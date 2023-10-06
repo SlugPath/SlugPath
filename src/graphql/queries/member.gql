@@ -1,0 +1,12 @@
+
+query AllMembers {
+  member { id, name, email }
+}
+
+query GetMember {
+  getMember (
+    email: "member@ucsc.edu"
+	) {
+    id, name, email
+  }
+}

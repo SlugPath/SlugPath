@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "typescript",
+    "next/core-web-vitals"
+  ]
+}
