@@ -1,7 +1,9 @@
+import CoursePlanner from "./components/CoursePlanner";
+
 export default function Home() {
   return (
     <main >
-      <div>Main page</div>
+      <CoursePlanner />
     </main>
   )
 }
