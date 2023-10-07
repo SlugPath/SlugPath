@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Input, Button, Card } from '@mui/joy';
+import { Button, Card } from '@mui/joy';
 
 export default function QuarterCard({ title }: { title: string }) {
     const courses = ["CSE 12", "CSE 130", "PHIL 11"]

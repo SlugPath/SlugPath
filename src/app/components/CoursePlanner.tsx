@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Input, Button, Card } from '@mui/joy';
+import { Card } from '@mui/joy';
 import QuarterCard from './QuarterCard';
 
 const quarterNames = ["Fall", "Winter", "Spring"]

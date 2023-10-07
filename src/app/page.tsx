@@ -1,4 +1,6 @@
+
 import { Member } from "../graphql/member/schema";
+import CoursePlanner from "./components/CoursePlanner";
 
 async function getMembers(): Promise<Member[]> {
   let query = '';
@@ -30,6 +32,7 @@ export default async function Home() {
           </div>
         ))}
       </div>
+      <CoursePlanner />
     </main>
   )
 }
