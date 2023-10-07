@@ -19,7 +19,7 @@ export class MemberService {
     return members;
   }
 
-  // Retreive one team member by email
+  // Retrieve one team member by email
   public async get(member: MemberEmail): Promise<Member|undefined> {
     const select = `SELECT (jsonb_build_object('id', id, 'name', member->>'name', 'email', member->>'email')) as member FROM member WHERE member->>'email' = $1`;
     const query = {
@@ -27,7 +27,6 @@ export class MemberService {
       values: [member.email],
     };
     const { rows } = await pool.query(query);
-    console.log(rows[0].member);
     return rows.length == 1 ? rows[0].member : undefined;
   }
 }

@@ -5,8 +5,8 @@ import CoursePlanner from "./components/CoursePlanner";
 async function getMembers(): Promise<Member[]> {
   let query = '';
 
-  // Retrieving the total number of slack users
-  query = 'query member {member { id, name, email }}';
+  // Retrieving information about team members
+  query = 'query member {member { name, email }}';
 
   const resMembers = await fetch('http://localhost:3000/api/graphql', {
     method: 'POST',
@@ -16,6 +16,8 @@ async function getMembers(): Promise<Member[]> {
     body: JSON.stringify({ query }),
   })
   const jsonMembers = await resMembers.json();
+
+  // Returning a list of objects with member information
   return await jsonMembers.data.member;
 }
 
