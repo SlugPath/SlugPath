@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 
-let pool;
+let pool: Pool;
 if (process.env.POSTGRES_URL !== undefined) {
   pool = new Pool({
     connectionString: process.env.POSTGRES_URL,

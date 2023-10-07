@@ -8,7 +8,8 @@ async function getMembers(): Promise<Member[]> {
   // Retrieving information about team members
   query = 'query member {member { name, email }}';
 
-  const resMembers = await fetch('http://localhost:3000/api/graphql', {
+  const url = process.env.GRAPHQL_URL || "http://localhost:3000/graphql"
+  const resMembers = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
