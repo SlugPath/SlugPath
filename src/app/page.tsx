@@ -1,21 +1,22 @@
-
 import { Member } from "../graphql/member/schema";
 import CoursePlanner from "./components/CoursePlanner";
 
 async function getMembers(): Promise<Member[]> {
-  let query = '';
-
   // Retrieving information about team members
-  query = 'query member {member { name, email }}';
+  let query = `
+    query AllMember {
+      member { id, name, email }
+    }
+    `;
 
-  const url = process.env.GRAPHQL_URL || "http://localhost:3000/graphql"
+  const url = process.env.GRAPHQL_URL || "http://localhost:3000/api/graphql";
   const resMembers = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-type': 'application/json',
+      "Content-type": "application/json",
     },
-    body: JSON.stringify({ query }),
-  })
+    body: JSON.stringify({query}),
+  });
   const jsonMembers = await resMembers.json();
 
   // Returning a list of objects with member information
@@ -29,7 +30,10 @@ export default async function Home() {
       <div className="grid place-items-center py-10 gap-2">
         <div className="text-3xl pb-3">Meet the team members!</div>
         {members.map((member) => (
-          <div key={member.name} className="grid grid-cols-2 place-items-center">
+          <div
+            key={member.name}
+            className="grid grid-cols-2 place-items-center"
+          >
             <div className="col-span-1">{member.name}</div>
             <div className="col-span-1">{member.email}</div>
           </div>
@@ -37,5 +41,5 @@ export default async function Home() {
       </div>
       <CoursePlanner />
     </main>
-  )
+  );
 }
