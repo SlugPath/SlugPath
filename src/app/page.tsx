@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Member } from "../graphql/member/schema";
 import CoursePlanner from "./components/CoursePlanner";
 
@@ -9,9 +8,10 @@ async function fetchMembers(): Promise<Member[]>{
   const query = "query member {member { name, email }}";
 
   const prodHost = process.env.VERCEL_URL;
-  console.log(`prodHost is ${prodHost}`)
   const defaultUrl = "http://localhost:3000/api/graphql";
   const url = prodHost ? `https://${prodHost}/api/graphql` : defaultUrl;
+
+  console.log(`prodHost is ${prodHost}`)
   console.log(`url is ${url}`);
 
   const resMembers = await fetch(url, {
@@ -31,19 +31,11 @@ async function fetchMembers(): Promise<Member[]>{
   }
 }
 
-function Members() {
-  const [members, setMembers] = useState<Member[]>([]);
-  useEffect(() => {
-    fetchMembers().then((it: Member[]) => setMembers(it))
-  }, [])
-
-  if (members.length == 0) {
-    return (
-      <h2>Loading....</h2>
-    )
-  }
+export default async function Home() {
+  const members = await fetchMembers();
   return (
-    <>
+    <main>
+      <div className="grid place-items-center py-10 gap-2">
       <div id="members" className="text-3xl pb-3">Meet the team members!</div>
       {members.map((member) => (
         <div
@@ -54,15 +46,6 @@ function Members() {
           <div className="col-span-1">{member.email}</div>
         </div>
       ))}
-    </>
-  );
-}
-
-export default function Home() {
-  return (
-    <main>
-      <div className="grid place-items-center py-10 gap-2">
-        <Members />
       </div>
       <CoursePlanner />
     </main>
