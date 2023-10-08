@@ -21,6 +21,5 @@ jobs:
         with:
           build: npm run build
           start: npm run e2e:headless
-        env:
-            POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+          env: POSTGRES_PRISMA_URL=${{ secrets.POSTGRES_PRISMA_URL }}
     

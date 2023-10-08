@@ -18,7 +18,7 @@ describe('app spec', () => {
   it('contains() group member names & emails', () => {
     cy.contains("Loading");
     // Wait for resp from GraphQL API
-    cy.wait(1000);
+    cy.wait(5000);
     cy.contains("Teresa Wu");
     cy.contains("Lily Knab");
     cy.contains("Furkan Ercevik");
