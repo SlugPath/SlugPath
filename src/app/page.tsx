@@ -1,10 +1,9 @@
 import { Member } from "../graphql/member/schema";
-import { prisma } from "../lib/prisma"
 import CoursePlanner from "./components/CoursePlanner";
 
 async function getMembers(): Promise<Member[]> {
   // Retrieving information about team members
-  let query = 'query member {member { name, email }}';
+  const query = 'query member {member { name, email }}';
 
   const url = process.env.GRAPHQL_URL || "http://localhost:3000/api/graphql";
   const resMembers = await fetch(url, {
