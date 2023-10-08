@@ -11,6 +11,7 @@ const schema = buildSchemaSync({
 });
 
 const { handleRequest } = createYoga({
+  logging: true,
   schema,
   graphqlEndpoint: '/api/graphql',
   fetchAPI: {

@@ -1,26 +1,28 @@
 import { Member } from "../graphql/member/schema";
+import { prisma } from "../lib/prisma"
 import CoursePlanner from "./components/CoursePlanner";
 
 async function getMembers(): Promise<Member[]> {
   // Retrieving information about team members
-  let query = `
-    query AllMember {
-      member { id, name, email }
-    }
-    `;
+  let query = 'query member {member { name, email }}';
 
   const url = process.env.GRAPHQL_URL || "http://localhost:3000/api/graphql";
   const resMembers = await fetch(url, {
     method: "POST",
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({query}),
   });
-  const jsonMembers = await resMembers.json();
+  try {
+    const jsonMembers = await resMembers.json();
+    return await jsonMembers.data.member;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 
   // Returning a list of objects with member information
-  return await jsonMembers.data.member;
 }
 
 export default async function Home() {
