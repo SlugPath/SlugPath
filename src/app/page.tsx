@@ -9,10 +9,10 @@ async function fetchMembers(): Promise<Member[]>{
   const query = "query member {member { name, email }}";
 
   const vercelHost = process.env.VERCEL_URL || process.env.VERCEL_BRANCH_URL;
-  console.log(`vercelHost is ${vercelHost}`)
+  console.log(`VERCEL_URL=${process.env.VERCEL_URL}`);
+  console.log(`VERCEL_BRANCH_URL=${process.env.VERCEL_BRANCH_URL}`);
   const defaultUrl = "http://localhost:3000/api/graphql";
   const url = vercelHost ? `https://${vercelHost}/api/graphql` : defaultUrl;
-  console.log(`url is ${url}`);
 
   const resMembers = await fetch(url, {
     method: "POST",
