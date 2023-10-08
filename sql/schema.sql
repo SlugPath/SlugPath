@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS member;
-CREATE TABLE member(id UUID UNIQUE PRIMARY KEY, member jsonb);

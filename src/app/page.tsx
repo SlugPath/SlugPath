@@ -17,7 +17,7 @@ async function getMembers(): Promise<Member[]> {
     const jsonMembers = await resMembers.json();
     return await jsonMembers.data.member;
   } catch (e) {
-    console.error(e);
+    console.error("ERROR:", e);
     return [];
   }
 
