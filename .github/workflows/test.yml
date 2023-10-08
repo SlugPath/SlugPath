@@ -1,0 +1,36 @@
+name: Cypress Tests
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+  test:
+    env:
+        POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+            node-version: 20
+            cache: 'npm'
+    
+      - name: Build
+        run: |
+            npm ci
+            npm run build
+
+      - name: Run Cypress Tests
+        run: |
+            npm run e2e:headless
+        
+    
