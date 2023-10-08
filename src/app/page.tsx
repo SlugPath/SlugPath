@@ -8,10 +8,10 @@ async function fetchMembers(): Promise<Member[]>{
   // Retrieving information about team members
   const query = "query member {member { name, email }}";
 
-  const prodHost = process.env.VERCEL_URL;
-  console.log(`prodHost is ${prodHost}`)
+  const vercelHost = process.env.VERCEL_URL || process.env.VERCEL_BRANCH_URL;
+  console.log(`vercelHost is ${vercelHost}`)
   const defaultUrl = "http://localhost:3000/api/graphql";
-  const url = prodHost ? `https://${prodHost}/api/graphql` : defaultUrl;
+  const url = vercelHost ? `https://${vercelHost}/api/graphql` : defaultUrl;
   console.log(`url is ${url}`);
 
   const resMembers = await fetch(url, {
