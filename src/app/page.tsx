@@ -5,7 +5,12 @@ async function getMembers(): Promise<Member[]> {
   // Retrieving information about team members
   const query = 'query member {member { name, email }}';
 
-  const url = process.env.GRAPHQL_URL || "http://localhost:3000/api/graphql";
+  const prodHost = process.env.VERCEL_URL;
+  const defaultUrl = "http://localhost:3000/api/graphql";
+
+  const url = prodHost ? `https://${prodHost}/api/graphql` : defaultUrl;
+
+  console.log(`Sending query to ${url}`);
   const resMembers = await fetch(url, {
     method: "POST",
     headers: {
@@ -17,7 +22,7 @@ async function getMembers(): Promise<Member[]> {
     const jsonMembers = await resMembers.json();
     return await jsonMembers.data.member;
   } catch (e) {
-    console.error("ERROR:", e);
+    console.error(e);
     return [];
   }
 
