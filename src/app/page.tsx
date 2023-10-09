@@ -1,17 +1,14 @@
-"use client";
-
 import { Member } from "../graphql/member/schema";
+import { APP_URL } from "../config";
 import CoursePlanner from "./components/CoursePlanner";
+
+export const dynamic = 'force-dynamic';
 
 async function fetchMembers(): Promise<Member[]>{
   // Retrieving information about team members
   const query = "query member {member { name, email }}";
 
-  const prodHost = process.env.VERCEL_URL;
-  const defaultUrl = "http://localhost:3000/api/graphql";
-  const url = prodHost ? `https://${prodHost}/api/graphql` : defaultUrl;
-
-  console.log(`prodHost is ${prodHost}`)
+  const url =  `${APP_URL}/api/graphql`;
   console.log(`url is ${url}`);
 
   const resMembers = await fetch(url, {
