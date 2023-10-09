@@ -1,12 +1,15 @@
-
 query AllMembers {
-  member { id, name, email }
+  member {
+    id
+    name
+    email
+  }
 }
 
 query GetMember {
-  getMember (
-    email: "member@ucsc.edu"
-	) {
-    id, name, email
+  getMember(email: "member@ucsc.edu") {
+    id
+    name
+    email
   }
 }

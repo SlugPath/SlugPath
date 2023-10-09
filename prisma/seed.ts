@@ -23,7 +23,7 @@ async function main() {
     update: {},
     create: {
       email: "fercevik@ucsc.edu",
-      name:"Furkan Ercevik",
+      name: "Furkan Ercevik",
     },
   });
   const oscar = await prisma.member.upsert({
@@ -39,17 +39,19 @@ async function main() {
     update: {},
     create: {
       email: "aajoseph@ucsc.edu",
-      name:"Ahmad Joseph",
+      name: "Ahmad Joseph",
     },
   });
 
   console.log({ teresa, lily, furkan, ahmad, oscar });
 }
 
-main().then(async () => {
-  await prisma.$disconnect();
-}).catch(async (e) => {
-  console.error(e);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });

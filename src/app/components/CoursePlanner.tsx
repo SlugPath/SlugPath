@@ -32,9 +32,7 @@ export function CoursePlanner() {
 
   return (
     <div className="flex min-h-screen flex-col items-center space-between p-24 bg-gray-100 space-y-4">
-      <Card className="flex flex-row">
-        {yearComponents()}
-      </Card>
+      <Card className="flex flex-row">{yearComponents()}</Card>
     </div>
   );
 }

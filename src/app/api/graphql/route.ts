@@ -1,9 +1,8 @@
-
-import { createYoga } from 'graphql-yoga';
-import 'reflect-metadata';
-import { buildSchemaSync } from 'type-graphql';
-import { NextRequest, NextResponse } from 'next/server';
-import { MemberResolver } from '../../../graphql/member/resolver';
+import { createYoga } from "graphql-yoga";
+import "reflect-metadata";
+import { buildSchemaSync } from "type-graphql";
+import { NextRequest, NextResponse } from "next/server";
+import { MemberResolver } from "../../../graphql/member/resolver";
 
 const schema = buildSchemaSync({
   resolvers: [MemberResolver],
@@ -13,10 +12,10 @@ const schema = buildSchemaSync({
 const { handleRequest } = createYoga({
   logging: true,
   schema,
-  graphqlEndpoint: '/api/graphql',
+  graphqlEndpoint: "/api/graphql",
   fetchAPI: {
     Request: NextRequest,
-    Response: NextResponse
+    Response: NextResponse,
   },
 });
 
