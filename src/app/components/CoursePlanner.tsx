@@ -44,10 +44,6 @@ function yearComponents() {
 export function CoursePlanner() {
   const { data, loading, error } = useQuery(AllMembers)
 
-  if (data) {
-    console.log(data);
-  }
-
   if (loading) return <p>Loading...</p>
   if (error) return <p>Oh no... {error.message}</p>
 
