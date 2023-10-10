@@ -121,14 +121,16 @@ export function CoursePlanner() {
         ))}
       </div>
       <DragDropContext onDragEnd={handleOnDragEnd} >
-        {
-          courseState.quarterOrder.map((quarterId) => {
-            const quarter = courseState.quarters[quarterId];
-            const courses = quarter.courseIds.map(courseId => courseState.courses[courseId]);
+        <div className="flex flex-row space-x-4" >
+          {
+            courseState.quarterOrder.map((quarterId) => {
+              const quarter = courseState.quarters[quarterId];
+              const courses = quarter.courseIds.map(courseId => courseState.courses[courseId]);
 
-            return <QuarterCard title={quarter.title} id={quarter.id} key={quarter.id} courses={courses} />
-          })
-        }
+              return <QuarterCard title={quarter.title} id={quarter.id} key={quarter.id} courses={courses} />
+            })
+          }
+        </div>
       </DragDropContext>
     </div>
   );

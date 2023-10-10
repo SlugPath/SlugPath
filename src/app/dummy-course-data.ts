@@ -10,18 +10,18 @@ export const dummyData = {
     quarters: {
         'quarter-1': {
             id: 'quarter-1',
-            title: 'To Do',
+            title: 'Fall',
             courseIds: ['course-1', 'course-2', 'course-3', 'course-4', 'course-5', 'course-6']
             // courseIds: []
         },
         'quarter-2': {
             id: 'quarter-2',
-            title: 'In Progress',
+            title: 'Winter',
             courseIds: []
         },
         'quarter-3': {
             id: 'quarter-3',
-            title: 'Done',
+            title: 'Spring',
             courseIds: []
         },
     },
