@@ -1,8 +1,6 @@
-
-import { Member, MemberEmail } from './schema';
-import { MemberService } from './service';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Arg, Args, Mutation, Query, Resolver } from 'type-graphql';
+import { Member, MemberEmail } from "./schema";
+import { MemberService } from "./service";
+import { Args, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class MemberResolver {
