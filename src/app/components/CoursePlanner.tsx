@@ -1,13 +1,9 @@
-// import { Card } from "@mui/joy";
 import { gql, useQuery } from '@apollo/client'
 import QuarterCard from "./QuarterCard";
 import { Member } from "../../graphql/member/schema";
 import * as React from 'react'
 import { dummyData } from '../dummy-course-data'
-import { DragDropContext } from 'react-beautiful-dnd'
-
-const quarterNames = ["Fall", "Winter", "Spring"];
-const yearNames = ["Freshman", "Sophomore", "Junior", "Senior"];
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
 const AllMembers = gql`
   query members {
@@ -18,36 +14,11 @@ const AllMembers = gql`
   }
 `;
 
-// function quarterComponents() {
-//   return (
-//     <div className="flex flex-row space-x-4">
-//       {quarterNames.map((quarter, index) => (
-//         <div key={index}>
-//           <QuarterCard title={quarter} />
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// function yearComponents() {
-//   return (
-//     <div className="flex flex-col space-y-2">
-//       {yearNames.map((year, index) => (
-//         <div key={index}>
-//           {year + " Year"}
-//           {quarterComponents()}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
 export function CoursePlanner() {
   const [courseState, setCourseState] = React.useState(dummyData)
   const { data, loading, error } = useQuery(AllMembers)
 
-  const handleOnDragEnd = (result) => {
+  const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return
@@ -121,16 +92,28 @@ export function CoursePlanner() {
         ))}
       </div>
       <DragDropContext onDragEnd={handleOnDragEnd} >
-        <div className="flex flex-row space-x-4" >
-          {
-            courseState.quarterOrder.map((quarterId) => {
-              const quarter = courseState.quarters[quarterId];
-              const courses = quarter.courseIds.map(courseId => courseState.courses[courseId]);
+        {
+          <div className="space-y-2" >
+            {
+              Array.from({ length: dummyData.quartersPerYear }, (_, index) => index).map((i) => {
+                const slice_val = dummyData.quartersPerYear * i
+                const quarters = courseState.quarterOrder.slice(slice_val, slice_val + dummyData.quartersPerYear)
+                return (
+                  <div key={i} className="flex flex-row space-x-2" >
+                    {
+                      quarters.map((quarterId) => {
+                        const quarter = courseState.quarters[quarterId];
+                        const courses = quarter.courseIds.map(courseId => courseState.courses[courseId]);
 
-              return <QuarterCard title={quarter.title} id={quarter.id} key={quarter.id} courses={courses} />
-            })
-          }
-        </div>
+                        return <QuarterCard title={quarter.title} id={quarter.id} key={quarter.id} courses={courses} />
+                      })
+                    }
+                  </div>
+                )
+              })
+            }
+          </div>
+        }
       </DragDropContext>
     </div>
   );

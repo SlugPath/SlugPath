@@ -22,10 +22,10 @@ export const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
 
 export default function QuarterCard({ title, id, courses }: { title: string, id: string, courses: Course[] }) {
   return (
-    <Card className="w-96">
+    <Card className="w-96" style={{ minHeight: "96px" }}>
       {title}
       <StrictModeDroppable droppableId={id} >
-        {(provided, snapshot) => { return (
+        {(provided) => { return (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}

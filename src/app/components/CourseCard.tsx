@@ -6,14 +6,12 @@ import { Course } from "../ts-types/Course";
 export default function CourseCard({ course, index }: { course: Course, index: number }) {
     return (
         <Draggable key={course.id} draggableId={course.id} index={index} >
-            {(provided, snapshot) => {
+            {(provided) => {
                 return (
                     <Card
                         ref={provided.innerRef}
-                        // isDragging={snapshot.isDragging}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        // className={`${snapshot.isDragging ? "bg-red-500" : ""}`}
                     >
                         {course.name}
                     </Card>

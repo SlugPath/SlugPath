@@ -32,6 +32,7 @@
     "@types/node": "^20.8.3",
     "@types/pg": "^8.10.3",
     "@types/react": "^18.2.25",
+    "@types/react-beautiful-dnd": "^13.1.5",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "autoprefixer": "^10",
