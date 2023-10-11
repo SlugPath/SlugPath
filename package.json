@@ -20,6 +20,8 @@
     "class-validator": "^0.14.0",
     "next": "13.5.4",
     "pg": "^8.11.3",
+    "pino": "^8.16.0",
+    "pino-logflare": "^0.4.2",
     "react": "^18",
     "react-dom": "^18",
     "reflect-metadata": "^0.1.13"
