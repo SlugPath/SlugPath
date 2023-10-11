@@ -4,14 +4,14 @@ describe("app spec", () => {
   });
 
   it("contains() quarters", () => {
-    cy.contains("Fall");
-    cy.contains("Winter");
-    cy.contains("Spring");
+    cy.contains("Fall Freshman");
+    cy.contains("Winter Freshman");
+    cy.contains("Spring Freshman");
   });
 
   it("contains() course names", () => {
-    cy.contains("CSE 12");
-    cy.contains("CSE 130");
-    cy.contains("PHIL 11");
+    cy.contains("CSE 1");
+    cy.contains("CSE 2");
+    cy.contains("CSE 3");
   });
 });
