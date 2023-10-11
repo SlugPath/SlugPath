@@ -1,11 +1,12 @@
 import { Quarter } from './ts-types/Quarter'
+import { DummyData } from './ts-types/DummyData';
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 const yearNames = ["Freshman", "Sophomore", "Junior", "Senior"];
 const years = 4;
 const quartersPerYear = 4;
 
-export const dummyData = {
+export const dummyData: DummyData = {
     courses: createCourses(),
     quarters: createQuarters().quarters,
     quarterOrder: createQuarters().quarterOrder,
