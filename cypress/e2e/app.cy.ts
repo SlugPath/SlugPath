@@ -3,7 +3,7 @@ describe("app spec", () => {
     cy.visit("http://localhost:3000/");
   });
 
-  it("contains() quarters", () => {
+  it("contains() quarter names", () => {
     cy.contains("Fall Freshman");
     cy.contains("Winter Freshman");
     cy.contains("Spring Freshman");
