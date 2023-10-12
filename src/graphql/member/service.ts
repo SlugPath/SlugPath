@@ -16,4 +16,23 @@ export class MemberService {
     });
     return res !== null ? res : undefined;
   }
+
+  // Create a member with name and email
+  public async create(member: Member): Promise<Member> {
+    return await prisma.member.create({
+      data: {
+        name: member.name,
+        email: member.email,
+      }
+    });
+  }
+
+  // Delete a member by id
+  public async delete(id: string): Promise<Member> {
+    return await prisma.member.delete({
+      where: {
+        id: id
+      }
+    });
+  }
 }
