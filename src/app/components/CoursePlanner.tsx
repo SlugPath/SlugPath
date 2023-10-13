@@ -1,11 +1,11 @@
-import { gql, useQuery } from '@apollo/client'
 import QuarterCard from "./QuarterCard";
 import { Course } from "../../graphql/member/schema";
-import * as React from 'react'
+import { useState } from "react";
 import { dummyData } from '../dummy-course-data'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { useCourseQuery } from '@/lib/graphql';
 
-const AllCourses = gql`
+const AllCourses = `
   query courses {
     courses {
       id
@@ -18,8 +18,8 @@ const AllCourses = gql`
 `;
 
 export function CoursePlanner() {
-  const [courseState, setCourseState] = React.useState(dummyData)
-  const { data, loading, error } = useQuery(AllCourses)
+  const [courseState, setCourseState] = useState(dummyData)
+  const { data, loading, error } = useCourseQuery(AllCourses)
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
@@ -77,14 +77,15 @@ export function CoursePlanner() {
     }
   }
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Oh no... {error.message}</p>
+  if (data) console.log(data?.courses)
 
   return (
     <div className="flex min-h-screen flex-col items-center space-between p-24 bg-gray-100 space-y-4">
       <div className="grid place-items-center py-10 gap-2">
-        <div id="members" className="text-3xl pb-3">See the courses!</div>
-        {data.courses.map((course: Course) => (
+        <div id="members" className="text-3xl pb-3">See the courses! (limited to first 10 for now)</div>
+        {loading && <div>Loading...</div>}
+        {error && <div>Error! {error.message}</div>}
+        {data?.courses.slice(0, 10).map((course: Course) => (
           <div
             key={course.name}
             className="grid grid-cols-2 place-items-center"

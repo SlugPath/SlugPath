@@ -1,5 +1,5 @@
 import { Card } from "@mui/joy";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Droppable, DroppableProps } from "react-beautiful-dnd";
 import CourseCard from "./CourseCard";
 import { Course } from "../ts-types/Course"
