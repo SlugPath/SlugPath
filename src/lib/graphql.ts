@@ -35,3 +35,4 @@ export function useCourseQuery(query: string) {
 
   return { data, loading, error };
 }
+

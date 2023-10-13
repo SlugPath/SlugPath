@@ -1,3 +1,6 @@
 {
-  "extends": ["typescript", "next/core-web-vitals", "prettier"]
+  "extends": ["typescript", "next/core-web-vitals", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }
