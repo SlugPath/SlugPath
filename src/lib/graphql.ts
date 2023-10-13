@@ -1,4 +1,3 @@
-import { APP_URL } from '@/config';
 import { useState, useEffect } from 'react';
 import { MemberQueryResult } from '@/app/ts-types/GraphQL';
 import { GraphQLQueryError } from '@/app/ts-types/Errors';
@@ -11,8 +10,7 @@ export function useMemberQuery(query: string) {
 
   useEffect(() => {
     // Define the GraphQL endpoint URL
-    console.log(`APP_URL=${APP_URL}`)
-    const endpoint = `${APP_URL}/api/graphql`;
+    const endpoint = '/api/graphql';
 
     // Define the GraphQL request options
     const options = {
