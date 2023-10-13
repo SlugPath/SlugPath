@@ -1,22 +1,25 @@
 import { gql, useQuery } from '@apollo/client'
 import QuarterCard from "./QuarterCard";
-import { Member } from "../../graphql/member/schema";
+import { Course } from "../../graphql/member/schema";
 import * as React from 'react'
 import { dummyData } from '../dummy-course-data'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 
-const AllMembers = gql`
-  query members {
-    member {
+const AllCourses = gql`
+  query courses {
+    courses {
+      id
       name
-      email
+      number
+      credits
+      department
     }
   }
 `;
 
 export function CoursePlanner() {
   const [courseState, setCourseState] = React.useState(dummyData)
-  const { data, loading, error } = useQuery(AllMembers)
+  const { data, loading, error } = useQuery(AllCourses)
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
@@ -80,14 +83,14 @@ export function CoursePlanner() {
   return (
     <div className="flex min-h-screen flex-col items-center space-between p-24 bg-gray-100 space-y-4">
       <div className="grid place-items-center py-10 gap-2">
-        <div id="members" className="text-3xl pb-3">Meet the team members!</div>
-        {data.member.map((member: Member) => (
+        <div id="members" className="text-3xl pb-3">See the courses!</div>
+        {data.courses.map((course: Course) => (
           <div
-            key={member.name}
+            key={course.name}
             className="grid grid-cols-2 place-items-center"
           >
-            <div className="col-span-1">{member.name}</div>
-            <div className="col-span-1">{member.email}</div>
+            <div className="col-span-1">{course.name}</div>
+            <div className="col-span-1">{course.department + '' + course.number}</div>
           </div>
         ))}
       </div>
