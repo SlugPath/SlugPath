@@ -1,11 +1,13 @@
 import QuarterCard from "./QuarterCard";
-import { Course } from "../../graphql/member/schema";
-import { useState } from "react";
+import { Member } from "../../graphql/member/schema";
+import {useState } from 'react'
 import { dummyData } from '../dummy-course-data'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
-import { useCourseQuery } from '@/lib/graphql';
 
-const AllCourses = `
+import { gql } from "@apollo/client";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+
+const query = gql`
   query courses {
     courses {
       id
@@ -19,7 +21,7 @@ const AllCourses = `
 
 export function CoursePlanner() {
   const [courseState, setCourseState] = useState(dummyData)
-  const { data, loading, error } = useCourseQuery(AllCourses)
+  const { data }: any = useSuspenseQuery(query);
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
