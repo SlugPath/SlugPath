@@ -1,15 +1,9 @@
-query AllMembers {
-  member {
+query AllCourses {
+  courses {
     id
     name
-    email
-  }
-}
-
-query GetMember {
-  getMember(email: "member@ucsc.edu") {
-    id
-    name
-    email
+    department
+    number
+    credits
   }
 }

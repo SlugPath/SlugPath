@@ -7,15 +7,12 @@ datasource db {
   url       = env("POSTGRES_PRISMA_URL")
 }
 
-model Task {
-  id        Int      @id @default(autoincrement())
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-}
-
-model Member {
-  id      String       @id @default(uuid())
-  name    String
-  email   String       @unique
+model Course {
+  id          String      @id @default(uuid())
+  name        String
+  department  String
+  number      String
+  credits     Int         @default(5)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }

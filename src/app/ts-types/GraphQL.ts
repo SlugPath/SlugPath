@@ -1,5 +1,5 @@
-import { Member } from "@prisma/client"
+import { Course } from "@prisma/client"
 
-export interface MemberQueryResult {
-  member: Member[]
+export interface CourseQueryResult {
+  courses: Course[]
 }

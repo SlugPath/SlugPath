@@ -1,0 +1,197 @@
+CSE,3,Personal Computer Concepts: Software and Hardware,5,Fall,Winter,Spring
+CSE,5J,Introduction to Programming in Java,5
+CSE,10,Introduction to Computer Science,5
+CSE,12,Computer Systems and Assembly Language and Lab,7,Fall,Winter,Spring,Summer
+CSE,13S,Computer Systems and C Programming,7,Fall,Winter,Spring
+CSE,16,Applied Discrete Mathematics,5,Fall,Winter,Spring
+CSE,20,Beginning Programming in Python,5,Fall,Winter,Spring
+CSE,30,Programming Abstractions: Python,7,Fall,Winter,Spring
+CSE,40,Machine Learning Basics: Data Analysis and Empirical Methods,5,Winter
+CSE,80A,Universal Access: Disability Technology and Society,5,Fall
+CSE,80L,Social Data Analytics and Visualization,5
+CSE,80N,Introduction to Networking and the Internet,5,Fall,Winter,Spring
+CSE,80S,Social Networks,5
+CSE,94,Group Tutorial,5,Fall,Winter,Spring
+CSE,94F,Group Tutorial,2,Fall,Winter,Spring
+CSE,99,Tutorial,5,Fall,Winter,Spring
+CSE,99F,Tutorial,2,Fall,Winter,Spring
+CSE,100,Logic Design,5,Fall,Winter,Spring
+CSE,100L,Logic Design Laboratory,2,Fall,Winter,Spring
+CSE,101,Introduction to Data Structures and Algorithms,5,Fall,Winter,Spring
+CSE,102,Introduction to Analysis of Algorithms,5,Fall,Winter,Spring
+CSE,103,Computational Models,5,Fall,Winter,Spring
+CSE,104,Computability and Computational Complexity,5,Winter
+CSE,106,Applied Graph Theory and Algorithms,5
+CSE,107,Probability and Statistics for Engineers,5,Fall,Winter,Spring
+CSE,108,Algorithmic Foundations of Cryptography,5,Spring
+CSE,110A,Fundamentals of Compiler Design I,5,Winter,Spring
+CSE,110B,Fundamentals of Compiler Design II,5
+CSE,111,Advanced Programming,5,Fall,Winter,Spring
+CSE,112,Comparative Programming Languages,5
+CSE,113,Parallel and Concurrent Programming,5,Winter
+CSE,114A,Foundations of Programming Languages,5,Fall,Winter,Spring
+CSE,114B,Functional Programming,5
+CSE,115A,Introduction to Software Engineering,5,Fall,Winter,Spring
+CSE,115B,Software Design Project,5,Winter
+CSE,115C,Software Design Project II,5,Spring
+CSE,115D,Software Design Project - Accelerated,5,Fall
+CSE,117,Open Source Programming,5
+CSE,118,Mobile Applications,5,Fall
+CSE,119,Software for Society,5
+CSE,120,Computer Architecture,5,Fall,Winter,Spring
+CSE,121,Embedded System Design,7,Fall,Spring
+CSE,122,Introduction to VLSI Digital System Design,5
+CSE,123A,Engineering Design Project I,5,Winter
+CSE,123B,Engineering Design Project II,7,Spring
+CSE,125,Logic Design with Verilog,7,Winter
+CSE,129A,Capstone Project I,2
+CSE,129B,Capstone Project II,5
+CSE,129C,Capstone Project III,5
+CSE,130,Principles of Computer Systems Design,5,Fall,Winter,Spring
+CSE,132,Computer Security,5,Fall
+CSE,134,Embedded Operating Systems,5,Spring
+CSE,138,Distributed Systems,5,Winter
+CSE,140,Artificial Intelligence,5,Winter,Spring
+CSE,142,Machine Learning,5,Fall,Winter,Spring
+CSE,143,Introduction to Natural Language Processing,5,Winter,Spring
+CSE,144,Applied Machine Learning,5,Fall,Winter,Spring
+CSE,145,Introduction to Data Mining,5,Spring
+CSE,146,Ethics and Algorithms,5,Spring
+CSE,150,Introduction to Computer Networks,7,Fall,Winter,Spring
+CSE,151,Advanced Computer Networks,5,Spring
+CSE,151L,Advanced Computer Networks Laboratory,2,Spring
+CSE,152,Principles of Computer Communication,5
+CSE,156,Network Programming,5,Winter
+CSE,156L,Network Programming Laboratory,2,Winter
+CSE,157,Internet of Things,7,Winter
+CSE,160,Introduction to Computer Graphics,7,Fall,Spring
+CSE,161,Introduction to Data Visualization,5
+CSE,161L,Data Visualization Laboratory,2
+CSE,162,Advanced Computer Graphics and Animation,5
+CSE,162L,Advanced Computer Graphics and Animation Laboratory,2
+CSE,163,Data Programming for Visualization,5,Fall
+CSE,164,Computer Vision,5,Fall
+CSE,165,Human-Computer Interaction,5
+CSE,167,Mobile Sensing and Interaction,5
+CSE,168,Introduction to Augmented Reality and Virtual Reality,7
+CSE,180,Database Systems I,5,Fall,Winter
+CSE,181,Database Systems II,5,Spring
+CSE,182,Introduction to Database Management Systems,5,Spring
+CSE,183,Web Applications,5,Spring
+CSE,184,Data Wrangling and Web Scraping,5
+CSE,185E,Technical Writing for Computer Science and Engineering,5,Fall,Winter,Spring
+CSE,186,Full Stack Web Development I,5,Fall,Winter,Summer
+CSE,191,Computer Science and Technology Seminar,2
+CSE,192,Supervised Student Teaching/Tutoring,5
+CSE,192F,Supervised Student Teaching/Tutoring,2
+CSE,193,Field Study,5,Fall,Winter,Spring
+CSE,193F,Field Study,2,Fall,Winter,Spring
+CSE,194,Group Tutorial,5,Fall,Winter,Spring
+CSE,194F,Group Tutorial,2,Fall,Winter,Spring
+CSE,195,Senior Thesis Research,5,Fall,Winter,Spring
+CSE,195F,Senior Thesis Research,2,Fall,Winter,Spring
+CSE,198,Individual Study or Research,5,Fall,Winter,Spring
+CSE,198F,Individual Study or Research,2,Fall,Winter,Spring
+CSE,199,Tutorial,5,Fall,Winter,Spring
+CSE,199F,Tutorial,2,Fall,Winter,Spring
+CSE,200,Research and Teaching in Computer Science and Engineering,3,Fall
+CSE,201,Analysis of Algorithms,5,Fall,Winter
+CSE,202,Combinatorial Algorithms,5
+CSE,204,Computational Models and Complexity,5,Spring
+CSE,205,Logic in Computer Science,5,Spring
+CSE,207,Graph Algorithms,5
+CSE,210A,Programming Languages,5,Winter
+CSE,210B,Advanced Programming Languages,5,Spring
+CSE,211,Compiler Design,5,Fall
+CSE,212A,Software Engineering,5
+CSE,212B,Software Reuse and Component-Based Software Engineering,5
+CSE,214,Principles of Database Systems,5
+CSE,215,Design and Implementation of Database Systems,5,Winter
+CSE,216,Formal Methods,5,Spring
+CSE,220,Computer Architecture,5,Fall,Spring
+CSE,221,Advanced Microprocessor Design,5,Winter
+CSE,221L,Advanced Microprocessor Design Laboratory,3
+CSE,222A,VLSI Digital System Design,5
+CSE,222B,VLSI System-on-a-Chip Design,5
+CSE,225,Introduction to ASIC Systems Design,7,Winter
+CSE,226,Advanced Parallel Processing,5
+CSE,229,Field-Programmable Gate Arrays Computer-Assisted Design,5
+CSE,231,Advanced Operating Systems,5,Fall
+CSE,232,Distributed Systems,5,Spring
+CSE,233,Advanced Computer Security,5
+CSE,234,Understanding Cryptography,5,Spring
+CSE,235,Cyber-Physical Systems Security,5,Spring
+CSE,237,Storage Systems,5
+CSE,240,Artificial Intelligence,5,Winter
+CSE,241,Knowledge Engineering,5
+CSE,242,Machine Learning,5,Fall
+CSE,243,Data Mining,5
+CSE,244A,Foundations of Deep Learning,5
+CSE,244B,Machine Learning for Natural Language Processing,5,Winter
+CSE,245,Computational Models of Discourse and Dialogue,5
+CSE,246,Responsible Data Science,5,Fall
+CSE,247,Projects in Artificial Intelligence,5,Spring
+CSE,248,Foundations of Data Science,5,Spring
+CSE,249,Large-Scale Web Analytics and Machine Learning,5
+CSE,250A,Computer Networks,5,Fall
+CSE,250B,Principles of Computer Communication,5,Winter
+CSE,250C,High Speed Computer Networks,5
+CSE,253,Network Security,5
+CSE,257,Wireless and Mobile Networks,5,Spring
+CSE,259,Sensor Networks,5
+CSE,260,Computer Graphics,5,Winter
+CSE,261,Advanced Visualization,5,Fall
+CSE,262,Computer Animation,5
+CSE,263,Data Driven Discovery and Visualization,5
+CSE,264,Computer Vision,5,Spring
+CSE,265,Human-Computer Interaction,5
+CSE,272,Information Retrieval,5
+CSE,276,Optimization Theory and Applications,5,Fall
+CSE,277,Random Process Models in Engineering,5
+CSE,279,Data Mining and Business Analytics in Knowledge Services,5
+CSE,280A,Seminar in Computer Science and Engineering,2
+CSE,280D,Seminar in Database Systems,2,Fall,Winter
+CSE,280F,Seminar on Software Engineering,2
+CSE,280G,VLSI/CAD Seminar,2,Fall,Winter,Spring
+CSE,280H,Seminar in Human Computation Systems,2
+CSE,280I,Seminar on Information Retrieval and Knowledge Management,2
+CSE,280J,Seminar on Computer Graphics,2,Fall,Winter,Spring
+CSE,280K,Sales and Marketing for Technologists and Engineers,2
+CSE,280L,Seminar on Logic in Computer Science,2
+CSE,280M,Seminar on Machine Learning,2,Fall,Winter,Spring
+CSE,280N,Seminar on Networks,2,Fall,Winter,Spring
+CSE,280O,Seminar in Applied Programming Languages,2,Fall,Winter,Spring
+CSE,280P,Seminar on Parallel Processing,2,Fall,Winter,Spring
+CSE,280S,Seminar on Computer Systems,2,Fall,Winter,Spring
+CSE,280T,Seminar on New Technologies,2
+CSE,280V,Seminar on Computer Vision,2,Fall,Winter,Spring
+CSE,280X,Seminar in Distributed Systems,2,Fall,Winter,Spring
+CSE,280Z,Seminar in Natural Language Processing and Dialogue,2
+CSE,285,Technical Writing for Engineering Graduates,5
+CSE,290A,Topics in Algorithms and Complexity Theory: Probabilistic Algorithms and Average Case Analysis,5,Fall
+CSE,290C,Advanced Topics in Machine Learning,5,Winter,Spring
+CSE,290D,Neural Computation,5,Fall
+CSE,290E,Object-Oriented Programming Methodology,5
+CSE,290F,Applications of Combinatorics,5
+CSE,290G,Topics in Software Engineering,5
+CSE,290H,Topics in Database Systems,5
+CSE,290J,Advanced Topics in Computer Graphics and Visual Computing,5
+CSE,290K,Advanced Topics in Natural Language Processing,5
+CSE,290L,Topics in Crowdsourcing and Collaboration,5
+CSE,290M,Topics in Parallel Computation,5
+CSE,290N,Topics in Computer Performance,5
+CSE,290O,Algorithmic Foundations of Convex Optimization,5
+CSE,290P,Data Privacy Via Machine Learning and Back,5
+CSE,290Q,Topics in Programming Languages,5
+CSE,290S,Advanced Topics in Computer Systems,5,Winter
+CSE,290T,Topics in Computing for Society,5
+CSE,290X,Cryptography and Computer Security,5,Winter
+CSE,293,Advanced Topics in Computer Science & Engineering,5,Spring
+CSE,296,Masters Project,2,Fall,Winter,Spring
+CSE,297A,Individual Study or Research,5,Fall
+CSE,297B,Individual Study or Research,10,Winter
+CSE,297C,Individual Study or Research,15,Spring
+CSE,297F,Independent Study or Research,2,Fall,Winter,Spring
+CSE,299A,Thesis Research,5
+CSE,299B,Thesis Research,10
+CSE,299C,Thesis Research,15

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MemberQueryResult } from '@/app/ts-types/GraphQL';
+import { CourseQueryResult } from '@/app/ts-types/GraphQL';
 import { GraphQLQueryError } from '@/app/ts-types/Errors';
 
 // a graphQL query and any variables
-export function useMemberQuery(query: string) {
-  const [data, setData] = useState<MemberQueryResult | null>(null);
+export function useCourseQuery(query: string) {
+  const [data, setData] = useState<CourseQueryResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<GraphQLQueryError | null>(null);
 
