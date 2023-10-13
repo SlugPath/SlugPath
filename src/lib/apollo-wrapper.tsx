@@ -14,12 +14,14 @@ function makeClient() {
     uri: `${APP_URL}/api/graphql`,
   });
 
+  console.log(httpLink.options.uri);
+
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
-    link:
-      typeof window === "undefined" ? ApolloLink.from([
+    link: typeof window === "undefined"
+      ? ApolloLink.from([
         new SSRMultipartLink({
-          stripDefer: true
+          stripDefer: true,
         }),
         httpLink,
       ])
@@ -27,10 +29,10 @@ function makeClient() {
   });
 }
 
-export function ApolloWrapper({children }: React.PropsWithChildren) {
+export function ApolloWrapper({ children }: React.PropsWithChildren) {
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
-    {children}
+      {children}
     </ApolloNextAppProvider>
-  )
+  );
 }
