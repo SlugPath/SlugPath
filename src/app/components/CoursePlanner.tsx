@@ -1,11 +1,12 @@
 import QuarterCard from "./QuarterCard";
-import { Member } from "../../graphql/member/schema";
 import {useState } from 'react'
 import { dummyData } from '../dummy-course-data'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { Course } from "@/graphql/course/schema";
 
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { CourseList } from "../ts-types/Course";
 
 const query = gql`
   query courses {
@@ -21,7 +22,7 @@ const query = gql`
 
 export function CoursePlanner() {
   const [courseState, setCourseState] = useState(dummyData)
-  const { data }: any = useSuspenseQuery(query);
+  const { data }: {data: CourseList | undefined} = useSuspenseQuery(query);
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
@@ -85,8 +86,6 @@ export function CoursePlanner() {
     <div className="flex min-h-screen flex-col items-center space-between p-24 bg-gray-100 space-y-4">
       <div className="grid place-items-center py-10 gap-2">
         <div id="members" className="text-3xl pb-3">See the courses! (limited to first 10 for now)</div>
-        {loading && <div>Loading...</div>}
-        {error && <div>Error! {error.message}</div>}
         {data?.courses.slice(0, 10).map((course: Course) => (
           <div
             key={course.name}
