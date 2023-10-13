@@ -1,12 +1,12 @@
-import { gql, useQuery } from '@apollo/client'
 import QuarterCard from "./QuarterCard";
 import { Member } from "../../graphql/member/schema";
-import * as React from 'react'
+import {useState } from 'react'
 import { dummyData } from '../dummy-course-data'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { useMemberQuery } from '@/lib/graphql';
 
-const AllMembers = gql`
-  query members {
+const AllMembers = `
+  query AllMember {
     member {
       name
       email
@@ -15,8 +15,8 @@ const AllMembers = gql`
 `;
 
 export function CoursePlanner() {
-  const [courseState, setCourseState] = React.useState(dummyData)
-  const { data, loading, error } = useQuery(AllMembers)
+  const [courseState, setCourseState] = useState(dummyData)
+  const { data, loading, error } = useMemberQuery(AllMembers)
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result
@@ -74,7 +74,7 @@ export function CoursePlanner() {
     }
   }
 
-  if (loading) return <p>Loading...</p>
+  if (loading || data == null) return <p>Loading...</p>
   if (error) return <p>Oh no... {error.message}</p>
 
   return (
