@@ -11,6 +11,7 @@ export function useMemberQuery(query: string) {
 
   useEffect(() => {
     // Define the GraphQL endpoint URL
+    console.log(`APP_URL=${APP_URL}`)
     const endpoint = `${APP_URL}/api/graphql`;
 
     // Define the GraphQL request options
