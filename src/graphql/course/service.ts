@@ -2,9 +2,22 @@ import { Course } from "./schema";
 import { prisma } from "../../lib/prisma";
 
 export class CourseService {
-  // Retreive all team members
+  // Retreive all courses
   public async list(): Promise<Course[]> {
     return await prisma.course.findMany();
+  }
+
+  // Retrieve a subset of the courses based on constraints
+  public async get({name, department, number, credits }: {name: string, department: string, number: string, credits: number}): Promise<Course[]> {
+    return await prisma.course.findMany({
+      where: {
+        name: name,
+        department: department,
+        number: number,
+        credits: credits
+      }
+    }
+    )
   }
 
   // Retrieve one team member by email
