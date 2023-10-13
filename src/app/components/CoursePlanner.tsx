@@ -81,7 +81,6 @@ export function CoursePlanner() {
     }
   };
 
-  if (data) console.log(data);
   if (error) {
     console.error(error);
     return <p>Oh no...{error.message}</p>;
