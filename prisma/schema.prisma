@@ -15,4 +15,7 @@ model Course {
   credits     Int         @default(5)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  // No two courses can have the same department and course number
+  @@unique([department, number])
 }

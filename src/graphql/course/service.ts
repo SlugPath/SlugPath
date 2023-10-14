@@ -1,5 +1,6 @@
 import { Course } from "./schema";
 import { prisma } from "../../lib/prisma";
+import { MutableCourseInput, QueryableCourseInput } from "./args";
 
 export class CourseService {
   // Retreive all courses
@@ -8,44 +9,51 @@ export class CourseService {
   }
 
   // Retrieve a subset of the courses based on constraints
-  public async get({name, department, number, credits }: {name: string, department: string, number: string, credits: number}): Promise<Course[]> {
+  public async get(input: QueryableCourseInput): Promise<Course[]> {
     return await prisma.course.findMany({
       where: {
-        name: name,
-        department: department,
-        number: number,
-        credits: credits
+        name: {
+          contains: input.name
+        },
+        department: input.department,
+        number: {
+          contains: input.number,
+        },
+        credits: input.credits
       }
-    }
-    )
+    });
   }
 
-  // Retrieve one team member by email
-  // public async get(memberEmail: MemberEmail): Promise<Member | undefined> {
-  //   const res = await prisma.member.findFirst({
-  //     where: {
-  //       email: memberEmail.email,
-  //     },
-  //   });
-  //   return res !== null ? res : undefined;
-  // }
+  // Creates a new course in the database with a unique department
+  // and course number, or updates an existing one
+  public async upsert(input: MutableCourseInput): Promise<Course> {
+    return await prisma.course.upsert({
+      where: {
+        department_number: {
+          department: input.department,
+          number: input.number,
+        },
+      },
+      create: {
+        department: input.department,
+        number: input.number,
+        name: input.name,
+        credits: input.credits
+      },
+      update: {
+        name: input.name,
+        credits: input.credits,
+      },
+    });
 
-  // Create a member with name and email
-  // public async create(member: Member): Promise<Member> {
-  //   return await prisma.member.create({
-  //     data: {
-  //       name: member.name,
-  //       email: member.email,
-  //     }
-  //   });
-  // }
+  }
 
-  // Delete a member by id
-  // public async delete(id: string): Promise<Member> {
-  //   return await prisma.member.delete({
-  //     where: {
-  //       id: id
-  //     }
-  //   });
-  // }
+  // Delete a course by id
+  public async delete(id: string): Promise<Course> {
+    return await prisma.course.delete({
+      where: {
+        id: id
+      }
+    });
+  }
 }
