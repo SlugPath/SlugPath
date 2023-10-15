@@ -1,5 +1,10 @@
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+module.exports = withBundleAnalyzer({
   async headers() {
     return [
       {
@@ -20,6 +25,12 @@ const nextConfig = {
       },
     ];
   },
-};
-
-module.exports = nextConfig;
+  webpack(config, { webpack }) {
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        "globalThis.__DEV__": false,
+      }),
+    );
+    return config;
+  },
+});
