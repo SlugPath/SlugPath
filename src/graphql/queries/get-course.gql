@@ -1,5 +1,15 @@
-query GetCourse($courseName: String, $courseDepartment: String, $courseNumber: String, $courseCredits: Float) {
-  course(name: $courseName, department: $courseDepartment, number: $courseNumber, credits: $courseCredits) {
+query GetCourse(
+  $courseName: String
+  $courseDepartment: String
+  $courseNumber: String
+  $courseCredits: Float
+) {
+  course(
+    name: $courseName
+    department: $courseDepartment
+    number: $courseNumber
+    credits: $courseCredits
+  ) {
     id
     name
     department

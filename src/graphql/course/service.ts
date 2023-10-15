@@ -13,14 +13,14 @@ export class CourseService {
     return await prisma.course.findMany({
       where: {
         name: {
-          contains: input.name
+          contains: input.name,
         },
         department: input.department,
         number: {
           contains: input.number,
         },
-        credits: input.credits
-      }
+        credits: input.credits,
+      },
     });
   }
 
@@ -38,22 +38,21 @@ export class CourseService {
         department: input.department,
         number: input.number,
         name: input.name,
-        credits: input.credits
+        credits: input.credits,
       },
       update: {
         name: input.name,
         credits: input.credits,
       },
     });
-
   }
 
   // Delete a course by id
   public async delete(id: string): Promise<Course> {
     return await prisma.course.delete({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
   }
 }

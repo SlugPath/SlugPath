@@ -29,7 +29,9 @@ export function CoursePlanner() {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    ) return;
+    ) {
+      return;
+    }
 
     const startQuarter = courseState.quarters[source.droppableId];
     const finishQuarter = courseState.quarters[destination.droppableId];
@@ -123,8 +125,8 @@ export function CoursePlanner() {
                 <div key={i} className="flex flex-row space-x-2">
                   {quarters.map((quarterId) => {
                     const quarter = courseState.quarters[quarterId];
-                    const courses = quarter.courseIds.map((courseId) =>
-                      courseState.courses[courseId]
+                    const courses = quarter.courseIds.map(
+                      (courseId) => courseState.courses[courseId],
                     );
 
                     return (
