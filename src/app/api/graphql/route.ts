@@ -3,7 +3,6 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { NextRequest, NextResponse } from "next/server";
 import { CourseResolver } from "@/graphql/course/resolver";
-// import { resolvers } from "@generated/type-graphql";
 import prisma from "@/lib/prisma";
 
 // TODO: restrict to specific resolver functions we need, and give public users read-only access

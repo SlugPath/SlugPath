@@ -1,14 +1,14 @@
 import { IsInt, IsUUID, Length, Matches, Max, Min } from "class-validator";
-import { Field, InputType } from "type-graphql";
+import { ArgsType, Field, InputType } from "type-graphql";
 
-@InputType()
+@ArgsType()
 export class QueryInput {
   @Field({ nullable: true })
   @Matches(/[A-Z]{2,6}/g)
   department?: string;
 
   @Field({ nullable: true })
-  @Matches(/[0-9]{1,3}[A-Z]{1}/g)
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
   number?: string;
 
   @Field({ nullable: true })
@@ -26,7 +26,32 @@ export class QueryInput {
   credits?: number;
 }
 
+/**
+ * `UpsertInput` is an `InputType` for the `createCourse` and `updateCourse`
+ * resolver functions.
+ */
 @InputType()
+export class UpsertInput {
+  @Field()
+  @Matches(/[A-Z]{2,6}/g)
+  department!: string;
+
+  @Field()
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
+  number!: string;
+
+  @Field()
+  @Length(5, 100)
+  name!: string;
+
+  @Field()
+  @IsInt()
+  @Min(1)
+  @Max(10)
+  credits!: number;
+}
+
+@ArgsType()
 export class AboveOrBelowInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)

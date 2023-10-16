@@ -1,6 +1,6 @@
-import { Course } from "@generated/type-graphql/models/Course";
 import { prisma } from "@/lib/prisma";
-import { QueryInput } from "@/app/ts-types/Args";
+import Course from "@/app/ts-types/Course";
+import { QueryInput, UpsertInput } from "@/app/ts-types/Args";
 
 const COURSES_LIMIT = 100;
 
@@ -40,12 +40,12 @@ export class CourseService {
   }
 
   /**
-   *  coursesAboveOrBelow returns a list of `Course` values that are either
+   *  `coursesAboveOrBelow` returns a list of `Course` values that are either
    *  above or below `courseNumber` depending on the value of the
    *  `above` flag.
    * @param courseNumber integer value representing a course number
    * @param above a flag. If true it returns courses above, otherwise courses below
-   * @returns a list of `Course` values
+   * @returns a list of `Course` instances.
    */
   public async coursesAboveOrBelow(
     { department, courseNum }: { department: string; courseNum: number },
@@ -59,6 +59,40 @@ export class CourseService {
     return courses.filter((c: Course) => {
       const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
       return above ? num > courseNum : num < courseNum;
+    });
+  }
+
+  /**
+   *  `createCourse` creates a course if one with the same `department`
+   *  and course `number` does not exist already
+   * @param input an `CreateInput` instance
+   * @returns the created `Course` instance upon success
+   */
+  public async createCourse(input: UpsertInput): Promise<Course> {
+    return await prisma.course.create({
+      data: {
+        ...input,
+      },
+    });
+  }
+
+  /**
+   *  `updateCourse` updates a course provided a valid `department`
+   *  and course `number` in the input
+   * @param input an `UpdateInput` instance
+   * @returns the updated `Course` instance upon success
+   */
+  public async updateCourse(input: UpsertInput): Promise<Course> {
+    return await prisma.course.update({
+      data: {
+        ...input,
+      },
+      where: {
+        department_number: {
+          department: input.department,
+          number: input.number,
+        },
+      },
     });
   }
 }

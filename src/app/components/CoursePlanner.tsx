@@ -2,7 +2,7 @@ import QuarterCard from "./QuarterCard";
 import { useState } from "react";
 import { dummyData } from "../dummy-course-data";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { Course } from "@generated/type-graphql/models/Course";
+import Course from "../ts-types/Course";
 
 import { gql, useQuery } from "@apollo/client";
 
