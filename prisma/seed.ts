@@ -8,7 +8,7 @@ async function main() {
   // load all the courses into the database
   for (let i = 0; i < courses.length; i++) {
     const course = courses[i];
-    const c = await prisma.course.create({
+    await prisma.course.create({
       data: {
         name: course.name,
         credits: course.credits,
@@ -16,8 +16,8 @@ async function main() {
         number: course.number,
       },
     });
-    console.log(c);
   }
+  console.log(`Loaded ${courses.length} courses`);
 }
 
 main()

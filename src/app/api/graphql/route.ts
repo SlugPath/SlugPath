@@ -1,12 +1,16 @@
 import { createYoga } from "graphql-yoga";
 import "reflect-metadata";
-import { buildSchemaSync } from "type-graphql";
+import { buildSchema } from "type-graphql";
 import { NextRequest, NextResponse } from "next/server";
-import { CourseResolver } from "../../../graphql/course/resolver";
+//import { CourseResolver } from "../../../graphql/course/resolver";
+import { resolvers } from "@generated/type-graphql";
+import { createContext } from "@/lib/context";
 
-const schema = buildSchemaSync({
-  resolvers: [CourseResolver],
-  validate: true,
+//const allResolvers: any = [...resolvers, new CourseResolver()];
+
+const schema = buildSchema({
+  resolvers: resolvers,
+  validate: false,
 });
 
 const { handleRequest } = createYoga({
@@ -17,6 +21,7 @@ const { handleRequest } = createYoga({
     Request: NextRequest,
     Response: NextResponse,
   },
+  context: createContext,
 });
 
 export { handleRequest as GET, handleRequest as POST };

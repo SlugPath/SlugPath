@@ -1,27 +1,16 @@
-import { MutableCourseInput, QueryableCourseInput } from "./args";
-import { Course } from "./schema";
+import { Course } from "@generated/type-graphql/models/Course";
 import { CourseService } from "./service";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Query, Resolver } from "type-graphql";
 
-@Resolver()
+@Resolver(Course)
 export class CourseResolver {
   @Query(() => [Course])
-  async courses(): Promise<Course[]> {
-    return await new CourseService().list();
+  async coursesBelow(@Arg("number") courseNum: number): Promise<Course[]> {
+    return await new CourseService().coursesAboveOrBelow(courseNum);
   }
 
   @Query(() => [Course])
-  async course(@Arg("input") input: QueryableCourseInput): Promise<Course[]> {
-    return await new CourseService().get(input);
-  }
-
-  @Mutation(() => Course)
-  async upsertCourse(@Arg("input") input: MutableCourseInput): Promise<Course> {
-    return await new CourseService().upsert(input);
-  }
-
-  @Mutation(() => Course)
-  async deleteCourse(@Arg("id") id: string): Promise<Course> {
-    return new CourseService().delete(id);
+  async coursesAbove(@Arg("number") courseNum: number): Promise<Course[]> {
+    return await new CourseService().coursesAboveOrBelow(courseNum, true);
   }
 }

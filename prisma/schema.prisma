@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("POSTGRES_PRISMA_URL")
@@ -13,7 +17,9 @@ model Course {
   department  String
   number      String
   credits     Int         @default(5)
+  /// @TypeGraphQL.omit(output: true)
   createdAt   DateTime    @default(now())
+  /// @TypeGraphQL.omit(output: true)
   updatedAt   DateTime    @updatedAt
 
   // No two courses can have the same department and course number
