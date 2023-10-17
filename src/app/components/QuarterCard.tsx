@@ -1,4 +1,5 @@
-import { Card } from "@mui/joy";
+import { Button, Card } from "@mui/joy";
+import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";
 import { Droppable, DroppableProps } from "react-beautiful-dnd";
 import CourseCard from "./CourseCard";
@@ -20,9 +21,11 @@ export const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
   return <Droppable {...props}>{children}</Droppable>;
 };
 
-export default function QuarterCard({ title, id, courses }: { title: string, id: string, courses: Course[] }) {
+export default function QuarterCard(
+  { title, id, courses, onOpenCourseSelectionModal }: { title: string, id: string, courses: Course[], onOpenCourseSelectionModal: any }
+) {
   return (
-    <Card className="w-96" style={{ minHeight: "96px" }}>
+    <Card className="w-96">
       {title}
       <StrictModeDroppable droppableId={id} >
         {(provided) => { return (
@@ -31,12 +34,18 @@ export default function QuarterCard({ title, id, courses }: { title: string, id:
             ref={provided.innerRef}
           >
             {courses.map((course, index) =>
-              <CourseCard key={course.id} course={course} index={index} />
+              <CourseCard key={index} course={course} index={index} />
             )}
             {provided.placeholder}
           </div>
         )}}
       </StrictModeDroppable>
+      <Button
+        variant="plain"
+        sx={{ m: 1 }}
+        startDecorator={<AddIcon />}
+        onClick={onOpenCourseSelectionModal}
+      >Course</Button>
     </Card>
   );
 }
