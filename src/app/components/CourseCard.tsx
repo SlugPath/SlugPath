@@ -1,12 +1,12 @@
 import { Card } from "@mui/joy";
 import { Draggable } from "react-beautiful-dnd";
-import { Course } from "../ts-types/Course";
+import { DummyCourse } from "../ts-types/Course";
 
 export default function CourseCard({
   course,
   index,
 }: {
-  course: Course;
+  course: DummyCourse;
   index: number;
 }) {
   return (

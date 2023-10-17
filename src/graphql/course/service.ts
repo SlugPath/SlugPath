@@ -1,8 +1,33 @@
 import { prisma } from "@/lib/prisma";
-import Course from "@/app/ts-types/Course";
-import { QueryInput, UpsertInput } from "@/app/ts-types/Args";
+import { Course } from "@/app/ts-types/Course";
+import { OrderedInput, QueryInput, UpsertInput } from "@/app/ts-types/Args";
+import { isAlpha } from "class-validator";
 
 const COURSES_LIMIT = 100;
+const MAX_COURSE_NUM: number = 299;
+
+const compareCoursesByNum = function (a: Course, b: Course): number {
+  // Check numbers first
+  const aNum = parseInt(a.number.replace(/[A-Z]/g, ""));
+  const bNum = parseInt(b.number.replace(/[A-Z]/g, ""));
+
+  if (aNum > bNum) return 1;
+  if (bNum > aNum) return -1;
+
+  // Check letters for cases like 115A and 115B
+  const aLastChar = a.number[a.number.length - 1];
+  const aLet = isAlpha(aLastChar) ? aLastChar : "";
+
+  const bLastChar = b.number[b.number.length - 1];
+  const bLet = isAlpha(bLastChar) ? bLastChar : "";
+
+  if (aLet == "") return 0;
+
+  if (aLet > bLet) return 1;
+  if (bLet > aLet) return -1;
+
+  return 0;
+};
 
 /**
  * CourseService is a service class used to execute custom functions
@@ -17,6 +42,23 @@ export class CourseService {
     return await prisma.course.findMany({
       take: COURSES_LIMIT,
     });
+  }
+
+  /**
+   * Returns `numCourses` `Course` instances in
+   * @param department string value representing a school department
+   * @param numCourses number of courses to return
+   * @returns a list of `Course` instances
+   */
+  public async coursesInOrder(input: OrderedInput): Promise<Course[]> {
+    return (
+      await this.coursesAboveOrBelow({
+        department: input.department,
+        courseNum: MAX_COURSE_NUM,
+      })
+    )
+      .sort(compareCoursesByNum)
+      .slice(0, input.numCourses);
   }
 
   /**
@@ -56,10 +98,12 @@ export class CourseService {
         department: department,
       },
     });
-    return courses.filter((c: Course) => {
-      const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
-      return above ? num > courseNum : num < courseNum;
-    });
+    return courses
+      .filter((c: Course) => {
+        const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
+        return above ? num > courseNum : num < courseNum;
+      })
+      .slice(0, COURSES_LIMIT);
   }
 
   /**

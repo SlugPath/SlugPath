@@ -1,5 +1,5 @@
-import { IsUUID, Matches, Length, IsInt, Min, Max } from "class-validator";
-import { ObjectType, Field } from "type-graphql";
+import { IsUUID, Matches, Length, Min, Max } from "class-validator";
+import { ObjectType, Field, Int } from "type-graphql";
 
 /**
  * `Course` is an `ObjectType` class used as a data transfer object.
@@ -7,7 +7,7 @@ import { ObjectType, Field } from "type-graphql";
  * of data sent to the UI from GraphQL.
  */
 @ObjectType()
-export default class Course {
+export class Course {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
   department!: string;
@@ -20,13 +20,20 @@ export default class Course {
   @Length(5, 100)
   name!: string;
 
-  @Field({ nullable: true })
-  @IsUUID("4")
-  id?: string;
-
   @Field()
-  @IsInt()
+  @IsUUID("4")
+  id!: string;
+
+  @Field(() => Int)
   @Min(1)
   @Max(10)
   credits!: number;
+}
+
+/**
+ * `DummyCourse` is a type to represent dummy courses for now
+ */
+export interface DummyCourse {
+  id: string;
+  name: string;
 }

@@ -1,5 +1,5 @@
-import { IsInt, IsUUID, Length, Matches, Max, Min } from "class-validator";
-import { ArgsType, Field, InputType } from "type-graphql";
+import { IsUUID, Length, Matches, Max, Min } from "class-validator";
+import { ArgsType, Field, InputType, Int } from "type-graphql";
 
 @ArgsType()
 export class QueryInput {
@@ -19,8 +19,7 @@ export class QueryInput {
   @IsUUID("4")
   id?: string;
 
-  @Field({ nullable: true })
-  @IsInt()
+  @Field(() => Int, { nullable: true })
   @Min(1)
   @Max(10)
   credits?: number;
@@ -44,11 +43,22 @@ export class UpsertInput {
   @Length(5, 100)
   name!: string;
 
-  @Field()
-  @IsInt()
+  @Field(() => Int)
   @Min(1)
   @Max(10)
   credits!: number;
+}
+
+@ArgsType()
+export class OrderedInput {
+  @Field()
+  @Matches(/[A-Z]{2,6}/g)
+  department!: string;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(390)
+  numCourses!: number;
 }
 
 @ArgsType()
@@ -57,8 +67,7 @@ export class AboveOrBelowInput {
   @Matches(/[A-Z]{2,6}/g)
   department!: string;
 
-  @Field()
-  @IsInt()
+  @Field(() => Int)
   @Min(1)
   @Max(299)
   courseNum!: number;

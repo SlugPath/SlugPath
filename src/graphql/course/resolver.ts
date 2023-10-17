@@ -1,8 +1,9 @@
 import { CourseService } from "./service";
-import Course from "@/app/ts-types/Course";
+import { Course } from "@/app/ts-types/Course";
 import { Args, Arg, Mutation, Query, Resolver } from "type-graphql";
 import {
   AboveOrBelowInput,
+  OrderedInput,
   QueryInput,
   UpsertInput,
 } from "@/app/ts-types/Args";
@@ -15,11 +16,22 @@ import {
 export class CourseResolver {
   /**
    * `courses` returns all courses with limit 200
-   * @returns
+   * @returns a list of `Course` instances
    */
   @Query(() => [Course])
   async courses(): Promise<Course[]> {
     return await new CourseService().allCourses();
+  }
+
+  /**
+   * `coursesInOrder` returns a user-defined number of courses in ascending order
+   * of course number for a user specified department.
+   * @param input OrderedInput containing department and number of `Course` instances
+   * @returns a list of `Course` instances
+   */
+  @Query(() => [Course])
+  async coursesInOrder(@Args() input: OrderedInput): Promise<Course[]> {
+    return await new CourseService().coursesInOrder(input);
   }
 
   /**

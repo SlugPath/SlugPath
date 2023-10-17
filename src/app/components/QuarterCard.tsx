@@ -2,7 +2,7 @@ import { Card } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { Droppable, DroppableProps } from "react-beautiful-dnd";
 import CourseCard from "./CourseCard";
-import { Course } from "../ts-types/Course";
+import { DummyCourse } from "../ts-types/Course";
 
 // KEEP THIS! This is a workaround for a bug with Droppable in react-beautiful-dnd
 export const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
@@ -27,7 +27,7 @@ export default function QuarterCard({
 }: {
   title: string;
   id: string;
-  courses: Course[];
+  courses: DummyCourse[];
 }) {
   return (
     <Card className="w-96" style={{ minHeight: "96px" }}>
