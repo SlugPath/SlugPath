@@ -8,12 +8,11 @@ import { gql, useQuery } from "@apollo/client";
 
 const query = gql`
   query {
-    courses {
-      id
-      name
-      number
+    coursesInOrder(department: "CSE", numCourses: 10) {
       credits
       department
+      name
+      number
     }
   }
 `;
@@ -97,7 +96,7 @@ export function CoursePlanner() {
         <div id="members" className="text-3xl pb-3">
           See the courses! (limited to first 10 for now)
         </div>
-        {data.courses.slice(0, 10).map((course: Course) => (
+        {data.coursesInOrder.slice(0, 10).map((course: Course) => (
           <div
             key={course.name}
             className="grid grid-cols-2 place-items-center"

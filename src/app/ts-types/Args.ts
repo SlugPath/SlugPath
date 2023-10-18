@@ -2,6 +2,9 @@ import { IsUUID, Length, Matches, Max, Min } from "class-validator";
 import { ArgsType, Field, InputType, Int } from "type-graphql";
 
 @ArgsType()
+/**
+ * `QueryInput` is for querying courses based on course attributes
+ */
 export class QueryInput {
   @Field({ nullable: true })
   @Matches(/[A-Z]{2,6}/g)
@@ -49,6 +52,23 @@ export class UpsertInput {
   credits!: number;
 }
 
+/**
+ * `DeleteInput` is used for deleting courses from the database
+ */
+@InputType()
+export class DeleteInput {
+  @Field()
+  @Matches(/[A-Z]{2,6}/g)
+  department!: string;
+
+  @Field()
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
+  number!: string;
+}
+
+/**
+ * `OrderedInput` is used for querying a number of courses in order of course number
+ */
 @ArgsType()
 export class OrderedInput {
   @Field()
@@ -61,6 +81,9 @@ export class OrderedInput {
   numCourses!: number;
 }
 
+/**
+ * `AboveOrBelowInput` is used for querying courses above or below a particular course number
+ */
 @ArgsType()
 export class AboveOrBelowInput {
   @Field()

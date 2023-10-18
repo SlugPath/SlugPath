@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Course } from "@/app/ts-types/Course";
-import { OrderedInput, QueryInput, UpsertInput } from "@/app/ts-types/Args";
+import { DeleteInput, OrderedInput, QueryInput, UpsertInput } from "@/app/ts-types/Args";
 import { isAlpha } from "class-validator";
 
 const COURSES_LIMIT = 100;
@@ -138,5 +138,22 @@ export class CourseService {
         },
       },
     });
+  }
+
+  /**
+   *  `deleteCourse` deletes a course provided a valid `department`
+   *  and course `number` in the input
+   * @param input a `DeleteInput` instance
+   * @returns the deleted `Course` instance upon success
+   */
+  public async deleteCourse(input: DeleteInput): Promise<Course> {
+    return await prisma.course.delete({
+      where: {
+        department_number: {
+          department: input.department,
+          number: input.number,
+        }
+      }
+    })
   }
 }

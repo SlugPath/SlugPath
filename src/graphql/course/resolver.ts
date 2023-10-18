@@ -3,6 +3,7 @@ import { Course } from "@/app/ts-types/Course";
 import { Args, Arg, Mutation, Query, Resolver } from "type-graphql";
 import {
   AboveOrBelowInput,
+  DeleteInput,
   OrderedInput,
   QueryInput,
   UpsertInput,
@@ -67,7 +68,7 @@ export class CourseResolver {
   }
 
   /**
-   *  `createCourse` is a resolver function that creates a course if one with the same `department`
+   *  `createCourse` is a mutation function that creates a course if one with the same `department`
    *  and course `number` does not exist already
    * @param input an `CreateInput` instance
    * @returns the created `Course` instance upon success
@@ -78,7 +79,7 @@ export class CourseResolver {
   }
 
   /**
-   *  `updateCourse` is a resolver function that updates a course provided a valid `department`
+   *  `updateCourse` is a mutating function that updates a course provided a valid `department`
    *  and course `number` in the input
    * @param input an `CreateInput` instance
    * @returns the created `Course` instance upon success
@@ -86,5 +87,16 @@ export class CourseResolver {
   @Mutation(() => Course)
   async updateCourse(@Arg("input") input: UpsertInput): Promise<Course> {
     return await new CourseService().updateCourse(input);
+  }
+
+  /**
+   * `deleteCourse` is a mutation function that deletes a course from a database,
+   * provided it exists
+   * @param input 
+   * @returns 
+   */
+  @Mutation(() => Course)
+  async deleteCourse(@Arg("input") input: DeleteInput): Promise<Course> {
+    return await new CourseService().deleteCourse(input);
   }
 }
