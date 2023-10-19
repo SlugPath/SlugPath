@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
+import { getCookie, setCookie } from 'cookies-next';
 import QuarterCard from "./QuarterCard";
-import { useState } from "react";
 import { dummyData } from "../dummy-course-data";
+import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Course } from "@/graphql/course/schema";
 
@@ -21,6 +23,19 @@ const query = gql`
 export function CoursePlanner() {
   const [courseState, setCourseState] = useState(dummyData);
   const { data, loading, error } = useQuery(query);
+
+  // Runs upon initial render
+  useEffect(() => {
+    const cookieCourseState = getCookie('courseState');
+    if (cookieCourseState) {
+      setCourseState(JSON.parse(cookieCourseState) as DummyData);
+    }
+  }, []);
+
+  const handleCourseUpdate = (courseState: DummyData) => {
+    setCourseState(courseState);
+    setCookie('courseState', JSON.stringify(courseState));
+  }
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -51,7 +66,7 @@ export function CoursePlanner() {
         },
       };
 
-      setCourseState(newState);
+      handleCourseUpdate(newState);
     } else {
       // moving from one list to another
       const startCourseIds = Array.from(startQuarter.courseIds);
@@ -77,7 +92,7 @@ export function CoursePlanner() {
         },
       };
 
-      setCourseState(newState);
+      handleCourseUpdate(newState);
     }
   };
 
