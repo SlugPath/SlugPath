@@ -48,6 +48,12 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
+    steps:
+      - name: Wait for PostgreSQL
+        run: |
+          while ! nc -z localhost 5432; do
+            sleep 1
+          done
 
   jest-tests:
     runs-on: ubuntu-22.04
