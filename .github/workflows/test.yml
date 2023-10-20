@@ -8,29 +8,7 @@ on:
     branches:
       - main
 jobs:
-  cypress-tests:
-    env:
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: "npm"
-
-      - name: Build
-        run: |
-          npm ci
-          npm run build
-
-      - name: Run Cypress Tests
-        run: npm run e2e:headless
-
-  jest-tests:
+  tests:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -61,6 +39,7 @@ jobs:
       - name: Build
         run: |
           npm ci
+          npx prisma generate
           npm run build
 
       - name: Populate Postgres Database
@@ -70,3 +49,6 @@ jobs:
 
       - name: Run Jest Tests
         run: npm run test
+      
+      - name: Run Cypress Tests
+        run: npm run e2e:headless
