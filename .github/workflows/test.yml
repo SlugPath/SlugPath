@@ -9,9 +9,7 @@ on:
       - main
 
 jobs:
-  test:
-    env:
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+  build:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -29,6 +27,41 @@ jobs:
           npm ci
           npm run build
 
+  cypress-tests:
+    runs-on: ubuntu-22.04
+    needs: build
+    env:
+      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+    steps:
       - name: Run Cypress Tests
+        run: npm run e2e:headless
+  
+  db:
+    runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: float
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
+  
+  jest-tests:
+    runs-on: ubuntu-22.04
+    needs: [build, db]
+    env:
+      POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
+    steps:
+      - name: Populate Postgres Database
         run: |
-          npm run e2e:headless
+          npx prisma db push
+          npx prisma db seed
+      - name: Run Jest Tests
+        run: npm run test
+
+
+
+      
