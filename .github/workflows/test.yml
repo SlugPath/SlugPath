@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Run Cypress Tests
         run: npm run e2e:headless
-  
+
   db:
     runs-on: ubuntu-22.04
     services:
@@ -48,7 +48,6 @@ jobs:
         ports:
           - 5432:5432
 
-  
   jest-tests:
     runs-on: ubuntu-22.04
     needs: [build, db]
@@ -61,7 +60,3 @@ jobs:
           npx prisma db seed
       - name: Run Jest Tests
         run: npm run test
-
-
-
-      
