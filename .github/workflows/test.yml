@@ -1,9 +1,10 @@
-name: Cypress Tests
+name: Tests
 
 on:
   push:
     branches:
       - main
+      - supertest-jest-setup # Remove this later
   pull_request:
     branches:
       - main
