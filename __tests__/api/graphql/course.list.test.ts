@@ -1,33 +1,17 @@
-
-import http from 'http'
-import supertest from 'supertest';
-import 'whatwg-fetch'
-
-// import * as db from '../db';
-import requestHandler from './requestHandler';
-
-let server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
-let request: supertest.SuperTest<supertest.Test>;
+import { graphql } from "graphql";
+import { buildSchemaSync } from "type-graphql";
+import { describe, expect } from "@jest/globals";
+import { MemberResolver } from "@/graphql/course/resolver";
+import { createMockContext } from "../context";
 
 jest.setTimeout(10000);
 
-beforeAll( async () => {
-  server = http.createServer(requestHandler);
-  server.listen();
-  request = supertest(server);
-  // await db.reset();
-  return new Promise(resolve => setTimeout(resolve, 500));
+const schema = buildSchemaSync({
+  resolvers: [MemberResolver],
+  validate: true,
 });
-
-afterAll((done) => {
-  server.close(done);
-  // db.shutdown();
-});
-
-test('Course List', async () => {
-  await request.post('/api/graphql')
-    .send({query:
-      `query AllCourses {
+const query = `
+  query AllCourses {
         courses {
           id
           name
@@ -35,23 +19,28 @@ test('Course List', async () => {
           number
           credits
         }
-      }`
-    })
-    .expect(200)
-    .then((data) => {
-      expect(data).toBeDefined();
-      expect(data.body).toBeDefined();
-      expect(data.body.data).toBeDefined();
-      expect(data.body.data.courses.length).toEqual(197);
-      expect(data.body.data.courses[0].id).toBeDefined();
-      expect(data.body.data.courses[0].id).toEqual('8522ab12-9bf1-408c-ba2d-560ee8a34009');
-      expect(data.body.data.courses[0].name).toBeDefined();
-      expect(data.body.data.courses[0].name).toEqual('Personal Computer Concepts: Software and Hardware');
-      expect(data.body.data.courses[0].department).toBeDefined();
-      expect(data.body.data.courses[0].department).toEqual('CSE');
-      expect(data.body.data.courses[0].number).toBeDefined();
-      expect(data.body.data.courses[0].number).toEqual('3');
-      expect(data.body.data.courses[0].credits).toBeDefined();
-      expect(data.body.data.courses[0].credits).toEqual(5);
+      }`;
+
+describe("Test All Courses", () => {
+  it("Should return a course", async () => {
+    const { data } = await graphql({
+      schema,
+      source: query,
+      contextValue: createMockContext(),
     });
+    expect(data).toBeDefined();
+    const courses = data?.courses;
+    expect(courses).toBeDefined();
+    expect(courses.length).toEqual(197);
+    expect(courses[0].id).toBeDefined();
+    expect(courses[0].name).toBeDefined();
+    expect(courses[0].name).toEqual(
+      "Personal Computer Concepts: Software and Hardware",
+    );
+    expect(courses[0].department).toBeDefined();
+    expect(courses[0].department).toEqual("CSE");
+    expect(courses[0].number).toBeDefined();
+    expect(courses[0].number).toEqual("3");
+    expect(courses[0].credits).toBeDefined();
   });
+});

@@ -1,11 +1,10 @@
+import { Pool } from "pg";
+import * as fs from "fs";
 
-import {Pool} from 'pg';
-import * as fs from 'fs';
-
-process.env.POSTGRES_DB='test';
+process.env.POSTGRES_DB = "test";
 
 const pool = new Pool({
-  host: 'localhost',
+  host: "localhost",
   port: 5432,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
@@ -13,7 +12,7 @@ const pool = new Pool({
 });
 
 const run = async (file: string) => {
-  const content = fs.readFileSync(file, 'utf8');
+  const content = fs.readFileSync(file, "utf8");
   const statements = content.split(/\r?\n/);
   for (const statement of statements) {
     if (statement) {
@@ -23,8 +22,8 @@ const run = async (file: string) => {
 };
 
 const reset = async () => {
-  await run('sql/schema.sql');
-  await run('sql/data.sql');
+  await run("sql/schema.sql");
+  await run("sql/data.sql");
 };
 
 const shutdown = () => {
@@ -33,4 +32,4 @@ const shutdown = () => {
   });
 };
 
-export {reset, shutdown};
+export { reset, shutdown };

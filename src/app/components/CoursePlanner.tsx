@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCookie, setCookie } from 'cookies-next';
+import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
 import { dummyData } from "../dummy-course-data"
@@ -28,7 +28,7 @@ export default function CoursePlanner() {
 
   // Runs upon initial render
   useEffect(() => {
-    const cookieCourseState = getCookie('courseState');
+    const cookieCourseState = getCookie("courseState");
     if (cookieCourseState) {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
     }
