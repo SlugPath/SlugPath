@@ -4,19 +4,18 @@ on:
   push:
     branches:
       - main
-      - supertest-jest-setup # Remove this later
   pull_request:
     branches:
       - main
-
 jobs:
-  build:
-    runs-on: ubuntu-22.04
+  cypress-tests:
+    env:
+      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -28,20 +27,11 @@ jobs:
           npm ci
           npm run build
 
-  cypress-tests:
-    runs-on: ubuntu-22.04
-    needs: build
-    env:
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Run Cypress Tests
         run: npm run e2e:headless
 
-  db:
-    runs-on: ubuntu-22.04
+  jest-tests:
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:alpine
@@ -51,24 +41,32 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
-    steps:
-      - name: Wait for PostgreSQL
-        run: |
-          while ! nc -z localhost 5432; do
-            sleep 1
-          done
-
-  jest-tests:
-    runs-on: ubuntu-22.04
-    needs: [build, db]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+
       - name: Populate Postgres Database
         run: |
           npx prisma db push
           npx prisma db seed
+
       - name: Run Jest Tests
         run: npm run test
