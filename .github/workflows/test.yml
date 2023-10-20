@@ -34,6 +34,9 @@ jobs:
     env:
       POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Run Cypress Tests
         run: npm run e2e:headless
 
@@ -61,6 +64,8 @@ jobs:
     env:
       POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Populate Postgres Database
         run: |
           npx prisma db push
