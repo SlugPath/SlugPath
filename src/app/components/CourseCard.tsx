@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card } from "@mui/joy";
+import { Card, Typography } from "@mui/joy";
 import { Draggable } from "react-beautiful-dnd";
 import { Course } from "../ts-types/Course";
 
@@ -12,8 +12,11 @@ export default function CourseCard({ course, index }: { course: Course, index: n
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            size="sm"
           >
-            {course.name}
+            <Typography level='body-md' >
+              {course.name}
+            </Typography>
           </Card>
         )
       }}

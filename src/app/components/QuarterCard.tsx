@@ -25,13 +25,14 @@ export default function QuarterCard(
   { title, id, courses, onOpenCourseSelectionModal }: { title: string, id: string, courses: Course[], onOpenCourseSelectionModal: any }
 ) {
   return (
-    <Card className="w-96">
+    <Card className="w-64">
       {title}
       <StrictModeDroppable droppableId={id} >
         {(provided) => { return (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
+            style={{ height: "100%" , minHeight: "64px" }}
           >
             {courses.map((course, index) =>
               <CourseCard key={index} course={course} index={index} />
@@ -42,9 +43,9 @@ export default function QuarterCard(
       </StrictModeDroppable>
       <Button
         variant="plain"
-        sx={{ m: 1 }}
         startDecorator={<AddIcon />}
         onClick={onOpenCourseSelectionModal}
+        size="sm"
       >Course</Button>
     </Card>
   );

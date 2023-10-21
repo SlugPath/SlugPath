@@ -4,7 +4,6 @@ import { useState } from "react";
 import { dummyData } from "../dummy-course-data";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { gql, useQuery } from "@apollo/client";
-import { Button } from "@mui/joy";
 import { Course } from "../ts-types/Course";
 
 const query = gql`
@@ -104,7 +103,7 @@ export function CoursePlanner() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center space-between p-24 bg-gray-100 space-y-4">
+    <div className="flex min-h-screen flex-col items-center space-between p-6 bg-gray-100 space-y-4">
       <CourseSelectionModal
         courses={data.courses}
         setShowModal={setShowModal}
