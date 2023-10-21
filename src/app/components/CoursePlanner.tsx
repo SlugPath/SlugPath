@@ -22,10 +22,9 @@ const query = gql`
 `;
 
 export default function CoursePlanner() {
-  const [courseState, setCourseState] = useState(dummyData);
   const { data, loading, error } = useQuery(query);
+  const [courseState, setCourseState] = useState(dummyData);
   const [showModal, setShowModal] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
   // Runs upon initial render
@@ -39,6 +38,31 @@ export default function CoursePlanner() {
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
     setCookie('courseState', JSON.stringify(courseState));
+  }
+
+  const handleOpenCourseSelectionModal = (quarterId: string) => {
+    setSelectedQuarter(quarterId);
+    setShowModal(true);
+  }
+
+  const handleAddCoursesFromModal = (courses: Course[]) => {
+    const quarter = courseState.quarters[selectedQuarter];
+    const newCourseIds = Array.from(quarter.courseIds);
+    courses.forEach((course) => newCourseIds.push(course.id));
+    const newQuarter = {
+      ...quarter,
+      courseIds: newCourseIds,
+    };
+
+    const newState = {
+      ...courseState,
+      quarters: {
+        ...courseState.quarters,
+        [newQuarter.id]: newQuarter,
+      },
+    };
+
+    handleCourseUpdate(newState);
   }
 
   const handleOnDragEnd = (result: DropResult) => {
@@ -123,14 +147,12 @@ export default function CoursePlanner() {
     }
   };
 
-  const handleOpenCourseSelectionModal = (quarterId: string) => {
-    setSelectedQuarter(quarterId);
-    setShowModal(true);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleAddCourses = (courses: Course[]) => {
-    // TODO: write the code to add the courses to the selected quarter
+  const loadCoursesNotPresentFromData = () => {
+    data.courses.forEach((course: Course) => {
+      if (!courseState.courses[course.id]) {
+        courseState.courses[course.id] = course;
+      }
+    });
   }
 
   if (error) {
@@ -141,11 +163,14 @@ export default function CoursePlanner() {
     return <p>Loading....</p>;
   }
 
+  loadCoursesNotPresentFromData()
+
   return (
     <div>
       <CourseSelectionModal
         courses={data.courses}
         setShowModal={setShowModal}
+        onAddCourses={handleAddCoursesFromModal}
         showModal={showModal}
       />
       <DragDropContext onDragEnd={handleOnDragEnd} >
