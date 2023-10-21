@@ -2,7 +2,7 @@ import { Card } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { Droppable, DroppableProps } from "react-beautiful-dnd";
 import CourseCard from "./CourseCard";
-import { Course } from "../ts-types/Course"
+import { DummyCourse } from "../ts-types/Course";
 
 // KEEP THIS! This is a workaround for a bug with Droppable in react-beautiful-dnd
 export const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
@@ -20,22 +20,29 @@ export const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
   return <Droppable {...props}>{children}</Droppable>;
 };
 
-export default function QuarterCard({ title, id, courses }: { title: string, id: string, courses: Course[] }) {
+export default function QuarterCard({
+  title,
+  id,
+  courses,
+}: {
+  title: string;
+  id: string;
+  courses: DummyCourse[];
+}) {
   return (
     <Card className="w-96" style={{ minHeight: "96px" }}>
       {title}
-      <StrictModeDroppable droppableId={id} >
-        {(provided) => { return (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {courses.map((course, index) =>
-              <CourseCard key={course.id} course={course} index={index} />
-            )}
-            {provided.placeholder}
-          </div>
-        )}}
+      <StrictModeDroppable droppableId={id}>
+        {(provided) => {
+          return (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {courses.map((course, index) => (
+                <CourseCard key={course.id} course={course} index={index} />
+              ))}
+              {provided.placeholder}
+            </div>
+          );
+        }}
       </StrictModeDroppable>
     </Card>
   );

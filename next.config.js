@@ -1,12 +1,18 @@
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+module.exports = withBundleAnalyzer({
+  output: "standalone",
   async headers() {
     return [
       {
-        "source": "/api/:path*",
+        source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this with actual origin if needed
           {
             key: "Access-Control-Allow-Methods",
             value: "GET,DELETE,PATCH,POST,PUT",
@@ -20,6 +26,12 @@ const nextConfig = {
       },
     ];
   },
-};
-
-module.exports = nextConfig;
+  webpack(config, { webpack }) {
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        "globalThis.__DEV__": false,
+      }),
+    );
+    return config;
+  },
+});

@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
 import { getCookie, setCookie } from 'cookies-next';
 import QuarterCard from "./QuarterCard";
-import { dummyData } from "../dummy-course-data";
+import { dummyData } from "../dummy.course.data";
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { Course } from "@/graphql/course/schema";
+import { Course } from "../ts-types/Course";
 
 import { gql, useQuery } from "@apollo/client";
 
 const query = gql`
-  query courses {
-    courses {
-      id
-      name
-      number
+  query {
+    coursesInOrder(department: "CSE", numCourses: 10) {
       credits
       department
+      name
+      number
     }
   }
 `;
@@ -44,7 +43,9 @@ export function CoursePlanner() {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    ) return;
+    ) {
+      return;
+    }
 
     const startQuarter = courseState.quarters[source.droppableId];
     const finishQuarter = courseState.quarters[destination.droppableId];
@@ -110,7 +111,7 @@ export function CoursePlanner() {
         <div id="members" className="text-3xl pb-3">
           See the courses! (limited to first 10 for now)
         </div>
-        {data.courses.slice(0, 10).map((course: Course) => (
+        {data.coursesInOrder.slice(0, 10).map((course: Course) => (
           <div
             key={course.name}
             className="grid grid-cols-2 place-items-center"
@@ -138,8 +139,8 @@ export function CoursePlanner() {
                 <div key={i} className="flex flex-row space-x-2">
                   {quarters.map((quarterId) => {
                     const quarter = courseState.quarters[quarterId];
-                    const courses = quarter.courseIds.map((courseId) =>
-                      courseState.courses[courseId]
+                    const courses = quarter.courseIds.map(
+                      (courseId) => courseState.courses[courseId],
                     );
 
                     return (
