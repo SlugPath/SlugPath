@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getCookie, setCookie } from "cookies-next";
+import { useState, useEffect } from "react";
+import { getCookie, setCookie } from 'cookies-next';
 import QuarterCard from "./QuarterCard";
 import { dummyData } from "../dummy.course.data";
 import { DummyData } from "../ts-types/DummyData";
@@ -19,13 +19,13 @@ const query = gql`
   }
 `;
 
-export      function CoursePlanner() {
+export function CoursePlanner() {
   const [courseState, setCourseState] = useState(dummyData);
   const { data, loading, error } = useQuery(query);
 
   // Runs upon initial render
   useEffect(() => {
-    const cookieCourseState = getCookie("courseState");
+    const cookieCourseState = getCookie('courseState');
     if (cookieCourseState) {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
     }
@@ -33,8 +33,8 @@ export      function CoursePlanner() {
 
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
-    setCookie("courseState", JSON.stringify(courseState));
-  };
+    setCookie('courseState', JSON.stringify(courseState));
+  }
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
