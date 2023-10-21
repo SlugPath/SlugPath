@@ -20,7 +20,6 @@ function createCourses() {
         'course-2': { id: 'course-2', name: 'CSE 2' },
         'course-3': { id: 'course-3', name: 'CSE 3' },
     }
-    // return {}
 }
 
 function createQuarters() {
