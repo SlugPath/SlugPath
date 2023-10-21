@@ -1,7 +1,6 @@
 import { DummyCourse } from "./Course";
 import { Quarter } from "./Quarter";
 
-
 /**
  * `DummyData` is a placeholder type used to store courses, quarters, and other fields
  */

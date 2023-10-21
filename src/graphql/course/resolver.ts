@@ -92,8 +92,8 @@ export class CourseResolver {
   /**
    * `deleteCourse` is a mutation function that deletes a course from a database,
    * provided it exists
-   * @param input 
-   * @returns 
+   * @param input
+   * @returns
    */
   @Mutation(() => Course)
   async deleteCourse(@Arg("input") input: DeleteInput): Promise<Course> {

@@ -1,6 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { Course } from "@/app/ts-types/Course";
-import { DeleteInput, OrderedInput, QueryInput, UpsertInput } from "@/app/ts-types/Args";
+import {
+  DeleteInput,
+  OrderedInput,
+  QueryInput,
+  UpsertInput,
+} from "@/app/ts-types/Args";
 import { isAlpha } from "class-validator";
 
 const COURSES_LIMIT = 100;
@@ -152,8 +157,8 @@ export class CourseService {
         department_number: {
           department: input.department,
           number: input.number,
-        }
-      }
-    })
+        },
+      },
+    });
   }
 }
