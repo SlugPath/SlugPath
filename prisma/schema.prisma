@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -13,6 +14,11 @@ model Course {
   department  String
   number      String
   credits     Int         @default(5)
+  /// @TypeGraphQL.omit(output: true)
   createdAt   DateTime    @default(now())
+  /// @TypeGraphQL.omit(output: true)
   updatedAt   DateTime    @updatedAt
+
+  // No two courses can have the same department and course number
+  @@unique([department, number])
 }

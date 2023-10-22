@@ -1,4 +1,4 @@
-import { Course } from "@/graphql/course/schema";
+import { Course } from "../ts-types/Course";
 import { Button, Checkbox, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useState } from "react";
 

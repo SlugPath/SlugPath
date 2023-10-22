@@ -10,13 +10,12 @@ import { Course } from "../ts-types/Course";
 import { StrictModeDroppable } from "./StrictModeDroppable";
 
 const query = gql`
-  query courses {
-    courses {
-      id
-      name
-      number
+  query {
+    coursesInOrder(department: "CSE", numCourses: 10) {
       credits
       department
+      name
+      number
     }
   }
 `;

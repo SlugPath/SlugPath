@@ -8,18 +8,21 @@ const { stream, send } = logflarePinoVercel({
 });
 
 // create pino logger
-const logger = pino({
-  browser: {
-    transmit: {
-      level: "info",
-      send: send,
+const logger = pino(
+  {
+    browser: {
+      transmit: {
+        level: "info",
+        send: send,
+      },
+    },
+    level: "debug",
+    base: {
+      env: ENV,
+      revision: SHA,
     },
   },
-  level: "debug",
-  base: {
-    env: ENV,
-    revision: SHA,
-  },
-}, stream);
+  stream,
+);
 
 export default logger;

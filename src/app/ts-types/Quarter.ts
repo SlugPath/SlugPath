@@ -1,5 +1,8 @@
+/**
+ * `Quarter` is a composite type that contains multiple courses a student might take in a quarter
+ */
 export interface Quarter {
-    id: string;
-    title: string;
-    courseIds: string[];
+  id: string;
+  title: string;
+  courseIds: string[];
 }

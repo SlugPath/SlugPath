@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Card, Typography } from "@mui/joy";
 import { Draggable } from "react-beautiful-dnd";
 import { Course } from "../ts-types/Course";

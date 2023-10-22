@@ -1,9 +1,0 @@
-query AllCourses {
-  courses {
-    id
-    name
-    department
-    number
-    credits
-  }
-}
