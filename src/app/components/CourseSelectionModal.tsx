@@ -18,7 +18,7 @@ export default function CourseSelectionModal(
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
 
 	const handleCheckedChanged = (event: React.ChangeEvent<HTMLInputElement>, course: Course) => {
-	  if (event.target.checked) {
+		if (event.target.checked) {
       setSelectedCourses([...selectedCourses, course]);
     } else {
       setSelectedCourses(selectedCourses.filter((c) => c.id !== course.id));

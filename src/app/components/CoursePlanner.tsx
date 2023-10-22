@@ -4,14 +4,14 @@ import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
 import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd"
 import { gql, useQuery } from "@apollo/client";
-import { Course } from "../ts-types/Course";
-import { StrictModeDroppable } from "./StrictModeDroppable";
+import { DummyCourse } from "../ts-types/Course";
 
 const query = gql`
   query {
-    coursesInOrder(department: "CSE", numCourses: 10) {
+    courses {
+      id
       credits
       department
       name
@@ -29,14 +29,18 @@ export default function CoursePlanner() {
   // Runs upon initial render
   useEffect(() => {
     const cookieCourseState = getCookie('courseState');
+    console.log("load cookies")
     if (cookieCourseState) {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
+      console.log(JSON.parse(cookieCourseState))
     }
   }, []);
 
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
     setCookie('courseState', JSON.stringify(courseState));
+    console.log("set cookies")
+    console.log(courseState)
   }
 
   const handleOpenCourseSelectionModal = (quarterId: string) => {
@@ -44,7 +48,7 @@ export default function CoursePlanner() {
     setShowModal(true);
   }
 
-  const handleAddCoursesFromModal = (courses: Course[]) => {
+  const handleAddCoursesFromModal = (courses: DummyCourse[]) => {
     const quarter = courseState.quarters[selectedQuarter];
     const newCourseIds = Array.from(quarter.courseIds);
     courses.forEach((course) => newCourseIds.push(course.id));
@@ -146,8 +150,8 @@ export default function CoursePlanner() {
     }
   };
 
-  const loadCoursesNotPresentFromData = () => {
-    data.courses.forEach((course: Course) => {
+  function loadCoursesNotPresentFromData() {
+    data.courses.forEach((course: DummyCourse) => {
       if (!courseState.courses[course.id]) {
         courseState.courses[course.id] = course;
       }
@@ -194,16 +198,16 @@ export default function CoursePlanner() {
 
 function RemoveCourseArea({droppableId}: {droppableId: string}) {
   return (
-    <StrictModeDroppable droppableId={droppableId} >
+    <Droppable droppableId={droppableId} >
       {(provided, snapshot) => { return (
         <div
           {...provided.droppableProps}
           ref={provided.innerRef}
           className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
           style={{ height: "100%" , minHeight: "48px"}}
-        />
+        >{provided.placeholder}</div>
       )}}
-    </StrictModeDroppable>
+    </Droppable>
   )
 }
 

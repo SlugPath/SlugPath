@@ -1,9 +1,11 @@
 import { Card, Typography } from "@mui/joy";
-import { Draggable } from "react-beautiful-dnd";
-import { Course } from "../ts-types/Course";
+import { Draggable } from "@hello-pangea/dnd";
+import { DummyCourse } from "../ts-types/Course";
 
-export default function CourseCard({ course, index }: { course: Course, index: number }) {
-  const title = `${course.department} ${course.number}`;
+export default function CourseCard({ course, index }: { course: DummyCourse, index: number }) {
+  function getTitle() {
+    return `${course.department} ${course.number}`;
+  }
 
   return (
     <Draggable key={course.id} draggableId={course.id} index={index} >
@@ -16,10 +18,10 @@ export default function CourseCard({ course, index }: { course: Course, index: n
             size="sm"
           >
             <Typography level='body-md' >
-              {title}
+              {course ? getTitle() : 'No course'}
             </Typography>
           </Card>
-        )
+        );
       }}
     </Draggable>
   )

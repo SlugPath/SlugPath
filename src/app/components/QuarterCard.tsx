@@ -1,8 +1,8 @@
 import { Button, Card } from "@mui/joy";
 import AddIcon from '@mui/icons-material/Add';
 import CourseCard from "./CourseCard";
-import { Course } from "../ts-types/Course"
-import { StrictModeDroppable } from "./StrictModeDroppable";
+import { Course } from "../ts-types/Course";
+import { Droppable } from "@hello-pangea/dnd";
 
 export default function QuarterCard(
   {title, id, courses, onOpenCourseSelectionModal }: { title: string, id: string, courses: Course[], onOpenCourseSelectionModal: any }
@@ -10,7 +10,7 @@ export default function QuarterCard(
   return (
     <Card className="w-64">
       {title}
-      <StrictModeDroppable droppableId={id} >
+      <Droppable droppableId={id} >
         {(provided) => { return (
           <div
             {...provided.droppableProps}
@@ -23,7 +23,7 @@ export default function QuarterCard(
             {provided.placeholder}
           </div>
         )}}
-      </StrictModeDroppable>
+      </Droppable>
       <div className="flex justify-end">
         <Button
           variant="plain"
