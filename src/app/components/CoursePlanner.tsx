@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getCookie, setCookie } from 'cookies-next';
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
-import { dummyData } from "../dummy-course-data";
+import { dummyData } from "../dummy-course-data"
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd"
 import { gql, useQuery } from "@apollo/client";
@@ -29,18 +29,19 @@ export default function CoursePlanner() {
   // Runs upon initial render
   useEffect(() => {
     const cookieCourseState = getCookie('courseState');
-    console.log("load cookies")
     if (cookieCourseState) {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
-      console.log(JSON.parse(cookieCourseState))
     }
   }, []);
 
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
-    setCookie('courseState', JSON.stringify(courseState));
-    console.log("set cookies")
-    console.log(courseState)
+
+    // remove all courses, as there are too many to fit into the max cookie size
+    setCookie('courseState', JSON.stringify({
+      ...courseState,
+      courses: {},
+    }));
   }
 
   const handleOpenCourseSelectionModal = (quarterId: string) => {

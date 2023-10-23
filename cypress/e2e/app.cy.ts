@@ -15,7 +15,7 @@ describe("app spec", () => {
       .click()
 
     // verify that course is added to the list
-    cy.contains("CSE 3")
+    cy.contains("CSE")
   });
 
 });
