@@ -1,38 +1,37 @@
 import { graphql } from "graphql";
 import { buildSchemaSync } from "type-graphql";
 import { describe, expect } from "@jest/globals";
-import { MemberResolver } from "@/graphql/course/resolver";
+import { CourseResolver } from "@/graphql/course/resolver";
 
 jest.setTimeout(10000);
 
 const schema = buildSchemaSync({
-  resolvers: [MemberResolver],
+  resolvers: [CourseResolver],
   validate: true,
 });
 
 const query = `
-  query AllCourses {
-        courses {
-          id
-          name
-          department
-          number
-          credits
-        }
-      }`;
+query {
+  coursesInOrder(department: "CSE", numCourses: 10) {
+    credits
+    department
+    id
+    name
+    number
+  }
+}`;
 
-describe("Test All Courses", () => {
-  it("Should return a course", async () => {
+describe("Test Courses InOrder", () => {
+  it("Should return CSE 3 first", async () => {
     const { data } = await graphql({
       schema,
       source: query,
-      //contextValue: createMockContext(),
     });
     expect(data).toBeDefined();
-    const courses = data?.courses;
+    const courses = data?.coursesInOrder;
 
     expect(courses).toBeDefined();
-    expect(courses.length).toEqual(197);
+    expect(courses.length).toEqual(10);
     expect(courses[0].id).toBeDefined();
     expect(courses[0].name).toBeDefined();
     expect(courses[0].name).toEqual(
