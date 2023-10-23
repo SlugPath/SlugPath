@@ -1,49 +1,37 @@
-import { Card } from "@mui/joy";
-import { useEffect, useState } from "react";
-import { Droppable, DroppableProps } from "react-beautiful-dnd";
+import { Button, Card } from "@mui/joy";
+import AddIcon from '@mui/icons-material/Add';
 import CourseCard from "./CourseCard";
-import { DummyCourse } from "../ts-types/Course";
+import { Course } from "../ts-types/Course";
+import { Droppable } from "@hello-pangea/dnd";
 
-// KEEP THIS! This is a workaround for a bug with Droppable in react-beautiful-dnd
-export const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
-  const [enabled, setEnabled] = useState(false);
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-  if (!enabled) {
-    return null;
-  }
-  return <Droppable {...props}>{children}</Droppable>;
-};
-
-export default function QuarterCard({
-  title,
-  id,
-  courses,
-}: {
-  title: string;
-  id: string;
-  courses: DummyCourse[];
-}) {
+export default function QuarterCard(
+  {title, id, courses, onOpenCourseSelectionModal }: { title: string, id: string, courses: Course[], onOpenCourseSelectionModal: any }
+) {
   return (
-    <Card className="w-96" style={{ minHeight: "96px" }}>
+    <Card className="w-64">
       {title}
-      <StrictModeDroppable droppableId={id}>
-        {(provided) => {
-          return (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {courses.map((course, index) => (
-                <CourseCard key={course.id} course={course} index={index} />
-              ))}
-              {provided.placeholder}
-            </div>
-          );
-        }}
-      </StrictModeDroppable>
+      <Droppable droppableId={id} >
+        {(provided) => { return (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            style={{ height: "100%" , minHeight: "48px" }}
+          >
+            {courses.map((course, index) =>
+              <CourseCard key={index} course={course} index={index} />
+            )}
+            {provided.placeholder}
+          </div>
+        )}}
+      </Droppable>
+      <div className="flex justify-end">
+        <Button
+          variant="plain"
+          startDecorator={<AddIcon />}
+          onClick={onOpenCourseSelectionModal}
+          size="sm"
+        />
+      </div>
     </Card>
   );
 }

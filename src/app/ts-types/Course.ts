@@ -36,4 +36,7 @@ export class Course {
 export interface DummyCourse {
   id: string;
   name: string;
+  credits: number;
+  department: string;
+  number: string;           // because some course numbers are 12L, 115A etc.
 }
