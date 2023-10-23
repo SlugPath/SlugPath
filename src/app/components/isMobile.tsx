@@ -12,7 +12,6 @@ export const MobileWarningModal = ({ show }: { show: boolean }) => {
       <div className="bg-white p-4 rounded shadow-lg w-3/4 text-center">
         <h2 className="text-lg font-bold mb-2">Attention</h2>
         <p>The Course Planner was not optimized for phones. Please use a desktop for a better experience.</p>
-        <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">Reload Page</button>
       </div>
     </div>
   );
