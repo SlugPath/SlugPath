@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { getCookie, setCookie } from 'cookies-next';
+import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
-import { dummyData } from "../dummy-course-data"
+import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
-import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd"
+import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
@@ -30,7 +30,7 @@ export default function CoursePlanner() {
 
   // Runs upon initial render
   useEffect(() => {
-    const cookieCourseState = getCookie('courseState');
+    const cookieCourseState = getCookie("courseState");
     if (cookieCourseState) {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
     }
@@ -41,22 +41,25 @@ export default function CoursePlanner() {
     if (isMobile()) {
       setShowMobileWarning(true);
     }
-  }, []);  
+  }, []);
 
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
 
     // remove all courses, as there are too many to fit into the max cookie size
-    setCookie('courseState', JSON.stringify({
-      ...courseState,
-      courses: {},
-    }));
-  }
+    setCookie(
+      "courseState",
+      JSON.stringify({
+        ...courseState,
+        courses: {},
+      }),
+    );
+  };
 
   const handleOpenCourseSelectionModal = (quarterId: string) => {
     setSelectedQuarter(quarterId);
     setShowModal(true);
-  }
+  };
 
   const handleAddCoursesFromModal = (courses: DummyCourse[]) => {
     const quarter = courseState.quarters[selectedQuarter];
@@ -76,7 +79,7 @@ export default function CoursePlanner() {
     };
 
     handleCourseUpdate(newState);
-  }
+  };
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -85,10 +88,14 @@ export default function CoursePlanner() {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    ) return;
+    )
+      return;
 
     // delete course dragged into delete area
-    if (destination.droppableId == "remove-course-area1" || destination.droppableId == "remove-course-area2") {
+    if (
+      destination.droppableId == "remove-course-area1" ||
+      destination.droppableId == "remove-course-area2"
+    ) {
       const startQuarter = courseState.quarters[result.source.droppableId];
       const newCourseIds = Array.from(startQuarter.courseIds);
       newCourseIds.splice(result.source.index, 1);
@@ -176,7 +183,7 @@ export default function CoursePlanner() {
     return <p>Loading....</p>;
   }
 
-  loadCoursesNotPresentFromData()
+  loadCoursesNotPresentFromData();
 
   return (
     <div>
@@ -186,7 +193,7 @@ export default function CoursePlanner() {
         onAddCourses={handleAddCoursesFromModal}
         showModal={showModal}
       />
-      <DragDropContext onDragEnd={handleOnDragEnd} >
+      <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="min-h-screen bg-gray-100 flex">
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area1"} />
@@ -207,22 +214,32 @@ export default function CoursePlanner() {
   );
 }
 
-function RemoveCourseArea({droppableId}: {droppableId: string}) {
+function RemoveCourseArea({ droppableId }: { droppableId: string }) {
   return (
-    <Droppable droppableId={droppableId} >
-      {(provided, snapshot) => { return (
-        <div
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
-          style={{ height: "100%" , minHeight: "48px"}}
-        >{provided.placeholder}</div>
-      )}}
+    <Droppable droppableId={droppableId}>
+      {(provided, snapshot) => {
+        return (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
+            style={{ height: "100%", minHeight: "48px" }}
+          >
+            {provided.placeholder}
+          </div>
+        );
+      }}
     </Droppable>
-  )
+  );
 }
 
-function Quarters({courseState, handleOpenCourseSelectionModal }: { courseState: DummyData, handleOpenCourseSelectionModal: any }) {
+function Quarters({
+  courseState,
+  handleOpenCourseSelectionModal,
+}: {
+  courseState: DummyData;
+  handleOpenCourseSelectionModal: any;
+}) {
   return (
     <div className="space-y-2">
       {Array.from(
@@ -238,8 +255,8 @@ function Quarters({courseState, handleOpenCourseSelectionModal }: { courseState:
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarterId) => {
               const quarter = courseState.quarters[quarterId];
-              const courses = quarter.courseIds.map((courseId) =>
-                courseState.courses[courseId]
+              const courses = quarter.courseIds.map(
+                (courseId) => courseState.courses[courseId],
               );
 
               return (
@@ -248,7 +265,9 @@ function Quarters({courseState, handleOpenCourseSelectionModal }: { courseState:
                   id={quarter.id}
                   key={quarter.id}
                   courses={courses}
-                  onOpenCourseSelectionModal={() => handleOpenCourseSelectionModal(quarter.id)}
+                  onOpenCourseSelectionModal={() =>
+                    handleOpenCourseSelectionModal(quarter.id)
+                  }
                 />
               );
             })}
@@ -256,5 +275,5 @@ function Quarters({courseState, handleOpenCourseSelectionModal }: { courseState:
         );
       })}
     </div>
-  )
+  );
 }
