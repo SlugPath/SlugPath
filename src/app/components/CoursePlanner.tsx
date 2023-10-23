@@ -7,6 +7,7 @@ import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd"
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
+import { isMobile, MobileWarningModal } from "./isMobile";
 
 const query = gql`
   query {
@@ -24,6 +25,7 @@ export default function CoursePlanner() {
   const { data, loading, error } = useQuery(query);
   const [courseState, setCourseState] = useState(dummyData);
   const [showModal, setShowModal] = useState(false);
+  const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
   // Runs upon initial render
@@ -33,6 +35,13 @@ export default function CoursePlanner() {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
     }
   }, []);
+
+  // Runs upon inital render: checks if user is on mobile device
+  useEffect(() => {
+    if (isMobile()) {
+      setShowMobileWarning(true);
+    }
+  }, []);  
 
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
@@ -193,6 +202,7 @@ export default function CoursePlanner() {
           </div>
         </div>
       </DragDropContext>
+      <MobileWarningModal show={showMobileWarning} />
     </div>
   );
 }
