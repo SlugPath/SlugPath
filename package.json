@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-browser": "npm run open-browser && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,7 +14,9 @@
     "e2e": "start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",
     "e2e:headless": "start-server-and-test dev http://localhost:3000 \"cypress run --e2e\"",
     "analyze": "cross-env ANALYZE=true next build",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "open-browser": "open http://localhost:3000",
+    "init-db": "npx prisma db push && npx prisma db seed"
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",

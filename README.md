@@ -11,6 +11,6 @@ Backend technologies: TypeGraphQL, GraphQL Yoga, PostgreSQL
 
 3. Open your .env file (create one if needed) and paste `POSTGRES_PRISMA_URL="postgresql://postgres:postgres@localhost:5432/dev"` into it. This is for connecting to the Postgres database within the docker container.
 4. Run `docker-compose up -d` to start the docker container. Make sure Docker is open.
-5. Run `npx prisma migrate dev --name init` and then `npx prisma db seed` to seed the database.
-6. Run `npm run dev` to start the application. It should be viewable at `localhost:3000` with the GraphQL query interface at `localhost:3000/api/graphql`.
+5. Run `npm run init-db` to initialize the postgres db, or directly run `npx prisma migrate dev --name init` and then `npx prisma db seed` to seed the database.
+6. Run `npm run dev` to start the application or `npm run dev-open` to run and open a new tab to `localhost:3000`, with the GraphQL query explorer at `localhost:3000/api/graphql`.
 7. When you're finished, `Ctrl + C` to exit dev and run `docker-compose down`.
