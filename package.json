@@ -68,7 +68,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "lint-staged": {
-    "*": [
+    "*.{ts,tsx,js,jsx}": [
       "prettier --write",
       "eslint --fix"
     ]

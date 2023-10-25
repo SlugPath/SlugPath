@@ -23,7 +23,6 @@ const query = gql`
 
 export default function CoursePlanner() {
   const { data, loading, error } = useQuery(query);
-  const [test, setTest] = useState(0);
   const [courseState, setCourseState] = useState(dummyData);
   const [showModal, setShowModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
