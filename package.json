@@ -18,12 +18,6 @@
     "open-browser": "open http://localhost:3000",
     "init-db": "npx prisma db push && npx prisma db seed"
   },
-  "lint-staged": {
-    "*": [
-      "prettier --write",
-      "eslint --fix"
-    ]
-  },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",
     "@emotion/react": "^11.11.1",
@@ -72,5 +66,11 @@
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
