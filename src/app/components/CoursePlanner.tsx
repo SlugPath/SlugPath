@@ -6,8 +6,12 @@ import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
+<<<<<<< Updated upstream
 import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
+=======
+import { Course } from "../ts-types/Course";
+>>>>>>> Stashed changes
 
 const query = gql`
   query {
