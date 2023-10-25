@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-// import { gql, useQuery } from "@apollo/client";
+// import { useState } from 'react';
+import { gql, useQuery } from "@apollo/client";
 import { Button, Input, Option, Select } from '@mui/joy';
 
 export default function Search() {
