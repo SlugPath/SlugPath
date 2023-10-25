@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
+import Search from "./Search";
 import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
@@ -195,6 +196,9 @@ export default function CoursePlanner() {
       />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="min-h-screen bg-gray-100 flex">
+          <div className="p-6">
+            <Search />
+          </div>
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area1"} />
           </div>

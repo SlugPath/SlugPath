@@ -12,6 +12,10 @@ export class QueryInput {
 
   @Field({ nullable: true })
   @Matches(/[0-9]{1,3}[A-Z]?/g)
+  operation?: '<' | '>' | '=';
+
+  @Field({ nullable: true })
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
   number?: string;
 
   @Field({ nullable: true })
