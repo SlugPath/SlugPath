@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { getCookie, setCookie } from 'cookies-next';
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
+import MajorCompletionModal from "./MajorCompletionModal";
 import { dummyData } from "../dummy-course-data"
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd"
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
+import { Button } from "@mui/joy";
 
 const query = gql`
   query {
@@ -23,7 +25,8 @@ const query = gql`
 export default function CoursePlanner() {
   const { data, loading, error } = useQuery(query);
   const [courseState, setCourseState] = useState(dummyData);
-  const [showModal, setShowModal] = useState(false);
+  const [showCourseSelectionModal, setShowCourseSelectionModal] = useState(false);
+  const [showMajorCompletionModal, setShowMajorCompletionModal] = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
   // Runs upon initial render
@@ -46,7 +49,7 @@ export default function CoursePlanner() {
 
   const handleOpenCourseSelectionModal = (quarterId: string) => {
     setSelectedQuarter(quarterId);
-    setShowModal(true);
+    setShowCourseSelectionModal(true);
   }
 
   const handleAddCoursesFromModal = (courses: DummyCourse[]) => {
@@ -173,10 +176,19 @@ export default function CoursePlanner() {
     <div>
       <CourseSelectionModal
         courses={data.courses}
-        setShowModal={setShowModal}
+        setShowModal={setShowCourseSelectionModal}
         onAddCourses={handleAddCoursesFromModal}
-        showModal={showModal}
+        showModal={showCourseSelectionModal}
       />
+      <MajorCompletionModal
+        setShowModal={setShowMajorCompletionModal}
+        showModal={showMajorCompletionModal}
+      />
+      <div className="flex justify-center">
+        <Button
+          onClick={() => setShowMajorCompletionModal(true)}
+        >View Major Completion</Button>
+      </div>
       <DragDropContext onDragEnd={handleOnDragEnd} >
         <div className="min-h-screen bg-gray-100 flex">
           <div className="flex-1">
