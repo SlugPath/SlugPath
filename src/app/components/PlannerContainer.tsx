@@ -76,23 +76,11 @@ export default function PlannerContainer() {
       </List>
       <List>
         {plannerTitles.map((title, idx) => (
-          <ListItem key={idx}>
-            <CoursePlanner
-              key={idx}
-              title={title}
-              isActive={idx == activeIdx}
-            />
+          <ListItem key={idx} hidden={idx != activeIdx}>
+            <CoursePlanner title={title} isActive={idx == activeIdx} />
           </ListItem>
         ))}
       </List>
     </div>
   );
 }
-/*
-        onClick={() => switchPlanners(title)}>
-          {title}
-          <CoursePlanner key={idx} title={title} isActive={idx == activeIdx} />
-        </ListItem>
-        ))}
-
-*/
