@@ -28,7 +28,6 @@ export default function CoursePlanner({
   title: string;
   isActive: boolean;
 }) {
-  console.log(title, isActive);
   const { data, loading, error } = useQuery(query);
   const [courseState, setCourseState] = useState(dummyData);
   const [showModal, setShowModal] = useState(false);
