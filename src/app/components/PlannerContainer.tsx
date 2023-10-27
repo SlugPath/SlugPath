@@ -5,12 +5,9 @@ import { Add, Delete } from "@mui/icons-material";
 
 export default function PlannerContainer() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [plannerTitles, setPlannerTitles] = useState<string[]>([
-    "Planner 1",
-    "Planner 2",
-  ]);
+  const [plannerTitles, setPlannerTitles] = useState<string[]>(["Planner 1"]);
 
-  const MAX_PLANNERS = 7;
+  const MAX_PLANNERS = 10;
 
   const switchPlanners = (idx: number) => {
     setActiveIdx(idx);
@@ -35,6 +32,7 @@ export default function PlannerContainer() {
 
   return (
     <div>
+      {/* Tabs at the top */}
       <List orientation="horizontal" size="lg">
         {plannerTitles.map((title, idx) => (
           <ListItem
@@ -74,9 +72,10 @@ export default function PlannerContainer() {
           }
         />
       </List>
+      {/* Planners */}
       <List>
         {plannerTitles.map((title, idx) => (
-          <ListItem key={idx} hidden={idx != activeIdx}>
+          <ListItem className={idx != activeIdx ? "hidden" : "block"} key={idx}>
             <CoursePlanner title={title} isActive={idx == activeIdx} />
           </ListItem>
         ))}
