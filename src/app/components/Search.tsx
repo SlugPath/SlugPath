@@ -1,75 +1,87 @@
 
-// import { useState } from 'react';
+import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Button, Input, Option, Select } from '@mui/joy';
 
+const GET_COURSE = gql`
+  query getCourse($department: String!, $number: String!) {
+    coursesBy (
+      department: $department
+      number: $number
+    ) {
+      department, number, name
+    }
+  }
+`;
+
 export default function Search() {
 
-  // const [course, setCourse] = useState({
-  //   subject: "",
-  //   operation: "",
-  //   courseNumber: "",
-  //   courseTitle: "",
-  // });
+  const [search, setSearch] = useState(false);
+  const [courseDetails, setCourseDetails] = useState({
+    department: '',
+    number: ''
+  });
 
-  // FIXME: yoga returning multiple of the same class
-  // const { data, loading, error } = useQuery(gql `
-  //   query {
-  //     coursesBy (
-  //       department: ${course.subject},
-  //       operation: ${course.operation},
-  //       number: ${course.courseNumber},
-  //       name: ${course.courseTitle},
-  //     ) {
-  //       department, number, name
-  //   }
-  // `);
+  const { data, loading, error } = useQuery(GET_COURSE, {
+    variables: {
+      department: courseDetails.department,
+      number: courseDetails.number
+    },
+    skip: !search // Skip the query if search button hasn't been pressed yet
+  });
+
+  const handleSearch = (departmentInput: string, numberInput: string) => {
+    setCourseDetails({department: departmentInput, number: numberInput.toUpperCase()});
+    setSearch(true);
+  }
 
   return (
-    <div className="w-96 grid grid-rows-4 gap-2">
+    <>
+      {/* Search form begins */}
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
-          alert(JSON.stringify(formJson));
-        }}
-      >
-        <Select placeholder="Department" name="department">
-          {/* onChange={(e: any) => (setCourse(prevOptions => ({...prevOptions, subject: e.target.value})))}> */}
-          <Option value="CSE">Computer Science & Engineering</Option>
-        </Select>
-        <div className="grid grid-cols-2">
-          <Select placeholder="is exactly" defaultValue="is exactly" name="operation">
-            {/* onChange={(e: any) => (setCourse(prevOptions => ({...prevOptions, operation: e.target.value})))}> */}
-            <Option value="=">is exactly</Option>
-            <Option value="<">less than or equal to</Option>
-            <Option value=">">greater than or equal to</Option>
+          onSubmit={(event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = (Object.fromEntries((formData as any).entries()));
+            handleSearch(formJson.department, formJson.number);
+          }}
+        >
+        <div className="w-72 grid grid-cols-3">
+          <Select placeholder="Department" name="department" className="col-span-2">
+            <Option value="CSE">Computer Science & Engineering</Option>
           </Select>
-          {/* FIXME : ensure this is a numeric value - pop up error / don't allow submission */}
           <Input
             color="neutral"
-            placeholder="Course Number"
+            placeholder="Number"
             size="md"
             variant="outlined"
-            type="number"
             name="number"
-            // onChange={(e: any) => {
-            //   setCourse(prevOptions => ({...prevOptions, courseNumber: e.target.value}));
-            //   console.log(course);
-            // }}
+            className="col-span-1"
           />
         </div>
-        <Input
-          color="neutral"
-          placeholder="Course Title Keyword"
-          size="md"
-          variant="outlined"
-          name="name"
-          // onChange={(e: any) => (setCourse(prevOptions => ({...prevOptions, courseTitle: e.target.value})))}
-        />
         <Button type="submit">Search</Button>
       </form>
-    </div>
+      {/* Search form ends */}
+
+      {/* Results begins */}
+      {loading && <p>Loading...</p>}
+      {error && <p>Please enter a valid course number</p>}
+      {data ? (
+        (data.coursesBy.length === 0) ? (
+          <div>
+            <p>No results found</p>
+          </div>
+        ) : (
+          <div>
+            <p>Department: {data.coursesBy[0].department}</p>
+            <p>Number: {data.coursesBy[0].number}</p>
+            <p>Name: {data.coursesBy[0].name}</p>
+          </div>
+        )
+      ) : (
+        <></>
+      )}
+      {/* Results ends */}
+    </>
   )
 }
