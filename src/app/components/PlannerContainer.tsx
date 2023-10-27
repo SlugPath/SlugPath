@@ -30,6 +30,10 @@ export default function PlannerContainer() {
       ]);
   };
 
+  const setVisibility = (idx: number) => {
+    return idx != activeIdx ? { display: "none" } : { display: "block" };
+  };
+
   return (
     <div>
       {/* Tabs at the top */}
@@ -75,7 +79,10 @@ export default function PlannerContainer() {
       {/* Planners */}
       <List>
         {plannerTitles.map((title, idx) => (
-          <ListItem className={idx != activeIdx ? "hidden" : "block"} key={idx}>
+          <ListItem
+            sx={setVisibility(idx)}
+            /*className={idx != activeIdx ? "hidden" : "block"} */ key={idx}
+          >
             <CoursePlanner title={title} isActive={idx == activeIdx} />
           </ListItem>
         ))}
