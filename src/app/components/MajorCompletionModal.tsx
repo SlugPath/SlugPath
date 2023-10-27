@@ -1,20 +1,43 @@
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { Tree, TreeNode } from 'react-organizational-chart';
 import { Binder, Requirements } from "../ts-types/Requirements";
-import { getCoursesFromRequirements, getBinderFromRequirements, getRequirementsLength, removeCoursesWhoseSiblingsHaveItAsRequirement } from "../logic/CourseRequirements";
+import { getCoursesFromRequirements, getBinderFromRequirements, getRequirementsLength, removeCoursesWhoseSiblingsHaveItAsRequirement, createOrRequirementsString } from "../logic/CourseRequirements";
 
 type Prerequisites = { [key: string]: Requirements }
-const requirements: Requirements = {binder: Binder.AND, requirements: ["CSE 12", "CSE 20", "CSE 30", "CSE 16", "MATH 19A", "MATH 19B", "CSE 13S", "CSE 101"]}
+const requirements: Requirements = {
+  binder: Binder.AND, requirements: [
+    "CSE 12", "CSE 16", "CSE 20", "CSE 30", "CSE 13S",
+    {binder: Binder.OR, requirements: [{binder: Binder.AND, requirements: ["MATH 19A", "MATH 19B"]}]},
+    {binder: Binder.OR, requirements: ["AM 10", "MATH 21"]},
+    {binder: Binder.OR, requirements: ["AM 30", "MATH 23A"]},
+    "ECE 30",
+    "CSE 101", "CSE 101M", "CSE 102", "CSE 103", "CSE 120", "CSE 130",
+    {binder: Binder.OR, requirements: ["CSE 112", "CSE 114A"]},
+    {binder: Binder.OR, requirements: ["CSE 112", "CSE 114A"]},
+    {binder: Binder.OR, requirements: ["STAT 131", "CSE 107"]},
+  ]
+}
+
 const prerequisites: Prerequisites = {
   "CSE 12": {binder: Binder.AND, requirements: ["CSE 20"]},
   "CSE 30": {binder: Binder.AND, requirements: ["CSE 20"]},
   "CSE 16": {binder: Binder.OR, requirements: ["MATH 19A", "MATH 19B"]},
   "MATH 19B": {binder: Binder.OR, requirements: ["MATH 19A", "MATH 20A"]},
   "CSE 13S": {binder: Binder.AND, requirements: ["CSE 12"]},
-  "CSE 101": {binder: Binder.AND, requirements: ["CSE 12", "CSE 13S", "MATH 19B"]},
+  "CSE 101": {binder: Binder.AND, requirements: ["CSE 12", "CSE 13S", "MATH 19B", "CSE 16"]},
+  "MATH 23A": {binder: Binder.OR, requirements: ["MATH 19B", "MATH 20B"]},
+  "ECE 30": {binder: Binder.AND, requirements: ["MATH 19B"]},
+  "CSE 101M": {binder: Binder.AND, requirements: ["CSE 101"]},
+  "CSE 102": {binder: Binder.AND, requirements: ["CSE 101"]},
+  "CSE 103": {binder: Binder.AND, requirements: ["CSE 101"]},
+  "CSE 120": {binder: Binder.AND, requirements: ["CSE 12", "CSE 13S"]},
+  "CSE 130": {binder: Binder.AND, requirements: ["CSE 12", "CSE 101"]},
+  "CSE 112": {binder: Binder.AND, requirements: ["CSE 101"]},
+  "CSE 114A": {binder: Binder.AND, requirements: ["CSE 101"]},
+  "STAT 131": {binder: Binder.OR, requirements: ["MATH 19B", "MATH 20B"]},
+  "CSE 107": {binder: Binder.OR, requirements: ["CSE 16", "AM 30"]}
 }
 const completedCourses: string[] = ["CSE 20", "MATH 19A"]
-// const completedCourses: string[] = []
 
 export default function MajorCompletionModal(
 	{
@@ -57,18 +80,6 @@ export default function MajorCompletionModal(
 	)
 }
 
-function createOrRequirementsString(courses: string[]): string {
-  let requirementName: string = "";
-  courses.forEach((course: string, index: number) => {
-    if (index === courses.length - 1) {
-      requirementName += course
-    } else {
-      requirementName += course + " or "
-    }
-  })
-  return requirementName
-}
-
 function MajorCompletionTree() {
 
   function getCoursePrerequisites(course: string): Requirements {
@@ -92,17 +103,17 @@ function MajorCompletionTree() {
 
         if (getRequirementsLength(coursePrerequisites) > 0) {
           tree.push(
-            <TreeNode key={index} label={<StyledNode course={course} />} >
+            <TreeNode key={index} label={<StyledNode courses={[course]} />} >
               {createRequirementsTree(coursePrerequisites, prerequisites)}
             </TreeNode>
           )
         } else {
-          tree.push(<TreeNode key={index} label={<StyledNode course={course} />} />)
+          tree.push(<TreeNode key={index} label={<StyledNode courses={[course]} />} />)
         }
       })
     } else {
       tree.push(
-        <TreeNode key={0} label={<StyledNode course={createOrRequirementsString(courses)} />} />
+        <TreeNode key={0} label={<StyledNode courses={courses} />} />
       )
     }
     return tree
@@ -113,20 +124,26 @@ function MajorCompletionTree() {
       lineWidth={'2px'}
       lineColor={'black'}
       lineBorderRadius={'10px'}
-      label={<StyledNode course="Lower Division Courses" />}
+      label={<StyledNode courses={["Lower Division Courses"]} />}
     >
       {createRequirementsTree(requirements, prerequisites)}
     </Tree>
   )
 }
 
-function StyledNode({ course, children }: { course: string, children?: any }) {
-  const completed = completedCourses.includes(course)
+function StyledNode({ courses, children }: { courses: string[], children?: any }) {
+  let completed = false
+  courses.forEach((course: string) => {
+    if (completedCourses.includes(course)) {
+      completed = true
+    }
+  })
+  const nodeName = createOrRequirementsString(courses)
 
   return (
     <div>
       <Card style={completed ? { background: "lightgreen" } : {}} sx={{  width: 'fit-content', mx: 'auto' }}>
-        {course}
+        {nodeName}
         {children}
       </Card>
     </div>

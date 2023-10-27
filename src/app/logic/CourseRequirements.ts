@@ -17,11 +17,26 @@ export function getCoursesFromRequirements(requirements: Requirements): string[]
     requirements.requirements.forEach((requirement: Requirements) => {
       if (typeof requirement === "string") {
         listOfCourses.push(requirement)
+      } else {
+        const courses = getCoursesFromRequirements(requirement)
+        listOfCourses.push(createOrRequirementsString(courses))
       }
       // TODO: handle the case where the requirement is a group
     })
     return listOfCourses
   }
+}
+
+export function createOrRequirementsString(courses: string[]): string {
+  let requirementName: string = "";
+  courses.forEach((course: string, index: number) => {
+    if (index === courses.length - 1) {
+      requirementName += course
+    } else {
+      requirementName += course + " or "
+    }
+  })
+  return requirementName
 }
 
 export function getBinderFromRequirements(requirements: Requirements): Binder {
