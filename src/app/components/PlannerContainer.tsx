@@ -94,6 +94,10 @@ export default function PlannerContainer() {
     });
   };
 
+  const handleEnter = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleBlur();
+  };
+
   return (
     <div>
       {/* Tabs Begin */}
@@ -124,6 +128,8 @@ export default function PlannerContainer() {
                 <Input
                   variant="soft"
                   value={title}
+                  autoFocus
+                  error={title == ""}
                   size="md"
                   sx={{
                     "--Input-focusedInset": "var(--any, )",
@@ -135,9 +141,10 @@ export default function PlannerContainer() {
                     "&:focus-within": {
                       borderColor: "#86b7fe",
                     },
-                    width: `${Math.max(5, title.length + 1)}ch`,
+                    maxWidth: "15ch",
                   }}
                   onChange={(e) => handleChange(e, id)}
+                  onKeyDown={handleEnter}
                   onBlur={handleBlur}
                 />
               ) : (
