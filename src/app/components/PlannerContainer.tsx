@@ -4,46 +4,55 @@ import CoursePlanner from "./CoursePlanner";
 import { Add, Delete } from "@mui/icons-material";
 
 export default function PlannerContainer() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [plannerTitles, setPlannerTitles] = useState<string[]>(["Planner 1"]);
+  const [counter, setCounter] = useState(1);
+  const [planners, setPlanners] = useState<{
+    [key: string]: boolean;
+  }>({
+    "Planner 1": true,
+  });
 
   const MAX_PLANNERS = 10;
 
-  const switchPlanners = (idx: number) => {
-    setActiveIdx(idx);
+  const switchPlanners = (title: string) => {
+    setPlanners((prev) => {
+      const currActive = Object.keys(prev).find(
+        (prevTitle: string) => prev[prevTitle],
+      );
+      if (currActive === undefined) {
+        return { ...prev, [title]: true };
+      }
+      return { ...prev, [currActive]: false, [title]: true };
+    });
   };
 
   const addPlanner = () => {
-    if (plannerTitles.length == MAX_PLANNERS) {
+    const keys = Object.keys(planners);
+    if (keys.length == MAX_PLANNERS) {
       alert("You have too many planners open, delete one to make a new one");
       return;
     }
-    setPlannerTitles([...plannerTitles, `Planner ${plannerTitles.length + 1}`]);
-    setActiveIdx(plannerTitles.length);
+    setCounter((prev) => prev + 1);
+    setPlanners({ ...planners, [`Planner ${counter}`]: false });
   };
 
-  const removePlanner = (idx: number) => {
-    if (idx != -1)
-      setPlannerTitles([
-        ...plannerTitles.slice(0, idx),
-        ...plannerTitles.slice(idx + 1),
-      ]);
-  };
-
-  const setVisibility = (idx: number) => {
-    return idx != activeIdx ? { display: "none" } : { display: "block" };
+  const removePlanner = (title: string) => {
+    setPlanners((prev) => {
+      const newPlanners = { ...prev };
+      delete newPlanners[title];
+      return newPlanners;
+    });
   };
 
   return (
     <div>
-      {/* Tabs at the top */}
+      {/* Tabs Begins */}
       <List orientation="horizontal" size="lg">
-        {plannerTitles.map((title, idx) => (
+        {Object.entries(planners).map(([title, isActive], idx) => (
           <ListItem
             key={idx}
             endAction={
               <IconButton
-                onClick={() => removePlanner(idx)}
+                onClick={() => removePlanner(title)}
                 aria-label="Delete"
                 size="lg"
                 color="danger"
@@ -53,10 +62,10 @@ export default function PlannerContainer() {
             }
           >
             <ListItemButton
-              onClick={() => switchPlanners(idx)}
+              onClick={() => switchPlanners(title)}
               variant="outlined"
-              color={idx == activeIdx ? "primary" : "neutral"}
-              selected={idx == activeIdx}
+              color={isActive ? "primary" : "neutral"}
+              selected={isActive}
             >
               <p>{title}</p>
             </ListItemButton>
@@ -76,17 +85,17 @@ export default function PlannerContainer() {
           }
         />
       </List>
-      {/* Planners */}
+      {/* Tabs Ends */}
+
+      {/* Planner Begins */}
       <List>
-        {plannerTitles.map((title, idx) => (
-          <ListItem
-            sx={setVisibility(idx)}
-            /*className={idx != activeIdx ? "hidden" : "block"} */ key={idx}
-          >
-            <CoursePlanner title={title} isActive={idx == activeIdx} />
+        {Object.entries(planners).map(([title, isActive]) => (
+          <ListItem sx={{ display: isActive ? "block" : "none" }} key={title}>
+            <CoursePlanner title={title} isActive={isActive} />
           </ListItem>
         ))}
       </List>
+      {/* Planner Ends*/}
     </div>
   );
 }

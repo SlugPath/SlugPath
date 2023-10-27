@@ -203,7 +203,7 @@ export default function CoursePlanner({
         showModal={showModal}
       />
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="min-h-screen bg-gray-100 flex">
+        <div className="min-h-screen flex">
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area1"} />
           </div>
