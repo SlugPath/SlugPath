@@ -135,7 +135,7 @@ export default function PlannerContainer() {
                     "&:focus-within": {
                       borderColor: "#86b7fe",
                     },
-                    width: `${title.length + 1}ch`,
+                    width: `${Math.max(5, title.length + 1)}ch`,
                   }}
                   onChange={(e) => handleChange(e, id)}
                   onBlur={handleBlur}
