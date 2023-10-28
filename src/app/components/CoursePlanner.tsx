@@ -22,10 +22,10 @@ const query = gql`
 `;
 
 export default function CoursePlanner({
-  title,
+  id,
   isActive,
 }: {
-  title: string;
+  id: string;
   isActive: boolean;
 }) {
   const { data, loading, error } = useQuery(query);
@@ -36,11 +36,11 @@ export default function CoursePlanner({
 
   // Runs upon initial render
   useEffect(() => {
-    const cookieCourseState = getCookie("courseState" + title);
+    const cookieCourseState = getCookie("courseState" + id);
     if (cookieCourseState) {
       setCourseState(JSON.parse(cookieCourseState) as DummyData);
     }
-  }, [title]);
+  }, [id]);
 
   // Runs upon inital render: checks if user is on mobile device
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function CoursePlanner({
 
     // remove all courses, as there are too many to fit into the max cookie size
     setCookie(
-      "courseState",
+      "courseState" + id,
       JSON.stringify({
         ...courseState,
         courses: {},

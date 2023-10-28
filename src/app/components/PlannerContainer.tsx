@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { v4 as uuidv4 } from "uuid";
 import { IconButton, Input, List, ListItem, ListItemButton } from "@mui/joy";
 import CoursePlanner from "./CoursePlanner";
 import { Add, Delete } from "@mui/icons-material";
+import { MultiPlanner } from "../ts-types/MultiPlanner";
 
 export default function PlannerContainer() {
   const [counter, setCounter] = useState(1);
@@ -10,13 +12,23 @@ export default function PlannerContainer() {
 
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners] = useState<{
-    [key: string]: [string, boolean];
-  }>({
+  const [planners, setPlanners] = useState<MultiPlanner>({
     [uuidv4()]: ["Planner 1", true],
   });
 
   const MAX_PLANNERS = 10;
+
+  useEffect(() => {
+    const cookiePlannerState = getCookie("plannerState");
+    if (cookiePlannerState)
+      setPlanners(JSON.parse(cookiePlannerState) as MultiPlanner);
+  });
+
+  const handlePlannerUpdate = (plannerState: MultiPlanner) => {
+    setPlanners(plannerState);
+
+    setCookie("plannerState", JSON.stringify(plannerState));
+  };
 
   /**
    * `switchPlanner` switches between planners
@@ -24,17 +36,25 @@ export default function PlannerContainer() {
    * @param title planner title
    */
   const switchPlanners = (id: string, title: string) => {
-    setPlanners((prev) => {
-      // Get id of previously active title if there was one
-      // and deactivate it
-      const prevId = Object.keys(prev).find((uid: string) => prev[uid][1]);
-      if (prevId === undefined) {
-        return { ...prev, [id]: [title, true] };
-      }
-      const prevTitle = prev[prevId][0];
+    handlePlannerUpdate(
+      (() => {
+        // Get id of previously active title if there was one
+        // and deactivate it
+        const prevId = Object.keys(planners).find(
+          (uid: string) => planners[uid][1],
+        );
+        if (prevId === undefined) {
+          return { ...planners, [id]: [title, true] };
+        }
+        const prevTitle = planners[prevId][0];
 
-      return { ...prev, [prevId]: [prevTitle, false], [id]: [title, true] };
-    });
+        return {
+          ...planners,
+          [prevId]: [prevTitle, false],
+          [id]: [title, true],
+        };
+      })(),
+    );
   };
 
   /**
@@ -79,7 +99,12 @@ export default function PlannerContainer() {
       return;
     }
     setCounter((prev) => prev + 1);
-    setPlanners({ ...planners, [uuidv4()]: [`Planner ${counter + 1}`, false] });
+    const [id, title] = [uuidv4(), `Planner ${counter}`];
+    handlePlannerUpdate({
+      ...planners,
+      [id]: [`Planner ${counter + 1}`, false],
+    });
+    switchPlanners(id, title);
   };
 
   /**
@@ -87,11 +112,10 @@ export default function PlannerContainer() {
    * @param id unique planner id
    */
   const removePlanner = (id: string) => {
-    setPlanners((prev) => {
-      const newPlanners = { ...prev };
-      delete newPlanners[id];
-      return newPlanners;
-    });
+    const newPlanners = { ...planners };
+    delete newPlanners[id];
+    deleteCookie("courseState" + id);
+    handlePlannerUpdate(newPlanners);
   };
 
   const handleEnter = (e: React.KeyboardEvent) => {
@@ -173,9 +197,9 @@ export default function PlannerContainer() {
 
       {/* Planner Begins */}
       <List>
-        {Object.entries(planners).map(([id, [title, isActive]]) => (
+        {Object.entries(planners).map(([id, [, isActive]]) => (
           <ListItem sx={{ display: isActive ? "block" : "none" }} key={id}>
-            <CoursePlanner title={title} isActive={isActive} />
+            <CoursePlanner id={id} isActive={isActive} />
           </ListItem>
         ))}
       </List>
