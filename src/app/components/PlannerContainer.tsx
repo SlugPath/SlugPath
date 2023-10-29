@@ -18,15 +18,21 @@ export default function PlannerContainer() {
 
   const MAX_PLANNERS = 10;
 
+  // Retrieves the multiplanner from cookies if it exists
   useEffect(() => {
     const cookiePlannerState = getCookie("plannerState");
-    if (cookiePlannerState)
-      setPlanners(JSON.parse(cookiePlannerState) as MultiPlanner);
+    if (cookiePlannerState) {
+      const cookiePlanners = JSON.parse(cookiePlannerState) as MultiPlanner;
+      setPlanners(cookiePlanners);
+    }
   });
 
+  /**
+   * Handles update to multiple planners by updating cookies and state
+   * @param plannerState new state of the multi planner
+   */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {
     setPlanners(plannerState);
-
     setCookie("plannerState", JSON.stringify(plannerState));
   };
 
@@ -83,8 +89,9 @@ export default function PlannerContainer() {
     event: React.ChangeEvent<HTMLInputElement>,
     id: string,
   ) => {
-    setPlanners((prev) => {
-      return { ...prev, [id]: [event.target.value, prev[id][1]] };
+    handlePlannerUpdate({
+      ...planners,
+      [id]: [event.target.value, planners[id][1]],
     });
   };
 
@@ -118,10 +125,6 @@ export default function PlannerContainer() {
     handlePlannerUpdate(newPlanners);
   };
 
-  const handleEnter = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleBlur();
-  };
-
   return (
     <div>
       {/* Tabs Begin */}
@@ -153,7 +156,6 @@ export default function PlannerContainer() {
                   variant="soft"
                   value={title}
                   autoFocus
-                  error={title == ""}
                   size="md"
                   sx={{
                     "--Input-focusedInset": "var(--any, )",
@@ -168,7 +170,6 @@ export default function PlannerContainer() {
                     maxWidth: "15ch",
                   }}
                   onChange={(e) => handleChange(e, id)}
-                  onKeyDown={handleEnter}
                   onBlur={handleBlur}
                 />
               ) : (
