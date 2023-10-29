@@ -8,8 +8,9 @@ import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
-import { Button } from "@mui/joy";
 import { isMobile, MobileWarningModal } from "./isMobile";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const query = gql`
   query {
@@ -204,7 +205,8 @@ export default function CoursePlanner() {
   loadCoursesNotPresentFromData();
 
   return (
-    <div>
+    <div className="bg-gray-100 mt-16">
+      <Navbar setShowMajorCompletionModal={setShowMajorCompletionModal} />
       <CourseSelectionModal
         courses={data.courses}
         coursesAlreadyAdded={coursesAlreadyAdded()}
@@ -216,13 +218,9 @@ export default function CoursePlanner() {
         setShowModal={setShowMajorCompletionModal}
         showModal={showMajorCompletionModal}
       />
-      <div className="flex justify-center">
-        <Button onClick={() => setShowMajorCompletionModal(true)}>
-          View Major Completion
-        </Button>
-      </div>
+      <MobileWarningModal show={showMobileWarning} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="min-h-screen bg-gray-100 flex">
+        <div className="flex">
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area1"} />
           </div>
@@ -237,7 +235,7 @@ export default function CoursePlanner() {
           </div>
         </div>
       </DragDropContext>
-      <MobileWarningModal show={showMobileWarning} />
+      <Footer />
     </div>
   );
 }
