@@ -38,5 +38,5 @@ export interface DummyCourse {
   name: string;
   credits: number;
   department: string;
-  number: string;           // because some course numbers are 12L, 115A etc.
+  number: string; // because some course numbers are 12L, 115A etc.
 }
