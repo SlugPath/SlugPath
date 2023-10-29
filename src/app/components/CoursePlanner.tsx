@@ -175,6 +175,19 @@ export default function CoursePlanner() {
     });
   }
 
+  function coursesAlreadyAdded() {
+    const coursesAlreadyAdded: DummyCourse[] = [];
+    Object.values(courseState.quarters).forEach((quarter) => {
+      quarter.courseIds.forEach((courseId) => {
+        const course = courseState.courses[courseId];
+        if (course) {
+          coursesAlreadyAdded.push(course);
+        }
+      });
+    });
+    return coursesAlreadyAdded;
+  }
+
   if (error) {
     console.error(error);
     return <p>Oh no...{error.message}</p>;
@@ -189,6 +202,7 @@ export default function CoursePlanner() {
     <div>
       <CourseSelectionModal
         courses={data.courses}
+        coursesAlreadyAdded={coursesAlreadyAdded()}
         setShowModal={setShowModal}
         onAddCourses={handleAddCoursesFromModal}
         showModal={showModal}
