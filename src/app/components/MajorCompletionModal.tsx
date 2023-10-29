@@ -1,7 +1,20 @@
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { Tree, TreeNode } from 'react-organizational-chart';
 import { Binder, Requirements } from "../ts-types/Requirements";
 import { getCoursesFromRequirements, getBinderFromRequirements, getRequirementsLength, removeCoursesWhoseSiblingsHaveItAsRequirement, createOrRequirementsString } from "../logic/CourseRequirements";
+import dynamic from "next/dynamic";
+
+const Tree = dynamic(
+  () => {
+    return import("react-organizational-chart").then((mod) => mod.Tree);
+  },
+  { ssr: false }
+);
+const TreeNode = dynamic(
+  () => {
+    return import("react-organizational-chart").then((mod) => mod.TreeNode);
+  },
+  { ssr: false }
+);
 
 type Prerequisites = { [key: string]: Requirements }
 const requirements: Requirements = {
