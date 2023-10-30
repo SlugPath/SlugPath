@@ -26,6 +26,7 @@
     "@mui/icons-material": "^5.14.14",
     "@mui/joy": "^5.0.0-beta.9",
     "@prisma/client": "^5.4.2",
+    "@react-pdf/renderer": "^3.1.14",
     "class-validator": "^0.14.0",
     "cookies-next": "^4.0.0",
     "csv-parse": "^5.5.2",
