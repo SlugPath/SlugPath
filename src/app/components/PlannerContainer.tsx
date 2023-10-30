@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
 import { v4 as uuidv4 } from "uuid";
-import { IconButton, Input, List, ListItem, ListItemButton } from "@mui/joy";
+import { List, ListItem } from "@mui/joy";
 import CoursePlanner from "./CoursePlanner";
-import { Add, Delete } from "@mui/icons-material";
 import { MultiPlanner } from "../ts-types/MultiPlanner";
+import TabList from "./TabList";
 
 export default function PlannerContainer() {
   const [counter, setCounter] = useState(1);
-  const [isEditing, setIsEditing] = useState<string | null>(null);
 
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
@@ -64,28 +63,11 @@ export default function PlannerContainer() {
   };
 
   /**
-   * `handleDoubleClick` handles the double click mouse event.
-   * Used for editing planner names
-   * @param id unique planner id
-   */
-  const handleDoubleClick = (id: string) => {
-    setIsEditing(id);
-  };
-
-  /**
-   * `handleBlur` handles the blur event after a user is done
-   * editing a planner name.
-   */
-  const handleBlur = () => {
-    setIsEditing(null);
-  };
-
-  /**
-   * `handleChange` handles the change event for a planner name
+   * `changePlannerName` handles the change event for a planner name
    * @param event keyboard event
    * @param id unique planner id
    */
-  const handleChange = (
+  const changePlannerName = (
     event: React.ChangeEvent<HTMLInputElement>,
     id: string,
   ) => {
@@ -128,74 +110,13 @@ export default function PlannerContainer() {
   return (
     <div>
       {/* Tabs Begin */}
-      <List orientation="horizontal" size="lg">
-        {Object.entries(planners).map(([id, [title, isActive]]) => (
-          <ListItem
-            onDoubleClick={() => handleDoubleClick(id)}
-            key={id}
-            endAction={
-              <IconButton
-                onClick={() => removePlanner(id)}
-                aria-label="Delete"
-                size="lg"
-                color="danger"
-              >
-                <Delete />
-              </IconButton>
-            }
-          >
-            <ListItemButton
-              onClick={() => switchPlanners(id, title)}
-              variant="outlined"
-              color={isActive ? "primary" : "neutral"}
-              selected={isActive}
-            >
-              {/* Editable planner titles */}
-              {isEditing === id ? (
-                <Input
-                  variant="soft"
-                  value={title}
-                  autoFocus
-                  size="md"
-                  sx={{
-                    "--Input-focusedInset": "var(--any, )",
-                    "--Input-focusedThickness": "0.25rem",
-                    "--Input-focusedHighlight": "rgba(13,110,253,.25)",
-                    "&::before": {
-                      transition: "box-shadow .15s ease-in-out",
-                    },
-                    "&:focus-within": {
-                      borderColor: "#86b7fe",
-                    },
-                    maxWidth: "15ch",
-                  }}
-                  onChange={(e) => handleChange(e, id)}
-                  onBlur={handleBlur}
-                />
-              ) : (
-                <span>{title}</span>
-              )}
-            </ListItemButton>
-          </ListItem>
-        ))}
-
-        {/* Add Tab Button */}
-        <ListItem
-          startAction={
-            <IconButton
-              onClick={() => addPlanner()}
-              aria-label="Add"
-              size="lg"
-              variant="plain"
-              color="primary"
-            >
-              <Add />
-            </IconButton>
-          }
-        />
-      </List>
-      {/* Tabs Ends */}
-
+      <TabList
+        planners={planners}
+        removePlanner={removePlanner}
+        addPlanner={addPlanner}
+        switchPlanners={switchPlanners}
+        changePlannerName={changePlannerName}
+      />
       {/* Planner Begins */}
       <List>
         {Object.entries(planners).map(([id, [, isActive]]) => (
