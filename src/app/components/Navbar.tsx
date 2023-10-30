@@ -1,8 +1,10 @@
 import { Button, Avatar } from "@mui/joy";
 
 export default function Navbar({
+  setShowExportModal,
   setShowMajorCompletionModal,
 }: {
+  setShowExportModal: any;
   setShowMajorCompletionModal: any;
 }) {
   return (
@@ -13,7 +15,9 @@ export default function Navbar({
             UCSC Course Planner
           </a>
           <div className="flex space-x-4">
-            <Button variant="plain">Export Planner</Button>
+            <Button onClick={setShowExportModal} variant="plain">
+              Export Planner
+            </Button>
             <Button onClick={setShowMajorCompletionModal} variant="plain">
               Major Progress
             </Button>

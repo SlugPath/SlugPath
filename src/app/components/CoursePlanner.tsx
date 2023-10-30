@@ -3,6 +3,7 @@ import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
 import MajorCompletionModal from "./MajorCompletionModal";
+import ExportModal from "./ExportModal";
 import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
@@ -31,6 +32,7 @@ export default function CoursePlanner() {
     useState(false);
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
@@ -206,13 +208,21 @@ export default function CoursePlanner() {
 
   return (
     <div className="bg-gray-100 mt-16">
-      <Navbar setShowMajorCompletionModal={setShowMajorCompletionModal} />
+      <Navbar
+        setShowExportModal={setShowExportModal}
+        setShowMajorCompletionModal={setShowMajorCompletionModal}
+      />
       <CourseSelectionModal
         courses={data.courses}
         coursesAlreadyAdded={coursesAlreadyAdded()}
         setShowModal={setShowCourseSelectionModal}
         onAddCourses={handleAddCoursesFromModal}
         showModal={showCourseSelectionModal}
+      />
+      <ExportModal
+        courseState={courseState}
+        setShowModal={setShowExportModal}
+        showModal={showExportModal}
       />
       <MajorCompletionModal
         setShowModal={setShowMajorCompletionModal}
