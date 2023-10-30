@@ -6,12 +6,10 @@ import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
-<<<<<<< Updated upstream
 import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
-=======
 import { Course } from "../ts-types/Course";
->>>>>>> Stashed changes
+
 
 const query = gql`
   query {
@@ -21,6 +19,7 @@ const query = gql`
       department
       name
       number
+      quartersOffered
     }
   }
 `;
@@ -30,6 +29,7 @@ export default function CoursePlanner() {
   const [courseState, setCourseState] = useState(dummyData);
   const [showModal, setShowModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
+  const [draggedCourse, setDraggedCourse] = useState<Course | null>(null);
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
   // Runs upon initial render
@@ -87,8 +87,15 @@ export default function CoursePlanner() {
 
   const handleOnDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
-
     if (!destination) return;
+
+    // Check if the dragged course is available in the destination quarter
+    const draggedCourse = data.courses.find((course: Course) => course.id === draggableId);
+    console.log(`${JSON.stringify(destination)}`);
+    const isAvailable = draggedCourse?.quartersOffered.includes(destination.droppableId);
+    if (!isAvailable) return;  // Disallow dropping
+    setDraggedCourse(null); // Reset after drag ends
+
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -206,6 +213,7 @@ export default function CoursePlanner() {
             <Quarters
               courseState={courseState}
               handleOpenCourseSelectionModal={handleOpenCourseSelectionModal}
+              draggedCourse={draggedCourse}
             />
           </div>
           <div className="flex-1">
@@ -240,9 +248,11 @@ function RemoveCourseArea({ droppableId }: { droppableId: string }) {
 function Quarters({
   courseState,
   handleOpenCourseSelectionModal,
+  draggedCourse
 }: {
   courseState: DummyData;
   handleOpenCourseSelectionModal: any;
+  draggedCourse: Course | null;
 }) {
   return (
     <div className="space-y-2">
@@ -272,6 +282,7 @@ function Quarters({
                   onOpenCourseSelectionModal={() =>
                     handleOpenCourseSelectionModal(quarter.id)
                   }
+                  draggedCourse={draggedCourse}
                 />
               );
             })}

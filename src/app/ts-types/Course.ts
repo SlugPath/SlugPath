@@ -1,4 +1,4 @@
-import { IsUUID, Matches, Length, Min, Max } from "class-validator";
+import { IsUUID, Matches, Length, Min, Max, IsString, IsArray, ArrayNotEmpty } from "class-validator";
 import { ObjectType, Field, Int } from "type-graphql";
 
 /**
@@ -28,6 +28,12 @@ export class Course {
   @Min(1)
   @Max(10)
   credits!: number;
+
+  @Field(() => [String])
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true }) // Ensures each item in the array is a string
+  quartersOffered!: string[];
 }
 
 /**
@@ -39,4 +45,5 @@ export interface DummyCourse {
   credits: number;
   department: string;
   number: string; // because some course numbers are 12L, 115A etc.
+  quartersOffered: string[];
 }
