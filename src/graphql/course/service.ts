@@ -44,9 +44,7 @@ export class CourseService {
    * @returns a list of `Course`
    */
   public async allCourses(): Promise<Course[]> {
-    return await prisma.course.findMany({
-      take: COURSES_LIMIT,
-    });
+    return await prisma.course.findMany({});
   }
 
   /**
@@ -85,7 +83,7 @@ export class CourseService {
   //     take: COURSES_LIMIT,
   //   });
   // }
-  
+
   /**
    * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
    * limited by `COURSES_LIMIT`.
@@ -93,7 +91,7 @@ export class CourseService {
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
     // if (pred.operation == '>') {
-      
+
     // } else if (pred.operation == '<') {
 
     // } else {

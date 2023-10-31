@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Button, Input, Option, Select } from "@mui/joy";
+import { Button, Card, Input, Option, Select } from "@mui/joy";
+import { DummyCourse } from "../ts-types/Course";
+import CourseCard from "./CourseCard";
+import { Droppable } from "@hello-pangea/dnd";
 
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
@@ -8,6 +11,7 @@ const GET_COURSE = gql`
       department
       number
       name
+      id
     }
   }
 `;
@@ -46,7 +50,12 @@ export default function Search() {
   };
 
   return (
-    <>
+    <Card
+      className="w-64"
+      style={{
+        height: "100%",
+      }}
+    >
       {/* Search form begins */}
       <form
         onSubmit={(event) => {
@@ -54,7 +63,7 @@ export default function Search() {
           handleSearch(department, number);
         }}
       >
-        <div className="grid grid-cols-3 gap-2 p-2">
+        <div className="grid grid-cols-2 gap-2 p-2">
           <Select
             placeholder="Department"
             name="department"
@@ -67,7 +76,7 @@ export default function Search() {
             </Option>
           </Select>
           <Input
-            className="col-span-1"
+            className="col-span-2"
             color="neutral"
             placeholder="Number"
             size="md"
@@ -99,16 +108,27 @@ export default function Search() {
             <p>No results found</p>
           </div>
         ) : (
-          <div>
-            <p>Department: {data.coursesBy[0].department}</p>
-            <p>Number: {data.coursesBy[0].number}</p>
-            <p>Name: {data.coursesBy[0].name}</p>
-          </div>
+          <Droppable droppableId={"search-droppable"}>
+            {(provided) => {
+              return (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{ height: "100%", minHeight: "48px" }}
+                >
+                  {data.coursesBy.map((course: DummyCourse, index: number) => (
+                    <CourseCard key={index} course={course} index={index} />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              );
+            }}
+          </Droppable>
         )
       ) : (
         <></>
       )}
       {/* Results ends */}
-    </>
+    </Card>
   );
 }

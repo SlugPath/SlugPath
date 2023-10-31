@@ -12,6 +12,7 @@ import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Search from "./Search";
 
 const query = gql`
   query {
@@ -99,10 +100,33 @@ export default function CoursePlanner() {
     )
       return;
 
-    // delete course dragged into delete area
+    // add course dragged from 'search-droppable' to quarter
+    if (source.droppableId === "search-droppable") {
+      const quarter = courseState.quarters[destination.droppableId];
+      const newCourseIds = Array.from(quarter.courseIds);
+      newCourseIds.splice(destination.index, 0, draggableId);
+      const newQuarter = {
+        ...quarter,
+        courseIds: newCourseIds,
+      };
+
+      const newState = {
+        ...courseState,
+        quarters: {
+          ...courseState.quarters,
+          [newQuarter.id]: newQuarter,
+        },
+      };
+
+      handleCourseUpdate(newState);
+      return;
+    }
+
+    // delete course dragged into delete area or search-droppable
     if (
       destination.droppableId == "remove-course-area1" ||
-      destination.droppableId == "remove-course-area2"
+      destination.droppableId == "remove-course-area2" ||
+      destination.droppableId == "search-droppable"
     ) {
       const startQuarter = courseState.quarters[result.source.droppableId];
       const newCourseIds = Array.from(startQuarter.courseIds);
@@ -231,8 +255,8 @@ export default function CoursePlanner() {
       <MobileWarningModal show={showMobileWarning} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="flex">
-          <div className="flex-1">
-            <RemoveCourseArea droppableId={"remove-course-area1"} />
+          <div className="flex-1 px-4 py-6">
+            <Search />
           </div>
           <div className="flex-3 py-6">
             <Quarters
