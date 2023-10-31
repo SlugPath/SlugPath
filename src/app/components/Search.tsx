@@ -99,43 +99,40 @@ export default function Search() {
           </Button>
         </div>
       </form>
-      {/* Search form ends */}
-
-      {/* Results begins */}
-      {loading && <p>Loading...</p>}
-      {error && <p>No results found</p>}
-      {data ? (
-        data.coursesBy.length === 0 ? (
-          <div>
-            <p>No results found</p>
-          </div>
-        ) : (
-          <Droppable droppableId={"search-droppable"}>
-            {(provided) => {
-              return (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ height: "100%", minHeight: "48px" }}
-                >
-                  {data.coursesBy.map((course: DummyCourse, index: number) => (
-                    <CourseCard
-                      key={index}
-                      course={createStoredCourse(course)}
-                      index={index}
-                      draggableId={course.id}
-                    />
-                  ))}
-                  {provided.placeholder}
+      <Droppable droppableId={"search-droppable"}>
+        {(provided, snapshot) => {
+          return (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={{ height: "100%", minHeight: "48px" }}
+              className={`${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
+            >
+              {loading && <p>Loading...</p>}
+              {error && <p>No results found</p>}
+              {data ? (
+                <div>
+                  <div>
+                    {data.coursesBy.map(
+                      (course: DummyCourse, index: number) => (
+                        <CourseCard
+                          key={index}
+                          course={createStoredCourse(course)}
+                          index={index}
+                          draggableId={course.id}
+                        />
+                      ),
+                    )}
+                  </div>
                 </div>
-              );
-            }}
-          </Droppable>
-        )
-      ) : (
-        <></>
-      )}
-      {/* Results ends */}
+              ) : (
+                <div>No results</div>
+              )}
+              {provided.placeholder}
+            </div>
+          );
+        }}
+      </Droppable>
     </Card>
   );
 }
