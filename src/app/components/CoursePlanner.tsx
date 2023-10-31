@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
+import MajorCompletionModal from "./MajorCompletionModal";
+import ExportModal from "./ExportModal";
 import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const query = gql`
   query {
@@ -24,7 +28,11 @@ const query = gql`
 export default function CoursePlanner() {
   const { data, loading, error } = useQuery(query);
   const [courseState, setCourseState] = useState(dummyData);
-  const [showModal, setShowModal] = useState(false);
+  const [showCourseSelectionModal, setShowCourseSelectionModal] =
+    useState(false);
+  const [showMajorCompletionModal, setShowMajorCompletionModal] =
+    useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
@@ -58,7 +66,7 @@ export default function CoursePlanner() {
 
   const handleOpenCourseSelectionModal = (quarterId: string) => {
     setSelectedQuarter(quarterId);
-    setShowModal(true);
+    setShowCourseSelectionModal(true);
   };
 
   const handleAddCoursesFromModal = (courses: DummyCourse[]) => {
@@ -175,6 +183,19 @@ export default function CoursePlanner() {
     });
   }
 
+  function coursesAlreadyAdded() {
+    const coursesAlreadyAdded: DummyCourse[] = [];
+    Object.values(courseState.quarters).forEach((quarter) => {
+      quarter.courseIds.forEach((courseId) => {
+        const course = courseState.courses[courseId];
+        if (course) {
+          coursesAlreadyAdded.push(course);
+        }
+      });
+    });
+    return coursesAlreadyAdded;
+  }
+
   if (error) {
     console.error(error);
     return <p>Oh no...{error.message}</p>;
@@ -186,15 +207,30 @@ export default function CoursePlanner() {
   loadCoursesNotPresentFromData();
 
   return (
-    <div>
+    <div className="bg-gray-100 mt-16">
+      <Navbar
+        setShowExportModal={setShowExportModal}
+        setShowMajorCompletionModal={setShowMajorCompletionModal}
+      />
       <CourseSelectionModal
         courses={data.courses}
-        setShowModal={setShowModal}
+        coursesAlreadyAdded={coursesAlreadyAdded()}
+        setShowModal={setShowCourseSelectionModal}
         onAddCourses={handleAddCoursesFromModal}
-        showModal={showModal}
+        showModal={showCourseSelectionModal}
       />
+      <ExportModal
+        courseState={courseState}
+        setShowModal={setShowExportModal}
+        showModal={showExportModal}
+      />
+      <MajorCompletionModal
+        setShowModal={setShowMajorCompletionModal}
+        showModal={showMajorCompletionModal}
+      />
+      <MobileWarningModal show={showMobileWarning} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="min-h-screen bg-gray-100 flex">
+        <div className="flex">
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area1"} />
           </div>
@@ -209,7 +245,7 @@ export default function CoursePlanner() {
           </div>
         </div>
       </DragDropContext>
-      <MobileWarningModal show={showMobileWarning} />
+      <Footer />
     </div>
   );
 }

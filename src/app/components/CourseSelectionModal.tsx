@@ -11,11 +11,13 @@ import { useState } from "react";
 
 export default function CourseSelectionModal({
   courses,
+  coursesAlreadyAdded,
   setShowModal,
   onAddCourses,
   showModal,
 }: {
   courses: Course[];
+  coursesAlreadyAdded: Course[];
   setShowModal: any;
   onAddCourses: any;
   showModal: boolean;
@@ -71,6 +73,7 @@ export default function CourseSelectionModal({
               onChange={(event) => handleCheckedChanged(event, course)}
               key={index}
               label={"CSE " + course.number + ": " + course.name}
+              disabled={coursesAlreadyAdded.some((c) => c.id === course.id)}
             />
           ))}
         </div>
