@@ -13,8 +13,6 @@ export default function PlannerContainer() {
     [uuidv4()]: ["Planner 1", true],
   });
 
-  const MAX_PLANNERS = 10;
-
   // Retrieves the multiplanner from cookies if it exists
   useEffect(() => {
     const cookiePlannerState = getCookie("plannerState");
@@ -61,7 +59,7 @@ export default function PlannerContainer() {
   };
 
   /**
-   * `changePlannerName` handles the change event for a planner name
+   * Handles the change event for a planner name
    * @param event keyboard event
    * @param id unique planner id
    */
@@ -76,16 +74,9 @@ export default function PlannerContainer() {
   };
 
   /**
-   * `addPlanner` creates a new planner with a default, editable name.
-   * It returns early if the user has too many planners already
+   * Creates a new planner with the provided title
    */
   const addPlanner = (title: string) => {
-    const keys = Object.keys(planners);
-    if (keys.length == MAX_PLANNERS) {
-      alert("You have too many planners open, delete one to make a new one");
-      return;
-    }
-
     const id = uuidv4();
     handlePlannerUpdate({
       ...planners,
@@ -95,7 +86,7 @@ export default function PlannerContainer() {
   };
 
   /**
-   * `removePlanner` removes a planner from the planner container
+   * Removes a planner from the planner container
    * @param id unique planner id
    */
   const removePlanner = (id: string) => {
@@ -115,6 +106,7 @@ export default function PlannerContainer() {
         switchPlanners={switchPlanners}
         changePlannerName={changePlannerName}
       />
+      {/* Tabs End */}
       {/* Planner Begins */}
       <List>
         {Object.entries(planners).map(([id, [, isActive]]) => (

@@ -4,6 +4,7 @@ import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import PlannerAddModal from "./PlannerAddModal";
+import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
 export interface TabListProps {
   planners: MultiPlanner;
@@ -30,6 +31,21 @@ export default function TabList(props: TabListProps) {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
   const [openAdd, setAdd] = useState(false);
+  const [openTooMany, setTooMany] = useState(false);
+
+  const MAX_PLANNERS = 10;
+
+  /**
+   * Event listener that runs when user clicks the add button
+   */
+  const handleAdd = () => {
+    // Check if user has too many planners open
+    if (Object.keys(planners).length == MAX_PLANNERS) {
+      setTooMany(true);
+      return;
+    }
+    setAdd(true);
+  };
 
   /**
    * Callback to delete planner and close the alert modal
@@ -42,11 +58,17 @@ export default function TabList(props: TabListProps) {
 
   return (
     <List orientation="horizontal" size="lg">
+      {/* Start alerts */}
       <PlannerDeleteAlert
         open={openAlert}
         onClose={() => setAlert(["", ""])}
         onDelete={deletePlanner}
       />
+      <TooManyPlannersAlert
+        open={openTooMany}
+        onClose={() => setTooMany(false)}
+      />
+      {/* End alerts */}
       {Object.entries(planners).map(([id, [title, isActive]]) => (
         <ListItem
           onDoubleClick={() => setIsEditing(id)}
@@ -101,7 +123,7 @@ export default function TabList(props: TabListProps) {
       <ListItem
         startAction={
           <IconButton
-            onClick={() => setAdd(true)}
+            onClick={() => handleAdd()}
             aria-label="Add"
             size="lg"
             variant="plain"
