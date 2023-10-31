@@ -24,7 +24,7 @@ export default function PlannerContainer() {
       const cookiePlanners = JSON.parse(cookiePlannerState) as MultiPlanner;
       setPlanners(cookiePlanners);
     }
-  });
+  }, []);
 
   /**
    * Handles update to multiple planners by updating cookies and state
@@ -81,14 +81,18 @@ export default function PlannerContainer() {
    * `addPlanner` creates a new planner with a default, editable name.
    * It returns early if the user has too many planners already
    */
-  const addPlanner = () => {
+  const addPlanner = (title: string) => {
     const keys = Object.keys(planners);
     if (keys.length == MAX_PLANNERS) {
       alert("You have too many planners open, delete one to make a new one");
       return;
     }
+
+    // Default to a name if one wasn't provided
     setCounter((prev) => prev + 1);
-    const [id, title] = [uuidv4(), `Planner ${counter}`];
+    if (title.length == 0) title = `Planner ${counter}`;
+
+    const id = uuidv4();
     handlePlannerUpdate({
       ...planners,
       [id]: [`Planner ${counter + 1}`, false],

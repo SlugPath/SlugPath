@@ -3,11 +3,12 @@ import { Add, DeleteForever } from "@mui/icons-material";
 import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
+import PlannerAddModal from "./PlannerAddModal";
 
 export interface TabListProps {
   planners: MultiPlanner;
   removePlanner: (id: string) => void;
-  addPlanner: () => void;
+  addPlanner: (title: string) => void;
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -24,10 +25,11 @@ export default function TabList(props: TabListProps) {
     addPlanner,
   } = props;
 
-  // Two state-ful variables for managing the editing of planner names
+  // State-ful variables for managing the editing of planner names
   // and deletion alerts
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
+  const [openAdd, setAdd] = useState(false);
 
   /**
    * Callback to delete planner and close the alert modal
@@ -102,7 +104,7 @@ export default function TabList(props: TabListProps) {
       <ListItem
         startAction={
           <IconButton
-            onClick={() => addPlanner()}
+            onClick={() => setAdd(true)}
             aria-label="Add"
             size="lg"
             variant="plain"
@@ -111,6 +113,11 @@ export default function TabList(props: TabListProps) {
             <Add />
           </IconButton>
         }
+      />
+      <PlannerAddModal
+        open={openAdd}
+        onClose={() => setAdd(false)}
+        onSubmit={(title) => addPlanner(title)}
       />
     </List>
   );
