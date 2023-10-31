@@ -15,9 +15,6 @@ export const dummyData: DummyData = {
 };
 
 function createCourses() {
-  // return {
-  //     'course-1': { id: 'course-1', name: 'CSE 1' },
-  // }
   return {};
 }
 
@@ -31,18 +28,11 @@ function createQuarters() {
       quarters[quarterId] = {
         id: quarterId,
         title: `${quarterNames[quarter]} ${yearNames[year]}`,
-        courseIds: [],
+        courses: [],
       };
       quarterOrder.push(quarterId);
     }
   }
-
-  // add courses to first quarter
-  const courses = createCourses();
-  Object.keys(courses).forEach((courseId) => {
-    const quarterId = quarterOrder[0];
-    quarters[quarterId].courseIds.push(courseId);
-  });
 
   return { quarters, quarterOrder };
 }

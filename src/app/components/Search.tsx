@@ -4,14 +4,16 @@ import { Button, Card, Input, Option, Select } from "@mui/joy";
 import { DummyCourse } from "../ts-types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
+import { createStoredCourse } from "../logic/Courses";
 
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
     coursesBy(department: $department, number: $number) {
+      id
+      name
       department
       number
-      name
-      id
+      credits
     }
   }
 `;
@@ -117,7 +119,12 @@ export default function Search() {
                   style={{ height: "100%", minHeight: "48px" }}
                 >
                   {data.coursesBy.map((course: DummyCourse, index: number) => (
-                    <CourseCard key={index} course={course} index={index} />
+                    <CourseCard
+                      key={index}
+                      course={createStoredCourse(course)}
+                      index={index}
+                      draggableId={course.id}
+                    />
                   ))}
                   {provided.placeholder}
                 </div>
