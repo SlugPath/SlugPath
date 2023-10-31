@@ -1,20 +1,19 @@
 import { Card, Typography } from "@mui/joy";
 import { Draggable } from "@hello-pangea/dnd";
-import { DummyCourse } from "../ts-types/Course";
+import { StoredCourse } from "../ts-types/Course";
+import { getTitle } from "../logic/Courses";
 
 export default function CourseCard({
   course,
   index,
+  draggableId,
 }: {
-  course: DummyCourse;
+  course: StoredCourse;
   index: number;
+  draggableId: string;
 }) {
-  function getTitle() {
-    return `${course.department} ${course.number}`;
-  }
-
   return (
-    <Draggable key={course.id} draggableId={course.id} index={index}>
+    <Draggable key={draggableId} draggableId={draggableId} index={index}>
       {(provided) => {
         return (
           <Card
@@ -24,7 +23,9 @@ export default function CourseCard({
             size="sm"
           >
             <Typography level="body-md">
-              {course ? getTitle() : "No course"}
+              {course
+                ? getTitle(course.department, course.number)
+                : "No course"}
             </Typography>
           </Card>
         );

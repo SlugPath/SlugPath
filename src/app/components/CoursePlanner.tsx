@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
-import CourseSelectionModal from "./CourseSelectionModal";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import { dummyData } from "../dummy-course-data";
@@ -12,6 +11,8 @@ import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Search from "./Search";
+import { createStoredCourse } from "../logic/Courses";
 
 const query = gql`
   query {
@@ -28,13 +29,10 @@ const query = gql`
 export default function CoursePlanner() {
   const { data, loading, error } = useQuery(query);
   const [courseState, setCourseState] = useState(dummyData);
-  const [showCourseSelectionModal, setShowCourseSelectionModal] =
-    useState(false);
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
-  const [selectedQuarter, setSelectedQuarter] = useState("");
 
   // Runs upon initial render
   useEffect(() => {
@@ -54,39 +52,12 @@ export default function CoursePlanner() {
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
 
-    // remove all courses, as there are too many to fit into the max cookie size
-    setCookie(
-      "courseState",
-      JSON.stringify({
-        ...courseState,
-        courses: {},
-      }),
-    );
-  };
-
-  const handleOpenCourseSelectionModal = (quarterId: string) => {
-    setSelectedQuarter(quarterId);
-    setShowCourseSelectionModal(true);
-  };
-
-  const handleAddCoursesFromModal = (courses: DummyCourse[]) => {
-    const quarter = courseState.quarters[selectedQuarter];
-    const newCourseIds = Array.from(quarter.courseIds);
-    courses.forEach((course) => newCourseIds.push(course.id));
-    const newQuarter = {
-      ...quarter,
-      courseIds: newCourseIds,
-    };
-
-    const newState = {
+    const json = JSON.stringify({
       ...courseState,
-      quarters: {
-        ...courseState.quarters,
-        [newQuarter.id]: newQuarter,
-      },
-    };
+      courses: {},
+    });
 
-    handleCourseUpdate(newState);
+    setCookie("courseState", json);
   };
 
   const handleOnDragEnd = (result: DropResult) => {
@@ -99,18 +70,45 @@ export default function CoursePlanner() {
     )
       return;
 
-    // delete course dragged into delete area
+    // add course dragged from 'search-droppable' to quarter
+    if (source.droppableId === "search-droppable") {
+      const quarter = courseState.quarters[destination.droppableId];
+      const newStoredCourses = Array.from(quarter.courses);
+      newStoredCourses.splice(
+        destination.index,
+        0,
+        createStoredCourse(courseState.courses[draggableId]),
+      );
+      const newQuarter = {
+        ...quarter,
+        courses: newStoredCourses,
+      };
+
+      const newState = {
+        ...courseState,
+        quarters: {
+          ...courseState.quarters,
+          [newQuarter.id]: newQuarter,
+        },
+      };
+
+      handleCourseUpdate(newState);
+      return;
+    }
+
+    // delete course dragged into delete area or search-droppable
     if (
       destination.droppableId == "remove-course-area1" ||
-      destination.droppableId == "remove-course-area2"
+      destination.droppableId == "remove-course-area2" ||
+      destination.droppableId == "search-droppable"
     ) {
       const startQuarter = courseState.quarters[result.source.droppableId];
-      const newCourseIds = Array.from(startQuarter.courseIds);
-      newCourseIds.splice(result.source.index, 1);
+      const newStoredCourses = Array.from(startQuarter.courses);
+      newStoredCourses.splice(result.source.index, 1);
 
       const newQuarter = {
         ...startQuarter,
-        courseIds: newCourseIds,
+        courses: newStoredCourses,
       };
 
       const newState = {
@@ -128,13 +126,18 @@ export default function CoursePlanner() {
     const startQuarter = courseState.quarters[source.droppableId];
     const finishQuarter = courseState.quarters[destination.droppableId];
     if (startQuarter === finishQuarter) {
-      const newCourseIds = Array.from(startQuarter.courseIds);
-      newCourseIds.splice(source.index, 1);
-      newCourseIds.splice(destination.index, 0, draggableId);
+      // moving course within startQuarter
+      const newStoredCourses = Array.from(startQuarter.courses);
+      newStoredCourses.splice(source.index, 1);
+      newStoredCourses.splice(
+        destination.index,
+        0,
+        startQuarter.courses[source.index],
+      );
 
       const newQuarter = {
         ...startQuarter,
-        courseIds: newCourseIds,
+        courses: newStoredCourses,
       };
 
       const newState = {
@@ -147,19 +150,20 @@ export default function CoursePlanner() {
 
       handleCourseUpdate(newState);
     } else {
-      // moving from one list to another
-      const startCourseIds = Array.from(startQuarter.courseIds);
-      startCourseIds.splice(source.index, 1);
+      // moving course from startQuarter to finishQuarter
+      const movedStoredCourse = startQuarter.courses[source.index];
+      const startStoredCourses = Array.from(startQuarter.courses);
+      startStoredCourses.splice(source.index, 1);
       const newStart = {
         ...startQuarter,
-        courseIds: startCourseIds,
+        courses: startStoredCourses,
       };
 
-      const finishCourseIds = Array.from(finishQuarter.courseIds);
-      finishCourseIds.splice(destination.index, 0, draggableId);
+      const finishStoredCourses = Array.from(finishQuarter.courses);
+      finishStoredCourses.splice(destination.index, 0, movedStoredCourse);
       const newFinish = {
         ...finishQuarter,
-        courseIds: finishCourseIds,
+        courses: finishStoredCourses,
       };
 
       const newState = {
@@ -183,19 +187,6 @@ export default function CoursePlanner() {
     });
   }
 
-  function coursesAlreadyAdded() {
-    const coursesAlreadyAdded: DummyCourse[] = [];
-    Object.values(courseState.quarters).forEach((quarter) => {
-      quarter.courseIds.forEach((courseId) => {
-        const course = courseState.courses[courseId];
-        if (course) {
-          coursesAlreadyAdded.push(course);
-        }
-      });
-    });
-    return coursesAlreadyAdded;
-  }
-
   if (error) {
     console.error(error);
     return <p>Oh no...{error.message}</p>;
@@ -212,13 +203,6 @@ export default function CoursePlanner() {
         setShowExportModal={setShowExportModal}
         setShowMajorCompletionModal={setShowMajorCompletionModal}
       />
-      <CourseSelectionModal
-        courses={data.courses}
-        coursesAlreadyAdded={coursesAlreadyAdded()}
-        setShowModal={setShowCourseSelectionModal}
-        onAddCourses={handleAddCoursesFromModal}
-        showModal={showCourseSelectionModal}
-      />
       <ExportModal
         courseState={courseState}
         setShowModal={setShowExportModal}
@@ -231,14 +215,11 @@ export default function CoursePlanner() {
       <MobileWarningModal show={showMobileWarning} />
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="flex">
-          <div className="flex-1">
-            <RemoveCourseArea droppableId={"remove-course-area1"} />
+          <div className="flex-1 px-4 py-6">
+            <Search />
           </div>
           <div className="flex-3 py-6">
-            <Quarters
-              courseState={courseState}
-              handleOpenCourseSelectionModal={handleOpenCourseSelectionModal}
-            />
+            <Quarters courseState={courseState} />
           </div>
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area2"} />
@@ -269,13 +250,7 @@ function RemoveCourseArea({ droppableId }: { droppableId: string }) {
   );
 }
 
-function Quarters({
-  courseState,
-  handleOpenCourseSelectionModal,
-}: {
-  courseState: DummyData;
-  handleOpenCourseSelectionModal: any;
-}) {
+function Quarters({ courseState }: { courseState: DummyData }) {
   return (
     <div className="space-y-2">
       {Array.from(
@@ -291,9 +266,7 @@ function Quarters({
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarterId) => {
               const quarter = courseState.quarters[quarterId];
-              const courses = quarter.courseIds.map(
-                (courseId) => courseState.courses[courseId],
-              );
+              const courses = quarter.courses;
 
               return (
                 <QuarterCard
@@ -301,9 +274,6 @@ function Quarters({
                   id={quarter.id}
                   key={quarter.id}
                   courses={courses}
-                  onOpenCourseSelectionModal={() =>
-                    handleOpenCourseSelectionModal(quarter.id)
-                  }
                 />
               );
             })}

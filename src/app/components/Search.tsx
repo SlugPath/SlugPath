@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Button, Input, Option, Select } from "@mui/joy";
+import { Button, Card, Input, Option, Select } from "@mui/joy";
+import { DummyCourse } from "../ts-types/Course";
+import CourseCard from "./CourseCard";
+import { Droppable } from "@hello-pangea/dnd";
+import { createStoredCourse } from "../logic/Courses";
 
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
     coursesBy(department: $department, number: $number) {
+      id
+      name
       department
       number
-      name
+      credits
     }
   }
 `;
@@ -46,7 +52,12 @@ export default function Search() {
   };
 
   return (
-    <>
+    <Card
+      className="w-64"
+      style={{
+        height: "100%",
+      }}
+    >
       {/* Search form begins */}
       <form
         onSubmit={(event) => {
@@ -54,7 +65,7 @@ export default function Search() {
           handleSearch(department, number);
         }}
       >
-        <div className="grid grid-cols-3 gap-2 p-2">
+        <div className="grid grid-cols-2 gap-2 p-2">
           <Select
             placeholder="Department"
             name="department"
@@ -67,7 +78,7 @@ export default function Search() {
             </Option>
           </Select>
           <Input
-            className="col-span-1"
+            className="col-span-2"
             color="neutral"
             placeholder="Number"
             size="md"
@@ -88,27 +99,40 @@ export default function Search() {
           </Button>
         </div>
       </form>
-      {/* Search form ends */}
-
-      {/* Results begins */}
-      {loading && <p>Loading...</p>}
-      {error && <p>No results found</p>}
-      {data ? (
-        data.coursesBy.length === 0 ? (
-          <div>
-            <p>No results found</p>
-          </div>
-        ) : (
-          <div>
-            <p>Department: {data.coursesBy[0].department}</p>
-            <p>Number: {data.coursesBy[0].number}</p>
-            <p>Name: {data.coursesBy[0].name}</p>
-          </div>
-        )
-      ) : (
-        <></>
-      )}
-      {/* Results ends */}
-    </>
+      <Droppable droppableId={"search-droppable"}>
+        {(provided, snapshot) => {
+          return (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={{ height: "100%", minHeight: "48px" }}
+              className={`${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
+            >
+              {loading && <p>Loading...</p>}
+              {error && <p>No results found</p>}
+              {data ? (
+                <div>
+                  <div>
+                    {data.coursesBy.map(
+                      (course: DummyCourse, index: number) => (
+                        <CourseCard
+                          key={index}
+                          course={createStoredCourse(course)}
+                          index={index}
+                          draggableId={course.id}
+                        />
+                      ),
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div>No results</div>
+              )}
+              {provided.placeholder}
+            </div>
+          );
+        }}
+      </Droppable>
+    </Card>
   );
 }

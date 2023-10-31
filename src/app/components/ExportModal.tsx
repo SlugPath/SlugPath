@@ -10,6 +10,7 @@ import {
 } from "@react-pdf/renderer";
 import { DummyCourse } from "../ts-types/Course";
 import { Quarter } from "../ts-types/Quarter";
+import { getTitle } from "../logic/Courses";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -43,10 +44,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
-
-function getTitle(course: DummyCourse) {
-  return `${course.department} ${course.number}`;
-}
 
 export default function CourseSelectionModal({
   courseState,
@@ -132,8 +129,8 @@ function Quarters({
     <View key={key} style={styles.yearView}>
       {quarters.map((quarterId) => {
         const quarter = courseState.quarters[quarterId];
-        const courses = quarter.courseIds.map(
-          (courseId) => courseState.courses[courseId],
+        const courses = quarter.courses.map(
+          (course) => courseState.courses[course.id],
         );
 
         return <Quarter key={quarter.id} quarter={quarter} courses={courses} />;
@@ -156,7 +153,7 @@ function Quarter({
         {courses.map((course) => {
           return (
             <View key={course.id} style={styles.course}>
-              <Text>{getTitle(course)}</Text>
+              <Text>{getTitle(course.department, course.number)}</Text>
             </View>
           );
         })}
