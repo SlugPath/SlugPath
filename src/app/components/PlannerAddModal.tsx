@@ -37,6 +37,7 @@ export default function PlannerAddModal(props: PlannerAddModalProps) {
               <FormLabel>Planner Title</FormLabel>
               <Input
                 autoFocus
+                required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />

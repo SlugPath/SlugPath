@@ -7,8 +7,6 @@ import { MultiPlanner } from "../ts-types/MultiPlanner";
 import TabList from "./TabList";
 
 export default function PlannerContainer() {
-  const [counter, setCounter] = useState(1);
-
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
   const [planners, setPlanners] = useState<MultiPlanner>({
@@ -88,14 +86,10 @@ export default function PlannerContainer() {
       return;
     }
 
-    // Default to a name if one wasn't provided
-    setCounter((prev) => prev + 1);
-    if (title.length == 0) title = `Planner ${counter}`;
-
     const id = uuidv4();
     handlePlannerUpdate({
       ...planners,
-      [id]: [`Planner ${counter + 1}`, false],
+      [id]: [title, false],
     });
     switchPlanners(id, title);
   };
