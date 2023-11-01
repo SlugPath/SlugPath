@@ -31,23 +31,10 @@ export class Course {
 }
 
 /**
- * `DummyCourse` is a type to represent dummy courses for now.
- * 'number' is stored as a string, as some numbers are 12L, 115A etc.
+ * `StoredCourse` is a type to represent how courses are stored.
+ * `number` is stored as a string, as some course numbers are appended with letters.
  */
-export interface DummyCourse {
-  id: string;
-  name: string;
-  credits: number;
+export interface StoredCourse {
   department: string;
   number: string;
-}
-
-/**
- * `StoredCourse` is a type to represent courses selected by the user and stored in the database
- * or locally in cookies. The only difference between this and `DummyCourse` is that it has a uuid.
- * `uuid` is the unique id for the stored course, so drag and drop can work with duplicate courses
- * which must have unique ids for each draggable course.
- */
-export interface StoredCourse extends DummyCourse {
-  uuid: string;
 }

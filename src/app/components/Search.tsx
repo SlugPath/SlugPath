@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Button, Card, Input, Option, Select } from "@mui/joy";
-import { DummyCourse } from "../ts-types/Course";
+import { StoredCourse } from "../ts-types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
-import { createStoredCourse } from "../logic/Courses";
+import { createIdFromCourse } from "../../lib/courseUtils";
 
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
@@ -114,12 +114,12 @@ export default function Search() {
                 <div>
                   <div>
                     {data.coursesBy.map(
-                      (course: DummyCourse, index: number) => (
+                      (course: StoredCourse, index: number) => (
                         <CourseCard
                           key={index}
-                          course={createStoredCourse(course)}
+                          course={course}
                           index={index}
-                          draggableId={course.id}
+                          draggableId={createIdFromCourse(course)}
                         />
                       ),
                     )}

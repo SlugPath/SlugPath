@@ -3,32 +3,17 @@ import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
-import { dummyData } from "../dummy-course-data";
-import { DummyData } from "../ts-types/DummyData";
+import { initialPlanner } from "../../lib/initialPlanner";
+import { PlannerData } from "../ts-types/PlannerData";
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
-import { gql, useQuery } from "@apollo/client";
-import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Search from "./Search";
-import { createStoredCourse } from "../logic/Courses";
-
-const query = gql`
-  query {
-    courses {
-      id
-      credits
-      department
-      name
-      number
-    }
-  }
-`;
+import { createCourseFromId } from "../../lib/courseUtils";
 
 export default function CoursePlanner() {
-  const { data, loading, error } = useQuery(query);
-  const [courseState, setCourseState] = useState(dummyData);
+  const [courseState, setCourseState] = useState(initialPlanner);
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
@@ -38,7 +23,7 @@ export default function CoursePlanner() {
   useEffect(() => {
     const cookieCourseState = getCookie("courseState");
     if (cookieCourseState) {
-      setCourseState(JSON.parse(cookieCourseState) as DummyData);
+      setCourseState(JSON.parse(cookieCourseState) as PlannerData);
     }
   }, []);
 
@@ -49,12 +34,11 @@ export default function CoursePlanner() {
     }
   }, []);
 
-  const handleCourseUpdate = (courseState: DummyData) => {
+  const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
 
     const json = JSON.stringify({
       ...courseState,
-      courses: {},
     });
 
     setCookie("courseState", json);
@@ -77,7 +61,7 @@ export default function CoursePlanner() {
       newStoredCourses.splice(
         destination.index,
         0,
-        createStoredCourse(courseState.courses[draggableId]),
+        createCourseFromId(draggableId),
       );
       const newQuarter = {
         ...quarter,
@@ -179,24 +163,6 @@ export default function CoursePlanner() {
     }
   };
 
-  function loadCoursesNotPresentFromData() {
-    data.courses.forEach((course: DummyCourse) => {
-      if (!courseState.courses[course.id]) {
-        courseState.courses[course.id] = course;
-      }
-    });
-  }
-
-  if (error) {
-    console.error(error);
-    return <p>Oh no...{error.message}</p>;
-  }
-  if (loading) {
-    return <p>Loading....</p>;
-  }
-
-  loadCoursesNotPresentFromData();
-
   return (
     <div className="bg-gray-100 mt-16">
       <Navbar
@@ -250,17 +216,17 @@ function RemoveCourseArea({ droppableId }: { droppableId: string }) {
   );
 }
 
-function Quarters({ courseState }: { courseState: DummyData }) {
+function Quarters({ courseState }: { courseState: PlannerData }) {
   return (
     <div className="space-y-2">
       {Array.from(
-        { length: dummyData.quartersPerYear },
+        { length: initialPlanner.quartersPerYear },
         (_, index) => index,
       ).map((i) => {
-        const slice_val = dummyData.quartersPerYear * i;
+        const slice_val = initialPlanner.quartersPerYear * i;
         const quarters = courseState.quarterOrder.slice(
           slice_val,
-          slice_val + dummyData.quartersPerYear,
+          slice_val + initialPlanner.quartersPerYear,
         );
         return (
           <div key={i} className="flex flex-row space-x-2">

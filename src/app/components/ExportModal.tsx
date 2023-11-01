@@ -1,5 +1,5 @@
 import { Modal, Sheet, Typography } from "@mui/joy";
-import { DummyData } from "../ts-types/DummyData";
+import { PlannerData } from "../ts-types/PlannerData";
 import {
   Page,
   Text,
@@ -8,9 +8,9 @@ import {
   StyleSheet,
   PDFViewer,
 } from "@react-pdf/renderer";
-import { DummyCourse } from "../ts-types/Course";
+import { StoredCourse } from "../ts-types/Course";
 import { Quarter } from "../ts-types/Quarter";
-import { getTitle } from "../logic/Courses";
+import { getTitle } from "../../lib/courseUtils";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -50,7 +50,7 @@ export default function CourseSelectionModal({
   setShowModal,
   showModal,
 }: {
-  courseState: DummyData;
+  courseState: PlannerData;
   setShowModal: any;
   showModal: boolean;
 }) {
@@ -95,7 +95,7 @@ export default function CourseSelectionModal({
   );
 }
 
-function Years({ courseState }: { courseState: DummyData }) {
+function Years({ courseState }: { courseState: PlannerData }) {
   return (
     <View>
       {Array.from(
@@ -122,17 +122,14 @@ function Quarters({
   key,
 }: {
   quarters: string[];
-  courseState: DummyData;
+  courseState: PlannerData;
   key: number;
 }) {
   return (
     <View key={key} style={styles.yearView}>
       {quarters.map((quarterId) => {
         const quarter = courseState.quarters[quarterId];
-        const courses = quarter.courses.map(
-          (course) => courseState.courses[course.id],
-        );
-
+        const courses = quarter.courses;
         return <Quarter key={quarter.id} quarter={quarter} courses={courses} />;
       })}
     </View>
@@ -144,15 +141,15 @@ function Quarter({
   courses,
 }: {
   quarter: Quarter;
-  courses: DummyCourse[];
+  courses: StoredCourse[];
 }) {
   return (
     <View key={quarter.id} style={styles.quarterCard}>
       <Text style={styles.quarterTitle}>{quarter.title}</Text>
       <View>
-        {courses.map((course) => {
+        {courses.map((course, idx) => {
           return (
-            <View key={course.id} style={styles.course}>
+            <View key={idx} style={styles.course}>
               <Text>{getTitle(course.department, course.number)}</Text>
             </View>
           );
