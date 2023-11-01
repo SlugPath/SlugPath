@@ -13,6 +13,8 @@ export default function PlannerContainer() {
     [uuidv4()]: ["Planner 1", true],
   });
 
+  const [counter, setCounter] = useState(1);
+
   // Retrieves the multiplanner from cookies if it exists
   useEffect(() => {
     const cookiePlannerState = getCookie("plannerState");
@@ -76,8 +78,10 @@ export default function PlannerContainer() {
   /**
    * Creates a new planner with the provided title
    */
-  const addPlanner = (title: string) => {
+  const addPlanner = () => {
     const id = uuidv4();
+    setCounter((prev) => prev + 1);
+    const title = `Planner ${counter}`;
     handlePlannerUpdate({
       ...planners,
       [id]: [title, false],

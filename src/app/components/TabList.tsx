@@ -3,13 +3,12 @@ import { Add, DeleteForever } from "@mui/icons-material";
 import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
-import PlannerAddModal from "./PlannerAddModal";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
 export interface TabListProps {
   planners: MultiPlanner;
   removePlanner: (id: string) => void;
-  addPlanner: (title: string) => void;
+  addPlanner: () => void;
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -30,7 +29,6 @@ export default function TabList(props: TabListProps) {
   // and deletion alerts
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
-  const [openAdd, setAdd] = useState(false);
   const [openTooMany, setTooMany] = useState(false);
 
   const MAX_PLANNERS = 10;
@@ -44,7 +42,7 @@ export default function TabList(props: TabListProps) {
       setTooMany(true);
       return;
     }
-    setAdd(true);
+    addPlanner();
   };
 
   /**
@@ -132,11 +130,6 @@ export default function TabList(props: TabListProps) {
             <Add />
           </IconButton>
         }
-      />
-      <PlannerAddModal
-        open={openAdd}
-        onClose={() => setAdd(false)}
-        onSubmit={(title) => addPlanner(title)}
       />
     </List>
   );
