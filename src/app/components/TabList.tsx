@@ -1,15 +1,13 @@
 import { List, ListItem, ListItemButton, IconButton, Input } from "@mui/joy";
-import { Delete, Add } from "@mui/icons-material";
+import { Add, DeleteForever } from "@mui/icons-material";
 import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { useState } from "react";
+import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
+import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
-export default function TabList({
-  planners,
-  onRemovePlanner,
-  onAddPlanner,
-  onSwitchPlanners,
-  onChangePlannerName,
-}: {
+const MAX_PLANNERS = 10;
+
+export interface TabListProps {
   planners: MultiPlanner;
   onRemovePlanner: (id: string) => void;
   onAddPlanner: () => void;
@@ -18,23 +16,69 @@ export default function TabList({
     event: React.ChangeEvent<HTMLInputElement>,
     id: string,
   ) => void;
-}) {
+}
+
+export default function TabList(props: TabListProps) {
+  const {
+    planners,
+    onRemovePlanner,
+    onSwitchPlanners,
+    onChangePlannerName,
+    onAddPlanner,
+  } = props;
+
+  // State-ful variables for managing the editing of planner names
+  // and deletion alerts
   const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [openAlert, setAlert] = useState<OpenState>(["", ""]);
+  const [openTooMany, setTooMany] = useState(false);
+
+  /**
+   * Event listener that runs when user clicks the add button
+   */
+  const handleAddPlanner = () => {
+    // Check if user has too many planners open
+    if (Object.keys(planners).length == MAX_PLANNERS) {
+      setTooMany(true);
+      return;
+    }
+    onAddPlanner();
+  };
+
+  /**
+   * Callback to delete planner and close the alert modal
+   * @param id planner id
+   */
+  const deletePlanner = (id: string) => {
+    setAlert(["", ""]);
+    onRemovePlanner(id);
+  };
 
   return (
     <List orientation="horizontal" size="lg">
+      {/* Start alerts */}
+      <PlannerDeleteAlert
+        open={openAlert}
+        onClose={() => setAlert(["", ""])}
+        onDelete={deletePlanner}
+      />
+      <TooManyPlannersAlert
+        open={openTooMany}
+        onClose={() => setTooMany(false)}
+      />
+      {/* End alerts */}
       {Object.entries(planners).map(([id, [title, isActive]]) => (
         <ListItem
           onDoubleClick={() => setIsEditing(id)}
           key={id}
           endAction={
             <IconButton
-              onClick={() => onRemovePlanner(id)}
+              onClick={() => setAlert([id, title])}
               aria-label="Delete"
               size="lg"
               color="danger"
             >
-              <Delete />
+              <DeleteForever />
             </IconButton>
           }
         >
@@ -82,7 +126,7 @@ export default function TabList({
       <ListItem
         startAction={
           <IconButton
-            onClick={() => onAddPlanner()}
+            onClick={() => handleAddPlanner()}
             aria-label="Add"
             size="lg"
             variant="plain"
