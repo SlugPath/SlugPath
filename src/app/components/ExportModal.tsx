@@ -1,4 +1,4 @@
-import { Modal, Sheet, Typography } from "@mui/joy";
+import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { PlannerData } from "../ts-types/PlannerData";
 import {
   Page,
@@ -90,6 +90,7 @@ export default function CourseSelectionModal({
             </Page>
           </Document>
         </PDFViewer>
+        <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
   );

@@ -1,87 +1,46 @@
 import QuarterCard from "./QuarterCard";
-import MajorCompletionModal from "./MajorCompletionModal";
-import ExportModal from "./ExportModal";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 import Search from "./Search";
-import { MobileWarningModal } from "./isMobile";
-import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext } from "@hello-pangea/dnd";
+import { useEffect } from "react";
 
 export default function CoursePlanner({
   id,
   isActive,
+  onCourseStateChanged,
 }: {
   id: string;
   isActive: boolean;
+  onCourseStateChanged: any;
 }) {
-  const {
-    courseState,
-    handleDragEnd,
-    coursesAlreadyAdded,
-    showMajorCompletionModal,
-    setShowMajorCompletionModal,
-    showExportModal,
-    setShowExportModal,
-    showMobileWarning,
-  } = useCoursePlanner({ id });
+  const { courseState, handleDragEnd, coursesAlreadyAdded } = useCoursePlanner({
+    id,
+  });
+
+  useEffect(() => {
+    onCourseStateChanged(courseState);
+  }, [courseState, onCourseStateChanged]);
 
   if (!isActive) {
     return <></>;
   }
 
   return (
-    <div className="bg-gray-100 mt-16">
-      <Navbar
-        setShowExportModal={setShowExportModal}
-        setShowMajorCompletionModal={setShowMajorCompletionModal}
-      />
-      <ExportModal
-        courseState={courseState}
-        setShowModal={setShowExportModal}
-        showModal={showExportModal}
-      />
-      <MajorCompletionModal
-        setShowModal={setShowMajorCompletionModal}
-        showModal={showMajorCompletionModal}
-      />
-      <MobileWarningModal show={showMobileWarning} />
+    <div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex">
           <div className="flex-1 px-4 py-6">
             <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
           </div>
-          <div className="flex-3 py-6">
+          <div className="flex-2 py-6">
             <Quarters courseState={courseState} />
           </div>
-          <div className="flex-1">
-            <RemoveCourseArea droppableId={"remove-course-area2"} />
-          </div>
+          <div className="flex-1 py-6" />
         </div>
       </DragDropContext>
-      <Footer />
     </div>
-  );
-}
-
-function RemoveCourseArea({ droppableId }: { droppableId: string }) {
-  return (
-    <Droppable droppableId={droppableId}>
-      {(provided, snapshot) => {
-        return (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
-            style={{ height: "100%", minHeight: "48px" }}
-          >
-            {provided.placeholder}
-          </div>
-        );
-      }}
-    </Droppable>
   );
 }
 

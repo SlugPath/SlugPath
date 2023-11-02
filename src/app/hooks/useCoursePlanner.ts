@@ -1,7 +1,6 @@
 import { createCourseFromId } from "../../lib/courseUtils";
 import { StoredCourse } from "../ts-types/Course";
 import { DropResult } from "@hello-pangea/dnd";
-import { isMobile } from "../components/isMobile";
 import { useState, useEffect } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import { initialPlanner } from "../../lib/initialPlanner";
@@ -9,26 +8,14 @@ import { PlannerData } from "../ts-types/PlannerData";
 
 export default function useCoursePlanner({ id }: { id: string }) {
   const [courseState, setCourseState] = useState(initialPlanner);
-  const [showMajorCompletionModal, setShowMajorCompletionModal] =
-    useState(false);
-  const [showExportModal, setShowExportModal] = useState(false);
-  const [showMobileWarning, setShowMobileWarning] = useState(false);
 
   // Runs upon initial render. Update useEffect whenever (course planner) id changes
   useEffect(() => {
     const cookieCourseState = getCookie("courseState");
     if (cookieCourseState) {
-      console.log(JSON.parse(cookieCourseState) as PlannerData);
       setCourseState(JSON.parse(cookieCourseState) as PlannerData);
     }
   }, [id]);
-
-  // Runs upon inital render: checks if user is on mobile device
-  useEffect(() => {
-    if (isMobile()) {
-      setShowMobileWarning(true);
-    }
-  }, []);
 
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
@@ -173,10 +160,5 @@ export default function useCoursePlanner({ id }: { id: string }) {
     courseState,
     handleDragEnd,
     coursesAlreadyAdded,
-    showMajorCompletionModal,
-    setShowMajorCompletionModal,
-    showExportModal,
-    setShowExportModal,
-    showMobileWarning,
   };
 }
