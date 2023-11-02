@@ -10,17 +10,27 @@ import Search from "./Search";
 import { MobileWarningModal } from "./isMobile";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
-export default function CoursePlanner() {
+export default function CoursePlanner({
+  id,
+  isActive,
+}: {
+  id: string;
+  isActive: boolean;
+}) {
   const {
     courseState,
     handleDragEnd,
-    getCoursesAlreadyAdded,
-    showExportModal,
+    coursesAlreadyAdded,
     showMajorCompletionModal,
-    showMobileWarning,
-    setShowExportModal,
     setShowMajorCompletionModal,
-  } = useCoursePlanner();
+    showExportModal,
+    setShowExportModal,
+    showMobileWarning,
+  } = useCoursePlanner({ id });
+
+  if (!isActive) {
+    return <></>;
+  }
 
   return (
     <div className="bg-gray-100 mt-16">
@@ -41,7 +51,7 @@ export default function CoursePlanner() {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex">
           <div className="flex-1 px-4 py-6">
-            <Search coursesAlreadyAdded={getCoursesAlreadyAdded()} />
+            <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
           </div>
           <div className="flex-3 py-6">
             <Quarters courseState={courseState} />
