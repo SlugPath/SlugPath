@@ -11,6 +11,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Search from "./Search";
 import { createCourseFromId } from "../../lib/courseUtils";
+import { StoredCourse } from "../ts-types/Course";
 
 export default function CoursePlanner() {
   const [courseState, setCourseState] = useState(initialPlanner);
@@ -23,6 +24,7 @@ export default function CoursePlanner() {
   useEffect(() => {
     const cookieCourseState = getCookie("courseState");
     if (cookieCourseState) {
+      console.log(JSON.parse(cookieCourseState) as PlannerData);
       setCourseState(JSON.parse(cookieCourseState) as PlannerData);
     }
   }, []);
@@ -163,6 +165,16 @@ export default function CoursePlanner() {
     }
   };
 
+  function getCoursesAlreadyAdded() {
+    const coursesAlreadyAdded: StoredCourse[] = [];
+    Object.values(courseState.quarters).forEach((quarter) => {
+      quarter.courses.forEach((course) => {
+        coursesAlreadyAdded.push(course);
+      });
+    });
+    return coursesAlreadyAdded;
+  }
+
   return (
     <div className="bg-gray-100 mt-16">
       <Navbar
@@ -182,7 +194,7 @@ export default function CoursePlanner() {
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="flex">
           <div className="flex-1 px-4 py-6">
-            <Search />
+            <Search coursesAlreadyAdded={getCoursesAlreadyAdded()} />
           </div>
           <div className="flex-3 py-6">
             <Quarters courseState={courseState} />
