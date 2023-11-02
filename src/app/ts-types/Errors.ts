@@ -1,3 +1,3 @@
 export interface GraphQLQueryError {
-  message: string
+  message: string;
 }

@@ -100,13 +100,12 @@ export default function Search() {
         </div>
       </form>
       <Droppable droppableId={"search-droppable"}>
-        {(provided, snapshot) => {
+        {(provided) => {
           return (
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
               style={{ height: "100%", minHeight: "48px" }}
-              className={`${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
             >
               {loading && <p>Loading...</p>}
               {error && <p>No results found</p>}
@@ -120,6 +119,8 @@ export default function Search() {
                           course={createStoredCourse(course)}
                           index={index}
                           draggableId={course.id}
+                          // Don't want search results to be deletable
+                          onDelete={undefined}
                         />
                       ),
                     )}

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
-import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
@@ -13,6 +13,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Search from "./Search";
 import { createStoredCourse } from "../logic/Courses";
+import { Dispatch } from "react";
 
 const query = gql`
   query {
@@ -219,10 +220,10 @@ export default function CoursePlanner() {
             <Search />
           </div>
           <div className="flex-3 py-6">
-            <Quarters courseState={courseState} />
-          </div>
-          <div className="flex-1">
-            <RemoveCourseArea droppableId={"remove-course-area2"} />
+            <Quarters
+              courseState={courseState}
+              setCourseState={setCourseState}
+            />
           </div>
         </div>
       </DragDropContext>
@@ -231,26 +232,45 @@ export default function CoursePlanner() {
   );
 }
 
-function RemoveCourseArea({ droppableId }: { droppableId: string }) {
-  return (
-    <Droppable droppableId={droppableId}>
-      {(provided, snapshot) => {
-        return (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
-            style={{ height: "100%", minHeight: "48px" }}
-          >
-            {provided.placeholder}
-          </div>
-        );
-      }}
-    </Droppable>
-  );
-}
+function Quarters({
+  courseState,
+  setCourseState,
+}: {
+  courseState: DummyData;
+  setCourseState: Dispatch<SetStateAction<DummyData>>;
+}) {
+  // Note: this component uses prop drilling which might be problematic, consider switching to
+  // a context. You have been warned
+  /**
+   * A curried callback function to be invoked upon deleting a course, so
+   * as to appropriately rerender the state of the planner
+   * @param quarterId id of the quarter card
+   * @returns
+   */
+  const deleteCourseInQuarter = (quarterId: string) => {
+    return (deleteIdx: number) => {
+      const quarter = courseState.quarters[quarterId];
+      const quarterCourses = quarter.courses;
+      const newCourses = [
+        ...quarterCourses.slice(0, deleteIdx),
+        ...quarterCourses.slice(deleteIdx + 1),
+      ];
+      setCourseState((prev) => {
+        return {
+          ...prev,
+          quarters: {
+            ...prev.quarters,
+            [quarterId]: {
+              id: quarter.id,
+              title: quarter.title,
+              courses: newCourses,
+            },
+          },
+        };
+      });
+    };
+  };
 
-function Quarters({ courseState }: { courseState: DummyData }) {
   return (
     <div className="space-y-2">
       {Array.from(
@@ -274,6 +294,7 @@ function Quarters({ courseState }: { courseState: DummyData }) {
                   id={quarter.id}
                   key={quarter.id}
                   courses={courses}
+                  deleteCourse={deleteCourseInQuarter(quarter.id)}
                 />
               );
             })}

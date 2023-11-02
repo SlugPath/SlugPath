@@ -7,10 +7,12 @@ export default function QuarterCard({
   title,
   id,
   courses,
+  deleteCourse,
 }: {
   title: string;
   id: string;
   courses: StoredCourse[];
+  deleteCourse: (deleteIdx: number) => void;
 }) {
   return (
     <Card className="w-64">
@@ -29,6 +31,7 @@ export default function QuarterCard({
                   course={course}
                   index={index}
                   draggableId={course.uuid}
+                  onDelete={deleteCourse}
                 />
               ))}
               {provided.placeholder}
