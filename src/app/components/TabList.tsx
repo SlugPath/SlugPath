@@ -5,16 +5,16 @@ import { useState } from "react";
 
 export default function TabList({
   planners,
-  removePlanner,
-  addPlanner,
-  switchPlanners,
-  changePlannerName,
+  onRemovePlanner,
+  onAddPlanner,
+  onSwitchPlanners,
+  onChangePlannerName,
 }: {
   planners: MultiPlanner;
-  removePlanner: (id: string) => void;
-  addPlanner: () => void;
-  switchPlanners: (id: string, title: string) => void;
-  changePlannerName: (
+  onRemovePlanner: (id: string) => void;
+  onAddPlanner: () => void;
+  onSwitchPlanners: (id: string, title: string) => void;
+  onChangePlannerName: (
     event: React.ChangeEvent<HTMLInputElement>,
     id: string,
   ) => void;
@@ -29,7 +29,7 @@ export default function TabList({
           key={id}
           endAction={
             <IconButton
-              onClick={() => removePlanner(id)}
+              onClick={() => onRemovePlanner(id)}
               aria-label="Delete"
               size="lg"
               color="danger"
@@ -39,7 +39,7 @@ export default function TabList({
           }
         >
           <ListItemButton
-            onClick={() => switchPlanners(id, title)}
+            onClick={() => onSwitchPlanners(id, title)}
             variant="outlined"
             color={isActive ? "primary" : "neutral"}
             selected={isActive}
@@ -63,8 +63,13 @@ export default function TabList({
                   },
                   maxWidth: "15ch",
                 }}
-                onChange={(e) => changePlannerName(e, id)}
+                onChange={(e) => onChangePlannerName(e, id)}
                 onBlur={() => setIsEditing(null)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setIsEditing(null);
+                  }
+                }}
               />
             ) : (
               <span>{title}</span>
@@ -77,7 +82,7 @@ export default function TabList({
       <ListItem
         startAction={
           <IconButton
-            onClick={() => addPlanner()}
+            onClick={() => onAddPlanner()}
             aria-label="Add"
             size="lg"
             variant="plain"

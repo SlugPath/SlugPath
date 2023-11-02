@@ -1,12 +1,12 @@
 "use client";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apollo-client";
-import PlannerContainer from "./components/PlannerContainer";
+import App from "./components/App";
 
 export default function Home() {
   return (
     <ApolloProvider client={apolloClient}>
-      <PlannerContainer />
+      <App />
     </ApolloProvider>
   );
 }
