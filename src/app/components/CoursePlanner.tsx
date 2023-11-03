@@ -4,11 +4,13 @@ import QuarterCard from "./QuarterCard";
 import CourseSelectionModal from "./CourseSelectionModal";
 import { dummyData } from "../dummy-course-data";
 import { DummyData } from "../ts-types/DummyData";
-import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, DraggableLocation, DropResult, Droppable } from "@hello-pangea/dnd";
 import { gql, useQuery } from "@apollo/client";
 import { DummyCourse } from "../ts-types/Course";
 import { isMobile, MobileWarningModal } from "./isMobile";
 import { Course } from "../ts-types/Course";
+import { DragStart } from 'react-beautiful-dnd';
+
 
 
 const query = gql`
@@ -29,7 +31,7 @@ export default function CoursePlanner() {
   const [courseState, setCourseState] = useState(dummyData);
   const [showModal, setShowModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
-  const [draggedCourse, setDraggedCourse] = useState<Course | null>(null);
+  const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [selectedQuarter, setSelectedQuarter] = useState("");
 
   // Runs upon initial render
@@ -85,16 +87,47 @@ export default function CoursePlanner() {
     handleCourseUpdate(newState);
   };
 
+  // Mapping of quarterId to quarterName
+  const quarters = {
+    "0": "Fall",
+    "1": "Winter",
+    "2": "Spring",
+    "3": "Summer"
+  };
+
+  // Check if the dragged course is available in the destination quarter
+  const getQuarterFromId = (droppableId: string) => {
+    const quarterId = droppableId.split("-")[2];
+    return quarters[quarterId as keyof typeof quarters];
+  }
+  
+  // Handle the drag start event for course items.
+  // result Contains information about the current drag event of the array of unavailable quarters.
+  const handleOnDragStart = (start: DragStart) => {
+    const courseBeingDragged = data.courses.find((course: Course) => course.id === start.draggableId);
+
+    if (courseBeingDragged) {
+      const unavailable = Object.values(courseState.quarters).filter(
+        (quarter) => {const quarterName = getQuarterFromId(quarter.id);
+          return !courseBeingDragged?.quartersOffered.includes(quarterName);
+        }
+      ).map((quarter) => quarter.id);
+      
+      setUnavailableQuarters(unavailable);
+    }
+  };
+
   const handleOnDragEnd = (result: DropResult) => {
+    setUnavailableQuarters([]); // Clear unavailable quarters at the start
+
     const { destination, source, draggableId } = result;
     if (!destination) return;
 
-    // Check if the dragged course is available in the destination quarter
+    // Find the course object from the dataset using the draggableId as the course identifier
     const draggedCourse = data.courses.find((course: Course) => course.id === draggableId);
-    console.log(`${JSON.stringify(destination)}`);
-    const isAvailable = draggedCourse?.quartersOffered.includes(destination.droppableId);
-    if (!isAvailable) return;  // Disallow dropping
-    setDraggedCourse(null); // Reset after drag ends
+    const quarterName = getQuarterFromId(destination.droppableId);
+    const isAvailable = draggedCourse?.quartersOffered.includes(quarterName);
+    // if (!isAvailable) return;  // Disallow dropping
 
     if (
       destination.droppableId === source.droppableId &&
@@ -204,7 +237,7 @@ export default function CoursePlanner() {
         onAddCourses={handleAddCoursesFromModal}
         showModal={showModal}
       />
-      <DragDropContext onDragEnd={handleOnDragEnd}>
+      <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleOnDragStart}> 
         <div className="min-h-screen bg-gray-100 flex">
           <div className="flex-1">
             <RemoveCourseArea droppableId={"remove-course-area1"} />
@@ -213,7 +246,7 @@ export default function CoursePlanner() {
             <Quarters
               courseState={courseState}
               handleOpenCourseSelectionModal={handleOpenCourseSelectionModal}
-              draggedCourse={draggedCourse}
+              unavailableQuarters={unavailableQuarters}
             />
           </div>
           <div className="flex-1">
@@ -248,11 +281,11 @@ function RemoveCourseArea({ droppableId }: { droppableId: string }) {
 function Quarters({
   courseState,
   handleOpenCourseSelectionModal,
-  draggedCourse
+  unavailableQuarters
 }: {
   courseState: DummyData;
   handleOpenCourseSelectionModal: any;
-  draggedCourse: Course | null;
+  unavailableQuarters: string[];
 }) {
   return (
     <div className="space-y-2">
@@ -282,7 +315,7 @@ function Quarters({
                   onOpenCourseSelectionModal={() =>
                     handleOpenCourseSelectionModal(quarter.id)
                   }
-                  draggedCourse={draggedCourse}
+                  unavailableQuarters={unavailableQuarters}
                 />
               );
             })}
