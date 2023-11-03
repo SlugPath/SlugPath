@@ -31,6 +31,7 @@
     "cookies-next": "^4.0.0",
     "csv-parse": "^5.5.2",
     "next": "13.5.4",
+    "next-auth": "^4.24.4",
     "pino": "^8.16.0",
     "pino-logflare": "^0.4.2",
     "react": "^18",

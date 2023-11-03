@@ -1,4 +1,5 @@
-import { Button, Avatar } from "@mui/joy";
+import { Button } from "@mui/joy";
+import { signIn } from "next-auth/react";
 
 export default function Navbar({
   setShowExportModal,
@@ -21,7 +22,21 @@ export default function Navbar({
             <Button onClick={setShowMajorCompletionModal} variant="plain">
               Major Progress
             </Button>
-            <Avatar />
+            {/* <Avatar /> */}
+            <Button
+              variant="plain"
+              onClick={() =>
+                signIn(
+                  "google",
+                  // FIXME: link for prod
+                  { callbackUrl: "/api/auth/callback/google" },
+                  // { callbackUrl: "http://localhost:3000/api/auth/callback/google" }
+                )
+              }
+              // onClick={() => signIn("google")}
+            >
+              Login with UCSC account
+            </Button>
           </div>
         </div>
       </nav>
