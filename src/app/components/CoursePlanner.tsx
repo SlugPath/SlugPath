@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
@@ -34,14 +33,6 @@ export default function CoursePlanner() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
 
-  // Runs upon initial render
-  useEffect(() => {
-    const cookieCourseState = getCookie("courseState");
-    if (cookieCourseState) {
-      setCourseState(JSON.parse(cookieCourseState) as DummyData);
-    }
-  }, []);
-
   // Runs upon inital render: checks if user is on mobile device
   useEffect(() => {
     if (isMobile()) {
@@ -51,13 +42,6 @@ export default function CoursePlanner() {
 
   const handleCourseUpdate = (courseState: DummyData) => {
     setCourseState(courseState);
-
-    const json = JSON.stringify({
-      ...courseState,
-      courses: {},
-    });
-
-    setCookie("courseState", json);
   };
 
   const handleOnDragEnd = (result: DropResult) => {

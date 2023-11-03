@@ -28,7 +28,6 @@
     "@prisma/client": "^5.4.2",
     "@react-pdf/renderer": "^3.1.14",
     "class-validator": "^0.14.0",
-    "cookies-next": "^4.0.0",
     "csv-parse": "^5.5.2",
     "next": "13.5.4",
     "next-auth": "^4.24.4",
