@@ -1,5 +1,6 @@
 import { Button } from "@mui/joy";
 import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Navbar({
   setShowExportModal,
@@ -8,6 +9,10 @@ export default function Navbar({
   setShowExportModal: any;
   setShowMajorCompletionModal: any;
 }) {
+  const { data: session, status } = useSession();
+
+  console.log(`${JSON.stringify(session)}`);
+
   return (
     <header className="bg-white fixed top-0 w-full shadow-md z-50">
       <nav className="container mx-auto py-3">
@@ -23,20 +28,19 @@ export default function Navbar({
               Major Progress
             </Button>
             {/* <Avatar /> */}
-            <Button
-              variant="plain"
-              onClick={() =>
-                signIn(
-                  "google",
-                  // FIXME: link for prod
-                  { callbackUrl: "/api/auth/callback/google" },
-                  // { callbackUrl: "http://localhost:3000/api/auth/callback/google" }
-                )
-              }
-              // onClick={() => signIn("google")}
-            >
-              Login with UCSC account
-            </Button>
+            {status !== "authenticated" ? (
+              <Button
+                variant="plain"
+                onClick={() => {
+                  signIn("google");
+                }}
+                // onClick={() => signIn("google")}
+              >
+                Login with UCSC account
+              </Button>
+            ) : (
+              <div>Hi {session.user?.email}</div>
+            )}
           </div>
         </div>
       </nav>

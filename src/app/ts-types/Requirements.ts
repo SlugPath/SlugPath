@@ -1,4 +1,7 @@
-export enum Binder {AND, OR}
+export enum Binder {
+  AND,
+  OR,
+}
 export type Requirement = string;
 export type RequirementGroup = {
   binder: Binder;
