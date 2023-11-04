@@ -1,22 +1,17 @@
-import { Quarter } from "./ts-types/Quarter";
-import { DummyData } from "./ts-types/DummyData";
+import { Quarter } from "../app/ts-types/Quarter";
+import { PlannerData } from "../app/ts-types/PlannerData";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 const yearNames = ["Freshman", "Sophomore", "Junior", "Senior"];
 const years = 4;
 const quartersPerYear = 4;
 
-export const dummyData: DummyData = {
-  courses: createCourses(),
+export const initialPlanner: PlannerData = {
   quarters: createQuarters().quarters,
   quarterOrder: createQuarters().quarterOrder,
   years,
   quartersPerYear,
 };
-
-function createCourses() {
-  return {};
-}
 
 function createQuarters() {
   const quarters: { [key: string]: Quarter } = {};

@@ -6,7 +6,7 @@ import {
   getRequirementsLength,
   removeCoursesWhoseSiblingsHaveItAsRequirement,
   createOrRequirementsString,
-} from "../logic/CourseRequirements";
+} from "../../lib/courseRequirements";
 import dynamic from "next/dynamic";
 
 const Tree = dynamic(

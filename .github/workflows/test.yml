@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Tests
 
 on:
   push:
@@ -7,17 +7,29 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
-  test:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: float
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
-      POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
-    runs-on: ubuntu-22.04
+      POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -27,8 +39,16 @@ jobs:
       - name: Build
         run: |
           npm ci
+          npx prisma generate
           npm run build
 
-      - name: Run Cypress Tests
+      - name: Populate Postgres Database
         run: |
-          npm run e2e:headless
+          npx prisma db push
+          npx prisma db seed
+
+      - name: Run Jest Tests
+        run: npm run test
+      
+      - name: Run Cypress Tests
+        run: npm run e2e:headless

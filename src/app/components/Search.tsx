@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Button, Card, Input, Option, Select } from "@mui/joy";
-import { DummyCourse } from "../ts-types/Course";
+import { Course, StoredCourse } from "../ts-types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
-import { createStoredCourse } from "../logic/Courses";
+import { createIdFromCourse } from "../../lib/courseUtils";
 
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
@@ -18,7 +18,15 @@ const GET_COURSE = gql`
   }
 `;
 
-export default function Search() {
+/**
+ * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
+ * already been added to the planner and should be disabled for dragging in search results.
+ */
+export default function Search({
+  coursesAlreadyAdded,
+}: {
+  coursesAlreadyAdded: StoredCourse[];
+}) {
   const [department, setDepartment] = useState("");
   const [number, setNumber] = useState("");
 
@@ -50,6 +58,16 @@ export default function Search() {
     });
     setSearch(true);
   };
+
+  function courseIsAlreadyAdded(course: Course) {
+    let alreadyAdded = false;
+    coursesAlreadyAdded.forEach((c) => {
+      if (c.department === course.department && c.number === course.number) {
+        alreadyAdded = true;
+      }
+    });
+    return alreadyAdded;
+  }
 
   return (
     <Card
@@ -113,16 +131,15 @@ export default function Search() {
               {data ? (
                 <div>
                   <div>
-                    {data.coursesBy.map(
-                      (course: DummyCourse, index: number) => (
-                        <CourseCard
-                          key={index}
-                          course={createStoredCourse(course)}
-                          index={index}
-                          draggableId={course.id}
-                        />
-                      ),
-                    )}
+                    {data.coursesBy.map((course: Course, index: number) => (
+                      <CourseCard
+                        key={index}
+                        course={course}
+                        index={index}
+                        draggableId={createIdFromCourse(course) + "-search"}
+                        alreadyAdded={courseIsAlreadyAdded(course)}
+                      />
+                    ))}
                   </div>
                 </div>
               ) : (
