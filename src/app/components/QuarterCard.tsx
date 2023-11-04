@@ -1,25 +1,29 @@
-import { Button, Card } from "@mui/joy";
-import AddIcon from "@mui/icons-material/Add";
+import { Card } from "@mui/joy";
 import CourseCard from "./CourseCard";
-import { Course } from "../ts-types/Course";
+import { StoredCourse } from "../ts-types/Course";
 import { Droppable } from "@hello-pangea/dnd";
+import { createIdFromCourse } from "../../lib/courseUtils";
 
 export default function QuarterCard({
   title,
   id,
   courses,
-  onOpenCourseSelectionModal,
-  unavailableQuarters
+  unavailableQuarters,
 }: {
   title: string;
   id: string;
-  courses: Course[];
-  onOpenCourseSelectionModal: any;
+  courses: StoredCourse[];
   unavailableQuarters: string[];
 }) {
-
   return (
-    <Card className="w-64" style={{backgroundColor: unavailableQuarters.includes(id) ? '#FEE2E2' : '#FFFFFF'}}>
+    <Card
+      className="w-64"
+      style={{
+        backgroundColor: unavailableQuarters.includes(id)
+          ? "#FEE2E2"
+          : "#FFFFFF",
+      }}
+    >
       {title}
       <Droppable droppableId={id}>
         {(provided) => {
@@ -27,24 +31,21 @@ export default function QuarterCard({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={{ height: "100%", minHeight: "48px"}}
+              style={{ height: "100%", minHeight: "48px" }}
             >
               {courses.map((course, index) => (
-                <CourseCard key={index} course={course} index={index} />
+                <CourseCard
+                  key={index}
+                  course={course}
+                  index={index}
+                  draggableId={createIdFromCourse(course)}
+                />
               ))}
               {provided.placeholder}
             </div>
           );
         }}
       </Droppable>
-      <div className="flex justify-end">
-        <Button
-          variant="plain"
-          startDecorator={<AddIcon />}
-          onClick={onOpenCourseSelectionModal}
-          size="sm"
-        />
-      </div>
     </Card>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
-import CoursePlanner from "./components/CoursePlanner";
 import { ApolloProvider } from "@apollo/client";
-import apolloClient from "@/lib/apollo-client";
+import apolloClient from "@/lib/apolloClient";
+import App from "./components/App";
 
 export default function Home() {
   return (
     <ApolloProvider client={apolloClient}>
-      <CoursePlanner />
+      <App />
     </ApolloProvider>
   );
 }

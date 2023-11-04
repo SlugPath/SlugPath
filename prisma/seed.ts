@@ -8,8 +8,18 @@ async function main() {
   // load all the courses into the database
   for (let i = 0; i < courses.length; i++) {
     const course = courses[i];
-    await prisma.course.create({
-      data: {
+    await prisma.course.upsert({
+      where: {
+        department_number: {
+          department: course.department,
+          number: course.number,
+        },
+      },
+      update: {
+        name: course.name,
+        credits: course.credits,
+      },
+      create: {
         name: course.name,
         credits: course.credits,
         department: course.department,

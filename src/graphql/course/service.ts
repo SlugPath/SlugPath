@@ -44,9 +44,7 @@ export class CourseService {
    * @returns a list of `Course`
    */
   public async allCourses(): Promise<Course[]> {
-    return await prisma.course.findMany({
-      take: COURSES_LIMIT,
-    });
+    return await prisma.course.findMany({});
   }
 
   /**
@@ -66,12 +64,39 @@ export class CourseService {
       .slice(0, input.numCourses);
   }
 
+  // /**
+  //  * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
+  //  * limited by `COURSES_LIMIT`.
+  //  * @returns a list of `Course`
+  //  */
+  // public async coursesBy(pred: QueryInput): Promise<Course[]> {
+  //   return await prisma.course.findMany({
+  //     where: {
+  //       id: pred.id,
+  //       name: {
+  //         contains: pred.name,
+  //       },
+  //       department: pred.department,
+  //       number: pred.number,
+  //       credits: pred.credits,
+  //     },
+  //     take: COURSES_LIMIT,
+  //   });
+  // }
+
   /**
    * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
    * limited by `COURSES_LIMIT`.
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
+    // if (pred.operation == '>') {
+
+    // } else if (pred.operation == '<') {
+
+    // } else {
+
+    // }
     return await prisma.course.findMany({
       where: {
         id: pred.id,

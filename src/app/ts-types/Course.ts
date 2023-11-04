@@ -1,4 +1,13 @@
-import { IsUUID, Matches, Length, Min, Max, IsString, IsArray, ArrayNotEmpty } from "class-validator";
+import {
+  IsUUID,
+  Matches,
+  Length,
+  Min,
+  Max,
+  IsString,
+  IsArray,
+  ArrayNotEmpty,
+} from "class-validator";
 import { ObjectType, Field, Int } from "type-graphql";
 
 /**
@@ -37,12 +46,9 @@ export class Course {
 }
 
 /**
- * `DummyCourse` is a type to represent dummy courses for now
+ * `StoredCourse` is a type to represent dummy courses for now
  */
-export interface DummyCourse {
-  id: string;
-  name: string;
-  credits: number;
+export interface StoredCourse {
   department: string;
   number: string; // because some course numbers are 12L, 115A etc.
   quartersOffered: string[];
