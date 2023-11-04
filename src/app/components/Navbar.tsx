@@ -41,10 +41,7 @@ export default function Navbar({
             ) : (
               <Dropdown>
                 <MenuButton color="neutral" variant="plain">
-                  <UserAvatar
-                    name={session.user?.name}
-                    src={session.user?.image}
-                  />
+                  <UserAvatar name={session.user?.name} />
                 </MenuButton>
                 <Menu variant="soft">
                   <MenuItem onClick={() => signOut()}>Sign out</MenuItem>

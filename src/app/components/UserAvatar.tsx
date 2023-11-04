@@ -30,16 +30,10 @@ function stringAvatar(name: string) {
 }
 
 export default function UserAvatar({
-  src,
   name,
 }: {
-  src: string | null | undefined;
   name: string | null | undefined;
 }) {
-  const imgSrc = src ?? "";
   const userName = name ?? "UCSC student";
-
-  if (imgSrc !== "") return <Avatar alt="UCSC student" src={imgSrc} />;
-
   return <Avatar {...stringAvatar(userName)}></Avatar>;
 }
