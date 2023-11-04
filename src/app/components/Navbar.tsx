@@ -1,6 +1,7 @@
-import { Button } from "@mui/joy";
-import { signIn } from "next-auth/react";
+import { Button, Dropdown, MenuButton, Menu, MenuItem } from "@mui/joy";
+import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import UserAvatar from "./UserAvatar";
 
 export default function Navbar({
   setShowExportModal,
@@ -34,12 +35,21 @@ export default function Navbar({
                 onClick={() => {
                   signIn("google");
                 }}
-                // onClick={() => signIn("google")}
               >
                 Login with UCSC account
               </Button>
             ) : (
-              <div>Hi {session.user?.email}</div>
+              <Dropdown>
+                <MenuButton color="neutral" variant="plain">
+                  <UserAvatar
+                    name={session.user?.name}
+                    src={session.user?.image}
+                  />
+                </MenuButton>
+                <Menu variant="soft">
+                  <MenuItem onClick={() => signOut()}>Sign out</MenuItem>
+                </Menu>
+              </Dropdown>
             )}
           </div>
         </div>
