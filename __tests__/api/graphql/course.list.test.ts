@@ -2,6 +2,7 @@ import { graphql } from "graphql";
 import { buildSchemaSync } from "type-graphql";
 import { describe, expect } from "@jest/globals";
 import { CourseResolver } from "@/graphql/course/resolver";
+import prisma from "@/lib/prisma";
 
 jest.setTimeout(10000);
 
@@ -12,35 +13,50 @@ const schema = buildSchemaSync({
 
 const query = `
 query {
-  coursesInOrder(department: "CSE", numCourses: 10) {
+  coursesBy(department: "CSE", number: "3") {
     credits
     department
-    id
     name
     number
+    id
   }
 }`;
 
-describe("Test Courses InOrder", () => {
-  it("Should return CSE 3 first", async () => {
+beforeAll(async () => {
+  await prisma.course.create({
+    data: {
+      department: "CSE",
+      number: "3",
+      credits: 5,
+      name: "Personal Computer Concepts: Software and Hardware",
+    },
+  });
+});
+
+afterAll(() => {
+  prisma.course.deleteMany();
+  prisma.$disconnect();
+});
+
+describe("test coursesBy", () => {
+  it("should return 1 result", async () => {
     const { data } = await graphql({
       schema,
       source: query,
     });
     expect(data).toBeDefined();
-    const courses = data?.coursesInOrder;
+    const course = data?.coursesBy[0];
 
-    expect(courses).toBeDefined();
-    expect(courses.length).toEqual(10);
-    expect(courses[0].id).toBeDefined();
-    expect(courses[0].name).toBeDefined();
-    expect(courses[0].name).toEqual(
+    expect(course).toBeDefined();
+    expect(course.id).toBeDefined();
+    expect(course.name).toBeDefined();
+    expect(course.name).toEqual(
       "Personal Computer Concepts: Software and Hardware",
     );
-    expect(courses[0].department).toBeDefined();
-    expect(courses[0].department).toEqual("CSE");
-    expect(courses[0].number).toBeDefined();
-    expect(courses[0].number).toEqual("3");
-    expect(courses[0].credits).toBeDefined();
+    expect(course.department).toBeDefined();
+    expect(course.department).toEqual("CSE");
+    expect(course.number).toBeDefined();
+    expect(course.number).toEqual("3");
+    expect(course.credits).toBeDefined();
   });
 });

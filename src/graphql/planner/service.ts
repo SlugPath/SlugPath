@@ -13,19 +13,30 @@ export class PlannerService {
       title,
       active,
     }: { p: PlannerData; id: string; title: string; active: boolean },
-  ) {
-    // Delete old quarters in the current planner
-    const deleteOperation = prisma.planner.update({
+  ): Promise<string> {
+    // Delete old planner
+    const operations = [];
+    const old = await prisma.planner.findUnique({
       where: {
-        userId,
         id,
-      },
-      data: {
-        quarters: {
-          deleteMany: {},
-        },
+        userId,
       },
     });
+    if (old !== null) {
+      operations.push(
+        prisma.planner.update({
+          where: {
+            id,
+            userId,
+          },
+          data: {
+            quarters: {
+              deleteMany: {},
+            },
+          },
+        }),
+      );
+    }
 
     // Get the new quarters
     const newQuarters = Object.keys(p.quarters).map((qid) => {
@@ -41,7 +52,6 @@ export class PlannerService {
         };
       });
       return {
-        id: qid,
         year: parseInt(year),
         term: term as Term,
         courses: {
@@ -51,39 +61,42 @@ export class PlannerService {
     });
 
     // Perform upsert
-    const upsertOperation = prisma.planner.upsert({
-      where: {
-        userId,
-        id,
-      },
-      include: {
-        quarters: {
-          include: {
-            courses: true,
+    operations.push(
+      prisma.planner.upsert({
+        where: {
+          id,
+          userId,
+        },
+        update: {
+          title,
+          active,
+          userId,
+          quarters: {
+            create: newQuarters,
           },
         },
-      },
-      update: {
-        title,
-        active,
-        quarters: {
-          create: newQuarters,
+        create: {
+          title,
+          active,
+          userId,
+          id,
+          quarters: {
+            create: newQuarters,
+          },
         },
-      },
-      create: {
-        title,
-        active,
-        userId,
-        quarters: {
-          create: newQuarters,
+        select: {
+          id: true,
         },
-      },
-    });
+      }),
+    );
 
     // Perform all queries as a serial transaction
-    await prisma.$transaction([deleteOperation, upsertOperation], {
+    const result = await prisma.$transaction(operations, {
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     });
+
+    // Return the id
+    return result[0].id;
   }
 
   /**
@@ -117,29 +130,49 @@ export class PlannerService {
   public async getPlanner(
     userId: string,
     plannerId: string,
-  ): Promise<PlannerData> {
-    return this.toPlannerData(
-      await prisma.planner.findUnique({
-        where: {
-          userId,
-          id: plannerId,
+  ): Promise<PlannerData | null> {
+    const p = await prisma.planner.findUnique({
+      where: {
+        userId,
+        id: plannerId,
+      },
+      include: {
+        quarters: {
+          include: {
+            courses: true,
+          },
         },
-      }),
-    );
+      },
+    });
+    return p !== null ? this.toPlannerData(p) : null;
   }
 
   /**
    * Deletes a planner belonging to a particular user
    * @param userId user id
    * @param plannerId planner id
+   * @returns true if record was successfully deleted
    */
-  public async deletePlanner(userId: string, plannerId: string) {
-    await prisma.planner.delete({
+  public async deletePlanner(
+    userId: string,
+    plannerId: string,
+  ): Promise<string | null> {
+    // Check if it exists first
+    const exists = await prisma.planner.findUnique({
       where: {
-        userId: userId,
         id: plannerId,
+        userId,
       },
     });
+    if (exists === null) return null;
+    // Then delete it if it does exist
+    await prisma.planner.delete({
+      where: {
+        id: plannerId,
+        userId,
+      },
+    });
+    return plannerId;
   }
 
   /**

@@ -12,7 +12,7 @@ export const initialPlanner: PlannerData = {
   quartersPerYear,
 };
 
-function createQuarters() {
+export function createQuarters() {
   const quarters: { [key: string]: Quarter } = {};
   const quarterOrder: string[] = [];
 
