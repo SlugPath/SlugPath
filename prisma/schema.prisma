@@ -18,7 +18,7 @@ model User {
 }
 
 model Planner {
-  id        Int       @id @default(autoincrement())
+  id        String       @id @default(uuid())
   title     String
   updatedAt DateTime  @updatedAt
   active    Boolean
@@ -34,7 +34,7 @@ model Quarter {
   year    Int
   courses Course[]
 
-  plannerId Int     @unique
+  plannerId String     @unique
   planner   Planner @relation(fields: [plannerId], references: [id])
 }
 

@@ -1,8 +1,7 @@
 import { Quarter } from "../app/ts-types/Quarter";
 import { PlannerData } from "../app/ts-types/PlannerData";
 
-const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
-const yearNames = ["Freshman", "Sophomore", "Junior", "Senior"];
+const quarterNames = ["FALL", "WINTER", "SPRING", "SUMMER"];
 const years = 4;
 const quartersPerYear = 4;
 
@@ -19,10 +18,10 @@ function createQuarters() {
 
   for (let year = 0; year < years; year++) {
     for (let quarter = 0; quarter < quartersPerYear; quarter++) {
-      const quarterId = `quarter-${year}-${quarter}`;
+      const quarterId = `quarter-${year}-${quarterNames[quarter]}`;
       quarters[quarterId] = {
         id: quarterId,
-        title: `${quarterNames[quarter]} ${yearNames[year]}`,
+        title: `${quarterNames[quarter]} ${year}`,
         courses: [],
       };
       quarterOrder.push(quarterId);
