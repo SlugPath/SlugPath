@@ -1,19 +1,68 @@
 import { IsUUID, Length, Max, Min } from "class-validator";
-import { Field, ObjectType, InputType, Int } from "type-graphql";
+import { Field, ObjectType, ArgsType, Int } from "type-graphql";
+
+/**
+ * An object type that stores data within a course
+ */
+@ObjectType()
+export class StoredCourse {
+  @Field()
+  @Length(1, 32)
+  department!: string;
+
+  @Field()
+  @Length(1, 3)
+  number!: string;
+}
+
+/**
+ * An object type that stores data within a quarter
+ */
+@ObjectType()
+export class Quarter {
+  @Field()
+  @Length(1, 16)
+  title!: string;
+
+  @Field(() => [StoredCourse])
+  courses!: StoredCourse[];
+}
+
+/**
+ * An object type that stores data within a planner
+ */
+@ObjectType()
+export class PlannerData {
+  @Field(() => Quarter, { name: "quarters" })
+  quarters!: { [key: string]: Quarter };
+
+  @Field(() => [String])
+  quartersOrder!: string[];
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(7)
+  years!: number;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(4)
+  quartersPerYear!: number;
+}
 
 /**
  * An object type that stores a user's id
  */
-@ObjectType()
+@ArgsType()
 export class UserId {
   @Field()
   userId!: string;
 }
 
 /**
- * An input type for creating or updating a planner
+ * An argument/input type for creating or updating a planner
  */
-@InputType()
+@ArgsType()
 export class PlannerCreateInput {
   @Field()
   userId!: string;
@@ -34,9 +83,9 @@ export class PlannerCreateInput {
 }
 
 /**
- * An input type for retrieving or deleting a planner
+ * An argument/input type for retrieving or deleting a planner
  */
-@InputType()
+@ArgsType()
 export class PlannerRetrieveInput {
   @Field()
   userId!: string;
@@ -44,53 +93,4 @@ export class PlannerRetrieveInput {
   @Field()
   @IsUUID("4")
   plannerId!: string;
-}
-
-/**
- * An object type that stores data within a planner
- */
-@ObjectType()
-export class PlannerData {
-  @Field()
-  quarters!: { [key: string]: Quarter };
-
-  @Field()
-  quartersOrder!: string[];
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(7)
-  years!: number;
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(4)
-  quartersPerYear!: number;
-}
-
-/**
- * An object type that stores data within a quarter
- */
-@ObjectType()
-export class Quarter {
-  @Field()
-  @Length(1, 16)
-  title!: string;
-
-  @Field(() => [StoredCourse])
-  courses!: StoredCourse[];
-}
-
-/**
- * An object type that stores data within a course
- */
-@ObjectType()
-export class StoredCourse {
-  @Field()
-  @Length(1, 32)
-  department!: string;
-
-  @Field()
-  @Length(1, 3)
-  number!: string;
 }
