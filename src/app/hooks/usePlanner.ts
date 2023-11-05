@@ -74,7 +74,7 @@ export function usePlanner() {
       return;
     }
     setCounter((prev) => prev + 1);
-    const [id, title] = [uuidv4(), `Planner ${counter}`];
+    const [id, title] = [uuidv4(), `Planner ${counter + 1}`];
     handlePlannerUpdate({
       ...planners,
       [id]: [`Planner ${counter + 1}`, false],
