@@ -65,7 +65,6 @@ export default function App() {
         {Object.entries(planners).map(([id, [, isActive]]) => (
           <ListItem sx={{ display: isActive ? "block" : "none" }} key={id}>
             <CoursePlanner
-              id={id}
               isActive={isActive}
               onCourseStateChanged={setCurrentCourseState}
             />

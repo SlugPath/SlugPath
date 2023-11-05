@@ -7,17 +7,14 @@ import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 
 export default function CoursePlanner({
-  id,
   isActive,
   onCourseStateChanged,
 }: {
-  id: string;
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
-  const { courseState, handleDragEnd, coursesAlreadyAdded } = useCoursePlanner({
-    id,
-  });
+  const { courseState, handleDragEnd, coursesAlreadyAdded } =
+    useCoursePlanner();
 
   useEffect(() => {
     onCourseStateChanged(courseState);
