@@ -10,7 +10,8 @@ datasource db {
 
 model User {
   id       Int       @id @default(autoincrement())
-  email    String    @unique
+  googleId String    @unique
+  email    String?
   name     String?
   role     Role      @default(USER)
   planners Planner[]
@@ -43,9 +44,7 @@ model Course {
   department String
   number     String
   credits    Int      @default(5)
-  /// @TypeGraphQL.omit(output: true)
-  createdAt  DateTime @default(now())
-  /// @TypeGraphQL.omit(output: true)
+
   updatedAt  DateTime @updatedAt
 
   quarterId Int?     @unique

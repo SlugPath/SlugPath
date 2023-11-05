@@ -1,8 +1,27 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import prisma from "@/lib/prisma";
 
 const handler = NextAuth({
   callbacks: {
+    async signIn({ user }) {
+      const res = await prisma.user.upsert({
+        where: {
+          googleId: user.id,
+        },
+        update: {
+          name: user.name,
+        },
+        create: {
+          name: user.name,
+          email: user.email,
+          googleId: user.id,
+        },
+      });
+      console.log(`Upserted user: ${JSON.stringify(res)}`);
+      return true;
+    },
+
     async redirect({ url }) {
       return url;
     },
