@@ -16,7 +16,7 @@ import {
 @Resolver()
 export class CourseResolver {
   /**
-   * `courses` returns all courses with limit 200
+   * Returns all courses with limit 200
    * @returns a list of `Course` instances
    */
   @Query(() => [Course])
@@ -25,7 +25,7 @@ export class CourseResolver {
   }
 
   /**
-   * `coursesInOrder` returns a user-defined number of courses in ascending order
+   * Returns a user-defined number of courses in ascending order
    * of course number for a user specified department.
    * @param input OrderedInput containing department and number of `Course` instances
    * @returns a list of `Course` instances
@@ -36,7 +36,7 @@ export class CourseResolver {
   }
 
   /**
-   * `coursesBy` returns a list of `Course` that satisfy the conditions in `input`
+   * Returns a list of `Course` that satisfy the conditions in `input`
    * @param input a QueryInput instance
    * @returns a list of `Course` instances
    */
@@ -46,8 +46,8 @@ export class CourseResolver {
   }
 
   /**
-   * `coursesBelow` is a custom query that asynchronously returns a
-   * list of `Course` instances that have a course number less than `input.courseNum`.
+   * Custom query that asynchronously returns a list of `Course` instances
+   * that have a course number less than `input.courseNum`.
    * @param input an `AboveOrBelowInput` instance containing department name and a valid `courseNum`.
    * @returns a list of `Course` instances
    */
@@ -57,7 +57,7 @@ export class CourseResolver {
   }
 
   /**
-   * `coursesAbove` is a custom query that asynchronously returns a
+   * A custom query that asynchronously returns a
    * list of `Course` instances that have a course number strictly greater than `input.courseNum`.
    * @param input an `AboveOrBelowInput` instance containing department name and a valid `courseNum`.
    * @returns a list of `Course` instances
@@ -68,8 +68,8 @@ export class CourseResolver {
   }
 
   /**
-   *  `createCourse` is a mutation function that creates a course if one with the same `department`
-   *  and course `number` does not exist already
+   * A mutation function that creates a course if one with the same `department`
+   * and course `number` does not exist already
    * @param input an `CreateInput` instance
    * @returns the created `Course` instance upon success
    */
@@ -79,8 +79,8 @@ export class CourseResolver {
   }
 
   /**
-   *  `updateCourse` is a mutating function that updates a course provided a valid `department`
-   *  and course `number` in the input
+   * A mutating function that updates a course provided a valid `department`
+   * and course `number` in the input
    * @param input an `CreateInput` instance
    * @returns the created `Course` instance upon success
    */
@@ -90,7 +90,7 @@ export class CourseResolver {
   }
 
   /**
-   * `deleteCourse` is a mutation function that deletes a course from a database,
+   * A mutation function that deletes a course from a database,
    * provided it exists
    * @param input
    * @returns
