@@ -1,24 +1,22 @@
-import { PlannerData } from "@/app/ts-types/PlannerData";
+import {
+  UserId,
+  PlannerData,
+  PlannerRetrieveInput,
+  PlannerCreateInput,
+} from "./schema";
 import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/ts-types/Course";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { Course, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
-  public async upsert(
-    userId: string,
-    {
-      p,
-      id,
-      title,
-      active,
-    }: { p: PlannerData; id: string; title: string; active: boolean },
-  ) {
+  // FIXME: return something to signify if creation/update worked
+  public async upsert(input: PlannerCreateInput) {
     // Delete old quarters in the current planner
     const deleteOperation = prisma.planner.update({
       where: {
-        userId,
-        id,
+        userId: input.userId,
+        id: input.plannerId,
       },
       data: {
         quarters: {
@@ -28,8 +26,8 @@ export class PlannerService {
     });
 
     // Get the new quarters
-    const newQuarters = Object.keys(p.quarters).map((qid) => {
-      const quarter = p.quarters[qid];
+    const newQuarters = Object.keys(input.plannerData.quarters).map((qid) => {
+      const quarter = input.plannerData.quarters[qid];
       const [year, term] = qid.split("-").slice(1);
 
       const courses = quarter.courses.map((c) => {
@@ -53,8 +51,8 @@ export class PlannerService {
     // Perform upsert
     const upsertOperation = prisma.planner.upsert({
       where: {
-        userId,
-        id,
+        userId: input.userId,
+        id: input.plannerId,
       },
       include: {
         quarters: {
@@ -64,16 +62,16 @@ export class PlannerService {
         },
       },
       update: {
-        title,
-        active,
+        title: input.title,
+        active: input.active,
         quarters: {
           create: newQuarters,
         },
       },
       create: {
-        title,
-        active,
-        userId,
+        title: input.title,
+        active: input.active,
+        userId: input.userId,
         quarters: {
           create: newQuarters,
         },
@@ -91,7 +89,7 @@ export class PlannerService {
    * @param userId user id
    * @returns a list of planners belonging to a user
    */
-  public async allPlanners(userId: string): Promise<PlannerData[]> {
+  public async allPlanners(userId: UserId): Promise<PlannerData[]> {
     const planners = await prisma.planner.findMany({
       where: {
         userId,
@@ -114,15 +112,12 @@ export class PlannerService {
    * @param plannerId planner id
    * @returns
    */
-  public async getPlanner(
-    userId: string,
-    plannerId: string,
-  ): Promise<PlannerData> {
+  public async getPlanner(input: PlannerRetrieveInput): Promise<PlannerData> {
     return this.toPlannerData(
       await prisma.planner.findUnique({
         where: {
-          userId,
-          id: plannerId,
+          userId: input.userId,
+          id: input.plannerId,
         },
       }),
     );
@@ -133,11 +128,12 @@ export class PlannerService {
    * @param userId user id
    * @param plannerId planner id
    */
-  public async deletePlanner(userId: string, plannerId: string) {
+  // FIXME: return something to signify if deletion worked
+  public async deletePlanner(input: PlannerRetrieveInput) {
     await prisma.planner.delete({
       where: {
-        userId: userId,
-        id: plannerId,
+        userId: input.userId,
+        id: input.plannerId,
       },
     });
   }
