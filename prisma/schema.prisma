@@ -22,17 +22,19 @@ model Planner {
   updatedAt DateTime  @updatedAt
   active    Boolean
   quarters  Quarter[]
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int       @unique
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
 }
 
 model Quarter {
-  id   Int  @id @default(autoincrement())
-  term Term
-  year Int
+  id      Int      @id @default(autoincrement())
+  term    Term
+  year    Int
+  courses Course[]
 
-  planner   Planner @relation(fields: [plannerId], references: [id])
   plannerId Int     @unique
+  planner   Planner @relation(fields: [plannerId], references: [id])
 }
 
 model Course {
@@ -45,6 +47,9 @@ model Course {
   createdAt  DateTime @default(now())
   /// @TypeGraphQL.omit(output: true)
   updatedAt  DateTime @updatedAt
+
+  quarterId Int?     @unique
+  quarter   Quarter? @relation(fields: [quarterId], references: [id])
 
   // No two courses can have the same department and course number
   @@unique([department, number])
