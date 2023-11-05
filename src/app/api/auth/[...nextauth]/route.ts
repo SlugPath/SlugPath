@@ -7,7 +7,7 @@ const handler = NextAuth({
     async signIn({ user }) {
       const res = await prisma.user.upsert({
         where: {
-          googleId: user.id,
+          id: user.id,
         },
         update: {
           name: user.name,
@@ -15,7 +15,7 @@ const handler = NextAuth({
         create: {
           name: user.name,
           email: user.email,
-          googleId: user.id,
+          id: user.id,
         },
       });
       console.log(`Upserted user: ${JSON.stringify(res)}`);

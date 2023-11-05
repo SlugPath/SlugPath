@@ -6,7 +6,7 @@ import { Course, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   public async upsert(
-    userId: number,
+    userId: string,
     {
       p,
       id,
@@ -91,7 +91,7 @@ export class PlannerService {
    * @param userId user id
    * @returns a list of planners belonging to a user
    */
-  public async allPlanners(userId: number): Promise<PlannerData[]> {
+  public async allPlanners(userId: string): Promise<PlannerData[]> {
     const planners = await prisma.planner.findMany({
       where: {
         userId,
@@ -115,7 +115,7 @@ export class PlannerService {
    * @returns
    */
   public async getPlanner(
-    userId: number,
+    userId: string,
     plannerId: string,
   ): Promise<PlannerData> {
     return this.toPlannerData(
@@ -133,7 +133,7 @@ export class PlannerService {
    * @param userId user id
    * @param plannerId planner id
    */
-  public async deletePlanner(userId: number, plannerId: string) {
+  public async deletePlanner(userId: string, plannerId: string) {
     await prisma.planner.delete({
       where: {
         userId: userId,
