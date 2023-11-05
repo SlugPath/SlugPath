@@ -18,7 +18,7 @@ model User {
 }
 
 model Planner {
-  id        String       @id @default(uuid())
+  id        String    @id @default(uuid())
   title     String
   updatedAt DateTime  @updatedAt
   active    Boolean
@@ -32,23 +32,22 @@ model Quarter {
   id      Int      @id @default(autoincrement())
   term    Term
   year    Int
-  courses Course[]
+  courses Course[] @relation()
 
-  plannerId String     @unique
+  plannerId String  @unique
   planner   Planner @relation(fields: [plannerId], references: [id])
 }
 
 model Course {
-  id         String   @id @default(uuid())
+  id         String @id @default(uuid())
   name       String
   department String
   number     String
-  credits    Int      @default(5)
+  credits    Int    @default(5)
 
-  updatedAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
-  quarterId Int?     @unique
-  quarter   Quarter? @relation(fields: [quarterId], references: [id])
+  quarter Quarter[] @relation()
 
   // No two courses can have the same department and course number
   @@unique([department, number])
@@ -60,8 +59,8 @@ enum Role {
 }
 
 enum Term {
-  FALL
-  WINTER
-  SPRING
-  SUMMER
+  Fall
+  Winter
+  Spring
+  Summer
 }

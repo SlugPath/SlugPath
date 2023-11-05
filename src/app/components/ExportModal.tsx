@@ -131,7 +131,7 @@ function Quarters({
       {quarters.map((quarterId) => {
         const quarter = courseState.quarters[quarterId];
         const courses = quarter.courses;
-        return <Quarter key={quarter.id} quarter={quarter} courses={courses} />;
+        return <Quarter key={quarterId} quarter={quarter} courses={courses} />;
       })}
     </View>
   );
@@ -145,7 +145,7 @@ function Quarter({
   courses: StoredCourse[];
 }) {
   return (
-    <View key={quarter.id} style={styles.quarterCard}>
+    <View style={styles.quarterCard}>
       <Text style={styles.quarterTitle}>{quarter.title}</Text>
       <View>
         {courses.map((course, idx) => {

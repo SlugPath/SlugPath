@@ -1,5 +1,5 @@
 import QuarterCard from "./QuarterCard";
-import { initialPlanner } from "../../lib/initialPlanner";
+import { quartersPerYear } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
@@ -7,17 +7,14 @@ import { DragDropContext } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 
 export default function CoursePlanner({
-  id,
   isActive,
   onCourseStateChanged,
 }: {
-  id: string;
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
-  const { courseState, handleDragEnd, coursesAlreadyAdded } = useCoursePlanner({
-    id,
-  });
+  const { courseState, handleDragEnd, coursesAlreadyAdded } =
+    useCoursePlanner();
 
   useEffect(() => {
     onCourseStateChanged(courseState);
@@ -47,14 +44,11 @@ export default function CoursePlanner({
 function Quarters({ courseState }: { courseState: PlannerData }) {
   return (
     <div className="space-y-2">
-      {Array.from(
-        { length: initialPlanner.quartersPerYear },
-        (_, index) => index,
-      ).map((i) => {
-        const slice_val = initialPlanner.quartersPerYear * i;
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
         const quarters = courseState.quarterOrder.slice(
           slice_val,
-          slice_val + initialPlanner.quartersPerYear,
+          slice_val + quartersPerYear,
         );
         return (
           <div key={i} className="flex flex-row space-x-2">
@@ -64,9 +58,9 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
 
               return (
                 <QuarterCard
+                  id={quarterId}
+                  key={quarterId}
                   title={quarter.title}
-                  id={quarter.id}
-                  key={quarter.id}
                   courses={courses}
                 />
               );

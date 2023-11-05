@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Course, StoredCourse } from "@/app/ts-types/Course";
+import { Course } from "@/app/ts-types/Course";
 import {
   DeleteInput,
   OrderedInput,
@@ -7,8 +7,6 @@ import {
   UpsertInput,
 } from "@/app/ts-types/Args";
 import { isAlpha } from "class-validator";
-import { PlannerData } from "@/app/ts-types/PlannerData";
-import { initialPlanner } from "@/lib/initialPlanner";
 
 const COURSES_LIMIT = 100;
 const MAX_COURSE_NUM: number = 299;
@@ -187,89 +185,5 @@ export class CourseService {
         },
       },
     });
-  }
-}
-
-export class PlannerService {
-  public async upsert(userId: number, planner: PlannerData) {
-    // TODO
-    console.log(`${userId}, ${planner}`);
-  }
-
-  /**
-   * Retrieves all planners for a user
-   * @param userId user id
-   * @returns a list of planners belonging to a user
-   */
-  public async allPlanners(userId: number): Promise<PlannerData[]> {
-    const plannerIds = await prisma.planner.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    return Promise.all(plannerIds.map((p) => this.toPlannerData(userId, p.id)));
-  }
-
-  /**
-   * Deletes a planner belonging to a particular user
-   * @param userId user id
-   * @param plannerId planner id
-   */
-  public async deletePlanner(userId: number, plannerId: string) {
-    await prisma.planner.delete({
-      where: {
-        userId: userId,
-        id: plannerId,
-      },
-    });
-  }
-
-  /**
-   * Finds and converts a Prisma Planner to a PlannerData
-   * @param userId user id
-   * @param plannerId planner id
-   * @returns a PlannerData instance
-   */
-  public async toPlannerData(
-    userId: number,
-    plannerId: string,
-  ): Promise<PlannerData> {
-    // Query to load all the related data
-    const planner = await prisma.planner.findFirst({
-      where: {
-        userId,
-        id: plannerId,
-      },
-      include: {
-        quarters: {
-          include: {
-            courses: true,
-          },
-        },
-      },
-    });
-    // Set all the courses for each quarter
-    const newPlanner: PlannerData = JSON.parse(JSON.stringify(initialPlanner));
-    planner?.quarters.forEach((q) => {
-      const quarterId = `quarter-${q.year}-${q.term}`;
-      const courses: StoredCourse[] = q.courses.map((c) => {
-        return {
-          department: c.department,
-          number: c.number,
-        };
-      });
-      newPlanner.quarters[quarterId] = {
-        id: quarterId,
-        title: `${q.term} ${q.year}`,
-        courses,
-      };
-    });
-
-    // Return new modified planner
-    return newPlanner;
   }
 }
