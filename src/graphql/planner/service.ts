@@ -2,7 +2,7 @@ import { PlannerData } from "@/app/ts-types/PlannerData";
 import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/ts-types/Course";
 import { initialPlanner } from "@/lib/initialPlanner";
-import { Course, Term } from "@prisma/client";
+import { Course, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   public async upsert(
@@ -15,7 +15,7 @@ export class PlannerService {
     }: { p: PlannerData; id: string; title: string; active: boolean },
   ) {
     // Delete old quarters in the current planner
-    const deleteQuarters = prisma.planner.update({
+    const deleteOperation = prisma.planner.update({
       where: {
         userId,
         id,
@@ -51,7 +51,7 @@ export class PlannerService {
     });
 
     // Perform upsert
-    const upsert = prisma.planner.upsert({
+    const upsertOperation = prisma.planner.upsert({
       where: {
         userId,
         id,
@@ -80,8 +80,10 @@ export class PlannerService {
       },
     });
 
-    // Perform all queries as a transaction
-    await prisma.$transaction([deleteQuarters, upsert]);
+    // Perform all queries as a serial transaction
+    await prisma.$transaction([deleteOperation, upsertOperation], {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+    });
   }
 
   /**
@@ -104,6 +106,26 @@ export class PlannerService {
     });
 
     return planners.map((p) => this.toPlannerData(p));
+  }
+
+  /**
+   * Retrieves a single planner for a user by its id
+   * @param userId author id
+   * @param plannerId planner id
+   * @returns
+   */
+  public async getPlanner(
+    userId: number,
+    plannerId: string,
+  ): Promise<PlannerData> {
+    return this.toPlannerData(
+      await prisma.planner.findUnique({
+        where: {
+          userId,
+          id: plannerId,
+        },
+      }),
+    );
   }
 
   /**

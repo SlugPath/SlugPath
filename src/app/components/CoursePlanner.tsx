@@ -7,12 +7,16 @@ import { DragDropContext } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 
 export default function CoursePlanner({
+  id,
   isActive,
   onCourseStateChanged,
 }: {
+  id: string;
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
+  console.log(`Id of planner is: ${id}`);
+
   const { courseState, handleDragEnd, coursesAlreadyAdded } =
     useCoursePlanner();
 
