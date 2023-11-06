@@ -8,7 +8,7 @@ import {
 } from "@/app/ts-types/Args";
 import { isAlpha } from "class-validator";
 
-const COURSES_LIMIT = 100;
+// const COURSES_LIMIT = 100;
 const MAX_COURSE_NUM: number = 299;
 
 const compareCoursesByNum = function (a: Course, b: Course): number {
@@ -64,50 +64,19 @@ export class CourseService {
       .slice(0, input.numCourses);
   }
 
-  // /**
-  //  * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
-  //  * limited by `COURSES_LIMIT`.
-  //  * @returns a list of `Course`
-  //  */
-  // public async coursesBy(pred: QueryInput): Promise<Course[]> {
-  //   return await prisma.course.findMany({
-  //     where: {
-  //       id: pred.id,
-  //       name: {
-  //         contains: pred.name,
-  //       },
-  //       department: pred.department,
-  //       number: pred.number,
-  //       credits: pred.credits,
-  //     },
-  //     take: COURSES_LIMIT,
-  //   });
-  // }
-
   /**
    * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
    * limited by `COURSES_LIMIT`.
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
-    // if (pred.operation == '>') {
-
-    // } else if (pred.operation == '<') {
-
-    // } else {
-
-    // }
     return await prisma.course.findMany({
       where: {
-        id: pred.id,
-        name: {
-          contains: pred.name,
-        },
         department: pred.department,
-        number: pred.number,
-        credits: pred.credits,
+        number: {
+          contains: pred.number,
+        },
       },
-      take: COURSES_LIMIT,
     });
   }
 
@@ -128,12 +97,11 @@ export class CourseService {
         department: department,
       },
     });
-    return courses
-      .filter((c: Course) => {
-        const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
-        return above ? num > courseNum : num < courseNum;
-      })
-      .slice(0, COURSES_LIMIT);
+    return courses.filter((c: Course) => {
+      const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
+      return above ? num > courseNum : num < courseNum;
+    });
+    // .slice(0, COURSES_LIMIT);
   }
 
   /**

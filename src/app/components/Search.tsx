@@ -6,6 +6,8 @@ import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 
+const CSE_DEPARTMENT = "Computer Science & Engineering";
+
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
     coursesBy(department: $department, number: $number) {
@@ -23,25 +25,22 @@ const GET_COURSE = gql`
  * already been added to the planner and should be disabled for dragging in search results.
  */
 export default function Search({
-  coursesAlreadyAdded,
+  coursesInPlanner,
 }: {
-  coursesAlreadyAdded: StoredCourse[];
+  coursesInPlanner: StoredCourse[];
 }) {
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState(CSE_DEPARTMENT);
   const [number, setNumber] = useState("");
-
-  const [search, setSearch] = useState(false);
   const [queryDetails, setQueryDetails] = useState({
     department: "",
     number: "",
   });
-
   const { data, loading, error } = useQuery(GET_COURSE, {
     variables: {
       department: queryDetails.department,
       number: queryDetails.number,
     },
-    skip: !search, // Skip the query if search button hasn't been pressed yet
+    skip: false,
   });
 
   const handleChangeDepartment = (
@@ -56,12 +55,11 @@ export default function Search({
       department: departmentInput,
       number: numberInput.toUpperCase(),
     });
-    setSearch(true);
   };
 
   function courseIsAlreadyAdded(course: Course) {
     let alreadyAdded = false;
-    coursesAlreadyAdded.forEach((c) => {
+    coursesInPlanner.forEach((c) => {
       if (c.department === course.department && c.number === course.number) {
         alreadyAdded = true;
       }
@@ -70,13 +68,7 @@ export default function Search({
   }
 
   return (
-    <Card
-      className="w-64"
-      style={{
-        height: "100%",
-      }}
-    >
-      {/* Search form begins */}
+    <Card className="w-64 h-full">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -90,9 +82,10 @@ export default function Search({
             aria-label="department"
             className="col-span-2"
             onChange={handleChangeDepartment}
+            defaultValue={department}
           >
             <Option value="CSE" aria-label="computer science and engineering">
-              Computer Science & Engineering
+              {CSE_DEPARTMENT}
             </Option>
           </Select>
           <Input
@@ -123,14 +116,13 @@ export default function Search({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={{ height: "100%", minHeight: "48px" }}
               className={`${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
             >
               {loading && <p>Loading...</p>}
               {error && <p>No results found</p>}
               {data ? (
                 <div>
-                  <div>
+                  <div className="overflow-y-auto h-96">
                     {data.coursesBy.map((course: Course, index: number) => (
                       <CourseCard
                         key={index}

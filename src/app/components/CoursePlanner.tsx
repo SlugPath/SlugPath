@@ -15,7 +15,7 @@ export default function CoursePlanner({
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
-  const { courseState, handleDragEnd, coursesAlreadyAdded } = useCoursePlanner({
+  const { courseState, handleDragEnd, coursesInPlanner } = useCoursePlanner({
     id,
   });
 
@@ -32,7 +32,7 @@ export default function CoursePlanner({
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex">
           <div className="flex-1 px-4 py-6">
-            <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
+            <Search coursesInPlanner={coursesInPlanner()} />
           </div>
           <div className="flex-2 py-6">
             <Quarters courseState={courseState} />
