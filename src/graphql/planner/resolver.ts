@@ -6,7 +6,7 @@ import {
   PlannerRetrieveInput,
   PlannerCreateInput,
 } from "./schema";
-import { Args, Query, Resolver } from "type-graphql";
+import { Args, Query, Mutation, Resolver } from "type-graphql";
 
 /**
  * PlannerResolver is a Resolver class that provides custom functionality for
@@ -14,7 +14,7 @@ import { Args, Query, Resolver } from "type-graphql";
  */
 @Resolver()
 export class PlannerResolver {
-  @Query(() => PlannerCreateInput)
+  @Mutation(() => PlannerId)
   async upsert(@Args() input: PlannerCreateInput): Promise<PlannerId> {
     return await new PlannerService().upsert(input);
   }
@@ -24,14 +24,14 @@ export class PlannerResolver {
     return await new PlannerService().allPlanners(input);
   }
 
-  @Query(() => PlannerData)
+  @Query(() => PlannerData, { nullable: true })
   async getPlanner(
     @Args() input: PlannerRetrieveInput,
   ): Promise<PlannerData | null> {
     return await new PlannerService().getPlanner(input);
   }
 
-  @Query(() => PlannerRetrieveInput)
+  @Mutation(() => PlannerId, { nullable: true })
   async deletePlanner(
     @Args() input: PlannerRetrieveInput,
   ): Promise<PlannerId | null> {

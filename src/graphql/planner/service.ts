@@ -121,7 +121,7 @@ export class PlannerService {
       },
     });
 
-    return planners.map((p) => this.toPlannerData(p));
+    return planners.map((p: any) => this.toPlannerData(p));
   }
 
   /**
