@@ -100,15 +100,6 @@ export class PlannerData {
 }
 
 /**
- * An object type that stores a user's id
- */
-@ArgsType()
-export class UserId {
-  @Field()
-  userId!: string;
-}
-
-/**
  * An object type that stores a planner's id
  */
 @ObjectType()

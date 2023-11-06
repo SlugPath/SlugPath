@@ -1,12 +1,11 @@
 import { PlannerService } from "./service";
 import {
-  UserId,
   PlannerId,
   PlannerData,
   PlannerRetrieveInput,
   PlannerCreateInput,
 } from "./schema";
-import { Args, Query, Mutation, Resolver } from "type-graphql";
+import { Arg, Args, Query, Mutation, Resolver } from "type-graphql";
 
 /**
  * PlannerResolver is a Resolver class that provides custom functionality for
@@ -20,8 +19,8 @@ export class PlannerResolver {
   }
 
   @Query(() => [PlannerData])
-  async getAllPlanners(@Args() input: UserId): Promise<PlannerData[]> {
-    return await new PlannerService().allPlanners(input);
+  async getAllPlanners(@Arg("userId") userId: string): Promise<PlannerData[]> {
+    return await new PlannerService().allPlanners(userId);
   }
 
   @Query(() => PlannerData, { nullable: true })

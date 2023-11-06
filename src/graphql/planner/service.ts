@@ -1,5 +1,4 @@
 import {
-  UserId,
   PlannerId,
   PlannerData,
   PlannerRetrieveInput,
@@ -107,10 +106,10 @@ export class PlannerService {
    * @param userId user id
    * @returns a list of planners belonging to a user
    */
-  public async allPlanners(input: UserId): Promise<PlannerData[]> {
+  public async allPlanners(userId: string): Promise<PlannerData[]> {
     const planners = await prisma.planner.findMany({
       where: {
-        userId: input.userId,
+        userId,
       },
       include: {
         quarters: {
