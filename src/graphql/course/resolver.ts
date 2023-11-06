@@ -1,13 +1,13 @@
 import { CourseService } from "./service";
-import { Course } from "@/app/ts-types/Course";
 import { Args, Arg, Mutation, Query, Resolver } from "type-graphql";
 import {
   AboveOrBelowInput,
+  Course,
   DeleteInput,
   OrderedInput,
   QueryInput,
   UpsertInput,
-} from "@/app/ts-types/Args";
+} from "./schema";
 
 /**
  * CourseResolver is a Resolver class that provides custom functionality for

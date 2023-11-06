@@ -68,17 +68,18 @@ it("should create 1 empty planner for 1 user", async () => {
   if (user === null) fail("User was null (this should not happen)");
 
   const service = new PlannerService();
-  const planners = await service.allPlanners(user.id);
+  const planners = await service.allPlanners({ userId: user.id });
   expect(planners).toHaveLength(0);
 
   // Empty planner
   const plannerId = uuidv4();
-  const res = await service.upsert(user.id, {
-    id: plannerId,
+  const res = await service.upsert({
+    userId: user.id,
+    plannerId: plannerId,
     title: "Planner 1",
     active: true,
-    p: {
-      quarterOrder: createQuarters().quarterOrder,
+    plannerData: {
+      quartersOrder: createQuarters().quarterOrder,
       quartersPerYear: 4,
       quarters: createQuarters().quarters,
       years: 4,
@@ -86,12 +87,12 @@ it("should create 1 empty planner for 1 user", async () => {
   });
   expect(res).toBe(plannerId);
 
-  const check = await service.getPlanner(user.id, plannerId);
+  const check = await service.getPlanner({ userId: user.id, plannerId });
   expect(check).not.toBeNull();
 
   // Cleanup
-  const deleted = await service.deletePlanner(user.id, plannerId);
+  const deleted = await service.deletePlanner({ userId: user.id, plannerId });
   expect(deleted).toBeTruthy();
-  const deleteCheck = await service.getPlanner(user.id, plannerId);
+  const deleteCheck = await service.getPlanner({ userId: user.id, plannerId });
   expect(deleteCheck).toBeNull();
 });
