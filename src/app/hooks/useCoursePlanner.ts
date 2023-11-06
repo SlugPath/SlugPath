@@ -1,21 +1,74 @@
-import { createCourseFromId } from "../../lib/courseUtils";
+import { createCourseFromId, createIdFromCourse } from "../../lib/courseUtils";
 import { StoredCourse } from "../ts-types/Course";
 import { DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
+import { DragStart } from "@hello-pangea/dnd";
 
 export default function useCoursePlanner() {
+  const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [courseState, setCourseState] = useState(initialPlanner);
 
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
   };
 
+  const quarters = {
+    "0": "Fall",
+    "1": "Winter",
+    "2": "Spring",
+    "3": "Summer",
+  };
+
+  // Check if the dragged course is available in the destination quarter
+  const getQuarterFromId = (droppableId: string) => {
+    const quarterId = droppableId.split("-")[2];
+    return quarters[quarterId as keyof typeof quarters];
+  };
+
+  const getCourseFromQuarters = (cid: string): StoredCourse | undefined => {
+    let allCourses: StoredCourse[] = [];
+    Object.values(courseState.quarters).forEach((quarter) => {
+      allCourses = allCourses.concat(quarter.courses);
+    });
+    return allCourses.find((c) => {
+      return createIdFromCourse(c) === cid;
+    });
+  };
+
+  // Handle the drag start event for course items.
+  // result Contains information about the current drag event of the array of unavailable quarters.
+  const handleOnDragStart = (start: DragStart) => {
+    const courseBeingDragged = getCourseFromQuarters(start.draggableId);
+
+    if (courseBeingDragged) {
+      const unavailable = Object.values(courseState.quarters)
+        .filter((quarter) => {
+          const quarterName = getQuarterFromId(quarter.id);
+          return !courseBeingDragged?.quartersOffered.includes(quarterName);
+        })
+        .map((quarter) => quarter.id);
+
+      setUnavailableQuarters(unavailable);
+    }
+  };
+
   const handleDragEnd = (result: DropResult) => {
+    setUnavailableQuarters([]);
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
+
+    /*
+    const draggedCourse = getCourseFromQuarters(draggableId);
+    const quarterName = getQuarterFromId(destination.droppableId);
+    const isAvailable = draggedCourse?.quartersOffered.includes(quarterName);
+
+    // FIXME: add additional logic to add a warning to the course if it is not offered then
+    if (!isAvailable) return
+    */
+
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -145,5 +198,7 @@ export default function useCoursePlanner() {
     courseState,
     handleDragEnd,
     coursesAlreadyAdded,
+    handleOnDragStart,
+    unavailableQuarters,
   };
 }

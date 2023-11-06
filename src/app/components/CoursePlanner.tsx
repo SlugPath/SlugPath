@@ -13,8 +13,13 @@ export default function CoursePlanner({
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
-  const { courseState, handleDragEnd, coursesAlreadyAdded } =
-    useCoursePlanner();
+  const {
+    handleOnDragStart,
+    unavailableQuarters,
+    courseState,
+    handleDragEnd,
+    coursesAlreadyAdded,
+  } = useCoursePlanner();
 
   useEffect(() => {
     onCourseStateChanged(courseState);
@@ -26,13 +31,19 @@ export default function CoursePlanner({
 
   return (
     <div>
-      <DragDropContext onDragEnd={handleDragEnd}>
+      <DragDropContext
+        onDragEnd={handleDragEnd}
+        onDragStart={handleOnDragStart}
+      >
         <div className="flex">
           <div className="flex-1 px-4 py-6">
             <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
           </div>
-          <div className="flex-2 py-6">
-            <Quarters courseState={courseState} />
+          <div className="flex-3 py-6">
+            <Quarters
+              courseState={courseState}
+              unavailableQuarters={unavailableQuarters}
+            />
           </div>
           <div className="flex-1 py-6" />
         </div>
@@ -41,7 +52,34 @@ export default function CoursePlanner({
   );
 }
 
-function Quarters({ courseState }: { courseState: PlannerData }) {
+/*
+function RemoveCourseArea({ droppableId }: { droppableId: string }) {
+  return (
+    <Droppable droppableId={droppableId}>
+      {(provided, snapshot) => {
+        return (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
+            style={{ height: "100%", minHeight: "48px" }}
+          >
+            {provided.placeholder}
+          </div>
+        );
+      }}
+    </Droppable>
+  );
+}
+*/
+
+function Quarters({
+  courseState,
+  unavailableQuarters,
+}: {
+  courseState: PlannerData;
+  unavailableQuarters: string[];
+}) {
   return (
     <div className="space-y-2">
       {Array.from(
@@ -65,6 +103,7 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
                   id={quarter.id}
                   key={quarter.id}
                   courses={courses}
+                  unavailableQuarters={unavailableQuarters}
                 />
               );
             })}

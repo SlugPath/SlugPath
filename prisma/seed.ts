@@ -24,6 +24,7 @@ async function main() {
         credits: course.credits,
         department: course.department,
         number: course.number,
+        quartersOffered: course.quartersOffered,
       },
     });
   }

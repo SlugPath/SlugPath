@@ -10,10 +10,12 @@ export function getTitle(department: string, number: string) {
  * @returns a `StoredCourse` object
  */
 export function createCourseFromId(id: string): StoredCourse {
-  const [department, number] = id.split("-");
+  const [department, number, quarters] = id.split("-");
+  const quartersOffered = quarters.split(",");
   return {
     number,
     department,
+    quartersOffered,
   };
 }
 
@@ -23,6 +25,6 @@ export function createCourseFromId(id: string): StoredCourse {
  * @returns an id
  */
 export function createIdFromCourse(course: StoredCourse): string {
-  const { department, number } = course;
-  return `${department}-${number}`;
+  const { department, number, quartersOffered } = course;
+  return `${department}-${number}-${quartersOffered.join(",")}`;
 }

@@ -14,6 +14,7 @@ model Course {
   department  String
   number      String
   credits     Int         @default(5)
+  quartersOffered String[]
   /// @TypeGraphQL.omit(output: true)
   createdAt   DateTime    @default(now())
   /// @TypeGraphQL.omit(output: true)
