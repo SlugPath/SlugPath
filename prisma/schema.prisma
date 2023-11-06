@@ -20,8 +20,8 @@ model Planner {
   id        String    @id @default(uuid())
   title     String
   updatedAt DateTime  @updatedAt
-  active    Boolean
   quarters  Quarter[]
+  order     Int
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

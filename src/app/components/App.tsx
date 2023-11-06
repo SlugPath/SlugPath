@@ -62,11 +62,16 @@ export default function App() {
         />
       </div>
       <List>
-        {Object.entries(planners).map(([id, [, isActive]]) => (
-          <ListItem sx={{ display: isActive ? "block" : "none" }} key={id}>
+        {Object.keys(planners).map((id, index) => (
+          <ListItem
+            sx={{ display: planners[id][1] ? "block" : "none" }}
+            key={id}
+          >
             <CoursePlanner
+              order={index}
+              title={planners[id][0]}
               id={id}
-              isActive={isActive}
+              isActive={planners[id][1]}
               onCourseStateChanged={setCurrentCourseState}
             />
           </ListItem>

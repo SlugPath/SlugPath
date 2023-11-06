@@ -1,4 +1,4 @@
-import { IsUUID, Length, Max, Min } from "class-validator";
+import { IsInt, IsUUID, Length, Max, Min } from "class-validator";
 import { Field, ObjectType, ArgsType, InputType, Int } from "type-graphql";
 
 /**
@@ -129,7 +129,9 @@ export class PlannerCreateInput {
   title!: string;
 
   @Field()
-  active!: boolean;
+  @IsInt()
+  @Min(0)
+  order!: number;
 }
 
 /**

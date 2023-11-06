@@ -68,16 +68,16 @@ it("should create 1 empty planner for 1 user", async () => {
   if (user === null) fail("User was null (this should not happen)");
 
   const service = new PlannerService();
-  const planners = await service.allPlanners({ userId: user.id });
+  const planners = await service.allPlanners(user.id);
   expect(planners).toHaveLength(0);
 
   // Empty planner
   const plannerId = uuidv4();
-  const res = await service.upsert({
+  const res = await service.upsertPlanner({
     userId: user.id,
     plannerId: plannerId,
     title: "Planner 1",
-    active: true,
+    order: 0,
     plannerData: {
       quartersOrder: createQuarters().quarterOrder,
       quartersPerYear: 4,

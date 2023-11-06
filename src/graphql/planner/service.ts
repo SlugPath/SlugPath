@@ -15,21 +15,27 @@ export class PlannerService {
    * @param input PlannerCreateInput
    * @returns planner id of the updated planner
    */
-  public async upsert(input: PlannerCreateInput): Promise<PlannerId> {
+  public async upsertPlanner({
+    userId,
+    plannerId,
+    plannerData,
+    title,
+    order,
+  }: PlannerCreateInput): Promise<PlannerId> {
     // Delete old planner
     const operations = [];
     const old = await prisma.planner.findUnique({
       where: {
-        userId: input.userId,
-        id: input.plannerId,
+        userId,
+        id: plannerId,
       },
     });
     if (old !== null) {
       operations.push(
         prisma.planner.update({
           where: {
-            userId: input.userId,
-            id: input.plannerId,
+            userId,
+            id: plannerId,
           },
           data: {
             quarters: {
@@ -41,8 +47,8 @@ export class PlannerService {
     }
 
     // Get the new quarters
-    const newQuarters = Object.keys(input.plannerData.quarters).map((qid) => {
-      const quarter = input.plannerData.quarters[qid];
+    const newQuarters = Object.keys(plannerData.quarters).map((qid) => {
+      const quarter = plannerData.quarters[qid];
       const [year, term] = qid.split("-").slice(1);
 
       const courses = quarter.courses.map((c) => {
@@ -66,22 +72,21 @@ export class PlannerService {
     operations.push(
       prisma.planner.upsert({
         where: {
-          userId: input.userId,
-          id: input.plannerId,
+          userId,
+          id: plannerId,
         },
         update: {
-          title: input.title,
-          active: input.active,
-          userId: input.userId,
+          title,
+          userId,
           quarters: {
             create: newQuarters,
           },
         },
         create: {
-          title: input.title,
-          active: input.active,
-          userId: input.userId,
-          id: input.plannerId,
+          title,
+          userId,
+          order,
+          id: plannerId,
           quarters: {
             create: newQuarters,
           },
@@ -102,7 +107,7 @@ export class PlannerService {
   }
 
   /**
-   * Retrieves all planners for a user
+   * Retrieves all planners for a user, sorted by `order` field in asc order.
    * @param userId user id
    * @returns a list of planners belonging to a user
    */
@@ -118,6 +123,9 @@ export class PlannerService {
           },
         },
       },
+      orderBy: {
+        order: "asc",
+      },
     });
 
     return planners.map((p: any) => this.toPlannerData(p));
@@ -129,13 +137,14 @@ export class PlannerService {
    * @param plannerId planner id
    * @returns a PlannerData instance if it exists, otherwise null
    */
-  public async getPlanner(
-    input: PlannerRetrieveInput,
-  ): Promise<PlannerData | null> {
+  public async getPlanner({
+    userId,
+    plannerId,
+  }: PlannerRetrieveInput): Promise<PlannerData | null> {
     const p = await prisma.planner.findUnique({
       where: {
-        userId: input.userId,
-        id: input.plannerId,
+        userId,
+        id: plannerId,
       },
       include: {
         quarters: {
@@ -154,25 +163,26 @@ export class PlannerService {
    * @param plannerId planner id
    * @returns id of the planner if record was successfully deleted, otherwise null
    */
-  public async deletePlanner(
-    input: PlannerRetrieveInput,
-  ): Promise<PlannerId | null> {
+  public async deletePlanner({
+    plannerId,
+    userId,
+  }: PlannerRetrieveInput): Promise<PlannerId | null> {
     // Check if it exists first
     const exists = await prisma.planner.findUnique({
       where: {
-        id: input.plannerId,
-        userId: input.userId,
+        id: plannerId,
+        userId,
       },
     });
     if (exists === null) return null;
     // Then delete it if it does exist
     await prisma.planner.delete({
       where: {
-        id: input.userId,
-        userId: input.plannerId,
+        id: plannerId,
+        userId,
       },
     });
-    return { plannerId: input.plannerId };
+    return { plannerId };
   }
 
   /**

@@ -35,5 +35,5 @@ export default function UserAvatar({
   name: string | null | undefined;
 }) {
   const userName = name ?? "UCSC student";
-  return <Avatar {...stringAvatar(userName)}></Avatar>;
+  return <Avatar {...stringAvatar(userName)} size="sm" />;
 }

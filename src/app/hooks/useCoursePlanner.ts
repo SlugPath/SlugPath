@@ -1,15 +1,49 @@
 import { createCourseFromId } from "../../lib/courseUtils";
 import { StoredCourse } from "../ts-types/Course";
 import { DropResult } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
+//import { gql, useMutation } from "@apollo/client";
+import { setTimeout } from "timers";
 
-export default function useCoursePlanner() {
+/*
+const SAVE_PLANNER = gql`
+  mutation SavePlanner($input: UpsertInput) {
+    upsertPlanner(input: $input) {
+      plannerId
+    }
+  }
+`
+*/
+
+export default function useCoursePlanner(input: {
+  userId: string | undefined;
+  plannerId: string;
+  title: string;
+  order: number;
+}) {
   const [courseState, setCourseState] = useState(initialPlanner);
+  //const [saveData, { loading, error }] = useMutation(SAVE_PLANNER)
+  const [dataChanged, setDataChanged] = useState(false);
+
+  useEffect(() => {
+    if (dataChanged) {
+      const timeoutId = setTimeout(() => {
+        console.log("saving");
+        localStorage.setItem(input.plannerId, JSON.stringify(courseState));
+        setDataChanged(false);
+      }, 1000);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [input, courseState, dataChanged]);
 
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
+    setDataChanged(true);
   };
 
   const handleDragEnd = (result: DropResult) => {

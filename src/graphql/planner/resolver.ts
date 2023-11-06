@@ -14,8 +14,8 @@ import { Arg, Args, Query, Mutation, Resolver } from "type-graphql";
 @Resolver()
 export class PlannerResolver {
   @Mutation(() => PlannerId)
-  async upsert(@Args() input: PlannerCreateInput): Promise<PlannerId> {
-    return await new PlannerService().upsert(input);
+  async upsertPlanner(@Args() input: PlannerCreateInput): Promise<PlannerId> {
+    return await new PlannerService().upsertPlanner(input);
   }
 
   @Query(() => [PlannerData])

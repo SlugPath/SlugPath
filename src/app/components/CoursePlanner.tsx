@@ -5,20 +5,32 @@ import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 export default function CoursePlanner({
   id,
   isActive,
   onCourseStateChanged,
+  title,
+  order,
 }: {
   id: string;
+  order: number;
   isActive: boolean;
+  title: string;
   onCourseStateChanged: any;
 }) {
-  console.log(`Id of planner is: ${id}`);
+  const { data: session } = useSession();
 
-  const { courseState, handleDragEnd, coursesAlreadyAdded } =
-    useCoursePlanner();
+  console.log(`Id of planner is: ${id}`);
+  console.log(`In courseplanner ${JSON.stringify(session)}`);
+
+  const { courseState, handleDragEnd, coursesAlreadyAdded } = useCoursePlanner({
+    userId: session?.user.id,
+    plannerId: id,
+    title,
+    order,
+  });
 
   useEffect(() => {
     onCourseStateChanged(courseState);
