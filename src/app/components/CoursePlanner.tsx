@@ -1,17 +1,15 @@
+import { useEffect } from "react";
 import QuarterCard from "./QuarterCard";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { useEffect } from "react";
 
 export default function CoursePlanner({
-  id,
   isActive,
   onCourseStateChanged,
 }: {
-  id: string;
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
@@ -21,9 +19,7 @@ export default function CoursePlanner({
     courseState,
     handleDragEnd,
     coursesAlreadyAdded,
-  } = useCoursePlanner({
-    id,
-  });
+  } = useCoursePlanner();
 
   useEffect(() => {
     onCourseStateChanged(courseState);

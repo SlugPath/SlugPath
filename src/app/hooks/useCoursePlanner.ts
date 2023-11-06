@@ -1,32 +1,17 @@
 import { createCourseFromId, createIdFromCourse } from "../../lib/courseUtils";
 import { StoredCourse } from "../ts-types/Course";
 import { DropResult } from "@hello-pangea/dnd";
-import { useState, useEffect } from "react";
-import { getCookie, setCookie } from "cookies-next";
+import { useState } from "react";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import { DragStart } from "@hello-pangea/dnd";
 
-export default function useCoursePlanner({ id }: { id: string }) {
+export default function useCoursePlanner() {
   const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [courseState, setCourseState] = useState(initialPlanner);
 
-  // Runs upon initial render. Update useEffect whenever (course planner) id changes
-  useEffect(() => {
-    const cookieCourseState = getCookie("courseState");
-    if (cookieCourseState) {
-      setCourseState(JSON.parse(cookieCourseState) as PlannerData);
-    }
-  }, [id]);
-
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
-
-    const json = JSON.stringify({
-      ...courseState,
-    });
-
-    setCookie("courseState", json);
   };
 
   const quarters = {
