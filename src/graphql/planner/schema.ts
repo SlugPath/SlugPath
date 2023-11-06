@@ -77,6 +77,16 @@ export class Quarter {
   courses!: StoredCourse[];
 }
 
+@ObjectType()
+export class PlannerTitle {
+  @Field()
+  title!: string;
+
+  @Field()
+  @IsUUID("4")
+  id!: string;
+}
+
 /**
  * An object type that stores data within a planner
  */

@@ -22,9 +22,6 @@ export default function CoursePlanner({
 }) {
   const { data: session } = useSession();
 
-  console.log(`Id of planner is: ${id}`);
-  console.log(`In courseplanner ${JSON.stringify(session)}`);
-
   const { courseState, handleDragEnd, coursesAlreadyAdded } = useCoursePlanner({
     userId: session?.user.id,
     plannerId: id,

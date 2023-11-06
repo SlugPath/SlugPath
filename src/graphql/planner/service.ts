@@ -3,6 +3,7 @@ import {
   PlannerData,
   PlannerRetrieveInput,
   PlannerCreateInput,
+  PlannerTitle,
 } from "./schema";
 import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/ts-types/Course";
@@ -109,26 +110,21 @@ export class PlannerService {
   /**
    * Retrieves all planners for a user, sorted by `order` field in asc order.
    * @param userId user id
-   * @returns a list of planners belonging to a user
+   * @returns a list of planner titles and ids belonging to a user
    */
-  public async allPlanners(userId: string): Promise<PlannerData[]> {
-    const planners = await prisma.planner.findMany({
+  public async allPlanners(userId: string): Promise<PlannerTitle[]> {
+    return await prisma.planner.findMany({
       where: {
         userId,
-      },
-      include: {
-        quarters: {
-          include: {
-            courses: true,
-          },
-        },
       },
       orderBy: {
         order: "asc",
       },
+      select: {
+        id: true,
+        title: true,
+      },
     });
-
-    return planners.map((p: any) => this.toPlannerData(p));
   }
 
   /**

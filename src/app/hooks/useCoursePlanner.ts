@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 //import { gql, useMutation } from "@apollo/client";
-import { setTimeout } from "timers";
+// import { setTimeout } from "timers";
+// import { debounce } from "cypress/types/lodash";
 
 /*
 const SAVE_PLANNER = gql`
@@ -17,6 +18,23 @@ const SAVE_PLANNER = gql`
 `
 */
 
+/*
+const debounceMutation = debounce((mutation, options) => {
+  const controller = new AbortController();
+
+  return mutation({
+    ...options,
+    options: {
+      context: {
+        fetchOptions: {
+          signal: controller.signal
+        }
+      }
+    }
+  })
+}, 500);
+*/
+
 export default function useCoursePlanner(input: {
   userId: string | undefined;
   plannerId: string;
@@ -25,8 +43,18 @@ export default function useCoursePlanner(input: {
 }) {
   const [courseState, setCourseState] = useState(initialPlanner);
   //const [saveData, { loading, error }] = useMutation(SAVE_PLANNER)
-  const [dataChanged, setDataChanged] = useState(false);
+  //const [dataChanged, setDataChanged] = useState(false);
 
+  useEffect(() => {
+    const planner = localStorage.getItem(`planner${input.plannerId}`);
+    if (planner !== null) {
+      setCourseState(JSON.parse(planner));
+    } else {
+      handleCourseUpdate(initialPlanner);
+    }
+  });
+
+  /*
   useEffect(() => {
     if (dataChanged) {
       const timeoutId = setTimeout(() => {
@@ -40,10 +68,15 @@ export default function useCoursePlanner(input: {
       };
     }
   }, [input, courseState, dataChanged]);
+  */
 
   const handleCourseUpdate = (courseState: PlannerData) => {
+    localStorage.setItem(
+      `planner${input.plannerId}`,
+      JSON.stringify(courseState),
+    );
     setCourseState(courseState);
-    setDataChanged(true);
+    //setDataChanged(true);
   };
 
   const handleDragEnd = (result: DropResult) => {

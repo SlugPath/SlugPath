@@ -4,6 +4,7 @@ import {
   PlannerData,
   PlannerRetrieveInput,
   PlannerCreateInput,
+  PlannerTitle,
 } from "./schema";
 import { Arg, Args, Query, Mutation, Resolver } from "type-graphql";
 
@@ -19,7 +20,7 @@ export class PlannerResolver {
   }
 
   @Query(() => [PlannerData])
-  async getAllPlanners(@Arg("userId") userId: string): Promise<PlannerData[]> {
+  async getAllPlanners(@Arg("userId") userId: string): Promise<PlannerTitle[]> {
     return await new PlannerService().allPlanners(userId);
   }
 

@@ -1,5 +1,5 @@
 import { MultiPlanner } from "../ts-types/MultiPlanner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const MAX_PLANNERS = 10;
@@ -9,9 +9,18 @@ export function usePlanner() {
 
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners] = useState<MultiPlanner>({
-    [uuidv4()]: ["Planner 1", true],
-  });
+  const [planners, setPlanners] = useState<MultiPlanner>({});
+
+  useEffect(() => {
+    const localPlanners = localStorage.getItem("planners");
+    if (localPlanners !== null) {
+      handlePlannerUpdate(JSON.parse(localPlanners));
+    } else {
+      handlePlannerUpdate({
+        [uuidv4()]: ["Planner 1", true],
+      });
+    }
+  }, []);
 
   /**
    * Handles update to multiple planners by updating cookies and state
@@ -19,6 +28,7 @@ export function usePlanner() {
    */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {
     setPlanners(plannerState);
+    localStorage.setItem("planners", JSON.stringify(plannerState));
   };
 
   /**
