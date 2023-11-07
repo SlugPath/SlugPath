@@ -26,6 +26,9 @@ export class QueryInput {
   @Min(1)
   @Max(10)
   credits?: number;
+
+  @Field(() => [String], { nullable: true })
+  quartersOffered?: string[];
 }
 
 /**

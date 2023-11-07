@@ -9,16 +9,16 @@ datasource db {
 }
 
 model Course {
-  id          String      @id @default(uuid())
-  name        String
-  department  String
-  number      String
-  credits     Int         @default(5)
+  id              String      @id @default(uuid())
+  name            String
+  department      String
+  number          String
+  credits         Int         @default(5)
   quartersOffered String[]
   /// @TypeGraphQL.omit(output: true)
-  createdAt   DateTime    @default(now())
+  createdAt       DateTime    @default(now())
   /// @TypeGraphQL.omit(output: true)
-  updatedAt   DateTime    @updatedAt
+  updatedAt       DateTime    @updatedAt
 
   // No two courses can have the same department and course number
   @@unique([department, number])

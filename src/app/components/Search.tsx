@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { Button, Card, Input, Option, Select } from "@mui/joy";
+import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { Course, StoredCourse } from "../ts-types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
+import useDebounce from "../hooks/useDebounce";
+
+// TODO: Base this on the actual departments in the database
+const DEPARTMENTS = {
+  CSE: "Computer Science and Engineering",
+};
 
 const GET_COURSE = gql`
-  query getCourse($department: String!, $number: String!) {
+  query getCourse($department: String!, $number: String = null) {
     coursesBy(department: $department, number: $number) {
       id
       name
@@ -24,25 +30,26 @@ const GET_COURSE = gql`
  * already been added to the planner and should be disabled for dragging in search results.
  */
 export default function Search({
-  coursesAlreadyAdded,
+  coursesInPlanner,
 }: {
-  coursesAlreadyAdded: StoredCourse[];
+  coursesInPlanner: StoredCourse[];
 }) {
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
   const [number, setNumber] = useState("");
-
-  const [search, setSearch] = useState(false);
   const [queryDetails, setQueryDetails] = useState({
-    department: "",
+    department: getFirstKey(DEPARTMENTS),
     number: "",
   });
-
-  const { data, loading, error } = useQuery(GET_COURSE, {
+  const { data, loading } = useQuery(GET_COURSE, {
     variables: {
       department: queryDetails.department,
-      number: queryDetails.number,
+      number: nullIfNumberEmpty(queryDetails.number),
     },
-    skip: !search, // Skip the query if search button hasn't been pressed yet
+  });
+  useDebounce({
+    callback: () => handleSearch(department, number),
+    delay: 500,
+    dependencies: [department, number],
   });
 
   const handleChangeDepartment = (
@@ -52,17 +59,20 @@ export default function Search({
     setDepartment(newValue || "");
   };
 
+  const handleChangeNumber = (number: string) => {
+    setNumber(number.toString());
+  };
+
   const handleSearch = (departmentInput: string, numberInput: string) => {
     setQueryDetails({
       department: departmentInput,
       number: numberInput.toUpperCase(),
     });
-    setSearch(true);
   };
 
   function courseIsAlreadyAdded(course: Course) {
     let alreadyAdded = false;
-    coursesAlreadyAdded.forEach((c) => {
+    coursesInPlanner.forEach((c) => {
       if (c.department === course.department && c.number === course.number) {
         alreadyAdded = true;
       }
@@ -70,14 +80,24 @@ export default function Search({
     return alreadyAdded;
   }
 
+  function getFirstKey(obj: any): string {
+    return Object.keys(obj)[0];
+  }
+
+  function nullIfNumberEmpty(number: string): string | null {
+    return number.length > 0 ? number : null;
+  }
+
+  function hasResults(data: any): boolean {
+    return data && data.coursesBy.length > 0;
+  }
+
+  function noResults(data: any): boolean {
+    return (!loading && !data) || (data && data.coursesBy.length == 0);
+  }
+
   return (
-    <Card
-      className="w-64"
-      style={{
-        height: "100%",
-      }}
-    >
-      {/* Search form begins */}
+    <Card className="w-64">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -91,9 +111,13 @@ export default function Search({
             aria-label="department"
             className="col-span-2"
             onChange={handleChangeDepartment}
+            defaultValue={getFirstKey(DEPARTMENTS)}
           >
-            <Option value="CSE" aria-label="computer science and engineering">
-              Computer Science & Engineering
+            <Option
+              value={getFirstKey(DEPARTMENTS)}
+              aria-label="computer science and engineering"
+            >
+              {DEPARTMENTS["CSE"]}
             </Option>
           </Select>
           <Input
@@ -104,49 +128,37 @@ export default function Search({
             variant="outlined"
             name="number"
             aria-label="number"
-            onChange={(event) => setNumber(event.target.value)}
+            onChange={(event) => handleChangeNumber(event.target.value)}
           />
         </div>
-        <div className="px-2 pb-2">
-          <Button
-            className="w-full"
-            aria-label="search"
-            disabled={department == "" || number == ""}
-            type="submit"
-          >
-            Search
-          </Button>
-        </div>
       </form>
-      <Droppable droppableId={"search-droppable"}>
-        {(provided, snapshot) => {
+      <Droppable droppableId={"search-droppable"} isDropDisabled={true}>
+        {(provided) => {
           return (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={{ height: "100%", minHeight: "48px" }}
-              className={`${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
-            >
-              {loading && <p>Loading...</p>}
-              {error && <p>No results found</p>}
-              {data ? (
-                <div>
-                  <div>
-                    {data.coursesBy.map((course: Course, index: number) => (
-                      <CourseCard
-                        key={index}
-                        course={course}
-                        index={index}
-                        draggableId={createIdFromCourse(course) + "-search"}
-                        alreadyAdded={courseIsAlreadyAdded(course)}
-                      />
-                    ))}
-                  </div>
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {hasResults(data) ? (
+                <div className="overflow-y-auto h-96">
+                  {data.coursesBy.map((course: Course, index: number) => (
+                    <CourseCard
+                      key={index}
+                      course={course}
+                      index={index}
+                      draggableId={createIdFromCourse(course) + "-search"}
+                      alreadyAdded={courseIsAlreadyAdded(course)}
+                    />
+                  ))}
+                  {provided.placeholder}
                 </div>
               ) : (
-                <div>No results</div>
+                <div className="flex justify-center items-center h-96">
+                  {noResults(data) ? (
+                    <p className="text-gray-400">No results</p>
+                  ) : null}
+                  {loading ? (
+                    <CircularProgress variant="plain" color="neutral" />
+                  ) : null}
+                </div>
               )}
-              {provided.placeholder}
             </div>
           );
         }}

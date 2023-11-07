@@ -13,4 +13,6 @@ export class Course {
   number!: string;
   @Field()
   credits!: number;
+  @Field()
+  quartersOffered!: string;
 }

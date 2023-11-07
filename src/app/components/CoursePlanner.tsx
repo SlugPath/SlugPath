@@ -37,7 +37,7 @@ export default function CoursePlanner({
       >
         <div className="flex">
           <div className="flex-1 px-4 py-6">
-            <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
+            <Search coursesInPlanner={coursesAlreadyAdded()} />
           </div>
           <div className="flex-3 py-6">
             <Quarters
@@ -51,27 +51,6 @@ export default function CoursePlanner({
     </div>
   );
 }
-
-/*
-function RemoveCourseArea({ droppableId }: { droppableId: string }) {
-  return (
-    <Droppable droppableId={droppableId}>
-      {(provided, snapshot) => {
-        return (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className={`h-full ${snapshot.isDraggingOver ? "bg-red-200" : ""}`}
-            style={{ height: "100%", minHeight: "48px" }}
-          >
-            {provided.placeholder}
-          </div>
-        );
-      }}
-    </Droppable>
-  );
-}
-*/
 
 function Quarters({
   courseState,

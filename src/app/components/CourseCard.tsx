@@ -14,6 +14,13 @@ export default function CourseCard({
   draggableId: string;
   alreadyAdded?: boolean;
 }) {
+  const margin = 4;
+  const getItemStyle = (draggableStyle: any) => ({
+    userSelect: "none",
+    margin: `0 0 ${margin}px 0`,
+    ...draggableStyle,
+  });
+
   return (
     <Draggable
       key={draggableId}
@@ -21,7 +28,7 @@ export default function CourseCard({
       index={index}
       isDragDisabled={alreadyAdded}
     >
-      {(provided) => {
+      {(provided, snapshot) => {
         return (
           <Card
             ref={provided.innerRef}
@@ -29,6 +36,8 @@ export default function CourseCard({
             {...provided.dragHandleProps}
             size="sm"
             variant={alreadyAdded ? "soft" : "outlined"}
+            className={snapshot.isDragging ? "bg-gray-200" : ""}
+            style={getItemStyle(provided.draggableProps.style)}
           >
             <Typography level="body-md">
               {course
