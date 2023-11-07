@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import {
-  Button,
-  Card,
-  CircularProgress,
-  Input,
-  Option,
-  Select,
-} from "@mui/joy";
+import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { Course, StoredCourse } from "../ts-types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
+import useDebounce from "../hooks/useDebounce";
 
 // TODO: Base this on the actual departments in the database
 const DEPARTMENTS = {
@@ -51,12 +45,21 @@ export default function Search({
       number: nullIfNumberEmpty(queryDetails.number),
     },
   });
+  useDebounce({
+    callback: () => handleSearch(department, number),
+    delay: 500,
+    dependencies: [department, number],
+  });
 
   const handleChangeDepartment = (
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
     setDepartment(newValue || "");
+  };
+
+  const handleChangeNumber = (number: string) => {
+    setNumber(number.toString());
   };
 
   const handleSearch = (departmentInput: string, numberInput: string) => {
@@ -81,7 +84,7 @@ export default function Search({
   }
 
   function nullIfNumberEmpty(number: string): string | null {
-    return number.length == 0 ? null : number;
+    return number.length > 0 ? number : null;
   }
 
   function hasResults(data: any): boolean {
@@ -90,10 +93,6 @@ export default function Search({
 
   function noResults(data: any): boolean {
     return (!loading && !data) || (data && data.coursesBy.length == 0);
-  }
-
-  function isSearchDisabled(): boolean {
-    return department == "";
   }
 
   return (
@@ -128,18 +127,8 @@ export default function Search({
             variant="outlined"
             name="number"
             aria-label="number"
-            onChange={(event) => setNumber(event.target.value)}
+            onChange={(event) => handleChangeNumber(event.target.value)}
           />
-        </div>
-        <div className="px-2 pb-2">
-          <Button
-            className="w-full"
-            aria-label="search"
-            disabled={isSearchDisabled()}
-            type="submit"
-          >
-            Search
-          </Button>
         </div>
       </form>
       <Droppable droppableId={"search-droppable"} isDropDisabled={true}>
