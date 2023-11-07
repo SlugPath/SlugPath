@@ -1,9 +1,9 @@
 import { createCourseFromId } from "../../lib/courseUtils";
 import { StoredCourse } from "../ts-types/Course";
 import { DropResult } from "@hello-pangea/dnd";
-import { useState, useEffect } from "react";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
+import useLocalState from "./useLocalState";
 //import { gql, useMutation } from "@apollo/client";
 // import { setTimeout } from "timers";
 // import { debounce } from "cypress/types/lodash";
@@ -41,18 +41,21 @@ export default function useCoursePlanner(input: {
   title: string;
   order: number;
 }) {
-  const [courseState, setCourseState] = useState(initialPlanner);
+  const [courseState, setCourseState] = useLocalState<PlannerData>(
+    `planner${input.plannerId}`,
+    initialPlanner,
+  );
   //const [saveData, { loading, error }] = useMutation(SAVE_PLANNER)
   //const [dataChanged, setDataChanged] = useState(false);
 
-  useEffect(() => {
-    const planner = localStorage.getItem(`planner${input.plannerId}`);
-    if (planner !== null) {
-      setCourseState(JSON.parse(planner));
-    } else {
-      handleCourseUpdate(initialPlanner);
-    }
-  });
+  const handleCourseUpdate = (courseState: PlannerData) => {
+    localStorage.setItem(
+      `planner${input.plannerId}`,
+      JSON.stringify(courseState),
+    );
+    setCourseState(courseState);
+    //setDataChanged(true);
+  };
 
   /*
   useEffect(() => {
@@ -69,15 +72,6 @@ export default function useCoursePlanner(input: {
     }
   }, [input, courseState, dataChanged]);
   */
-
-  const handleCourseUpdate = (courseState: PlannerData) => {
-    localStorage.setItem(
-      `planner${input.plannerId}`,
-      JSON.stringify(courseState),
-    );
-    setCourseState(courseState);
-    //setDataChanged(true);
-  };
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;

@@ -5,7 +5,7 @@ import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
-const MAX_PLANNERS = 10;
+const MAX_PLANNERS = 8;
 
 export interface TabListProps {
   planners: MultiPlanner;
