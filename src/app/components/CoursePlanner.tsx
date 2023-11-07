@@ -14,11 +14,11 @@ export default function CoursePlanner({
   onCourseStateChanged: any;
 }) {
   const {
+    handleOnDragStart,
+    unavailableQuarters,
     courseState,
     handleDragEnd,
-    handleOnDragStart,
-    coursesInPlanner,
-    unavailableQuarters,
+    coursesAlreadyAdded,
   } = useCoursePlanner();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function CoursePlanner({
       >
         <div className="flex">
           <div className="flex-1 px-4 py-6">
-            <Search coursesInPlanner={coursesInPlanner()} />
+            <Search coursesInPlanner={coursesAlreadyAdded()} />
           </div>
           <div className="flex-3 py-6">
             <Quarters

@@ -4,8 +4,9 @@ import {
   Length,
   Min,
   Max,
-  IsArray,
   IsString,
+  IsArray,
+  ArrayNotEmpty,
 } from "class-validator";
 import { ObjectType, Field, Int } from "type-graphql";
 
@@ -39,6 +40,7 @@ export class Course {
 
   @Field(() => [String])
   @IsArray()
+  @ArrayNotEmpty()
   @IsString({ each: true }) // Ensures each item in the array is a string
   quartersOffered!: string[];
 }
