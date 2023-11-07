@@ -70,14 +70,34 @@ export class CourseService {
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
-    return await prisma.course.findMany({
-      where: {
-        department: pred.department,
-        number: {
-          contains: pred.number,
+    // return await prisma.course.findMany({
+    //   where: {
+    //     department: pred.department,
+    //   },
+    // });
+
+    // find courses that have department: pred.department
+    // but if no number is specified, return all courses
+    // otherwise, return courses that have number: pred.number
+
+    console.log(pred);
+
+    if (pred.number && pred.number?.length > 0) {
+      return await prisma.course.findMany({
+        where: {
+          department: pred.department,
+          number: {
+            contains: pred.number,
+          },
         },
-      },
-    });
+      });
+    } else {
+      return await prisma.course.findMany({
+        where: {
+          department: pred.department,
+        },
+      });
+    }
   }
 
   /**
