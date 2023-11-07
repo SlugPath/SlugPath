@@ -1,6 +1,5 @@
 import { MultiPlanner } from "../ts-types/MultiPlanner";
-import { useEffect, useState } from "react";
-import { getCookie, setCookie, deleteCookie } from "cookies-next";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const MAX_PLANNERS = 10;
@@ -14,22 +13,12 @@ export function usePlanner() {
     [uuidv4()]: ["Planner 1", true],
   });
 
-  // Retrieves the multiplanner from cookies if it exists
-  useEffect(() => {
-    const cookiePlannerState = getCookie("plannerState");
-    if (cookiePlannerState) {
-      const cookiePlanners = JSON.parse(cookiePlannerState) as MultiPlanner;
-      setPlanners(cookiePlanners);
-    }
-  }, []);
-
   /**
-   * Handles update to multiple planners by updating cookies and state
+   * Handles update to multiple planners by updating state
    * @param plannerState new state of the multi planner
    */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {
     setPlanners(plannerState);
-    setCookie("plannerState", JSON.stringify(plannerState));
   };
 
   /**
@@ -85,7 +74,7 @@ export function usePlanner() {
       return;
     }
     setCounter((prev) => prev + 1);
-    const [id, title] = [uuidv4(), `Planner ${counter}`];
+    const [id, title] = [uuidv4(), `Planner ${counter + 1}`];
     handlePlannerUpdate({
       ...planners,
       [id]: [`Planner ${counter + 1}`, false],
@@ -100,7 +89,6 @@ export function usePlanner() {
   const handleRemovePlanner = (id: string) => {
     const newPlanners = { ...planners };
     delete newPlanners[id];
-    deleteCookie("courseState" + id);
     handlePlannerUpdate(newPlanners);
   };
 

@@ -20,6 +20,7 @@ const GET_COURSE = gql`
       department
       number
       credits
+      quartersOffered
     }
   }
 `;

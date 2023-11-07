@@ -22,7 +22,7 @@
     "init-db": "npx prisma db push && npx prisma db seed"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.0-rc.2",
+    "@apollo/client": "^3.8.6",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hello-pangea/dnd": "^16.3.0",
@@ -31,9 +31,9 @@
     "@prisma/client": "^5.4.2",
     "@react-pdf/renderer": "^3.1.14",
     "class-validator": "^0.14.0",
-    "cookies-next": "^4.0.0",
     "csv-parse": "^5.5.2",
     "next": "13.5.4",
+    "next-auth": "^4.24.4",
     "pino": "^8.16.0",
     "pino-logflare": "^0.4.2",
     "react": "^18",

@@ -1,4 +1,7 @@
-import { Button, Avatar } from "@mui/joy";
+import { Button, Dropdown, MenuButton, Menu, MenuItem } from "@mui/joy";
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import UserAvatar from "./UserAvatar";
 
 export default function Navbar({
   setShowExportModal,
@@ -7,6 +10,8 @@ export default function Navbar({
   setShowExportModal: any;
   setShowMajorCompletionModal: any;
 }) {
+  const { data: session, status } = useSession();
+
   return (
     <header className="bg-white fixed top-0 w-full shadow-md z-50">
       <nav className="container mx-auto py-3">
@@ -21,7 +26,26 @@ export default function Navbar({
             <Button onClick={setShowMajorCompletionModal} variant="plain">
               Major Progress
             </Button>
-            <Avatar />
+            {/* <Avatar /> */}
+            {status !== "authenticated" ? (
+              <Button
+                variant="plain"
+                onClick={() => {
+                  signIn("google");
+                }}
+              >
+                Login with UCSC account
+              </Button>
+            ) : (
+              <Dropdown>
+                <MenuButton color="neutral" variant="plain">
+                  <UserAvatar name={session.user?.name} />
+                </MenuButton>
+                <Menu variant="soft">
+                  <MenuItem onClick={() => signOut()}>Sign out</MenuItem>
+                </Menu>
+              </Dropdown>
+            )}
           </div>
         </div>
       </nav>

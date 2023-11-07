@@ -1,5 +1,5 @@
-import { Course } from "@prisma/client"
+import { Course } from "@prisma/client";
 
 export interface CourseQueryResult {
-  courses: Course[]
+  courses: Course[];
 }

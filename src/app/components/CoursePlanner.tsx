@@ -1,23 +1,25 @@
+import { useEffect } from "react";
 import QuarterCard from "./QuarterCard";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { useEffect } from "react";
 
 export default function CoursePlanner({
-  id,
   isActive,
   onCourseStateChanged,
 }: {
-  id: string;
   isActive: boolean;
   onCourseStateChanged: any;
 }) {
-  const { courseState, handleDragEnd, coursesInPlanner } = useCoursePlanner({
-    id,
-  });
+  const {
+    courseState,
+    handleDragEnd,
+    handleOnDragStart,
+    coursesInPlanner,
+    unavailableQuarters,
+  } = useCoursePlanner();
 
   useEffect(() => {
     onCourseStateChanged(courseState);
@@ -29,13 +31,19 @@ export default function CoursePlanner({
 
   return (
     <div>
-      <DragDropContext onDragEnd={handleDragEnd}>
+      <DragDropContext
+        onDragEnd={handleDragEnd}
+        onDragStart={handleOnDragStart}
+      >
         <div className="flex">
           <div className="flex-1 px-4 py-6">
             <Search coursesInPlanner={coursesInPlanner()} />
           </div>
-          <div className="flex-2 py-6">
-            <Quarters courseState={courseState} />
+          <div className="flex-3 py-6">
+            <Quarters
+              courseState={courseState}
+              unavailableQuarters={unavailableQuarters}
+            />
           </div>
           <div className="flex-1 py-6" />
         </div>
@@ -44,7 +52,13 @@ export default function CoursePlanner({
   );
 }
 
-function Quarters({ courseState }: { courseState: PlannerData }) {
+function Quarters({
+  courseState,
+  unavailableQuarters,
+}: {
+  courseState: PlannerData;
+  unavailableQuarters: string[];
+}) {
   return (
     <div className="space-y-2">
       {Array.from(
@@ -68,6 +82,7 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
                   id={quarter.id}
                   key={quarter.id}
                   courses={courses}
+                  unavailableQuarters={unavailableQuarters}
                 />
               );
             })}

@@ -8,13 +8,22 @@ export default function QuarterCard({
   title,
   id,
   courses,
+  unavailableQuarters,
 }: {
   title: string;
   id: string;
   courses: StoredCourse[];
+  unavailableQuarters: string[];
 }) {
   return (
-    <Card className="w-64">
+    <Card
+      className="w-64"
+      style={{
+        backgroundColor: unavailableQuarters.includes(id)
+          ? "#FEE2E2"
+          : "#FFFFFF",
+      }}
+    >
       {title}
       <Droppable droppableId={id}>
         {(provided) => {
