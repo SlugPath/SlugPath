@@ -6,7 +6,7 @@ import {
   DefaultContext,
   MutationTuple,
 } from "@apollo/client";
-import { debounce } from "cypress/types/lodash";
+import { debounce } from "@/lib/utils";
 import { DocumentNode } from "graphql";
 
 const debounceMutation = debounce((mutation, options) => {

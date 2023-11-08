@@ -9,6 +9,7 @@ import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/ts-types/Course";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { Course, Prisma, Term } from "@prisma/client";
+import { RenamePlannerInput } from "./schema";
 
 export class PlannerService {
   /**
@@ -105,6 +106,26 @@ export class PlannerService {
 
     // Return the id
     return { plannerId: result[0].id };
+  }
+
+  /**
+   * Renames a planner
+   * @param input a RenamePlannerInput instance
+   * @returns
+   */
+  public async renamePlanner({ userId, plannerId, title }: RenamePlannerInput) {
+    return await prisma.planner.update({
+      where: {
+        userId,
+        id: plannerId,
+      },
+      data: {
+        title,
+      },
+      select: {
+        id: true,
+      },
+    });
   }
 
   /**

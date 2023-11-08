@@ -6,6 +6,7 @@ import { PlannerData } from "../ts-types/PlannerData";
 import useLocalState from "./useLocalState";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
+import { useEffect } from "react";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: UpsertInput) {
@@ -26,13 +27,18 @@ export default function useCoursePlanner(input: {
     initialPlanner(input.title),
   );
 
-  const [saveData, { loading: saving }] = useAutosave(SAVE_PLANNER, {
-    variables: input,
-  });
+  const [saveData, { loading: saving }] = useAutosave(SAVE_PLANNER, {});
+
+  useEffect(() => {
+    saveData({
+      variables: {
+        ...input,
+        plannerData: courseState,
+      },
+    });
+  }, [input, courseState, saveData]);
 
   const handleCourseUpdate = (courseState: PlannerData) => {
-    if (input.userId !== undefined) saveData({ variables: input });
-
     setCourseState(courseState);
   };
 
