@@ -6,6 +6,7 @@ import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { findQuarter } from "../ts-types/Quarter";
 
 export default function CoursePlanner({
   id,
@@ -66,7 +67,7 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
         return (
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarterId) => {
-              const quarter = courseState.quarters[quarterId];
+              const quarter = findQuarter(courseState.quarters, quarterId);
               const courses = quarter.courses;
 
               return (

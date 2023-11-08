@@ -10,6 +10,7 @@ import { StoredCourse } from "@/app/ts-types/Course";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { Course, Prisma, Term } from "@prisma/client";
 import { RenamePlannerInput } from "./schema";
+import { findQuarter } from "@/app/ts-types/Quarter";
 
 export class PlannerService {
   /**
@@ -50,7 +51,7 @@ export class PlannerService {
 
     // Get the new quarters
     const newQuarters = Object.keys(plannerData.quarters).map((qid) => {
-      const quarter = plannerData.quarters[qid];
+      const quarter = findQuarter(plannerData.quarters, qid);
       const [year, term] = qid.split("-").slice(1);
 
       const courses = quarter.courses.map((c) => {

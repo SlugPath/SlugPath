@@ -35,6 +35,9 @@ export class RenamePlannerInput {
 @InputType()
 export class QuarterInput {
   @Field()
+  id!: string;
+
+  @Field()
   @Length(1, 16)
   title!: string;
 
@@ -48,7 +51,7 @@ export class QuarterInput {
 @InputType()
 export class PlannerDataInput {
   @Field(() => QuarterInput, { name: "quarters" })
-  quarters!: { [key: string]: QuarterInput };
+  quarters!: QuarterInput[];
 
   @Field(() => [String])
   quartersOrder!: string[];
@@ -136,7 +139,7 @@ export class PlannerId {
 /**
  * An argument/input type for creating or updating a planner
  */
-@ArgsType()
+@InputType()
 export class PlannerCreateInput {
   @Field()
   userId!: string;

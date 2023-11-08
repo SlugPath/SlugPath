@@ -15,3 +15,7 @@ export const debounce = <T extends (...args: any[]) => any>(
     timeoutId = setTimeout(() => callback(...args), wait);
   };
 };
+
+export const deepEqual = (obj1: any, obj2: any): boolean => {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+};

@@ -7,9 +7,10 @@ import useLocalState from "./useLocalState";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
+import { findQuarter } from "../ts-types/Quarter";
 
 const SAVE_PLANNER = gql`
-  mutation SavePlanner($input: UpsertInput) {
+  mutation SavePlanner($input: PlannerCreateInput!) {
     upsertPlanner(input: $input) {
       plannerId
     }
@@ -27,16 +28,23 @@ export default function useCoursePlanner(input: {
     initialPlanner(input.title),
   );
 
-  const [saveData, { loading: saving }] = useAutosave(SAVE_PLANNER, {});
+  const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
+    SAVE_PLANNER,
+    {},
+  );
 
   useEffect(() => {
-    saveData({
-      variables: {
-        ...input,
-        plannerData: courseState,
-      },
-    });
-  }, [input, courseState, saveData]);
+    if (input.userId !== undefined) {
+      saveData({
+        variables: {
+          input: {
+            ...input,
+            plannerData: courseState,
+          },
+        },
+      });
+    }
+  }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
@@ -54,7 +62,10 @@ export default function useCoursePlanner(input: {
 
     // add course dragged from 'search-droppable' to quarter
     if (source.droppableId === "search-droppable") {
-      const quarter = courseState.quarters[destination.droppableId];
+      const quarter = findQuarter(
+        courseState.quarters,
+        destination.droppableId,
+      );
       const newStoredCourses = Array.from(quarter.courses);
       newStoredCourses.splice(
         destination.index,
@@ -84,7 +95,10 @@ export default function useCoursePlanner(input: {
       destination.droppableId == "remove-course-area2" ||
       destination.droppableId == "search-droppable"
     ) {
-      const startQuarter = courseState.quarters[result.source.droppableId];
+      const startQuarter = findQuarter(
+        courseState.quarters,
+        result.source.droppableId,
+      );
       const newStoredCourses = Array.from(startQuarter.courses);
       newStoredCourses.splice(result.source.index, 1);
 
@@ -105,8 +119,11 @@ export default function useCoursePlanner(input: {
       return;
     }
 
-    const startQuarter = courseState.quarters[source.droppableId];
-    const finishQuarter = courseState.quarters[destination.droppableId];
+    const startQuarter = findQuarter(courseState.quarters, source.droppableId);
+    const finishQuarter = findQuarter(
+      courseState.quarters,
+      destination.droppableId,
+    );
     if (startQuarter === finishQuarter) {
       // moving course within startQuarter
       const newStoredCourses = Array.from(startQuarter.courses);
@@ -175,6 +192,7 @@ export default function useCoursePlanner(input: {
     courseState,
     handleDragEnd,
     coursesAlreadyAdded,
-    saving,
+    saveStatus,
+    saveError,
   };
 }

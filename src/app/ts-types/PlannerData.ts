@@ -5,7 +5,7 @@ import { Quarter } from "./Quarter";
  */
 export interface PlannerData {
   title: string;
-  quarters: { [key: string]: Quarter };
+  quarters: Quarter[];
   quarterOrder: string[];
   years: number;
   quartersPerYear: number;

@@ -14,17 +14,18 @@ export const initialPlanner = (title: string): PlannerData => ({
 });
 
 export function createQuarters() {
-  const quarters: { [key: string]: Quarter } = {};
+  const quarters: Quarter[] = [];
   const quarterOrder: string[] = [];
 
   for (let year = 0; year < years; year++) {
     for (let quarter = 0; quarter < quartersPerYear; quarter++) {
-      const quarterId = `quarter-${year}-${quarterNames[quarter]}`;
-      quarters[quarterId] = {
+      const id = `quarter-${year}-${quarterNames[quarter]}`;
+      quarters.push({
+        id,
         title: `Year ${year + 1}: ${quarterNames[quarter]}`,
         courses: [],
-      };
-      quarterOrder.push(quarterId);
+      });
+      quarterOrder.push(id);
     }
   }
 
