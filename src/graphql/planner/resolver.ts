@@ -21,7 +21,7 @@ export class PlannerResolver {
     return await new PlannerService().upsertPlanner(input);
   }
 
-  @Query(() => [PlannerData])
+  @Query(() => [PlannerTitle])
   async getAllPlanners(@Arg("userId") userId: string): Promise<PlannerTitle[]> {
     return await new PlannerService().allPlanners(userId);
   }
