@@ -25,7 +25,7 @@ export default function useCoursePlanner(input: {
 }) {
   const [courseState, setCourseState] = useLocalState<PlannerData>(
     `planner${input.plannerId}`,
-    initialPlanner(input.title),
+    initialPlanner,
   );
 
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
@@ -35,15 +35,18 @@ export default function useCoursePlanner(input: {
 
   useEffect(() => {
     if (input.userId !== undefined) {
-      saveData({
-        variables: {
-          input: {
-            ...input,
-            plannerData: courseState,
-          },
+      const variables = {
+        input: {
+          ...input,
+          plannerData: courseState,
         },
+      };
+      console.log(`In Autosave: ${JSON.stringify(variables)}`);
+      saveData({
+        variables,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
   const handleCourseUpdate = (courseState: PlannerData) => {
@@ -62,10 +65,11 @@ export default function useCoursePlanner(input: {
 
     // add course dragged from 'search-droppable' to quarter
     if (source.droppableId === "search-droppable") {
-      const quarter = findQuarter(
+      const { quarter, idx } = findQuarter(
         courseState.quarters,
         destination.droppableId,
       );
+
       const newStoredCourses = Array.from(quarter.courses);
       newStoredCourses.splice(
         destination.index,
@@ -79,10 +83,11 @@ export default function useCoursePlanner(input: {
 
       const newState = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [destination.droppableId]: newQuarter,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
       };
 
       handleCourseUpdate(newState);
@@ -95,7 +100,7 @@ export default function useCoursePlanner(input: {
       destination.droppableId == "remove-course-area2" ||
       destination.droppableId == "search-droppable"
     ) {
-      const startQuarter = findQuarter(
+      const { quarter: startQuarter, idx } = findQuarter(
         courseState.quarters,
         result.source.droppableId,
       );
@@ -109,18 +114,22 @@ export default function useCoursePlanner(input: {
 
       const newState = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [result.source.droppableId]: newQuarter,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
       };
 
       handleCourseUpdate(newState);
       return;
     }
 
-    const startQuarter = findQuarter(courseState.quarters, source.droppableId);
-    const finishQuarter = findQuarter(
+    const { quarter: startQuarter, idx } = findQuarter(
+      courseState.quarters,
+      source.droppableId,
+    );
+    const { quarter: finishQuarter, idx: idx2 } = findQuarter(
       courseState.quarters,
       destination.droppableId,
     );
@@ -142,8 +151,9 @@ export default function useCoursePlanner(input: {
       const newState = {
         ...courseState,
         quarters: {
-          ...courseState.quarters,
-          [source.droppableId]: newQuarter,
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
         },
       };
 
@@ -165,13 +175,21 @@ export default function useCoursePlanner(input: {
         courses: finishStoredCourses,
       };
 
-      const newState = {
+      let newState: PlannerData = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [source.droppableId]: newStart,
-          [destination.droppableId]: newFinish,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newStart,
+          ...courseState.quarters.slice(idx + 1),
+        ],
+      };
+      newState = {
+        ...newState,
+        quarters: [
+          ...newState.quarters.slice(0, idx2),
+          newFinish,
+          ...newState.quarters.slice(idx2 + 1),
+        ],
       };
 
       handleCourseUpdate(newState);

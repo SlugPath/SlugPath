@@ -15,9 +15,7 @@ export default function App() {
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
-  const [currentCourseState, setCurrentCourseState] = useState(
-    initialPlanner(""),
-  );
+  const [currentCourseState, setCurrentCourseState] = useState(initialPlanner);
   const {
     planners,
     handleRemovePlanner,

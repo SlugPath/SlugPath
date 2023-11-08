@@ -50,11 +50,8 @@ export class QuarterInput {
  */
 @InputType()
 export class PlannerDataInput {
-  @Field(() => QuarterInput, { name: "quarters" })
+  @Field(() => [QuarterInput])
   quarters!: QuarterInput[];
-
-  @Field(() => [String])
-  quartersOrder!: string[];
 
   @Field(() => Int)
   @Min(1)
