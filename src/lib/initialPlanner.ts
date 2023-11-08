@@ -5,12 +5,13 @@ const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 const years = 4;
 export const quartersPerYear = 4;
 
-export const initialPlanner: PlannerData = {
+export const initialPlanner = (title: string): PlannerData => ({
+  title,
   quarters: createQuarters().quarters,
   quarterOrder: createQuarters().quarterOrder,
   years,
   quartersPerYear,
-};
+});
 
 export function createQuarters() {
   const quarters: { [key: string]: Quarter } = {};

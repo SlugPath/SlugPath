@@ -4,36 +4,16 @@ import { DropResult } from "@hello-pangea/dnd";
 import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import useLocalState from "./useLocalState";
-//import { gql, useMutation } from "@apollo/client";
-// import { setTimeout } from "timers";
-// import { debounce } from "cypress/types/lodash";
+import { gql } from "@apollo/client";
+import useAutosave from "./useAutosave";
 
-/*
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: UpsertInput) {
     upsertPlanner(input: $input) {
       plannerId
     }
   }
-`
-*/
-
-/*
-const debounceMutation = debounce((mutation, options) => {
-  const controller = new AbortController();
-
-  return mutation({
-    ...options,
-    options: {
-      context: {
-        fetchOptions: {
-          signal: controller.signal
-        }
-      }
-    }
-  })
-}, 500);
-*/
+`;
 
 export default function useCoursePlanner(input: {
   userId: string | undefined;
@@ -43,35 +23,18 @@ export default function useCoursePlanner(input: {
 }) {
   const [courseState, setCourseState] = useLocalState<PlannerData>(
     `planner${input.plannerId}`,
-    initialPlanner,
+    initialPlanner(input.title),
   );
-  //const [saveData, { loading, error }] = useMutation(SAVE_PLANNER)
-  //const [dataChanged, setDataChanged] = useState(false);
+
+  const [saveData, { loading: saving }] = useAutosave(SAVE_PLANNER, {
+    variables: input,
+  });
 
   const handleCourseUpdate = (courseState: PlannerData) => {
-    localStorage.setItem(
-      `planner${input.plannerId}`,
-      JSON.stringify(courseState),
-    );
+    if (input.userId !== undefined) saveData({ variables: input });
+
     setCourseState(courseState);
-    //setDataChanged(true);
   };
-
-  /*
-  useEffect(() => {
-    if (dataChanged) {
-      const timeoutId = setTimeout(() => {
-        console.log("saving");
-        localStorage.setItem(input.plannerId, JSON.stringify(courseState));
-        setDataChanged(false);
-      }, 1000);
-
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-  }, [input, courseState, dataChanged]);
-  */
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -206,5 +169,6 @@ export default function useCoursePlanner(input: {
     courseState,
     handleDragEnd,
     coursesAlreadyAdded,
+    saving,
   };
 }

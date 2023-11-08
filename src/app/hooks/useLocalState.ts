@@ -15,7 +15,6 @@ export default function useLocalState<T>(
 
   useEffect(() => {
     const initialize = (key: string) => {
-      console.log(`${JSON.stringify(initialValue)}`);
       try {
         const item = window.localStorage.getItem(key);
         if (item && item !== null) return JSON.parse(item);
