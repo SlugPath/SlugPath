@@ -90,7 +90,7 @@ export const useLoadPlanner = (
       const planner = data.getPlanner;
       if (planner !== null) {
         removeTypenames(planner);
-        console.log(`In Load Single: ${JSON.stringify(planner)}`);
+        console.log(`In Load Single: ${planner.quarters.length}`);
         setState(planner);
       } else {
         setState(initialPlanner);

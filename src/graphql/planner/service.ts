@@ -7,7 +7,7 @@ import {
 } from "./schema";
 import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/ts-types/Course";
-import { initialPlanner } from "@/lib/initialPlanner";
+import { emptyPlanner } from "@/lib/initialPlanner";
 import { Course, Prisma, Term } from "@prisma/client";
 import { RenamePlannerInput } from "./schema";
 
@@ -25,6 +25,7 @@ export class PlannerService {
     order,
   }: PlannerCreateInput): Promise<PlannerId> {
     // Delete old planner
+    console.log(`IN UPSERT`);
     const operations = [];
     const old = await prisma.planner.findUnique({
       where: {
@@ -62,8 +63,8 @@ export class PlannerService {
         },
       };
     });
+    console.log(`${JSON.stringify(newQuarters.length)}`);
 
-    console.log(`newQuarters: ${JSON.stringify(newQuarters, null, 2)}`);
     // Perform upsert
     operations.push(
       prisma.planner.create({
@@ -86,8 +87,6 @@ export class PlannerService {
     const result = await prisma.$transaction(operations, {
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     });
-
-    console.log(`RESULT: ${JSON.stringify(result)}`);
 
     // Return the id
     return { plannerId: result[0].id };
@@ -195,7 +194,7 @@ export class PlannerService {
    */
   private toPlannerData(planner: any): PlannerData {
     // Set all the courses for each quarter
-    const newPlanner: PlannerData = JSON.parse(JSON.stringify(initialPlanner));
+    const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner));
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
       const courses: StoredCourse[] = q.courses.map((c: Course) => {
@@ -206,7 +205,7 @@ export class PlannerService {
       });
       newPlanner.quarters.push({
         id: quarterId,
-        title: `Year ${q.year}: ${q.term}`,
+        title: `Year ${q.year + 1}: ${q.term}`,
         courses,
       });
     });

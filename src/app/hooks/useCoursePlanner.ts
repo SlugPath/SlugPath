@@ -39,7 +39,7 @@ export default function useCoursePlanner(input: {
       input.title.length > 1 &&
       input.title.length < 20
     ) {
-      console.log(`SAVING: ${JSON.stringify(input)}`);
+      console.log(`SAVING: ${courseState.quarters.length}`);
       const variables = {
         input: {
           ...input,
