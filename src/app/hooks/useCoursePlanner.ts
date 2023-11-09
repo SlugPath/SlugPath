@@ -55,11 +55,13 @@ export default function useCoursePlanner(input: {
 
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
-    if (input.userId === undefined)
+    if (input.userId === undefined) {
+      console.log(`UPDATING LOCAL STORAGE`);
       localStorage.setItem(
         `planner${input.plannerId}`,
         JSON.stringify(courseState),
       );
+    }
   };
 
   const handleDragEnd = (result: DropResult) => {

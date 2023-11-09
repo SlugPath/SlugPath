@@ -2,9 +2,10 @@ import { ApolloError, gql, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { PlannerTitle } from "@/graphql/planner/schema";
-import { emptyPlanner, initialPlanner } from "@/lib/initialPlanner";
+import { initialPlanner } from "@/lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
+import { v4 as uuidv4 } from "uuid";
 
 const GET_PLANNERS = gql`
   query ($userId: String!) {
@@ -43,11 +44,14 @@ export const useLoadAllPlanners = (
   React.Dispatch<React.SetStateAction<MultiPlanner>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useState<MultiPlanner>({});
+  const [state, setState] = useState<MultiPlanner>({
+    [uuidv4()]: [`New Planner`, true],
+  });
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNERS, {
     onCompleted: (data) => {
-      console.log(`COMPLETED LOAD ALL ${JSON.stringify(data.getAllPlanners)}`);
-      setState(convertPlannerTitles(data.getAllPlanners));
+      if (data.getAllPlanners.length > 0) {
+        setState(convertPlannerTitles(data.getAllPlanners));
+      }
     },
     onError: (err) => {
       console.error(err);
@@ -61,8 +65,7 @@ export const useLoadAllPlanners = (
         },
       });
     } else {
-      const planners = localStorage.getItem("planners") ?? "";
-      setState(planners.length > 0 ? JSON.parse(planners) : []);
+      setState(getPlannersFromLocal(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -84,7 +87,7 @@ export const useLoadPlanner = (
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useState<PlannerData>(emptyPlanner);
+  const [state, setState] = useState<PlannerData>(initialPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
       const planner = data.getPlanner;
@@ -92,31 +95,23 @@ export const useLoadPlanner = (
         removeTypenames(planner);
         console.log(`In Load Single: ${planner.quarters.length}`);
         setState(planner);
-      } else {
-        setState(initialPlanner);
       }
     },
     onError: (err) => {
       console.error(err);
     },
-    variables: {
-      userId: userId ?? "",
-      plannerId,
-    },
   });
 
   useEffect(() => {
-    console.log(`IN USE EFFECT`);
     if (userId !== undefined) {
       getData({
         variables: {
           userId,
+          plannerId,
         },
       });
     } else {
-      const planner = localStorage.getItem(`planner${plannerId}`) ?? "";
-      setState(planner.length > 0 ? JSON.parse(planner) : initialPlanner);
-      console.log(`IN USE EFFECT STILL ${state}`);
+      setState(getPlannerFromLocal(plannerId, userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -135,4 +130,18 @@ const convertPlannerTitles = (queryResult: PlannerTitle[]): MultiPlanner => {
   });
 
   return mp;
+};
+
+const getPlannersFromLocal = (userId: string | undefined) => {
+  const it = localStorage.getItem(`planners`);
+  if (it === null) return { [uuidv4()]: ["New Planner", true] };
+  if (userId !== undefined) localStorage.clear();
+  return JSON.parse(it);
+};
+
+const getPlannerFromLocal = (id: string, userId: string | undefined) => {
+  const it = localStorage.getItem(`planner${id}`);
+  if (it === null) return initialPlanner;
+  if (userId !== undefined) localStorage.clear();
+  return JSON.parse(it);
 };

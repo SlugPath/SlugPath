@@ -1,5 +1,4 @@
 import { MultiPlanner } from "../ts-types/MultiPlanner";
-import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useLoadAllPlanners } from "./useLoad";
 import { gql, useMutation } from "@apollo/client";
@@ -13,8 +12,6 @@ const DELETE_PLANNER = gql`
 `;
 
 export function usePlanner(userId: string | undefined) {
-  const [counter, setCounter] = useState(1);
-
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
   const [planners, setPlanners] = useLoadAllPlanners(userId);
@@ -27,8 +24,10 @@ export function usePlanner(userId: string | undefined) {
    */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {
     setPlanners(plannerState);
-    if (userId === undefined)
+    if (userId === undefined) {
+      console.log("SAVING ALL PLANNERS");
       localStorage.setItem(`planners`, JSON.stringify(plannerState));
+    }
   };
 
   /**
@@ -78,8 +77,7 @@ export function usePlanner(userId: string | undefined) {
    * It returns early if the user has too many planners already
    */
   const handleAddPlanner = () => {
-    setCounter((prev) => prev + 1);
-    const [id, title] = [uuidv4(), `Planner ${counter + 1}`];
+    const [id, title] = [uuidv4(), `New Planner`];
     handlePlannerUpdate({
       ...planners,
       [id]: [title, false],
@@ -94,12 +92,14 @@ export function usePlanner(userId: string | undefined) {
   const handleRemovePlanner = (id: string) => {
     const newPlanners = { ...planners };
     delete newPlanners[id];
-    mutation({
-      variables: {
-        userId,
-        plannerId: id,
-      },
-    });
+    if (userId !== undefined) {
+      mutation({
+        variables: {
+          userId,
+          plannerId: id,
+        },
+      });
+    }
     handlePlannerUpdate(newPlanners);
   };
 

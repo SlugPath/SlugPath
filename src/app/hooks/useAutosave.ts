@@ -22,7 +22,7 @@ const debounceMutation = debounce((mutation, options) => {
       },
     },
   });
-}, 500);
+}, 1000);
 
 const useAutosave = <
   TData,

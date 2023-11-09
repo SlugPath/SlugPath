@@ -25,7 +25,6 @@ export class PlannerService {
     order,
   }: PlannerCreateInput): Promise<PlannerId> {
     // Delete old planner
-    console.log(`IN UPSERT`);
     const operations = [];
     const old = await prisma.planner.findUnique({
       where: {

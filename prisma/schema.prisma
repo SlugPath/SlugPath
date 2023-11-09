@@ -38,13 +38,12 @@ model Quarter {
 }
 
 model EnrolledCourses {
+  id         Int    @id @default(autoincrement())
   department String
   number     String
 
   quarterId Int
   quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
-
-  @@id([department, number])
 }
 
 model Course {
