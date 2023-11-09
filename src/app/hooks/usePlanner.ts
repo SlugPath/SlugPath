@@ -2,6 +2,15 @@ import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useLoadAllPlanners } from "./useLoad";
+import { gql, useMutation } from "@apollo/client";
+
+const DELETE_PLANNER = gql`
+  mutation DeletePlanner($userId: String!, $plannerId: String!) {
+    deletePlanner(userId: $userId, plannerId: $plannerId) {
+      plannerId
+    }
+  }
+`;
 
 export function usePlanner(userId: string | undefined) {
   const [counter, setCounter] = useState(1);
@@ -9,6 +18,8 @@ export function usePlanner(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
   const [planners, setPlanners] = useLoadAllPlanners(userId);
+
+  const [mutation] = useMutation(DELETE_PLANNER);
 
   /**
    * Handles update to multiple planners by updating cookies and state
@@ -83,6 +94,12 @@ export function usePlanner(userId: string | undefined) {
   const handleRemovePlanner = (id: string) => {
     const newPlanners = { ...planners };
     delete newPlanners[id];
+    mutation({
+      variables: {
+        userId,
+        plannerId: id,
+      },
+    });
     handlePlannerUpdate(newPlanners);
   };
 

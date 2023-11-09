@@ -10,6 +10,11 @@ export const initialPlanner: PlannerData = {
   years,
 };
 
+export const emptyPlanner: PlannerData = {
+  quarters: [],
+  years,
+};
+
 export function createQuarters() {
   const quarters: Quarter[] = [];
 

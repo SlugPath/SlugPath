@@ -34,15 +34,10 @@ export class PlannerService {
     });
     if (old !== null) {
       operations.push(
-        prisma.planner.update({
+        prisma.planner.delete({
           where: {
             userId,
             id: plannerId,
-          },
-          data: {
-            quarters: {
-              deleteMany: {},
-            },
           },
         }),
       );
@@ -53,40 +48,26 @@ export class PlannerService {
       const qid = q.id;
       const [year, term] = qid.split("-").slice(1);
 
-      const courses = q.courses.map((c) => {
+      const enrolledCourses = q.courses.map((c) => {
         return {
-          department_number: {
-            department: c.department,
-            number: c.number,
-          },
+          department: c.department,
+          number: c.number,
         };
       });
       return {
         year: parseInt(year),
         term: term as Term,
         courses: {
-          connect: courses,
+          create: enrolledCourses,
         },
       };
     });
 
     console.log(`newQuarters: ${JSON.stringify(newQuarters, null, 2)}`);
-
     // Perform upsert
     operations.push(
-      prisma.planner.upsert({
-        where: {
-          userId,
-          id: plannerId,
-        },
-        update: {
-          title,
-          userId,
-          quarters: {
-            create: newQuarters,
-          },
-        },
-        create: {
+      prisma.planner.create({
+        data: {
           title,
           userId,
           order,

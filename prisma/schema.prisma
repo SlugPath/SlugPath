@@ -28,17 +28,26 @@ model Planner {
 }
 
 model Quarter {
-  id      Int      @id @default(autoincrement())
+  id      Int               @id @default(autoincrement())
   term    Term
   year    Int
-  courses Course[] @relation()
+  courses EnrolledCourses[]
 
   plannerId String
   planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
+model EnrolledCourses {
+  department String
+  number     String
+
+  quarterId Int
+  quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+
+  @@id([department, number])
+}
+
 model Course {
-  id         String @id @default(uuid())
   name       String
   department String
   number     String
@@ -46,10 +55,8 @@ model Course {
 
   updatedAt DateTime @updatedAt
 
-  quarter Quarter[] @relation()
-
   // No two courses can have the same department and course number
-  @@unique([department, number])
+  @@id([department, number])
 }
 
 enum Role {

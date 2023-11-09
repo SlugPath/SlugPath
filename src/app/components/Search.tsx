@@ -9,7 +9,6 @@ import { createIdFromCourse } from "../../lib/courseUtils";
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String!) {
     coursesBy(department: $department, number: $number) {
-      id
       name
       department
       number

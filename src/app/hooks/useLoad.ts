@@ -1,10 +1,8 @@
 import { ApolloError, gql, useLazyQuery } from "@apollo/client";
-import { useEffect } from "react";
-import useLocalState from "./useLocalState";
+import { useEffect, useState } from "react";
 import { MultiPlanner } from "../ts-types/MultiPlanner";
-import { v4 as uuidv4 } from "uuid";
 import { PlannerTitle } from "@/graphql/planner/schema";
-import { initialPlanner } from "@/lib/initialPlanner";
+import { emptyPlanner, initialPlanner } from "@/lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
 
@@ -45,9 +43,7 @@ export const useLoadAllPlanners = (
   React.Dispatch<React.SetStateAction<MultiPlanner>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useLocalState<MultiPlanner>("planners", {
-    [uuidv4()]: ["Planner 1", true],
-  });
+  const [state, setState] = useState<MultiPlanner>({});
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNERS, {
     onCompleted: (data) => {
       console.log(`COMPLETED LOAD ALL ${JSON.stringify(data.getAllPlanners)}`);
@@ -64,6 +60,9 @@ export const useLoadAllPlanners = (
           userId,
         },
       });
+    } else {
+      const planners = localStorage.getItem("planners") ?? "";
+      setState(planners.length > 0 ? JSON.parse(planners) : []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -85,10 +84,7 @@ export const useLoadPlanner = (
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useLocalState<PlannerData>(
-    `planner${plannerId}`,
-    initialPlanner,
-  );
+  const [state, setState] = useState<PlannerData>(emptyPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
       const planner = data.getPlanner;
@@ -96,6 +92,8 @@ export const useLoadPlanner = (
         removeTypenames(planner);
         console.log(`In Load Single: ${JSON.stringify(planner)}`);
         setState(planner);
+      } else {
+        setState(initialPlanner);
       }
     },
     onError: (err) => {
@@ -108,12 +106,17 @@ export const useLoadPlanner = (
   });
 
   useEffect(() => {
+    console.log(`IN USE EFFECT`);
     if (userId !== undefined) {
       getData({
         variables: {
           userId,
         },
       });
+    } else {
+      const planner = localStorage.getItem(`planner${plannerId}`) ?? "";
+      setState(planner.length > 0 ? JSON.parse(planner) : initialPlanner);
+      console.log(`IN USE EFFECT STILL ${state}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);

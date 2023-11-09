@@ -34,7 +34,11 @@ export default function useCoursePlanner(input: {
 
   // Auto-saving
   useEffect(() => {
-    if (input.userId !== undefined) {
+    if (
+      input.userId !== undefined &&
+      input.title.length > 1 &&
+      input.title.length < 20
+    ) {
       console.log(`SAVING: ${JSON.stringify(input)}`);
       const variables = {
         input: {

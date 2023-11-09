@@ -20,10 +20,6 @@ export class Course {
   @Length(5, 100)
   name!: string;
 
-  @Field()
-  @IsUUID("4")
-  id!: string;
-
   @Field(() => Int)
   @Min(1)
   @Max(10)
