@@ -100,6 +100,7 @@ export function usePlanner(userId: string | undefined) {
         },
       });
     }
+    localStorage.removeItem(`planner${id}`);
     handlePlannerUpdate(newPlanners);
   };
 
