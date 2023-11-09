@@ -16,6 +16,8 @@ export function usePlanner(userId: string | undefined) {
    */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {
     setPlanners(plannerState);
+    if (userId === undefined)
+      localStorage.setItem(`planners`, JSON.stringify(plannerState));
   };
 
   /**

@@ -53,7 +53,7 @@ export class PlannerService {
       const qid = q.id;
       const [year, term] = qid.split("-").slice(1);
 
-      const courses = q.courses?.map((c) => {
+      const courses = q.courses.map((c) => {
         return {
           department_number: {
             department: c.department,
@@ -69,6 +69,8 @@ export class PlannerService {
         },
       };
     });
+
+    console.log(`newQuarters: ${JSON.stringify(newQuarters, null, 2)}`);
 
     // Perform upsert
     operations.push(
@@ -103,6 +105,8 @@ export class PlannerService {
     const result = await prisma.$transaction(operations, {
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     });
+
+    console.log(`RESULT: ${JSON.stringify(result)}`);
 
     // Return the id
     return { plannerId: result[0].id };

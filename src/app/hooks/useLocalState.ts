@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * A custom hook that fetches and updates the contents of a variable via local storage
@@ -32,21 +32,5 @@ export default function useLocalState<T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 
-  // Return a wrapped version of useState's setter function
-  const setValue = useCallback(
-    (value: T | ((prev: Readonly<T>) => T)) => {
-      try {
-        // Allow value to be a function so we have the same API as useState
-        const valueToStore = value instanceof Function ? value(state) : value;
-        // Save state
-        setState(valueToStore);
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    [key, setState, state],
-  );
-
-  return [state, setValue];
+  return [state, setState];
 }

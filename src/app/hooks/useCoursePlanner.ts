@@ -35,6 +35,7 @@ export default function useCoursePlanner(input: {
   // Auto-saving
   useEffect(() => {
     if (input.userId !== undefined) {
+      console.log(`SAVING: ${JSON.stringify(input)}`);
       const variables = {
         input: {
           ...input,
@@ -50,6 +51,11 @@ export default function useCoursePlanner(input: {
 
   const handleCourseUpdate = (courseState: PlannerData) => {
     setCourseState(courseState);
+    if (input.userId === undefined)
+      localStorage.setItem(
+        `planner${input.plannerId}`,
+        JSON.stringify(courseState),
+      );
   };
 
   const handleDragEnd = (result: DropResult) => {
