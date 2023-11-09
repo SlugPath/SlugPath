@@ -53,7 +53,7 @@ export class PlannerService {
       const qid = q.id;
       const [year, term] = qid.split("-").slice(1);
 
-      const courses = q.courses.map((c) => {
+      const courses = q.courses?.map((c) => {
         return {
           department_number: {
             department: c.department,
@@ -171,6 +171,7 @@ export class PlannerService {
         },
       },
     });
+    //console.log(`${JSON.stringify(p)}`)
     return p !== null ? this.toPlannerData(p) : null;
   }
 
@@ -218,10 +219,11 @@ export class PlannerService {
           number: c.number,
         };
       });
-      newPlanner.quarters[quarterId] = {
+      newPlanner.quarters.push({
+        id: quarterId,
         title: `Year ${q.year}: ${q.term}`,
         courses,
-      };
+      });
     });
 
     // Return new modified planner

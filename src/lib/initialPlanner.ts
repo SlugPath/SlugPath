@@ -8,7 +8,6 @@ export const quartersPerYear = 4;
 export const initialPlanner: PlannerData = {
   quarters: createQuarters(),
   years,
-  quartersPerYear,
 };
 
 export function createQuarters() {

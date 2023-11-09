@@ -1,13 +1,12 @@
 import { createCourseFromId } from "../../lib/courseUtils";
 import { StoredCourse } from "../ts-types/Course";
 import { DropResult } from "@hello-pangea/dnd";
-import { initialPlanner } from "../../lib/initialPlanner";
 import { PlannerData } from "../ts-types/PlannerData";
-import useLocalState from "./useLocalState";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
 import { findQuarter } from "../ts-types/Quarter";
+import { useLoadPlanner } from "./useLoad";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -23,9 +22,9 @@ export default function useCoursePlanner(input: {
   title: string;
   order: number;
 }) {
-  const [courseState, setCourseState] = useLocalState<PlannerData>(
-    `planner${input.plannerId}`,
-    initialPlanner,
+  const [courseState, setCourseState] = useLoadPlanner(
+    input.plannerId,
+    input.userId,
   );
 
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
@@ -33,6 +32,7 @@ export default function useCoursePlanner(input: {
     {},
   );
 
+  // Auto-saving
   useEffect(() => {
     if (input.userId !== undefined) {
       const variables = {
@@ -41,7 +41,6 @@ export default function useCoursePlanner(input: {
           plannerData: courseState,
         },
       };
-      console.log(`In Autosave: ${JSON.stringify(variables)}`);
       saveData({
         variables,
       });

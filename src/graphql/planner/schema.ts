@@ -57,11 +57,6 @@ export class PlannerDataInput {
   @Min(1)
   @Max(7)
   years!: number;
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(4)
-  quartersPerYear!: number;
 }
 
 /**
@@ -83,6 +78,9 @@ export class StoredCourse {
  */
 @ObjectType()
 export class Quarter {
+  @Field()
+  id!: string;
+
   @Field()
   @Length(1, 16)
   title!: string;
@@ -106,21 +104,13 @@ export class PlannerTitle {
  */
 @ObjectType()
 export class PlannerData {
-  @Field(() => Quarter, { name: "quarters" })
-  quarters!: { [key: string]: Quarter };
-
-  @Field(() => [String])
-  quartersOrder!: string[];
+  @Field(() => [Quarter])
+  quarters!: Quarter[];
 
   @Field(() => Int)
   @Min(1)
   @Max(7)
   years!: number;
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(4)
-  quartersPerYear!: number;
 }
 
 /**

@@ -9,8 +9,9 @@ import {
   PDFViewer,
 } from "@react-pdf/renderer";
 import { StoredCourse } from "../ts-types/Course";
-import { Quarter } from "../ts-types/Quarter";
+import { Quarter, findQuarter } from "../ts-types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
+import { quartersPerYear } from "@/lib/initialPlanner";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -99,15 +100,11 @@ export default function CourseSelectionModal({
 function Years({ courseState }: { courseState: PlannerData }) {
   return (
     <View>
-      {Array.from(
-        { length: courseState.quartersPerYear },
-        (_, index) => index,
-      ).map((i) => {
-        const slice_val = courseState.quartersPerYear * i;
-        const quarters = courseState.quarterOrder.slice(
-          slice_val,
-          slice_val + courseState.quartersPerYear,
-        );
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
+        const quarters = courseState.quarters
+          .slice(slice_val, slice_val + quartersPerYear)
+          .map((q) => q.title);
 
         return (
           <Quarters key={i} quarters={quarters} courseState={courseState} />
@@ -129,7 +126,7 @@ function Quarters({
   return (
     <View key={key} style={styles.yearView}>
       {quarters.map((quarterId) => {
-        const quarter = courseState.quarters[quarterId];
+        const { quarter } = findQuarter(courseState.quarters, quarterId);
         const courses = quarter.courses;
         return <Quarter key={quarterId} quarter={quarter} courses={courses} />;
       })}

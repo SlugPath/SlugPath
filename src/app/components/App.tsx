@@ -9,8 +9,10 @@ import { MobileWarningModal, isMobile } from "./isMobile";
 import Footer from "./Footer";
 import { useEffect, useState } from "react";
 import { initialPlanner } from "@/lib/initialPlanner";
+import { useSession } from "next-auth/react";
 
 export default function App() {
+  const { data: session } = useSession();
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
@@ -22,7 +24,7 @@ export default function App() {
     handleAddPlanner,
     handleSwitchPlanners,
     handleChangePlannerName,
-  } = usePlanner();
+  } = usePlanner(session?.user.id);
 
   // checks if user is on mobile device
   useEffect(() => {

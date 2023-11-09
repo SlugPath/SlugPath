@@ -16,6 +16,15 @@ export const debounce = <T extends (...args: any[]) => any>(
   };
 };
 
-export const deepEqual = (obj1: any, obj2: any): boolean => {
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
+export const removeTypenames = (value: any) => {
+  if (value && typeof value === "object") {
+    delete value.__typename; // Remove __typename property if it exists
+
+    Object.values(value).forEach((val) => {
+      // Recursively apply to properties and array elements
+      if (typeof val === "object" || Array.isArray(val)) {
+        removeTypenames(val);
+      }
+    });
+  }
 };

@@ -6,5 +6,4 @@ import { Quarter } from "./Quarter";
 export interface PlannerData {
   quarters: Quarter[];
   years: number;
-  quartersPerYear: number;
 }
