@@ -51,6 +51,7 @@ export class PlannerService {
         return {
           department: c.department,
           number: c.number,
+          quartersOffered: [...c.quartersOffered],
         };
       });
       return {
@@ -179,6 +180,7 @@ export class PlannerService {
         return {
           department: c.department,
           number: c.number,
+          quartersOffered: [...c.quartersOffered],
         };
       });
       newPlanner.quarters.push({

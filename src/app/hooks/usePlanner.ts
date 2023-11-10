@@ -19,7 +19,7 @@ export function usePlanner(userId: string | undefined) {
   const [mutation] = useMutation(DELETE_PLANNER);
 
   /**
-   * Handles update to multiple planners by updating cookies and state
+   * Handles update to multiple planners by updating state
    * @param plannerState new state of the multi planner
    */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {

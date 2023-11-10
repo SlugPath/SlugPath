@@ -25,6 +25,7 @@ const GET_PLANNER = gql`
         courses {
           department
           number
+          quartersOffered
         }
       }
       years

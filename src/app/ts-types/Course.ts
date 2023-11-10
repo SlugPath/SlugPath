@@ -7,10 +7,10 @@ export interface Course {
 }
 
 /**
- * `StoredCourse` is a type to represent how courses are stored.
- * `number` is stored as a string, as some course numbers are appended with letters.
+ * `StoredCourse` is a type to represent dummy courses for now
  */
 export interface StoredCourse {
   department: string;
-  number: string;
+  number: string; // because some course numbers are 12L, 115A etc.
+  quartersOffered: string[];
 }

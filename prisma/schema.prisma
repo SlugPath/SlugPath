@@ -38,21 +38,25 @@ model Quarter {
 }
 
 model EnrolledCourses {
-  id         Int    @id @default(autoincrement())
-  department String
-  number     String
+  id              Int      @id @default(autoincrement())
+  department      String
+  number          String
+  quartersOffered String[]
 
   quarterId Int
   quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {
-  name       String
-  department String
-  number     String
-  credits    Int    @default(5)
-
-  updatedAt DateTime @updatedAt
+  name            String
+  department      String
+  number          String
+  credits         Int      @default(5)
+  quartersOffered String[]
+  /// @TypeGraphQL.omit(output: true)
+  createdAt       DateTime @default(now())
+  /// @TypeGraphQL.omit(output: true)
+  updatedAt       DateTime @updatedAt
 
   // No two courses can have the same department and course number
   @@id([department, number])

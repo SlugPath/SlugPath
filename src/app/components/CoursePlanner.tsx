@@ -24,6 +24,8 @@ export default function CoursePlanner({
 }) {
   const { data: session, status } = useSession();
   const {
+    handleOnDragStart,
+    unavailableQuarters,
     courseState,
     handleDragEnd,
     coursesAlreadyAdded,
@@ -60,16 +62,22 @@ export default function CoursePlanner({
     <>
       <SaveSnackbars saving={saveStatus} saveError={saveError} />
       <div>
-        <DragDropContext onDragEnd={handleDragEnd}>
+        <DragDropContext
+          onDragEnd={handleDragEnd}
+          onDragStart={handleOnDragStart}
+        >
           <div className="flex">
             <div className="flex-1 px-4 py-6">
-              <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
+              <Search coursesInPlanner={coursesAlreadyAdded()} />
             </div>
             {loading ? (
               <CircularProgress />
             ) : (
-              <div className="flex-2 py-6">
-                <Quarters courseState={courseState} />
+              <div className="flex-3 py-6">
+                <Quarters
+                  courseState={courseState}
+                  unavailableQuarters={unavailableQuarters}
+                />
               </div>
             )}
             <div className="flex-1 py-6" />
@@ -80,7 +88,13 @@ export default function CoursePlanner({
   );
 }
 
-function Quarters({ courseState }: { courseState: PlannerData }) {
+function Quarters({
+  courseState,
+  unavailableQuarters,
+}: {
+  courseState: PlannerData;
+  unavailableQuarters: string[];
+}) {
   return (
     <div className="space-y-2">
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
@@ -100,6 +114,7 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
                   key={quarter.id}
                   title={quarter.title}
                   courses={courses}
+                  unavailableQuarters={unavailableQuarters}
                 />
               );
             })}

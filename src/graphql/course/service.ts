@@ -8,7 +8,7 @@ import {
 } from "./schema";
 import { isAlpha } from "class-validator";
 
-const COURSES_LIMIT = 100;
+// const COURSES_LIMIT = 100;
 const MAX_COURSE_NUM: number = 299;
 
 const compareCoursesByNum = function (a: Course, b: Course): number {
@@ -70,24 +70,22 @@ export class CourseService {
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
-    // if (pred.operation == '>') {
-
-    // } else if (pred.operation == '<') {
-
-    // } else {
-
-    // }
-    return await prisma.course.findMany({
-      where: {
-        name: {
-          contains: pred.name,
+    if (pred.number && pred.number?.length > 0) {
+      return await prisma.course.findMany({
+        where: {
+          department: pred.department,
+          number: {
+            contains: pred.number,
+          },
         },
-        department: pred.department,
-        number: pred.number,
-        credits: pred.credits,
-      },
-      take: COURSES_LIMIT,
-    });
+      });
+    } else {
+      return await prisma.course.findMany({
+        where: {
+          department: pred.department,
+        },
+      });
+    }
   }
 
   /**
@@ -107,12 +105,11 @@ export class CourseService {
         department: department,
       },
     });
-    return courses
-      .filter((c: Course) => {
-        const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
-        return above ? num > courseNum : num < courseNum;
-      })
-      .slice(0, COURSES_LIMIT);
+    return courses.filter((c: Course) => {
+      const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
+      return above ? num > courseNum : num < courseNum;
+    });
+    // .slice(0, COURSES_LIMIT);
   }
 
   /**

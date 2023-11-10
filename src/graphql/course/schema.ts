@@ -24,6 +24,9 @@ export class Course {
   @Min(1)
   @Max(10)
   credits!: number;
+
+  @Field(() => [String])
+  quartersOffered!: string[];
 }
 
 /**
