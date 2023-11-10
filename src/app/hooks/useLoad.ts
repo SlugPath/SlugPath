@@ -64,8 +64,6 @@ export const useLoadAllPlanners = (
           userId,
         },
       });
-    } else {
-      setState(getPlannersFromLocal(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -93,7 +91,6 @@ export const useLoadPlanner = (
       const planner = data.getPlanner;
       if (planner !== null) {
         removeTypenames(planner);
-        console.log(`In Load Single: ${planner.quarters.length}`);
         setState(planner);
       }
     },
@@ -110,8 +107,6 @@ export const useLoadPlanner = (
           plannerId,
         },
       });
-    } else {
-      setState(getPlannerFromLocal(plannerId, userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -130,18 +125,4 @@ const convertPlannerTitles = (queryResult: PlannerTitle[]): MultiPlanner => {
   });
 
   return mp;
-};
-
-const getPlannersFromLocal = (userId: string | undefined) => {
-  const it = localStorage.getItem(`planners`);
-  if (it === null) return { [uuidv4()]: ["New Planner", true] };
-  if (userId !== undefined) localStorage.clear();
-  return JSON.parse(it);
-};
-
-const getPlannerFromLocal = (id: string, userId: string | undefined) => {
-  const it = localStorage.getItem(`planner${id}`);
-  if (it === null) return initialPlanner;
-  if (userId !== undefined) localStorage.clear();
-  return JSON.parse(it);
 };
