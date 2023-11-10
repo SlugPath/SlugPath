@@ -1,4 +1,3 @@
-import { MultiPlanner } from "../ts-types/MultiPlanner";
 import { v4 as uuidv4 } from "uuid";
 import { useLoadAllPlanners } from "./useLoad";
 import { gql, useMutation } from "@apollo/client";
@@ -19,33 +18,23 @@ export function usePlanner(userId: string | undefined) {
   const [mutation] = useMutation(DELETE_PLANNER);
 
   /**
-   * Handles update to multiple planners by updating state
-   * @param plannerState new state of the multi planner
-   */
-  const handlePlannerUpdate = (plannerState: MultiPlanner) => {
-    setPlanners(plannerState);
-  };
-
-  /**
    * `switchPlanner` switches between planners
    * @param id unique planner id
    * @param title planner title
    */
   const handleSwitchPlanners = (id: string, title: string) => {
-    handlePlannerUpdate(
+    setPlanners((prev) =>
       (() => {
         // Get id of previously active title if there was one
         // and deactivate it
-        const prevId = Object.keys(planners).find(
-          (uid: string) => planners[uid][1],
-        );
+        const prevId = Object.keys(prev).find((uid: string) => prev[uid][1]);
         if (prevId === undefined) {
-          return { ...planners, [id]: [title, true] };
+          return { ...prev, [id]: [title, true] };
         }
-        const prevTitle = planners[prevId][0];
+        const prevTitle = prev[prevId][0];
 
         return {
-          ...planners,
+          ...prev,
           [prevId]: [prevTitle, false],
           [id]: [title, true],
         };
@@ -62,7 +51,7 @@ export function usePlanner(userId: string | undefined) {
     event: React.ChangeEvent<HTMLInputElement>,
     id: string,
   ) => {
-    handlePlannerUpdate({
+    setPlanners({
       ...planners,
       [id]: [event.target.value, planners[id][1]],
     });
@@ -74,7 +63,7 @@ export function usePlanner(userId: string | undefined) {
    */
   const handleAddPlanner = () => {
     const [id, title] = [uuidv4(), `New Planner`];
-    handlePlannerUpdate({
+    setPlanners({
       ...planners,
       [id]: [title, false],
     });
@@ -96,12 +85,16 @@ export function usePlanner(userId: string | undefined) {
         },
       });
     }
-    handlePlannerUpdate(newPlanners);
+    setPlanners(newPlanners);
 
+    // Switch to the next planner upon deletion if one exists
     const newActive =
       Object.keys(newPlanners)[Object.keys(newPlanners).length - 1];
-    const title = newPlanners[newActive][0];
-    handleSwitchPlanners(newActive, title);
+
+    if (newActive !== undefined) {
+      const title = newPlanners[newActive][0];
+      handleSwitchPlanners(newActive, title);
+    }
   };
 
   return {

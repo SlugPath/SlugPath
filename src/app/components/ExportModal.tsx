@@ -104,7 +104,7 @@ function Years({ courseState }: { courseState: PlannerData }) {
         const slice_val = quartersPerYear * i;
         const quarters = courseState.quarters
           .slice(slice_val, slice_val + quartersPerYear)
-          .map((q) => q.title);
+          .map((q) => q.id);
 
         return (
           <Quarters key={i} quarters={quarters} courseState={courseState} />
@@ -125,10 +125,10 @@ function Quarters({
 }) {
   return (
     <View key={key} style={styles.yearView}>
-      {quarters.map((quarterId) => {
-        const { quarter } = findQuarter(courseState.quarters, quarterId);
+      {quarters.map((q) => {
+        const { quarter } = findQuarter(courseState.quarters, q);
         const courses = quarter.courses;
-        return <Quarter key={quarterId} quarter={quarter} courses={courses} />;
+        return <Quarter key={q} quarter={quarter} courses={courses} />;
       })}
     </View>
   );
