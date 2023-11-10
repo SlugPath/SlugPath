@@ -61,6 +61,10 @@ export class StoredCourse {
   @Field()
   @Length(1, 3)
   number!: string;
+
+  @Field(() => [String])
+  @Length(0, 4)
+  quartersOffered!: string[];
 }
 
 /**

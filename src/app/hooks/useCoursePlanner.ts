@@ -58,22 +58,14 @@ export default function useCoursePlanner(input: {
     setCourseState(courseState);
   };
 
-  const quarters = {
-    "0": "Fall",
-    "1": "Winter",
-    "2": "Spring",
-    "3": "Summer",
-  };
-
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
-    const quarterId = droppableId.split("-")[2];
-    return quarters[quarterId as keyof typeof quarters];
+    return droppableId.split("-")[2];
   };
 
   const getCourseFromQuarters = (cid: string): StoredCourse | undefined => {
     let allCourses: StoredCourse[] = [];
-    Object.values(courseState.quarters).forEach((quarter) => {
+    courseState.quarters.forEach((quarter) => {
       allCourses = allCourses.concat(quarter.courses);
     });
     return allCourses.find((c) => {
@@ -87,10 +79,11 @@ export default function useCoursePlanner(input: {
     const courseBeingDragged = getCourseFromQuarters(start.draggableId);
 
     if (courseBeingDragged) {
-      const unavailable = Object.values(courseState.quarters)
+      const unavailable = courseState.quarters
         .filter((quarter) => {
-          const quarterName = getQuarterFromId(quarter.id);
-          return !courseBeingDragged?.quartersOffered.includes(quarterName);
+          return !courseBeingDragged?.quartersOffered.includes(
+            getQuarterFromId(quarter.id),
+          );
         })
         .map((quarter) => quarter.id);
 

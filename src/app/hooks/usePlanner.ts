@@ -97,6 +97,11 @@ export function usePlanner(userId: string | undefined) {
       });
     }
     handlePlannerUpdate(newPlanners);
+
+    const newActive =
+      Object.keys(newPlanners)[Object.keys(newPlanners).length - 1];
+    const title = newPlanners[newActive][0];
+    handleSwitchPlanners(newActive, title);
   };
 
   return {
