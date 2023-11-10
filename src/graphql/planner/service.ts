@@ -62,8 +62,6 @@ export class PlannerService {
         },
       };
     });
-    console.log(`${JSON.stringify(newQuarters.length)}`);
-
     // Perform upsert
     operations.push(
       prisma.planner.create({

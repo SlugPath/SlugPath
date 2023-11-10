@@ -30,6 +30,7 @@ const customJestConfig = {
     "<rootDir>/src/app/components/",
     "<rootDir>/src/config.ts",
     "<rootDir>/src/app/types",
+    "schema\\.ts",
     "\\.tsx",
   ],
 
