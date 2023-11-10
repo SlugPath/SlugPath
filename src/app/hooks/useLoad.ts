@@ -1,9 +1,9 @@
 import { ApolloError, gql, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { MultiPlanner } from "../ts-types/MultiPlanner";
+import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerTitle } from "@/graphql/planner/schema";
 import { initialPlanner } from "@/lib/initialPlanner";
-import { PlannerData } from "../ts-types/PlannerData";
+import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
 

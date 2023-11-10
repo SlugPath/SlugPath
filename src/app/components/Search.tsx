@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
-import { StoredCourse } from "../ts-types/Course";
+import { StoredCourse } from "../types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";

@@ -1,5 +1,5 @@
-import { Quarter } from "../app/ts-types/Quarter";
-import { PlannerData } from "../app/ts-types/PlannerData";
+import { Quarter } from "../app/types/Quarter";
+import { PlannerData } from "../app/types/PlannerData";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 const years = 4;

@@ -1,5 +1,5 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { PlannerData } from "../ts-types/PlannerData";
+import { PlannerData } from "../types/PlannerData";
 import {
   Page,
   Text,
@@ -8,8 +8,8 @@ import {
   StyleSheet,
   PDFViewer,
 } from "@react-pdf/renderer";
-import { StoredCourse } from "../ts-types/Course";
-import { Quarter, findQuarter } from "../ts-types/Quarter";
+import { StoredCourse } from "../types/Course";
+import { Quarter, findQuarter } from "../types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
 

@@ -1,7 +1,7 @@
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import { createCourseFromId } from "../../lib/courseUtils";
-import { PlannerData } from "../ts-types/PlannerData";
-import { Quarter, findQuarter } from "../ts-types/Quarter";
+import { PlannerData } from "../types/PlannerData";
+import { Quarter, findQuarter } from "../types/Quarter";
 
 const REMOVE_COURSE_AREA1 = "remove-course-area1";
 const REMOVE_COURSE_AREA2 = "remove-course-area2";

@@ -1,6 +1,6 @@
 import { Card } from "@mui/joy";
 import CourseCard from "./CourseCard";
-import { StoredCourse } from "../ts-types/Course";
+import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 

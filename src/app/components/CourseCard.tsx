@@ -1,6 +1,6 @@
 import { Card, Typography } from "@mui/joy";
 import { Draggable } from "@hello-pangea/dnd";
-import { StoredCourse } from "../ts-types/Course";
+import { StoredCourse } from "../types/Course";
 import { getTitle } from "../../lib/courseUtils";
 
 export default function CourseCard({

@@ -1,5 +1,5 @@
 import { PlannerService } from "@/graphql/planner/service";
-import { createQuarters } from "@/lib/initialPlanner";
+import { initialPlanner } from "@/lib/initialPlanner";
 import prisma from "@/lib/prisma";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
@@ -78,15 +78,75 @@ it("should create 1 empty planner for 1 user", async () => {
     plannerId: plannerId,
     title: "Planner 1",
     order: 0,
-    plannerData: {
-      quarters: createQuarters(),
-      years: 4,
-    },
+    plannerData: initialPlanner,
   });
   expect(res.plannerId).toBe(plannerId);
 
   const check = await service.getPlanner({ userId: user.id, plannerId });
   expect(check).not.toBeNull();
+
+  // Cleanup
+  const deleted = await service.deletePlanner({ userId: user.id, plannerId });
+  expect(deleted).toBeTruthy();
+  const deleteCheck = await service.getPlanner({ userId: user.id, plannerId });
+  expect(deleteCheck).toBeNull();
+});
+
+it("should create 1 partially filled planner for 1 user", async () => {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: "Sammy Slug",
+    },
+  });
+  expect(user).not.toBeNull();
+
+  if (user === null) fail("User was null (this should not happen)");
+
+  const service = new PlannerService();
+  const planners = await service.allPlanners(user.id);
+  expect(planners).toHaveLength(0);
+
+  // Planner with some courses
+  const plannerId = uuidv4();
+  const plannerData = initialPlanner;
+  initialPlanner.quarters[0].courses = [
+    {
+      department: "CSE",
+      number: "13S",
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    },
+    {
+      department: "CSE",
+      number: "16",
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    },
+    {
+      department: "CSE",
+      number: "30",
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    },
+  ];
+
+  const res = await service.upsertPlanner({
+    userId: user.id,
+    plannerId: plannerId,
+    title: "Planner 1",
+    order: 0,
+    plannerData,
+  });
+  expect(res.plannerId).toBe(plannerId);
+
+  const check = await service.getPlanner({ userId: user.id, plannerId });
+  expect(check).not.toBeNull();
+  const courses = check?.quarters[0].courses;
+  expect(courses).toBeDefined();
+  expect(courses).toHaveLength(3);
+  expect(courses?.at(0)).toEqual({
+    department: "CSE",
+    number: "13S",
+    quartersOffered: ["Fall", "Winter", "Spring"],
+  });
+  console.log(`${JSON.stringify(check?.quarters[0].courses)}`);
 
   // Cleanup
   const deleted = await service.deletePlanner({ userId: user.id, plannerId });

@@ -6,7 +6,7 @@ import {
   PlannerTitle,
 } from "./schema";
 import prisma from "@/lib/prisma";
-import { StoredCourse } from "@/app/ts-types/Course";
+import { StoredCourse } from "@/app/types/Course";
 import { emptyPlanner } from "@/lib/initialPlanner";
 import { Course, Prisma, Term } from "@prisma/client";
 

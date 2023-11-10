@@ -26,7 +26,12 @@ const customJestConfig = {
   collectCoverage: true,
 
   // Include any files to ignore during coverage collection
-  coveragePathIgnorePatterns: [],
+  coveragePathIgnorePatterns: [
+    "<rootDir>/src/app/components/",
+    "<rootDir>/src/config.ts",
+    "<rootDir>/src/app/types",
+    "\\.tsx",
+  ],
 
   // Searches for matching test files
   testMatch: ["**/?(*.)+(test).[jt]s?(x)"],

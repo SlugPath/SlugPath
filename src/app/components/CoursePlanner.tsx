@@ -1,6 +1,6 @@
 import QuarterCard from "./QuarterCard";
 import { quartersPerYear } from "../../lib/initialPlanner";
-import { PlannerData } from "../ts-types/PlannerData";
+import { PlannerData } from "../types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";

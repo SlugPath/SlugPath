@@ -1,12 +1,12 @@
 import { createCourseFromId, createIdFromCourse } from "../../lib/courseUtils";
-import { StoredCourse } from "../ts-types/Course";
+import { StoredCourse } from "../types/Course";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
-import { PlannerData } from "../ts-types/PlannerData";
+import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
-import { findQuarter } from "../ts-types/Quarter";
+import { findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
 
 const SAVE_PLANNER = gql`

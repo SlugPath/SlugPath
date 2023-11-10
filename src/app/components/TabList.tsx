@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemButton, IconButton, Input } from "@mui/joy";
 import { Add, DeleteForever } from "@mui/icons-material";
-import { MultiPlanner } from "../ts-types/MultiPlanner";
+import { MultiPlanner } from "../types/MultiPlanner";
 import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
