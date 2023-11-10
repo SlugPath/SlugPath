@@ -4,9 +4,10 @@ import { PlannerData } from "../ts-types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import SaveSnackbars from "./SaveSnackbars";
+import { CircularProgress } from "@mui/joy";
 
 export default function CoursePlanner({
   id,
@@ -21,7 +22,7 @@ export default function CoursePlanner({
   title: string;
   onCourseStateChanged: any;
 }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const {
     courseState,
     handleDragEnd,
@@ -34,6 +35,18 @@ export default function CoursePlanner({
     title,
     order,
   });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setLoading(status === "loading");
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [status]);
 
   useEffect(() => {
     onCourseStateChanged(courseState);
@@ -52,9 +65,13 @@ export default function CoursePlanner({
             <div className="flex-1 px-4 py-6">
               <Search coursesAlreadyAdded={coursesAlreadyAdded()} />
             </div>
-            <div className="flex-2 py-6">
-              <Quarters courseState={courseState} />
-            </div>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <div className="flex-2 py-6">
+                <Quarters courseState={courseState} />
+              </div>
+            )}
             <div className="flex-1 py-6" />
           </div>
         </DragDropContext>

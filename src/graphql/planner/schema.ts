@@ -15,20 +15,6 @@ export class StoredCourseInput {
   number!: string;
 }
 
-@InputType()
-export class RenamePlannerInput {
-  @Field()
-  @IsUUID("4")
-  plannerId!: string;
-
-  @Field()
-  userId!: string;
-
-  @Field()
-  @Length(1, 20)
-  title!: string;
-}
-
 /**
  * An input type that stores data within a quarter
  */

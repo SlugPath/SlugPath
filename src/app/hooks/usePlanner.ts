@@ -24,10 +24,6 @@ export function usePlanner(userId: string | undefined) {
    */
   const handlePlannerUpdate = (plannerState: MultiPlanner) => {
     setPlanners(plannerState);
-    if (userId === undefined) {
-      console.log("SAVING ALL PLANNERS");
-      localStorage.setItem(`planners`, JSON.stringify(plannerState));
-    }
   };
 
   /**
@@ -100,7 +96,6 @@ export function usePlanner(userId: string | undefined) {
         },
       });
     }
-    localStorage.removeItem(`planner${id}`);
     handlePlannerUpdate(newPlanners);
   };
 

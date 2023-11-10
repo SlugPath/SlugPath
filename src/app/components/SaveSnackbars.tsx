@@ -12,6 +12,7 @@ export default function SaveSnackbars({
 }) {
   const [saveOpen, setSaveOpen] = useState(false);
   const [errOpen, setErrOpen] = useState(false);
+  const snackTime = 3000;
 
   useEffect(() => {
     if (saving) setSaveOpen(true);
@@ -31,7 +32,7 @@ export default function SaveSnackbars({
         variant="soft"
         color="primary"
         open={saveOpen}
-        autoHideDuration={3000}
+        autoHideDuration={snackTime}
         onClose={() => setSaveOpen(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         startDecorator={<PlaylistAddCheckCircleRounded />}
