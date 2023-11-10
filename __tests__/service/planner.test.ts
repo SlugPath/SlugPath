@@ -79,13 +79,11 @@ it("should create 1 empty planner for 1 user", async () => {
     title: "Planner 1",
     order: 0,
     plannerData: {
-      quartersOrder: createQuarters().quarterOrder,
-      quartersPerYear: 4,
-      quarters: createQuarters().quarters,
+      quarters: createQuarters(),
       years: 4,
     },
   });
-  expect(res).toBe(plannerId);
+  expect(res.plannerId).toBe(plannerId);
 
   const check = await service.getPlanner({ userId: user.id, plannerId });
   expect(check).not.toBeNull();

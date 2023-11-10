@@ -18,7 +18,6 @@ query {
     department
     name
     number
-    id
   }
 }`;
 
@@ -48,7 +47,6 @@ describe("test coursesBy", () => {
     const course = data?.coursesBy[0];
 
     expect(course).toBeDefined();
-    expect(course.id).toBeDefined();
     expect(course.name).toBeDefined();
     expect(course.name).toEqual(
       "Personal Computer Concepts: Software and Hardware",
