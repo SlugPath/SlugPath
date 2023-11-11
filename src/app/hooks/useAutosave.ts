@@ -1,3 +1,4 @@
+import { debounce } from "@/lib/utils";
 import {
   MutationHookOptions,
   useMutation,
@@ -6,12 +7,10 @@ import {
   DefaultContext,
   MutationTuple,
 } from "@apollo/client";
-import { debounce } from "@/lib/utils";
 import { DocumentNode } from "graphql";
 
 const debounceMutation = debounce((mutation, options) => {
   const controller = new AbortController();
-
   return mutation({
     ...options,
     options: {
@@ -24,17 +23,15 @@ const debounceMutation = debounce((mutation, options) => {
   });
 }, 3000);
 
-const useAutosave = <
+export default function useAutosave<
   TData,
   TVariables,
   TCache extends ApolloCache<any> = ApolloCache<any>,
 >(
   GQL: DocumentNode | TypedDocumentNode<TData, TVariables>,
   options: MutationHookOptions<TData, TVariables, DefaultContext>,
-): MutationTuple<TData, TVariables, DefaultContext, TCache> => {
+): MutationTuple<TData, TVariables, DefaultContext, TCache> {
   const [mutation, rest] = useMutation<TData, TVariables>(GQL, options);
 
   return [(options: any) => debounceMutation(mutation, options), rest];
-};
-
-export default useAutosave;
+}
