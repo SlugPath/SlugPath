@@ -1,5 +1,5 @@
-import { Modal, Sheet, Typography } from "@mui/joy";
-import { DummyData } from "../ts-types/DummyData";
+import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { PlannerData } from "../types/PlannerData";
 import {
   Page,
   Text,
@@ -8,9 +8,10 @@ import {
   StyleSheet,
   PDFViewer,
 } from "@react-pdf/renderer";
-import { DummyCourse } from "../ts-types/Course";
-import { Quarter } from "../ts-types/Quarter";
-import { getTitle } from "../logic/Courses";
+import { StoredCourse } from "../types/Course";
+import { Quarter, findQuarter } from "../types/Quarter";
+import { getTitle } from "../../lib/courseUtils";
+import { quartersPerYear } from "@/lib/initialPlanner";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -50,7 +51,7 @@ export default function CourseSelectionModal({
   setShowModal,
   showModal,
 }: {
-  courseState: DummyData;
+  courseState: PlannerData;
   setShowModal: any;
   showModal: boolean;
 }) {
@@ -90,23 +91,20 @@ export default function CourseSelectionModal({
             </Page>
           </Document>
         </PDFViewer>
+        <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
   );
 }
 
-function Years({ courseState }: { courseState: DummyData }) {
+function Years({ courseState }: { courseState: PlannerData }) {
   return (
     <View>
-      {Array.from(
-        { length: courseState.quartersPerYear },
-        (_, index) => index,
-      ).map((i) => {
-        const slice_val = courseState.quartersPerYear * i;
-        const quarters = courseState.quarterOrder.slice(
-          slice_val,
-          slice_val + courseState.quartersPerYear,
-        );
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
+        const quarters = courseState.quarters
+          .slice(slice_val, slice_val + quartersPerYear)
+          .map((q) => q.id);
 
         return (
           <Quarters key={i} quarters={quarters} courseState={courseState} />
@@ -122,18 +120,15 @@ function Quarters({
   key,
 }: {
   quarters: string[];
-  courseState: DummyData;
+  courseState: PlannerData;
   key: number;
 }) {
   return (
     <View key={key} style={styles.yearView}>
-      {quarters.map((quarterId) => {
-        const quarter = courseState.quarters[quarterId];
-        const courses = quarter.courses.map(
-          (course) => courseState.courses[course.id],
-        );
-
-        return <Quarter key={quarter.id} quarter={quarter} courses={courses} />;
+      {quarters.map((q) => {
+        const { quarter } = findQuarter(courseState.quarters, q);
+        const courses = quarter.courses;
+        return <Quarter key={q} quarter={quarter} courses={courses} />;
       })}
     </View>
   );
@@ -144,15 +139,15 @@ function Quarter({
   courses,
 }: {
   quarter: Quarter;
-  courses: DummyCourse[];
+  courses: StoredCourse[];
 }) {
   return (
-    <View key={quarter.id} style={styles.quarterCard}>
+    <View style={styles.quarterCard}>
       <Text style={styles.quarterTitle}>{quarter.title}</Text>
       <View>
-        {courses.map((course) => {
+        {courses.map((course, idx) => {
           return (
-            <View key={course.id} style={styles.course}>
+            <View key={idx} style={styles.course}>
               <Text>{getTitle(course.department, course.number)}</Text>
             </View>
           );

@@ -1,12 +1,12 @@
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { Binder, Requirements } from "../ts-types/Requirements";
+import { Binder, Requirements } from "../types/Requirements";
 import {
   getCoursesFromRequirements,
   getBinderFromRequirements,
   getRequirementsLength,
   removeCoursesWhoseSiblingsHaveItAsRequirement,
   createOrRequirementsString,
-} from "../logic/CourseRequirements";
+} from "../../lib/courseRequirements";
 import dynamic from "next/dynamic";
 
 const Tree = dynamic(

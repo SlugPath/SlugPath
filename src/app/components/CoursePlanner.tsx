@@ -1,300 +1,125 @@
-import { useState, useEffect, SetStateAction } from "react";
-import { getCookie, setCookie } from "cookies-next";
 import QuarterCard from "./QuarterCard";
-import MajorCompletionModal from "./MajorCompletionModal";
-import ExportModal from "./ExportModal";
-import { dummyData } from "../dummy-course-data";
-import { DummyData } from "../ts-types/DummyData";
-import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { gql, useQuery } from "@apollo/client";
-import { DummyCourse } from "../ts-types/Course";
-import { isMobile, MobileWarningModal } from "./isMobile";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import { quartersPerYear } from "../../lib/initialPlanner";
+import { PlannerData } from "../types/PlannerData";
+import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
-import { createStoredCourse } from "../logic/Courses";
-import { Dispatch } from "react";
+import { DragDropContext } from "@hello-pangea/dnd";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import SaveSnackbars from "./SaveSnackbars";
+import { CircularProgress } from "@mui/joy";
 
-const query = gql`
-  query {
-    courses {
-      id
-      credits
-      department
-      name
-      number
-    }
-  }
-`;
+export default function CoursePlanner({
+  id,
+  isActive,
+  onCourseStateChanged,
+  title,
+  order,
+}: {
+  id: string;
+  order: number;
+  isActive: boolean;
+  title: string;
+  onCourseStateChanged: any;
+}) {
+  const { data: session, status } = useSession();
+  const {
+    handleOnDragStart,
+    deleteCourseInQuarter,
+    unavailableQuarters,
+    courseState,
+    handleDragEnd,
+    coursesAlreadyAdded,
+    saveStatus,
+    saveError,
+  } = useCoursePlanner({
+    userId: session?.user.id,
+    plannerId: id,
+    title,
+    order,
+  });
 
-export default function CoursePlanner() {
-  const { data, loading, error } = useQuery(query);
-  const [courseState, setCourseState] = useState(dummyData);
-  const [showMajorCompletionModal, setShowMajorCompletionModal] =
-    useState(false);
-  const [showExportModal, setShowExportModal] = useState(false);
-  const [showMobileWarning, setShowMobileWarning] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Runs upon initial render
   useEffect(() => {
-    const cookieCourseState = getCookie("courseState");
-    if (cookieCourseState) {
-      setCourseState(JSON.parse(cookieCourseState) as DummyData);
-    }
-  }, []);
+    const handler = setTimeout(() => {
+      setLoading(status === "loading");
+    }, 1000);
 
-  // Runs upon inital render: checks if user is on mobile device
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [status]);
+
   useEffect(() => {
-    if (isMobile()) {
-      setShowMobileWarning(true);
-    }
-  }, []);
+    onCourseStateChanged(courseState);
+  }, [courseState, onCourseStateChanged]);
 
-  const handleCourseUpdate = (courseState: DummyData) => {
-    setCourseState(courseState);
-
-    const json = JSON.stringify({
-      ...courseState,
-      courses: {},
-    });
-
-    setCookie("courseState", json);
-  };
-
-  const handleOnDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
-
-    if (!destination) return;
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return;
-
-    // add course dragged from 'search-droppable' to quarter
-    if (source.droppableId === "search-droppable") {
-      const quarter = courseState.quarters[destination.droppableId];
-      const newStoredCourses = Array.from(quarter.courses);
-      newStoredCourses.splice(
-        destination.index,
-        0,
-        createStoredCourse(courseState.courses[draggableId]),
-      );
-      const newQuarter = {
-        ...quarter,
-        courses: newStoredCourses,
-      };
-
-      const newState = {
-        ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newQuarter.id]: newQuarter,
-        },
-      };
-
-      handleCourseUpdate(newState);
-      return;
-    }
-
-    // delete course dragged into delete area or search-droppable
-    if (
-      destination.droppableId == "remove-course-area1" ||
-      destination.droppableId == "remove-course-area2" ||
-      destination.droppableId == "search-droppable"
-    ) {
-      const startQuarter = courseState.quarters[result.source.droppableId];
-      const newStoredCourses = Array.from(startQuarter.courses);
-      newStoredCourses.splice(result.source.index, 1);
-
-      const newQuarter = {
-        ...startQuarter,
-        courses: newStoredCourses,
-      };
-
-      const newState = {
-        ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newQuarter.id]: newQuarter,
-        },
-      };
-
-      handleCourseUpdate(newState);
-      return;
-    }
-
-    const startQuarter = courseState.quarters[source.droppableId];
-    const finishQuarter = courseState.quarters[destination.droppableId];
-    if (startQuarter === finishQuarter) {
-      // moving course within startQuarter
-      const newStoredCourses = Array.from(startQuarter.courses);
-      newStoredCourses.splice(source.index, 1);
-      newStoredCourses.splice(
-        destination.index,
-        0,
-        startQuarter.courses[source.index],
-      );
-
-      const newQuarter = {
-        ...startQuarter,
-        courses: newStoredCourses,
-      };
-
-      const newState = {
-        ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newQuarter.id]: newQuarter,
-        },
-      };
-
-      handleCourseUpdate(newState);
-    } else {
-      // moving course from startQuarter to finishQuarter
-      const movedStoredCourse = startQuarter.courses[source.index];
-      const startStoredCourses = Array.from(startQuarter.courses);
-      startStoredCourses.splice(source.index, 1);
-      const newStart = {
-        ...startQuarter,
-        courses: startStoredCourses,
-      };
-
-      const finishStoredCourses = Array.from(finishQuarter.courses);
-      finishStoredCourses.splice(destination.index, 0, movedStoredCourse);
-      const newFinish = {
-        ...finishQuarter,
-        courses: finishStoredCourses,
-      };
-
-      const newState = {
-        ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newStart.id]: newStart,
-          [newFinish.id]: newFinish,
-        },
-      };
-
-      handleCourseUpdate(newState);
-    }
-  };
-
-  function loadCoursesNotPresentFromData() {
-    data.courses.forEach((course: DummyCourse) => {
-      if (!courseState.courses[course.id]) {
-        courseState.courses[course.id] = course;
-      }
-    });
+  if (!isActive) {
+    return <></>;
   }
-
-  if (error) {
-    console.error(error);
-    return <p>Oh no...{error.message}</p>;
-  }
-  if (loading) {
-    return <p>Loading....</p>;
-  }
-
-  loadCoursesNotPresentFromData();
 
   return (
-    <div className="bg-gray-100 mt-16">
-      <Navbar
-        setShowExportModal={setShowExportModal}
-        setShowMajorCompletionModal={setShowMajorCompletionModal}
-      />
-      <ExportModal
-        courseState={courseState}
-        setShowModal={setShowExportModal}
-        showModal={showExportModal}
-      />
-      <MajorCompletionModal
-        setShowModal={setShowMajorCompletionModal}
-        showModal={showMajorCompletionModal}
-      />
-      <MobileWarningModal show={showMobileWarning} />
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="flex">
-          <div className="flex-1 px-4 py-6">
-            <Search />
+    <>
+      <SaveSnackbars saving={saveStatus} saveError={saveError} />
+      <div>
+        <DragDropContext
+          onDragEnd={handleDragEnd}
+          onDragStart={handleOnDragStart}
+        >
+          <div className="flex">
+            <div className="flex-1 px-4 py-6">
+              <Search coursesInPlanner={coursesAlreadyAdded()} />
+            </div>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <div className="flex-3 py-6">
+                <Quarters
+                  courseState={courseState}
+                  unavailableQuarters={unavailableQuarters}
+                  deleteCourse={deleteCourseInQuarter}
+                />
+              </div>
+            )}
+            <div className="flex-1 py-6" />
           </div>
-          <div className="flex-3 py-6">
-            <Quarters
-              courseState={courseState}
-              setCourseState={setCourseState}
-            />
-          </div>
-        </div>
-      </DragDropContext>
-      <Footer />
-    </div>
+        </DragDropContext>
+      </div>
+    </>
   );
 }
 
 function Quarters({
   courseState,
-  setCourseState,
+  unavailableQuarters,
+  deleteCourse,
 }: {
-  courseState: DummyData;
-  setCourseState: Dispatch<SetStateAction<DummyData>>;
+  courseState: PlannerData;
+  unavailableQuarters: string[];
+  deleteCourse: any;
 }) {
-  // Note: this component uses prop drilling which might be problematic, consider switching to
-  // a context. You have been warned
-  /**
-   * A curried callback function to be invoked upon deleting a course, so
-   * as to appropriately rerender the state of the planner
-   * @param quarterId id of the quarter card
-   * @returns
-   */
-  const deleteCourseInQuarter = (quarterId: string) => {
-    return (deleteIdx: number) => {
-      const quarter = courseState.quarters[quarterId];
-      const quarterCourses = quarter.courses;
-      const newCourses = [
-        ...quarterCourses.slice(0, deleteIdx),
-        ...quarterCourses.slice(deleteIdx + 1),
-      ];
-      setCourseState((prev) => {
-        return {
-          ...prev,
-          quarters: {
-            ...prev.quarters,
-            [quarterId]: {
-              id: quarter.id,
-              title: quarter.title,
-              courses: newCourses,
-            },
-          },
-        };
-      });
-    };
-  };
-
   return (
     <div className="space-y-2">
-      {Array.from(
-        { length: dummyData.quartersPerYear },
-        (_, index) => index,
-      ).map((i) => {
-        const slice_val = dummyData.quartersPerYear * i;
-        const quarters = courseState.quarterOrder.slice(
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
+        const quarters = courseState.quarters.slice(
           slice_val,
-          slice_val + dummyData.quartersPerYear,
+          slice_val + quartersPerYear,
         );
         return (
           <div key={i} className="flex flex-row space-x-2">
-            {quarters.map((quarterId) => {
-              const quarter = courseState.quarters[quarterId];
+            {quarters.map((quarter) => {
               const courses = quarter.courses;
 
               return (
                 <QuarterCard
-                  title={quarter.title}
                   id={quarter.id}
                   key={quarter.id}
+                  title={quarter.title}
                   courses={courses}
-                  deleteCourse={deleteCourseInQuarter(quarter.id)}
+                  deleteCourse={deleteCourse(quarter.id)}
+                  unavailableQuarters={unavailableQuarters}
                 />
               );
             })}
