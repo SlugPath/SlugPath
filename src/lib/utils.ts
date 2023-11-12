@@ -28,3 +28,7 @@ export const removeTypenames = (value: any) => {
     });
   }
 };
+
+export const deepEqual = (val: any, val2: any) => {
+  return JSON.stringify(val) == JSON.stringify(val2);
+};

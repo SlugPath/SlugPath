@@ -31,7 +31,7 @@ const GET_COURSE = gql`
 export default function Search({
   coursesInPlanner,
 }: {
-  coursesInPlanner: StoredCourse[];
+  coursesInPlanner: string[];
 }) {
   const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
   const [number, setNumber] = useState("");
@@ -72,7 +72,8 @@ export default function Search({
   function courseIsAlreadyAdded(course: StoredCourse) {
     let alreadyAdded = false;
     coursesInPlanner.forEach((c) => {
-      if (c.department === course.department && c.number === course.number) {
+      const [department, number] = c.split("-");
+      if (department === course.department && number === course.number) {
         alreadyAdded = true;
       }
     });

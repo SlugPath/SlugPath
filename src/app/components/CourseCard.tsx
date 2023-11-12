@@ -35,11 +35,7 @@ export default function CourseCard({
     >
       {(provided, snapshot) => {
         return (
-          <div
-            onDrag={() => setShowDelete(false)}
-            onMouseOver={() => setShowDelete(true)}
-            onMouseOut={() => setShowDelete(false)}
-          >
+          <div>
             <Card
               ref={provided.innerRef}
               {...provided.draggableProps}
@@ -67,8 +63,10 @@ export default function CourseCard({
                     {onDelete !== undefined && (
                       <IconButton
                         size="sm"
+                        onMouseEnter={() => setShowDelete(true)}
+                        onMouseLeave={() => setShowDelete(false)}
                         onClick={() => onDelete(index)}
-                        style={{ opacity: showDelete ? 1 : 0 }}
+                        style={{ opacity: showDelete ? 1 : 0.2 }}
                       >
                         <Delete />
                       </IconButton>

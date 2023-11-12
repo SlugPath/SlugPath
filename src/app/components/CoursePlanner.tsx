@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
+import useDebounce from "../hooks/useDebounce";
 
 export default function CoursePlanner({
   id,
@@ -25,11 +26,11 @@ export default function CoursePlanner({
   const { data: session, status } = useSession();
   const {
     handleOnDragStart,
-    deleteCourseInQuarter,
+    deleteCourse,
     unavailableQuarters,
     courseState,
     handleDragEnd,
-    coursesAlreadyAdded,
+    memoAlreadyCourses,
     saveStatus,
     saveError,
   } = useCoursePlanner({
@@ -41,15 +42,11 @@ export default function CoursePlanner({
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setLoading(status === "loading");
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [status]);
+  useDebounce({
+    callback: () => setLoading(status === "loading"),
+    delay: 1000,
+    dependencies: [status],
+  });
 
   useEffect(() => {
     onCourseStateChanged(courseState);
@@ -69,7 +66,7 @@ export default function CoursePlanner({
         >
           <div className="flex">
             <div className="flex-1 px-4 py-6">
-              <Search coursesInPlanner={coursesAlreadyAdded()} />
+              <Search coursesInPlanner={memoAlreadyCourses} />
             </div>
             {loading ? (
               <CircularProgress />
@@ -78,7 +75,7 @@ export default function CoursePlanner({
                 <Quarters
                   courseState={courseState}
                   unavailableQuarters={unavailableQuarters}
-                  deleteCourse={deleteCourseInQuarter}
+                  deleteCourse={deleteCourse}
                 />
               </div>
             )}

@@ -1,13 +1,13 @@
-import { createCourseFromId, createIdFromCourse } from "../../lib/courseUtils";
-import { StoredCourse } from "../types/Course";
+import { createCourseFromId } from "../../lib/courseUtils";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
 import { findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
+import useDeepMemo from "./useDeepMemo";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -32,6 +32,10 @@ export default function useCoursePlanner(input: {
     SAVE_PLANNER,
     {},
   );
+  const memoAlreadyCourses = useDeepMemo(
+    () => coursesAlreadyAdded(),
+    [courseState],
+  );
 
   // Auto-saving
   useEffect(() => {
@@ -40,7 +44,6 @@ export default function useCoursePlanner(input: {
       input.title.length > 1 &&
       input.title.length < 20
     ) {
-      console.log(`SAVING: ${courseState.quarters.length}`);
       const variables = {
         input: {
           ...input,
@@ -59,12 +62,12 @@ export default function useCoursePlanner(input: {
   };
 
   /**
-   * A curried function to be invoked upon deleting a course, so
+   * A curried callback to be invoked upon deleting a course, so
    * as to appropriately rerender the state of the planner
    * @param quarterId id of the quarter card
    * @returns
    */
-  const deleteCourseInQuarter = (quarterId: string) => {
+  const deleteCourse = useCallback((quarterId: string) => {
     return (deleteIdx: number) => {
       const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
       const quarterCourses = quarter.courses;
@@ -87,27 +90,17 @@ export default function useCoursePlanner(input: {
         };
       });
     };
-  };
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
     return droppableId.split("-")[2];
   };
 
-  const getCourseFromQuarters = (cid: string): StoredCourse | undefined => {
-    let allCourses: StoredCourse[] = [];
-    courseState.quarters.forEach((quarter) => {
-      allCourses = allCourses.concat(quarter.courses);
-    });
-    return allCourses.find((c) => {
-      return createIdFromCourse(c) === cid;
-    });
-  };
-
   // Handle the drag start event for course items.
   // result Contains information about the current drag event of the array of unavailable quarters.
   const handleOnDragStart = (start: DragStart) => {
-    const courseBeingDragged = getCourseFromQuarters(start.draggableId);
+    const courseBeingDragged = createCourseFromId(start.draggableId);
 
     if (courseBeingDragged) {
       const unavailable = courseState.quarters
@@ -117,7 +110,6 @@ export default function useCoursePlanner(input: {
           );
         })
         .map((quarter) => quarter.id);
-
       setUnavailableQuarters(unavailable);
     }
   };
@@ -127,15 +119,6 @@ export default function useCoursePlanner(input: {
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
-
-    /*
-    const draggedCourse = getCourseFromQuarters(draggableId);
-    const quarterName = getQuarterFromId(destination.droppableId);
-    const isAvailable = draggedCourse?.quartersOffered.includes(quarterName);
-
-    // FIXME: add additional logic to add a warning to the course if it is not offered then
-    if (!isAvailable) return
-    */
 
     if (
       destination.droppableId === source.droppableId &&
@@ -276,11 +259,11 @@ export default function useCoursePlanner(input: {
     }
   };
 
-  function coursesAlreadyAdded() {
-    const coursesAlreadyAdded: StoredCourse[] = [];
+  function coursesAlreadyAdded(): string[] {
+    const coursesAlreadyAdded: string[] = [];
     Object.values(courseState.quarters).forEach((quarter) => {
       quarter.courses.forEach((course) => {
-        coursesAlreadyAdded.push(course);
+        coursesAlreadyAdded.push(course.department + "-" + course.number);
       });
     });
     return coursesAlreadyAdded;
@@ -289,11 +272,11 @@ export default function useCoursePlanner(input: {
   return {
     courseState,
     handleDragEnd,
-    coursesAlreadyAdded,
+    memoAlreadyCourses,
     handleOnDragStart,
     unavailableQuarters,
     saveStatus,
     saveError,
-    deleteCourseInQuarter,
+    deleteCourse,
   };
 }
