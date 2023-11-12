@@ -22,8 +22,8 @@ export default function CourseCard({
       {(provided) => {
         return (
           <div
-            onMouseEnter={() => onDelete !== undefined && setShowDelete(true)}
-            onMouseLeave={() => onDelete !== undefined && setShowDelete(false)}
+            onMouseOver={() => onDelete !== undefined && setShowDelete(true)}
+            onMouseOut={() => onDelete !== undefined && setShowDelete(false)}
           >
             <Card
               ref={provided.innerRef}
@@ -32,7 +32,12 @@ export default function CourseCard({
               size="sm"
             >
               <CardContent>
-                <Grid container justifyContent="space-between">
+                <Grid
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  spacing={1}
+                >
                   <Grid xs={10}>
                     <Typography level="body-md">
                       {course
@@ -41,8 +46,12 @@ export default function CourseCard({
                     </Typography>
                   </Grid>
                   <Grid xs={2}>
-                    {showDelete && onDelete !== undefined && (
-                      <IconButton onClick={() => onDelete(index)}>
+                    {onDelete !== undefined && (
+                      <IconButton
+                        size="sm"
+                        onClick={() => onDelete(index)}
+                        style={{ opacity: showDelete ? 1 : 0 }}
+                      >
                         <Delete />
                       </IconButton>
                     )}
