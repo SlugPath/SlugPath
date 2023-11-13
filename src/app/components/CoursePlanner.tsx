@@ -36,16 +36,16 @@ export default function CoursePlanner({
         onDragStart={handleOnDragStart}
       >
         <div className="flex">
-          <div className="flex-1 px-4 py-6">
+          <div className="flex-1">
             <Search coursesInPlanner={coursesAlreadyAdded()} />
           </div>
-          <div className="flex-3 py-6">
+          <div className="flex-3">
             <Quarters
               courseState={courseState}
               unavailableQuarters={unavailableQuarters}
             />
           </div>
-          <div className="flex-1 py-6" />
+          <div className="flex-1" />
         </div>
       </DragDropContext>
     </div>

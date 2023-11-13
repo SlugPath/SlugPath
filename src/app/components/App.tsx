@@ -47,32 +47,46 @@ export default function App() {
   );
 
   return (
-    <div className="bg-gray-100 mt-16">
-      <Navbar
-        setShowExportModal={setShowExportModal}
-        setShowMajorCompletionModal={setShowMajorCompletionModal}
-      />
-      <div className="flex justify-left px-6">
-        <TabList
-          planners={planners}
-          onRemovePlanner={handleRemovePlanner}
-          onAddPlanner={handleAddPlanner}
-          onSwitchPlanners={handleSwitchPlanners}
-          onChangePlannerName={handleChangePlannerName}
+    <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
+      {/* Header Start */}
+      <div className="">
+        <Navbar
+          setShowExportModal={setShowExportModal}
+          setShowMajorCompletionModal={setShowMajorCompletionModal}
         />
       </div>
-      <List>
-        {Object.entries(planners).map(([id, [, isActive]]) => (
-          <ListItem sx={{ display: isActive ? "block" : "none" }} key={id}>
-            <CoursePlanner
-              isActive={isActive}
-              onCourseStateChanged={setCurrentCourseState}
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Modals />
+      {/* Header End */}
+
+      {/* Planner Start */}
+      <div className="pt-4 mb-auto">
+        <div className="flex justify-left px-6">
+          <TabList
+            planners={planners}
+            onRemovePlanner={handleRemovePlanner}
+            onAddPlanner={handleAddPlanner}
+            onSwitchPlanners={handleSwitchPlanners}
+            onChangePlannerName={handleChangePlannerName}
+          />
+        </div>
+        <div className="px-5">
+          <List>
+            {Object.entries(planners).map(([id, [, isActive]]) => (
+              <ListItem sx={{ display: isActive ? "block" : "none" }} key={id}>
+                <CoursePlanner
+                  isActive={isActive}
+                  onCourseStateChanged={setCurrentCourseState}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
+        <Modals />
+      </div>
+      {/* Planner End */}
+
+      {/* Footer Start */}
       <Footer />
+      {/* Footer End */}
     </div>
   );
 }

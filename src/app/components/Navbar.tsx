@@ -1,6 +1,7 @@
 import { Button, Dropdown, MenuButton, Menu, MenuItem } from "@mui/joy";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import UserAvatar from "./UserAvatar";
 
 export default function Navbar({
@@ -13,13 +14,25 @@ export default function Navbar({
   const { data: session, status } = useSession();
 
   return (
-    <header className="bg-white fixed top-0 w-full shadow-md z-50">
-      <nav className="container mx-auto py-3">
-        <div className="flex justify-between items-center">
-          <a href="#" className="text-2xl font-bold text-gray-800">
-            UCSC Course Planner
-          </a>
-          <div className="flex space-x-4">
+    <header className="bg-white w-full shadow-md">
+      <nav className="py-3 px-5">
+        <div className="flex flex-row">
+          {/* Logo and title start */}
+          <div className="flex flex-row gap-4 place-items-center pr-2">
+            <Image
+              src="/images/slug-icon.png"
+              width={40}
+              height={40}
+              alt="Slug Icon"
+            />
+            <a href="#" className="text-2xl font-bold text-gray-800">
+              UCSC Course Planner
+            </a>
+          </div>
+          {/* Logo and title end */}
+
+          {/* Buttons start */}
+          <div className="flex flex-1 justify-end">
             <Button onClick={setShowExportModal} variant="plain">
               Export Planner
             </Button>
@@ -47,6 +60,7 @@ export default function Navbar({
               </Dropdown>
             )}
           </div>
+          {/* Buttons end */}
         </div>
       </nav>
     </header>
