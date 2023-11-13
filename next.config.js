@@ -6,6 +6,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 module.exports = withBundleAnalyzer({
   output: "standalone",
+  experimental: {
+    serverMinification: false,
+  },
   async headers() {
     return [
       {
