@@ -15,10 +15,10 @@ export default function useCoursePlanner() {
   };
 
   const quarters = {
-    "0": "Fall",
-    "1": "Winter",
-    "2": "Spring",
-    "3": "Summer",
+    "0": "Summer",
+    "1": "Fall",
+    "2": "Winter",
+    "3": "Spring",
   };
 
   // Check if the dragged course is available in the destination quarter

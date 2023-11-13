@@ -14,7 +14,7 @@ export default function CourseCard({
   draggableId: string;
   alreadyAdded?: boolean;
 }) {
-  const margin = 4;
+  const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
     userSelect: "none",
     margin: `0 0 ${margin}px 0`,
@@ -37,9 +37,12 @@ export default function CourseCard({
             size="sm"
             variant={alreadyAdded ? "soft" : "outlined"}
             className={snapshot.isDragging ? "bg-gray-200" : ""}
-            style={getItemStyle(provided.draggableProps.style)}
+            style={{
+              ...getItemStyle(provided.draggableProps.style),
+              height: "35px",
+            }}
           >
-            <Typography level="body-md">
+            <Typography level="body-sm">
               {course
                 ? getTitle(course.department, course.number)
                 : "No course"}

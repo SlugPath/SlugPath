@@ -36,7 +36,7 @@ export default function CoursePlanner({
         onDragStart={handleOnDragStart}
       >
         <div className="flex">
-          <div className="flex-1">
+          <div className="flex-1 pr-2">
             <Search coursesInPlanner={coursesAlreadyAdded()} />
           </div>
           <div className="flex-3">

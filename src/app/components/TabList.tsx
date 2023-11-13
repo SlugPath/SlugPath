@@ -55,7 +55,7 @@ export default function TabList(props: TabListProps) {
   };
 
   return (
-    <List orientation="horizontal" size="lg">
+    <List orientation="horizontal" size="sm">
       {/* Start alerts */}
       <PlannerDeleteAlert
         open={openAlert}

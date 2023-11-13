@@ -112,6 +112,7 @@ export default function Search({
             className="col-span-2"
             onChange={handleChangeDepartment}
             defaultValue={getFirstKey(DEPARTMENTS)}
+            size="sm"
           >
             <Option
               value={getFirstKey(DEPARTMENTS)}
@@ -124,11 +125,11 @@ export default function Search({
             className="col-span-2"
             color="neutral"
             placeholder="Number"
-            size="md"
             variant="outlined"
             name="number"
             aria-label="number"
             onChange={(event) => handleChangeNumber(event.target.value)}
+            size="sm"
           />
         </div>
       </form>

@@ -15,17 +15,17 @@ export default function Navbar({
 
   return (
     <header className="bg-white w-full shadow-md">
-      <nav className="py-3 px-5">
+      <nav className="py-1 px-5">
         <div className="flex flex-row">
           {/* Logo and title start */}
           <div className="flex flex-row gap-4 place-items-center pr-2">
             <Image
               src="/images/slug-icon.png"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
               alt="Slug Icon"
             />
-            <a href="#" className="text-2xl font-bold text-gray-800">
+            <a href="#" className="text-xl font-semibold text-gray-800">
               UCSC Course Planner
             </a>
           </div>

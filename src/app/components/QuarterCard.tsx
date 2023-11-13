@@ -17,6 +17,7 @@ export default function QuarterCard({
 }) {
   return (
     <Card
+      size="sm"
       className="w-64"
       style={{
         backgroundColor: unavailableQuarters.includes(id)
@@ -31,7 +32,7 @@ export default function QuarterCard({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={{ height: "100%", minHeight: "48px" }}
+              style={{ height: "100%", minHeight: "112px" }}
             >
               {courses.map((course, index) => (
                 <CourseCard
