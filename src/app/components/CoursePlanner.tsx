@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
+import { GradProgress } from "./GradProgress";
 
 export default function CoursePlanner({
   id,
@@ -71,13 +72,18 @@ export default function CoursePlanner({
             {loading ? (
               <CircularProgress />
             ) : (
-              <div className="flex-3 py-6">
-                <Quarters
-                  courseState={courseState}
-                  unavailableQuarters={unavailableQuarters}
-                  deleteCourse={deleteCourse}
-                />
-              </div>
+              <>
+                <div className="flex-3 py-6">
+                  <Quarters
+                    courseState={courseState}
+                    unavailableQuarters={unavailableQuarters}
+                    deleteCourse={deleteCourse}
+                  />
+                </div>
+                <div className="flex-1 pl-20">
+                  <GradProgress credits={140} />
+                </div>
+              </>
             )}
             <div className="flex-1 py-6" />
           </div>
