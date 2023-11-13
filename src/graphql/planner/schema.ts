@@ -18,11 +18,11 @@ export class StoredCourseInput {
   @Length(0, 4)
   quartersOffered!: string[];
 
-  @Field({ nullable: true })
+  @Field()
   @IsInt()
   @Max(10)
   @Min(1)
-  credits?: number;
+  credits!: number;
 }
 
 /**

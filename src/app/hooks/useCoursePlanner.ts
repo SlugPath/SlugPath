@@ -218,11 +218,11 @@ export default function useCoursePlanner(input: {
 
       const newState = {
         ...courseState,
-        quarters: {
+        quarters: [
           ...courseState.quarters.slice(0, idx),
           newQuarter,
           ...courseState.quarters.slice(idx + 1),
-        },
+        ],
       };
 
       setCourseState(newState);

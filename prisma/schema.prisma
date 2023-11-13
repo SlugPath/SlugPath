@@ -42,6 +42,7 @@ model EnrolledCourses {
   department      String
   number          String
   quartersOffered String[]
+  credits         Int
 
   quarterId Int
   quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)

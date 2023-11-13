@@ -40,7 +40,6 @@ export function getTotalCredits(planner: PlannerData): number {
   let totalCredits = 0;
   planner.quarters.forEach((q) => {
     totalCredits += q.courses.reduce((acc, c) => {
-      console.log(`In compute: ${JSON.stringify(c)}`);
       return acc + c.credits;
     }, 0);
   }, 0);
