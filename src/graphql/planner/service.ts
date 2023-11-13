@@ -179,6 +179,7 @@ export class PlannerService {
           department: c.department,
           number: c.number,
           quartersOffered: [...c.quartersOffered],
+          credits: c.credits,
         };
       });
       newPlanner.quarters.push({

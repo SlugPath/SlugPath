@@ -1,4 +1,4 @@
-import { createCourseFromId } from "../../lib/courseUtils";
+import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { useCallback, useState } from "react";
 import { PlannerData } from "../types/PlannerData";
@@ -26,6 +26,9 @@ export default function useCoursePlanner(input: {
   const [courseState, setCourseState] = useLoadPlanner(
     input.plannerId,
     input.userId,
+  );
+  const [totalCredits, setTotalCredits] = useState(
+    getTotalCredits(courseState),
   );
   const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
@@ -57,9 +60,10 @@ export default function useCoursePlanner(input: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
-  const handleCourseUpdate = (courseState: PlannerData) => {
-    setCourseState(courseState);
-  };
+  useEffect(() => {
+    setTotalCredits(getTotalCredits(courseState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseState]);
 
   /**
    * A curried callback to be invoked upon deleting a course, so
@@ -89,6 +93,7 @@ export default function useCoursePlanner(input: {
           ],
         };
       });
+      setTotalCredits(getTotalCredits(courseState));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -153,7 +158,7 @@ export default function useCoursePlanner(input: {
         ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
       return;
     }
 
@@ -184,7 +189,7 @@ export default function useCoursePlanner(input: {
         ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
       return;
     }
 
@@ -220,7 +225,7 @@ export default function useCoursePlanner(input: {
         },
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
     } else {
       // moving course from startQuarter to finishQuarter
       const movedStoredCourse = startQuarter.courses[source.index];
@@ -255,7 +260,7 @@ export default function useCoursePlanner(input: {
         ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
     }
   };
 
@@ -271,6 +276,7 @@ export default function useCoursePlanner(input: {
 
   return {
     courseState,
+    totalCredits,
     handleDragEnd,
     memoAlreadyCourses,
     handleOnDragStart,

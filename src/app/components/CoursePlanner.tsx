@@ -28,6 +28,7 @@ export default function CoursePlanner({
   const {
     handleOnDragStart,
     deleteCourse,
+    totalCredits,
     unavailableQuarters,
     courseState,
     handleDragEnd,
@@ -81,7 +82,7 @@ export default function CoursePlanner({
                   />
                 </div>
                 <div className="flex-1 pl-20">
-                  <GradProgress credits={140} />
+                  <GradProgress credits={totalCredits} />
                 </div>
               </>
             )}
@@ -114,7 +115,6 @@ function Quarters({
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarter) => {
               const courses = quarter.courses;
-
               return (
                 <QuarterCard
                   id={quarter.id}

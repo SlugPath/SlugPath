@@ -13,4 +13,5 @@ export interface StoredCourse {
   department: string;
   number: string; // because some course numbers are 12L, 115A etc.
   quartersOffered: string[];
+  credits: number;
 }

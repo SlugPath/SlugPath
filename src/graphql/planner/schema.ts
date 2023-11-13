@@ -17,6 +17,12 @@ export class StoredCourseInput {
   @Field(() => [String])
   @Length(0, 4)
   quartersOffered!: string[];
+
+  @Field({ nullable: true })
+  @IsInt()
+  @Max(10)
+  @Min(1)
+  credits?: number;
 }
 
 /**
@@ -65,6 +71,12 @@ export class StoredCourse {
   @Field(() => [String])
   @Length(0, 4)
   quartersOffered!: string[];
+
+  @Field()
+  @IsInt()
+  @Max(10)
+  @Min(1)
+  credits!: number;
 }
 
 /**
