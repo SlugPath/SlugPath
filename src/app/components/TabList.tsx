@@ -1,11 +1,11 @@
 import { List, ListItem, ListItemButton, IconButton, Input } from "@mui/joy";
 import { Add, DeleteForever } from "@mui/icons-material";
-import { MultiPlanner } from "../ts-types/MultiPlanner";
+import { MultiPlanner } from "../types/MultiPlanner";
 import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
-const MAX_PLANNERS = 10;
+const MAX_PLANNERS = 8;
 
 export interface TabListProps {
   planners: MultiPlanner;

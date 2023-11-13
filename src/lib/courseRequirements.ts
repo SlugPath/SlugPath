@@ -1,4 +1,4 @@
-import { Binder, Requirements } from "../app/ts-types/Requirements";
+import { Binder, Requirements } from "../app/types/Requirements";
 
 export function getRequirementsLength(requirements: Requirements): number {
   if (typeof requirements === "string") {

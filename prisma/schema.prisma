@@ -1,25 +1,75 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model User {
+  id       String    @id
+  email    String?
+  name     String?
+  role     Role      @default(USER)
+  planners Planner[]
+}
+
+model Planner {
+  id        String    @id @default(uuid())
+  title     String
+  updatedAt DateTime  @updatedAt
+  quarters  Quarter[]
+  order     Int
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Quarter {
+  id      Int               @id @default(autoincrement())
+  term    Term
+  year    Int
+  courses EnrolledCourses[]
+
+  plannerId String
+  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+}
+
+model EnrolledCourses {
+  id              Int      @id @default(autoincrement())
+  department      String
+  number          String
+  quartersOffered String[]
+
+  quarterId Int
+  quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {
-  id              String      @id @default(uuid())
   name            String
   department      String
   number          String
-  credits         Int         @default(5)
+  credits         Int      @default(5)
   quartersOffered String[]
   /// @TypeGraphQL.omit(output: true)
-  createdAt       DateTime    @default(now())
+  createdAt       DateTime @default(now())
   /// @TypeGraphQL.omit(output: true)
-  updatedAt       DateTime    @updatedAt
+  updatedAt       DateTime @updatedAt
 
   // No two courses can have the same department and course number
-  @@unique([department, number])
+  @@id([department, number])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Term {
+  Fall
+  Winter
+  Spring
+  Summer
 }

@@ -1,4 +1,4 @@
-import { StoredCourse } from "../app/ts-types/Course";
+import { StoredCourse } from "../app/types/Course";
 
 export function getTitle(department: string, number: string) {
   return `${department} ${number}`;

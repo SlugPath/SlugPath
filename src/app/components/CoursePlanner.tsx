@@ -1,25 +1,52 @@
-import { useEffect } from "react";
 import QuarterCard from "./QuarterCard";
-import { initialPlanner } from "../../lib/initialPlanner";
-import { PlannerData } from "../ts-types/PlannerData";
+import { quartersPerYear } from "../../lib/initialPlanner";
+import { PlannerData } from "../types/PlannerData";
 import useCoursePlanner from "../hooks/useCoursePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import SaveSnackbars from "./SaveSnackbars";
+import { CircularProgress } from "@mui/joy";
+import useDebounce from "../hooks/useDebounce";
 
 export default function CoursePlanner({
+  id,
   isActive,
   onCourseStateChanged,
+  title,
+  order,
 }: {
+  id: string;
+  order: number;
   isActive: boolean;
+  title: string;
   onCourseStateChanged: any;
 }) {
+  const { data: session, status } = useSession();
   const {
     handleOnDragStart,
+    deleteCourse,
     unavailableQuarters,
     courseState,
     handleDragEnd,
-    coursesAlreadyAdded,
-  } = useCoursePlanner();
+    memoAlreadyCourses,
+    saveStatus,
+    saveError,
+  } = useCoursePlanner({
+    userId: session?.user.id,
+    plannerId: id,
+    title,
+    order,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useDebounce({
+    callback: () => setLoading(status === "loading"),
+    delay: 1000,
+    dependencies: [status],
+  });
 
   useEffect(() => {
     onCourseStateChanged(courseState);
@@ -30,58 +57,65 @@ export default function CoursePlanner({
   }
 
   return (
-    <div>
-      <DragDropContext
-        onDragEnd={handleDragEnd}
-        onDragStart={handleOnDragStart}
-      >
-        <div className="flex">
-          <div className="flex-1 px-4 py-6">
-            <Search coursesInPlanner={coursesAlreadyAdded()} />
+    <>
+      <SaveSnackbars saving={saveStatus} saveError={saveError} />
+      <div>
+        <DragDropContext
+          onDragEnd={handleDragEnd}
+          onDragStart={handleOnDragStart}
+        >
+          <div className="flex">
+            <div className="flex-1 px-4 py-6">
+              <Search coursesInPlanner={memoAlreadyCourses} />
+            </div>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <div className="flex-3 py-6">
+                <Quarters
+                  courseState={courseState}
+                  unavailableQuarters={unavailableQuarters}
+                  deleteCourse={deleteCourse}
+                />
+              </div>
+            )}
+            <div className="flex-1 py-6" />
           </div>
-          <div className="flex-3 py-6">
-            <Quarters
-              courseState={courseState}
-              unavailableQuarters={unavailableQuarters}
-            />
-          </div>
-          <div className="flex-1 py-6" />
-        </div>
-      </DragDropContext>
-    </div>
+        </DragDropContext>
+      </div>
+    </>
   );
 }
 
 function Quarters({
   courseState,
   unavailableQuarters,
+  deleteCourse,
 }: {
   courseState: PlannerData;
   unavailableQuarters: string[];
+  deleteCourse: any;
 }) {
   return (
     <div className="space-y-2">
-      {Array.from(
-        { length: initialPlanner.quartersPerYear },
-        (_, index) => index,
-      ).map((i) => {
-        const slice_val = initialPlanner.quartersPerYear * i;
-        const quarters = courseState.quarterOrder.slice(
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
+        const quarters = courseState.quarters.slice(
           slice_val,
-          slice_val + initialPlanner.quartersPerYear,
+          slice_val + quartersPerYear,
         );
         return (
           <div key={i} className="flex flex-row space-x-2">
-            {quarters.map((quarterId) => {
-              const quarter = courseState.quarters[quarterId];
+            {quarters.map((quarter) => {
               const courses = quarter.courses;
 
               return (
                 <QuarterCard
-                  title={quarter.title}
                   id={quarter.id}
                   key={quarter.id}
+                  title={quarter.title}
                   courses={courses}
+                  deleteCourse={deleteCourse(quarter.id)}
                   unavailableQuarters={unavailableQuarters}
                 />
               );

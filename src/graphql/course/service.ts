@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { Course } from "@/app/ts-types/Course";
 import {
+  Course,
   DeleteInput,
   OrderedInput,
   QueryInput,
   UpsertInput,
-} from "@/app/ts-types/Args";
+} from "./schema";
 import { isAlpha } from "class-validator";
 
 // const COURSES_LIMIT = 100;

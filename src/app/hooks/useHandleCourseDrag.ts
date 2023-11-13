@@ -1,7 +1,7 @@
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import { createCourseFromId } from "../../lib/courseUtils";
-import { PlannerData } from "../ts-types/PlannerData";
-import { Quarter } from "../ts-types/Quarter";
+import { PlannerData } from "../types/PlannerData";
+import { Quarter, findQuarter } from "../types/Quarter";
 
 const REMOVE_COURSE_AREA1 = "remove-course-area1";
 const REMOVE_COURSE_AREA2 = "remove-course-area2";
@@ -46,7 +46,10 @@ export default function useHandleCourseDrag({
     draggableId: string,
     destination: DraggableLocation,
   ) {
-    const quarter = courseState.quarters[destination.droppableId];
+    const { quarter, idx } = findQuarter(
+      courseState.quarters,
+      destination.droppableId,
+    );
     const newStoredCourses = Array.from(quarter.courses);
     newStoredCourses.splice(
       destination.index,
@@ -60,10 +63,11 @@ export default function useHandleCourseDrag({
 
     const newState = {
       ...courseState,
-      quarters: {
-        ...courseState.quarters,
-        [newQuarter.id]: newQuarter,
-      },
+      quarters: [
+        ...courseState.quarters.slice(0, idx),
+        newQuarter,
+        ...courseState.quarters.slice(idx + 1),
+      ],
     };
 
     handleCourseUpdate(newState);
@@ -78,7 +82,10 @@ export default function useHandleCourseDrag({
   }
 
   function deleteCourse(source: DraggableLocation) {
-    const startQuarter = courseState.quarters[source.droppableId];
+    const { quarter: startQuarter, idx } = findQuarter(
+      courseState.quarters,
+      source.droppableId,
+    );
     const newStoredCourses = Array.from(startQuarter.courses);
     newStoredCourses.splice(source.index, 1);
 
@@ -89,10 +96,11 @@ export default function useHandleCourseDrag({
 
     const newState = {
       ...courseState,
-      quarters: {
-        ...courseState.quarters,
-        [newQuarter.id]: newQuarter,
-      },
+      quarters: [
+        ...courseState.quarters.slice(0, idx),
+        newQuarter,
+        ...courseState.quarters.slice(idx + 1),
+      ],
     };
 
     handleCourseUpdate(newState);
@@ -102,17 +110,30 @@ export default function useHandleCourseDrag({
     source: DraggableLocation,
     destination: DraggableLocation,
   ) {
-    const startQuarter = courseState.quarters[source.droppableId];
-    const finishQuarter = courseState.quarters[destination.droppableId];
+    const { quarter: startQuarter, idx } = findQuarter(
+      courseState.quarters,
+      source.droppableId,
+    );
+    const { quarter: finishQuarter, idx: idx2 } = findQuarter(
+      courseState.quarters,
+      destination.droppableId,
+    );
 
     function isSameQuarter(startQuarter: Quarter, finishQuarter: Quarter) {
       return startQuarter.id === finishQuarter.id;
     }
 
     if (isSameQuarter(startQuarter, finishQuarter)) {
-      moveCourseWithinQuarter(startQuarter, source, destination);
+      moveCourseWithinQuarter(startQuarter, source, destination, idx);
     } else {
-      moveCourseToNewQuarter(startQuarter, finishQuarter, source, destination);
+      moveCourseToNewQuarter(
+        startQuarter,
+        finishQuarter,
+        source,
+        destination,
+        idx,
+        idx2,
+      );
     }
   }
 
@@ -120,6 +141,7 @@ export default function useHandleCourseDrag({
     quarter: Quarter,
     source: DraggableLocation,
     destination: DraggableLocation,
+    idx: number,
   ) {
     const newStoredCourses = Array.from(quarter.courses);
     newStoredCourses.splice(source.index, 1);
@@ -136,10 +158,11 @@ export default function useHandleCourseDrag({
 
     const newState = {
       ...courseState,
-      quarters: {
-        ...courseState.quarters,
-        [newQuarter.id]: newQuarter,
-      },
+      quarters: [
+        ...courseState.quarters.slice(0, idx),
+        newQuarter,
+        ...courseState.quarters.slice(idx + 1),
+      ],
     };
 
     handleCourseUpdate(newState);
@@ -150,6 +173,8 @@ export default function useHandleCourseDrag({
     finishQuarter: Quarter,
     source: DraggableLocation,
     destination: DraggableLocation,
+    idx: number,
+    idx2: number,
   ) {
     const movedStoredCourse = startQuarter.courses[source.index];
     const startStoredCourses = Array.from(startQuarter.courses);
@@ -166,13 +191,21 @@ export default function useHandleCourseDrag({
       courses: finishStoredCourses,
     };
 
-    const newState = {
+    let newState: PlannerData = {
       ...courseState,
-      quarters: {
-        ...courseState.quarters,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish,
-      },
+      quarters: [
+        ...courseState.quarters.slice(0, idx),
+        newStart,
+        ...courseState.quarters.slice(idx + 1),
+      ],
+    };
+    newState = {
+      ...newState,
+      quarters: [
+        ...newState.quarters.slice(0, idx2),
+        newFinish,
+        ...newState.quarters.slice(idx2 + 1),
+      ],
     };
 
     handleCourseUpdate(newState);

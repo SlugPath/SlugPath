@@ -1,4 +1,4 @@
-import { Course } from "../ts-types/Course";
+import { Course } from "../types/Course";
 import {
   Button,
   Checkbox,
