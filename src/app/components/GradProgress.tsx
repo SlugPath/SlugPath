@@ -5,7 +5,6 @@ const colors = ["danger", "warning", "primary", "success"];
 
 const getColor = (percentage: number) => {
   const idx = Math.floor((colors.length - 1) * percentage);
-  console.log(`${colors[idx]}`);
   return colors[idx] ?? "neutral";
 };
 

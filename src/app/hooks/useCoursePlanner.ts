@@ -1,6 +1,6 @@
 import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
@@ -66,14 +66,13 @@ export default function useCoursePlanner(input: {
   }, [courseState]);
 
   /**
-   * A curried callback to be invoked upon deleting a course, so
-   * as to appropriately rerender the state of the planner
+   * A curried function that returns a callback to be invoked upon deleting a course
    * @param quarterId id of the quarter card
-   * @returns
+   * @returns a callback
    */
-  const deleteCourse = useCallback((quarterId: string) => {
+  const deleteCourse = (quarterId: string) => {
+    const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
     return (deleteIdx: number) => {
-      const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
       const quarterCourses = quarter.courses;
       const newCourses = [
         ...quarterCourses.slice(0, deleteIdx),
@@ -95,8 +94,7 @@ export default function useCoursePlanner(input: {
       });
       setTotalCredits(getTotalCredits(courseState));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
     return droppableId.split("-")[2];
