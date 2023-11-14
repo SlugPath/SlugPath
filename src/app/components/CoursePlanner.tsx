@@ -39,7 +39,7 @@ export default function CoursePlanner({
           <div className="flex-1 pr-2">
             <Search coursesInPlanner={coursesAlreadyAdded()} />
           </div>
-          <div className="flex-3 overflow-auto h-[80vh] w-auto">
+          <div className="flex-3 overflow-auto h-[92vh] w-auto">
             <Quarters
               courseState={courseState}
               unavailableQuarters={unavailableQuarters}

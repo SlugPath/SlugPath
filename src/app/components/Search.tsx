@@ -138,7 +138,7 @@ export default function Search({
           return (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {hasResults(data) ? (
-                <div className="overflow-y-auto h-96">
+                <div className="overflow-y-auto h-[62vh]">
                   {data.coursesBy.map((course: Course, index: number) => (
                     <CourseCard
                       key={index}
