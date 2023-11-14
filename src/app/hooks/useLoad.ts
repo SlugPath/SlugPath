@@ -1,11 +1,10 @@
 import { ApolloError, gql, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { initialPlanner } from "@/lib/initialPlanner";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerTitle } from "@/graphql/planner/schema";
-import { emptyPlanner, initialPlanner } from "@/lib/initialPlanner";
 import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
-import { v4 as uuidv4 } from "uuid";
 
 const GET_PLANNERS = gql`
   query ($userId: String!) {
@@ -64,10 +63,6 @@ export const useLoadAllPlanners = (
           userId,
         },
       });
-    } else {
-      setState({
-        [uuidv4()]: [`New Planner`, true],
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -89,7 +84,7 @@ export const useLoadPlanner = (
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useState<PlannerData>(emptyPlanner);
+  const [state, setState] = useState<PlannerData>(initialPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
       const planner = data.getPlanner;
@@ -111,8 +106,6 @@ export const useLoadPlanner = (
           plannerId,
         },
       });
-    } else {
-      setState(initialPlanner);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
