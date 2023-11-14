@@ -97,7 +97,7 @@ export default function Search({
   }
 
   return (
-    <Card className="w-64">
+    <Card className="min-w-40">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -112,6 +112,7 @@ export default function Search({
             className="col-span-2"
             onChange={handleChangeDepartment}
             defaultValue={getFirstKey(DEPARTMENTS)}
+            size="sm"
           >
             <Option
               value={getFirstKey(DEPARTMENTS)}
@@ -124,11 +125,11 @@ export default function Search({
             className="col-span-2"
             color="neutral"
             placeholder="Number"
-            size="md"
             variant="outlined"
             name="number"
             aria-label="number"
             onChange={(event) => handleChangeNumber(event.target.value)}
+            size="sm"
           />
         </div>
       </form>
@@ -137,7 +138,7 @@ export default function Search({
           return (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {hasResults(data) ? (
-                <div className="overflow-y-auto h-96">
+                <div className="overflow-y-auto h-[62vh]">
                   {data.coursesBy.map((course: StoredCourse, index: number) => (
                     <CourseCard
                       key={index}

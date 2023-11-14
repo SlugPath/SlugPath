@@ -1,7 +1,7 @@
 import { Quarter } from "../app/types/Quarter";
 import { PlannerData } from "../app/types/PlannerData";
 
-const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
+const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
 export const quartersPerYear = 4;
 
