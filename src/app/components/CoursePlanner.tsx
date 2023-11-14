@@ -66,22 +66,22 @@ export default function CoursePlanner({
           onDragEnd={handleDragEnd}
           onDragStart={handleOnDragStart}
         >
-          <div className="grid grid-cols-6">
-            <div className="pr-2 col-span-1">
+          <div className="flex">
+            <div className="pr-2 flex-initial">
               <Search coursesInPlanner={memoAlreadyCourses} />
             </div>
             {loading ? (
               <CircularProgress />
             ) : (
               <>
-                <div className="overflow-auto h-[92vh] w-auto col-span-4">
+                <div className="overflow-auto h-[92vh] w-auto">
                   <Quarters
                     courseState={courseState}
                     unavailableQuarters={unavailableQuarters}
                     deleteCourse={deleteCourse}
                   />
                 </div>
-                <div className="pl-4" col-span-1>
+                <div className="pl-4 flex-initial self-start">
                   <GradProgress credits={totalCredits} />
                 </div>
               </>
