@@ -97,7 +97,7 @@ export default function Search({
   }
 
   return (
-    <Card className="w-64">
+    <Card className="min-w-40">
       <form
         onSubmit={(event) => {
           event.preventDefault();
