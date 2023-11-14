@@ -13,15 +13,15 @@ export const GradProgress = ({ credits }: { credits: number }) => {
   const percentage = Math.min(credits / TOTAL_CREDITS_NEEDED, 1);
   return (
     <>
-      <div className="pt-16 flex flex-col place-items-center gap-4 min-w-48">
+      <div className="pt-16 flex flex-col place-items-center gap-4 w-[145px]">
         <Donut
           value={percentage}
           sx={{
             color: getColor(percentage),
           }}
         ></Donut>
-        <div className="grid grid-cols-2 place-items-center">
-          <Typography className="text-sm grid-cols-1">
+        <div className="grid grid-cols-2 items-center">
+          <Typography className="text-sm grid-cols-1 justify-self-end pl-2">
             Total Credits:
           </Typography>
           <Typography className="grid-cols-1">
