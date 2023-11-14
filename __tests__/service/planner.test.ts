@@ -126,16 +126,19 @@ it("should update 1 planner for 1 user", async () => {
       department: "CSE",
       number: "13S",
       quartersOffered: ["Fall", "Winter", "Spring"],
+      credits: 7,
     },
     {
       department: "CSE",
       number: "16",
       quartersOffered: ["Fall", "Winter", "Spring"],
+      credits: 5,
     },
     {
       department: "CSE",
       number: "30",
       quartersOffered: ["Fall", "Winter", "Spring"],
+      credits: 5,
     },
   ];
   const plannerData = initialPlanner;
