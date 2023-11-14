@@ -1,6 +1,6 @@
-import { createCourseFromId } from "../../lib/courseUtils";
+import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
@@ -26,6 +26,9 @@ export default function useCoursePlanner(input: {
   const [courseState, setCourseState] = useLoadPlanner(
     input.plannerId,
     input.userId,
+  );
+  const [totalCredits, setTotalCredits] = useState(
+    getTotalCredits(courseState),
   );
   const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
@@ -57,19 +60,19 @@ export default function useCoursePlanner(input: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
-  const handleCourseUpdate = (courseState: PlannerData) => {
-    setCourseState(courseState);
-  };
+  useEffect(() => {
+    setTotalCredits(getTotalCredits(courseState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseState]);
 
   /**
-   * A curried callback to be invoked upon deleting a course, so
-   * as to appropriately rerender the state of the planner
+   * A curried function that returns a callback to be invoked upon deleting a course
    * @param quarterId id of the quarter card
-   * @returns
+   * @returns a callback
    */
-  const deleteCourse = useCallback((quarterId: string) => {
+  const deleteCourse = (quarterId: string) => {
+    const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
     return (deleteIdx: number) => {
-      const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
       const quarterCourses = quarter.courses;
       const newCourses = [
         ...quarterCourses.slice(0, deleteIdx),
@@ -89,9 +92,9 @@ export default function useCoursePlanner(input: {
           ],
         };
       });
+      setTotalCredits(getTotalCredits(courseState));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
     return droppableId.split("-")[2];
@@ -153,7 +156,7 @@ export default function useCoursePlanner(input: {
         ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
       return;
     }
 
@@ -184,7 +187,7 @@ export default function useCoursePlanner(input: {
         ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
       return;
     }
 
@@ -213,14 +216,14 @@ export default function useCoursePlanner(input: {
 
       const newState = {
         ...courseState,
-        quarters: {
+        quarters: [
           ...courseState.quarters.slice(0, idx),
           newQuarter,
           ...courseState.quarters.slice(idx + 1),
-        },
+        ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
     } else {
       // moving course from startQuarter to finishQuarter
       const movedStoredCourse = startQuarter.courses[source.index];
@@ -255,7 +258,7 @@ export default function useCoursePlanner(input: {
         ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
     }
   };
 
@@ -271,6 +274,7 @@ export default function useCoursePlanner(input: {
 
   return {
     courseState,
+    totalCredits,
     handleDragEnd,
     memoAlreadyCourses,
     handleOnDragStart,

@@ -26,6 +26,7 @@ const GET_PLANNER = gql`
           department
           number
           quartersOffered
+          credits
         }
       }
       years

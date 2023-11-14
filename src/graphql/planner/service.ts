@@ -52,6 +52,7 @@ export class PlannerService {
           department: c.department,
           number: c.number,
           quartersOffered: [...c.quartersOffered],
+          credits: c.credits,
         };
       });
       return {
@@ -132,7 +133,6 @@ export class PlannerService {
         },
       },
     });
-    //console.log(`${JSON.stringify(p)}`)
     return p !== null ? this.toPlannerData(p) : null;
   }
 
@@ -179,6 +179,7 @@ export class PlannerService {
           department: c.department,
           number: c.number,
           quartersOffered: [...c.quartersOffered],
+          credits: c.credits,
         };
       });
       newPlanner.quarters.push({

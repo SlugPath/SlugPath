@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
+import { GradProgress } from "./GradProgress";
 
 export default function CoursePlanner({
   id,
@@ -27,6 +28,7 @@ export default function CoursePlanner({
   const {
     handleOnDragStart,
     deleteCourse,
+    totalCredits,
     unavailableQuarters,
     courseState,
     handleDragEnd,
@@ -71,13 +73,18 @@ export default function CoursePlanner({
             {loading ? (
               <CircularProgress />
             ) : (
-              <div className="flex-3 py-6">
-                <Quarters
-                  courseState={courseState}
-                  unavailableQuarters={unavailableQuarters}
-                  deleteCourse={deleteCourse}
-                />
-              </div>
+              <>
+                <div className="flex-3 py-6">
+                  <Quarters
+                    courseState={courseState}
+                    unavailableQuarters={unavailableQuarters}
+                    deleteCourse={deleteCourse}
+                  />
+                </div>
+                <div className="flex-1 pl-10">
+                  <GradProgress credits={totalCredits} />
+                </div>
+              </>
             )}
             <div className="flex-1 py-6" />
           </div>
@@ -108,7 +115,6 @@ function Quarters({
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarter) => {
               const courses = quarter.courses;
-
               return (
                 <QuarterCard
                   id={quarter.id}
