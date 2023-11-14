@@ -5,6 +5,7 @@ import { PlannerTitle } from "@/graphql/planner/schema";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
+import { v4 as uuidv4 } from "uuid";
 
 const GET_PLANNERS = gql`
   query ($userId: String!) {
@@ -45,7 +46,9 @@ export const useLoadAllPlanners = (
   React.Dispatch<React.SetStateAction<MultiPlanner>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useState<MultiPlanner>({});
+  const [state, setState] = useState<MultiPlanner>({
+    [uuidv4()]: [`New Planner`, true],
+  });
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNERS, {
     onCompleted: (data) => {
       if (data.getAllPlanners.length > 0) {
