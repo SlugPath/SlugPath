@@ -67,6 +67,7 @@ export default function TabList(props: TabListProps) {
         onClose={() => setTooMany(false)}
       />
       {/* End alerts */}
+
       {Object.entries(planners).map(([id, [title, isActive]]) => (
         <ListItem
           onDoubleClick={() => setIsEditing(id)}
@@ -75,7 +76,7 @@ export default function TabList(props: TabListProps) {
             <IconButton
               onClick={() => setAlert([id, title])}
               aria-label="Delete"
-              size="lg"
+              size="sm"
               color="danger"
             >
               <DeleteForever />
