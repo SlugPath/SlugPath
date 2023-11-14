@@ -81,7 +81,7 @@ export default function CoursePlanner({
                     deleteCourse={deleteCourse}
                   />
                 </div>
-                <div className="flex-1 pl-20">
+                <div className="flex-1 pl-10">
                   <GradProgress credits={totalCredits} />
                 </div>
               </>
