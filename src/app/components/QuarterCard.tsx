@@ -18,7 +18,7 @@ export default function QuarterCard({
   return (
     <Card
       size="sm"
-      className="w-64"
+      className="w-64 min-w-[256px]"
       style={{
         backgroundColor: unavailableQuarters.includes(id)
           ? "#FEE2E2"

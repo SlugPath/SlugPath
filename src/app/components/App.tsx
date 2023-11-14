@@ -59,7 +59,7 @@ export default function App() {
 
       {/* Planner Start */}
       <div className="pt-4 mb-auto">
-        <div className="flex justify-left px-6">
+        <div className="flex justify-left px-7">
           <TabList
             planners={planners}
             onRemovePlanner={handleRemovePlanner}
