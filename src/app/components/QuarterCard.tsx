@@ -1,6 +1,6 @@
 import { Card } from "@mui/joy";
 import CourseCard from "./CourseCard";
-import { StoredCourse } from "../ts-types/Course";
+import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 
@@ -9,11 +9,13 @@ export default function QuarterCard({
   id,
   courses,
   unavailableQuarters,
+  deleteCourse,
 }: {
   title: string;
   id: string;
   courses: StoredCourse[];
   unavailableQuarters: string[];
+  deleteCourse: (deleteIdx: number) => void;
 }) {
   return (
     <Card
@@ -40,6 +42,7 @@ export default function QuarterCard({
                   course={course}
                   index={index}
                   draggableId={createIdFromCourse(course)}
+                  onDelete={deleteCourse}
                 />
               ))}
               {provided.placeholder}

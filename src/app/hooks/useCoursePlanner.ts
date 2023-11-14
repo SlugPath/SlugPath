@@ -1,55 +1,118 @@
-import { createCourseFromId, createIdFromCourse } from "../../lib/courseUtils";
-import { StoredCourse } from "../ts-types/Course";
-import { DropResult } from "@hello-pangea/dnd";
+import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
+import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
-import { initialPlanner } from "../../lib/initialPlanner";
-import { PlannerData } from "../ts-types/PlannerData";
-import { DragStart } from "@hello-pangea/dnd";
+import { PlannerData } from "../types/PlannerData";
+import { gql } from "@apollo/client";
+import useAutosave from "./useAutosave";
+import { useEffect } from "react";
+import { findQuarter } from "../types/Quarter";
+import { useLoadPlanner } from "./useLoad";
+import useDeepMemo from "./useDeepMemo";
 
-export default function useCoursePlanner() {
+const SAVE_PLANNER = gql`
+  mutation SavePlanner($input: PlannerCreateInput!) {
+    upsertPlanner(input: $input) {
+      plannerId
+    }
+  }
+`;
+
+export default function useCoursePlanner(input: {
+  userId: string | undefined;
+  plannerId: string;
+  title: string;
+  order: number;
+}) {
+  const [courseState, setCourseState] = useLoadPlanner(
+    input.plannerId,
+    input.userId,
+  );
+  const [totalCredits, setTotalCredits] = useState(
+    getTotalCredits(courseState),
+  );
   const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
-  const [courseState, setCourseState] = useState(initialPlanner);
+  const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
+    SAVE_PLANNER,
+    {},
+  );
+  const memoAlreadyCourses = useDeepMemo(
+    () => coursesAlreadyAdded(),
+    [courseState],
+  );
 
-  const handleCourseUpdate = (courseState: PlannerData) => {
-    setCourseState(courseState);
+  // Auto-saving
+  useEffect(() => {
+    if (
+      input.userId !== undefined &&
+      input.title.length > 1 &&
+      input.title.length < 20
+    ) {
+      const variables = {
+        input: {
+          ...input,
+          plannerData: courseState,
+        },
+      };
+      saveData({
+        variables,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(input), JSON.stringify(courseState)]);
+
+  useEffect(() => {
+    setTotalCredits(getTotalCredits(courseState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseState]);
+
+  /**
+   * A curried function that returns a callback to be invoked upon deleting a course
+   * @param quarterId id of the quarter card
+   * @returns a callback
+   */
+  const deleteCourse = (quarterId: string) => {
+    const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
+    return (deleteIdx: number) => {
+      const quarterCourses = quarter.courses;
+      const newCourses = [
+        ...quarterCourses.slice(0, deleteIdx),
+        ...quarterCourses.slice(deleteIdx + 1),
+      ];
+      setCourseState((prev) => {
+        return {
+          ...prev,
+          quarters: [
+            ...prev.quarters.slice(0, idx),
+            {
+              id: quarter.id,
+              title: quarter.title,
+              courses: newCourses,
+            },
+            ...prev.quarters.slice(idx + 1),
+          ],
+        };
+      });
+      setTotalCredits(getTotalCredits(courseState));
+    };
   };
-
-  const quarters = {
-    "0": "Summer",
-    "1": "Fall",
-    "2": "Winter",
-    "3": "Spring",
-  };
-
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
-    const quarterId = droppableId.split("-")[2];
-    return quarters[quarterId as keyof typeof quarters];
-  };
-
-  const getCourseFromQuarters = (cid: string): StoredCourse | undefined => {
-    let allCourses: StoredCourse[] = [];
-    Object.values(courseState.quarters).forEach((quarter) => {
-      allCourses = allCourses.concat(quarter.courses);
-    });
-    return allCourses.find((c) => {
-      return createIdFromCourse(c) === cid;
-    });
+    return droppableId.split("-")[2];
   };
 
   // Handle the drag start event for course items.
   // result Contains information about the current drag event of the array of unavailable quarters.
   const handleOnDragStart = (start: DragStart) => {
-    const courseBeingDragged = getCourseFromQuarters(start.draggableId);
+    const courseBeingDragged = createCourseFromId(start.draggableId);
 
     if (courseBeingDragged) {
-      const unavailable = Object.values(courseState.quarters)
+      const unavailable = courseState.quarters
         .filter((quarter) => {
-          const quarterName = getQuarterFromId(quarter.id);
-          return !courseBeingDragged?.quartersOffered.includes(quarterName);
+          return !courseBeingDragged?.quartersOffered.includes(
+            getQuarterFromId(quarter.id),
+          );
         })
         .map((quarter) => quarter.id);
-
       setUnavailableQuarters(unavailable);
     }
   };
@@ -60,15 +123,6 @@ export default function useCoursePlanner() {
 
     if (!destination) return;
 
-    /*
-    const draggedCourse = getCourseFromQuarters(draggableId);
-    const quarterName = getQuarterFromId(destination.droppableId);
-    const isAvailable = draggedCourse?.quartersOffered.includes(quarterName);
-
-    // FIXME: add additional logic to add a warning to the course if it is not offered then
-    if (!isAvailable) return
-    */
-
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -77,7 +131,11 @@ export default function useCoursePlanner() {
 
     // add course dragged from 'search-droppable' to quarter
     if (source.droppableId === "search-droppable") {
-      const quarter = courseState.quarters[destination.droppableId];
+      const { quarter, idx } = findQuarter(
+        courseState.quarters,
+        destination.droppableId,
+      );
+
       const newStoredCourses = Array.from(quarter.courses);
       newStoredCourses.splice(
         destination.index,
@@ -91,13 +149,14 @@ export default function useCoursePlanner() {
 
       const newState = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newQuarter.id]: newQuarter,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
       return;
     }
 
@@ -107,7 +166,10 @@ export default function useCoursePlanner() {
       destination.droppableId == "remove-course-area2" ||
       destination.droppableId == "search-droppable"
     ) {
-      const startQuarter = courseState.quarters[result.source.droppableId];
+      const { quarter: startQuarter, idx } = findQuarter(
+        courseState.quarters,
+        result.source.droppableId,
+      );
       const newStoredCourses = Array.from(startQuarter.courses);
       newStoredCourses.splice(result.source.index, 1);
 
@@ -118,18 +180,25 @@ export default function useCoursePlanner() {
 
       const newState = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newQuarter.id]: newQuarter,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
       return;
     }
 
-    const startQuarter = courseState.quarters[source.droppableId];
-    const finishQuarter = courseState.quarters[destination.droppableId];
+    const { quarter: startQuarter, idx } = findQuarter(
+      courseState.quarters,
+      source.droppableId,
+    );
+    const { quarter: finishQuarter, idx: idx2 } = findQuarter(
+      courseState.quarters,
+      destination.droppableId,
+    );
     if (startQuarter === finishQuarter) {
       // moving course within startQuarter
       const newStoredCourses = Array.from(startQuarter.courses);
@@ -147,13 +216,14 @@ export default function useCoursePlanner() {
 
       const newState = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newQuarter.id]: newQuarter,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
     } else {
       // moving course from startQuarter to finishQuarter
       const movedStoredCourse = startQuarter.courses[source.index];
@@ -171,24 +241,32 @@ export default function useCoursePlanner() {
         courses: finishStoredCourses,
       };
 
-      const newState = {
+      let newState: PlannerData = {
         ...courseState,
-        quarters: {
-          ...courseState.quarters,
-          [newStart.id]: newStart,
-          [newFinish.id]: newFinish,
-        },
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newStart,
+          ...courseState.quarters.slice(idx + 1),
+        ],
+      };
+      newState = {
+        ...newState,
+        quarters: [
+          ...newState.quarters.slice(0, idx2),
+          newFinish,
+          ...newState.quarters.slice(idx2 + 1),
+        ],
       };
 
-      handleCourseUpdate(newState);
+      setCourseState(newState);
     }
   };
 
-  function coursesAlreadyAdded() {
-    const coursesAlreadyAdded: StoredCourse[] = [];
+  function coursesAlreadyAdded(): string[] {
+    const coursesAlreadyAdded: string[] = [];
     Object.values(courseState.quarters).forEach((quarter) => {
       quarter.courses.forEach((course) => {
-        coursesAlreadyAdded.push(course);
+        coursesAlreadyAdded.push(course.department + "-" + course.number);
       });
     });
     return coursesAlreadyAdded;
@@ -196,9 +274,13 @@ export default function useCoursePlanner() {
 
   return {
     courseState,
+    totalCredits,
     handleDragEnd,
-    coursesAlreadyAdded,
+    memoAlreadyCourses,
     handleOnDragStart,
     unavailableQuarters,
+    saveStatus,
+    saveError,
+    deleteCourse,
   };
 }

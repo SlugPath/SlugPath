@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
-import { Course, StoredCourse } from "../ts-types/Course";
+import { StoredCourse } from "../types/Course";
 import CourseCard from "./CourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
@@ -15,7 +15,6 @@ const DEPARTMENTS = {
 const GET_COURSE = gql`
   query getCourse($department: String!, $number: String = null) {
     coursesBy(department: $department, number: $number) {
-      id
       name
       department
       number
@@ -32,7 +31,7 @@ const GET_COURSE = gql`
 export default function Search({
   coursesInPlanner,
 }: {
-  coursesInPlanner: StoredCourse[];
+  coursesInPlanner: string[];
 }) {
   const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
   const [number, setNumber] = useState("");
@@ -70,10 +69,11 @@ export default function Search({
     });
   };
 
-  function courseIsAlreadyAdded(course: Course) {
+  function courseIsAlreadyAdded(course: StoredCourse) {
     let alreadyAdded = false;
     coursesInPlanner.forEach((c) => {
-      if (c.department === course.department && c.number === course.number) {
+      const [department, number] = c.split("-");
+      if (department === course.department && number === course.number) {
         alreadyAdded = true;
       }
     });
@@ -146,6 +146,7 @@ export default function Search({
                       index={index}
                       draggableId={createIdFromCourse(course) + "-search"}
                       alreadyAdded={courseIsAlreadyAdded(course)}
+                      onDelete={undefined}
                     />
                   ))}
                   {provided.placeholder}

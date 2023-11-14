@@ -54,7 +54,14 @@ export default function Navbar({
                   <UserAvatar name={session.user?.name} />
                 </MenuButton>
                 <Menu variant="soft">
-                  <MenuItem onClick={() => signOut()}>Sign out</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      localStorage.clear();
+                      signOut();
+                    }}
+                  >
+                    Sign out
+                  </MenuItem>
                 </Menu>
               </Dropdown>
             )}

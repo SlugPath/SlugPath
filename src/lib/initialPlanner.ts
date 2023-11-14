@@ -1,33 +1,33 @@
-import { Quarter } from "../app/ts-types/Quarter";
-import { PlannerData } from "../app/ts-types/PlannerData";
+import { Quarter } from "../app/types/Quarter";
+import { PlannerData } from "../app/types/PlannerData";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
-const yearNames = ["1", "2", "3", "4"];
 const years = 4;
-const quartersPerYear = 4;
+export const quartersPerYear = 4;
 
 export const initialPlanner: PlannerData = {
-  quarters: createQuarters().quarters,
-  quarterOrder: createQuarters().quarterOrder,
+  quarters: createQuarters(),
   years,
-  quartersPerYear,
 };
 
-function createQuarters() {
-  const quarters: { [key: string]: Quarter } = {};
-  const quarterOrder: string[] = [];
+export const emptyPlanner: PlannerData = {
+  quarters: [],
+  years,
+};
+
+export function createQuarters() {
+  const quarters: Quarter[] = [];
 
   for (let year = 0; year < years; year++) {
     for (let quarter = 0; quarter < quartersPerYear; quarter++) {
-      const quarterId = `quarter-${year}-${quarter}`;
-      quarters[quarterId] = {
-        id: quarterId,
-        title: `${quarterNames[quarter]} ${yearNames[year]}`,
+      const id = `quarter-${year}-${quarterNames[quarter]}`;
+      quarters.push({
+        id,
+        title: `Year ${year + 1}: ${quarterNames[quarter]}`,
         courses: [],
-      };
-      quarterOrder.push(quarterId);
+      });
     }
   }
 
-  return { quarters, quarterOrder };
+  return quarters;
 }
