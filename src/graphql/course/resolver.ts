@@ -46,6 +46,16 @@ export class CourseResolver {
   }
 
   /**
+   * Return a `Course` instance that matches the `department` and `number` in `input`
+   * @param input a QueryInput instance
+   * @returns a `Course` instance
+   */
+  @Query(() => Course)
+  async courseBy(@Args() input: QueryInput): Promise<Course | null> {
+    return await new CourseService().courseBy(input);
+  }
+
+  /**
    * Custom query that asynchronously returns a list of `Course` instances
    * that have a course number less than `input.courseNum`.
    * @param input an `AboveOrBelowInput` instance containing department name and a valid `courseNum`.

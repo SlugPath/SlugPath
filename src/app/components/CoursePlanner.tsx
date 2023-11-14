@@ -17,12 +17,14 @@ export default function CoursePlanner({
   onCourseStateChanged,
   title,
   order,
+  onShowCourseInfoModal,
 }: {
   id: string;
   order: number;
   isActive: boolean;
   title: string;
   onCourseStateChanged: any;
+  onShowCourseInfoModal: any;
 }) {
   const { data: session, status } = useSession();
   const {
@@ -69,7 +71,10 @@ export default function CoursePlanner({
           <div className="flex">
             {/* <div className="pr-2 flex-initial"> */}
             <div className="flex-initial pr-2">
-              <Search coursesInPlanner={memoAlreadyCourses} />
+              <Search
+                coursesInPlanner={memoAlreadyCourses}
+                onShowCourseInfoModal={onShowCourseInfoModal}
+              />
             </div>
             {loading ? (
               <CircularProgress />
@@ -80,6 +85,7 @@ export default function CoursePlanner({
                     courseState={courseState}
                     unavailableQuarters={unavailableQuarters}
                     deleteCourse={deleteCourse}
+                    onShowCourseInfoModal={onShowCourseInfoModal}
                   />
                 </div>
                 <div className="pl-4 flex-initial self-start">
@@ -98,10 +104,12 @@ function Quarters({
   courseState,
   unavailableQuarters,
   deleteCourse,
+  onShowCourseInfoModal,
 }: {
   courseState: PlannerData;
   unavailableQuarters: string[];
   deleteCourse: any;
+  onShowCourseInfoModal: any;
 }) {
   return (
     <div className="space-y-2">
@@ -123,6 +131,7 @@ function Quarters({
                   courses={courses}
                   deleteCourse={deleteCourse(quarter.id)}
                   unavailableQuarters={unavailableQuarters}
+                  onShowCourseInfoModal={onShowCourseInfoModal}
                 />
               );
             })}

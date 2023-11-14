@@ -66,7 +66,6 @@ export class CourseService {
 
   /**
    * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
-   * limited by `COURSES_LIMIT`.
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
@@ -86,6 +85,20 @@ export class CourseService {
         },
       });
     }
+  }
+
+  /**
+   * `courseBy` returns a course that satisfies a predicate `pred`
+   * or null if no such course exists
+   * @returns a `Course` instance
+   */
+  public async courseBy(pred: QueryInput): Promise<Course | null> {
+    return await prisma.course.findFirst({
+      where: {
+        department: pred.department,
+        number: pred.number,
+      },
+    });
   }
 
   /**

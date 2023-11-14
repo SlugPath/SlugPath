@@ -45,3 +45,16 @@ export function getTotalCredits(planner: PlannerData): number {
   }, 0);
   return totalCredits;
 }
+
+/**
+ * Creates a string of the quarters offered for a course
+ */
+export function createQuartersOfferedString(course: StoredCourse) {
+  if (course.quartersOffered.length === 0) {
+    return "None";
+  } else {
+    return course.quartersOffered.reduce((acc: any, curr: any) => {
+      return acc + ", " + curr;
+    });
+  }
+}
