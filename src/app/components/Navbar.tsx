@@ -15,7 +15,7 @@ export default function Navbar({
 
   return (
     <header className="bg-white w-full shadow-md">
-      <nav className="py-1 px-5">
+      <nav className={`${status !== "authenticated" ? "py-1.5" : "py-0"} px-5`}>
         <div className="flex flex-row">
           {/* Logo and title start */}
           <div className="flex flex-row gap-4 place-items-center pr-2">
@@ -39,7 +39,6 @@ export default function Navbar({
             <Button onClick={setShowMajorCompletionModal} variant="plain">
               Major Progress
             </Button>
-            {/* <Avatar /> */}
             {status !== "authenticated" ? (
               <Button
                 variant="plain"
@@ -51,7 +50,7 @@ export default function Navbar({
               </Button>
             ) : (
               <Dropdown>
-                <MenuButton color="neutral" variant="plain">
+                <MenuButton color="neutral" variant="plain" size="sm">
                   <UserAvatar name={session.user?.name} />
                 </MenuButton>
                 <Menu variant="soft">
