@@ -1,5 +1,5 @@
 import { Card } from "@mui/joy";
-import CourseCard from "./CourseCard";
+import DraggableCourseCard from "./DraggableCourseCard";
 import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
@@ -37,7 +37,7 @@ export default function QuarterCard({
               style={{ height: "100%", minHeight: "112px" }}
             >
               {courses.map((course, index) => (
-                <CourseCard
+                <DraggableCourseCard
                   key={index}
                   course={course}
                   index={index}
