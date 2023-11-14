@@ -1,9 +1,8 @@
-import { Card, CardContent, Grid, IconButton, Typography } from "@mui/joy";
+import { Card, CardContent, Grid, Typography } from "@mui/joy";
 import { Draggable } from "@hello-pangea/dnd";
 import { StoredCourse } from "../types/Course";
 import { getTitle } from "../../lib/courseUtils";
 import { useState } from "react";
-import { Delete } from "@mui/icons-material";
 
 export default function CourseCard({
   course,
@@ -64,15 +63,27 @@ export default function CourseCard({
                   </Grid>
                   <Grid xs={2}>
                     {onDelete !== undefined && (
-                      <IconButton
-                        size="sm"
+                      <button
                         onMouseEnter={() => setShowDelete(true)}
                         onMouseLeave={() => setShowDelete(false)}
                         onClick={() => onDelete(index)}
                         style={{ opacity: showDelete ? 1 : 0.2 }}
                       >
-                        <Delete />
-                      </IconButton>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="black"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
                     )}
                   </Grid>
                 </Grid>
