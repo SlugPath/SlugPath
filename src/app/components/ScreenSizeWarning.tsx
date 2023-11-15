@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 // Function to check if the screen size is too small
 const isScreenTooSmall = () => {
-  const minWidth = 768; // Set your minimum width threshold
-  const minHeight = 600; // Set your minimum height threshold
+  const minWidth = 1030; // Set your minimum width threshold
+  const minHeight = 400; // Set your minimum height threshold
   return window.innerWidth < minWidth || window.innerHeight < minHeight;
 };
 
