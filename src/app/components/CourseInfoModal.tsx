@@ -1,6 +1,6 @@
 import { getTitle } from "@/lib/courseUtils";
 import { StoredCourse } from "../types/Course";
-import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { createQuartersOfferedString } from "@/lib/courseUtils";
@@ -23,14 +23,23 @@ export default function CourseInfoModal({
   });
 
   if (!course) return null;
-  if (loading) return null;
   if (error) return `Error! ${error}`;
 
-  const loadedCourse = data.courseBy;
-  const title =
-    getTitle(loadedCourse.department, loadedCourse.number) +
-    " " +
-    loadedCourse.name;
+  function title(data: any) {
+    return loading
+      ? ""
+      : getTitle(data.courseBy.department, data.courseBy.number) +
+          " " +
+          data.courseBy.name;
+  }
+
+  function credits(data: any) {
+    return loading ? "" : data.courseBy.credits;
+  }
+
+  function quartersOffered(data: any) {
+    return loading ? "" : createQuartersOfferedString(data.courseBy);
+  }
 
   return (
     <Modal
@@ -56,12 +65,16 @@ export default function CourseInfoModal({
           fontWeight="lg"
           mb={1}
         >
-          {title}
+          <Skeleton loading={loading} variant="text" width="50%">
+            {title(data)}
+          </Skeleton>
         </Typography>
-        <Typography component="p">
-          Quarters offered: {createQuartersOfferedString(loadedCourse)}
-        </Typography>
-        <Typography component="p">Credits: {loadedCourse.credits}</Typography>
+        <Skeleton loading={loading} variant="text" width="50%">
+          <Typography component="p">
+            Quarters offered: {quartersOffered(data)}
+          </Typography>
+          <Typography component="p">Credits: {credits(data)}</Typography>
+        </Skeleton>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
