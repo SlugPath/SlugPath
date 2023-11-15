@@ -82,7 +82,7 @@ export default function CoursePlanner({
                     deleteCourse={deleteCourse}
                   />
                 </div>
-                <div className="pl-4 flex-initial self-start">
+                <div className="pl-4 flex-initial self-start w-[145px] xl:w-[300px]">
                   <GradProgress credits={totalCredits} />
                 </div>
               </>

@@ -13,7 +13,7 @@ export const GradProgress = ({ credits }: { credits: number }) => {
   const percentage = Math.min(credits / TOTAL_CREDITS_NEEDED, 1);
   return (
     <>
-      <div className="pt-16 flex flex-col place-items-center gap-4 w-[145px]">
+      <div className="pt-16 flex flex-col place-items-center gap-4">
         <Donut
           value={percentage}
           sx={{
@@ -21,10 +21,10 @@ export const GradProgress = ({ credits }: { credits: number }) => {
           }}
         ></Donut>
         <div className="grid grid-cols-2 items-center">
-          <Typography className="text-sm grid-cols-1 justify-self-end pl-2">
+          <Typography className="text-sm grid-cols-1 justify-self-end">
             Total Credits:
           </Typography>
-          <Typography className="grid-cols-1">
+          <Typography className="grid-cols-1 justify-self-center">
             {credits} / {TOTAL_CREDITS_NEEDED}
           </Typography>
         </div>
