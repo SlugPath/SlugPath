@@ -71,11 +71,7 @@ export default function CourseCard({
                 onClick={() => onShowCourseInfoModal(course)}
               >
                 {course
-                  ? getTitle(course.department, course.number) +
-                    "isDragging: " +
-                    isDragging +
-                    ", highlighted: " +
-                    highlighted
+                  ? getTitle(course.department, course.number)
                   : "No course"}
               </Link>
             </Typography>
