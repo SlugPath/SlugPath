@@ -44,17 +44,12 @@ export default function CourseCard({
       {...provided.dragHandleProps}
       size="sm"
       variant={alreadyAdded ? "soft" : "outlined"}
-      className={
-        isDragging || highlighted
-          ? "bg-gray-200"
-          : alreadyAdded
-          ? ""
-          : "bg-white"
-      }
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
+        backgroundColor:
+          isDragging || highlighted ? "#E5E7EB" : alreadyAdded ? "" : "#FFFFFF",
       }}
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}
