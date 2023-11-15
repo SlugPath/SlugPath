@@ -44,14 +44,13 @@ export default function CourseCard({
       {...provided.dragHandleProps}
       size="sm"
       variant={alreadyAdded ? "soft" : "outlined"}
-      // className={
-      //   isDragging || highlighted
-      //     ? "bg-gray-200"
-      //     : alreadyAdded
-      //     ? ""
-      //     : "bg-white"
-      // }
-      className={isDragging ? "bg-gray-200" : "bg-white"}
+      className={
+        isDragging || highlighted
+          ? "bg-gray-200"
+          : alreadyAdded
+          ? ""
+          : "bg-white"
+      }
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
@@ -72,7 +71,11 @@ export default function CourseCard({
                 onClick={() => onShowCourseInfoModal(course)}
               >
                 {course
-                  ? getTitle(course.department, course.number)
+                  ? getTitle(course.department, course.number) +
+                    "isDragging: " +
+                    isDragging +
+                    ", highlighted: " +
+                    highlighted
                   : "No course"}
               </Link>
             </Typography>
