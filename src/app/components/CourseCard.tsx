@@ -44,13 +44,14 @@ export default function CourseCard({
       {...provided.dragHandleProps}
       size="sm"
       variant={alreadyAdded ? "soft" : "outlined"}
-      className={
-        isDragging || highlighted
-          ? "bg-gray-200"
-          : alreadyAdded
-          ? ""
-          : "bg-white"
-      }
+      // className={
+      //   isDragging || highlighted
+      //     ? "bg-gray-200"
+      //     : alreadyAdded
+      //     ? ""
+      //     : "bg-white"
+      // }
+      className={isDragging ? "bg-gray-200" : "bg-white"}
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
