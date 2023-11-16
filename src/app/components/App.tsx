@@ -10,13 +10,19 @@ import Footer from "./Footer";
 import { useState } from "react";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { useSession } from "next-auth/react";
+import CourseInfoModal from "./CourseInfoModal";
+import { StoredCourse } from "@/graphql/planner/schema";
 
 export default function App() {
   const { data: session } = useSession();
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
   const [currentCourseState, setCurrentCourseState] = useState(initialPlanner);
+  const [displayCourse, setDisplayCourse] = useState<
+    StoredCourse | undefined
+  >();
   const {
     planners,
     handleRemovePlanner,
@@ -25,8 +31,25 @@ export default function App() {
     handleChangePlannerName,
   } = usePlanner(session?.user.id);
 
+  // checks if user is on mobile device
+  useEffect(() => {
+    if (isMobile()) {
+      setShowMobileWarning(true);
+    }
+  }, []);
+
+  function handleShowCourseInfoModal(course: StoredCourse) {
+    setDisplayCourse(course);
+    setShowCourseInfoModal(true);
+  }
+
   const Modals = () => (
     <>
+      <CourseInfoModal
+        showModal={showCourseInfoModal}
+        setShowModal={setShowCourseInfoModal}
+        course={displayCourse}
+      />
       <ExportModal
         courseState={currentCourseState}
         setShowModal={setShowExportModal}
@@ -75,6 +98,7 @@ export default function App() {
                   id={id}
                   isActive={planners[id][1]}
                   onCourseStateChanged={setCurrentCourseState}
+                  onShowCourseInfoModal={handleShowCourseInfoModal}
                 />
               </ListItem>
             ))}

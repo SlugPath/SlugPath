@@ -34,7 +34,7 @@ export default function Navbar({
           {/* Buttons start */}
           <div className="flex flex-1 justify-end">
             <Button onClick={setShowExportModal} variant="plain">
-              Export Planner
+              Export
             </Button>
             <Button onClick={setShowMajorCompletionModal} variant="plain">
               Major Progress

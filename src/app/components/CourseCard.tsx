@@ -1,8 +1,16 @@
-import { Card, CardContent, Grid, Typography } from "@mui/joy";
+import {
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Link,
+  Typography,
+} from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import { getTitle } from "../../lib/courseUtils";
 import { useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function CourseCard({
   course,
@@ -11,6 +19,7 @@ export default function CourseCard({
   onDelete,
   provided,
   isDragging,
+  onShowCourseInfoModal,
 }: {
   course: StoredCourse;
   index: number;
@@ -18,8 +27,9 @@ export default function CourseCard({
   onDelete: undefined | ((index: number) => void);
   provided: DraggableProvided;
   isDragging: boolean;
+  onShowCourseInfoModal: any;
 }) {
-  const [showDelete, setShowDelete] = useState(false);
+  const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
     userSelect: "none",
@@ -34,45 +44,45 @@ export default function CourseCard({
       {...provided.dragHandleProps}
       size="sm"
       variant={alreadyAdded ? "soft" : "outlined"}
-      className={isDragging ? "bg-gray-200" : alreadyAdded ? "" : "bg-white"}
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
+        backgroundColor:
+          isDragging || highlighted ? "#E5E7EB" : alreadyAdded ? "" : "#FFFFFF",
       }}
+      onMouseEnter={() => setHighlighted(true)}
+      onMouseLeave={() => setHighlighted(false)}
     >
       <CardContent>
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
           <Grid xs={10}>
             <Typography level="body-sm">
-              {course
-                ? getTitle(course.department, course.number)
-                : "No course"}
+              <Link
+                overlay
+                underline="none"
+                href="#interactive-card"
+                sx={{ color: "text.tertiary" }}
+                onClick={() => onShowCourseInfoModal(course)}
+              >
+                {course
+                  ? getTitle(course.department, course.number)
+                  : "No course"}
+              </Link>
             </Typography>
           </Grid>
           <Grid xs={2}>
             {onDelete !== undefined && (
-              <button
-                onMouseEnter={() => setShowDelete(true)}
-                onMouseLeave={() => setShowDelete(false)}
+              <IconButton
                 onClick={() => onDelete(index)}
-                style={{ opacity: showDelete ? 1 : 0.2 }}
+                variant="plain"
+                size="sm"
+                className={`bg-gray-200 hover:bg-gray-300 ${
+                  highlighted ? "" : "invisible"
+                }`}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="black"
-                  className="w-4 h-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                <CloseIcon fontSize="small" />
+              </IconButton>
             )}
           </Grid>
         </Grid>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
@@ -8,23 +8,12 @@ import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
 import useDebounce from "../hooks/useDebounce";
+import { GET_COURSES } from "../../graphql/queries";
 
 // TODO: Base this on the actual departments in the database
 const DEPARTMENTS = {
   CSE: "Computer Science and Engineering",
 };
-
-const GET_COURSE = gql`
-  query getCourse($department: String!, $number: String = null) {
-    coursesBy(department: $department, number: $number) {
-      name
-      department
-      number
-      credits
-      quartersOffered
-    }
-  }
-`;
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -32,8 +21,10 @@ const GET_COURSE = gql`
  */
 export default function Search({
   coursesInPlanner,
+  onShowCourseInfoModal,
 }: {
   coursesInPlanner: string[];
+  onShowCourseInfoModal: any;
 }) {
   const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
   const [number, setNumber] = useState("");
@@ -41,7 +32,7 @@ export default function Search({
     department: getFirstKey(DEPARTMENTS),
     number: "",
   });
-  const { data, loading } = useQuery(GET_COURSE, {
+  const { data, loading } = useQuery(GET_COURSES, {
     variables: {
       department: queryDetails.department,
       number: nullIfNumberEmpty(queryDetails.number),
@@ -152,6 +143,7 @@ export default function Search({
           draggableId={createSearchIdFromCourse(course)}
           alreadyAdded={courseIsAlreadyAdded(course)}
           onDelete={undefined}
+          onShowCourseInfoModal={onShowCourseInfoModal}
         />
       </div>
     );
@@ -209,6 +201,7 @@ export default function Search({
               onDelete={undefined}
               provided={provided}
               isDragging={snapshot.isDragging}
+              onShowCourseInfoModal={onShowCourseInfoModal}
             />
           );
         }}
