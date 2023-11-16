@@ -1,5 +1,5 @@
 import { List, ListItem } from "@mui/joy";
-import CoursePlanner from "./CoursePlanner";
+import Planner from "./Planner";
 import TabList from "./TabList";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
@@ -53,6 +53,7 @@ export default function App() {
   return (
     <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
       <ScreenSizeWarning />
+
       {/* Header Start */}
       <div className="">
         <Navbar
@@ -96,7 +97,7 @@ function PlannerList({
       {Object.keys(planners).map((id, index) => (
         <ListItem sx={{ display: planners[id][1] ? "block" : "none" }} key={id}>
           <PlannerProvider plannerId={id} title={planners[id][0]} order={index}>
-            <CoursePlanner
+            <Planner
               isActive={planners[id][1]}
               onCourseStateChanged={setCurrentCourseState}
               onShowCourseInfoModal={handleShowCourseInfoModal}

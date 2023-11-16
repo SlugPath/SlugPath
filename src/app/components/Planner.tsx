@@ -13,7 +13,7 @@ import { GradProgress } from "./GradProgress";
 import { useContext } from "react";
 import { PlannerContext } from "../contexts/PlannerProvider";
 
-export default function CoursePlanner({
+export default function Planner({
   isActive,
   onCourseStateChanged,
   onShowCourseInfoModal,
