@@ -1,31 +1,20 @@
 import { List, ListItem, ListItemButton, IconButton, Input } from "@mui/joy";
 import { Add } from "@mui/icons-material";
-import { MultiPlanner } from "../types/MultiPlanner";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
+import { PlannersContext } from "../contexts/PlannersProvider";
 
 const MAX_PLANNERS = 8;
 
-export interface TabListProps {
-  planners: MultiPlanner;
-  onRemovePlanner: (id: string) => void;
-  onAddPlanner: () => void;
-  onSwitchPlanners: (id: string, title: string) => void;
-  onChangePlannerName: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string,
-  ) => void;
-}
-
-export default function TabList(props: TabListProps) {
+export default function TabList() {
   const {
     planners,
-    onRemovePlanner,
-    onSwitchPlanners,
-    onChangePlannerName,
-    onAddPlanner,
-  } = props;
+    removePlanner,
+    switchPlanners,
+    changePlannerName,
+    addPlanner,
+  } = useContext(PlannersContext);
 
   // State-ful variables for managing the editing of planner names
   // and deletion alerts
@@ -42,7 +31,7 @@ export default function TabList(props: TabListProps) {
       setTooMany(true);
       return;
     }
-    onAddPlanner();
+    addPlanner();
   };
 
   /**
@@ -51,7 +40,7 @@ export default function TabList(props: TabListProps) {
    */
   const deletePlanner = (id: string) => {
     setAlert(["", ""]);
-    onRemovePlanner(id);
+    removePlanner(id);
   };
 
   return (
@@ -97,7 +86,7 @@ export default function TabList(props: TabListProps) {
           }
         >
           <ListItemButton
-            onClick={() => onSwitchPlanners(id, title)}
+            onClick={() => switchPlanners(id, title)}
             variant="outlined"
             color={isActive ? "primary" : "neutral"}
             selected={isActive}
@@ -121,7 +110,7 @@ export default function TabList(props: TabListProps) {
                   },
                   maxWidth: "15ch",
                 }}
-                onChange={(e) => onChangePlannerName(e, id)}
+                onChange={(e) => changePlannerName(e, id)}
                 onBlur={() => setIsEditing(null)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {

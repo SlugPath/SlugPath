@@ -1,48 +1,36 @@
 import QuarterCard from "./QuarterCard";
 import { quartersPerYear } from "../../lib/initialPlanner";
 import { PlannerData } from "../types/PlannerData";
-import useCoursePlanner from "../hooks/useCoursePlanner";
+// import usePlanner from "../hooks/usePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
+import { useContext } from "react";
+import { PlannerContext } from "../contexts/PlannerProvider";
 
 export default function CoursePlanner({
-  id,
   isActive,
   onCourseStateChanged,
-  title,
-  order,
   onShowCourseInfoModal,
 }: {
-  id: string;
-  order: number;
   isActive: boolean;
-  title: string;
   onCourseStateChanged: any;
   onShowCourseInfoModal: any;
 }) {
-  const { data: session, status } = useSession();
   const {
     handleOnDragStart,
-    deleteCourse,
-    totalCredits,
-    unavailableQuarters,
-    courseState,
     handleDragEnd,
+    totalCredits,
+    courseState,
     memoAlreadyCourses,
     saveStatus,
     saveError,
-  } = useCoursePlanner({
-    userId: session?.user.id,
-    plannerId: id,
-    title,
-    order,
-  });
+  } = useContext(PlannerContext);
 
   const [loading, setLoading] = useState(true);
 
@@ -83,8 +71,6 @@ export default function CoursePlanner({
                 <div className="overflow-auto h-[92vh] w-auto">
                   <Quarters
                     courseState={courseState}
-                    unavailableQuarters={unavailableQuarters}
-                    deleteCourse={deleteCourse}
                     onShowCourseInfoModal={onShowCourseInfoModal}
                   />
                 </div>
@@ -102,13 +88,13 @@ export default function CoursePlanner({
 
 function Quarters({
   courseState,
-  unavailableQuarters,
-  deleteCourse,
+  // unavailableQuarters,
+  // deleteCourse,
   onShowCourseInfoModal,
 }: {
   courseState: PlannerData;
-  unavailableQuarters: string[];
-  deleteCourse: any;
+  // unavailableQuarters: string[];
+  // deleteCourse: any;
   onShowCourseInfoModal: any;
 }) {
   return (
@@ -129,8 +115,8 @@ function Quarters({
                   key={quarter.id}
                   title={quarter.title}
                   courses={courses}
-                  deleteCourse={deleteCourse(quarter.id)}
-                  unavailableQuarters={unavailableQuarters}
+                  // deleteCourse={deleteCourse(quarter.id)}
+                  // unavailableQuarters={unavailableQuarters}
                   onShowCourseInfoModal={onShowCourseInfoModal}
                 />
               );

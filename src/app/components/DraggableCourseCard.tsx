@@ -7,14 +7,14 @@ export default function DraggableCourseCard({
   index,
   draggableId,
   alreadyAdded,
-  onDelete,
+  quarterId,
   onShowCourseInfoModal,
 }: {
   course: StoredCourse;
   index: number;
   draggableId: string;
   alreadyAdded?: boolean;
-  onDelete: undefined | ((index: number) => void);
+  quarterId?: string;
   onShowCourseInfoModal: any;
 }) {
   return (
@@ -30,7 +30,7 @@ export default function DraggableCourseCard({
             course={course}
             index={index}
             alreadyAdded={alreadyAdded}
-            onDelete={onDelete}
+            quarterId={quarterId}
             provided={provided}
             isDragging={snapshot.isDragging}
             onShowCourseInfoModal={onShowCourseInfoModal}
