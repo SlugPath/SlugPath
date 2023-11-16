@@ -5,9 +5,9 @@ import { usePlanner } from "../hooks/usePlanner";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import Navbar from "./Navbar";
-import { MobileWarningModal, isMobile } from "./isMobile";
+import ScreenSizeWarning from "./ScreenSizeWarning";
 import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { useSession } from "next-auth/react";
 import CourseInfoModal from "./CourseInfoModal";
@@ -15,7 +15,6 @@ import { StoredCourse } from "@/graphql/planner/schema";
 
 export default function App() {
   const { data: session } = useSession();
-  const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
@@ -60,12 +59,12 @@ export default function App() {
         setShowModal={setShowMajorCompletionModal}
         showModal={showMajorCompletionModal}
       />
-      <MobileWarningModal show={showMobileWarning} />
     </>
   );
 
   return (
     <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
+      <ScreenSizeWarning />
       {/* Header Start */}
       <div className="">
         <Navbar
