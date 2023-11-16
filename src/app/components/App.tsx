@@ -31,13 +31,6 @@ export default function App() {
     handleChangePlannerName,
   } = usePlanner(session?.user.id);
 
-  // checks if user is on mobile device
-  useEffect(() => {
-    if (isMobile()) {
-      setShowMobileWarning(true);
-    }
-  }, []);
-
   function handleShowCourseInfoModal(course: StoredCourse) {
     setDisplayCourse(course);
     setShowCourseInfoModal(true);
