@@ -21,10 +21,8 @@ const DEPARTMENTS = {
  */
 export default function Search({
   coursesInPlanner,
-  onShowCourseInfoModal,
 }: {
   coursesInPlanner: string[];
-  onShowCourseInfoModal: any;
 }) {
   const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
   const [number, setNumber] = useState("");
@@ -142,8 +140,6 @@ export default function Search({
           index={index}
           draggableId={createSearchIdFromCourse(course)}
           alreadyAdded={courseIsAlreadyAdded(course)}
-          onDelete={undefined}
-          onShowCourseInfoModal={onShowCourseInfoModal}
         />
       </div>
     );
@@ -198,10 +194,8 @@ export default function Search({
               course={course}
               index={index}
               alreadyAdded={courseIsAlreadyAdded(course)}
-              onDelete={undefined}
               provided={provided}
               isDragging={snapshot.isDragging}
-              onShowCourseInfoModal={onShowCourseInfoModal}
             />
           );
         }}

@@ -8,6 +8,8 @@ import {
   createOrRequirementsString,
 } from "../../lib/courseRequirements";
 import dynamic from "next/dynamic";
+import { ModalsStateContext } from "../contexts/ModalsStateProvider";
+import { useContext } from "react";
 
 const Tree = dynamic(
   () => {
@@ -76,17 +78,14 @@ const prerequisites: Prerequisites = {
 };
 const completedCourses: string[] = ["CSE 20", "MATH 19A"];
 
-export default function MajorCompletionModal({
-  setShowModal,
-  showModal,
-}: {
-  setShowModal: any;
-  showModal: boolean;
-}) {
+export default function MajorCompletionModal() {
+  const { setShowMajorCompletionModal, showMajorCompletionModal } =
+    useContext(ModalsStateContext);
+
   return (
     <Modal
-      open={showModal}
-      onClose={() => setShowModal(false)}
+      open={showMajorCompletionModal}
+      onClose={() => setShowMajorCompletionModal(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet

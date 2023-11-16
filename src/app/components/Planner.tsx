@@ -1,27 +1,18 @@
 import QuarterCard from "./QuarterCard";
 import { quartersPerYear } from "../../lib/initialPlanner";
 import { PlannerData } from "../types/PlannerData";
-// import usePlanner from "../hooks/usePlanner";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-// import { useSession } from "next-auth/react";
 import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
-import { useContext } from "react";
 import { PlannerContext } from "../contexts/PlannerProvider";
+import { ModalsStateContext } from "../contexts/ModalsStateProvider";
+import { useContext } from "react";
 
-export default function Planner({
-  isActive,
-  onCourseStateChanged,
-  onShowCourseInfoModal,
-}: {
-  isActive: boolean;
-  onCourseStateChanged: any;
-  onShowCourseInfoModal: any;
-}) {
+export default function Planner({ isActive }: { isActive: boolean }) {
   const {
     handleOnDragStart,
     handleDragEnd,
@@ -31,6 +22,7 @@ export default function Planner({
     saveStatus,
     saveError,
   } = useContext(PlannerContext);
+  const { setCurrentCourseState } = useContext(ModalsStateContext);
 
   const [loading, setLoading] = useState(true);
 
@@ -41,8 +33,8 @@ export default function Planner({
   });
 
   useEffect(() => {
-    onCourseStateChanged(courseState);
-  }, [courseState, onCourseStateChanged]);
+    setCurrentCourseState(courseState);
+  }, [courseState, setCurrentCourseState]);
 
   if (!isActive) {
     return <></>;
@@ -59,20 +51,14 @@ export default function Planner({
           <div className="flex">
             {/* <div className="pr-2 flex-initial"> */}
             <div className="flex-initial pr-2">
-              <Search
-                coursesInPlanner={memoAlreadyCourses}
-                onShowCourseInfoModal={onShowCourseInfoModal}
-              />
+              <Search coursesInPlanner={memoAlreadyCourses} />
             </div>
             {loading ? (
               <CircularProgress />
             ) : (
               <>
                 <div className="overflow-auto h-[92vh] w-auto">
-                  <Quarters
-                    courseState={courseState}
-                    onShowCourseInfoModal={onShowCourseInfoModal}
-                  />
+                  <Quarters courseState={courseState} />
                 </div>
                 <div className="pl-4 flex-initial self-start">
                   <GradProgress credits={totalCredits} />
@@ -86,17 +72,7 @@ export default function Planner({
   );
 }
 
-function Quarters({
-  courseState,
-  // unavailableQuarters,
-  // deleteCourse,
-  onShowCourseInfoModal,
-}: {
-  courseState: PlannerData;
-  // unavailableQuarters: string[];
-  // deleteCourse: any;
-  onShowCourseInfoModal: any;
-}) {
+function Quarters({ courseState }: { courseState: PlannerData }) {
   return (
     <div className="space-y-2">
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
@@ -115,9 +91,6 @@ function Quarters({
                   key={quarter.id}
                   title={quarter.title}
                   courses={courses}
-                  // deleteCourse={deleteCourse(quarter.id)}
-                  // unavailableQuarters={unavailableQuarters}
-                  onShowCourseInfoModal={onShowCourseInfoModal}
                 />
               );
             })}

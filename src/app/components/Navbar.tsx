@@ -3,14 +3,12 @@ import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UserAvatar from "./UserAvatar";
+import { ModalsStateContext } from "../contexts/ModalsStateProvider";
+import { useContext } from "react";
 
-export default function Navbar({
-  setShowExportModal,
-  setShowMajorCompletionModal,
-}: {
-  setShowExportModal: any;
-  setShowMajorCompletionModal: any;
-}) {
+export default function Navbar() {
+  const { setShowExportModal, setShowMajorCompletionModal } =
+    useContext(ModalsStateContext);
   const { data: session, status } = useSession();
 
   return (

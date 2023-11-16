@@ -8,14 +8,12 @@ export default function DraggableCourseCard({
   draggableId,
   alreadyAdded,
   quarterId,
-  onShowCourseInfoModal,
 }: {
   course: StoredCourse;
   index: number;
   draggableId: string;
   alreadyAdded?: boolean;
   quarterId?: string;
-  onShowCourseInfoModal: any;
 }) {
   return (
     <Draggable
@@ -33,7 +31,6 @@ export default function DraggableCourseCard({
             quarterId={quarterId}
             provided={provided}
             isDragging={snapshot.isDragging}
-            onShowCourseInfoModal={onShowCourseInfoModal}
           />
         );
       }}

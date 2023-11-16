@@ -10,12 +10,10 @@ export default function QuarterCard({
   title,
   id,
   courses,
-  onShowCourseInfoModal,
 }: {
   title: string;
   id: string;
   courses: StoredCourse[];
-  onShowCourseInfoModal: any;
 }) {
   const { unavailableQuarters } = useContext(PlannerContext);
 
@@ -45,7 +43,6 @@ export default function QuarterCard({
                   index={index}
                   draggableId={createIdFromCourse(course)}
                   quarterId={id}
-                  onShowCourseInfoModal={onShowCourseInfoModal}
                 />
               ))}
               {provided.placeholder}
