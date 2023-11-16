@@ -3,13 +3,12 @@ import { quartersPerYear } from "../../lib/initialPlanner";
 import { PlannerData } from "../types/PlannerData";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
 import { PlannerContext } from "../contexts/PlannerProvider";
-import { ModalsStateContext } from "../contexts/ModalsStateProvider";
 import { useContext } from "react";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -22,8 +21,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     saveStatus,
     saveError,
   } = useContext(PlannerContext);
-  const { setCurrentCourseState } = useContext(ModalsStateContext);
-
   const [loading, setLoading] = useState(true);
 
   useDebounce({
@@ -31,10 +28,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     delay: 1000,
     dependencies: [status],
   });
-
-  useEffect(() => {
-    setCurrentCourseState(courseState);
-  }, [courseState, setCurrentCourseState]);
 
   if (!isActive) {
     return <></>;

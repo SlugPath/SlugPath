@@ -62,6 +62,7 @@ function PlannerList() {
         <ListItem sx={{ display: planners[id][1] ? "block" : "none" }} key={id}>
           <PlannerProvider plannerId={id} title={planners[id][0]} order={index}>
             <Planner isActive={planners[id][1]} />
+            {planners[id][1] && <Modals />}
           </PlannerProvider>
         </ListItem>
       ))}

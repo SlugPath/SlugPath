@@ -14,6 +14,7 @@ import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
 import { ModalsStateContext } from "../contexts/ModalsStateProvider";
 import { useContext } from "react";
+import { PlannerContext } from "../contexts/PlannerProvider";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -49,8 +50,9 @@ const styles = StyleSheet.create({
 });
 
 export default function CourseSelectionModal() {
-  const { setShowExportModal, showExportModal, currentCourseState } =
+  const { setShowExportModal, showExportModal } =
     useContext(ModalsStateContext);
+  const { courseState } = useContext(PlannerContext);
 
   return (
     <Modal
@@ -83,7 +85,7 @@ export default function CourseSelectionModal() {
           <Document>
             <Page size="A4" style={styles.page}>
               <View>
-                <Years courseState={currentCourseState} />
+                <Years courseState={courseState} />
               </View>
             </Page>
           </Document>

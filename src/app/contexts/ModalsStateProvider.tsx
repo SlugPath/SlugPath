@@ -1,6 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { StoredCourse } from "../types/Course";
-import { initialPlanner } from "@/lib/initialPlanner";
 
 interface ModalsStateContextProps {
   showMajorCompletionModal: boolean;
@@ -9,8 +8,6 @@ interface ModalsStateContextProps {
   setShowExportModal: any;
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: any;
-  currentCourseState: typeof initialPlanner;
-  setCurrentCourseState: any;
   displayCourse: StoredCourse | undefined;
   setDisplayCourse: any;
   onShowCourseInfoModal: (course: StoredCourse) => void;
@@ -27,14 +24,9 @@ function useModalsState() {
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
-  const [currentCourseState, setCurrentCourseState] = useState(initialPlanner);
   const [displayCourse, setDisplayCourse] = useState<
     StoredCourse | undefined
   >();
-
-  useEffect(() => {
-    console.log("currentCourseState", currentCourseState);
-  }, [currentCourseState]);
 
   function handleShowCourseInfoModal(course: StoredCourse) {
     setDisplayCourse(course);
@@ -48,8 +40,6 @@ function useModalsState() {
     setShowExportModal,
     showCourseInfoModal,
     setShowCourseInfoModal,
-    currentCourseState,
-    setCurrentCourseState,
     displayCourse,
     setDisplayCourse,
     onShowCourseInfoModal: handleShowCourseInfoModal,
@@ -64,8 +54,6 @@ export function ModalsStateProvider({ children }: PlannersProviderProps) {
     setShowExportModal,
     showCourseInfoModal,
     setShowCourseInfoModal,
-    currentCourseState,
-    setCurrentCourseState,
     displayCourse,
     setDisplayCourse,
     onShowCourseInfoModal,
@@ -80,8 +68,6 @@ export function ModalsStateProvider({ children }: PlannersProviderProps) {
         setShowExportModal,
         showCourseInfoModal,
         setShowCourseInfoModal,
-        currentCourseState,
-        setCurrentCourseState,
         displayCourse,
         setDisplayCourse,
         onShowCourseInfoModal,
