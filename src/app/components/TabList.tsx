@@ -1,9 +1,10 @@
-import { List, ListItem, ListItemButton, IconButton, Input } from "@mui/joy";
+import { IconButton, Input, List, ListItem, ListItemButton } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
+import TitleSnackbar from "./TitleSnackbar";
 
 const MAX_PLANNERS = 8;
 
@@ -52,6 +53,10 @@ export default function TabList(props: TabListProps) {
   const deletePlanner = (id: string) => {
     setAlert(["", ""]);
     onRemovePlanner(id);
+  };
+
+  const handleBlur = (title: string) => {
+    title.length > 2 && setIsEditing(null);
   };
 
   return (
@@ -104,31 +109,35 @@ export default function TabList(props: TabListProps) {
           >
             {/* Editable planner titles */}
             {isEditing === id ? (
-              <Input
-                variant="soft"
-                value={title}
-                autoFocus
-                size="md"
-                sx={{
-                  "--Input-focusedInset": "var(--any, )",
-                  "--Input-focusedThickness": "0.25rem",
-                  "--Input-focusedHighlight": "rgba(13,110,253,.25)",
-                  "&::before": {
-                    transition: "box-shadow .15s ease-in-out",
-                  },
-                  "&:focus-within": {
-                    borderColor: "#86b7fe",
-                  },
-                  maxWidth: "15ch",
-                }}
-                onChange={(e) => onChangePlannerName(e, id)}
-                onBlur={() => setIsEditing(null)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setIsEditing(null);
-                  }
-                }}
-              />
+              <>
+                <TitleSnackbar error={title.length < 2} />
+                <Input
+                  variant="soft"
+                  value={title}
+                  autoFocus
+                  error={title.length < 2}
+                  size="md"
+                  sx={{
+                    "--Input-focusedInset": "var(--any, )",
+                    "--Input-focusedThickness": "0.25rem",
+                    "--Input-focusedHighlight": "rgba(13,110,253,.25)",
+                    "&::before": {
+                      transition: "box-shadow .15s ease-in-out",
+                    },
+                    "&:focus-within": {
+                      borderColor: "#86b7fe",
+                    },
+                    maxWidth: "15ch",
+                  }}
+                  onChange={(e) => onChangePlannerName(e, id)}
+                  onBlur={() => handleBlur(title)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleBlur(title);
+                    }
+                  }}
+                />
+              </>
             ) : (
               <span>{title}</span>
             )}
