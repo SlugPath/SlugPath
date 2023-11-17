@@ -46,30 +46,30 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           onDragEnd={handleDragEnd}
           onDragStart={handleOnDragStart}
         >
-          <div className="flex">
-            {/* <div className="pr-2 flex-initial"> */}
-            <div className="flex-initial pr-2">
-              <Search coursesInPlanner={memoAlreadyCourses} />
-            </div>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <>
-                <div className="overflow-auto h-[92vh] w-auto">
-                  <Quarters courseState={courseState} />
-                </div>
-                {/* Modals and Grad Progress */}
-                <div className="pl-4 flex-initial self-start">
-                  <GradProgress credits={totalCredits} />
-                  <ModalsStateProvider>
+          <ModalsStateProvider>
+            <div className="flex">
+              {/* <div className="pr-2 flex-initial"> */}
+              <div className="flex-initial pr-2">
+                <Search coursesInPlanner={memoAlreadyCourses} />
+              </div>
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <>
+                  <div className="overflow-auto h-[92vh] w-auto">
+                    <Quarters courseState={courseState} />
+                  </div>
+                  {/* Modals and Grad Progress */}
+                  <div className="pl-4 flex-initial self-start">
+                    <GradProgress credits={totalCredits} />
                     <PlannerActions />
                     <Modals />
-                  </ModalsStateProvider>
-                  {/* End Modals */}
-                </div>
-              </>
-            )}
-          </div>
+                    {/* End Modals */}
+                  </div>
+                </>
+              )}
+            </div>
+          </ModalsStateProvider>
         </DragDropContext>
       </div>
     </>
