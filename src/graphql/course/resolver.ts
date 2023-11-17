@@ -78,6 +78,15 @@ export class CourseResolver {
   }
 
   /**
+   * A custom query that asynchronously retrieves a list of unique `Department` names.
+   * @returns a list of `Department` instances with unique department names
+   */
+  @Query(() => [Department])
+  async departments(): Promise<Department[]> {
+    return await new CourseService().getAllDepartments();
+  }
+
+  /**
    * A mutation function that creates a course if one with the same `department`
    * and course `number` does not exist already
    * @param input an `CreateInput` instance
