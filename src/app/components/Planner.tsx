@@ -47,7 +47,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           onDragStart={handleOnDragStart}
         >
           <div className="flex">
-            {/* <div className="pr-2 flex-initial"> */}
             <div className="flex-initial pr-2">
               <Search coursesInPlanner={memoAlreadyCourses} />
             </div>
@@ -58,15 +57,23 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <div className="overflow-auto h-[92vh] w-auto">
                   <Quarters courseState={courseState} />
                 </div>
+
                 {/* Modals and Grad Progress */}
-                <div className="pl-4 flex-initial self-start">
-                  <GradProgress credits={totalCredits} />
-                  <ModalsStateProvider>
-                    <PlannerActions />
-                    <Modals />
-                  </ModalsStateProvider>
-                  {/* End Modals */}
+                <div className="pl-4 pt-7 self-start">
+                  <div className="pb-6">
+                    <ModalsStateProvider>
+                      <PlannerActions />
+                      <Modals />
+                    </ModalsStateProvider>
+                  </div>
+
+                  <hr className="rounded border-t border-slate-400" />
+
+                  <div className="pl-2 pt-8 flex justify-items-center">
+                    <GradProgress credits={totalCredits} />
+                  </div>
                 </div>
+                {/* End Modals */}
               </>
             )}
           </div>

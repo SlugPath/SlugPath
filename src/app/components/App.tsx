@@ -15,11 +15,8 @@ export default function App() {
   return (
     <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
       <ScreenSizeWarning />
-      {/* Header Start */}
       <Navbar />
-      {/* Header End */}
 
-      {/* Planner Start */}
       <PlannersProvider>
         <div className="pt-4 mb-auto">
           <div className="flex justify-left px-7">
@@ -30,11 +27,8 @@ export default function App() {
           </div>
         </div>
       </PlannersProvider>
-      {/* Planner End */}
 
-      {/* Footer Start */}
       <Footer />
-      {/* Footer End */}
     </div>
   );
 }

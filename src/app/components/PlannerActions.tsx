@@ -5,12 +5,12 @@ export default function PlannerActions() {
   const { setShowExportModal, setShowMajorCompletionModal } =
     useContext(ModalsStateContext);
   return (
-    <div className="flex flex-1 justify-end">
+    <div className="flex flex-col gap-1">
       <Button onClick={() => setShowExportModal(true)} variant="plain">
-        Export
+        Export Planner PDF
       </Button>
       <Button onClick={() => setShowMajorCompletionModal(true)} variant="plain">
-        Major Progress
+        Major Progress Chart
       </Button>
     </div>
   );
