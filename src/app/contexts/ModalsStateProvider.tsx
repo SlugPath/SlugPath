@@ -1,16 +1,21 @@
-import { createContext, useState } from "react";
+import { SetStateAction, createContext, useContext, useState } from "react";
 import { StoredCourse } from "../types/Course";
+import { PlannerContext } from "./PlannerProvider";
+import { PlannerData } from "../types/PlannerData";
+
+type setShow = React.Dispatch<SetStateAction<boolean>>;
 
 interface ModalsStateContextProps {
   showMajorCompletionModal: boolean;
-  setShowMajorCompletionModal: any;
+  setShowMajorCompletionModal: setShow;
   showExportModal: boolean;
-  setShowExportModal: any;
+  setShowExportModal: setShow;
   showCourseInfoModal: boolean;
-  setShowCourseInfoModal: any;
+  setShowCourseInfoModal: setShow;
   displayCourse: StoredCourse | undefined;
   setDisplayCourse: any;
   onShowCourseInfoModal: (course: StoredCourse) => void;
+  courseState: PlannerData;
 }
 
 export const ModalsStateContext = createContext({} as ModalsStateContextProps);
@@ -59,6 +64,8 @@ export function ModalsStateProvider({ children }: PlannersProviderProps) {
     onShowCourseInfoModal,
   } = useModalsState();
 
+  const { courseState } = useContext(PlannerContext);
+
   return (
     <ModalsStateContext.Provider
       value={{
@@ -71,6 +78,7 @@ export function ModalsStateProvider({ children }: PlannersProviderProps) {
         displayCourse,
         setDisplayCourse,
         onShowCourseInfoModal,
+        courseState,
       }}
     >
       {children}

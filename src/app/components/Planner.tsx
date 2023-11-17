@@ -10,6 +10,11 @@ import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { useContext } from "react";
+import PlannerActions from "./PlannerActions";
+import { ModalsStateProvider } from "../contexts/ModalsStateProvider";
+import MajorCompletionModal from "./MajorCompletionModal";
+import ExportModal from "./ExportModal";
+import CourseInfoModal from "./CourseInfoModal";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -53,14 +58,30 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <div className="overflow-auto h-[92vh] w-auto">
                   <Quarters courseState={courseState} />
                 </div>
+                {/* Modals and Grad Progress */}
                 <div className="pl-4 flex-initial self-start">
                   <GradProgress credits={totalCredits} />
+                  <ModalsStateProvider>
+                    <PlannerActions />
+                    <Modals />
+                  </ModalsStateProvider>
+                  {/* End Modals */}
                 </div>
               </>
             )}
           </div>
         </DragDropContext>
       </div>
+    </>
+  );
+}
+
+function Modals() {
+  return (
+    <>
+      <CourseInfoModal />
+      <ExportModal />
+      <MajorCompletionModal />
     </>
   );
 }
