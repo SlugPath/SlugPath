@@ -21,6 +21,7 @@ export default function QuarterCard({
     <Card
       size="sm"
       className="w-64 min-w-[130px]"
+      // Highlight quarter(s) in red where course is not offered
       style={{
         backgroundColor: unavailableQuarters.includes(id)
           ? "#FEE2E2"

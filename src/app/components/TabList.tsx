@@ -61,7 +61,6 @@ export default function TabList() {
         onClose={() => setTooMany(false)}
       />
       {/* End alerts */}
-
       {Object.entries(planners).map(([id, [title, isActive]]) => (
         <ListItem
           onDoubleClick={() => setIsEditing(id)}
