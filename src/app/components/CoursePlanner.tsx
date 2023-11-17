@@ -69,7 +69,6 @@ export default function CoursePlanner({
           onDragStart={handleOnDragStart}
         >
           <div className="flex">
-            {/* <div className="pr-2 flex-initial"> */}
             <div className="flex-initial pr-2">
               <Search
                 coursesInPlanner={memoAlreadyCourses}
@@ -88,7 +87,7 @@ export default function CoursePlanner({
                     onShowCourseInfoModal={onShowCourseInfoModal}
                   />
                 </div>
-                <div className="pl-4 flex-initial self-start">
+                <div className="pl-4 flex-initial self-start w-[145px] xl:w-[300px]">
                   <GradProgress credits={totalCredits} />
                 </div>
               </>
