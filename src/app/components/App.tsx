@@ -5,19 +5,24 @@ import { usePlanner } from "../hooks/usePlanner";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import Navbar from "./Navbar";
-import { MobileWarningModal, isMobile } from "./isMobile";
+import ScreenSizeWarning from "./ScreenSizeWarning";
 import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { initialPlanner } from "@/lib/initialPlanner";
 import { useSession } from "next-auth/react";
+import CourseInfoModal from "./CourseInfoModal";
+import { StoredCourse } from "@/graphql/planner/schema";
 
 export default function App() {
   const { data: session } = useSession();
-  const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [showMajorCompletionModal, setShowMajorCompletionModal] =
     useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
   const [currentCourseState, setCurrentCourseState] = useState(initialPlanner);
+  const [displayCourse, setDisplayCourse] = useState<
+    StoredCourse | undefined
+  >();
   const {
     planners,
     handleRemovePlanner,
@@ -26,15 +31,18 @@ export default function App() {
     handleChangePlannerName,
   } = usePlanner(session?.user.id);
 
-  // checks if user is on mobile device
-  useEffect(() => {
-    if (isMobile()) {
-      setShowMobileWarning(true);
-    }
-  }, []);
+  function handleShowCourseInfoModal(course: StoredCourse) {
+    setDisplayCourse(course);
+    setShowCourseInfoModal(true);
+  }
 
   const Modals = () => (
     <>
+      <CourseInfoModal
+        showModal={showCourseInfoModal}
+        setShowModal={setShowCourseInfoModal}
+        course={displayCourse}
+      />
       <ExportModal
         courseState={currentCourseState}
         setShowModal={setShowExportModal}
@@ -44,12 +52,12 @@ export default function App() {
         setShowModal={setShowMajorCompletionModal}
         showModal={showMajorCompletionModal}
       />
-      <MobileWarningModal show={showMobileWarning} />
     </>
   );
 
   return (
     <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
+      <ScreenSizeWarning />
       {/* Header Start */}
       <div className="">
         <Navbar
@@ -100,6 +108,7 @@ export default function App() {
                   id={id}
                   isActive={planners[id][1]}
                   onCourseStateChanged={setCurrentCourseState}
+                  onShowCourseInfoModal={handleShowCourseInfoModal}
                 />
               </ListItem>
             ))}
