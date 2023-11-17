@@ -8,27 +8,29 @@ import {
 } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import { getTitle } from "../../lib/courseUtils";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import CloseIcon from "@mui/icons-material/Close";
+import { PlannerContext } from "../contexts/PlannerProvider";
+import { ModalsContext } from "../contexts/ModalsProvider";
 
 export default function CourseCard({
   course,
   index,
   alreadyAdded,
-  onDelete,
+  quarterId,
   provided,
   isDragging,
-  onShowCourseInfoModal,
 }: {
   course: StoredCourse;
   index: number;
   alreadyAdded?: boolean;
-  onDelete: undefined | ((index: number) => void);
+  quarterId?: string;
   provided: DraggableProvided;
   isDragging: boolean;
-  onShowCourseInfoModal: any;
 }) {
+  const { deleteCourse } = useContext(PlannerContext);
+  const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
@@ -72,9 +74,9 @@ export default function CourseCard({
             </Typography>
           </Grid>
           <Grid xs={2}>
-            {onDelete !== undefined && (
+            {quarterId !== undefined && (
               <IconButton
-                onClick={() => onDelete(index)}
+                onClick={() => deleteCourse(quarterId)(index)}
                 variant="plain"
                 size="sm"
                 className={`bg-gray-200 hover:bg-gray-300 ${

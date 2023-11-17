@@ -12,6 +12,8 @@ import { StoredCourse } from "../types/Course";
 import { Quarter, findQuarter } from "../types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
+import { ModalsContext } from "../contexts/ModalsProvider";
+import { useContext } from "react";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -46,19 +48,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function CourseSelectionModal({
-  courseState,
-  setShowModal,
-  showModal,
-}: {
-  courseState: PlannerData;
-  setShowModal: any;
-  showModal: boolean;
-}) {
+export default function CourseSelectionModal() {
+  const { setShowExportModal, showExportModal, courseState } =
+    useContext(ModalsContext);
+
   return (
     <Modal
-      open={showModal}
-      onClose={() => setShowModal(false)}
+      open={showExportModal}
+      onClose={() => setShowExportModal(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
@@ -107,17 +104,17 @@ function Years({ courseState }: { courseState: PlannerData }) {
           .map((q) => q.id);
 
         return (
-          <Quarters key={i} quarters={quarters} courseState={courseState} />
+          <PDFQuarters key={i} quarters={quarters} courseState={courseState} />
         );
       })}
     </View>
   );
 }
 
-function Quarters({
+function PDFQuarters({
+  key,
   quarters,
   courseState,
-  key,
 }: {
   quarters: string[];
   courseState: PlannerData;
@@ -128,13 +125,13 @@ function Quarters({
       {quarters.map((q) => {
         const { quarter } = findQuarter(courseState.quarters, q);
         const courses = quarter.courses;
-        return <Quarter key={q} quarter={quarter} courses={courses} />;
+        return <PDFQuarter key={q} quarter={quarter} courses={courses} />;
       })}
     </View>
   );
 }
 
-function Quarter({
+function PDFQuarter({
   quarter,
   courses,
 }: {

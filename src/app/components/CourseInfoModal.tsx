@@ -1,19 +1,17 @@
 import { getTitle } from "@/lib/courseUtils";
-import { StoredCourse } from "../types/Course";
 import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { createQuartersOfferedString } from "@/lib/courseUtils";
+import { useContext } from "react";
+import { ModalsContext } from "../contexts/ModalsProvider";
 
-export default function CourseInfoModal({
-  setShowModal,
-  showModal,
-  course,
-}: {
-  setShowModal: any;
-  showModal: boolean;
-  course?: StoredCourse;
-}) {
+export default function CourseInfoModal() {
+  const {
+    setShowCourseInfoModal: setShowModal,
+    showCourseInfoModal: showModal,
+    displayCourse: course,
+  } = useContext(ModalsContext);
   const { data, error, loading } = useQuery(GET_COURSE, {
     variables: {
       department: course ? course.department : "",

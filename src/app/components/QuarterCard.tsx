@@ -3,22 +3,20 @@ import DraggableCourseCard from "./DraggableCourseCard";
 import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
+import { PlannerContext } from "../contexts/PlannerProvider";
+import { useContext } from "react";
 
 export default function QuarterCard({
   title,
   id,
   courses,
-  unavailableQuarters,
-  deleteCourse,
-  onShowCourseInfoModal,
 }: {
   title: string;
   id: string;
   courses: StoredCourse[];
-  unavailableQuarters: string[];
-  deleteCourse: (deleteIdx: number) => void;
-  onShowCourseInfoModal: any;
 }) {
+  const { unavailableQuarters } = useContext(PlannerContext);
+
   return (
     <Card
       size="sm"
@@ -45,8 +43,7 @@ export default function QuarterCard({
                   course={course}
                   index={index}
                   draggableId={createIdFromCourse(course)}
-                  onDelete={deleteCourse}
-                  onShowCourseInfoModal={onShowCourseInfoModal}
+                  quarterId={id}
                 />
               ))}
               {provided.placeholder}
