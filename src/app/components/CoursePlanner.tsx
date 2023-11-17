@@ -69,7 +69,6 @@ export default function CoursePlanner({
           onDragStart={handleOnDragStart}
         >
           <div className="flex">
-            {/* <div className="pr-2 flex-initial"> */}
             <div className="flex-initial pr-2">
               <Search
                 coursesInPlanner={memoAlreadyCourses}
