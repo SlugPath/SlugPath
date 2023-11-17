@@ -71,6 +71,23 @@ export default function App() {
           />
         </div>
         <div className="px-5">
+          {Object.keys(planners).length == 0 ? (
+            <div className="flex flex-col items-center justify-center h-[80vh]">
+              <div className="text-2xl font-semibold">
+                Welcome to UCSC Course Planner!
+              </div>
+              <div className="text-lg text-center">
+                To get started, click the <b>+</b> button above to create a new
+                planner.
+              </div>
+              <div className="text-sm text-slate-600 text-center pt-4">
+                (Login to save your progress - Your progress will not be saved
+                if you login after creating a planner)
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
           <List>
             {Object.keys(planners).map((id, index) => (
               <ListItem
