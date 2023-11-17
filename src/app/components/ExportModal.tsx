@@ -12,7 +12,7 @@ import { StoredCourse } from "../types/Course";
 import { Quarter, findQuarter } from "../types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
-import { ModalsStateContext } from "../contexts/ModalsStateProvider";
+import { ModalsContext } from "../contexts/ModalsProvider";
 import { useContext } from "react";
 
 // Create styles
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 export default function CourseSelectionModal() {
   const { setShowExportModal, showExportModal, courseState } =
-    useContext(ModalsStateContext);
+    useContext(ModalsContext);
 
   return (
     <Modal

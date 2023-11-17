@@ -11,7 +11,7 @@ import { GradProgress } from "./GradProgress";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { useContext } from "react";
 import PlannerActions from "./PlannerActions";
-import { ModalsStateProvider } from "../contexts/ModalsStateProvider";
+import { ModalsProvider } from "../contexts/ModalsProvider";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import CourseInfoModal from "./CourseInfoModal";
@@ -46,7 +46,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           onDragEnd={handleDragEnd}
           onDragStart={handleOnDragStart}
         >
-          <ModalsStateProvider>
+          <ModalsProvider>
             <div className="flex">
               {/* <div className="pr-2 flex-initial"> */}
               <div className="flex-initial pr-2">
@@ -69,7 +69,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 </>
               )}
             </div>
-          </ModalsStateProvider>
+          </ModalsProvider>
         </DragDropContext>
       </div>
     </>

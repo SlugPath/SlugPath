@@ -1,23 +1,11 @@
-import { ChangeEvent, createContext } from "react";
+import { createContext } from "react";
 import { useSession } from "next-auth/react";
 import { usePlanners } from "../hooks/usePlanners";
-import { MultiPlanner } from "../types/MultiPlanner";
-
-interface PlannersContextProps {
-  planners: MultiPlanner;
-  removePlanner: (plannerId: string) => void;
-  addPlanner: () => void;
-  switchPlanners: (id: string, title: string) => void;
-  changePlannerName: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
-}
+import { PlannersContextProps } from "../types/Context";
 
 export const PlannersContext = createContext({} as PlannersContextProps);
 
-interface PlannersProviderProps {
-  children: React.ReactNode;
-}
-
-export function PlannersProvider({ children }: PlannersProviderProps) {
+export function PlannersProvider({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const {
     planners,

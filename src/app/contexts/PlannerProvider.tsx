@@ -1,30 +1,9 @@
 import { createContext } from "react";
 import usePlanner from "../hooks/usePlanner";
 import { useSession } from "next-auth/react";
-import { DragStart, DropResult } from "@hello-pangea/dnd";
-import { PlannerData } from "@/graphql/planner/schema";
-import { ApolloError } from "@apollo/client";
-
-interface PlannerContextProps {
-  handleOnDragStart: (start: DragStart) => void;
-  deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
-  totalCredits: number;
-  unavailableQuarters: string[];
-  courseState: PlannerData;
-  handleDragEnd: (result: DropResult) => void;
-  memoAlreadyCourses: string[];
-  saveStatus: boolean;
-  saveError: ApolloError | undefined;
-}
+import { PlannerContextProps, PlannerProviderProps } from "../types/Context";
 
 export const PlannerContext = createContext({} as PlannerContextProps);
-
-interface PlannerProviderProps {
-  children: React.ReactNode;
-  plannerId: string;
-  title: string;
-  order: number;
-}
 
 export function PlannerProvider({
   children,

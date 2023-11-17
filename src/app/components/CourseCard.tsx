@@ -12,7 +12,7 @@ import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
-import { ModalsStateContext } from "../contexts/ModalsStateProvider";
+import { ModalsContext } from "../contexts/ModalsProvider";
 
 export default function CourseCard({
   course,
@@ -30,7 +30,7 @@ export default function CourseCard({
   isDragging: boolean;
 }) {
   const { deleteCourse } = useContext(PlannerContext);
-  const { onShowCourseInfoModal } = useContext(ModalsStateContext);
+  const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
