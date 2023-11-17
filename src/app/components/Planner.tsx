@@ -46,37 +46,37 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           onDragEnd={handleDragEnd}
           onDragStart={handleOnDragStart}
         >
-          <div className="flex">
-            <div className="flex-initial pr-2">
-              <Search coursesInPlanner={memoAlreadyCourses} />
-            </div>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <>
-                <div className="overflow-auto h-[92vh] w-auto">
-                  <Quarters courseState={courseState} />
-                </div>
+          <ModalsStateProvider>
+            <div className="flex">
+              <div className="flex-initial pr-2">
+                <Search coursesInPlanner={memoAlreadyCourses} />
+              </div>
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <>
+                  <div className="overflow-auto h-[92vh] w-auto">
+                    <Quarters courseState={courseState} />
+                  </div>
 
-                {/* Modals and Grad Progress */}
-                <div className="pl-4 pt-7 self-start">
-                  <div className="pb-6">
-                    <ModalsStateProvider>
+                  {/* Modals and Grad Progress */}
+                  <div className="pl-4 pt-7 self-start">
+                    <div className="pb-6">
                       <PlannerActions />
                       <Modals />
-                    </ModalsStateProvider>
-                  </div>
+                    </div>
 
-                  <hr className="rounded border-t border-slate-400" />
+                    <hr className="rounded border-t border-slate-400" />
 
-                  <div className="pl-2 pt-8 flex justify-items-center">
-                    <GradProgress credits={totalCredits} />
+                    <div className="pl-2 pt-8 flex justify-items-center">
+                      <GradProgress credits={totalCredits} />
+                    </div>
                   </div>
-                </div>
-                {/* End Modals */}
-              </>
-            )}
-          </div>
+                  {/* End Modals */}
+                </>
+              )}
+            </div>
+          </ModalsStateProvider>
         </DragDropContext>
       </div>
     </>
