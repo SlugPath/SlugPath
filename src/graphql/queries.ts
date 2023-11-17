@@ -23,3 +23,11 @@ export const GET_COURSE = gql`
     }
   }
 `;
+
+export const GET_DEPARTMENTS = gql`
+  query GetDepartments {
+    departments {
+      name
+    }
+  }
+`;
