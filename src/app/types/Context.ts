@@ -4,6 +4,7 @@ import { PlannerData } from "./PlannerData";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
 import { MultiPlanner } from "./MultiPlanner";
+import { Term } from "./Quarter";
 
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
@@ -14,9 +15,9 @@ export interface ModalsContextProps {
   setShowExportModal: setShow;
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: setShow;
-  displayCourse: StoredCourse | undefined;
+  displayCourse: [StoredCourse, Term | undefined] | undefined;
   setDisplayCourse: any;
-  onShowCourseInfoModal: (course: StoredCourse) => void;
+  onShowCourseInfoModal: (courseTerm: [StoredCourse, Term | undefined]) => void;
   courseState: PlannerData;
 }
 
