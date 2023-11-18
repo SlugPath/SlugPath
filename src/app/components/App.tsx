@@ -1,6 +1,6 @@
 import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
-import TabList from "./TabList";
+import PlannerTabs from "./PlannerTabs";
 import Navbar from "./Navbar";
 import ScreenSizeWarning from "./ScreenSizeWarning";
 import Footer from "./Footer";
@@ -19,7 +19,7 @@ export default function App() {
         <Navbar />
         <div className="pt-4 mb-auto">
           <div className="flex justify-left px-7">
-            <TabList />
+            <PlannerTabs />
           </div>
           <div className="px-5">
             <PlannerList />
