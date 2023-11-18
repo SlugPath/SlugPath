@@ -139,7 +139,11 @@ export default function PlannerTabs() {
               onClick={() => setAlert([id, title])}
               variant="plain"
               size="sm"
-              className="hover:bg-gray-200 p-1 rounded-lg"
+              sx={{
+                "&:hover": {
+                  bgcolor: "background.level2",
+                },
+              }}
             >
               <CloseIcon fontSize="small" />
             </IconButton>
