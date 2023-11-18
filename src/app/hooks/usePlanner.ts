@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
 import useDeepMemo from "./useDeepMemo";
+import { DropResult } from "@hello-pangea/dnd";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
