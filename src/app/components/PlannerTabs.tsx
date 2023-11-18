@@ -17,6 +17,7 @@ export default function PlannerTabs() {
     switchPlanners,
     changePlannerName,
     addPlanner,
+    activePlanner,
   } = useContext(PlannersContext);
 
   // State-ful variables for managing the editing of planner names
@@ -54,6 +55,7 @@ export default function PlannerTabs() {
     if (typeof index === "string" && index !== "add-planner-tab") {
       const title = planners[index][0];
       switchPlanners(index, title);
+      console.log(index);
     }
   };
 
@@ -63,6 +65,7 @@ export default function PlannerTabs() {
       defaultValue={0}
       sx={{ bgcolor: "transparent" }}
       onChange={handleTabChange}
+      value={activePlanner ? activePlanner.id : null}
     >
       <TabList
         disableUnderline
@@ -73,14 +76,14 @@ export default function PlannerTabs() {
           bgcolor: "background.level1",
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
             boxShadow: "sm",
-            bgcolor: "white",
+            bgcolor: "#E5E7EB",
           },
           [`& .${tabClasses.root}[aria-selected="false"]`]: {
             boxShadow: "sm",
-            bgcolor: "background.level1",
+            bgcolor: "white",
           },
           [`& .${tabClasses.root}:hover`]: {
-            bgcolor: "white",
+            bgcolor: "background.level1",
           },
         }}
       >

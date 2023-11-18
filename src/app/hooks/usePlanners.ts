@@ -97,11 +97,22 @@ export function usePlanners(userId: string | undefined) {
     }
   };
 
+  const getActivePlanner = () => {
+    const activePlanner = Object.keys(planners).find(
+      (id: string) => planners[id][1],
+    );
+    if (activePlanner === undefined) {
+      return undefined;
+    }
+    return { id: activePlanner, title: planners[activePlanner][0] };
+  };
+
   return {
     planners,
     switchPlanners,
     changePlannerName,
     addPlanner,
     removePlanner,
+    activePlanner: getActivePlanner(),
   };
 }
