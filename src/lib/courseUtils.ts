@@ -1,5 +1,6 @@
 import { PlannerData } from "@/app/types/PlannerData";
 import { StoredCourse } from "../app/types/Course";
+import { Term } from "@/app/types/Quarter";
 
 export function getTitle(department: string, number: string) {
   return `${department} ${number}`;
@@ -49,7 +50,7 @@ export function getTotalCredits(planner: PlannerData): number {
 /**
  * Creates a string of the quarters offered for a course
  */
-export function createQuartersOfferedString(course: StoredCourse) {
+export function createQuartersOfferedString(course: StoredCourse): string {
   if (course.quartersOffered.length === 0) {
     return "None";
   } else {
@@ -57,4 +58,26 @@ export function createQuartersOfferedString(course: StoredCourse) {
       return acc + ", " + curr;
     });
   }
+}
+
+/**
+ * Extracts the term from a quarter ID
+ * @param qid quarter Id of the format `quarter-{year}-{term}`
+ * @returns term name
+ */
+export function extractTermFromQuarter(
+  qid: string | undefined,
+): Term | undefined {
+  if (qid === undefined) return undefined;
+
+  const tokens = qid.split("-");
+  return tokens[tokens.length - 1] as Term;
+}
+
+export function isOffered(
+  quartersOffered: string[],
+  term: Term | undefined,
+): boolean {
+  if (term === undefined) return true;
+  return quartersOffered.find((t) => (t as Term) == term) !== undefined;
 }
