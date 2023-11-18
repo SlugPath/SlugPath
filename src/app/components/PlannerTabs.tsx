@@ -1,5 +1,7 @@
-import { IconButton, Input, List, ListItem, ListItemButton } from "@mui/joy";
+import { IconButton, Input, Tabs, TabList } from "@mui/joy";
+import Tab, { tabClasses } from "@mui/joy/Tab";
 import { Add } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useContext, useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
@@ -8,7 +10,7 @@ import TitleSnackbar from "./TitleSnackbar";
 
 const MAX_PLANNERS = 8;
 
-export default function TabList() {
+export default function PlannerTabs() {
   const {
     planners,
     removePlanner,
@@ -48,52 +50,57 @@ export default function TabList() {
     title.length > 2 && setIsEditing(null);
   };
 
+  const handleTabChange = (e: any, index: number | string | null) => {
+    if (typeof index === "string" && index !== "add-planner-tab") {
+      const title = planners[index][0];
+      switchPlanners(index, title);
+    }
+  };
+
   return (
-    <List orientation="horizontal" size="sm">
-      {/* Start alerts */}
-      <PlannerDeleteAlert
-        open={openAlert}
-        onClose={() => setAlert(["", ""])}
-        onDelete={deletePlanner}
-      />
-      <TooManyPlannersAlert
-        open={openTooMany}
-        onClose={() => setTooMany(false)}
-      />
-      {/* End alerts */}
-      {Object.entries(planners).map(([id, [title, isActive]]) => (
-        <ListItem
-          onDoubleClick={() => setIsEditing(id)}
-          key={id}
-          endAction={
-            <button
-              onClick={() => setAlert([id, title])}
-              aria-label="Delete"
-              color="danger"
-              className="hover:bg-red-100 p-1 rounded-lg"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="red"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                />
-              </svg>
-            </button>
-          }
-        >
-          <ListItemButton
-            onClick={() => switchPlanners(id, title)}
-            variant="outlined"
-            color={isActive ? "primary" : "neutral"}
-            selected={isActive}
+    <Tabs
+      aria-label="tabs"
+      defaultValue={0}
+      sx={{ bgcolor: "transparent" }}
+      onChange={handleTabChange}
+    >
+      <TabList
+        disableUnderline
+        sx={{
+          p: 0.5,
+          gap: 0.5,
+          borderRadius: "xl",
+          bgcolor: "background.level1",
+          [`& .${tabClasses.root}[aria-selected="true"]`]: {
+            boxShadow: "sm",
+            bgcolor: "white",
+          },
+          [`& .${tabClasses.root}[aria-selected="false"]`]: {
+            boxShadow: "sm",
+            bgcolor: "background.level1",
+          },
+          [`& .${tabClasses.root}:hover`]: {
+            bgcolor: "white",
+          },
+        }}
+      >
+        {/* Start alerts */}
+        <PlannerDeleteAlert
+          open={openAlert}
+          onClose={() => setAlert(["", ""])}
+          onDelete={deletePlanner}
+        />
+        <TooManyPlannersAlert
+          open={openTooMany}
+          onClose={() => setTooMany(false)}
+        />
+        {/* End alerts */}
+        {Object.entries(planners).map(([id, [title]]) => (
+          <Tab
+            onDoubleClick={() => setIsEditing(id)}
+            key={id}
+            disableIndicator
+            value={id}
           >
             {/* Editable planner titles */}
             {isEditing === id ? (
@@ -108,7 +115,6 @@ export default function TabList() {
                   sx={{
                     "--Input-focusedInset": "var(--any, )",
                     "--Input-focusedThickness": "0.25rem",
-                    "--Input-focusedHighlight": "rgba(13,110,253,.25)",
                     "&::before": {
                       transition: "box-shadow .15s ease-in-out",
                     },
@@ -129,24 +135,27 @@ export default function TabList() {
             ) : (
               <span>{title}</span>
             )}
-          </ListItemButton>
-        </ListItem>
-      ))}
-
-      {/* Add Tab Button */}
-      <ListItem
-        startAction={
-          <IconButton
-            onClick={() => handleAddPlanner()}
-            aria-label="Add"
-            size="lg"
-            variant="plain"
-            color="primary"
-          >
-            <Add />
-          </IconButton>
-        }
-      />
-    </List>
+            <IconButton
+              onClick={() => setAlert([id, title])}
+              variant="plain"
+              size="sm"
+              className="hover:bg-gray-200 p-1 rounded-lg"
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Tab>
+        ))}
+        {/* Add new planner button */}
+        <IconButton
+          onClick={() => handleAddPlanner()}
+          aria-label="Add"
+          size="sm"
+          variant="plain"
+          color="primary"
+        >
+          <Add />
+        </IconButton>
+      </TabList>
+    </Tabs>
   );
 }
