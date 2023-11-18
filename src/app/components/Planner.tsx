@@ -18,7 +18,6 @@ import CourseInfoModal from "./CourseInfoModal";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
-    handleOnDragStart,
     handleDragEnd,
     totalCredits,
     courseState,
@@ -42,10 +41,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     <>
       <SaveSnackbars saving={saveStatus} saveError={saveError} />
       <div>
-        <DragDropContext
-          onDragEnd={handleDragEnd}
-          onDragStart={handleOnDragStart}
-        >
+        <DragDropContext onDragEnd={handleDragEnd}>
           <ModalsProvider>
             <div className="flex">
               <div className="flex-initial pr-2">
