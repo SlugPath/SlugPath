@@ -7,6 +7,7 @@ import {
   OrderedInput,
   QueryInput,
   UpsertInput,
+  Department,
 } from "./schema";
 
 /**

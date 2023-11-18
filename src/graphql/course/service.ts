@@ -5,6 +5,7 @@ import {
   OrderedInput,
   QueryInput,
   UpsertInput,
+  Department,
 } from "./schema";
 import { isAlpha } from "class-validator";
 
@@ -123,6 +124,23 @@ export class CourseService {
       return above ? num > courseNum : num < courseNum;
     });
     // .slice(0, COURSES_LIMIT);
+  }
+
+  /**
+   * Fetches all unique department names from the database.
+   * @returns an array of Department instances
+   */
+  public async getAllDepartments(): Promise<Department[]> {
+    const departments = await prisma.course.findMany({
+      distinct: ["department"],
+      select: {
+        department: true,
+      },
+    });
+    // Map the result to match the Department type
+    return departments.map((dep) => ({
+      name: dep.department,
+    }));
   }
 
   /**
