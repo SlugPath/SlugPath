@@ -30,6 +30,17 @@ export class Course {
 }
 
 /**
+ * `Department` is an `ObjectType` class used within GraphQL to represent
+ * a department entity. Each `Department` object will have a `name` field that
+ * reflects the name of a department within UCSC.
+ */
+@ObjectType()
+export class Department {
+  @Field()
+  name!: string;
+}
+
+/**
  * For querying courses based on course attributes
  */
 @ArgsType()
