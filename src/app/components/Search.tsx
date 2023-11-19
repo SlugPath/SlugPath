@@ -19,7 +19,7 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [queryDetails, setQueryDetails] = useState({
     department: "",
@@ -32,21 +32,22 @@ export default function Search({
     },
   });
 
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState<string[]>([]);
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
   type DepartmentType = {
     name: string;
   };
   useEffect(() => {
     if (departmentsData && departmentsData.departments) {
-      setDepartments(
-        departmentsData.departments.map((dep: DepartmentType) => dep.name),
-      );
+      setDepartments([
+        "--",
+        ...departmentsData.departments.map((dep: DepartmentType) => dep.name),
+      ]);
     }
   }, [departmentsData]);
 
   useDebounce({
-    callback: () => handleSearch(department, number),
+    callback: () => handleSearch(department ?? "", number),
     delay: 500,
     dependencies: [department, number],
   });
@@ -55,7 +56,11 @@ export default function Search({
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    setDepartment(newValue || "");
+    if (newValue === "--") {
+      setDepartment(null); // Set to empty string for 'no department'
+    } else {
+      setDepartment(newValue || "");
+    }
   };
 
   const handleChangeNumber = (number: string) => {
@@ -155,7 +160,7 @@ export default function Search({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(department, number);
+          handleSearch(department ?? "", number);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">
@@ -165,7 +170,7 @@ export default function Search({
             aria-label="department"
             className="col-span-2"
             onChange={handleChangeDepartment}
-            value={department}
+            value={department ?? ""}
             size="sm"
           >
             {departments.map((dep) => (
