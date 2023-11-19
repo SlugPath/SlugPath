@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { LabelService } from "./service";
-import { Label, LabelInput } from "./schema";
+import { Label } from "./schema";
 import { Arg, Query, Resolver } from "type-graphql";
 
 /**
@@ -10,7 +10,7 @@ import { Arg, Query, Resolver } from "type-graphql";
 @Resolver()
 export class LabelResolver {
   @Query(() => [Label])
-  async getLabels(@Arg("input") input: LabelInput): Promise<Label[]> {
-    return await new LabelService().getLabels(input.userId);
+  async getLabels(@Arg("userId") userId: string): Promise<Label[]> {
+    return await new LabelService().getLabels(userId);
   }
 }
