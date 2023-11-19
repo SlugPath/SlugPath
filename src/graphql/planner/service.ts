@@ -180,9 +180,12 @@ export class PlannerService {
       const courses: StoredCourse[] = q.courses.map((c: Course) => {
         return {
           department: c.department,
+          departmentCode: c.departmentCode,
           number: c.number,
-          quartersOffered: [...c.quartersOffered],
+          title: c.title,
           credits: c.credits,
+          ge: [...c.ge],
+          quartersOffered: [...c.quartersOffered],
         };
       });
       newPlanner.quarters.push({
