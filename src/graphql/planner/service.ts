@@ -50,9 +50,12 @@ export class PlannerService {
       const enrolledCourses = q.courses.map((c) => {
         return {
           department: c.department,
+          departmentCode: c.departmentCode,
           number: c.number,
-          quartersOffered: [...c.quartersOffered],
+          title: c.title,
           credits: c.credits,
+          ge: [...c.ge],
+          quartersOffered: [...c.quartersOffered],
         };
       });
       return {

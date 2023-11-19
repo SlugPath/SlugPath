@@ -56,7 +56,6 @@ export function getCourses() {
       })
       .on("end", () => {
         console.log("done");
-        courses.slice(0, 3).forEach((course) => console.log(course));
         resolve(courses);
       });
   });

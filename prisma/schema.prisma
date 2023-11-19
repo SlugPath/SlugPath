@@ -44,7 +44,6 @@ model EnrolledCourses {
   number          String
   title           String
   credits         Int
-  prerequisites   String
   ge              String[]
   quartersOffered String[]
 
@@ -61,10 +60,6 @@ model Course {
   prerequisites   String
   ge              String[]
   quartersOffered String[]
-  /// @TypeGraphQL.omit(output: true)
-  createdAt       DateTime @default(now())
-  /// @TypeGraphQL.omit(output: true)
-  updatedAt       DateTime @updatedAt
 
   // No two courses can have the same department and course number
   @@id([department, number])
