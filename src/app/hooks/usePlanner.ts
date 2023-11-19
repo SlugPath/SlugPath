@@ -1,5 +1,4 @@
 import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
-import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
@@ -8,6 +7,7 @@ import { useEffect } from "react";
 import { findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
 import useDeepMemo from "./useDeepMemo";
+import { DropResult } from "@hello-pangea/dnd";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -30,7 +30,6 @@ export default function usePlanner(input: {
   const [totalCredits, setTotalCredits] = useState(
     getTotalCredits(courseState),
   );
-  const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
     SAVE_PLANNER,
     {},
@@ -60,6 +59,7 @@ export default function usePlanner(input: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
+  // Update total credits
   useEffect(() => {
     setTotalCredits(getTotalCredits(courseState));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,30 +95,8 @@ export default function usePlanner(input: {
       setTotalCredits(getTotalCredits(courseState));
     };
   };
-  // Check if the dragged course is available in the destination quarter
-  const getQuarterFromId = (droppableId: string) => {
-    return droppableId.split("-")[2];
-  };
-
-  // Handle the drag start event for course items.
-  // result Contains information about the current drag event of the array of unavailable quarters.
-  const handleOnDragStart = (start: DragStart) => {
-    const courseBeingDragged = createCourseFromId(start.draggableId);
-
-    if (courseBeingDragged) {
-      const unavailable = courseState.quarters
-        .filter((quarter) => {
-          return !courseBeingDragged?.quartersOffered.includes(
-            getQuarterFromId(quarter.id),
-          );
-        })
-        .map((quarter) => quarter.id);
-      setUnavailableQuarters(unavailable);
-    }
-  };
 
   const handleDragEnd = (result: DropResult) => {
-    setUnavailableQuarters([]);
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -126,8 +104,9 @@ export default function usePlanner(input: {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    )
+    ) {
       return;
+    }
 
     // add course dragged from 'search-droppable' to quarter
     if (source.droppableId === "search-droppable") {
@@ -277,8 +256,6 @@ export default function usePlanner(input: {
     totalCredits,
     handleDragEnd,
     memoAlreadyCourses,
-    handleOnDragStart,
-    unavailableQuarters,
     saveStatus,
     saveError,
     deleteCourse,

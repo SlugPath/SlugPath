@@ -7,12 +7,17 @@ import {
   Typography,
 } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
-import { getTitle } from "../../lib/courseUtils";
+import {
+  extractTermFromQuarter,
+  getTitle,
+  isOffered,
+} from "../../lib/courseUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ModalsContext } from "../contexts/ModalsProvider";
+import { WarningAmberRounded } from "@mui/icons-material";
 
 export default function CourseCard({
   course,
@@ -59,13 +64,27 @@ export default function CourseCard({
       <CardContent>
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
           <Grid xs={10}>
-            <Typography level="body-sm">
+            <Typography
+              level="body-sm"
+              endDecorator={
+                course &&
+                !isOffered(
+                  course.quartersOffered,
+                  extractTermFromQuarter(quarterId),
+                ) && <WarningAmberRounded color="warning" />
+              }
+            >
               <Link
                 overlay
                 underline="none"
                 href="#interactive-card"
                 sx={{ color: "text.tertiary" }}
-                onClick={() => onShowCourseInfoModal(course)}
+                onClick={() =>
+                  onShowCourseInfoModal([
+                    course,
+                    extractTermFromQuarter(quarterId),
+                  ])
+                }
               >
                 {course
                   ? getTitle(course.department, course.number)
