@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
@@ -8,12 +8,7 @@ import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
 import useDebounce from "../hooks/useDebounce";
-import { GET_COURSES } from "../../graphql/queries";
-
-// TODO: Base this on the actual departments in the database
-const DEPARTMENTS = {
-  CSE: "Computer Science and Engineering",
-};
+import { GET_COURSES, GET_DEPARTMENTS } from "../../graphql/queries";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -24,10 +19,10 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
+  const [department, setDepartment] = useState("");
   const [number, setNumber] = useState("");
   const [queryDetails, setQueryDetails] = useState({
-    department: getFirstKey(DEPARTMENTS),
+    department: "",
     number: "",
   });
   const { data, loading } = useQuery(GET_COURSES, {
@@ -36,6 +31,20 @@ export default function Search({
       number: nullIfNumberEmpty(queryDetails.number),
     },
   });
+
+  const [departments, setDepartments] = useState([]);
+  const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
+  type DepartmentType = {
+    name: string;
+  };
+  useEffect(() => {
+    if (departmentsData && departmentsData.departments) {
+      setDepartments(
+        departmentsData.departments.map((dep: DepartmentType) => dep.name),
+      );
+    }
+  }, [departmentsData]);
+
   useDebounce({
     callback: () => handleSearch(department, number),
     delay: 500,
@@ -69,10 +78,6 @@ export default function Search({
       }
     });
     return alreadyAdded;
-  }
-
-  function getFirstKey(obj: any): string {
-    return Object.keys(obj)[0];
   }
 
   function nullIfNumberEmpty(number: string): string | null {
@@ -160,15 +165,14 @@ export default function Search({
             aria-label="department"
             className="col-span-2"
             onChange={handleChangeDepartment}
-            defaultValue={getFirstKey(DEPARTMENTS)}
+            value={department}
             size="sm"
           >
-            <Option
-              value={getFirstKey(DEPARTMENTS)}
-              aria-label="computer science and engineering"
-            >
-              {DEPARTMENTS["CSE"]}
-            </Option>
+            {departments.map((dep) => (
+              <Option key={dep} value={dep}>
+                {dep}
+              </Option>
+            ))}
           </Select>
           <Input
             className="col-span-2"
