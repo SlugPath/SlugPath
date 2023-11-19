@@ -9,6 +9,8 @@ export interface Quarter {
   courses: StoredCourse[];
 }
 
+export type Term = "Fall" | "Winter" | "Spring" | "Summer";
+
 /**
  * Finds a quarter with a given id in an array of `Quarter`
  * @param quarters array of quarters in a `CourseState` instance
