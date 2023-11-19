@@ -35,6 +35,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     flexGrow: 1,
   },
+  titleView: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
   quarterCard: {
     fontSize: 8,
     padding: 10,
@@ -57,6 +62,7 @@ const styles = StyleSheet.create({
   },
   image: {
     margin: 10,
+    marginRight: 25,
     height: 30,
     width: 30,
   },
@@ -98,9 +104,9 @@ export default function CourseSelectionModal() {
         <PDFViewer width="100%" height="90%">
           <Document>
             <Page size="A4" style={styles.page}>
-              <View>
-                <Image style={styles.image} src="/images/slug-icon.png" />
+              <View style={styles.titleView}>
                 <Text style={styles.plannerTitle}>{activePlanner?.title}</Text>
+                <Image style={styles.image} src="/images/slug-icon.png" />
               </View>
               <View>
                 <Years courseState={courseState} />
