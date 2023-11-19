@@ -5,6 +5,9 @@ import { GET_COURSE } from "@/graphql/queries";
 import { createQuartersOfferedString } from "@/lib/courseUtils";
 import { useContext } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
+import { useSession } from "next-auth/react";
+import { useLabels } from "../hooks/useLabels";
+import { Label } from "@prisma/client";
 
 export default function CourseInfoModal() {
   const {
@@ -19,6 +22,8 @@ export default function CourseInfoModal() {
     },
     skip: !course,
   });
+  const { data: session } = useSession();
+  const { labels, loading: labelsLoading } = useLabels(session?.user.id);
 
   if (!course) return null;
   if (error) return `Error! ${error}`;
@@ -38,6 +43,9 @@ export default function CourseInfoModal() {
   function quartersOffered(data: any) {
     return loading ? "" : createQuartersOfferedString(data.courseBy);
   }
+
+  // console.log(labels);
+  // console.log(labelsLoading);
 
   return (
     <Modal
@@ -65,6 +73,18 @@ export default function CourseInfoModal() {
         >
           <Skeleton loading={loading} variant="text" width="50%">
             {title(data)}
+          </Skeleton>
+          <Skeleton loading={labelsLoading} variant="text" width="50%">
+            {labels.map((label: Label) => {
+              return (
+                <div
+                  key={label.id}
+                  // className="bg-gray-200 text-gray-600 text-xs font-semibold rounded-full px-2 py-1 mr-1"
+                >
+                  {label.color}
+                </div>
+              );
+            })}
           </Skeleton>
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">

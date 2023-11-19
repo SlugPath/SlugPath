@@ -1,9 +1,12 @@
+import { Label } from "@prisma/client";
+
 export interface Course {
   department: string;
   number: string;
   name: string;
   id: string;
   credits: number;
+  labels: Label[];
 }
 
 /**

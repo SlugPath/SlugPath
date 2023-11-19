@@ -23,3 +23,22 @@ export const GET_COURSE = gql`
     }
   }
 `;
+
+export const GET_LABELS = gql`
+  query labels($userId: String!) {
+    getLabels(userId: $userId) {
+      color
+      name
+      id
+    }
+  }
+`;
+// export const GET_LABELS = gql`
+//   query labels($input: LabelInput!) {
+//     getLabels(input: $input) {
+//       color
+//       name
+//       id
+//     }
+//   }
+// `;

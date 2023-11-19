@@ -14,7 +14,10 @@ model User {
   name     String?
   role     Role      @default(USER)
   planners Planner[]
+  // Labels
 }
+
+// model Labels
 
 model Planner {
   id        String    @id @default(uuid())
@@ -23,29 +26,30 @@ model Planner {
   quarters  Quarter[]
   order     Int
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Quarter {
-  id      Int               @id @default(autoincrement())
-  term    Term
-  year    Int
-  courses EnrolledCourses[]
+  id        Int               @id @default(autoincrement())
+  term      Term
+  year      Int
+  courses   EnrolledCourse[]
 
   plannerId String
   planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
-model EnrolledCourses {
+model EnrolledCourse {
   id              Int      @id @default(autoincrement())
   department      String
   number          String
   quartersOffered String[]
   credits         Int
+  labels          Label[]
 
-  quarterId Int
-  quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+  quarterId       Int
+  quarter         Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {
@@ -54,6 +58,7 @@ model Course {
   number          String
   credits         Int      @default(5)
   quartersOffered String[]
+
   /// @TypeGraphQL.omit(output: true)
   createdAt       DateTime @default(now())
   /// @TypeGraphQL.omit(output: true)
@@ -61,6 +66,26 @@ model Course {
 
   // No two courses can have the same department and course number
   @@id([department, number])
+}
+
+model Label {
+  id            String    @id @default(uuid())
+  name          String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  color         LabelColor
+  courses       EnrolledCourse[]
+  userId        String
+}
+
+enum LabelColor {
+  RED
+  ORANGE
+  YELLOW
+  GREEN
+  BLUE
+  PURPLE
+  PINK
 }
 
 enum Role {

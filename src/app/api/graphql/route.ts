@@ -4,11 +4,12 @@ import { buildSchema } from "type-graphql";
 import { NextRequest, NextResponse } from "next/server";
 import { CourseResolver } from "@/graphql/course/resolver";
 import { PlannerResolver } from "@/graphql/planner/resolver";
+import { LabelResolver } from "@/graphql/label/resolver";
 import prisma from "@/lib/prisma";
 
 // TODO: restrict to specific resolver functions we need, and give public users read-only access
 const schema = buildSchema({
-  resolvers: [CourseResolver, PlannerResolver],
+  resolvers: [CourseResolver, PlannerResolver, LabelResolver],
   validate: true,
 });
 
