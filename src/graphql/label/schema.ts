@@ -1,5 +1,6 @@
 // import { Length, Matches, Max, Min } from "class-validator";
-import { Field, ObjectType } from "type-graphql";
+import { Length } from "class-validator";
+import { Field, InputType, ObjectType } from "type-graphql";
 
 /**
  * `Label` is an `ObjectType` class used as a data transfer object.
@@ -22,8 +23,9 @@ export class Label {
 /**
  * For querying labels by userId
  */
-// @InputType()
-// export class LabelInput {
-//   @Field()
-//   userId!: string;
-// }
+@InputType()
+export class LabelInput {
+  @Field()
+  @Length(1, 50)
+  userId!: string;
+}
