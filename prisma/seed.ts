@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
 import { getCourses } from "./csvreader";
+
+const prisma = new PrismaClient();
 
 async function main() {
   const courses = await getCourses();

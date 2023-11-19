@@ -38,14 +38,14 @@ model Quarter {
 }
 
 model EnrolledCourses {
-  id              Int      @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   department      String
   departmentCode  String
   number          String
-  title            String
+  title           String
   credits         Int
   prerequisites   String
-  ge              GE
+  ge              String[]
   quartersOffered String[]
 
   quarterId Int
@@ -56,10 +56,10 @@ model Course {
   department      String
   departmentCode  String
   number          String
-  title            String
+  title           String
   credits         Int      @default(5)
   prerequisites   String
-  ge              GE
+  ge              String[]
   quartersOffered String[]
   /// @TypeGraphQL.omit(output: true)
   createdAt       DateTime @default(now())
@@ -80,22 +80,4 @@ enum Term {
   Winter
   Spring
   Summer
-}
-
-enum GE {
-  None
-  er
-  c
-  cc
-  im
-  mf
-  si
-  sr
-  ta
-  peH
-  peE
-  peT
-  prC
-  prE
-  prS
 }
