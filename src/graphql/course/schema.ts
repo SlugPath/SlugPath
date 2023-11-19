@@ -9,8 +9,12 @@ import { ArgsType, Field, ObjectType, InputType, Int } from "type-graphql";
 @ObjectType()
 export class Course {
   @Field()
-  @Matches(/[A-Z]{2,6}/g)
+  @Length(3, 50)
   department!: string;
+
+  @Field()
+  @Matches(/[A-Z]{2,6}/g)
+  departmentCode!: string;
 
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
@@ -18,14 +22,22 @@ export class Course {
 
   @Field()
   @Length(5, 100)
-  name!: string;
+  title!: string;
 
   @Field(() => Int)
   @Min(1)
   @Max(10)
   credits!: number;
 
+  @Field()
+  @Length(4, 2000)
+  prerequisites!: string;
+
   @Field(() => [String])
+  ge!: string[];
+
+  @Field(() => [String])
+  @Length(0, 4)
   quartersOffered!: string[];
 }
 
@@ -73,8 +85,12 @@ export class QueryInput {
 @InputType()
 export class UpsertInput {
   @Field()
-  @Matches(/[A-Z]{2,6}/g)
+  @Length(3, 50)
   department!: string;
+
+  @Field()
+  @Matches(/[A-Z]{2,6}/g)
+  departmentCode!: string;
 
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
@@ -82,12 +98,16 @@ export class UpsertInput {
 
   @Field()
   @Length(5, 100)
-  name!: string;
+  title!: string;
 
   @Field(() => Int)
   @Min(1)
   @Max(10)
   credits!: number;
+
+  @Field()
+  @Length(4, 2000)
+  prerequisites!: string;
 }
 
 /**
