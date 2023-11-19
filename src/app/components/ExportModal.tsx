@@ -1,19 +1,21 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { PlannerData } from "../types/PlannerData";
 import {
+  Document,
+  Image,
   Page,
+  PDFViewer,
+  StyleSheet,
   Text,
   View,
-  Document,
-  StyleSheet,
-  PDFViewer,
 } from "@react-pdf/renderer";
 import { StoredCourse } from "../types/Course";
-import { Quarter, findQuarter } from "../types/Quarter";
+import { findQuarter, Quarter } from "../types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { useContext } from "react";
+import { PlannersContext } from "../contexts/PlannersProvider";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -43,14 +45,28 @@ const styles = StyleSheet.create({
     borderColor: "#D1D5DB",
     borderWidth: 1,
   },
+  plannerTitle: {
+    fontSize: 16,
+    paddingLeft: 20,
+    paddingBottom: 3,
+    borderRadius: 10,
+    margin: 3,
+  },
   course: {
     marginTop: 4,
+  },
+  image: {
+    margin: 10,
+    height: 30,
+    width: 30,
   },
 });
 
 export default function CourseSelectionModal() {
   const { setShowExportModal, showExportModal, courseState } =
     useContext(ModalsContext);
+
+  const { activePlanner } = useContext(PlannersContext);
 
   return (
     <Modal
@@ -77,11 +93,15 @@ export default function CourseSelectionModal() {
           fontWeight="lg"
           mb={1}
         >
-          Export Planner to PDF
+          Export to PDF
         </Typography>
         <PDFViewer width="100%" height="90%">
           <Document>
             <Page size="A4" style={styles.page}>
+              <View>
+                <Image style={styles.image} src="/images/slug-icon.png" />
+                <Text style={styles.plannerTitle}>{activePlanner?.title}</Text>
+              </View>
               <View>
                 <Years courseState={courseState} />
               </View>
