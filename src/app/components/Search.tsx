@@ -34,15 +34,12 @@ export default function Search({
 
   const [departments, setDepartments] = useState<string[]>([]);
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
-  type DepartmentType = {
-    name: string;
-  };
   useEffect(() => {
     if (departmentsData && departmentsData.departments) {
-      setDepartments([
-        "--",
-        ...departmentsData.departments.map((dep: DepartmentType) => dep.name),
-      ]);
+      const sortedDepartments = departmentsData.departments
+        .map((dep: { name: string }) => dep.name)
+        .sort();
+      setDepartments(["--", ...sortedDepartments]);
     }
   }, [departmentsData]);
 
