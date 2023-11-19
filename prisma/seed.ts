@@ -11,10 +11,13 @@ async function main() {
     const updatedCourse = {
       // this helps avoid bugs and makes the code more DRY
       data: {
-        name: course.name,
-        credits: course.credits,
         department: course.department,
+        departmentCode: course.departmentCode,
         number: course.number,
+        title: course.title,
+        credits: course.credits,
+        prerequisites: course.prerequisites,
+        ge: course.ge,
         quartersOffered: course.quartersOffered,
       },
     };
