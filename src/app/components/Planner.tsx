@@ -8,6 +8,7 @@ import SaveSnackbars from "./SaveSnackbars";
 import { CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
+import { GEProgress } from "./GEProgress";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { useContext } from "react";
 import PlannerActions from "./PlannerActions";
@@ -56,7 +57,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   </div>
 
                   {/* Modals and Grad Progress */}
-                  <div className="pl-4 pt-7 self-start">
+                  <div className="pl-2 pt-7 self-start">
                     <div className="pb-6">
                       <PlannerActions />
                       <Modals />
@@ -66,6 +67,9 @@ export default function Planner({ isActive }: { isActive: boolean }) {
 
                     <div className="pl-2 pt-8 flex justify-items-center">
                       <GradProgress credits={totalCredits} />
+                    </div>
+                    <div className="pt-6 flex justify-items-center">
+                      <GEProgress />
                     </div>
                   </div>
                   {/* End Modals */}
