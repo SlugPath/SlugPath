@@ -38,6 +38,10 @@ export default function CourseInfoModal() {
     return loading ? "" : data.courseBy.credits;
   }
 
+  function ge(data: any) {
+    return loading ? "" : data.courseBy.ge;
+  }
+
   function quartersOffered(data: any) {
     return loading ? "" : createQuartersOfferedString(data.courseBy);
   }
@@ -86,6 +90,7 @@ export default function CourseInfoModal() {
             Quarters offered: {quartersOffered(data)}
           </Typography>
           <Typography component="p">Credits: {credits(data)}</Typography>
+          <Typography component="p">GE: {ge(data)}</Typography>
         </Skeleton>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>

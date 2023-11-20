@@ -9,8 +9,6 @@ import { Term } from "./Quarter";
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
 export interface ModalsContextProps {
-  showMajorCompletionModal: boolean;
-  setShowMajorCompletionModal: setShow;
   showExportModal: boolean;
   setShowExportModal: setShow;
   showCourseInfoModal: boolean;
@@ -24,6 +22,7 @@ export interface ModalsContextProps {
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
   totalCredits: number;
+  geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
   memoAlreadyCourses: string[];
