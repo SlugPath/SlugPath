@@ -59,10 +59,14 @@ beforeAll(async () => {
         quartersOffered: ["Fall", "Winter", "Spring"],
       },
       {
-        name: "Calculus",
-        department: "MATH",
+        department: "Mathematics",
+        departmentCode: "Math",
+        title: "Calculus",
         number: "19A",
         credits: 5,
+        prerequisites: "None",
+        ge: ["None"],
+        quartersOffered: ["Fall", "Winter", "Spring"],
       },
     ],
   });
@@ -146,6 +150,7 @@ it("should update 1 planner for 1 user", async () => {
   // Update planner with some courses
   const cseCourses = [
     {
+      department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "12",
       credits: 7,
@@ -153,6 +158,7 @@ it("should update 1 planner for 1 user", async () => {
       quartersOffered: ["Fall", "Winter"],
     },
     {
+      department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "16",
       credits: 5,
@@ -160,6 +166,7 @@ it("should update 1 planner for 1 user", async () => {
       quartersOffered: ["Fall", "Winter", "Spring"],
     },
     {
+      department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "30",
       credits: 5,
@@ -225,6 +232,10 @@ it("should handle department retrieval correctly", async () => {
 
   expect(departments).toBeDefined();
   expect(Array.isArray(departments)).toBe(true);
-  expect(departments).toContainEqual(expect.objectContaining({ name: "CSE" }));
-  expect(departments).toContainEqual(expect.objectContaining({ name: "MATH" }));
+  expect(departments).toContainEqual(
+    expect.objectContaining({ name: "Computer Science and Engineering" }),
+  );
+  expect(departments).toContainEqual(
+    expect.objectContaining({ name: "Mathematics" }),
+  );
 });
