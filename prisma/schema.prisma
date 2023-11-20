@@ -39,14 +39,11 @@ model Quarter {
 
 model EnrolledCourses {
   id              Int    @id @default(autoincrement())
-  department      String
   departmentCode  String
   number          String
-  title           String
   credits         Int
   ge              String[]
   quartersOffered String[]
-
   quarterId Int
   quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
@@ -61,8 +58,8 @@ model Course {
   ge              String[]
   quartersOffered String[]
 
-  // No two courses can have the same department and course number
-  @@id([department, number])
+  // No two courses can have the same department code and course number
+  @@id([departmentCode, number])
 }
 
 enum Role {

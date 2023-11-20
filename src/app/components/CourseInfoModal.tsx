@@ -17,7 +17,7 @@ export default function CourseInfoModal() {
   const [course = undefined, term = undefined] = courseTerm ?? [];
   const { data, error, loading } = useQuery(GET_COURSE, {
     variables: {
-      department: course?.department,
+      departmentCode: course?.departmentCode,
       number: course?.number,
     },
     skip: course === undefined,
@@ -29,9 +29,9 @@ export default function CourseInfoModal() {
   function title(data: any) {
     return loading
       ? ""
-      : getTitle(data.courseBy.department, data.courseBy.number) +
+      : getTitle(data.courseBy.departmentCode, data.courseBy.number) +
           " " +
-          data.courseBy.name;
+          data.courseBy.title;
   }
 
   function credits(data: any) {
@@ -78,7 +78,7 @@ export default function CourseInfoModal() {
               component="p"
               startDecorator={<WarningAmberRounded color="warning" />}
             >
-              Warning: {course.department} {course.number} is not offered in{" "}
+              Warning: {course.departmentCode} {course.number} is not offered in{" "}
               {term}
             </Typography>
           )}

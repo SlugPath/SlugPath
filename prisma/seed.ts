@@ -25,8 +25,8 @@ async function main() {
 
     await prisma.course.upsert({
       where: {
-        department_number: {
-          department: course.department,
+        departmentCode_number: {
+          departmentCode: course.departmentCode,
           number: course.number,
         },
       },

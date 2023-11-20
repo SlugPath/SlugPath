@@ -57,7 +57,7 @@ export class CourseService {
   public async coursesInOrder(input: OrderedInput): Promise<Course[]> {
     return (
       await this.coursesAboveOrBelow({
-        department: input.department,
+        departmentCode: input.departmentCode,
         courseNum: MAX_COURSE_NUM,
       })
     )
@@ -73,7 +73,7 @@ export class CourseService {
     if (pred.number && pred.number?.length > 0) {
       return await prisma.course.findMany({
         where: {
-          department: pred.department,
+          departmentCode: pred.departmentCode,
           number: {
             contains: pred.number,
           },
@@ -82,7 +82,7 @@ export class CourseService {
     } else {
       return await prisma.course.findMany({
         where: {
-          department: pred.department,
+          departmentCode: pred.departmentCode,
         },
       });
     }
@@ -96,7 +96,7 @@ export class CourseService {
   public async courseBy(pred: QueryInput): Promise<Course | null> {
     return await prisma.course.findFirst({
       where: {
-        department: pred.department,
+        departmentCode: pred.departmentCode,
         number: pred.number,
       },
     });
@@ -111,12 +111,15 @@ export class CourseService {
    * @returns a list of `Course` instances.
    */
   public async coursesAboveOrBelow(
-    { department, courseNum }: { department: string; courseNum: number },
+    {
+      departmentCode,
+      courseNum,
+    }: { departmentCode: string; courseNum: number },
     above: boolean = false,
   ): Promise<Course[]> {
     const courses = await prisma.course.findMany({
       where: {
-        department: department,
+        departmentCode: departmentCode,
       },
     });
     return courses.filter((c: Course) => {
@@ -169,8 +172,8 @@ export class CourseService {
         ...input,
       },
       where: {
-        department_number: {
-          department: input.department,
+        departmentCode_number: {
+          departmentCode: input.departmentCode,
           number: input.number,
         },
       },
@@ -186,8 +189,8 @@ export class CourseService {
   public async deleteCourse(input: DeleteInput): Promise<Course> {
     return await prisma.course.delete({
       where: {
-        department_number: {
-          department: input.department,
+        departmentCode_number: {
+          departmentCode: input.departmentCode,
           number: input.number,
         },
       },

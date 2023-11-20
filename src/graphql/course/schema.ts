@@ -58,8 +58,12 @@ export class Department {
 @ArgsType()
 export class QueryInput {
   @Field({ nullable: true })
-  @Matches(/[A-Z]{2,6}/g)
+  @Length(3, 50)
   department?: string;
+
+  @Field({ nullable: true })
+  @Matches(/[A-Z]{2,6}/g)
+  departmentCode?: string;
 
   @Field({ nullable: true })
   @Matches(/[0-9]{1,3}[A-Z]?/g)
@@ -67,7 +71,7 @@ export class QueryInput {
 
   @Field({ nullable: true })
   @Length(5, 100)
-  name?: string;
+  title?: string;
 
   @Field({ nullable: true })
   @IsUUID("4")
@@ -117,7 +121,7 @@ export class UpsertInput {
 export class DeleteInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
-  department!: string;
+  departmentCode!: string;
 
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
@@ -131,7 +135,7 @@ export class DeleteInput {
 export class OrderedInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
-  department!: string;
+  departmentCode!: string;
 
   @Field(() => Int)
   @Min(1)
@@ -146,7 +150,7 @@ export class OrderedInput {
 export class AboveOrBelowInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
-  department!: string;
+  departmentCode!: string;
 
   @Field(() => Int)
   @Min(1)

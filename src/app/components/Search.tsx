@@ -19,15 +19,15 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [department, setDepartment] = useState<string | null>(null);
+  const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [queryDetails, setQueryDetails] = useState({
-    department: "",
+    departmentCode: "",
     number: "",
   });
   const { data, loading } = useQuery(GET_COURSES, {
     variables: {
-      department: queryDetails.department,
+      departmentCode: queryDetails.departmentCode,
       number: nullIfNumberEmpty(queryDetails.number),
     },
   });
@@ -44,9 +44,9 @@ export default function Search({
   }, [departmentsData]);
 
   useDebounce({
-    callback: () => handleSearch(department ?? "", number),
+    callback: () => handleSearch(departmentCode ?? "", number),
     delay: 500,
-    dependencies: [department, number],
+    dependencies: [departmentCode, number],
   });
 
   const handleChangeDepartment = (
@@ -54,9 +54,9 @@ export default function Search({
     newValue: string | null,
   ) => {
     if (newValue === "--") {
-      setDepartment(null); // Set to empty string for 'no department'
+      setDepartmentCode(null); // Set to empty string for 'no department'
     } else {
-      setDepartment(newValue || "");
+      setDepartmentCode(newValue || "");
     }
   };
 
@@ -66,7 +66,7 @@ export default function Search({
 
   const handleSearch = (departmentInput: string, numberInput: string) => {
     setQueryDetails({
-      department: departmentInput,
+      departmentCode: departmentInput,
       number: numberInput.toUpperCase(),
     });
   };
@@ -74,8 +74,11 @@ export default function Search({
   function courseIsAlreadyAdded(course: StoredCourse) {
     let alreadyAdded = false;
     coursesInPlanner.forEach((c) => {
-      const [department, number] = c.split("-");
-      if (department === course.department && number === course.number) {
+      const [departmentCode, number] = c.split("-");
+      if (
+        departmentCode === course.departmentCode &&
+        number === course.number
+      ) {
         alreadyAdded = true;
       }
     });
@@ -157,7 +160,7 @@ export default function Search({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(department ?? "", number);
+          handleSearch(departmentCode ?? "", number);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">

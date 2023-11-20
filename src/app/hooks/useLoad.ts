@@ -22,9 +22,10 @@ const GET_PLANNER = gql`
         title
         id
         courses {
-          department
+          departmentCode
           number
           quartersOffered
+          ge
           credits
         }
       }
