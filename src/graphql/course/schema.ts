@@ -110,7 +110,7 @@ export class UpsertInput {
 export class DeleteInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
-  department!: string;
+  departmentCode!: string;
 
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
@@ -124,7 +124,7 @@ export class DeleteInput {
 export class OrderedInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
-  department!: string;
+  departmentCode!: string;
 
   @Field(() => Int)
   @Min(1)
@@ -139,7 +139,7 @@ export class OrderedInput {
 export class AboveOrBelowInput {
   @Field()
   @Matches(/[A-Z]{2,6}/g)
-  department!: string;
+  departmentCode!: string;
 
   @Field(() => Int)
   @Min(1)

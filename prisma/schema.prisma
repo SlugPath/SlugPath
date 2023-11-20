@@ -58,8 +58,8 @@ model Course {
   ge              String[]
   quartersOffered String[]
 
-  // No two courses can have the same department and course number
-  @@id([department, number])
+  // No two courses can have the same department code and course number
+  @@id([departmentCode, number])
 }
 
 enum Role {

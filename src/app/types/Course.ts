@@ -1,5 +1,5 @@
 export interface Course {
-  department: string;
+  departmentCode: string;
   number: string;
   name: string;
   id: string;

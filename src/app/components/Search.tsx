@@ -24,29 +24,31 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
+  const [departmentCode, setDepartmentCode] = useState(
+    getFirstKey(DEPARTMENTS),
+  );
   const [number, setNumber] = useState("");
   const [queryDetails, setQueryDetails] = useState({
-    department: getFirstKey(DEPARTMENTS),
+    departmentCode: getFirstKey(DEPARTMENTS),
     number: "",
   });
   const { data, loading } = useQuery(GET_COURSES, {
     variables: {
-      department: queryDetails.department,
+      departmentCode: queryDetails.departmentCode,
       number: nullIfNumberEmpty(queryDetails.number),
     },
   });
   useDebounce({
-    callback: () => handleSearch(department, number),
+    callback: () => handleSearch(departmentCode, number),
     delay: 500,
-    dependencies: [department, number],
+    dependencies: [departmentCode, number],
   });
 
   const handleChangeDepartment = (
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    setDepartment(newValue || "");
+    setDepartmentCode(newValue || "");
   };
 
   const handleChangeNumber = (number: string) => {
@@ -55,7 +57,7 @@ export default function Search({
 
   const handleSearch = (departmentInput: string, numberInput: string) => {
     setQueryDetails({
-      department: departmentInput,
+      departmentCode: departmentInput,
       number: numberInput.toUpperCase(),
     });
   };
@@ -63,8 +65,11 @@ export default function Search({
   function courseIsAlreadyAdded(course: StoredCourse) {
     let alreadyAdded = false;
     coursesInPlanner.forEach((c) => {
-      const [department, number] = c.split("-");
-      if (department === course.departmentCode && number === course.number) {
+      const [departmentCode, number] = c.split("-");
+      if (
+        departmentCode === course.departmentCode &&
+        number === course.number
+      ) {
         alreadyAdded = true;
       }
     });
@@ -150,7 +155,7 @@ export default function Search({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(department, number);
+          handleSearch(departmentCode, number);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">

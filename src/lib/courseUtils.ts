@@ -2,8 +2,8 @@ import { PlannerData } from "@/app/types/PlannerData";
 import { StoredCourse } from "../app/types/Course";
 import { Term } from "@/app/types/Quarter";
 
-export function getTitle(department: string, number: string) {
-  return `${department} ${number}`;
+export function getTitle(departmentCode: string, number: string) {
+  return `${departmentCode} ${number}`;
 }
 
 /**

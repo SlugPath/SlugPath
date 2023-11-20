@@ -1,24 +1,28 @@
 import { gql } from "@apollo/client";
 
 export const GET_COURSES = gql`
-  query getCourses($department: String!, $number: String = null) {
-    coursesBy(department: $department, number: $number) {
-      name
+  query getCourses($departmentCode: String!, $number: String = null) {
+    coursesBy(departmentCode: $departmentCode, number: $number) {
+      title
       department
+      departmentCode
       number
       credits
+      ge
       quartersOffered
     }
   }
 `;
 
 export const GET_COURSE = gql`
-  query getCourse($department: String!, $number: String!) {
-    courseBy(department: $department, number: $number) {
-      name
+  query getCourse($departmentCode: String!, $number: String!) {
+    courseBy(departmentCode: $departmentCode, number: $number) {
+      title
       department
+      departmentCode
       number
       credits
+      ge
       quartersOffered
     }
   }
