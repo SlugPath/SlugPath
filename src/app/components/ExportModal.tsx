@@ -148,7 +148,7 @@ function Quarter({
         {courses.map((course, idx) => {
           return (
             <View key={idx} style={styles.course}>
-              <Text>{getTitle(course.department, course.number)}</Text>
+              <Text>{getTitle(course.departmentCode, course.number)}</Text>
             </View>
           );
         })}

@@ -66,7 +66,7 @@ export default function Search({
     let alreadyAdded = false;
     coursesInPlanner.forEach((c) => {
       const [department, number] = c.split("-");
-      if (department === course.department && number === course.number) {
+      if (department === course.departmentCode && number === course.number) {
         alreadyAdded = true;
       }
     });

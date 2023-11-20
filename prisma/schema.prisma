@@ -39,14 +39,11 @@ model Quarter {
 
 model EnrolledCourses {
   id              Int    @id @default(autoincrement())
-  department      String
   departmentCode  String
   number          String
-  title           String
   credits         Int
   ge              String[]
   quartersOffered String[]
-
   quarterId Int
   quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }

@@ -7,20 +7,12 @@ import { ArgsType, Field, InputType, Int, ObjectType } from "type-graphql";
 @InputType()
 export class StoredCourseInput {
   @Field()
-  @Length(3, 50)
-  department!: string;
-
-  @Field()
   @Matches(/[A-Z]{2,6}/g)
   departmentCode!: string;
 
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
-
-  @Field()
-  @Length(5, 100)
-  title!: string;
 
   @Field()
   @IsInt()
@@ -72,20 +64,12 @@ export class PlannerDataInput {
 @ObjectType()
 export class StoredCourse {
   @Field()
-  @Length(3, 50)
-  department!: string;
-
-  @Field()
   @Matches(/[A-Z]{2,6}/g)
   departmentCode!: string;
 
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
-
-  @Field()
-  @Length(5, 100)
-  title!: string;
 
   @Field()
   @IsInt()

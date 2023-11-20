@@ -16,7 +16,7 @@ export default function CourseInfoModal({
 }) {
   const { data, error, loading } = useQuery(GET_COURSE, {
     variables: {
-      department: course ? course.department : "",
+      department: course ? course.departmentCode : "",
       number: course ? course.number : "",
     },
     skip: !course,

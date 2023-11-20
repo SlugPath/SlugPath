@@ -139,27 +139,21 @@ it("should update 1 planner for 1 user", async () => {
   // Update planner with some courses
   const cseCourses = [
     {
-      department: "Computer Science and Engineering",
       departmentCode: "CSE",
-      title: "Computer Systems and Assembly Language and Lab",
       number: "12",
       credits: 7,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter"],
     },
     {
-      department: "Computer Science and Engineering",
       departmentCode: "CSE",
-      title: "Discrete Mathematics for Engineers",
       number: "16",
       credits: 5,
       ge: ["mf", "si"],
       quartersOffered: ["Fall", "Winter", "Spring"],
     },
     {
-      department: "Computer Science and Engineering",
       departmentCode: "CSE",
-      title: "Computer Programming in Python",
       number: "30",
       credits: 5,
       ge: ["None"],

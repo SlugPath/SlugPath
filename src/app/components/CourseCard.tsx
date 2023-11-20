@@ -66,7 +66,7 @@ export default function CourseCard({
                 onClick={() => onShowCourseInfoModal(course)}
               >
                 {course
-                  ? getTitle(course.department, course.number)
+                  ? getTitle(course.departmentCode, course.number)
                   : "No course"}
               </Link>
             </Typography>
