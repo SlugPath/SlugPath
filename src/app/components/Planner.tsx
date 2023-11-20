@@ -21,6 +21,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   const {
     handleDragEnd,
     totalCredits,
+    geSatisfied,
     courseState,
     memoAlreadyCourses,
     saveStatus,
@@ -68,8 +69,8 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                     <div className="pl-2 pt-8 flex justify-items-center">
                       <GradProgress credits={totalCredits} />
                     </div>
-                    <div className="pt-6 flex justify-items-center">
-                      <GEProgress />
+                    <div className="pt-6 flex place-items-center">
+                      <GEProgress ge={geSatisfied} />
                     </div>
                   </div>
                   {/* End Modals */}
