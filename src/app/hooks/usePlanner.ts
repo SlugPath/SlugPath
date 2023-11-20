@@ -1,4 +1,8 @@
-import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
+import {
+  createCourseFromId,
+  getTotalCredits,
+  getGeSatisfied,
+} from "@/lib/courseUtils";
 import { useState } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
@@ -30,6 +34,7 @@ export default function usePlanner(input: {
   const [totalCredits, setTotalCredits] = useState(
     getTotalCredits(courseState),
   );
+  const [geSatisfied, setGeSatisfied] = useState(getGeSatisfied(courseState));
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
     SAVE_PLANNER,
     {},
@@ -65,6 +70,12 @@ export default function usePlanner(input: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseState]);
 
+  // Update list of GEs satisfied
+  useEffect(() => {
+    setGeSatisfied(getGeSatisfied(courseState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseState]);
+
   /**
    * A curried function that returns a callback to be invoked upon deleting a course
    * @param quarterId id of the quarter card
@@ -93,6 +104,7 @@ export default function usePlanner(input: {
         };
       });
       setTotalCredits(getTotalCredits(courseState));
+      setGeSatisfied(getGeSatisfied(courseState));
     };
   };
 
@@ -254,6 +266,7 @@ export default function usePlanner(input: {
   return {
     courseState,
     totalCredits,
+    geSatisfied,
     handleDragEnd,
     memoAlreadyCourses,
     saveStatus,
