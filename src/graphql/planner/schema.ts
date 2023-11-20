@@ -1,5 +1,5 @@
-import { IsInt, IsUUID, Length, Max, Min } from "class-validator";
-import { Field, ObjectType, ArgsType, InputType, Int } from "type-graphql";
+import { IsInt, IsUUID, Length, Matches, Max, Min } from "class-validator";
+import { ArgsType, Field, InputType, Int, ObjectType } from "type-graphql";
 
 /**
  * An input type that stores data within a course
@@ -7,22 +7,25 @@ import { Field, ObjectType, ArgsType, InputType, Int } from "type-graphql";
 @InputType()
 export class StoredCourseInput {
   @Field()
-  @Length(1, 32)
-  department!: string;
+  @Matches(/[A-Z]{2,6}/g)
+  departmentCode!: string;
 
   @Field()
-  @Length(1, 3)
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
-
-  @Field(() => [String])
-  @Length(0, 4)
-  quartersOffered!: string[];
 
   @Field()
   @IsInt()
   @Max(10)
   @Min(1)
   credits!: number;
+
+  @Field(() => [String])
+  ge!: string[];
+
+  @Field(() => [String])
+  @Length(0, 4)
+  quartersOffered!: string[];
 }
 
 /**
@@ -61,22 +64,25 @@ export class PlannerDataInput {
 @ObjectType()
 export class StoredCourse {
   @Field()
-  @Length(1, 32)
-  department!: string;
+  @Matches(/[A-Z]{2,6}/g)
+  departmentCode!: string;
 
   @Field()
-  @Length(1, 3)
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
-
-  @Field(() => [String])
-  @Length(0, 4)
-  quartersOffered!: string[];
 
   @Field()
   @IsInt()
   @Max(10)
   @Min(1)
   credits!: number;
+
+  @Field(() => [String])
+  ge!: string[];
+
+  @Field(() => [String])
+  @Length(0, 4)
+  quartersOffered!: string[];
 }
 
 /**

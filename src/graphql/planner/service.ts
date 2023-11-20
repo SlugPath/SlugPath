@@ -49,10 +49,11 @@ export class PlannerService {
 
       const enrolledCourses = q.courses.map((c) => {
         return {
-          department: c.department,
+          departmentCode: c.departmentCode,
           number: c.number,
-          quartersOffered: [...c.quartersOffered],
           credits: c.credits,
+          ge: [...c.ge],
+          quartersOffered: [...c.quartersOffered],
         };
       });
       return {
@@ -176,10 +177,11 @@ export class PlannerService {
       const quarterId = `quarter-${q.year}-${q.term}`;
       const courses: StoredCourse[] = q.courses.map((c: Course) => {
         return {
-          department: c.department,
+          departmentCode: c.departmentCode,
           number: c.number,
-          quartersOffered: [...c.quartersOffered],
           credits: c.credits,
+          ge: [...c.ge],
+          quartersOffered: [...c.quartersOffered],
         };
       });
       newPlanner.quarters.push({

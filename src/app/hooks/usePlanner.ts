@@ -245,7 +245,7 @@ export default function usePlanner(input: {
     const coursesAlreadyAdded: string[] = [];
     Object.values(courseState.quarters).forEach((quarter) => {
       quarter.courses.forEach((course) => {
-        coursesAlreadyAdded.push(course.department + "-" + course.number);
+        coursesAlreadyAdded.push(course.departmentCode + "-" + course.number);
       });
     });
     return coursesAlreadyAdded;

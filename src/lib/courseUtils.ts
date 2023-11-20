@@ -2,8 +2,8 @@ import { PlannerData } from "@/app/types/PlannerData";
 import { StoredCourse } from "../app/types/Course";
 import { Term } from "@/app/types/Quarter";
 
-export function getTitle(department: string, number: string) {
-  return `${department} ${number}`;
+export function getTitle(departmentCode: string, number: string) {
+  return `${departmentCode} ${number}`;
 }
 
 /**
@@ -12,11 +12,13 @@ export function getTitle(department: string, number: string) {
  * @returns a `StoredCourse` object
  */
 export function createCourseFromId(id: string): StoredCourse {
-  const [department, number, quarters, credits] = id.split("-");
+  const [departmentCode, number, quarters, ge, credits] = id.split("-");
   const quartersOffered = quarters.split(",");
+  const ges = ge.split(",");
   return {
+    departmentCode,
     number,
-    department,
+    ge: ges,
     quartersOffered,
     credits: parseInt(credits),
   };
@@ -28,8 +30,10 @@ export function createCourseFromId(id: string): StoredCourse {
  * @returns an id
  */
 export function createIdFromCourse(course: StoredCourse): string {
-  const { department, number, quartersOffered, credits } = course;
-  return `${department}-${number}-${quartersOffered.join(",")}-${credits}`;
+  const { departmentCode, number, quartersOffered, ge, credits } = course;
+  return `${departmentCode}-${number}-${quartersOffered.join(",")}-${ge.join(
+    ",",
+  )}-${credits}`;
 }
 
 /**

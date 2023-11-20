@@ -87,7 +87,7 @@ export default function CourseCard({
                 }
               >
                 {course
-                  ? getTitle(course.department, course.number)
+                  ? getTitle(course.departmentCode, course.number)
                   : "No course"}
               </Link>
             </Typography>

@@ -38,29 +38,28 @@ model Quarter {
 }
 
 model EnrolledCourses {
-  id              Int      @id @default(autoincrement())
-  department      String
+  id              Int    @id @default(autoincrement())
+  departmentCode  String
   number          String
-  quartersOffered String[]
   credits         Int
-
+  ge              String[]
+  quartersOffered String[]
   quarterId Int
   quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {
-  name            String
   department      String
+  departmentCode  String
   number          String
+  title           String
   credits         Int      @default(5)
+  prerequisites   String
+  ge              String[]
   quartersOffered String[]
-  /// @TypeGraphQL.omit(output: true)
-  createdAt       DateTime @default(now())
-  /// @TypeGraphQL.omit(output: true)
-  updatedAt       DateTime @updatedAt
 
-  // No two courses can have the same department and course number
-  @@id([department, number])
+  // No two courses can have the same department code and course number
+  @@id([departmentCode, number])
 }
 
 enum Role {

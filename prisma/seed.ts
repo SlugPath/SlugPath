@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import { getCourses } from "./csvreader";
+
 const prisma = new PrismaClient();
-import getCourses from "./csvreader";
 
 async function main() {
   const courses = await getCourses();
@@ -11,18 +12,21 @@ async function main() {
     const updatedCourse = {
       // this helps avoid bugs and makes the code more DRY
       data: {
-        name: course.name,
-        credits: course.credits,
         department: course.department,
+        departmentCode: course.departmentCode,
         number: course.number,
+        title: course.title,
+        credits: course.credits,
+        prerequisites: course.prerequisites,
+        ge: course.ge,
         quartersOffered: course.quartersOffered,
       },
     };
 
     await prisma.course.upsert({
       where: {
-        department_number: {
-          department: course.department,
+        departmentCode_number: {
+          departmentCode: course.departmentCode,
           number: course.number,
         },
       },
