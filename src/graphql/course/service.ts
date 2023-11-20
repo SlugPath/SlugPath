@@ -130,19 +130,21 @@ export class CourseService {
   }
 
   /**
-   * Fetches all unique department names from the database.
+   * Fetches all unique department names and their codes from the database.
    * @returns an array of Department instances
    */
   public async getAllDepartments(): Promise<Department[]> {
     const departments = await prisma.course.findMany({
-      distinct: ["department"],
+      distinct: ["department", "departmentCode"],
       select: {
         department: true,
+        departmentCode: true,
       },
     });
     // Map the result to match the Department type
     return departments.map((dep) => ({
       name: dep.department,
+      code: dep.departmentCode,
     }));
   }
 

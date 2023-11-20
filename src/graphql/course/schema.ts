@@ -49,7 +49,12 @@ export class Course {
 @ObjectType()
 export class Department {
   @Field()
+  @Length(3, 50)
   name!: string;
+
+  @Field()
+  @Matches(/[A-Z]{2,6}/g)
+  code!: string;
 }
 
 /**

@@ -32,14 +32,21 @@ export default function Search({
     },
   });
 
-  const [departments, setDepartments] = useState<string[]>([]);
+  const [departments, setDepartments] = useState<
+    { label: string; value: string }[]
+  >([]);
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
   useEffect(() => {
     if (departmentsData && departmentsData.departments) {
       const sortedDepartments = departmentsData.departments
-        .map((dep: { name: string }) => dep.name)
-        .sort();
-      setDepartments(["--", ...sortedDepartments]);
+        .map((dep: { name: string; code: string }) => ({
+          label: dep.name,
+          value: dep.code,
+        }))
+        .sort((a: { label: string }, b: { label: string }) =>
+          a.label.localeCompare(b.label),
+        );
+      setDepartments(sortedDepartments);
     }
   }, [departmentsData]);
 
@@ -53,11 +60,8 @@ export default function Search({
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    if (newValue === "--") {
-      setDepartmentCode(null); // Set to empty string for 'no department'
-    } else {
-      setDepartmentCode(newValue || "");
-    }
+    console.log("Selected Department:", newValue);
+    setDepartmentCode(newValue);
   };
 
   const handleChangeNumber = (number: string) => {
@@ -170,12 +174,12 @@ export default function Search({
             aria-label="department"
             className="col-span-2"
             onChange={handleChangeDepartment}
-            value={department ?? ""}
+            value={departmentCode ?? ""}
             size="sm"
           >
             {departments.map((dep) => (
-              <Option key={dep} value={dep}>
-                {dep}
+              <Option key={dep.value} value={dep.value}>
+                {dep.label}
               </Option>
             ))}
           </Select>

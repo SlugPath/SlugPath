@@ -32,6 +32,7 @@ export const GET_DEPARTMENTS = gql`
   query GetDepartments {
     departments {
       name
+      code
     }
   }
 `;
