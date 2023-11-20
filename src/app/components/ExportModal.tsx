@@ -1,17 +1,21 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { PlannerData } from "../types/PlannerData";
 import {
+  Document,
+  Image,
   Page,
+  PDFViewer,
+  StyleSheet,
   Text,
   View,
-  Document,
-  StyleSheet,
-  PDFViewer,
 } from "@react-pdf/renderer";
 import { StoredCourse } from "../types/Course";
-import { Quarter, findQuarter } from "../types/Quarter";
+import { findQuarter, Quarter } from "../types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
+import { ModalsContext } from "../contexts/ModalsProvider";
+import { useContext } from "react";
+import { PlannersContext } from "../contexts/PlannersProvider";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -31,6 +35,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     flexGrow: 1,
   },
+  titleView: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
   quarterCard: {
     fontSize: 8,
     padding: 10,
@@ -41,24 +50,34 @@ const styles = StyleSheet.create({
     borderColor: "#D1D5DB",
     borderWidth: 1,
   },
+  plannerTitle: {
+    fontSize: 16,
+    paddingLeft: 20,
+    paddingBottom: 3,
+    borderRadius: 10,
+    margin: 3,
+  },
   course: {
     marginTop: 4,
   },
+  image: {
+    margin: 10,
+    marginRight: 25,
+    height: 30,
+    width: 30,
+  },
 });
 
-export default function CourseSelectionModal({
-  courseState,
-  setShowModal,
-  showModal,
-}: {
-  courseState: PlannerData;
-  setShowModal: any;
-  showModal: boolean;
-}) {
+export default function CourseSelectionModal() {
+  const { setShowExportModal, showExportModal, courseState } =
+    useContext(ModalsContext);
+
+  const { activePlanner } = useContext(PlannersContext);
+
   return (
     <Modal
-      open={showModal}
-      onClose={() => setShowModal(false)}
+      open={showExportModal}
+      onClose={() => setShowExportModal(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
@@ -80,11 +99,15 @@ export default function CourseSelectionModal({
           fontWeight="lg"
           mb={1}
         >
-          Export Planner to PDF
+          Export to PDF
         </Typography>
         <PDFViewer width="100%" height="90%">
           <Document>
             <Page size="A4" style={styles.page}>
+              <View style={styles.titleView}>
+                <Text style={styles.plannerTitle}>{activePlanner?.title}</Text>
+                <Image style={styles.image} src="/images/slug-icon.png" />
+              </View>
               <View>
                 <Years courseState={courseState} />
               </View>
@@ -107,17 +130,17 @@ function Years({ courseState }: { courseState: PlannerData }) {
           .map((q) => q.id);
 
         return (
-          <Quarters key={i} quarters={quarters} courseState={courseState} />
+          <PDFQuarters key={i} quarters={quarters} courseState={courseState} />
         );
       })}
     </View>
   );
 }
 
-function Quarters({
+function PDFQuarters({
+  key,
   quarters,
   courseState,
-  key,
 }: {
   quarters: string[];
   courseState: PlannerData;
@@ -128,13 +151,13 @@ function Quarters({
       {quarters.map((q) => {
         const { quarter } = findQuarter(courseState.quarters, q);
         const courses = quarter.courses;
-        return <Quarter key={q} quarter={quarter} courses={courses} />;
+        return <PDFQuarter key={q} quarter={quarter} courses={courses} />;
       })}
     </View>
   );
 }
 
-function Quarter({
+function PDFQuarter({
   quarter,
   courses,
 }: {

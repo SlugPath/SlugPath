@@ -7,28 +7,35 @@ import {
   Typography,
 } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
-import { getTitle } from "../../lib/courseUtils";
-import { useState } from "react";
+import {
+  extractTermFromQuarter,
+  getTitle,
+  isOffered,
+} from "../../lib/courseUtils";
+import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import CloseIcon from "@mui/icons-material/Close";
+import { PlannerContext } from "../contexts/PlannerProvider";
+import { ModalsContext } from "../contexts/ModalsProvider";
+import { WarningAmberRounded } from "@mui/icons-material";
 
 export default function CourseCard({
   course,
   index,
   alreadyAdded,
-  onDelete,
+  quarterId,
   provided,
   isDragging,
-  onShowCourseInfoModal,
 }: {
   course: StoredCourse;
   index: number;
   alreadyAdded?: boolean;
-  onDelete: undefined | ((index: number) => void);
+  quarterId?: string;
   provided: DraggableProvided;
   isDragging: boolean;
-  onShowCourseInfoModal: any;
 }) {
+  const { deleteCourse } = useContext(PlannerContext);
+  const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
@@ -57,13 +64,27 @@ export default function CourseCard({
       <CardContent>
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
           <Grid xs={10}>
-            <Typography level="body-sm">
+            <Typography
+              level="body-sm"
+              endDecorator={
+                course &&
+                !isOffered(
+                  course.quartersOffered,
+                  extractTermFromQuarter(quarterId),
+                ) && <WarningAmberRounded color="warning" />
+              }
+            >
               <Link
                 overlay
                 underline="none"
                 href="#interactive-card"
                 sx={{ color: "text.tertiary" }}
-                onClick={() => onShowCourseInfoModal(course)}
+                onClick={() =>
+                  onShowCourseInfoModal([
+                    course,
+                    extractTermFromQuarter(quarterId),
+                  ])
+                }
               >
                 {course
                   ? getTitle(course.departmentCode, course.number)
@@ -72,9 +93,9 @@ export default function CourseCard({
             </Typography>
           </Grid>
           <Grid xs={2}>
-            {onDelete !== undefined && (
+            {quarterId !== undefined && (
               <IconButton
-                onClick={() => onDelete(index)}
+                onClick={() => deleteCourse(quarterId)(index)}
                 variant="plain"
                 size="sm"
                 className={`bg-gray-200 hover:bg-gray-300 ${

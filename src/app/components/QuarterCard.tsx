@@ -8,28 +8,13 @@ export default function QuarterCard({
   title,
   id,
   courses,
-  unavailableQuarters,
-  deleteCourse,
-  onShowCourseInfoModal,
 }: {
   title: string;
   id: string;
   courses: StoredCourse[];
-  unavailableQuarters: string[];
-  deleteCourse: (deleteIdx: number) => void;
-  onShowCourseInfoModal: any;
 }) {
   return (
-    <Card
-      size="sm"
-      className="w-64 min-w-[130px]"
-      // Highlight quarter(s) in red where course is not offered
-      style={{
-        backgroundColor: unavailableQuarters.includes(id)
-          ? "#FEE2E2"
-          : "#FFFFFF",
-      }}
-    >
+    <Card size="sm" className="w-64 min-w-[130px]">
       {title}
       <Droppable droppableId={id}>
         {(provided) => {
@@ -45,8 +30,7 @@ export default function QuarterCard({
                   course={course}
                   index={index}
                   draggableId={createIdFromCourse(course)}
-                  onDelete={deleteCourse}
-                  onShowCourseInfoModal={onShowCourseInfoModal}
+                  quarterId={id}
                 />
               ))}
               {provided.placeholder}

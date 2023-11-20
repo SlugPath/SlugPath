@@ -3,14 +3,7 @@ import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UserAvatar from "./UserAvatar";
-
-export default function Navbar({
-  setShowExportModal,
-  setShowMajorCompletionModal,
-}: {
-  setShowExportModal: any;
-  setShowMajorCompletionModal: any;
-}) {
+export default function Navbar() {
   const { data: session, status } = useSession();
 
   return (
@@ -31,14 +24,8 @@ export default function Navbar({
           </div>
           {/* Logo and title end */}
 
-          {/* Buttons start */}
+          {/* Login button start */}
           <div className="flex flex-1 justify-end">
-            <Button onClick={setShowExportModal} variant="plain">
-              Export
-            </Button>
-            <Button onClick={setShowMajorCompletionModal} variant="plain">
-              Major Progress
-            </Button>
             {status !== "authenticated" ? (
               <Button
                 variant="plain"

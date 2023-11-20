@@ -1,107 +1,263 @@
-import { v4 as uuidv4 } from "uuid";
-import { useLoadAllPlanners } from "./useLoad";
-import { gql, useMutation } from "@apollo/client";
+import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
+import { useState } from "react";
+import { PlannerData } from "../types/PlannerData";
+import { gql } from "@apollo/client";
+import useAutosave from "./useAutosave";
+import { useEffect } from "react";
+import { findQuarter } from "../types/Quarter";
+import { useLoadPlanner } from "./useLoad";
+import useDeepMemo from "./useDeepMemo";
+import { DropResult } from "@hello-pangea/dnd";
 
-const DELETE_PLANNER = gql`
-  mutation DeletePlanner($userId: String!, $plannerId: String!) {
-    deletePlanner(userId: $userId, plannerId: $plannerId) {
+const SAVE_PLANNER = gql`
+  mutation SavePlanner($input: PlannerCreateInput!) {
+    upsertPlanner(input: $input) {
       plannerId
     }
   }
 `;
 
-export function usePlanner(userId: string | undefined) {
-  // Each planner has an immutable uuid associated with it
-  // this will allow users to edit their planner names
-  const [planners, setPlanners] = useLoadAllPlanners(userId);
+export default function usePlanner(input: {
+  userId: string | undefined;
+  plannerId: string;
+  title: string;
+  order: number;
+}) {
+  const [courseState, setCourseState] = useLoadPlanner(
+    input.plannerId,
+    input.userId,
+  );
+  const [totalCredits, setTotalCredits] = useState(
+    getTotalCredits(courseState),
+  );
+  const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
+    SAVE_PLANNER,
+    {},
+  );
+  const memoAlreadyCourses = useDeepMemo(
+    () => coursesAlreadyAdded(),
+    [courseState],
+  );
 
-  const [mutation] = useMutation(DELETE_PLANNER);
-
-  /**
-   * `switchPlanner` switches between planners
-   * @param id unique planner id
-   * @param title planner title
-   */
-  const handleSwitchPlanners = (id: string, title: string) => {
-    setPlanners((prev) =>
-      (() => {
-        // Get id of previously active title if there was one
-        // and deactivate it
-        const prevId = Object.keys(prev).find((uid: string) => prev[uid][1]);
-        if (prevId === undefined) {
-          return { ...prev, [id]: [title, true] };
-        }
-        const prevTitle = prev[prevId][0];
-
-        return {
-          ...prev,
-          [prevId]: [prevTitle, false],
-          [id]: [title, true],
-        };
-      })(),
-    );
-  };
-
-  /**
-   * `changePlannerName` handles the change event for a planner name
-   * @param event keyboard event
-   * @param id unique planner id
-   */
-  const handleChangePlannerName = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string,
-  ) => {
-    setPlanners({
-      ...planners,
-      [id]: [event.target.value, planners[id][1]],
-    });
-  };
-
-  /**
-   * `addPlanner` creates a new planner with a default, editable name.
-   * It returns early if the user has too many planners already
-   */
-  const handleAddPlanner = () => {
-    const [id, title] = [uuidv4(), `New Planner`];
-    setPlanners({
-      ...planners,
-      [id]: [title, false],
-    });
-    handleSwitchPlanners(id, title);
-  };
-
-  /**
-   * `removePlanner` removes a planner from the planner container
-   * @param id unique planner id
-   */
-  const handleRemovePlanner = (id: string) => {
-    const newPlanners = { ...planners };
-    delete newPlanners[id];
-    if (userId !== undefined) {
-      mutation({
-        variables: {
-          userId,
-          plannerId: id,
+  // Auto-saving
+  useEffect(() => {
+    if (
+      input.userId !== undefined &&
+      input.title.length > 1 &&
+      input.title.length < 20
+    ) {
+      const variables = {
+        input: {
+          ...input,
+          plannerData: courseState,
         },
+      };
+      saveData({
+        variables,
       });
     }
-    setPlanners(newPlanners);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
-    // Switch to the next planner upon deletion if one exists
-    const newActive =
-      Object.keys(newPlanners)[Object.keys(newPlanners).length - 1];
+  // Update total credits
+  useEffect(() => {
+    setTotalCredits(getTotalCredits(courseState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseState]);
 
-    if (newActive !== undefined) {
-      const title = newPlanners[newActive][0];
-      handleSwitchPlanners(newActive, title);
+  /**
+   * A curried function that returns a callback to be invoked upon deleting a course
+   * @param quarterId id of the quarter card
+   * @returns a callback
+   */
+  const deleteCourse = (quarterId: string) => {
+    const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
+    return (deleteIdx: number) => {
+      const quarterCourses = quarter.courses;
+      const newCourses = [
+        ...quarterCourses.slice(0, deleteIdx),
+        ...quarterCourses.slice(deleteIdx + 1),
+      ];
+      setCourseState((prev) => {
+        return {
+          ...prev,
+          quarters: [
+            ...prev.quarters.slice(0, idx),
+            {
+              id: quarter.id,
+              title: quarter.title,
+              courses: newCourses,
+            },
+            ...prev.quarters.slice(idx + 1),
+          ],
+        };
+      });
+      setTotalCredits(getTotalCredits(courseState));
+    };
+  };
+
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    // add course dragged from 'search-droppable' to quarter
+    if (source.droppableId === "search-droppable") {
+      const { quarter, idx } = findQuarter(
+        courseState.quarters,
+        destination.droppableId,
+      );
+
+      const newStoredCourses = Array.from(quarter.courses);
+      newStoredCourses.splice(
+        destination.index,
+        0,
+        createCourseFromId(draggableId),
+      );
+      const newQuarter = {
+        ...quarter,
+        courses: newStoredCourses,
+      };
+
+      const newState = {
+        ...courseState,
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
+      };
+
+      setCourseState(newState);
+      return;
+    }
+
+    // delete course dragged into delete area or search-droppable
+    if (
+      destination.droppableId == "remove-course-area1" ||
+      destination.droppableId == "remove-course-area2" ||
+      destination.droppableId == "search-droppable"
+    ) {
+      const { quarter: startQuarter, idx } = findQuarter(
+        courseState.quarters,
+        result.source.droppableId,
+      );
+      const newStoredCourses = Array.from(startQuarter.courses);
+      newStoredCourses.splice(result.source.index, 1);
+
+      const newQuarter = {
+        ...startQuarter,
+        courses: newStoredCourses,
+      };
+
+      const newState = {
+        ...courseState,
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
+      };
+
+      setCourseState(newState);
+      return;
+    }
+
+    const { quarter: startQuarter, idx } = findQuarter(
+      courseState.quarters,
+      source.droppableId,
+    );
+    const { quarter: finishQuarter, idx: idx2 } = findQuarter(
+      courseState.quarters,
+      destination.droppableId,
+    );
+    if (startQuarter === finishQuarter) {
+      // moving course within startQuarter
+      const newStoredCourses = Array.from(startQuarter.courses);
+      newStoredCourses.splice(source.index, 1);
+      newStoredCourses.splice(
+        destination.index,
+        0,
+        startQuarter.courses[source.index],
+      );
+
+      const newQuarter = {
+        ...startQuarter,
+        courses: newStoredCourses,
+      };
+
+      const newState = {
+        ...courseState,
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newQuarter,
+          ...courseState.quarters.slice(idx + 1),
+        ],
+      };
+
+      setCourseState(newState);
+    } else {
+      // moving course from startQuarter to finishQuarter
+      const movedStoredCourse = startQuarter.courses[source.index];
+      const startStoredCourses = Array.from(startQuarter.courses);
+      startStoredCourses.splice(source.index, 1);
+      const newStart = {
+        ...startQuarter,
+        courses: startStoredCourses,
+      };
+
+      const finishStoredCourses = Array.from(finishQuarter.courses);
+      finishStoredCourses.splice(destination.index, 0, movedStoredCourse);
+      const newFinish = {
+        ...finishQuarter,
+        courses: finishStoredCourses,
+      };
+
+      let newState: PlannerData = {
+        ...courseState,
+        quarters: [
+          ...courseState.quarters.slice(0, idx),
+          newStart,
+          ...courseState.quarters.slice(idx + 1),
+        ],
+      };
+      newState = {
+        ...newState,
+        quarters: [
+          ...newState.quarters.slice(0, idx2),
+          newFinish,
+          ...newState.quarters.slice(idx2 + 1),
+        ],
+      };
+
+      setCourseState(newState);
     }
   };
 
+  function coursesAlreadyAdded(): string[] {
+    const coursesAlreadyAdded: string[] = [];
+    Object.values(courseState.quarters).forEach((quarter) => {
+      quarter.courses.forEach((course) => {
+        coursesAlreadyAdded.push(course.departmentCode + "-" + course.number);
+      });
+    });
+    return coursesAlreadyAdded;
+  }
+
   return {
-    planners,
-    handleSwitchPlanners,
-    handleChangePlannerName,
-    handleAddPlanner,
-    handleRemovePlanner,
+    courseState,
+    totalCredits,
+    handleDragEnd,
+    memoAlreadyCourses,
+    saveStatus,
+    saveError,
+    deleteCourse,
   };
 }
