@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     margin: 10,
     marginRight: 25,
     height: 30,
-    width: 30,
+    width: "auto",
   },
 });
 
@@ -138,16 +138,14 @@ function Years({ courseState }: { courseState: PlannerData }) {
 }
 
 function PDFQuarters({
-  key,
   quarters,
   courseState,
 }: {
   quarters: string[];
   courseState: PlannerData;
-  key: number;
 }) {
   return (
-    <View key={key} style={styles.yearView}>
+    <View style={styles.yearView}>
       {quarters.map((q) => {
         const { quarter } = findQuarter(courseState.quarters, q);
         const courses = quarter.courses;

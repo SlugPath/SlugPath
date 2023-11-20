@@ -56,7 +56,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   </div>
 
                   {/* Modals and Grad Progress */}
-                  <div className="pl-4 pt-7 self-start">
+                  <div className="pl-2 pt-7 self-start">
                     <div className="pb-6">
                       <PlannerActions />
                       <Modals />

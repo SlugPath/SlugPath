@@ -76,7 +76,7 @@ export default function PlannerTabs() {
           bgcolor: "background.level1",
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
             boxShadow: "sm",
-            bgcolor: "#E5E7EB",
+            bgcolor: "#d5e7ed",
           },
           [`& .${tabClasses.root}[aria-selected="false"]`]: {
             boxShadow: "sm",
