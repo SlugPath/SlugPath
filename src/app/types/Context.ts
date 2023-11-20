@@ -9,8 +9,6 @@ import { Term } from "./Quarter";
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
 export interface ModalsContextProps {
-  showMajorCompletionModal: boolean;
-  setShowMajorCompletionModal: setShow;
   showExportModal: boolean;
   setShowExportModal: setShow;
   showCourseInfoModal: boolean;
