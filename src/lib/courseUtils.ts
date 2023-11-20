@@ -52,6 +52,21 @@ export function getTotalCredits(planner: PlannerData): number {
 }
 
 /**
+ * Computes the total credits of a student planner
+ * @param planner a course planner object
+ * @returns list of GEs satisfied
+ */
+export function getGeSatisfied(planner: PlannerData): string[] {
+  let geSatisfied: string[] = [];
+  planner.quarters.forEach((q) => {
+    q.courses.forEach((c) => {
+      geSatisfied = geSatisfied.concat(c.ge);
+    });
+  });
+  return geSatisfied;
+}
+
+/**
  * Creates a string of the quarters offered for a course
  */
 export function createQuartersOfferedString(course: StoredCourse): string {

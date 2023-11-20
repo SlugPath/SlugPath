@@ -15,6 +15,7 @@ export function PlannerProvider({
   const {
     deleteCourse,
     totalCredits,
+    geSatisfied,
     courseState,
     handleDragEnd,
     memoAlreadyCourses,
@@ -32,6 +33,7 @@ export function PlannerProvider({
       value={{
         deleteCourse,
         totalCredits,
+        geSatisfied,
         courseState,
         handleDragEnd,
         memoAlreadyCourses,

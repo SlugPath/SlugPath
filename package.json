@@ -25,6 +25,7 @@
     "@mui/icons-material": "^5.14.18",
     "@mui/joy": "^5.0.0-beta.9",
     "@mui/material": "^5.14.18",
+    "@mui/x-charts": "^6.18.1",
     "@prisma/client": "^5.5.2",
     "@react-pdf/renderer": "^3.1.14",
     "class-validator": "^0.14.0",

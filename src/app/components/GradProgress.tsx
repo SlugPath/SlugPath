@@ -24,7 +24,7 @@ export const GradProgress = ({ credits }: { credits: number }) => {
           <Typography className="text-sm grid-cols-1 pl-2 xl:pl-0 justify-self-end">
             Total Credits:
           </Typography>
-          <Typography className="grid-cols-1 xl:justify-self-center">
+          <Typography className="grid-cols-1 pl-2 xl:pl-0 xl:justify-self-center">
             {credits} / {TOTAL_CREDITS_NEEDED}
           </Typography>
         </div>
