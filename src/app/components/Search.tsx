@@ -37,6 +37,7 @@ export default function Search({
   >([]);
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
   useEffect(() => {
+    console.log("Received departments data:", departmentsData);
     if (departmentsData && departmentsData.departments) {
       const sortedDepartments = departmentsData.departments
         .map((dep: { name: string; code: string }) => ({
@@ -46,8 +47,9 @@ export default function Search({
         .sort((a: { label: string }, b: { label: string }) =>
           a.label.localeCompare(b.label),
         );
-      setDepartments(sortedDepartments);
+      setDepartments([{ label: "--", value: null }, ...sortedDepartments]);
     }
+    console.log("Processed departments state:", departments);
   }, [departmentsData]);
 
   useDebounce({
@@ -60,7 +62,6 @@ export default function Search({
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    console.log("Selected Department:", newValue);
     setDepartmentCode(newValue);
   };
 
