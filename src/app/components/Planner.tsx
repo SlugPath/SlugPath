@@ -12,7 +12,6 @@ import { PlannerContext } from "../contexts/PlannerProvider";
 import { useContext } from "react";
 import PlannerActions from "./PlannerActions";
 import { ModalsProvider } from "../contexts/ModalsProvider";
-import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import CourseInfoModal from "./CourseInfoModal";
 
@@ -84,7 +83,6 @@ function Modals() {
     <>
       <CourseInfoModal />
       <ExportModal />
-      <MajorCompletionModal />
     </>
   );
 }
