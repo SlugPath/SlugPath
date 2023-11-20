@@ -2,7 +2,6 @@ import { Typography } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { green, grey } from "@mui/material/colors";
-import { mangoFusionPalette } from "@mui/x-charts";
 
 const satisfied = green[500];
 const notSatisfied = grey[400];
@@ -30,7 +29,7 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
       currData.map((item) => ({
         ...item,
         color:
-          // If GE is satisfied in planner, set the corresponding GE color to green, else set it to grey
+          // If GE is satisfied, set the corresponding GE pie section to green, else set it to grey
           (item.label === "PE" && PE_GE.some((g) => ge.includes(g))) ||
           (item.label === "PR" && PR_GE.some((g) => ge.includes(g))) ||
           ge.includes(item.label.toLowerCase())
@@ -44,7 +43,6 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
     <>
       <div className="flex flex-col place-items-center xl:w-64">
         <PieChart
-          colors={mangoFusionPalette}
           tooltip={{ trigger: "none" }}
           series={[
             {
