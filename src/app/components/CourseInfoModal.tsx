@@ -31,7 +31,7 @@ export default function CourseInfoModal() {
       ? ""
       : getTitle(data.courseBy.departmentCode, data.courseBy.number) +
           " " +
-          data.courseBy.name;
+          data.courseBy.title;
   }
 
   function credits(data: any) {

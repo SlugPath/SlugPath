@@ -25,6 +25,7 @@ const GET_PLANNER = gql`
           departmentCode
           number
           quartersOffered
+          ge
           credits
         }
       }
