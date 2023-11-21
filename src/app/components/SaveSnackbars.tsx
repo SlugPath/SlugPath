@@ -1,7 +1,10 @@
 import { ApolloError } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Snackbar, Button } from "@mui/joy";
-import { PlaylistAddCheckCircleRounded, Warning } from "@mui/icons-material";
+import {
+  DangerousRounded,
+  PlaylistAddCheckCircleRounded,
+} from "@mui/icons-material";
 
 export default function SaveSnackbars({
   saving,
@@ -34,7 +37,7 @@ export default function SaveSnackbars({
         open={saveOpen}
         autoHideDuration={snackTime}
         onClose={() => setSaveOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         startDecorator={<PlaylistAddCheckCircleRounded />}
         endDecorator={
           <Button
@@ -51,17 +54,17 @@ export default function SaveSnackbars({
       </Snackbar>
       <Snackbar
         variant="soft"
-        color="warning"
+        color="danger"
         open={errOpen}
         onClose={() => setErrOpen(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        startDecorator={<Warning />}
+        startDecorator={<DangerousRounded />}
         endDecorator={
           <Button
             onClick={() => setErrOpen(false)}
             size="sm"
             variant="soft"
-            color="warning"
+            color="danger"
           >
             Dismiss
           </Button>
