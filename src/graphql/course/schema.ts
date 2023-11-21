@@ -1,5 +1,5 @@
 import { IsUUID, Length, Matches, Max, Min } from "class-validator";
-import { ArgsType, Field, ObjectType, InputType, Int } from "type-graphql";
+import { ArgsType, Field, ObjectType, Int } from "type-graphql";
 
 /**
  * `Course` is an `ObjectType` class used as a data transfer object.
@@ -67,7 +67,7 @@ export class QueryInput {
   department?: string;
 
   @Field({ nullable: true })
-  @Matches(/[A-Z]{2,6}/g)
+  @Matches(/[A-Z]{0,6}/g)
   departmentCode?: string;
 
   @Field({ nullable: true })
@@ -86,79 +86,4 @@ export class QueryInput {
   @Min(1)
   @Max(10)
   credits?: number;
-}
-
-/**
- * For the `createCourse` and `updateCourse` resolver functions.
- */
-@InputType()
-export class UpsertInput {
-  @Field()
-  @Length(3, 50)
-  department!: string;
-
-  @Field()
-  @Matches(/[A-Z]{2,6}/g)
-  departmentCode!: string;
-
-  @Field()
-  @Matches(/[0-9]{1,3}[A-Z]?/g)
-  number!: string;
-
-  @Field()
-  @Length(5, 100)
-  title!: string;
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(10)
-  credits!: number;
-
-  @Field()
-  @Length(4, 2000)
-  prerequisites!: string;
-}
-
-/**
- * Used for deleting courses from the database
- */
-@InputType()
-export class DeleteInput {
-  @Field()
-  @Matches(/[A-Z]{2,6}/g)
-  departmentCode!: string;
-
-  @Field()
-  @Matches(/[0-9]{1,3}[A-Z]?/g)
-  number!: string;
-}
-
-/**
- * Used for querying a number of courses in order of course number
- */
-@ArgsType()
-export class OrderedInput {
-  @Field()
-  @Matches(/[A-Z]{2,6}/g)
-  departmentCode!: string;
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(390)
-  numCourses!: number;
-}
-
-/**
- * Used for querying courses above or below a particular course number
- */
-@ArgsType()
-export class AboveOrBelowInput {
-  @Field()
-  @Matches(/[A-Z]{2,6}/g)
-  departmentCode!: string;
-
-  @Field(() => Int)
-  @Min(1)
-  @Max(299)
-  courseNum!: number;
 }

@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
@@ -7,8 +5,7 @@ import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
-import useDebounce from "../hooks/useDebounce";
-import { GET_COURSES, GET_DEPARTMENTS } from "../../graphql/queries";
+import useSearch from "../hooks/useSearch";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -19,80 +16,17 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [departmentCode, setDepartmentCode] = useState<string | null>(null);
-  const [number, setNumber] = useState("");
-  const [queryDetails, setQueryDetails] = useState({
-    departmentCode: "",
-    number: "",
-  });
-  const { data, loading } = useQuery(GET_COURSES, {
-    variables: {
-      departmentCode: queryDetails.departmentCode,
-      number: nullIfNumberEmpty(queryDetails.number),
-    },
-  });
-
-  const [departments, setDepartments] = useState<
-    { label: string; value: string }[]
-  >([]);
-  const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
-  useEffect(() => {
-    console.log("Received departments data:", departmentsData);
-    if (departmentsData && departmentsData.departments) {
-      const sortedDepartments = departmentsData.departments
-        .map((dep: { name: string; code: string }) => ({
-          label: dep.name,
-          value: dep.code,
-        }))
-        .sort((a: { label: string }, b: { label: string }) =>
-          a.label.localeCompare(b.label),
-        );
-      setDepartments([{ label: "--", value: null }, ...sortedDepartments]);
-    }
-    console.log("Processed departments state:", departments);
-  }, [departmentsData]);
-
-  useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number),
-    delay: 500,
-    dependencies: [departmentCode, number],
-  });
-
-  const handleChangeDepartment = (
-    event: React.SyntheticEvent | null,
-    newValue: string | null,
-  ) => {
-    setDepartmentCode(newValue);
-  };
-
-  const handleChangeNumber = (number: string) => {
-    setNumber(number.toString());
-  };
-
-  const handleSearch = (departmentInput: string, numberInput: string) => {
-    setQueryDetails({
-      departmentCode: departmentInput,
-      number: numberInput.toUpperCase(),
-    });
-  };
-
-  function courseIsAlreadyAdded(course: StoredCourse) {
-    let alreadyAdded = false;
-    coursesInPlanner.forEach((c) => {
-      const [departmentCode, number] = c.split("-");
-      if (
-        departmentCode === course.departmentCode &&
-        number === course.number
-      ) {
-        alreadyAdded = true;
-      }
-    });
-    return alreadyAdded;
-  }
-
-  function nullIfNumberEmpty(number: string): string | null {
-    return number.length > 0 ? number : null;
-  }
+  const {
+    data,
+    loading,
+    departments,
+    handleChangeDepartment,
+    handleChangeNumber,
+    handleSearch,
+    courseIsAlreadyAdded,
+    departmentCode,
+    number,
+  } = useSearch({ coursesInPlanner });
 
   function hasResults(data: any): boolean {
     return data && data.coursesBy.length > 0;

@@ -39,7 +39,27 @@ export default function CourseInfoModal() {
   }
 
   function ge(data: any) {
-    return loading ? "" : data.courseBy.ge;
+    if (loading) return "";
+    const capitalize: { [key: string]: string } = {
+      peT: "PE-T",
+      peH: "PE-H",
+      peE: "PE-E",
+      prC: "PR-C",
+      prS: "PR-S",
+      prE: "PR-E",
+    };
+    return data.courseBy.ge.map((code: string) => {
+      if (code === "None") return code;
+      if (Object.keys(capitalize).includes(code)) return capitalize[code];
+      return code.toLocaleUpperCase();
+    });
+  }
+
+  function prerequisites(data: any) {
+    const start = "Prerequisite(s):";
+    if (loading) return `${start} None`;
+    const preqs = data.courseBy.prerequisites;
+    return preqs.startsWith(start) ? preqs : `${start} ${preqs}`;
   }
 
   function quartersOffered(data: any) {
@@ -90,6 +110,7 @@ export default function CourseInfoModal() {
             Quarters offered: {quartersOffered(data)}
           </Typography>
           <Typography component="p">Credits: {credits(data)}</Typography>
+          <Typography component="p">{prerequisites(data)}</Typography>
           <Typography component="p">GE: {ge(data)}</Typography>
         </Skeleton>
         <ModalClose variant="plain" sx={{ m: 1 }} />

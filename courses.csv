@@ -1,4 +1,3 @@
-subjectName,subjectCode,courseNumber,courseTitle,creditNarrative,prereqNarrative,GE,quartersOffered
 Academic English,ACEN,110A,Advanced Academic English 1,5.0,None,None,""
 Academic English,ACEN,110B,Advanced Academic English 2,5.0,None,None,""
 Academic English,ACEN,110C,Advanced Grammar in Context,5.0,None,None,""
@@ -2771,7 +2770,7 @@ History of Art and Visual Culture,HAVC,191D,Semiotics and Visual Culture,,None,N
 History of Art and Visual Culture,HAVC,191E,Feminist Theory and Art Production,,None,None,""
 History of Art and Visual Culture,HAVC,191F,Image and Gender,,None,None,""
 History of Art and Visual Culture,HAVC,191G,"Art, Cinema, and the Postmodern",,None,None,""
-History of Art&Visual Culture,HAVC,191H,Climate Havoc: Art and Environmental Crisis Today,5.0,None,None,""
+History of Art and Visual Culture,HAVC,191H,Climate Havoc: Art and Environmental Crisis Today,5.0,None,None,""
 History of Art and Visual Culture,HAVC,191I,Topics in Architecture and Urban History,,None,None,""
 History of Art and Visual Culture,HAVC,191K,Decolonial Visual Culture,,None,None,""
 History of Art and Visual Culture,HAVC,191L,Topics in Native American Visual Culture: Indigeneity and Pop Culture,,None,None,""
