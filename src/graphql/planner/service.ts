@@ -48,23 +48,12 @@ export class PlannerService {
       const [year, term] = qid.split("-").slice(1);
 
       const enrolledCourses = q.courses.map((c) => {
-        // const labelss = c.labels.map((l) => {
-        //   return { id: l.id };
-        // });
-        // console.log(labelss)
         return {
           department: c.department,
           number: c.number,
           quartersOffered: [...c.quartersOffered],
           credits: c.credits,
           labels: {
-            // create: c.labels.map((l) => {
-            //   return {
-            //     name: l.name,
-            //     color: LabelColor[l.color as keyof typeof LabelColor],
-            //     userId,
-            //   };
-            // }),
             connect: c.labels.map((l) => {
               return { id: l.id };
             }),

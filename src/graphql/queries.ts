@@ -33,12 +33,3 @@ export const GET_LABELS = gql`
     }
   }
 `;
-// export const GET_LABELS = gql`
-//   query labels($input: LabelInput!) {
-//     getLabels(input: $input) {
-//       color
-//       name
-//       id
-//     }
-//   }
-// `;

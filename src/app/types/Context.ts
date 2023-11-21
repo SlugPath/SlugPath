@@ -14,9 +14,7 @@ export interface ModalsContextProps {
   setShowExportModal: setShow;
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: setShow;
-  displayCourse: StoredCourse | undefined;
-  setDisplayCourse: any;
-  onShowCourseInfoModal: (course: StoredCourse) => void;
+  onShowCourseInfoModal: () => void;
   courseState: PlannerData;
 }
 
@@ -29,6 +27,8 @@ export interface PlannerContextProps {
     newCourse: StoredCourse,
   ) => void;
   getCourse: (number: string, department: string) => StoredCourse | undefined;
+  displayCourse: StoredCourse | undefined;
+  setDisplayCourse: any;
   totalCredits: number;
   unavailableQuarters: string[];
   courseState: PlannerData;

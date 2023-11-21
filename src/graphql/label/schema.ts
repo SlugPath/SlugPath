@@ -28,13 +28,3 @@ export class LabelInput {
   @Field()
   id!: string;
 }
-
-/**
- * For querying labels by userId
- */
-// @InputType()
-// export class LabelInput {
-//   @Field()
-//   @Length(1, 50)
-//   userId!: string;
-// }

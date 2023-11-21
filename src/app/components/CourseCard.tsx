@@ -30,7 +30,7 @@ export default function CourseCard({
   provided: DraggableProvided;
   isDragging: boolean;
 }) {
-  const { deleteCourse } = useContext(PlannerContext);
+  const { deleteCourse, setDisplayCourse } = useContext(PlannerContext);
   const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
@@ -62,7 +62,10 @@ export default function CourseCard({
           <Grid xs={10} className="flex flex-row whitespace-nowrap">
             <Title
               course={course}
-              onShowCourseInfoModal={onShowCourseInfoModal}
+              onShowCourseInfoModal={(course) => {
+                setDisplayCourse(course);
+                onShowCourseInfoModal();
+              }}
             />
             <CourseLabelList course={course} />
           </Grid>

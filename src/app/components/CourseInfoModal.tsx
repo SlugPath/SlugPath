@@ -27,8 +27,9 @@ export default function CourseInfoModal() {
   const {
     setShowCourseInfoModal: setShowModal,
     showCourseInfoModal: showModal,
-    displayCourse: course,
   } = useContext(ModalsContext);
+  const { displayCourse: course, setDisplayCourse } =
+    useContext(PlannerContext);
   const { editCourse } = useContext(PlannerContext);
   const { data, error, loading } = useQuery(GET_COURSE, {
     variables: {
@@ -73,6 +74,7 @@ export default function CourseInfoModal() {
     });
     const newCourse = { ...course, labels: newLabels };
     editCourse(newCourse.number, newCourse.department, newCourse);
+    setDisplayCourse(newCourse);
   };
 
   return (

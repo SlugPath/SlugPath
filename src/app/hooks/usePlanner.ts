@@ -40,6 +40,9 @@ export default function usePlanner(input: {
     () => coursesAlreadyAdded(),
     [courseState],
   );
+  const [displayCourse, setDisplayCourse] = useState<
+    StoredCourse | undefined
+  >();
 
   // Auto-saving
   useEffect(() => {
@@ -344,5 +347,7 @@ export default function usePlanner(input: {
     deleteCourse,
     editCourse,
     getCourse,
+    displayCourse,
+    setDisplayCourse,
   };
 }

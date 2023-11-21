@@ -122,7 +122,6 @@ export class CourseService {
       const num = parseInt(c.number.replace(/[A-Za-z]/g, ""));
       return above ? num > courseNum : num < courseNum;
     });
-    // .slice(0, COURSES_LIMIT);
   }
 
   /**
