@@ -8,16 +8,16 @@ const notSatisfied = grey[400];
 
 export const GEProgress = ({ ge }: { ge: string[] }) => {
   const [data, setData] = useState([
-    { value: 10, label: "CC", color: "grey" },
-    { value: 10, label: "ER", color: "grey" },
-    { value: 10, label: "IM", color: "grey" },
-    { value: 10, label: "MF", color: "grey" },
-    { value: 10, label: "SI", color: "grey" },
-    { value: 10, label: "SR", color: "grey" },
-    { value: 10, label: "TA", color: "grey" },
-    { value: 10, label: "PE", color: "grey" },
-    { value: 10, label: "PR", color: "grey" },
-    { value: 10, label: "C", color: "grey" },
+    { id: 1, value: 10, label: "CC", color: "grey" },
+    { id: 2, value: 10, label: "ER", color: "grey" },
+    { id: 3, value: 10, label: "IM", color: "grey" },
+    { id: 4, value: 10, label: "MF", color: "grey" },
+    { id: 5, value: 10, label: "SI", color: "grey" },
+    { id: 6, value: 10, label: "SR", color: "grey" },
+    { id: 7, value: 10, label: "TA", color: "grey" },
+    { id: 8, value: 10, label: "PE", color: "grey" },
+    { id: 9, value: 10, label: "PR", color: "grey" },
+    { id: 10, value: 10, label: "C", color: "grey" },
   ]);
 
   const PE_GE = ["peT", "peH", "peE"];

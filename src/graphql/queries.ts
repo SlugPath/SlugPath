@@ -24,6 +24,16 @@ export const GET_COURSE = gql`
       credits
       ge
       quartersOffered
+      prerequisites
+    }
+  }
+`;
+
+export const GET_DEPARTMENTS = gql`
+  query GetDepartments {
+    departments {
+      name
+      code
     }
   }
 `;

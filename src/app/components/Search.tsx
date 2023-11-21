@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
@@ -7,13 +5,7 @@ import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
-import useDebounce from "../hooks/useDebounce";
-import { GET_COURSES } from "../../graphql/queries";
-
-// TODO: Base this on the actual departments in the database
-const DEPARTMENTS = {
-  CSE: "Computer Science and Engineering",
-};
+import useSearch from "../hooks/useSearch";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -24,65 +16,17 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [departmentCode, setDepartmentCode] = useState(
-    getFirstKey(DEPARTMENTS),
-  );
-  const [number, setNumber] = useState("");
-  const [queryDetails, setQueryDetails] = useState({
-    departmentCode: getFirstKey(DEPARTMENTS),
-    number: "",
-  });
-  const { data, loading } = useQuery(GET_COURSES, {
-    variables: {
-      departmentCode: queryDetails.departmentCode,
-      number: nullIfNumberEmpty(queryDetails.number),
-    },
-  });
-  useDebounce({
-    callback: () => handleSearch(departmentCode, number),
-    delay: 500,
-    dependencies: [departmentCode, number],
-  });
-
-  const handleChangeDepartment = (
-    event: React.SyntheticEvent | null,
-    newValue: string | null,
-  ) => {
-    setDepartmentCode(newValue || "");
-  };
-
-  const handleChangeNumber = (number: string) => {
-    setNumber(number.toString());
-  };
-
-  const handleSearch = (departmentInput: string, numberInput: string) => {
-    setQueryDetails({
-      departmentCode: departmentInput,
-      number: numberInput.toUpperCase(),
-    });
-  };
-
-  function courseIsAlreadyAdded(course: StoredCourse) {
-    let alreadyAdded = false;
-    coursesInPlanner.forEach((c) => {
-      const [departmentCode, number] = c.split("-");
-      if (
-        departmentCode === course.departmentCode &&
-        number === course.number
-      ) {
-        alreadyAdded = true;
-      }
-    });
-    return alreadyAdded;
-  }
-
-  function getFirstKey(obj: any): string {
-    return Object.keys(obj)[0];
-  }
-
-  function nullIfNumberEmpty(number: string): string | null {
-    return number.length > 0 ? number : null;
-  }
+  const {
+    data,
+    loading,
+    departments,
+    handleChangeDepartment,
+    handleChangeNumber,
+    handleSearch,
+    courseIsAlreadyAdded,
+    departmentCode,
+    number,
+  } = useSearch({ coursesInPlanner });
 
   function hasResults(data: any): boolean {
     return data && data.coursesBy.length > 0;
@@ -155,7 +99,7 @@ export default function Search({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(departmentCode, number);
+          handleSearch(departmentCode ?? "", number);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">
@@ -165,15 +109,14 @@ export default function Search({
             aria-label="department"
             className="col-span-2"
             onChange={handleChangeDepartment}
-            defaultValue={getFirstKey(DEPARTMENTS)}
+            value={departmentCode ?? ""}
             size="sm"
           >
-            <Option
-              value={getFirstKey(DEPARTMENTS)}
-              aria-label="computer science and engineering"
-            >
-              {DEPARTMENTS["CSE"]}
-            </Option>
+            {departments.map((dep) => (
+              <Option key={dep.value} value={dep.value}>
+                {dep.label}
+              </Option>
+            ))}
           </Select>
           <Input
             className="col-span-2"
@@ -231,7 +174,7 @@ export default function Search({
                     <p className="text-gray-400">No results</p>
                   ) : null}
                   {loading ? (
-                    <CircularProgress variant="plain" color="neutral" />
+                    <CircularProgress variant="plain" color="primary" />
                   ) : null}
                 </div>
               )}
