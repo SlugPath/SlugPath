@@ -1,5 +1,6 @@
 import { GET_LABELS } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
+import { Label } from "../types/Label";
 
 export function useLabels(userId: string | undefined) {
   const { data, error, loading } = useQuery(GET_LABELS, {
@@ -9,7 +10,7 @@ export function useLabels(userId: string | undefined) {
     skip: !userId,
   });
 
-  const getLabels = () => {
+  const getLabels = (): Label[] => {
     return !loading && !error ? data.getLabels : [];
   };
 

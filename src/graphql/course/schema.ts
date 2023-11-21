@@ -1,6 +1,5 @@
 import { IsUUID, Length, Matches, Max, Min } from "class-validator";
 import { ArgsType, Field, ObjectType, InputType, Int } from "type-graphql";
-import { Label } from "../label/schema";
 
 /**
  * `Course` is an `ObjectType` class used as a data transfer object.
@@ -28,9 +27,6 @@ export class Course {
 
   @Field(() => [String])
   quartersOffered!: string[];
-
-  @Field(() => [Label])
-  labels?: Label[];
 }
 
 /**

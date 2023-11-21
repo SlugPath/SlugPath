@@ -1,3 +1,4 @@
+import { Label, LabelInput } from "../label/schema";
 import { IsInt, IsUUID, Length, Max, Min } from "class-validator";
 import { Field, ObjectType, ArgsType, InputType, Int } from "type-graphql";
 
@@ -23,6 +24,9 @@ export class StoredCourseInput {
   @Max(10)
   @Min(1)
   credits!: number;
+
+  @Field(() => [LabelInput])
+  labels!: LabelInput[];
 }
 
 /**
@@ -77,6 +81,9 @@ export class StoredCourse {
   @Max(10)
   @Min(1)
   credits!: number;
+
+  @Field(() => [Label])
+  labels!: Label[];
 }
 
 /**

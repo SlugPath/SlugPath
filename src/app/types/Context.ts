@@ -23,6 +23,11 @@ export interface ModalsContextProps {
 export interface PlannerContextProps {
   handleOnDragStart: (start: DragStart) => void;
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
+  editCourse: (
+    number: string,
+    department: string,
+    newCourse: StoredCourse,
+  ) => void;
   totalCredits: number;
   unavailableQuarters: string[];
   courseState: PlannerData;

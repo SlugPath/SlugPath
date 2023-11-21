@@ -18,6 +18,7 @@ export function createCourseFromId(id: string): StoredCourse {
     department,
     quartersOffered,
     credits: parseInt(credits),
+    labels: [],
   };
 }
 

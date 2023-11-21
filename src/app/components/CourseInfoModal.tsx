@@ -1,20 +1,35 @@
 import { getTitle } from "@/lib/courseUtils";
-import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
+import {
+  List,
+  ListItem,
+  Modal,
+  ModalClose,
+  Sheet,
+  Skeleton,
+  Typography,
+} from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { createQuartersOfferedString } from "@/lib/courseUtils";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { useSession } from "next-auth/react";
 import { useLabels } from "../hooks/useLabels";
-import { Label } from "@prisma/client";
+import { IconButton } from "theme-ui";
+import { Add } from "@mui/icons-material";
+import LabelSelectionModal from "./modals/LabelSelectionModal";
+import CourseLabel from "./CourseLabel";
+import { PlannerContext } from "../contexts/PlannerProvider";
+import { Label } from "../types/Label";
 
 export default function CourseInfoModal() {
+  const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
   const {
     setShowCourseInfoModal: setShowModal,
     showCourseInfoModal: showModal,
     displayCourse: course,
   } = useContext(ModalsContext);
+  const { editCourse } = useContext(PlannerContext);
   const { data, error, loading } = useQuery(GET_COURSE, {
     variables: {
       department: course ? course.department : "",
@@ -44,8 +59,21 @@ export default function CourseInfoModal() {
     return loading ? "" : createQuartersOfferedString(data.courseBy);
   }
 
-  // console.log(labels);
-  // console.log(labelsLoading);
+  const handleEditLabels = () => {
+    setShowLabelSelectionModal(true);
+  };
+
+  const handleUpdateLabels = (labels: Label[]) => {
+    const newLabels = labels.map((label) => {
+      return {
+        id: label.id,
+        name: label.name,
+        color: label.color,
+      };
+    });
+    const newCourse = { ...course, labels: newLabels };
+    editCourse(newCourse.number, newCourse.department, newCourse);
+  };
 
   return (
     <Modal
@@ -63,6 +91,13 @@ export default function CourseInfoModal() {
           boxShadow: "lg",
         }}
       >
+        <LabelSelectionModal
+          showModal={showLabelSelectionModal}
+          setShowModal={setShowLabelSelectionModal}
+          labels={labels}
+          selectedLabels={course.labels}
+          onUpdateLabels={handleUpdateLabels}
+        />
         <Typography
           component="h2"
           id="modal-title"
@@ -75,16 +110,10 @@ export default function CourseInfoModal() {
             {title(data)}
           </Skeleton>
           <Skeleton loading={labelsLoading} variant="text" width="50%">
-            {labels.map((label: Label) => {
-              return (
-                <div
-                  key={label.id}
-                  // className="bg-gray-200 text-gray-600 text-xs font-semibold rounded-full px-2 py-1 mr-1"
-                >
-                  {label.color}
-                </div>
-              );
-            })}
+            <SelectedLabels
+              labels={course.labels}
+              onEditLabels={handleEditLabels}
+            />
           </Skeleton>
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">
@@ -96,5 +125,29 @@ export default function CourseInfoModal() {
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
+  );
+}
+
+function SelectedLabels({
+  labels,
+  onEditLabels,
+}: {
+  labels: Label[];
+  onEditLabels: () => void;
+}) {
+  return (
+    <div>
+      <Typography component="p">Labels ;</Typography>
+      <List orientation="horizontal">
+        {labels.map((label) => (
+          <ListItem key={label.id}>
+            <CourseLabel label={label} />
+          </ListItem>
+        ))}
+        <IconButton aria-label="add label" onClick={onEditLabels}>
+          <Add />
+        </IconButton>
+      </List>
+    </div>
   );
 }

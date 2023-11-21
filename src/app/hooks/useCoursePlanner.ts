@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import { findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
 import useDeepMemo from "./useDeepMemo";
-import { StoredCourse } from "../types/Course";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -18,7 +17,7 @@ const SAVE_PLANNER = gql`
   }
 `;
 
-export default function usePlanner(input: {
+export default function useCoursePlanner(input: {
   userId: string | undefined;
   plannerId: string;
   title: string;
@@ -96,51 +95,6 @@ export default function usePlanner(input: {
       setTotalCredits(getTotalCredits(courseState));
     };
   };
-
-  /**
-   * A curried function that returns a callback to be invoked upon editing a course
-   * @param quarterId id of the quarter card
-   * @param newCourse the new course to replace the old course
-   * @returns a callback
-   */
-  const editCourse = (
-    number: string,
-    department: string,
-    newCourse: StoredCourse,
-  ) => {
-    courseState.quarters.forEach((quarter) => {
-      quarter.courses.forEach((course, index) => {
-        if (course.department == department && course.number == number) {
-          const { idx } = findQuarter(courseState.quarters, quarter.id);
-          const editIdx = index;
-
-          const quarterCourses = quarter.courses;
-          const newCourses = [
-            ...quarterCourses.slice(0, editIdx),
-            newCourse,
-            ...quarterCourses.slice(editIdx + 1),
-          ];
-          setCourseState((prev) => {
-            return {
-              ...prev,
-              quarters: [
-                ...prev.quarters.slice(0, idx),
-                {
-                  id: quarter.id,
-                  title: quarter.title,
-                  courses: newCourses,
-                },
-                ...prev.quarters.slice(idx + 1),
-              ],
-            };
-          });
-          setTotalCredits(getTotalCredits(courseState));
-        }
-        return;
-      });
-    });
-  };
-
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
     return droppableId.split("-")[2];
@@ -328,6 +282,5 @@ export default function usePlanner(input: {
     saveStatus,
     saveError,
     deleteCourse,
-    editCourse,
   };
 }

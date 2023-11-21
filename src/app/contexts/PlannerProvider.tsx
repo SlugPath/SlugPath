@@ -15,6 +15,7 @@ export function PlannerProvider({
   const {
     handleOnDragStart,
     deleteCourse,
+    editCourse,
     totalCredits,
     unavailableQuarters,
     courseState,
@@ -34,6 +35,7 @@ export function PlannerProvider({
       value={{
         handleOnDragStart,
         deleteCourse,
+        editCourse,
         totalCredits,
         unavailableQuarters,
         courseState,

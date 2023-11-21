@@ -26,6 +26,11 @@ const GET_PLANNER = gql`
           number
           quartersOffered
           credits
+          labels {
+            id
+            name
+            color
+          }
         }
       }
       years

@@ -1,4 +1,4 @@
-import { Label } from "@prisma/client";
+import { Label } from "./Label";
 
 export interface Course {
   department: string;
@@ -6,7 +6,6 @@ export interface Course {
   name: string;
   id: string;
   credits: number;
-  labels: Label[];
 }
 
 /**
@@ -17,4 +16,5 @@ export interface StoredCourse {
   number: string; // because some course numbers are 12L, 115A etc.
   quartersOffered: string[];
   credits: number;
+  labels: Label[];
 }

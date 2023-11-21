@@ -14,30 +14,25 @@ model User {
   name     String?
   role     Role      @default(USER)
   planners Planner[]
-  // Labels
 }
-
-// model Labels
 
 model Planner {
   id        String    @id @default(uuid())
   title     String
   updatedAt DateTime  @updatedAt
-  quarters  Quarter[]
   order     Int
-
   userId    String
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quarters  Quarter[]
 }
 
 model Quarter {
-  id        Int               @id @default(autoincrement())
+  id        Int              @id @default(autoincrement())
   term      Term
   year      Int
-  courses   EnrolledCourse[]
-
   plannerId String
-  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+  courses   EnrolledCourse[]
+  planner   Planner          @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
 model EnrolledCourse {
@@ -46,10 +41,9 @@ model EnrolledCourse {
   number          String
   quartersOffered String[]
   credits         Int
-  labels          Label[]
-
   quarterId       Int
-  quarter         Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+  quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+  labels          Label[]  @relation("EnrolledCourseToLabel")
 }
 
 model Course {
@@ -57,25 +51,23 @@ model Course {
   department      String
   number          String
   credits         Int      @default(5)
-  quartersOffered String[]
-
   /// @TypeGraphQL.omit(output: true)
   createdAt       DateTime @default(now())
   /// @TypeGraphQL.omit(output: true)
   updatedAt       DateTime @updatedAt
+  quartersOffered String[]
 
-  // No two courses can have the same department and course number
   @@id([department, number])
 }
 
 model Label {
-  id            String    @id @default(uuid())
-  name          String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  color         LabelColor
-  courses       EnrolledCourse[]
-  userId        String
+  id        String           @id @default(uuid())
+  name      String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  color     LabelColor
+  userId    String
+  courses   EnrolledCourse[] @relation("EnrolledCourseToLabel")
 }
 
 enum LabelColor {

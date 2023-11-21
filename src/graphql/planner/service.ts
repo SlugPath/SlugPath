@@ -8,7 +8,7 @@ import {
 import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/types/Course";
 import { emptyPlanner } from "@/lib/initialPlanner";
-import { Course, Prisma, Term } from "@prisma/client";
+import { Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -48,13 +48,30 @@ export class PlannerService {
       const [year, term] = qid.split("-").slice(1);
 
       const enrolledCourses = q.courses.map((c) => {
+        // const labelss = c.labels.map((l) => {
+        //   return { id: l.id };
+        // });
+        // console.log(labelss)
         return {
           department: c.department,
           number: c.number,
           quartersOffered: [...c.quartersOffered],
           credits: c.credits,
+          labels: {
+            // create: c.labels.map((l) => {
+            //   return {
+            //     name: l.name,
+            //     color: LabelColor[l.color as keyof typeof LabelColor],
+            //     userId,
+            //   };
+            // }),
+            connect: c.labels.map((l) => {
+              return { id: l.id };
+            }),
+          },
         };
       });
+
       return {
         year: parseInt(year),
         term: term as Term,
@@ -128,7 +145,11 @@ export class PlannerService {
       include: {
         quarters: {
           include: {
-            courses: true,
+            courses: {
+              include: {
+                labels: true,
+              },
+            },
           },
         },
       },
@@ -174,12 +195,20 @@ export class PlannerService {
     const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner));
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
-      const courses: StoredCourse[] = q.courses.map((c: Course) => {
+      const courses: StoredCourse[] = q.courses.map((c: StoredCourse) => {
+        const labels = c.labels.map((l: any) => {
+          return {
+            name: l.name,
+            color: l.color,
+            id: l.id,
+          };
+        });
         return {
           department: c.department,
           number: c.number,
           quartersOffered: [...c.quartersOffered],
           credits: c.credits,
+          labels: labels,
         };
       });
       newPlanner.quarters.push({

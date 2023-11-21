@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 
 /**
  * `Label` is an `ObjectType` class used as a data transfer object.
@@ -7,6 +7,18 @@ import { Field, ObjectType } from "type-graphql";
  */
 @ObjectType()
 export class Label {
+  @Field()
+  name!: string;
+
+  @Field()
+  color!: string;
+
+  @Field()
+  id!: string;
+}
+
+@InputType()
+export class LabelInput {
   @Field()
   name!: string;
 
