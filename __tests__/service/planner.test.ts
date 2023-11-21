@@ -1,3 +1,4 @@
+import { CourseService } from "@/graphql/course/service";
 import { PlannerService } from "@/graphql/planner/service";
 import { initialPlanner } from "@/lib/initialPlanner";
 import prisma from "@/lib/prisma";
@@ -52,6 +53,16 @@ beforeAll(async () => {
         departmentCode: "CSE",
         title: "Introduction to Algorithm Analysis",
         number: "102",
+        credits: 5,
+        prerequisites: "None",
+        ge: ["None"],
+        quartersOffered: ["Fall", "Winter", "Spring"],
+      },
+      {
+        department: "Mathematics",
+        departmentCode: "Math",
+        title: "Calculus",
+        number: "19A",
         credits: 5,
         prerequisites: "None",
         ge: ["None"],
@@ -209,4 +220,19 @@ it("should return null to delete missing planner", async () => {
   });
 
   expect(res).toBeNull();
+});
+
+it("should handle department retrieval correctly", async () => {
+  const service = new CourseService();
+
+  const departments = await service.getAllDepartments();
+
+  expect(departments).toBeDefined();
+  expect(Array.isArray(departments)).toBe(true);
+  expect(departments).toContainEqual(
+    expect.objectContaining({ name: "Computer Science and Engineering" }),
+  );
+  expect(departments).toContainEqual(
+    expect.objectContaining({ name: "Mathematics" }),
+  );
 });

@@ -7,6 +7,7 @@ import {
   OrderedInput,
   QueryInput,
   UpsertInput,
+  Department,
 } from "./schema";
 
 /**
@@ -75,6 +76,15 @@ export class CourseResolver {
   @Query(() => [Course])
   async coursesAbove(@Args() input: AboveOrBelowInput): Promise<Course[]> {
     return await new CourseService().coursesAboveOrBelow(input, true);
+  }
+
+  /**
+   * A custom query that asynchronously retrieves a list of unique `Department` names.
+   * @returns a list of `Department` instances with unique department names
+   */
+  @Query(() => [Department])
+  async departments(): Promise<Department[]> {
+    return await new CourseService().getAllDepartments();
   }
 
   /**
