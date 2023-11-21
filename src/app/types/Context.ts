@@ -28,6 +28,7 @@ export interface PlannerContextProps {
     department: string,
     newCourse: StoredCourse,
   ) => void;
+  getCourse: (number: string, department: string) => StoredCourse | undefined;
   totalCredits: number;
   unavailableQuarters: string[];
   courseState: PlannerData;

@@ -141,6 +141,20 @@ export default function usePlanner(input: {
     });
   };
 
+  const getCourse = (
+    number: string,
+    department: string,
+  ): StoredCourse | undefined => {
+    courseState.quarters.forEach((quarter) => {
+      quarter.courses.forEach((course) => {
+        if (course.department == department && course.number == number) {
+          return course;
+        }
+      });
+    });
+    return;
+  };
+
   // Check if the dragged course is available in the destination quarter
   const getQuarterFromId = (droppableId: string) => {
     return droppableId.split("-")[2];
@@ -329,5 +343,6 @@ export default function usePlanner(input: {
     saveError,
     deleteCourse,
     editCourse,
+    getCourse,
   };
 }

@@ -3,21 +3,23 @@
  * @param color is a string such as "red", "blue", "green", etc.
  * @returns a string that is the tailwindcss class for the color
  */
-export function getColor(color: string): string {
+export function getColor(color: string) {
   switch (color.toLowerCase()) {
     case "red":
-      return "bg-red-500";
+      return { backgroundColor: "#EF4444" };
     case "blue":
-      return "bg-blue-500";
+      return { backgroundColor: "#3B82F6" };
     case "green":
-      return "bg-green-500";
+      return { backgroundColor: "#10B981" };
     case "yellow":
-      return "bg-yellow-500";
+      return { backgroundColor: "#FBBF24" };
+    case "orange":
+      return { backgroundColor: "#F97316" };
     case "purple":
-      return "bg-purple-500";
+      return { backgroundColor: "#8B5CF6" };
     case "pink":
-      return "bg-pink-500";
+      return { backgroundColor: "#EC4899" };
     default:
-      return "bg-gray-500";
+      return { backgroundColor: "#6B7280" };
   }
 }

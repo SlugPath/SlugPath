@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/joy";
 import { Label } from "../../types/Label";
-import LabelButton from "../CourseLabel";
+import CourseLabel from "../CourseLabel";
 import { useState } from "react";
 
 interface LabelsSelectionModalProps {
@@ -89,7 +89,7 @@ export default function LabelsSelectionModal({
                   onChange={() => handleToggle(label)}
                   checked={isChecked(label)}
                 />
-                <LabelButton label={label}>
+                <CourseLabel label={label} displayText={true}>
                   {/* <Input
                     variant="soft"
                     value={label.name}
@@ -98,7 +98,8 @@ export default function LabelsSelectionModal({
                     size="md"
                     placeholder="Label name"
                   /> */}
-                </LabelButton>
+                  <div>{label.color}</div>
+                </CourseLabel>
               </ListItem>
             ))}
           </List>

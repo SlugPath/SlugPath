@@ -141,7 +141,9 @@ function SelectedLabels({
       <List orientation="horizontal">
         {labels.map((label) => (
           <ListItem key={label.id}>
-            <CourseLabel label={label} />
+            <CourseLabel label={label}>
+              <div>{label.color}</div>
+            </CourseLabel>
           </ListItem>
         ))}
         <IconButton aria-label="add label" onClick={onEditLabels}>

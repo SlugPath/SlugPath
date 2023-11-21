@@ -13,6 +13,7 @@ import { DraggableProvided } from "@hello-pangea/dnd";
 import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ModalsContext } from "../contexts/ModalsProvider";
+import CourseLabel from "./CourseLabel";
 
 export default function CourseCard({
   course,
@@ -58,33 +59,19 @@ export default function CourseCard({
     >
       <CardContent>
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={10}>
-            <Typography level="body-sm">
-              <Link
-                overlay
-                underline="none"
-                href="#interactive-card"
-                sx={{ color: "text.tertiary" }}
-                onClick={() => onShowCourseInfoModal(course)}
-              >
-                {course
-                  ? getTitle(course.department, course.number)
-                  : "No course"}
-              </Link>
-            </Typography>
+          <Grid xs={10} className="flex flex-row whitespace-nowrap">
+            <Title
+              course={course}
+              onShowCourseInfoModal={onShowCourseInfoModal}
+            />
+            <CourseLabelList course={course} />
           </Grid>
           <Grid xs={2}>
             {quarterId !== undefined && (
-              <IconButton
+              <DeleteIcon
                 onClick={() => deleteCourse(quarterId)(index)}
-                variant="plain"
-                size="sm"
-                className={`bg-gray-200 hover:bg-gray-300 ${
-                  highlighted ? "" : "invisible"
-                }`}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
+                highlighted={highlighted}
+              />
             )}
           </Grid>
         </Grid>
@@ -92,3 +79,58 @@ export default function CourseCard({
     </Card>
   );
 }
+
+const Title = ({
+  course,
+  onShowCourseInfoModal,
+}: {
+  course: StoredCourse;
+  onShowCourseInfoModal: (course: StoredCourse) => void;
+}) => {
+  return (
+    <Typography level="body-sm">
+      <Link
+        overlay
+        underline="none"
+        href="#interactive-card"
+        sx={{ color: "text.tertiary" }}
+        onClick={() => onShowCourseInfoModal(course)}
+      >
+        {course ? getTitle(course.department, course.number) : "No course"}
+      </Link>
+    </Typography>
+  );
+};
+
+const CourseLabelList = ({ course }: { course: StoredCourse }) => {
+  return (
+    <div className="flex truncate">
+      {course.labels
+        ? course.labels.map((label, index) => (
+            <CourseLabel key={index} label={label} displayText={false} />
+          ))
+        : null}
+    </div>
+  );
+};
+
+const DeleteIcon = ({
+  onClick,
+  highlighted,
+}: {
+  onClick: () => void;
+  highlighted: boolean;
+}) => {
+  return (
+    <IconButton
+      onClick={onClick}
+      variant="plain"
+      size="sm"
+      className={`bg-gray-200 hover:bg-gray-300 ${
+        highlighted ? "" : "invisible"
+      }`}
+    >
+      <CloseIcon fontSize="small" />
+    </IconButton>
+  );
+};
