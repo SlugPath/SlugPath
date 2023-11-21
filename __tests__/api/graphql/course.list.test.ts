@@ -51,6 +51,7 @@ describe("test coursesBy", () => {
       source: query,
     });
     expect(data).toBeDefined();
+    console.log(`DATA: ${JSON.stringify(data, null, 2)}`);
     const course = data?.coursesBy[0];
 
     expect(course).toBeDefined();

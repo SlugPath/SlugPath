@@ -24,6 +24,7 @@ export const GET_COURSE = gql`
       credits
       ge
       quartersOffered
+      prerequisites
     }
   }
 `;

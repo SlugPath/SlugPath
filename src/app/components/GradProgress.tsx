@@ -18,6 +18,7 @@ export const GradProgress = ({ credits }: { credits: number }) => {
           value={percentage}
           sx={{
             color: getColor(percentage),
+            strokeWidth: 3,
           }}
         ></Donut>
         <div className="grid grid-cols-2 items-center">
