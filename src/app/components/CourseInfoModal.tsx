@@ -58,8 +58,8 @@ export default function CourseInfoModal() {
   function prerequisites(data: any) {
     const start = "Prerequisite(s):";
     if (loading) return `${start} None`;
-    const preqs = data.courseBy.prerequisites;
-    return preqs.startsWith(start) ? preqs : `${start} ${preqs}`;
+    const preqs: string = data.courseBy.prerequisites;
+    return preqs.includes(start) ? preqs : `${start} ${preqs}`;
   }
 
   function quartersOffered(data: any) {

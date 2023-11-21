@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const courses = await getCourses();
+  const ops = [];
 
   // load all the courses into the database
   for (let i = 0; i < courses.length; i++) {
@@ -23,17 +24,20 @@ async function main() {
       },
     };
 
-    await prisma.course.upsert({
-      where: {
-        departmentCode_number: {
-          departmentCode: course.departmentCode,
-          number: course.number,
+    ops.push(
+      prisma.course.upsert({
+        where: {
+          departmentCode_number: {
+            departmentCode: course.departmentCode,
+            number: course.number,
+          },
         },
-      },
-      update: updatedCourse.data,
-      create: updatedCourse.data,
-    });
+        update: updatedCourse.data,
+        create: updatedCourse.data,
+      }),
+    );
   }
+  await prisma.$transaction([...ops]);
   console.log(`Loaded ${courses.length} courses`);
 }
 

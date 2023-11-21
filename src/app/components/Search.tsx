@@ -174,7 +174,7 @@ export default function Search({
                     <p className="text-gray-400">No results</p>
                   ) : null}
                   {loading ? (
-                    <CircularProgress variant="plain" color="neutral" />
+                    <CircularProgress variant="plain" color="primary" />
                   ) : null}
                 </div>
               )}
