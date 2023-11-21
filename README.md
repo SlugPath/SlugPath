@@ -56,6 +56,12 @@ Make sure to add relevant tests and run them and view coverage details with
 npm run test
 ```
 
+Before running tests make sure that your local instance of the database contains the up-to-date schema with
+
+```
+npx prisma db push
+```
+
 Before starting work on an issue make sure that it has not been assigned already or has not been actively worked on recently.
 Create PR's upon completion of work, and we will review it and merge it as soon as possible.
 
