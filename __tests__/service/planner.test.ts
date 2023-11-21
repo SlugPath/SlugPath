@@ -1,5 +1,5 @@
-import { PlannerService } from "@/graphql/planner/service";
 import { CourseService } from "@/graphql/course/service";
+import { PlannerService } from "@/graphql/planner/service";
 import { initialPlanner } from "@/lib/initialPlanner";
 import prisma from "@/lib/prisma";
 import { expect } from "@jest/globals";
@@ -150,7 +150,6 @@ it("should update 1 planner for 1 user", async () => {
   // Update planner with some courses
   const cseCourses = [
     {
-      department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "12",
       credits: 7,
@@ -158,7 +157,6 @@ it("should update 1 planner for 1 user", async () => {
       quartersOffered: ["Fall", "Winter"],
     },
     {
-      department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "16",
       credits: 5,
@@ -166,7 +164,6 @@ it("should update 1 planner for 1 user", async () => {
       quartersOffered: ["Fall", "Winter", "Spring"],
     },
     {
-      department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "30",
       credits: 5,
