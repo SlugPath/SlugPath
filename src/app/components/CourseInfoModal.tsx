@@ -77,6 +77,13 @@ export default function CourseInfoModal() {
     setDisplayCourse(newCourse);
   };
 
+  const labelsAreEditable = () => {
+    if (course.labels) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Modal
       open={showModal}
@@ -93,13 +100,15 @@ export default function CourseInfoModal() {
           boxShadow: "lg",
         }}
       >
-        <LabelSelectionModal
-          showModal={showLabelSelectionModal}
-          setShowModal={setShowLabelSelectionModal}
-          labels={labels}
-          selectedLabels={course.labels}
-          onUpdateLabels={handleUpdateLabels}
-        />
+        {labelsAreEditable() && (
+          <LabelSelectionModal
+            showModal={showLabelSelectionModal}
+            setShowModal={setShowLabelSelectionModal}
+            labels={labels}
+            selectedLabels={course.labels}
+            onUpdateLabels={handleUpdateLabels}
+          />
+        )}
         <Typography
           component="h2"
           id="modal-title"
@@ -111,12 +120,14 @@ export default function CourseInfoModal() {
           <Skeleton loading={loading} variant="text" width="50%">
             {title(data)}
           </Skeleton>
-          <Skeleton loading={labelsLoading} variant="text" width="50%">
-            <SelectedLabels
-              labels={course.labels}
-              onEditLabels={handleEditLabels}
-            />
-          </Skeleton>
+          {labelsAreEditable() && (
+            <Skeleton loading={labelsLoading} variant="text" width="50%">
+              <SelectedLabels
+                labels={course.labels}
+                onEditLabels={handleEditLabels}
+              />
+            </Skeleton>
+          )}
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">
           <Typography component="p">
