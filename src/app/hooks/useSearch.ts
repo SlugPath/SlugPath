@@ -1,19 +1,49 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useBackgroundQuery, useQuery, useReadQuery } from "@apollo/client";
 import useDebounce from "./useDebounce";
 import { StoredCourse } from "../types/Course";
 import { GET_COURSES, GET_DEPARTMENTS } from "@/graphql/queries";
+
+const initialData = { coursesBy: [] };
 
 export default function useSearch({
   coursesInPlanner,
 }: {
   coursesInPlanner: string[];
 }) {
-  // Get all the departments
+  const [data, setData] = useState<any>(initialData);
+  const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<
     { label: string; value: string }[]
   >([]);
+
+  // Query details for course search
+  const [departmentCode, setDepartmentCode] = useState<string | null>(null);
+  const [number, setNumber] = useState("");
+  const [queryDetails, setQueryDetails] = useState({
+    departmentCode: "",
+    number: "",
+  });
+
+  // useBackgroundQuery gives the queryRef to use in useReadQuery to instantly search the cache
+  const [queryRef] = useBackgroundQuery(GET_COURSES, {
+    variables: {
+      departmentCode: queryDetails.departmentCode,
+      number: nullIfNumberEmpty(queryDetails.number),
+    },
+  });
+  const { data: useReadQueryData } = useReadQuery(queryRef);
+  const { data: useQueryData, loading: loadingUseQuery } = useQuery(
+    GET_COURSES,
+    {
+      variables: {
+        departmentCode: queryDetails.departmentCode,
+        number: nullIfNumberEmpty(queryDetails.number),
+      },
+    },
+  );
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
+
   useEffect(() => {
     if (!departmentsData || !departmentsData.departments) return;
     // Sort departments data
@@ -29,19 +59,16 @@ export default function useSearch({
     setDepartments([{ label: "--", value: null }, ...sortedDepartments]);
   }, [departmentsData]);
 
-  // Query details for course search
-  const [departmentCode, setDepartmentCode] = useState<string | null>(null);
-  const [number, setNumber] = useState("");
-  const [queryDetails, setQueryDetails] = useState({
-    departmentCode: "",
-    number: "",
-  });
-  const { data, loading } = useQuery(GET_COURSES, {
-    variables: {
-      departmentCode: queryDetails.departmentCode,
-      number: nullIfNumberEmpty(queryDetails.number),
-    },
-  });
+  useEffect(() => {
+    setLoading(loadingUseQuery);
+    if (useQueryData) {
+      setData(useQueryData);
+    } else if (useReadQueryData) {
+      setData({ coursesBy: useReadQueryData });
+    } else {
+      setLoading(true);
+    }
+  }, [useReadQueryData, useQueryData, loadingUseQuery]);
 
   useDebounce({
     callback: () => handleSearch(departmentCode ?? "", number),
