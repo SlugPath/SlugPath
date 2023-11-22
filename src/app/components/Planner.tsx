@@ -38,9 +38,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     return <></>;
   }
 
-  console.log("coursestate");
-  console.log(courseState);
-
   return (
     <>
       <SaveSnackbars saving={saveStatus} saveError={saveError} />

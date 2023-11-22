@@ -139,16 +139,18 @@ function SelectedLabels({
 }) {
   return (
     <div>
-      <Typography component="p">Labels ;</Typography>
+      <Typography component="p">Labels</Typography>
       <List orientation="horizontal">
         {labels.map((label) => (
           <ListItem key={label.id}>
-            <CourseLabel label={label}>
-              <div>{label.color}</div>
-            </CourseLabel>
+            <CourseLabel label={label} displayText={label.name.length > 0} />
           </ListItem>
         ))}
-        <IconButton aria-label="add label" onClick={onEditLabels}>
+        <IconButton
+          aria-label="add label"
+          onClick={onEditLabels}
+          variant="soft"
+        >
           <Add />
         </IconButton>
       </List>

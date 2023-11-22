@@ -32,4 +32,23 @@ export class LabelService {
       return await createDefaultLabels();
     }
   }
+
+  public async updateLabels(userId: string, labels: Label[]): Promise<void> {
+    const operations = [];
+    for (const label of labels) {
+      operations.push(
+        prisma.label.update({
+          where: {
+            id: label.id,
+            userId,
+          },
+          data: {
+            name: label.name,
+            color: label.color as LabelColor,
+          },
+        }),
+      );
+    }
+    await prisma.$transaction(operations);
+  }
 }

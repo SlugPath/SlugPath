@@ -9,6 +9,7 @@ import prisma from "@/lib/prisma";
 import { StoredCourse } from "@/app/types/Course";
 import { emptyPlanner } from "@/lib/initialPlanner";
 import { Prisma, Term } from "@prisma/client";
+import { LabelService } from "../label/service";
 
 export class PlannerService {
   /**
@@ -48,6 +49,7 @@ export class PlannerService {
       const [year, term] = qid.split("-").slice(1);
 
       const enrolledCourses = q.courses.map((c) => {
+        new LabelService().updateLabels(userId, c.labels);
         return {
           department: c.department,
           number: c.number,

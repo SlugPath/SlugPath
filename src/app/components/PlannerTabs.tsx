@@ -55,7 +55,6 @@ export default function PlannerTabs() {
     if (typeof index === "string" && index !== "add-planner-tab") {
       const title = planners[index][0];
       switchPlanners(index, title);
-      console.log(index);
     }
   };
 

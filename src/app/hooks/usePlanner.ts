@@ -148,14 +148,16 @@ export default function usePlanner(input: {
     number: string,
     department: string,
   ): StoredCourse | undefined => {
+    let returnCourse: StoredCourse | undefined;
     courseState.quarters.forEach((quarter) => {
       quarter.courses.forEach((course) => {
-        if (course.department == department && course.number == number) {
-          return course;
+        if (course.number == number && course.department == department) {
+          returnCourse = course;
+          return;
         }
       });
     });
-    return;
+    return returnCourse;
   };
 
   // Check if the dragged course is available in the destination quarter

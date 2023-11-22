@@ -7,10 +7,13 @@ import {
   Typography,
   DialogActions,
   Button,
+  Input,
+  IconButton,
 } from "@mui/joy";
 import { Label } from "../../types/Label";
 import CourseLabel from "../CourseLabel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Edit } from "@mui/icons-material";
 
 interface LabelsSelectionModalProps {
   setShowModal: (showModal: boolean) => void;
@@ -49,12 +52,26 @@ export default function LabelsSelectionModal({
     setShowModal(false);
   }
 
+  function handleCancel() {
+    setCheckedLabels(selectedLabels);
+    setShowModal(false);
+  }
+
   function isChecked(label: Label) {
     return (
       checkedLabels.findIndex(
         (checkedLabel) => checkedLabel.id === label.id,
       ) !== -1
     );
+  }
+
+  function handleLabelChanged(label: Label) {
+    const currentIndex = checkedLabels.findIndex(
+      (checkedLabel) => checkedLabel.id === label.id,
+    );
+    const newChecked = [...checkedLabels];
+    newChecked[currentIndex] = label;
+    setCheckedLabels(newChecked);
   }
 
   return (
@@ -82,41 +99,113 @@ export default function LabelsSelectionModal({
           mb={1}
         >
           Edit Labels
+          {selectedLabels.map((label: Label, index: number) => {
+            return (
+              <div key={index}>
+                {label.id} {label.color} {label.name}
+              </div>
+            );
+          })}
           <List>
-            {labels.map((label: Label, index: number) => (
-              <ListItem key={index}>
-                <Checkbox
-                  onChange={() => handleToggle(label)}
-                  checked={isChecked(label)}
+            {labels.map((label: Label, index: number) => {
+              let displayLabel = selectedLabels.find(
+                (selectedLabel) => selectedLabel.id === label.id,
+              );
+              if (!displayLabel) {
+                displayLabel = label;
+              }
+              return (
+                <LabelListItem
+                  key={index}
+                  label={displayLabel}
+                  index={index}
+                  handleToggle={handleToggle}
+                  isChecked={isChecked(displayLabel)}
+                  onLabelChanged={handleLabelChanged}
                 />
-                <CourseLabel label={label} displayText={true}>
-                  {/* <Input
-                    variant="soft"
-                    value={label.name}
-                    autoFocus
-                    error={label.name.length < 2}
-                    size="md"
-                    placeholder="Label name"
-                  /> */}
-                  <div>{label.color}</div>
-                </CourseLabel>
-              </ListItem>
-            ))}
+              );
+            })}
           </List>
         </Typography>
         <DialogActions>
           <Button variant="solid" color="primary" onClick={handleSave}>
             Save
           </Button>
-          <Button
-            variant="plain"
-            color="neutral"
-            onClick={() => setShowModal(false)}
-          >
+          <Button variant="plain" color="neutral" onClick={handleCancel}>
             Cancel
           </Button>
         </DialogActions>
       </Sheet>
     </Modal>
+  );
+}
+
+function LabelListItem({
+  label,
+  index,
+  handleToggle,
+  isChecked,
+  onLabelChanged,
+}: {
+  label: Label;
+  index: number;
+  handleToggle: (label: Label) => void;
+  isChecked: boolean;
+  onLabelChanged: (label: Label) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [labelName, setLabelName] = useState(label.name);
+  const [updatedLabel, setUpdatedLabel] = useState(label);
+
+  // stop editing if label becomes unchecked
+  useEffect(() => {
+    if (isChecked == false && editing) {
+      setEditing(false);
+    }
+  }, [editing, isChecked]);
+
+  const handleEndEditing = () => {
+    if (editing) {
+      setEditing(false);
+      const newLabel = { ...label };
+      newLabel.name = labelName;
+      onLabelChanged(newLabel);
+      setUpdatedLabel(newLabel);
+    }
+  };
+
+  function displayText(): boolean {
+    return labelName.length > 0 && !editing;
+  }
+
+  return (
+    <ListItem key={index}>
+      <Checkbox onChange={() => handleToggle(label)} checked={isChecked} />
+      <CourseLabel label={updatedLabel} displayText={displayText()}>
+        {editing ? (
+          <Input
+            variant="soft"
+            value={labelName}
+            autoFocus
+            size="sm"
+            placeholder="Label name"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleEndEditing();
+              }
+            }}
+            onChange={(e) => setLabelName(e.target.value)}
+          />
+        ) : null}
+      </CourseLabel>
+      <IconButton
+        onClick={() => {
+          editing ? handleEndEditing() : setEditing(true);
+        }}
+        disabled={!isChecked}
+      >
+        <Edit />
+      </IconButton>
+    </ListItem>
   );
 }
