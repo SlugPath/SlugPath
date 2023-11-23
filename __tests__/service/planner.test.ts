@@ -1,6 +1,6 @@
 import { CourseService } from "@/graphql/course/service";
 import { PlannerService } from "@/graphql/planner/service";
-import { initialPlanner } from "@/lib/initialPlanner";
+import { initialPlanner, serializePlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
@@ -105,7 +105,7 @@ it("should create 1 empty planner for 1 user", async () => {
     plannerId: plannerId,
     title: "Planner 1",
     order: 0,
-    plannerData: initialPlanner,
+    plannerData: serializePlanner(initialPlanner),
   });
   expect(res.plannerId).toBe(plannerId);
 
@@ -140,7 +140,7 @@ it("should update 1 planner for 1 user", async () => {
     plannerId,
     title: "Planner 1",
     order: 0,
-    plannerData: initialPlanner,
+    plannerData: serializePlanner(initialPlanner),
   });
   expect(res1.plannerId).toBe(plannerId);
 
@@ -150,6 +150,7 @@ it("should update 1 planner for 1 user", async () => {
   // Update planner with some courses
   const cseCourses = [
     {
+      id: uuidv4(),
       departmentCode: "CSE",
       number: "12",
       credits: 7,
@@ -157,6 +158,7 @@ it("should update 1 planner for 1 user", async () => {
       quartersOffered: ["Fall", "Winter"],
     },
     {
+      id: uuidv4(),
       departmentCode: "CSE",
       number: "16",
       credits: 5,
@@ -164,6 +166,7 @@ it("should update 1 planner for 1 user", async () => {
       quartersOffered: ["Fall", "Winter", "Spring"],
     },
     {
+      id: uuidv4(),
       departmentCode: "CSE",
       number: "30",
       credits: 5,
@@ -172,14 +175,18 @@ it("should update 1 planner for 1 user", async () => {
     },
   ];
   const plannerData = initialPlanner;
-  initialPlanner.quarters[0].courses = cseCourses;
+  cseCourses.forEach((c) => {
+    const { id, ...rest } = c;
+    plannerData.quarters[0].courses.push(id);
+    plannerData.courseTable[id] = rest;
+  });
 
   const res2 = await service.upsertPlanner({
     userId: user.id,
     plannerId: plannerId,
     title: "Planner 1",
     order: 0,
-    plannerData,
+    plannerData: serializePlanner(plannerData),
   });
   expect(res2.plannerId).toBe(plannerId);
 

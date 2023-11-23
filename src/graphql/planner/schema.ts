@@ -7,6 +7,10 @@ import { ArgsType, Field, InputType, Int, ObjectType } from "type-graphql";
 @InputType()
 export class StoredCourseInput {
   @Field()
+  @IsUUID("4")
+  id!: string;
+
+  @Field()
   @Matches(/[A-Z]{2,6}/g)
   departmentCode!: string;
 
@@ -63,6 +67,10 @@ export class PlannerDataInput {
  */
 @ObjectType()
 export class StoredCourse {
+  @Field()
+  @IsUUID("4")
+  id!: string;
+
   @Field()
   @Matches(/[A-Z]{2,6}/g)
   departmentCode!: string;

@@ -25,7 +25,6 @@ export interface PlannerContextProps {
   geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
-  memoAlreadyCourses: string[];
   saveStatus: boolean;
   saveError: ApolloError | undefined;
 }

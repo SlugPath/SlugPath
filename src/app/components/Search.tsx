@@ -11,11 +11,7 @@ import useSearch from "../hooks/useSearch";
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
  * already been added to the planner and should be disabled for dragging in search results.
  */
-export default function Search({
-  coursesInPlanner,
-}: {
-  coursesInPlanner: string[];
-}) {
+export default function Search() {
   const {
     data,
     loading,
@@ -23,10 +19,9 @@ export default function Search({
     handleChangeDepartment,
     handleChangeNumber,
     handleSearch,
-    courseIsAlreadyAdded,
     departmentCode,
     number,
-  } = useSearch({ coursesInPlanner });
+  } = useSearch();
 
   function hasResults(data: any): boolean {
     return data && data.coursesBy.length > 0;
@@ -88,7 +83,6 @@ export default function Search({
           course={course}
           index={index}
           draggableId={createSearchIdFromCourse(course)}
-          alreadyAdded={courseIsAlreadyAdded(course)}
         />
       </div>
     );
@@ -141,7 +135,6 @@ export default function Search({
             <CourseCard
               course={course}
               index={index}
-              alreadyAdded={courseIsAlreadyAdded(course)}
               provided={provided}
               isDragging={snapshot.isDragging}
             />

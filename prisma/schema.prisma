@@ -38,14 +38,15 @@ model Quarter {
 }
 
 model EnrolledCourses {
-  id              Int    @id @default(autoincrement())
-  departmentCode  String
-  number          String
-  credits         Int
+  id              String      @id @default(uuid())
+  departmentCode  String?
+  number          String?
+  title           String?
+  credits         Int?
   ge              String[]
   quartersOffered String[]
-  quarterId Int
-  quarter   Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+  quarterId       Int
+  quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {

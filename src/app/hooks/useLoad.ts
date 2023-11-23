@@ -1,6 +1,6 @@
 import { ApolloError, gql, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { initialPlanner } from "@/lib/initialPlanner";
+import { initialPlanner } from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerTitle } from "@/graphql/planner/schema";
 import { PlannerData } from "../types/PlannerData";
@@ -22,6 +22,7 @@ const GET_PLANNER = gql`
         title
         id
         courses {
+          id
           departmentCode
           number
           quartersOffered

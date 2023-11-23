@@ -22,14 +22,12 @@ import { WarningAmberRounded } from "@mui/icons-material";
 export default function CourseCard({
   course,
   index,
-  alreadyAdded,
   quarterId,
   provided,
   isDragging,
 }: {
   course: StoredCourse;
   index: number;
-  alreadyAdded?: boolean;
   quarterId?: string;
   provided: DraggableProvided;
   isDragging: boolean;
@@ -50,13 +48,12 @@ export default function CourseCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant={alreadyAdded ? "soft" : "outlined"}
+      variant="outlined"
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
-        backgroundColor:
-          isDragging || highlighted ? "#E5E7EB" : alreadyAdded ? "" : "#FFFFFF",
+        backgroundColor: isDragging || highlighted ? "#E5E7EB" : "#FFFFFF",
       }}
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}

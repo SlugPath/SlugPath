@@ -4,11 +4,11 @@ import {
   PlannerRetrieveInput,
   PlannerCreateInput,
   PlannerTitle,
+  StoredCourse,
 } from "./schema";
 import prisma from "@/lib/prisma";
-import { StoredCourse } from "@/app/types/Course";
-import { emptyPlanner } from "@/lib/initialPlanner";
-import { Course, Prisma, Term } from "@prisma/client";
+import { emptyPlanner } from "@/lib/plannerUtils";
+import { EnrolledCourses, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -49,6 +49,7 @@ export class PlannerService {
 
       const enrolledCourses = q.courses.map((c) => {
         return {
+          id: c.id,
           departmentCode: c.departmentCode,
           number: c.number,
           credits: c.credits,
@@ -175,8 +176,9 @@ export class PlannerService {
     const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner));
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
-      const courses: StoredCourse[] = q.courses.map((c: Course) => {
+      const courses: StoredCourse[] = q.courses.map((c: EnrolledCourses) => {
         return {
+          id: c.id,
           departmentCode: c.departmentCode,
           number: c.number,
           credits: c.credits,

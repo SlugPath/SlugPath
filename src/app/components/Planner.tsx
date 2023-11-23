@@ -1,6 +1,6 @@
 import QuarterCard from "./QuarterCard";
-import { quartersPerYear } from "../../lib/initialPlanner";
-import { PlannerData } from "../types/PlannerData";
+import { quartersPerYear } from "../../lib/plannerUtils";
+import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useState } from "react";
@@ -22,7 +22,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     totalCredits,
     geSatisfied,
     courseState,
-    memoAlreadyCourses,
     saveStatus,
     saveError,
   } = useContext(PlannerContext);
@@ -46,7 +45,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           <ModalsProvider>
             <div className="flex">
               <div className="flex-initial pr-2">
-                <Search coursesInPlanner={memoAlreadyCourses} />
+                <Search />
               </div>
               {loading ? (
                 <CircularProgress />
@@ -107,7 +106,7 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
         return (
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarter) => {
-              const courses = quarter.courses;
+              const courses = findCoursesInQuarter(courseState, quarter.id);
               return (
                 <QuarterCard
                   id={quarter.id}

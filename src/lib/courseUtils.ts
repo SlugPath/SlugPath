@@ -42,13 +42,9 @@ export function createIdFromCourse(course: StoredCourse): string {
  * @returns total number of credits
  */
 export function getTotalCredits(planner: PlannerData): number {
-  let totalCredits = 0;
-  planner.quarters.forEach((q) => {
-    totalCredits += q.courses.reduce((acc, c) => {
-      return acc + c.credits;
-    }, 0);
+  return Object.values(planner.courseTable).reduce((acc, c) => {
+    return acc + c.credits;
   }, 0);
-  return totalCredits;
 }
 
 /**
@@ -57,13 +53,7 @@ export function getTotalCredits(planner: PlannerData): number {
  * @returns list of GEs satisfied
  */
 export function getGeSatisfied(planner: PlannerData): string[] {
-  let geSatisfied: string[] = [];
-  planner.quarters.forEach((q) => {
-    q.courses.forEach((c) => {
-      geSatisfied = geSatisfied.concat(c.ge);
-    });
-  });
-  return geSatisfied;
+  return Object.values(planner.courseTable).flatMap((c) => c.ge);
 }
 
 /**
