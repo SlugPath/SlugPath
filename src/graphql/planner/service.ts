@@ -55,6 +55,7 @@ export class PlannerService {
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
+          title: c.title,
         };
       });
       return {
@@ -184,6 +185,7 @@ export class PlannerService {
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
+          title: c.title,
         };
       });
       newPlanner.quarters.push({

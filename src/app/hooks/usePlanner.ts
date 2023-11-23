@@ -1,4 +1,4 @@
-import { getTotalCredits, getGeSatisfied } from "@/lib/courseUtils";
+import { getTotalCredits, getGeSatisfied } from "@/lib/plannerUtils";
 import { useState } from "react";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";

@@ -3,7 +3,6 @@ import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
 import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
-import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
 import useSearch from "../hooks/useSearch";
 
@@ -31,8 +30,8 @@ export default function Search() {
     return (!loading && !data) || (data && data.coursesBy.length == 0);
   }
 
-  function createSearchIdFromCourse(course: StoredCourse): string {
-    return createIdFromCourse(course) + "-search";
+  function createSearchId({ departmentCode, number }: StoredCourse) {
+    return `${departmentCode}-${number}-search`;
   }
 
   function getCourseByIndex(index: number) {
@@ -82,7 +81,7 @@ export default function Search() {
           key={index}
           course={course}
           index={index}
-          draggableId={createSearchIdFromCourse(course)}
+          draggableId={createSearchId(course)}
         />
       </div>
     );

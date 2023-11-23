@@ -19,6 +19,10 @@ export class StoredCourseInput {
   number!: string;
 
   @Field()
+  @Length(1, 255)
+  title!: string;
+
+  @Field()
   @IsInt()
   @Max(10)
   @Min(1)
@@ -78,6 +82,10 @@ export class StoredCourse {
   @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
+
+  @Field()
+  @Length(1, 255)
+  title!: string;
 
   @Field()
   @IsInt()

@@ -11,7 +11,7 @@ import {
   extractTermFromQuarter,
   getTitle,
   isOffered,
-} from "../../lib/courseUtils";
+} from "../../lib/plannerUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import CloseIcon from "@mui/icons-material/Close";
@@ -83,9 +83,7 @@ export default function CourseCard({
                   ])
                 }
               >
-                {course
-                  ? getTitle(course.departmentCode, course.number)
-                  : "No course"}
+                {course ? getTitle(course) : "No course"}
               </Link>
             </Typography>
           </Grid>

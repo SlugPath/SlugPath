@@ -2,7 +2,6 @@ import { Card } from "@mui/joy";
 import DraggableCourseCard from "./DraggableCourseCard";
 import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
-import { createIdFromCourse } from "../../lib/courseUtils";
 
 export default function QuarterCard({
   title,
@@ -29,7 +28,7 @@ export default function QuarterCard({
                   key={index}
                   course={course}
                   index={index}
-                  draggableId={createIdFromCourse(course)}
+                  draggableId={course.id}
                   quarterId={id}
                 />
               ))}

@@ -7,7 +7,7 @@ import { Quarter, findQuarter } from "./Quarter";
 export interface PlannerData {
   quarters: Quarter[];
   years: number;
-  courseTable: CourseTable;
+  courses: StoredCourse[];
 }
 
 export interface CourseTable {
@@ -18,7 +18,9 @@ export const findCourseById = (
   courseState: PlannerData,
   id: string,
 ): StoredCourse => {
-  return courseState.courseTable[id];
+  const course = courseState.courses.find((c) => c.id === id);
+  if (course === undefined) throw new Error("course not found");
+  return course;
 };
 
 export const findCoursesInQuarter = (

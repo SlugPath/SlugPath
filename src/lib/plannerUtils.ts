@@ -5,6 +5,8 @@ import {
   QuarterInput,
   PlannerData as PlannerDataOutput,
 } from "@/graphql/planner/schema";
+import { Term } from "../app/types/Quarter";
+import { StoredCourse } from "@/app/types/Course";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
@@ -13,13 +15,13 @@ export const quartersPerYear = 4;
 export const initialPlanner: PlannerData = {
   quarters: createQuarters(),
   years,
-  courseTable: {},
+  courses: [],
 };
 
 export const emptyPlanner: PlannerData = {
   quarters: [],
   years,
-  courseTable: {},
+  courses: [],
 };
 
 export function createQuarters() {
@@ -49,12 +51,7 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
     const quarter: QuarterInput = {
       id: q.id,
       title: q.title,
-      courses: q.courses.map((cid) => {
-        return {
-          id: cid,
-          ...findCourseById(courseState, cid),
-        };
-      }),
+      courses: q.courses.map((cid) => findCourseById(courseState, cid)),
     };
     result.quarters.push(quarter);
   });
@@ -66,7 +63,7 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
   const result: PlannerData = {
     years: output.years,
     quarters: [],
-    courseTable: {},
+    courses: [],
   };
 
   output.quarters.forEach((q) => {
@@ -76,12 +73,57 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
       courses: [],
     };
     q.courses.forEach((c) => {
-      const { id, ...rest } = c;
-      result.courseTable[id] = rest;
-      quarter.courses.push(id);
+      result.courses.push(c);
+      quarter.courses.push(c.id);
     });
     result.quarters.push(quarter);
   });
 
   return result;
+}
+
+export function getTitle({ title, departmentCode, number }: StoredCourse) {
+  return title.length > 0 ? title : `${departmentCode} ${number}`;
+}
+
+/**
+ * Computes the total credits of a student planner
+ * @param planner a course planner object
+ * @returns total number of credits
+ */
+export function getTotalCredits(planner: PlannerData): number {
+  return planner.courses.reduce((acc, c) => {
+    return acc + c.credits;
+  }, 0);
+}
+
+/**
+ * Computes the total credits of a student planner
+ * @param planner a course planner object
+ * @returns list of GEs satisfied
+ */
+export function getGeSatisfied(planner: PlannerData): string[] {
+  return planner.courses.flatMap((c) => c.ge);
+}
+
+/**
+ * Extracts the term from a quarter ID
+ * @param qid quarter Id of the format `quarter-{year}-{term}`
+ * @returns term name
+ */
+export function extractTermFromQuarter(
+  qid: string | undefined,
+): Term | undefined {
+  if (qid === undefined) return undefined;
+
+  const tokens = qid.split("-");
+  return tokens[tokens.length - 1] as Term;
+}
+
+export function isOffered(
+  quartersOffered: string[],
+  term: Term | undefined,
+): boolean {
+  if (term === undefined) return true;
+  return quartersOffered.find((t) => (t as Term) == term) !== undefined;
 }

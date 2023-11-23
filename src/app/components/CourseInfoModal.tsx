@@ -1,11 +1,11 @@
-import { getTitle, isOffered } from "@/lib/courseUtils";
+import { getTitle, isOffered } from "@/lib/plannerUtils";
 import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
-import { createQuartersOfferedString } from "@/lib/courseUtils";
 import { useContext } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
+import { StoredCourse } from "../types/Course";
 
 export default function CourseInfoModal() {
   const {
@@ -27,11 +27,8 @@ export default function CourseInfoModal() {
   if (course === undefined) return null;
 
   function title(data: any) {
-    return loading
-      ? ""
-      : getTitle(data.courseBy.departmentCode, data.courseBy.number) +
-          " " +
-          data.courseBy.title;
+    const c = data.courseBy as StoredCourse;
+    return loading ? "" : `${c.departmentCode} ${c.number} ${getTitle(c)}`;
   }
 
   function credits(data: any) {
@@ -63,7 +60,10 @@ export default function CourseInfoModal() {
   }
 
   function quartersOffered(data: any) {
-    return loading ? "" : createQuartersOfferedString(data.courseBy);
+    if (loading) return "";
+    const c = data.courseBy as StoredCourse;
+    if (c.quartersOffered.length == 0) return "None";
+    return c.quartersOffered.join(", ");
   }
 
   return (
