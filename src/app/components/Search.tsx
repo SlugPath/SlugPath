@@ -19,6 +19,7 @@ export default function Search({
   const {
     data,
     loading,
+    loadingUseQuery,
     departments,
     handleChangeDepartment,
     handleChangeNumber,
@@ -44,7 +45,7 @@ export default function Search({
     return data.coursesBy[index];
   }
 
-  function getItemCount(data: any, snapshot?: DroppableStateSnapshot) {
+  function getItemCount(data: any, snapshot?: DroppableStateSnapshot): number {
     if (data) {
       return snapshot && snapshot.isUsingPlaceholder
         ? data.coursesBy.length + 1
@@ -60,6 +61,14 @@ export default function Search({
     } else {
       return [];
     }
+  }
+
+  function getResultsString(data: any) {
+    const itemCount = getItemCount(data);
+    const loadingMoreResultsString = loadingUseQuery
+      ? "     Loading more results"
+      : "";
+    return itemCount.toString() + " results" + loadingMoreResultsString;
   }
 
   function getRowRender({
@@ -95,11 +104,11 @@ export default function Search({
   }
 
   return (
-    <Card className="min-w-40">
+    <Card className="w-80">
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(departmentCode ?? "", number);
+          handleSearch(departmentCode ?? "", number, false);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">
@@ -153,7 +162,7 @@ export default function Search({
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {hasResults(data) ? (
                 <div>
-                  <div className="mb-1">{getItemCount(data)} results</div>
+                  <div className="mb-1">{getResultsString(data)}</div>
                   <div className="overflow-y-auto h-[62vh]">
                     <AutoSizer>
                       {({ height, width }) => (

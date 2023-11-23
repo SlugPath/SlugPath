@@ -20,6 +20,10 @@ export default function useSearch({
   // Query details for course search
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
+  const [cacheQueryDetails, setCacheQueryDetails] = useState({
+    departmentCode: "",
+    number: "",
+  });
   const [queryDetails, setQueryDetails] = useState({
     departmentCode: "",
     number: "",
@@ -28,8 +32,8 @@ export default function useSearch({
   // useBackgroundQuery gives the queryRef to use in useReadQuery to instantly search the cache
   const [queryRef] = useBackgroundQuery(GET_COURSES, {
     variables: {
-      departmentCode: queryDetails.departmentCode,
-      number: nullIfNumberEmpty(queryDetails.number),
+      departmentCode: cacheQueryDetails.departmentCode,
+      number: nullIfNumberEmpty(cacheQueryDetails.number),
     },
   });
   const { data: useReadQueryData } = useReadQuery(queryRef);
@@ -70,8 +74,16 @@ export default function useSearch({
     }
   }, [useReadQueryData, useQueryData, loadingUseQuery]);
 
+  // debounce for running queries on cache
   useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number),
+    callback: () => handleSearch(departmentCode ?? "", number, false),
+    delay: 0,
+    dependencies: [departmentCode, number],
+  });
+
+  // debounce for running queries on backend database
+  useDebounce({
+    callback: () => handleSearch(departmentCode ?? "", number, true),
     delay: 500,
     dependencies: [departmentCode, number],
   });
@@ -87,11 +99,22 @@ export default function useSearch({
     setNumber(number.toString());
   };
 
-  const handleSearch = (departmentCode: string, numberInput: string) => {
-    setQueryDetails({
-      departmentCode,
-      number: numberInput.toUpperCase(),
-    });
+  const handleSearch = (
+    departmentCode: string,
+    numberInput: string,
+    runCacheQuery: boolean,
+  ) => {
+    if (runCacheQuery) {
+      setQueryDetails({
+        departmentCode,
+        number: numberInput.toUpperCase(),
+      });
+    } else {
+      setCacheQueryDetails({
+        departmentCode,
+        number: numberInput.toUpperCase(),
+      });
+    }
   };
 
   function courseIsAlreadyAdded(course: StoredCourse) {
@@ -115,6 +138,7 @@ export default function useSearch({
   return {
     data,
     loading,
+    loadingUseQuery,
     departments,
     departmentCode,
     number,
