@@ -1,4 +1,4 @@
-import { getTitle, isCSE, isOffered } from "@/lib/plannerUtils";
+import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
@@ -15,25 +15,27 @@ export default function CourseInfoModal() {
   } = useContext(ModalsContext);
 
   const [course = undefined, term = undefined] = courseTerm ?? [];
-  const { data, error, loading } = useQuery(GET_COURSE, {
+  const { data, loading } = useQuery(GET_COURSE, {
     variables: {
       departmentCode: course?.departmentCode,
       number: course?.number,
     },
-    skip: course === undefined,
+    skip: course === undefined || isCustomCourse(course),
   });
 
-  if (error) return `Error! ${error}`;
   if (course === undefined) return null;
 
   function title(data: any) {
     if (loading) return "";
+    if (!data) return course?.title;
     const c = data.courseBy as StoredCourse;
     return `${c.departmentCode} ${c.number} ${getTitle(c)}`;
   }
 
   function credits(data: any) {
-    return loading ? "" : data.courseBy.credits;
+    if (loading) return "";
+    if (!data) return course?.credits;
+    return data.courseBy.credits;
   }
 
   function ge(data: any) {
@@ -62,8 +64,8 @@ export default function CourseInfoModal() {
 
   function quartersOffered(data: any) {
     if (loading) return "";
+    if (!data) return "Quarters Offered: Summer, Fall, Winter, Spring";
     const c = data.courseBy as StoredCourse;
-    if (!isCSE(c)) return "Offered quarter information not available";
     if (c.quartersOffered.length == 0) return "Quarters Offered: None";
     return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
   }
@@ -97,6 +99,17 @@ export default function CourseInfoModal() {
           </Skeleton>
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">
+          {!isCSE(course) && (
+            <Typography
+              variant="soft"
+              color="warning"
+              component="p"
+              startDecorator={<WarningAmberRounded color="warning" />}
+            >
+              Warning: quarters offered information is unavailable for this
+              course.
+            </Typography>
+          )}
           {isCSE(course) && !isOffered(course.quartersOffered, term) && (
             <Typography
               variant="soft"
@@ -105,13 +118,17 @@ export default function CourseInfoModal() {
               startDecorator={<WarningAmberRounded color="warning" />}
             >
               Warning: {course.departmentCode} {course.number} is not offered in{" "}
-              {term}
+              {` ${term}`}
             </Typography>
           )}
           <Typography component="p">{quartersOffered(data)}</Typography>
           <Typography component="p">Credits: {credits(data)}</Typography>
-          <Typography component="p">{prerequisites(data)}</Typography>
-          <Typography component="p">GE: {ge(data)}</Typography>
+          {data !== undefined && (
+            <>
+              <Typography component="p">{prerequisites(data)}</Typography>
+              <Typography component="p">GE: {ge(data)}</Typography>
+            </>
+          )}
         </Skeleton>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>

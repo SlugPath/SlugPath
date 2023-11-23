@@ -27,6 +27,7 @@ const GET_PLANNER = gql`
           number
           quartersOffered
           ge
+          title
           credits
         }
       }

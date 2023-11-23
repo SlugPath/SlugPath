@@ -5,6 +5,7 @@ import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
 import useSearch from "../hooks/useSearch";
+import { customCourse } from "@/lib/plannerUtils";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -132,6 +133,7 @@ export default function Search() {
           />
         </div>
       </form>
+
       <Droppable
         droppableId={"search-droppable"}
         isDropDisabled={true}
@@ -152,6 +154,11 @@ export default function Search() {
         {(provided, snapshot) => {
           return (
             <div {...provided.droppableProps} ref={provided.innerRef}>
+              <DraggableCourseCard
+                index={-1}
+                draggableId={createSearchId(customCourse)}
+                course={customCourse}
+              />
               {hasResults(data) ? (
                 <div>
                   <div className="mb-1">{getItemCount(data)} results</div>

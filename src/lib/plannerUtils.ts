@@ -7,6 +7,7 @@ import {
 } from "@/graphql/planner/schema";
 import { Term } from "../app/types/Quarter";
 import { StoredCourse } from "@/app/types/Course";
+import { v4 as uuidv4 } from "uuid";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
@@ -86,11 +87,31 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
   return result;
 }
 
+export const customCourse: StoredCourse = {
+  id: uuidv4(),
+  credits: 5,
+  departmentCode: "",
+  number: "",
+  title: "Custom Course",
+  ge: [],
+  quartersOffered: ["Fall", "Winter", "Spring"],
+};
+
 export function getDeptAndNumber({
   departmentCode,
   number,
+  title,
 }: StoredCourse): string {
-  return `${departmentCode} ${number}`;
+  if (departmentCode !== "" && number !== "")
+    return `${departmentCode} ${number}`;
+  return `${title}`;
+}
+
+export function isCustomCourse({
+  departmentCode,
+  number,
+}: StoredCourse): boolean {
+  return departmentCode === "" || number === "";
 }
 
 export function getTitle({ title, departmentCode, number }: StoredCourse) {

@@ -84,6 +84,7 @@ export default function usePlanner(input: {
     const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
     return (deleteIdx: number) => {
       const quarterCourses = quarter.courses;
+      const deleteCid = quarter.courses[deleteIdx];
       const newCourses = [
         ...quarterCourses.slice(0, deleteIdx),
         ...quarterCourses.slice(deleteIdx + 1),
@@ -91,6 +92,7 @@ export default function usePlanner(input: {
       setCourseState((prev) => {
         return {
           ...prev,
+          courses: prev.courses.filter((c) => c.id !== deleteCid),
           quarters: [
             ...prev.quarters.slice(0, idx),
             {

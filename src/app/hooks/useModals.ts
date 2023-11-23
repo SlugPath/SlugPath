@@ -3,8 +3,6 @@ import { StoredCourse } from "../types/Course";
 import { Term } from "../types/Quarter";
 
 export default function useModals() {
-  const [showMajorCompletionModal, setShowMajorCompletionModal] =
-    useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
   const [displayCourse, setDisplayCourse] = useState<
@@ -19,8 +17,6 @@ export default function useModals() {
   }
 
   return {
-    showMajorCompletionModal,
-    setShowMajorCompletionModal,
     showExportModal,
     setShowExportModal,
     showCourseInfoModal,
