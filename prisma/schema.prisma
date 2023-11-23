@@ -39,9 +39,9 @@ model Quarter {
 
 model EnrolledCourses {
   id              String      @id @default(uuid())
+  title           String
   departmentCode  String?
   number          String?
-  title           String?
   credits         Int?
   ge              String[]
   quartersOffered String[]

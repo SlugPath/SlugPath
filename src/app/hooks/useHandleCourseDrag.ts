@@ -2,6 +2,7 @@ import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import { PlannerData } from "../types/PlannerData";
 import { Quarter, findQuarter } from "../types/Quarter";
 import { v4 as uuidv4 } from "uuid";
+import { createCourseFromId } from "@/lib/plannerUtils";
 
 const REMOVE_COURSE_AREA1 = "remove-course-area1";
 const REMOVE_COURSE_AREA2 = "remove-course-area2";
@@ -15,7 +16,7 @@ export default function useHandleCourseDrag({
   handleCourseUpdate: any;
 }) {
   function handleDragEnd(result: DropResult) {
-    const { destination, source } = result;
+    const { destination, source, draggableId } = result;
 
     function draggedFromSearch(droppableId: string) {
       return droppableId === "search-droppable";
@@ -30,7 +31,7 @@ export default function useHandleCourseDrag({
       return;
 
     if (draggedFromSearch(source.droppableId)) {
-      addCourseFromSearch(destination);
+      addCourseFromSearch(draggableId, destination);
       return;
     }
 
@@ -42,13 +43,22 @@ export default function useHandleCourseDrag({
     moveCourse(source, destination);
   }
 
-  function addCourseFromSearch(destination: DraggableLocation) {
+  function addCourseFromSearch(
+    draggableId: string,
+    destination: DraggableLocation,
+  ) {
     const { quarter, idx } = findQuarter(
       courseState.quarters,
       destination.droppableId,
     );
     const newStoredCourses = Array.from(quarter.courses);
-    newStoredCourses.splice(destination.index, 0, uuidv4());
+    const cid = uuidv4();
+    newStoredCourses.splice(destination.index, 0, cid);
+    const course = createCourseFromId(draggableId);
+    courseState.courses.push({
+      id: cid,
+      ...course,
+    });
     const newQuarter = {
       ...quarter,
       courses: newStoredCourses,

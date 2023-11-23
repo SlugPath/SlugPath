@@ -9,7 +9,7 @@ import {
 import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
-  getTitle,
+  getDeptAndNumber,
   isOffered,
 } from "../../lib/plannerUtils";
 import { useContext, useState } from "react";
@@ -83,7 +83,7 @@ export default function CourseCard({
                   ])
                 }
               >
-                {course ? getTitle(course) : "No course"}
+                {course ? getDeptAndNumber(course) : "No course"}
               </Link>
             </Typography>
           </Grid>

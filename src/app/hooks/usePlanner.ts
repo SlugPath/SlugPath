@@ -1,4 +1,8 @@
-import { getTotalCredits, getGeSatisfied } from "@/lib/plannerUtils";
+import {
+  getTotalCredits,
+  getGeSatisfied,
+  serializePlanner,
+} from "@/lib/plannerUtils";
 import { useState } from "react";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
@@ -49,7 +53,7 @@ export default function usePlanner(input: {
       const variables = {
         input: {
           ...input,
-          plannerData: courseState,
+          plannerData: serializePlanner(courseState),
         },
       };
       saveData({

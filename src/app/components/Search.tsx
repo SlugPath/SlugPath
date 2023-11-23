@@ -30,8 +30,17 @@ export default function Search() {
     return (!loading && !data) || (data && data.coursesBy.length == 0);
   }
 
-  function createSearchId({ departmentCode, number }: StoredCourse) {
-    return `${departmentCode}-${number}-search`;
+  function createSearchId({
+    title,
+    departmentCode,
+    number,
+    quartersOffered,
+    credits,
+    ge,
+  }: StoredCourse) {
+    return `${title}-${departmentCode}-${number}-${quartersOffered.join(
+      ",",
+    )}-${credits}-${ge.join(",")}-search`;
   }
 
   function getCourseByIndex(index: number) {

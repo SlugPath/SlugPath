@@ -153,6 +153,7 @@ it("should update 1 planner for 1 user", async () => {
       id: uuidv4(),
       departmentCode: "CSE",
       number: "12",
+      title: "CSE 12",
       credits: 7,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter"],
@@ -161,6 +162,7 @@ it("should update 1 planner for 1 user", async () => {
       id: uuidv4(),
       departmentCode: "CSE",
       number: "16",
+      title: "CSE 16",
       credits: 5,
       ge: ["mf", "si"],
       quartersOffered: ["Fall", "Winter", "Spring"],
@@ -168,17 +170,26 @@ it("should update 1 planner for 1 user", async () => {
     {
       id: uuidv4(),
       departmentCode: "CSE",
+      title: "CSE 30",
       number: "30",
       credits: 5,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter", "Spring"],
     },
+    {
+      id: uuidv4(),
+      departmentCode: "SGI",
+      title: "Custom class",
+      number: "40N",
+      credits: 5,
+      ge: [],
+      quartersOffered: ["Summer"],
+    },
   ];
   const plannerData = initialPlanner;
   cseCourses.forEach((c) => {
-    const { id, ...rest } = c;
-    plannerData.quarters[0].courses.push(id);
-    plannerData.courseTable[id] = rest;
+    plannerData.quarters[0].courses.push(c.id);
+    plannerData.courses.push(c);
   });
 
   const res2 = await service.upsertPlanner({
@@ -198,7 +209,7 @@ it("should update 1 planner for 1 user", async () => {
   expect(check2).not.toBeNull();
   const courses = check2?.quarters[0].courses;
   expect(courses).toBeDefined();
-  expect(courses).toHaveLength(3);
+  expect(courses).toHaveLength(cseCourses.length);
   courses?.forEach((c, idx) => {
     expect(c).toStrictEqual(cseCourses[idx]);
   });

@@ -82,8 +82,29 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
   return result;
 }
 
+export function getDeptAndNumber({
+  departmentCode,
+  number,
+}: StoredCourse): string {
+  return `${departmentCode} ${number}`;
+}
+
 export function getTitle({ title, departmentCode, number }: StoredCourse) {
   return title.length > 0 ? title : `${departmentCode} ${number}`;
+}
+
+export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
+  const [title, departmentCode, number, quarters, credits, ge] = id.split("-");
+  const quartersOffered = quarters.split(",");
+  const ges = ge.split(",");
+  return {
+    title,
+    departmentCode,
+    number,
+    quartersOffered,
+    credits: parseInt(credits),
+    ge: ges,
+  };
 }
 
 /**

@@ -1,6 +1,6 @@
 import { ApolloError, gql, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { initialPlanner } from "@/lib/plannerUtils";
+import { deserializePlanner, initialPlanner } from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerTitle } from "@/graphql/planner/schema";
 import { PlannerData } from "../types/PlannerData";
@@ -92,7 +92,7 @@ export const useLoadPlanner = (
       const planner = data.getPlanner;
       if (planner !== null) {
         removeTypenames(planner);
-        setState(planner);
+        setState(deserializePlanner(planner));
       }
     },
     onError: (err) => {
