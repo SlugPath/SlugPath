@@ -145,6 +145,10 @@ export function getGeSatisfied(planner: PlannerData): string[] {
   return planner.courses.flatMap((c) => c.ge);
 }
 
+export function isCSE(course: StoredCourse): boolean {
+  return course.departmentCode === "CSE";
+}
+
 /**
  * Extracts the term from a quarter ID
  * @param qid quarter Id of the format `quarter-{year}-{term}`

@@ -10,6 +10,7 @@ import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
   getDeptAndNumber,
+  isCSE,
   isOffered,
 } from "../../lib/plannerUtils";
 import { useContext, useState } from "react";
@@ -65,6 +66,7 @@ export default function CourseCard({
               level="body-sm"
               endDecorator={
                 course &&
+                isCSE(course) &&
                 !isOffered(
                   course.quartersOffered,
                   extractTermFromQuarter(quarterId),

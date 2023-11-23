@@ -1,4 +1,4 @@
-import { getTitle, isOffered } from "@/lib/plannerUtils";
+import { getTitle, isCSE, isOffered } from "@/lib/plannerUtils";
 import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
@@ -27,8 +27,9 @@ export default function CourseInfoModal() {
   if (course === undefined) return null;
 
   function title(data: any) {
+    if (loading) return "";
     const c = data.courseBy as StoredCourse;
-    return loading ? "" : `${c.departmentCode} ${c.number} ${getTitle(c)}`;
+    return `${c.departmentCode} ${c.number} ${getTitle(c)}`;
   }
 
   function credits(data: any) {
@@ -62,8 +63,9 @@ export default function CourseInfoModal() {
   function quartersOffered(data: any) {
     if (loading) return "";
     const c = data.courseBy as StoredCourse;
-    if (c.quartersOffered.length == 0) return "None";
-    return c.quartersOffered.join(", ");
+    if (!isCSE(c)) return "Offered quarter information not available";
+    if (c.quartersOffered.length == 0) return "Quarters Offered: None";
+    return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
   }
 
   return (
@@ -95,7 +97,7 @@ export default function CourseInfoModal() {
           </Skeleton>
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">
-          {!isOffered(course.quartersOffered, term) && (
+          {isCSE(course) && !isOffered(course.quartersOffered, term) && (
             <Typography
               variant="soft"
               color="warning"
@@ -106,9 +108,7 @@ export default function CourseInfoModal() {
               {term}
             </Typography>
           )}
-          <Typography component="p">
-            Quarters offered: {quartersOffered(data)}
-          </Typography>
+          <Typography component="p">{quartersOffered(data)}</Typography>
           <Typography component="p">Credits: {credits(data)}</Typography>
           <Typography component="p">{prerequisites(data)}</Typography>
           <Typography component="p">GE: {ge(data)}</Typography>
