@@ -51,7 +51,11 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
     const quarter: QuarterInput = {
       id: q.id,
       title: q.title,
-      courses: q.courses.map((cid) => findCourseById(courseState, cid)),
+      courses: q.courses.map((cid) => {
+        const course = findCourseById(courseState, cid);
+        course.title = getTitle(course);
+        return course;
+      }),
     };
     result.quarters.push(quarter);
   });
@@ -90,7 +94,9 @@ export function getDeptAndNumber({
 }
 
 export function getTitle({ title, departmentCode, number }: StoredCourse) {
-  return title.length > 0 ? title : `${departmentCode} ${number}`;
+  return title !== undefined && title.length > 0
+    ? title
+    : `${departmentCode} ${number}`;
 }
 
 export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
@@ -107,13 +113,25 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
   };
 }
 
+export function getUniqueCoursesForGrad(planner: PlannerData): any[] {
+  const unique = new Map();
+
+  for (const { departmentCode, number, credits } of planner.courses) {
+    const key = `${departmentCode}|${number}|${credits}`;
+
+    if (!unique.has(key)) unique.set(key, { departmentCode, number, credits });
+  }
+  return Array.from(unique.values());
+}
+
 /**
  * Computes the total credits of a student planner
  * @param planner a course planner object
  * @returns total number of credits
  */
 export function getTotalCredits(planner: PlannerData): number {
-  return planner.courses.reduce((acc, c) => {
+  const uniqueCourses = getUniqueCoursesForGrad(planner);
+  return uniqueCourses.reduce((acc, c) => {
     return acc + c.credits;
   }, 0);
 }
