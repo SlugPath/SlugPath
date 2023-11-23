@@ -146,7 +146,7 @@ export default function Search({
   }
 
   return (
-    <Card className="min-w-40">
+    <Card className="min-w-40" variant="plain">
       <form
         onSubmit={(event) => {
           event.preventDefault();

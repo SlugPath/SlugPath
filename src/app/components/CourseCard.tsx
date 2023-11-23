@@ -46,7 +46,7 @@ export default function CourseCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant={alreadyAdded ? "soft" : "outlined"}
+      variant={alreadyAdded ? "soft" : "plain"}
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",

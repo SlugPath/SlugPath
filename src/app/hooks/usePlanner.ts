@@ -123,8 +123,9 @@ export default function usePlanner(input: {
             newCourse,
             ...quarterCourses.slice(editIdx + 1),
           ];
+
           setCourseState((prev) => {
-            return {
+            const newNewCourseState = {
               ...prev,
               quarters: [
                 ...prev.quarters.slice(0, idx),
@@ -136,6 +137,27 @@ export default function usePlanner(input: {
                 ...prev.quarters.slice(idx + 1),
               ],
             };
+
+            // for each course in newNewCourseState, update the labels
+            // this is a dumb solution. A better solution would be for courses
+            // to have an array of label ids instead of an array of labels
+            newNewCourseState.quarters.forEach((quarter) => {
+              quarter.courses.forEach((course) => {
+                const newLabels = newCourse.labels;
+                const labels = course.labels;
+                newLabels.forEach((newLabel) => {
+                  const selectedLabel = labels.find(
+                    (label) => label.id == newLabel.id,
+                  );
+                  if (selectedLabel) {
+                    selectedLabel.name = newLabel.name;
+                    selectedLabel.color = newLabel.color;
+                  }
+                });
+              });
+            });
+
+            return newNewCourseState;
           });
           setTotalCredits(getTotalCredits(courseState));
         }
