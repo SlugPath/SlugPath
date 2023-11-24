@@ -2,6 +2,7 @@ import {
   getTotalCredits,
   getGeSatisfied,
   serializePlanner,
+  isCustomCourse,
 } from "@/lib/plannerUtils";
 import { useState } from "react";
 import { gql } from "@apollo/client";
@@ -109,6 +110,29 @@ export default function usePlanner(input: {
     };
   };
 
+  /**
+   * A function that is used to edit a custom course and reflect changes in
+   * the entire planner state
+   * @param cid id of custom course being edited
+   * @param newTitle new title of custom course
+   */
+  const editCustomCourse = (cid: string, newTitle: string) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        courses: prev.courses.map((c) => {
+          if (c.id === cid && isCustomCourse(c)) {
+            return {
+              ...c,
+              title: newTitle,
+            };
+          }
+          return c;
+        }),
+      };
+    });
+  };
+
   return {
     courseState,
     totalCredits,
@@ -116,6 +140,7 @@ export default function usePlanner(input: {
     saveStatus,
     saveError,
     deleteCourse,
+    editCustomCourse,
     handleCourseUpdate,
   };
 }

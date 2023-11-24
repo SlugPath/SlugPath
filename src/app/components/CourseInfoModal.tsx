@@ -2,10 +2,12 @@ import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
-import { WarningAmberRounded } from "@mui/icons-material";
+import { WarningAmberRounded, Edit } from "@mui/icons-material";
 import { StoredCourse } from "../types/Course";
+import { PlannerContext } from "../contexts/PlannerProvider";
+import { IconButton, Input } from "@mui/joy";
 
 export default function CourseInfoModal() {
   const {
@@ -14,7 +16,20 @@ export default function CourseInfoModal() {
     displayCourse: courseTerm,
   } = useContext(ModalsContext);
 
+  const { editCustomCourse } = useContext(PlannerContext);
+  const [editing, setEditing] = useState(false);
   const [course = undefined, term = undefined] = courseTerm ?? [];
+
+  const [customTitle, setCustomTitle] = useState("Custom Course");
+
+  const handleEndEditing = () => {
+    if (course && editing) {
+      setEditing(false);
+      course.title = customTitle;
+      editCustomCourse(course.id, customTitle);
+      setCustomTitle("");
+    }
+  };
   const { data, loading } = useQuery(GET_COURSE, {
     variables: {
       departmentCode: course?.departmentCode,
@@ -73,7 +88,11 @@ export default function CourseInfoModal() {
   return (
     <Modal
       open={showModal}
-      onClose={() => setShowModal(false)}
+      onClose={() => {
+        setShowModal(false);
+        setCustomTitle("");
+        setEditing(false);
+      }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
@@ -95,7 +114,31 @@ export default function CourseInfoModal() {
           mb={1}
         >
           <Skeleton loading={loading} variant="text" width="50%">
-            {title(data)}
+            {editing ? (
+              <Input
+                variant="soft"
+                autoFocus
+                value={customTitle}
+                size="lg"
+                placeholder="Custom Course"
+                onChange={(e) => setCustomTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleEndEditing();
+                }}
+              />
+            ) : (
+              title(data)
+            )}
+            {isCustomCourse(course) && (
+              <IconButton
+                onClick={() => {
+                  if (editing) handleEndEditing();
+                  if (term !== undefined) setEditing(true);
+                }}
+              >
+                <Edit />
+              </IconButton>
+            )}
           </Skeleton>
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">

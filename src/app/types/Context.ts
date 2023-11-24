@@ -21,6 +21,7 @@ export interface ModalsContextProps {
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
+  editCustomCourse: (cid: string, newTitle: string) => void;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;

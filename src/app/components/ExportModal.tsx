@@ -11,7 +11,11 @@ import {
 } from "@react-pdf/renderer";
 import { StoredCourse } from "../types/Course";
 import { findQuarter, Quarter } from "../types/Quarter";
-import { getTitle } from "../../lib/plannerUtils";
+import {
+  getDeptAndNumber,
+  getTitle,
+  isCustomCourse,
+} from "../../lib/plannerUtils";
 import { quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { useContext } from "react";
@@ -169,7 +173,11 @@ function PDFQuarter({
         {courses.map((course, idx) => {
           return (
             <View key={idx} style={styles.course}>
-              <Text>{getTitle(course)}</Text>
+              <Text>
+                {isCustomCourse(course)
+                  ? getTitle(course)
+                  : getDeptAndNumber(course)}
+              </Text>
             </View>
           );
         })}

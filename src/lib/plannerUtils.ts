@@ -137,10 +137,9 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
 export function getUniqueCoursesForGrad(planner: PlannerData): any[] {
   const unique = new Map();
 
-  for (const { departmentCode, number, credits } of planner.courses) {
-    const key = `${departmentCode}|${number}|${credits}`;
-
-    if (!unique.has(key)) unique.set(key, { departmentCode, number, credits });
+  for (const { departmentCode, number, title, credits } of planner.courses) {
+    const key = `${departmentCode}|${number}|${title}|${credits}`;
+    if (!unique.has(key)) unique.set(key, { credits });
   }
   return Array.from(unique.values());
 }
