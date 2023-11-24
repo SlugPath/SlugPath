@@ -1,13 +1,15 @@
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-import { Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
+import { Grid, Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { WarningAmberRounded, Edit } from "@mui/icons-material";
 import { StoredCourse } from "../types/Course";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { IconButton, Input } from "@mui/joy";
+
+const MAX_TITLE_LENGTH: number = 20;
 
 export default function CourseInfoModal() {
   const {
@@ -20,16 +22,21 @@ export default function CourseInfoModal() {
   const [editing, setEditing] = useState(false);
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
-  const [customTitle, setCustomTitle] = useState("Custom Course");
+  const [customTitle, setCustomTitle] = useState("");
 
   const handleEndEditing = () => {
     if (course && editing) {
       setEditing(false);
       course.title = customTitle;
       editCustomCourse(course.id, customTitle);
-      setCustomTitle("");
     }
   };
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCustomTitle(value.slice(0, MAX_TITLE_LENGTH));
+  };
+
   const { data, loading } = useQuery(GET_COURSE, {
     variables: {
       departmentCode: course?.departmentCode,
@@ -113,36 +120,49 @@ export default function CourseInfoModal() {
           fontWeight="lg"
           mb={1}
         >
+          {/* Editable course title */}
           <Skeleton loading={loading} variant="text" width="50%">
-            {editing ? (
-              <Input
-                variant="soft"
-                autoFocus
-                value={customTitle}
-                size="lg"
-                placeholder="Custom Course"
-                onChange={(e) => setCustomTitle(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleEndEditing();
-                }}
-              />
-            ) : (
-              title(data)
-            )}
-            {isCustomCourse(course) && (
-              <IconButton
-                onClick={() => {
-                  if (editing) handleEndEditing();
-                  if (term !== undefined) setEditing(true);
-                }}
-              >
-                <Edit />
-              </IconButton>
-            )}
+            <Grid container alignItems="center" spacing="1">
+              <Grid>
+                {editing ? (
+                  <Input
+                    variant="soft"
+                    autoFocus
+                    value={customTitle}
+                    size="lg"
+                    placeholder={course.title}
+                    onChange={handleTitleChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleEndEditing();
+                    }}
+                    onBlur={handleEndEditing}
+                  />
+                ) : (
+                  title(data)
+                )}
+              </Grid>
+              <Grid>
+                {isCustomCourse(course) && term !== undefined && (
+                  <IconButton
+                    onClick={() => {
+                      if (editing) {
+                        handleEndEditing();
+                      } else {
+                        setEditing(true);
+                      }
+                    }}
+                  >
+                    <Edit />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
           </Skeleton>
         </Typography>
+        {/* End title */}
+        {/* Course details */}
         <Skeleton loading={loading} variant="text" width="50%">
-          {!isCSE(course) && (
+          {!isCSE(course) && !isCustomCourse(course) && (
             <Typography
               variant="soft"
               color="warning"
@@ -173,6 +193,7 @@ export default function CourseInfoModal() {
             </>
           )}
         </Skeleton>
+        {/* End course details */}
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>

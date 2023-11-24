@@ -154,11 +154,13 @@ export default function Search() {
         {(provided, snapshot) => {
           return (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              <DraggableCourseCard
-                index={-1}
-                draggableId={createSearchId(customCourse)}
-                course={customCourse}
-              />
+              <div className="mb-4">
+                <DraggableCourseCard
+                  index={-1}
+                  draggableId={createSearchId(customCourse)}
+                  course={customCourse}
+                />
+              </div>
               {hasResults(data) ? (
                 <div>
                   <div className="mb-1">{getItemCount(data)} results</div>
