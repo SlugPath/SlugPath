@@ -5,7 +5,7 @@ import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useState } from "react";
 import SaveSnackbars from "./SaveSnackbars";
-import { CircularProgress } from "@mui/joy";
+import { Card, CircularProgress } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
 import { GEProgress } from "./GEProgress";
@@ -44,36 +44,39 @@ export default function Planner({ isActive }: { isActive: boolean }) {
       <div>
         <DragDropContext onDragEnd={handleDragEnd}>
           <ModalsProvider>
-            <div className="flex">
-              <div className="flex-initial pr-2">
+            <div className="flex justify-between space-x-4">
+              <div className="flex-initial">
                 <Search coursesInPlanner={memoAlreadyCourses} />
               </div>
               {loading ? (
                 <CircularProgress />
               ) : (
                 <>
-                  <div className="overflow-auto h-[92vh] w-auto">
+                  {/* make div expand to the full width of screen */}
+                  <div className="overflow-auto h-[92vh] w-full">
                     <Quarters courseState={courseState} />
                   </div>
 
                   {/* Modals and Grad Progress */}
-                  <div className="pl-2 pt-7 self-start">
-                    <div className="pb-6">
-                      <PlannerActions />
-                      <Modals />
-                    </div>
+                  <div className="self-start">
+                    <Card variant="plain">
+                      <div>
+                        <PlannerActions />
+                        <Modals />
+                      </div>
 
-                    <hr className="rounded border-t border-slate-400" />
+                      <hr className="rounded border-t border-slate-300" />
 
-                    <div className="py-6 flex justify-items-center">
-                      <GradProgress credits={totalCredits} />
-                    </div>
+                      <div className="flex justify-items-center">
+                        <GradProgress credits={totalCredits} />
+                      </div>
 
-                    <hr className="rounded border-t border-slate-400" />
+                      <hr className="rounded border-t border-slate-300" />
 
-                    <div className="pt-6 flex place-items-center">
-                      <GEProgress ge={geSatisfied} />
-                    </div>
+                      <div className="flex place-items-center">
+                        <GEProgress ge={geSatisfied} />
+                      </div>
+                    </Card>
                   </div>
                   {/* End Modals */}
                 </>

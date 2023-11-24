@@ -1,10 +1,11 @@
-import { Typography } from "@mui/joy";
+import { Tooltip, Typography } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { green, grey } from "@mui/material/colors";
+import InfoIcon from "@mui/icons-material/Info";
 
-const satisfied = green[500];
-const notSatisfied = grey[400];
+const satisfied = green[400];
+const notSatisfied = grey[200];
 
 export const GEProgress = ({ ge }: { ge: string[] }) => {
   const [data, setData] = useState([
@@ -42,6 +43,12 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
   return (
     <>
       <div className="flex flex-col place-items-center xl:w-64">
+        <div className="flex flex-row py-1 justify-between w-full">
+          <Typography>GE Progress</Typography>
+          <Tooltip title="You must satisfy all general education requirements to graduate">
+            <InfoIcon sx={{ color: "gray" }} />
+          </Tooltip>
+        </div>
         <PieChart
           tooltip={{ trigger: "none" }}
           series={[
@@ -72,9 +79,6 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
             },
           }}
         />
-        <Typography className="text-sm text-center">
-          You must satisfy all general education requirements to graduate.
-        </Typography>
       </div>
     </>
   );

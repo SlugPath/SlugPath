@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  Grid,
-  IconButton,
-  Link,
-  Typography,
-} from "@mui/joy";
+import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
@@ -14,10 +7,10 @@ import {
 } from "../../lib/courseUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
+import CloseIconButton from "./CloseIconButton";
 
 export default function CourseCard({
   course,
@@ -50,14 +43,19 @@ export default function CourseCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant={alreadyAdded ? "soft" : "outlined"}
+      variant={"soft"}
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
         backgroundColor:
-          isDragging || highlighted ? "#E5E7EB" : alreadyAdded ? "" : "#FFFFFF",
+          isDragging || highlighted
+            ? "rgb(226 232 240)"
+            : alreadyAdded
+            ? ""
+            : "#F1F5F9",
       }}
+      // className="bg-slate-200"
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}
     >
@@ -65,7 +63,7 @@ export default function CourseCard({
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
           <Grid xs={10}>
             <Typography
-              level="body-sm"
+              // level="title-md"
               endDecorator={
                 course &&
                 !isOffered(
@@ -77,7 +75,6 @@ export default function CourseCard({
               <Link
                 overlay
                 underline="none"
-                href="#interactive-card"
                 sx={{ color: "text.tertiary" }}
                 onClick={() =>
                   onShowCourseInfoModal([
@@ -94,16 +91,12 @@ export default function CourseCard({
           </Grid>
           <Grid xs={2}>
             {quarterId !== undefined && (
-              <IconButton
+              <CloseIconButton
                 onClick={() => deleteCourse(quarterId)(index)}
-                variant="plain"
-                size="sm"
-                className={`bg-gray-200 hover:bg-gray-300 ${
-                  highlighted ? "" : "invisible"
-                }`}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
+                sx={{
+                  visibility: highlighted ? "visible" : "hidden",
+                }}
+              />
             )}
           </Grid>
         </Grid>

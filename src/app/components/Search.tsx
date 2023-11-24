@@ -104,7 +104,7 @@ export default function Search({
   }
 
   return (
-    <Card className="w-80">
+    <Card className="w-80" variant="plain">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -116,10 +116,10 @@ export default function Search({
             placeholder="Department"
             name="department"
             aria-label="department"
-            className="col-span-2"
+            className="col-span-2 bg-slate-100"
+            variant="soft"
             onChange={handleChangeDepartment}
             value={departmentCode ?? ""}
-            size="sm"
           >
             {departments.map((dep) => (
               <Option key={dep.value} value={dep.value}>
@@ -131,11 +131,10 @@ export default function Search({
             className="col-span-2"
             color="neutral"
             placeholder="Number"
-            variant="outlined"
+            variant="soft"
             name="number"
             aria-label="number"
             onChange={(event) => handleChangeNumber(event.target.value)}
-            size="sm"
           />
         </div>
       </form>
