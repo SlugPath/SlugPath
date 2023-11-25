@@ -1,4 +1,12 @@
-import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
+import {
+  Card,
+  CircularProgress,
+  FormControl,
+  FormHelperText,
+  Input,
+  Option,
+  Select,
+} from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
 import CourseCard from "./CourseCard";
@@ -6,6 +14,7 @@ import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
 import useSearch from "../hooks/useSearch";
 import { customCourse } from "@/lib/plannerUtils";
+import { InfoOutlined } from "@mui/icons-material";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -21,6 +30,7 @@ export default function Search() {
     handleSearch,
     departmentCode,
     number,
+    error,
   } = useSearch();
 
   function hasResults(data: any): boolean {
@@ -39,9 +49,9 @@ export default function Search() {
     credits,
     ge,
   }: StoredCourse) {
-    return `${title}-${departmentCode}-${number}-${quartersOffered.join(
+    return `${title};${departmentCode};${number};${quartersOffered.join(
       ",",
-    )}-${credits}-${ge.join(",")}-search`;
+    )};${credits};${ge.join(",")};search`;
   }
 
   function getCourseByIndex(index: number) {
@@ -105,7 +115,7 @@ export default function Search() {
           handleSearch(departmentCode ?? "", number);
         }}
       >
-        <div className="grid grid-cols-2 gap-2 p-2">
+        <div className="grid gap-2 p-2">
           <Select
             placeholder="Department"
             name="department"
@@ -121,16 +131,24 @@ export default function Search() {
               </Option>
             ))}
           </Select>
-          <Input
-            className="col-span-2"
-            color="neutral"
-            placeholder="Number"
-            variant="outlined"
-            name="number"
-            aria-label="number"
-            onChange={(event) => handleChangeNumber(event.target.value)}
-            size="sm"
-          />
+          <FormControl error={error}>
+            <Input
+              className="col-span-2"
+              color="neutral"
+              placeholder="Number"
+              variant="outlined"
+              name="number"
+              aria-label="number"
+              onChange={(event) => handleChangeNumber(event.target.value)}
+              size="sm"
+            />
+            {error && (
+              <FormHelperText>
+                <InfoOutlined />
+                Invalid course number
+              </FormHelperText>
+            )}
+          </FormControl>
         </div>
       </form>
 

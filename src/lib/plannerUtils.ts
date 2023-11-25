@@ -121,7 +121,7 @@ export function getTitle({ title, departmentCode, number }: StoredCourse) {
 }
 
 export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
-  const [title, departmentCode, number, quarters, credits, ge] = id.split("-");
+  const [title, departmentCode, number, quarters, credits, ge] = id.split(";");
   const quartersOffered = quarters.split(",");
   const ges = ge.split(",");
   return {

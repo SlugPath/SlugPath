@@ -42,6 +42,8 @@ export default function CourseCard({
     margin: `0 0 ${margin}px 0`,
     ...draggableStyle,
   });
+  if (isDragging && course.departmentCode === "ARBC")
+    console.log(`${JSON.stringify(course)}`);
 
   return (
     <Card

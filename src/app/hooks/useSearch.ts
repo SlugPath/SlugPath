@@ -7,6 +7,7 @@ const initialData = { coursesBy: [] };
 
 export default function useSearch() {
   const [data, setData] = useState<any>(initialData);
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<
     { label: string; value: string }[]
@@ -83,6 +84,11 @@ export default function useSearch() {
   };
 
   const handleSearch = (departmentCode: string, numberInput: string) => {
+    if (numberInput !== "" && !/^\d{1,3}[a-zA-Z]?$/.test(numberInput)) {
+      setError(true);
+      return;
+    }
+    setError(false);
     setQueryDetails({
       departmentCode,
       number: numberInput.toUpperCase(),
@@ -94,6 +100,7 @@ export default function useSearch() {
   }
 
   return {
+    error,
     data,
     loading,
     departments,
