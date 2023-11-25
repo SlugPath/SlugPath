@@ -7,7 +7,8 @@ export default function Navbar() {
   const { data: session, status } = useSession();
 
   return (
-    <header className="bg-white w-full shadow-md">
+    // <header className="bg-white w-full">
+    <header className="bg-blue-500 w-full">
       <nav className={`${status !== "authenticated" ? "py-1.5" : "py-0"} px-5`}>
         <div className="flex flex-row">
           {/* Logo and title start */}
@@ -18,7 +19,8 @@ export default function Navbar() {
               height={30}
               alt="Slug Icon"
             />
-            <a href="#" className="text-xl font-semibold text-gray-800">
+            {/* <a href="#" className="text-xl font-semibold text-gray-800"> */}
+            <a href="#" className="text-xl font-semibold text-white">
               UCSC Course Planner
             </a>
           </div>
@@ -28,7 +30,7 @@ export default function Navbar() {
           <div className="flex flex-1 justify-end">
             {status !== "authenticated" ? (
               <Button
-                variant="plain"
+                variant="solid"
                 onClick={() => {
                   signIn("google");
                 }}

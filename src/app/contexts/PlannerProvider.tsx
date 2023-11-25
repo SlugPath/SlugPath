@@ -13,14 +13,13 @@ export function PlannerProvider({
 }: PlannerProviderProps) {
   const { data: session } = useSession();
   const {
-    handleOnDragStart,
     deleteCourse,
     editCourse,
     getCourse,
     displayCourse,
     setDisplayCourse,
     totalCredits,
-    unavailableQuarters,
+    geSatisfied,
     courseState,
     handleDragEnd,
     memoAlreadyCourses,
@@ -36,14 +35,13 @@ export function PlannerProvider({
   return (
     <PlannerContext.Provider
       value={{
-        handleOnDragStart,
         deleteCourse,
         editCourse,
         getCourse,
         displayCourse,
         setDisplayCourse,
         totalCredits,
-        unavailableQuarters,
+        geSatisfied,
         courseState,
         handleDragEnd,
         memoAlreadyCourses,

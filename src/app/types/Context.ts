@@ -1,16 +1,15 @@
 import { ChangeEvent, SetStateAction } from "react";
 import { StoredCourse } from "./Course";
 import { PlannerData } from "./PlannerData";
-import { DragStart, DropResult } from "@hello-pangea/dnd";
+import { DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
 import { MultiPlanner } from "./MultiPlanner";
 import { Label } from "./Label";
+import { Term } from "./Quarter";
 
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
 export interface ModalsContextProps {
-  showMajorCompletionModal: boolean;
-  setShowMajorCompletionModal: setShow;
   showExportModal: boolean;
   setShowExportModal: setShow;
   showCourseInfoModal: boolean;
@@ -20,7 +19,6 @@ export interface ModalsContextProps {
 }
 
 export interface PlannerContextProps {
-  handleOnDragStart: (start: DragStart) => void;
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
   editCourse: (
     number: string,
@@ -28,10 +26,10 @@ export interface PlannerContextProps {
     newCourse: StoredCourse,
   ) => void;
   getCourse: (number: string, department: string) => StoredCourse | undefined;
-  displayCourse: StoredCourse | undefined;
+  displayCourse: [StoredCourse, Term | undefined] | undefined;
   setDisplayCourse: any;
   totalCredits: number;
-  unavailableQuarters: string[];
+  geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
   memoAlreadyCourses: string[];

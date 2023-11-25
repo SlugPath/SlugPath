@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
 import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
@@ -7,13 +5,7 @@ import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
-import useDebounce from "../hooks/useDebounce";
-import { GET_COURSES } from "../../graphql/queries";
-
-// TODO: Base this on the actual departments in the database
-const DEPARTMENTS = {
-  CSE: "Computer Science and Engineering",
-};
+import useSearch from "../hooks/useSearch";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -24,60 +16,18 @@ export default function Search({
 }: {
   coursesInPlanner: string[];
 }) {
-  const [department, setDepartment] = useState(getFirstKey(DEPARTMENTS));
-  const [number, setNumber] = useState("");
-  const [queryDetails, setQueryDetails] = useState({
-    department: getFirstKey(DEPARTMENTS),
-    number: "",
-  });
-  const { data, loading } = useQuery(GET_COURSES, {
-    variables: {
-      department: queryDetails.department,
-      number: nullIfNumberEmpty(queryDetails.number),
-    },
-  });
-  useDebounce({
-    callback: () => handleSearch(department, number),
-    delay: 500,
-    dependencies: [department, number],
-  });
-
-  const handleChangeDepartment = (
-    event: React.SyntheticEvent | null,
-    newValue: string | null,
-  ) => {
-    setDepartment(newValue || "");
-  };
-
-  const handleChangeNumber = (number: string) => {
-    setNumber(number.toString());
-  };
-
-  const handleSearch = (departmentInput: string, numberInput: string) => {
-    setQueryDetails({
-      department: departmentInput,
-      number: numberInput.toUpperCase(),
-    });
-  };
-
-  function courseIsAlreadyAdded(course: StoredCourse) {
-    let alreadyAdded = false;
-    coursesInPlanner.forEach((c) => {
-      const [department, number] = c.split("-");
-      if (department === course.department && number === course.number) {
-        alreadyAdded = true;
-      }
-    });
-    return alreadyAdded;
-  }
-
-  function getFirstKey(obj: any): string {
-    return Object.keys(obj)[0];
-  }
-
-  function nullIfNumberEmpty(number: string): string | null {
-    return number.length > 0 ? number : null;
-  }
+  const {
+    data,
+    loading,
+    loadingUseQuery,
+    departments,
+    handleChangeDepartment,
+    handleChangeNumber,
+    handleSearch,
+    courseIsAlreadyAdded,
+    departmentCode,
+    number,
+  } = useSearch({ coursesInPlanner });
 
   function hasResults(data: any): boolean {
     return data && data.coursesBy.length > 0;
@@ -95,7 +45,7 @@ export default function Search({
     return data.coursesBy[index];
   }
 
-  function getItemCount(data: any, snapshot?: DroppableStateSnapshot) {
+  function getItemCount(data: any, snapshot?: DroppableStateSnapshot): number {
     if (data) {
       return snapshot && snapshot.isUsingPlaceholder
         ? data.coursesBy.length + 1
@@ -111,6 +61,14 @@ export default function Search({
     } else {
       return [];
     }
+  }
+
+  function getResultsString(data: any) {
+    const itemCount = getItemCount(data);
+    const loadingMoreResultsString = loadingUseQuery
+      ? "     Loading more results"
+      : "";
+    return itemCount.toString() + " results" + loadingMoreResultsString;
   }
 
   function getRowRender({
@@ -146,11 +104,11 @@ export default function Search({
   }
 
   return (
-    <Card className="min-w-40" variant="plain">
+    <Card className="w-80" variant="plain">
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(department, number);
+          handleSearch(departmentCode ?? "", number, false);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">
@@ -158,27 +116,25 @@ export default function Search({
             placeholder="Department"
             name="department"
             aria-label="department"
-            className="col-span-2"
+            className="col-span-2 bg-slate-100"
+            variant="soft"
             onChange={handleChangeDepartment}
-            defaultValue={getFirstKey(DEPARTMENTS)}
-            size="sm"
+            value={departmentCode ?? ""}
           >
-            <Option
-              value={getFirstKey(DEPARTMENTS)}
-              aria-label="computer science and engineering"
-            >
-              {DEPARTMENTS["CSE"]}
-            </Option>
+            {departments.map((dep) => (
+              <Option key={dep.value} value={dep.value}>
+                {dep.label}
+              </Option>
+            ))}
           </Select>
           <Input
             className="col-span-2"
             color="neutral"
             placeholder="Number"
-            variant="outlined"
+            variant="soft"
             name="number"
             aria-label="number"
             onChange={(event) => handleChangeNumber(event.target.value)}
-            size="sm"
           />
         </div>
       </form>
@@ -205,7 +161,7 @@ export default function Search({
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {hasResults(data) ? (
                 <div>
-                  <div className="mb-1">{getItemCount(data)} results</div>
+                  <div className="mb-1">{getResultsString(data)}</div>
                   <div className="overflow-y-auto h-[62vh]">
                     <AutoSizer>
                       {({ height, width }) => (
@@ -226,7 +182,7 @@ export default function Search({
                     <p className="text-gray-400">No results</p>
                   ) : null}
                   {loading ? (
-                    <CircularProgress variant="plain" color="neutral" />
+                    <CircularProgress variant="plain" color="primary" />
                   ) : null}
                 </div>
               )}

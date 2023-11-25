@@ -7,25 +7,31 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const filePath = "../cse.csv";
+const filePathCourses = "../courses.csv";
 
-export default function getCourses() {
-  const csvFilePath = path.resolve(__dirname, filePath);
+export function getCourses() {
+  const csvFilePath = path.resolve(__dirname, filePathCourses);
 
   return new Promise<
     {
       department: string;
+      departmentCode: string;
       number: string;
-      name: string;
+      title: string;
       credits: number;
+      prerequisites: string;
+      ge: string[];
       quartersOffered: string[];
     }[]
   >((resolve, reject) => {
     const courses: {
       department: string;
+      departmentCode: string;
       number: string;
-      name: string;
+      title: string;
       credits: number;
+      prerequisites: string;
+      ge: string[];
       quartersOffered: string[];
     }[] = [];
     fs.createReadStream(csvFilePath)
@@ -33,17 +39,17 @@ export default function getCourses() {
         console.log(err);
         reject(err);
       })
-      .pipe(parse({ delimiter: "\t" }))
-      .on("data", (r) => {
-        const line: string = r[0];
-        const splitArray = line.split(",");
-
+      .pipe(parse({ delimiter: "," }))
+      .on("data", (record) => {
         const course = {
-          department: splitArray.length > 0 ? splitArray[0] : "no department",
-          number: splitArray.length > 1 ? splitArray[1] : "no number",
-          name: splitArray.length > 2 ? splitArray[2] : "no name",
-          credits: splitArray.length > 3 ? parseInt(splitArray[3]) : 5,
-          quartersOffered: splitArray.length > 4 ? splitArray.slice(4) : [], // captures everything from the 5th element onwards
+          department: record[0] || "no department",
+          departmentCode: record[1] || "no department code",
+          number: record[2] || "no number",
+          title: record[3] || "no name",
+          credits: parseInt(record[4]) || 5,
+          prerequisites: record[5] || "no prerequisites",
+          ge: record[6] ? record[6].split(",") : ["None"],
+          quartersOffered: record[7] ? record[7].split(",") : [],
         };
 
         courses.push(course);

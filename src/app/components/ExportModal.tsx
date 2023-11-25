@@ -1,19 +1,21 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { PlannerData } from "../types/PlannerData";
 import {
+  Document,
+  Image,
   Page,
+  PDFViewer,
+  StyleSheet,
   Text,
   View,
-  Document,
-  StyleSheet,
-  PDFViewer,
 } from "@react-pdf/renderer";
 import { StoredCourse } from "../types/Course";
-import { Quarter, findQuarter } from "../types/Quarter";
+import { findQuarter, Quarter } from "../types/Quarter";
 import { getTitle } from "../../lib/courseUtils";
 import { quartersPerYear } from "@/lib/initialPlanner";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { useContext } from "react";
+import { PlannersContext } from "../contexts/PlannersProvider";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -33,6 +35,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     flexGrow: 1,
   },
+  titleView: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
   quarterCard: {
     fontSize: 8,
     padding: 10,
@@ -43,14 +50,29 @@ const styles = StyleSheet.create({
     borderColor: "#D1D5DB",
     borderWidth: 1,
   },
+  plannerTitle: {
+    fontSize: 16,
+    paddingLeft: 20,
+    paddingBottom: 3,
+    borderRadius: 10,
+    margin: 3,
+  },
   course: {
     marginTop: 4,
+  },
+  image: {
+    margin: 10,
+    marginRight: 25,
+    height: 30,
+    width: "auto",
   },
 });
 
 export default function CourseSelectionModal() {
   const { setShowExportModal, showExportModal, courseState } =
     useContext(ModalsContext);
+
+  const { activePlanner } = useContext(PlannersContext);
 
   return (
     <Modal
@@ -77,11 +99,15 @@ export default function CourseSelectionModal() {
           fontWeight="lg"
           mb={1}
         >
-          Export Planner to PDF
+          Export to PDF
         </Typography>
         <PDFViewer width="100%" height="90%">
           <Document>
             <Page size="A4" style={styles.page}>
+              <View style={styles.titleView}>
+                <Text style={styles.plannerTitle}>{activePlanner?.title}</Text>
+                <Image style={styles.image} src="/images/slug-icon.png" />
+              </View>
               <View>
                 <Years courseState={courseState} />
               </View>
@@ -112,16 +138,14 @@ function Years({ courseState }: { courseState: PlannerData }) {
 }
 
 function PDFQuarters({
-  key,
   quarters,
   courseState,
 }: {
   quarters: string[];
   courseState: PlannerData;
-  key: number;
 }) {
   return (
-    <View key={key} style={styles.yearView}>
+    <View style={styles.yearView}>
       {quarters.map((q) => {
         const { quarter } = findQuarter(courseState.quarters, q);
         const courses = quarter.courses;
@@ -145,7 +169,7 @@ function PDFQuarter({
         {courses.map((course, idx) => {
           return (
             <View key={idx} style={styles.course}>
-              <Text>{getTitle(course.department, course.number)}</Text>
+              <Text>{getTitle(course.departmentCode, course.number)}</Text>
             </View>
           );
         })}

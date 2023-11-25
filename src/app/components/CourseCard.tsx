@@ -1,18 +1,16 @@
-import {
-  Card,
-  CardContent,
-  Grid,
-  IconButton,
-  Link,
-  Typography,
-} from "@mui/joy";
+import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
-import { getTitle } from "../../lib/courseUtils";
+import {
+  extractTermFromQuarter,
+  getTitle,
+  isOffered,
+} from "../../lib/courseUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ModalsContext } from "../contexts/ModalsProvider";
+import { WarningAmberRounded } from "@mui/icons-material";
+import CloseIconButton from "./CloseIconButton";
 import CourseLabel from "./CourseLabel";
 
 export default function CourseCard({
@@ -40,19 +38,29 @@ export default function CourseCard({
     ...draggableStyle,
   });
 
+  function handleShowCourseInfoModal(course: StoredCourse) {
+    const courseTerm = [course, extractTermFromQuarter(quarterId)];
+    setDisplayCourse(courseTerm);
+    onShowCourseInfoModal();
+  }
+
   return (
     <Card
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant={alreadyAdded ? "soft" : "plain"}
+      variant={"soft"}
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
         backgroundColor:
-          isDragging || highlighted ? "#E5E7EB" : alreadyAdded ? "" : "#FFFFFF",
+          isDragging || highlighted
+            ? "rgb(226 232 240)"
+            : alreadyAdded
+            ? ""
+            : "#F1F5F9",
       }}
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}
@@ -62,18 +70,18 @@ export default function CourseCard({
           <Grid xs={10} className="flex flex-row whitespace-nowrap">
             <Title
               course={course}
-              onShowCourseInfoModal={(course) => {
-                setDisplayCourse(course);
-                onShowCourseInfoModal();
-              }}
+              onShowCourseInfoModal={handleShowCourseInfoModal}
+              quarterId={quarterId}
             />
             <CourseLabelList course={course} />
           </Grid>
           <Grid xs={2}>
             {quarterId !== undefined && (
-              <DeleteIcon
+              <CloseIconButton
                 onClick={() => deleteCourse(quarterId)(index)}
-                highlighted={highlighted}
+                sx={{
+                  visibility: highlighted ? "visible" : "hidden",
+                }}
               />
             )}
           </Grid>
@@ -86,12 +94,23 @@ export default function CourseCard({
 const Title = ({
   course,
   onShowCourseInfoModal,
+  quarterId,
 }: {
   course: StoredCourse;
   onShowCourseInfoModal: (course: StoredCourse) => void;
+  quarterId?: string;
 }) => {
   return (
-    <Typography level="body-sm">
+    <Typography
+      // level="body-sm"
+      endDecorator={
+        course &&
+        !isOffered(
+          course.quartersOffered,
+          extractTermFromQuarter(quarterId),
+        ) && <WarningAmberRounded color="warning" />
+      }
+    >
       <Link
         overlay
         underline="none"
@@ -99,7 +118,7 @@ const Title = ({
         sx={{ color: "text.tertiary" }}
         onClick={() => onShowCourseInfoModal(course)}
       >
-        {course ? getTitle(course.department, course.number) : "No course"}
+        {course ? getTitle(course.departmentCode, course.number) : "No course"}
       </Link>
     </Typography>
   );
@@ -114,26 +133,5 @@ const CourseLabelList = ({ course }: { course: StoredCourse }) => {
           ))
         : null}
     </div>
-  );
-};
-
-const DeleteIcon = ({
-  onClick,
-  highlighted,
-}: {
-  onClick: () => void;
-  highlighted: boolean;
-}) => {
-  return (
-    <IconButton
-      onClick={onClick}
-      variant="plain"
-      size="sm"
-      className={`bg-gray-200 hover:bg-gray-300 ${
-        highlighted ? "" : "invisible"
-      }`}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
   );
 };

@@ -1,4 +1,4 @@
-import { getTitle } from "@/lib/courseUtils";
+import { getTitle, isOffered } from "@/lib/courseUtils";
 import {
   List,
   ListItem,
@@ -13,6 +13,7 @@ import { GET_COURSE } from "@/graphql/queries";
 import { createQuartersOfferedString } from "@/lib/courseUtils";
 import { useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
+import { WarningAmberRounded } from "@mui/icons-material";
 import { IconButton } from "theme-ui";
 import { Add } from "@mui/icons-material";
 import LabelSelectionModal from "./modals/LabelSelectionModal";
@@ -27,31 +28,57 @@ export default function CourseInfoModal() {
     setShowCourseInfoModal: setShowModal,
     showCourseInfoModal: showModal,
   } = useContext(ModalsContext);
-  const { displayCourse: course, setDisplayCourse } =
+
+  const { displayCourse: courseTerm, setDisplayCourse } =
     useContext(PlannerContext);
+  const [course = undefined, term = undefined] = courseTerm ?? [];
   const { editCourse } = useContext(PlannerContext);
   const { data, error, loading } = useQuery(GET_COURSE, {
     variables: {
-      department: course ? course.department : "",
-      number: course ? course.number : "",
+      departmentCode: course?.departmentCode,
+      number: course?.number,
     },
-    skip: !course,
+    skip: course === undefined,
   });
   const { labels, updateLabels } = useContext(LabelsContext);
 
-  if (!course) return null;
   if (error) return `Error! ${error}`;
+  if (course === undefined) return null;
 
   function title(data: any) {
     return loading
       ? ""
-      : getTitle(data.courseBy.department, data.courseBy.number) +
+      : getTitle(data.courseBy.departmentCode, data.courseBy.number) +
           " " +
-          data.courseBy.name;
+          data.courseBy.title;
   }
 
   function credits(data: any) {
     return loading ? "" : data.courseBy.credits;
+  }
+
+  function ge(data: any) {
+    if (loading) return "";
+    const capitalize: { [key: string]: string } = {
+      peT: "PE-T",
+      peH: "PE-H",
+      peE: "PE-E",
+      prC: "PR-C",
+      prS: "PR-S",
+      prE: "PR-E",
+    };
+    return data.courseBy.ge.map((code: string) => {
+      if (code === "None") return code;
+      if (Object.keys(capitalize).includes(code)) return capitalize[code];
+      return code.toLocaleUpperCase();
+    });
+  }
+
+  function prerequisites(data: any) {
+    const start = "Prerequisite(s):";
+    if (loading) return `${start} None`;
+    const preqs: string = data.courseBy.prerequisites;
+    return preqs.includes(start) ? preqs : `${start} ${preqs}`;
   }
 
   function quartersOffered(data: any) {
@@ -71,8 +98,9 @@ export default function CourseInfoModal() {
       };
     });
     const newCourse = { ...course, labels: newLabels };
-    editCourse(newCourse.number, newCourse.department, newCourse);
-    setDisplayCourse(newCourse);
+    const courseTerm = [newCourse, term];
+    editCourse(newCourse.number, newCourse.departmentCode, newCourse);
+    setDisplayCourse(courseTerm);
     updateLabels(newLabels);
   };
 
@@ -119,18 +147,33 @@ export default function CourseInfoModal() {
           <Skeleton loading={loading} variant="text" width="50%">
             {title(data)}
           </Skeleton>
-          {labelsAreEditable() && (
-            <SelectedLabels
-              labels={course.labels}
-              onEditLabels={handleEditLabels}
-            />
-          )}
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">
-          <Typography component="p">
-            Quarters offered: {quartersOffered(data)}
-          </Typography>
-          <Typography component="p">Credits: {credits(data)}</Typography>
+          <div className="space-y-2">
+            {!isOffered(course.quartersOffered, term) && (
+              <Typography
+                variant="soft"
+                color="warning"
+                component="p"
+                startDecorator={<WarningAmberRounded color="warning" />}
+              >
+                Warning: {course.departmentCode} {course.number} is not offered
+                in {term}
+              </Typography>
+            )}
+            <Typography component="p">
+              Quarters offered: {quartersOffered(data)}
+            </Typography>
+            <Typography component="p">Credits: {credits(data)}</Typography>
+            <Typography component="p">{prerequisites(data)}</Typography>
+            <Typography component="p">GE: {ge(data)}</Typography>
+            {labelsAreEditable() && (
+              <SelectedLabels
+                labels={course.labels}
+                onEditLabels={handleEditLabels}
+              />
+            )}
+          </div>
         </Skeleton>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
@@ -146,19 +189,16 @@ function SelectedLabels({
   onEditLabels: () => void;
 }) {
   return (
-    <div className="flex flex-row">
-      <Typography component="p">Labels</Typography>
+    // align items left
+    <div className="flex flex-row items-center justify-start">
+      <Typography>Labels:</Typography>
       <List orientation="horizontal">
         {labels.map((label) => (
           <ListItem key={label.id}>
             <CourseLabel label={label} displayText={label.name.length > 0} />
           </ListItem>
         ))}
-        <IconButton
-          aria-label="add label"
-          onClick={onEditLabels}
-          variant="soft"
-        >
+        <IconButton onClick={onEditLabels} variant="solid">
           <Add />
         </IconButton>
       </List>

@@ -13,21 +13,28 @@ const schema = buildSchemaSync({
 
 const query = `
 query {
-  coursesBy(department: "CSE", number: "3") {
-    credits
+  coursesBy(departmentCode: "CSE", number: "3") {
     department
-    name
+    departmentCode
+    title
     number
+    credits
+    ge
+    quartersOffered
   }
 }`;
 
 beforeAll(async () => {
   await prisma.course.create({
     data: {
-      department: "CSE",
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      title: "Personal Computer Concepts: Software and Hardware",
       number: "3",
       credits: 5,
-      name: "Personal Computer Concepts: Software and Hardware",
+      prerequisites: "None",
+      ge: ["mf"],
+      quartersOffered: ["Fall", "Winter", "Spring"],
     },
   });
 });
@@ -44,17 +51,25 @@ describe("test coursesBy", () => {
       source: query,
     });
     expect(data).toBeDefined();
+    console.log(`DATA: ${JSON.stringify(data, null, 2)}`);
     const course = data?.coursesBy[0];
 
     expect(course).toBeDefined();
-    expect(course.name).toBeDefined();
-    expect(course.name).toEqual(
+    expect(course.title).toBeDefined();
+    expect(course.title).toEqual(
       "Personal Computer Concepts: Software and Hardware",
     );
     expect(course.department).toBeDefined();
-    expect(course.department).toEqual("CSE");
+    expect(course.department).toEqual("Computer Science and Engineering");
+    expect(course.departmentCode).toBeDefined();
+    expect(course.departmentCode).toEqual("CSE");
     expect(course.number).toBeDefined();
     expect(course.number).toEqual("3");
     expect(course.credits).toBeDefined();
+    expect(course.credits).toEqual(5);
+    expect(course.ge).toBeDefined();
+    expect(course.ge).toEqual(["mf"]);
+    expect(course.quartersOffered).toBeDefined();
+    expect(course.quartersOffered).toEqual(["Fall", "Winter", "Spring"]);
   });
 });

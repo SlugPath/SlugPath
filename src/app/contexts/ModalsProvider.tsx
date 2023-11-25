@@ -7,8 +7,6 @@ export const ModalsContext = createContext({} as ModalsContextProps);
 
 export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
-    showMajorCompletionModal,
-    setShowMajorCompletionModal,
     showExportModal,
     setShowExportModal,
     showCourseInfoModal,
@@ -21,8 +19,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   return (
     <ModalsContext.Provider
       value={{
-        showMajorCompletionModal,
-        setShowMajorCompletionModal,
         showExportModal,
         setShowExportModal,
         showCourseInfoModal,

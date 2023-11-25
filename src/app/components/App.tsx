@@ -14,7 +14,7 @@ import { PlannerProvider } from "../contexts/PlannerProvider";
 export default function App() {
   return (
     <PlannersProvider>
-      <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
+      <div className="h-full min-h-screen w-full bg-slate-200 flex flex-col justify-between">
         <ScreenSizeWarning />
         <Navbar />
         <div className="pt-4 mb-auto">

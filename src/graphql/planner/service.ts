@@ -51,10 +51,11 @@ export class PlannerService {
       const enrolledCourses = q.courses.map((c) => {
         new LabelService().updateLabels(userId, c.labels);
         return {
-          department: c.department,
+          departmentCode: c.departmentCode,
           number: c.number,
-          quartersOffered: [...c.quartersOffered],
           credits: c.credits,
+          ge: [...c.ge],
+          quartersOffered: [...c.quartersOffered],
           labels: {
             connect: c.labels.map((l) => {
               return { id: l.id };
@@ -195,10 +196,11 @@ export class PlannerService {
           };
         });
         return {
-          department: c.department,
+          departmentCode: c.departmentCode,
           number: c.number,
-          quartersOffered: [...c.quartersOffered],
           credits: c.credits,
+          ge: [...c.ge],
+          quartersOffered: [...c.quartersOffered],
           labels: labels,
         };
       });
