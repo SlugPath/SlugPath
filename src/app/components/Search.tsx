@@ -78,7 +78,7 @@ export default function Search() {
   }) {
     const courses = getCoursesList(data);
     // We are rendering an extra item for the placeholder
-    // Do do this we increased our data set size to include one 'fake' item
+    // To do this we increased our data set size to include one 'fake' item
     if (!courses[index]) {
       return null;
     }
@@ -140,7 +140,9 @@ export default function Search() {
         mode="virtual"
         renderClone={(provided, snapshot, rubric) => {
           const index = rubric.source.index;
-          const course = getCourseByIndex(index);
+          // Null coalesce to custom course since the custom course
+          // has an index of -1
+          const course = getCourseByIndex(index) ?? customCourse;
           return (
             <CourseCard
               course={course}
