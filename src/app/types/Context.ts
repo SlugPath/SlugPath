@@ -4,6 +4,7 @@ import { PlannerData } from "./PlannerData";
 import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
 import { MultiPlanner } from "./MultiPlanner";
+import { Label } from "./Label";
 
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
@@ -52,4 +53,9 @@ export interface PlannersContextProps {
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
   activePlanner: { id: string; title: string } | undefined;
+}
+
+export interface LabelsContextProps {
+  labels: Label[];
+  updateLabels: (label: Label[]) => void;
 }

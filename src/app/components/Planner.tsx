@@ -15,6 +15,7 @@ import { ModalsProvider } from "../contexts/ModalsProvider";
 import MajorCompletionModal from "./MajorCompletionModal";
 import ExportModal from "./ExportModal";
 import CourseInfoModal from "./CourseInfoModal";
+import { LabelsProvider } from "../contexts/LabelsProvider";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -55,23 +56,25 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <CircularProgress />
               ) : (
                 <>
-                  <div className="overflow-auto h-[92vh] w-auto">
-                    <Quarters courseState={courseState} />
-                  </div>
-
-                  {/* Modals and Grad Progress */}
-                  <div className="pl-4 pt-7 self-start">
-                    <div className="pb-6">
-                      <PlannerActions />
-                      <Modals />
+                  <LabelsProvider>
+                    <div className="overflow-auto h-[92vh] w-auto">
+                      <Quarters courseState={courseState} />
                     </div>
 
-                    <hr className="rounded border-t border-slate-400" />
+                    {/* Modals and Grad Progress */}
+                    <div className="pl-4 pt-7 self-start">
+                      <div className="pb-6">
+                        <PlannerActions />
+                        <Modals />
+                      </div>
 
-                    <div className="pl-2 pt-8 flex justify-items-center">
-                      <GradProgress credits={totalCredits} />
+                      <hr className="rounded border-t border-slate-400" />
+
+                      <div className="pl-2 pt-8 flex justify-items-center">
+                        <GradProgress credits={totalCredits} />
+                      </div>
                     </div>
-                  </div>
+                  </LabelsProvider>
                   {/* End Modals */}
                 </>
               )}

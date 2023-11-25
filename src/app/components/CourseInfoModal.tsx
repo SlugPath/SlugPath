@@ -13,14 +13,13 @@ import { GET_COURSE } from "@/graphql/queries";
 import { createQuartersOfferedString } from "@/lib/courseUtils";
 import { useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
-import { useSession } from "next-auth/react";
-import { useLabels } from "../hooks/useLabels";
 import { IconButton } from "theme-ui";
 import { Add } from "@mui/icons-material";
 import LabelSelectionModal from "./modals/LabelSelectionModal";
 import CourseLabel from "./CourseLabel";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { Label } from "../types/Label";
+import { LabelsContext } from "../contexts/LabelsProvider";
 
 export default function CourseInfoModal() {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
@@ -38,8 +37,7 @@ export default function CourseInfoModal() {
     },
     skip: !course,
   });
-  const { data: session } = useSession();
-  const { labels, loading: labelsLoading } = useLabels(session?.user.id);
+  const { labels, updateLabels } = useContext(LabelsContext);
 
   if (!course) return null;
   if (error) return `Error! ${error}`;
@@ -75,6 +73,7 @@ export default function CourseInfoModal() {
     const newCourse = { ...course, labels: newLabels };
     editCourse(newCourse.number, newCourse.department, newCourse);
     setDisplayCourse(newCourse);
+    updateLabels(newLabels);
   };
 
   const labelsAreEditable = () => {
@@ -121,12 +120,10 @@ export default function CourseInfoModal() {
             {title(data)}
           </Skeleton>
           {labelsAreEditable() && (
-            <Skeleton loading={labelsLoading} variant="text" width="50%">
-              <SelectedLabels
-                labels={course.labels}
-                onEditLabels={handleEditLabels}
-              />
-            </Skeleton>
+            <SelectedLabels
+              labels={course.labels}
+              onEditLabels={handleEditLabels}
+            />
           )}
         </Typography>
         <Skeleton loading={loading} variant="text" width="50%">
@@ -149,7 +146,7 @@ function SelectedLabels({
   onEditLabels: () => void;
 }) {
   return (
-    <div>
+    <div className="flex flex-row">
       <Typography component="p">Labels</Typography>
       <List orientation="horizontal">
         {labels.map((label) => (
