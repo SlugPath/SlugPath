@@ -116,6 +116,7 @@ export default function useSearch({
   return {
     data,
     loading,
+    loadingUseQuery,
     departments,
     departmentCode,
     number,
