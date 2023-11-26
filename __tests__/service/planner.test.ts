@@ -78,8 +78,14 @@ afterAll(async () => {
   const deleteUsers = prisma.user.deleteMany();
   const deleteQuarters = prisma.quarter.deleteMany();
   const deleteCourses = prisma.course.deleteMany();
+  const deleteLabels = prisma.label.deleteMany();
 
-  await prisma.$transaction([deleteUsers, deleteQuarters, deleteCourses]);
+  await prisma.$transaction([
+    deleteUsers,
+    deleteQuarters,
+    deleteCourses,
+    deleteLabels,
+  ]);
 
   await prisma.$disconnect();
 });
@@ -157,6 +163,7 @@ it("should update 1 planner for 1 user", async () => {
       credits: 7,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter"],
+      labels: [],
     },
     {
       id: uuidv4(),
@@ -166,6 +173,7 @@ it("should update 1 planner for 1 user", async () => {
       credits: 5,
       ge: ["mf", "si"],
       quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [],
     },
     {
       id: uuidv4(),
@@ -175,6 +183,7 @@ it("should update 1 planner for 1 user", async () => {
       credits: 5,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [],
     },
     {
       id: uuidv4(),
@@ -184,6 +193,7 @@ it("should update 1 planner for 1 user", async () => {
       credits: 5,
       ge: [],
       quartersOffered: ["Summer"],
+      labels: [],
     },
   ];
   const plannerData = initialPlanner;
@@ -253,4 +263,90 @@ it("should handle department retrieval correctly", async () => {
   expect(departments).toContainEqual(
     expect.objectContaining({ name: "Mathematics" }),
   );
+});
+
+it("should return the correct labels for each course", async () => {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: "Sammy Slug",
+    },
+  });
+  expect(user).not.toBeNull();
+
+  if (user === null) fail("User was null (this should not happen)");
+  const service = new PlannerService();
+  const planners = await service.allPlanners(user.id);
+  expect(planners).toHaveLength(0);
+
+  const plannerId = uuidv4();
+  const plannerData = initialPlanner;
+  plannerData.labels[0].name = "Elective";
+  plannerData.labels[1].name = "Capstone";
+  plannerData.labels[2].name = "DC";
+  const cseCourses = [
+    {
+      id: uuidv4(),
+      departmentCode: "CSE",
+      number: "12",
+      title: "CSE 12",
+      credits: 7,
+      ge: ["None"],
+      quartersOffered: ["Fall", "Winter"],
+      labels: [],
+    },
+    {
+      id: uuidv4(),
+      departmentCode: "CSE",
+      number: "16",
+      title: "CSE 16",
+      credits: 5,
+      ge: ["mf", "si"],
+      quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [plannerData.labels[0].id, plannerData.labels[2].id],
+    },
+    {
+      id: uuidv4(),
+      departmentCode: "CSE",
+      title: "CSE 30",
+      number: "30",
+      credits: 5,
+      ge: ["None"],
+      quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [plannerData.labels[0].id, plannerData.labels[1].id],
+    },
+    {
+      id: uuidv4(),
+      departmentCode: "SGI",
+      title: "Custom class",
+      number: "40N",
+      credits: 5,
+      ge: [],
+      quartersOffered: ["Summer"],
+      labels: [plannerData.labels[0].id],
+    },
+  ];
+  plannerData.courses = cseCourses;
+  plannerData.quarters[0].courses = plannerData.courses.map((c) => c.id);
+
+  const res = await service.upsertPlanner({
+    userId: user.id,
+    plannerId,
+    title: "Planner 1",
+    order: 0,
+    plannerData: serializePlanner(plannerData),
+  });
+  expect(res.plannerId).toBe(plannerId);
+
+  // Ensure there is only 1 planner for that user
+  const allPlanners = await service.allPlanners(user.id);
+  expect(allPlanners).toHaveLength(1);
+  // Ensure the content of that planner is updated
+  const check2 = await service.getPlanner({ userId: user.id, plannerId });
+  expect(check2).not.toBeNull();
+  const courses = check2?.quarters[0].courses;
+  expect(courses).toBeDefined();
+  expect(courses).toHaveLength(cseCourses.length);
+  courses?.forEach((c, idx) => {
+    expect(c).toStrictEqual(cseCourses[idx]);
+  });
 });
