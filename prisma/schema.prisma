@@ -31,13 +31,13 @@ model Quarter {
   id      Int               @id @default(autoincrement())
   term    Term
   year    Int
-  courses EnrolledCourses[]
+  courses EnrolledCourse[]
 
   plannerId String
   planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
-model EnrolledCourses {
+model EnrolledCourse {
   id              String      @id @default(uuid())
   title           String
   departmentCode  String
