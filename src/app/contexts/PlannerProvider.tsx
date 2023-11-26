@@ -14,6 +14,10 @@ export function PlannerProvider({
   const { data: session } = useSession();
   const {
     deleteCourse,
+    editCourse,
+    getCourse,
+    displayCourse,
+    setDisplayCourse,
     totalCredits,
     geSatisfied,
     courseState,
@@ -32,6 +36,10 @@ export function PlannerProvider({
     <PlannerContext.Provider
       value={{
         deleteCourse,
+        editCourse,
+        getCourse,
+        displayCourse,
+        setDisplayCourse,
         totalCredits,
         geSatisfied,
         courseState,

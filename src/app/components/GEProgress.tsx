@@ -21,11 +21,10 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
     { id: 10, value: 10, label: "C", color: "grey" },
   ]);
 
-  const PE_GE = ["peT", "peH", "peE"];
-  const PR_GE = ["prC", "prE", "prS"];
-
   // Update the color of the pie slices when "ge" prop changes
   useEffect(() => {
+    const PE_GE = ["peT", "peH", "peE"];
+    const PR_GE = ["prC", "prE", "prS"];
     setData((currData) =>
       currData.map((item) => ({
         ...item,

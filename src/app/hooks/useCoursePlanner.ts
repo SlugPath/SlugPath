@@ -1,18 +1,13 @@
-import {
-  createCourseFromId,
-  getTotalCredits,
-  getGeSatisfied,
-} from "@/lib/courseUtils";
+import { createCourseFromId, getTotalCredits } from "@/lib/courseUtils";
+import { DragStart, DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
-import { Term, findQuarter } from "../types/Quarter";
+import { findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
 import useDeepMemo from "./useDeepMemo";
-import { StoredCourse } from "../types/Course";
-import { DropResult } from "@hello-pangea/dnd";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -22,7 +17,7 @@ const SAVE_PLANNER = gql`
   }
 `;
 
-export default function usePlanner(input: {
+export default function useCoursePlanner(input: {
   userId: string | undefined;
   plannerId: string;
   title: string;
@@ -35,7 +30,7 @@ export default function usePlanner(input: {
   const [totalCredits, setTotalCredits] = useState(
     getTotalCredits(courseState),
   );
-  const [geSatisfied, setGeSatisfied] = useState(getGeSatisfied(courseState));
+  const [unavailableQuarters, setUnavailableQuarters] = useState<string[]>([]);
   const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
     SAVE_PLANNER,
     {},
@@ -44,9 +39,6 @@ export default function usePlanner(input: {
     () => coursesAlreadyAdded(),
     [courseState],
   );
-  const [displayCourse, setDisplayCourse] = useState<
-    [StoredCourse, Term | undefined] | undefined
-  >();
 
   // Auto-saving
   useEffect(() => {
@@ -68,15 +60,8 @@ export default function usePlanner(input: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
-  // Update total credits
   useEffect(() => {
     setTotalCredits(getTotalCredits(courseState));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseState]);
-
-  // Update list of GEs satisfied
-  useEffect(() => {
-    setGeSatisfied(getGeSatisfied(courseState));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseState]);
 
@@ -108,96 +93,32 @@ export default function usePlanner(input: {
         };
       });
       setTotalCredits(getTotalCredits(courseState));
-      setGeSatisfied(getGeSatisfied(courseState));
     };
   };
-
-  /**
-   * A curried function that returns a callback to be invoked upon editing a course
-   * @param quarterId id of the quarter card
-   * @param newCourse the new course to replace the old course
-   * @returns a callback
-   */
-  const editCourse = (
-    number: string,
-    departmentCode: string,
-    newCourse: StoredCourse,
-  ) => {
-    courseState.quarters.forEach((quarter) => {
-      quarter.courses.forEach((course, index) => {
-        if (
-          course.departmentCode == departmentCode &&
-          course.number == number
-        ) {
-          const { idx } = findQuarter(courseState.quarters, quarter.id);
-          const editIdx = index;
-
-          const quarterCourses = quarter.courses;
-          const newCourses = [
-            ...quarterCourses.slice(0, editIdx),
-            newCourse,
-            ...quarterCourses.slice(editIdx + 1),
-          ];
-
-          setCourseState((prev) => {
-            const newNewCourseState = {
-              ...prev,
-              quarters: [
-                ...prev.quarters.slice(0, idx),
-                {
-                  id: quarter.id,
-                  title: quarter.title,
-                  courses: newCourses,
-                },
-                ...prev.quarters.slice(idx + 1),
-              ],
-            };
-
-            // for each course in newNewCourseState, update the labels
-            // this is a dumb solution. A better solution would be for courses
-            // to have an array of label ids instead of an array of labels
-            newNewCourseState.quarters.forEach((quarter) => {
-              quarter.courses.forEach((course) => {
-                const newLabels = newCourse.labels;
-                const labels = course.labels;
-                newLabels.forEach((newLabel) => {
-                  const selectedLabel = labels.find(
-                    (label) => label.id == newLabel.id,
-                  );
-                  if (selectedLabel) {
-                    selectedLabel.name = newLabel.name;
-                    selectedLabel.color = newLabel.color;
-                  }
-                });
-              });
-            });
-
-            return newNewCourseState;
-          });
-          setTotalCredits(getTotalCredits(courseState));
-        }
-        return;
-      });
-    });
+  // Check if the dragged course is available in the destination quarter
+  const getQuarterFromId = (droppableId: string) => {
+    return droppableId.split("-")[2];
   };
 
-  const getCourse = (
-    number: string,
-    department: string,
-  ): StoredCourse | undefined => {
-    let returnCourse: StoredCourse | undefined;
-    courseState.quarters.forEach((quarter) => {
-      quarter.courses.forEach((course) => {
-        if (course.number == number && course.departmentCode == department) {
-          returnCourse = course;
-          return;
-        }
-      });
-    });
-    return returnCourse;
+  // Handle the drag start event for course items.
+  // result Contains information about the current drag event of the array of unavailable quarters.
+  const handleOnDragStart = (start: DragStart) => {
+    const courseBeingDragged = createCourseFromId(start.draggableId);
+
+    if (courseBeingDragged) {
+      const unavailable = courseState.quarters
+        .filter((quarter) => {
+          return !courseBeingDragged?.quartersOffered.includes(
+            getQuarterFromId(quarter.id),
+          );
+        })
+        .map((quarter) => quarter.id);
+      setUnavailableQuarters(unavailable);
+    }
   };
 
   const handleDragEnd = (result: DropResult) => {
+    setUnavailableQuarters([]);
     const { destination, source, draggableId } = result;
 
     if (!destination) return;
@@ -205,9 +126,8 @@ export default function usePlanner(input: {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    ) {
+    )
       return;
-    }
 
     // add course dragged from 'search-droppable' to quarter
     if (source.droppableId === "search-droppable") {
@@ -355,15 +275,12 @@ export default function usePlanner(input: {
   return {
     courseState,
     totalCredits,
-    geSatisfied,
     handleDragEnd,
     memoAlreadyCourses,
+    handleOnDragStart,
+    unavailableQuarters,
     saveStatus,
     saveError,
     deleteCourse,
-    editCourse,
-    getCourse,
-    displayCourse,
-    setDisplayCourse,
   };
 }

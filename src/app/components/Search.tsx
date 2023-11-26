@@ -108,7 +108,7 @@ export default function Search({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(departmentCode ?? "", number, false);
+          handleSearch(departmentCode ?? "", number);
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">

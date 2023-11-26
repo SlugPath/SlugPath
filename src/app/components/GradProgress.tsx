@@ -16,7 +16,15 @@ export const GradProgress = ({ credits }: { credits: number }) => {
   return (
     <>
       <div className="flex flex-col place-items-center gap-4 xl:w-64">
-        <div className="flex py-1 w-full justify-end">
+        <div className="flex py-1 justify-between w-full">
+          <div>
+            <Typography className="grid-cols-1 pl-2 xl:pl-0 justify-self-end">
+              Total Credits:
+            </Typography>
+            <Typography className="grid-cols-1 pl-2 xl:pl-0 xl:justify-self-center">
+              {credits} / {TOTAL_CREDITS_NEEDED}
+            </Typography>
+          </div>
           <Tooltip title="180 credits is needed for graduation">
             <InfoIcon sx={{ color: "gray" }} />
           </Tooltip>
@@ -28,14 +36,6 @@ export const GradProgress = ({ credits }: { credits: number }) => {
             strokeWidth: 3,
           }}
         ></Donut>
-        <div className="grid grid-cols-2 items-center">
-          <Typography className="grid-cols-1 pl-2 xl:pl-0 justify-self-end">
-            Total Credits:
-          </Typography>
-          <Typography className="grid-cols-1 pl-2 xl:pl-0 xl:justify-self-center">
-            {credits} / {TOTAL_CREDITS_NEEDED}
-          </Typography>
-        </div>
       </div>
     </>
   );

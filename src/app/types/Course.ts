@@ -1,3 +1,5 @@
+import { Label } from "./Label";
+
 export interface Course {
   departmentCode: string;
   number: string;
@@ -15,4 +17,5 @@ export interface StoredCourse {
   credits: number;
   ge: string[];
   quartersOffered: string[];
+  labels: Label[];
 }
