@@ -143,6 +143,7 @@ export default function usePlanner(input: {
   };
 
   const getCourseLabels = (course: StoredCourse): Label[] => {
+    if (course.labels === undefined) return [];
     return course.labels.map((lid) => {
       const label = courseState.labels.find((l) => l.id === lid);
       if (label === undefined) throw new Error("label not found");
@@ -154,7 +155,12 @@ export default function usePlanner(input: {
     setCourseState((prev) => {
       return {
         ...prev,
-        labels: newLabels,
+        labels: prev.labels.map((old) => {
+          // Update only the labels that got updated (their names changed)
+          const updated = newLabels.find((l) => l.id === old.id);
+          if (updated === undefined) return old;
+          return updated;
+        }),
       };
     });
   };

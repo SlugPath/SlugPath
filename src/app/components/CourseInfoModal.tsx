@@ -21,7 +21,7 @@ import LabelsSelectionModal from "./modals/LabelSelectionModal";
 import { Label } from "../types/Label";
 import CourseLabel from "./CourseLabel";
 
-const MAX_TITLE_LENGTH: number = 20;
+const MAX_TITLE_LENGTH: number = 10;
 
 export default function CourseInfoModal() {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
@@ -118,9 +118,6 @@ export default function CourseInfoModal() {
 
   const handleUpdateLabels = (labels: Label[]) => {
     const newLabels = labels.map((label) => label.id);
-    // 1. set current course to new label ids
-    // 2. update any labels that got updated
-
     const newCourse: StoredCourse = { ...course, labels: newLabels };
     const courseTerm = [newCourse, term];
     editCourseLabels(newCourse);

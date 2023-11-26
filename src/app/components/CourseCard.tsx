@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  Grid,
-  IconButton,
-  Link,
-  Typography,
-} from "@mui/joy";
+import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
@@ -15,7 +8,6 @@ import {
 } from "../../lib/plannerUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
@@ -72,61 +64,24 @@ export default function CourseCard({
     >
       <CardContent>
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={10}>
-            <Typography
-              level="body-sm"
-              endDecorator={
-                course &&
-                isCSE(course) &&
-                !isOffered(
-                  course.quartersOffered,
-                  extractTermFromQuarter(quarterId),
-                ) && <WarningAmberRounded color="warning" />
-              }
-            >
-              <Link
-                overlay
-                underline="none"
-                href="#interactive-card"
-                sx={{ color: "text.tertiary" }}
-                onClick={() => handleShowCourseInfoModal(course)}
-              >
-                {course ? getDeptAndNumber(course) : "No course"}
-              </Link>
-            </Typography>
+          <Grid xs={10} className="flex flex-row whitespace-nowrap">
+            <Title
+              course={course}
+              onShowCourseInfoModal={handleShowCourseInfoModal}
+              quarterId={quarterId}
+            />
+            <CourseLabelList labels={getCourseLabels(course)} />
           </Grid>
           <Grid xs={2}>
             {quarterId !== undefined && (
-              <IconButton
+              <CloseIconButton
                 onClick={() => deleteCourse(quarterId)(index)}
-                variant="plain"
-                size="sm"
-                className={`bg-gray-200 hover:bg-gray-300 ${
-                  highlighted ? "" : "invisible"
-                }`}
-              >
-                <CloseIcon fontSize="small" />
-              </IconButton>
+                sx={{
+                  visibility: highlighted ? "visible" : "hidden",
+                }}
+              />
             )}
           </Grid>
-        </Grid>
-        <Grid xs={10} className="flex flex-row whitespace-nowrap">
-          <Title
-            course={course}
-            onShowCourseInfoModal={onShowCourseInfoModal}
-            quarterId={quarterId}
-          />
-          <CourseLabelList labels={getCourseLabels(course)} />
-        </Grid>
-        <Grid xs={2}>
-          {quarterId !== undefined && (
-            <CloseIconButton
-              onClick={() => deleteCourse(quarterId)(index)}
-              sx={{
-                visibility: highlighted ? "visible" : "hidden",
-              }}
-            />
-          )}
         </Grid>
       </CardContent>
     </Card>
@@ -147,6 +102,7 @@ const Title = ({
       // level="body-sm"
       endDecorator={
         course &&
+        isCSE(course) &&
         !isOffered(
           course.quartersOffered,
           extractTermFromQuarter(quarterId),
