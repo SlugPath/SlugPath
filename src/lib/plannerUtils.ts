@@ -75,6 +75,7 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
 }
 
 export function deserializePlanner(output: PlannerDataOutput): PlannerData {
+  console.log(`GOT ${JSON.stringify(output, null, 2)}`);
   const result: PlannerData = {
     years: output.years,
     quarters: [],

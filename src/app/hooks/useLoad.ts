@@ -29,14 +29,15 @@ const GET_PLANNER = gql`
           ge
           title
           credits
-          labels {
-            id
-            name
-            color
-          }
+          labels
         }
       }
       years
+      labels {
+        id
+        name
+        color
+      }
     }
   }
 `;
