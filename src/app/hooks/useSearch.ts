@@ -68,7 +68,8 @@ export default function useSearch() {
 
   useDebounce({
     callback: () => handleSearch(departmentCode ?? "", number),
-    delay: 500,
+    // delay: 500,
+    delay: 0,
     dependencies: [departmentCode, number],
   });
 
@@ -103,6 +104,7 @@ export default function useSearch() {
     error,
     data,
     loading,
+    loadingUseQuery,
     departments,
     departmentCode,
     number,

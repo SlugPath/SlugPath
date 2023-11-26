@@ -19,6 +19,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
+import CloseIconButton from "./CloseIconButton";
+import CourseLabel from "./CourseLabel";
+import { Label } from "../types/Label";
 
 export default function CourseCard({
   course,
@@ -33,7 +36,8 @@ export default function CourseCard({
   provided: DraggableProvided;
   isDragging: boolean;
 }) {
-  const { deleteCourse } = useContext(PlannerContext);
+  const { deleteCourse, setDisplayCourse, getCourseLabels } =
+    useContext(PlannerContext);
   const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
@@ -42,8 +46,12 @@ export default function CourseCard({
     margin: `0 0 ${margin}px 0`,
     ...draggableStyle,
   });
-  if (isDragging && course.departmentCode === "ARBC")
-    console.log(`${JSON.stringify(course)}`);
+
+  function handleShowCourseInfoModal(course: StoredCourse) {
+    const courseTerm = [course, extractTermFromQuarter(quarterId)];
+    setDisplayCourse(courseTerm);
+    onShowCourseInfoModal();
+  }
 
   return (
     <Card
@@ -56,7 +64,8 @@ export default function CourseCard({
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
-        backgroundColor: isDragging || highlighted ? "#E5E7EB" : "#FFFFFF",
+        backgroundColor:
+          isDragging || highlighted ? "rgb(226 232 240)" : "#F1F5F9",
       }}
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}
@@ -80,12 +89,7 @@ export default function CourseCard({
                 underline="none"
                 href="#interactive-card"
                 sx={{ color: "text.tertiary" }}
-                onClick={() =>
-                  onShowCourseInfoModal([
-                    course,
-                    extractTermFromQuarter(quarterId),
-                  ])
-                }
+                onClick={() => handleShowCourseInfoModal(course)}
               >
                 {course ? getDeptAndNumber(course) : "No course"}
               </Link>
@@ -106,7 +110,70 @@ export default function CourseCard({
             )}
           </Grid>
         </Grid>
+        <Grid xs={10} className="flex flex-row whitespace-nowrap">
+          <Title
+            course={course}
+            onShowCourseInfoModal={onShowCourseInfoModal}
+            quarterId={quarterId}
+          />
+          <CourseLabelList labels={getCourseLabels(course)} />
+        </Grid>
+        <Grid xs={2}>
+          {quarterId !== undefined && (
+            <CloseIconButton
+              onClick={() => deleteCourse(quarterId)(index)}
+              sx={{
+                visibility: highlighted ? "visible" : "hidden",
+              }}
+            />
+          )}
+        </Grid>
       </CardContent>
     </Card>
   );
 }
+
+const Title = ({
+  course,
+  onShowCourseInfoModal,
+  quarterId,
+}: {
+  course: StoredCourse;
+  onShowCourseInfoModal: (course: StoredCourse) => void;
+  quarterId?: string;
+}) => {
+  return (
+    <Typography
+      // level="body-sm"
+      endDecorator={
+        course &&
+        !isOffered(
+          course.quartersOffered,
+          extractTermFromQuarter(quarterId),
+        ) && <WarningAmberRounded color="warning" />
+      }
+    >
+      <Link
+        overlay
+        underline="none"
+        href="#interactive-card"
+        sx={{ color: "text.tertiary" }}
+        onClick={() => onShowCourseInfoModal(course)}
+      >
+        {course ? getDeptAndNumber(course) : "No course"}
+      </Link>
+    </Typography>
+  );
+};
+
+const CourseLabelList = ({ labels }: { labels: Label[] }) => {
+  return (
+    <div className="flex truncate">
+      {labels
+        ? labels.map((label, index) => (
+            <CourseLabel key={index} label={label} displayText={false} />
+          ))
+        : null}
+    </div>
+  );
+};

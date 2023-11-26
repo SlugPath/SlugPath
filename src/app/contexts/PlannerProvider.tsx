@@ -16,12 +16,18 @@ export function PlannerProvider({
   const {
     deleteCourse,
     editCustomCourse,
+    displayCourse,
+    setDisplayCourse,
     totalCredits,
     geSatisfied,
     courseState,
     saveStatus,
     saveError,
     handleCourseUpdate,
+    getCourseLabels,
+    getAllLabels,
+    editCourseLabels,
+    updatePlannerLabels,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -39,12 +45,18 @@ export function PlannerProvider({
       value={{
         deleteCourse,
         editCustomCourse,
+        displayCourse,
+        setDisplayCourse,
         totalCredits,
         geSatisfied,
         courseState,
         handleDragEnd,
         saveStatus,
         saveError,
+        getCourseLabels,
+        getAllLabels,
+        editCourseLabels,
+        updatePlannerLabels,
       }}
     >
       {children}

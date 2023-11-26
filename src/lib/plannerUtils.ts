@@ -8,6 +8,8 @@ import {
 import { Term } from "../app/types/Quarter";
 import { StoredCourse } from "@/app/types/Course";
 import { v4 as uuidv4 } from "uuid";
+import { initialLabels } from "./labels";
+import { LabelColor } from "@prisma/client";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
@@ -17,12 +19,14 @@ export const initialPlanner: PlannerData = {
   quarters: createQuarters(),
   years,
   courses: [],
+  labels: initialLabels,
 };
 
 export const emptyPlanner: PlannerData = {
   quarters: [],
   years,
   courses: [],
+  labels: [],
 };
 
 export function createQuarters() {
@@ -46,6 +50,12 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
   const result: PlannerDataInput = {
     years: courseState.years,
     quarters: [],
+    labels: courseState.labels.map((l) => {
+      return {
+        ...l,
+        color: l.color as string,
+      };
+    }),
   };
 
   courseState.quarters.forEach((q) => {
@@ -69,6 +79,12 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
     years: output.years,
     quarters: [],
     courses: [],
+    labels: output.labels.map((l) => {
+      return {
+        ...l,
+        color: l.color as LabelColor,
+      };
+    }),
   };
 
   output.quarters.forEach((q) => {
@@ -95,6 +111,7 @@ export const customCourse: StoredCourse = {
   title: "Custom Course",
   ge: [],
   quartersOffered: ["Fall", "Winter", "Spring"],
+  labels: [],
 };
 
 export function getDeptAndNumber({
@@ -131,6 +148,7 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
     quartersOffered,
     credits: parseInt(credits),
     ge: ges,
+    labels: [],
   };
 }
 

@@ -8,7 +8,7 @@ import {
 } from "./schema";
 import prisma from "@/lib/prisma";
 import { emptyPlanner } from "@/lib/plannerUtils";
-import { EnrolledCourses, Prisma, Term } from "@prisma/client";
+import { LabelColor, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -42,7 +42,14 @@ export class PlannerService {
       );
     }
 
-    // Get the new quarters
+    // Update the labels
+    const labels = plannerData.labels.map((l) => {
+      return {
+        ...l,
+        color: l.color as LabelColor,
+      };
+    });
+    // Get the new quarters with their respective courses
     const newQuarters = plannerData.quarters.map((q) => {
       const qid = q.id;
       const [year, term] = qid.split("-").slice(1);
@@ -56,8 +63,10 @@ export class PlannerService {
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
           title: c.title,
+          labels: c.labels,
         };
       });
+
       return {
         year: parseInt(year),
         term: term as Term,
@@ -76,6 +85,11 @@ export class PlannerService {
           id: plannerId,
           quarters: {
             create: newQuarters,
+          },
+          labels: {
+            createMany: {
+              data: labels,
+            },
           },
         },
         select: {
@@ -134,6 +148,7 @@ export class PlannerService {
             courses: true,
           },
         },
+        labels: true,
       },
     });
     return p !== null ? this.toPlannerData(p) : null;
@@ -177,7 +192,7 @@ export class PlannerService {
     const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner));
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
-      const courses: StoredCourse[] = q.courses.map((c: EnrolledCourses) => {
+      const courses: StoredCourse[] = q.courses.map((c: StoredCourse) => {
         return {
           id: c.id,
           departmentCode: c.departmentCode,
@@ -186,6 +201,7 @@ export class PlannerService {
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
           title: c.title,
+          labels: c.labels,
         };
       });
       newPlanner.quarters.push({
@@ -194,6 +210,7 @@ export class PlannerService {
         courses,
       });
     });
+    newPlanner.labels = [...planner.labels];
 
     // Return new modified planner
     return newPlanner;

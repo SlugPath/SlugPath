@@ -8,9 +8,11 @@ import { useState } from "react";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
-import { findQuarter } from "../types/Quarter";
+import { Term, findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
+import { StoredCourse } from "../types/Course";
 import { PlannerData } from "../types/PlannerData";
+import { Label } from "../types/Label";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -43,6 +45,9 @@ export default function usePlanner(input: {
     SAVE_PLANNER,
     {},
   );
+  const [displayCourse, setDisplayCourse] = useState<
+    [StoredCourse, Term | undefined] | undefined
+  >();
 
   // Auto-saving
   useEffect(() => {
@@ -133,6 +138,38 @@ export default function usePlanner(input: {
     });
   };
 
+  const getAllLabels = () => {
+    return courseState.labels;
+  };
+
+  const getCourseLabels = (course: StoredCourse): Label[] => {
+    return course.labels.map((lid) => {
+      const label = courseState.labels.find((l) => l.id === lid);
+      if (label === undefined) throw new Error("label not found");
+      return label;
+    });
+  };
+
+  const updatePlannerLabels = (newLabels: Label[]) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        labels: newLabels,
+      };
+    });
+  };
+
+  const editCourseLabels = (newCourse: StoredCourse) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        courses: prev.courses.map((c) => {
+          return c.id === newCourse.id ? newCourse : c;
+        }),
+      };
+    });
+  };
+
   return {
     courseState,
     totalCredits,
@@ -142,5 +179,11 @@ export default function usePlanner(input: {
     deleteCourse,
     editCustomCourse,
     handleCourseUpdate,
+    displayCourse,
+    setDisplayCourse,
+    getCourseLabels,
+    getAllLabels,
+    updatePlannerLabels,
+    editCourseLabels,
   };
 }

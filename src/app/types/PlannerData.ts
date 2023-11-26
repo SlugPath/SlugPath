@@ -1,5 +1,6 @@
 import { StoredCourse } from "./Course";
 import { Quarter, findQuarter } from "./Quarter";
+import { Label } from "./Label";
 
 /**
  * `PlannerData` is a placeholder type used to store courses, quarters, and other fields
@@ -8,6 +9,7 @@ export interface PlannerData {
   quarters: Quarter[];
   years: number;
   courses: StoredCourse[];
+  labels: Label[];
 }
 
 export interface CourseTable {

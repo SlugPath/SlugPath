@@ -1,25 +1,45 @@
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-import { Grid, Modal, ModalClose, Sheet, Skeleton, Typography } from "@mui/joy";
+import {
+  Grid,
+  List,
+  ListItem,
+  Modal,
+  ModalClose,
+  Sheet,
+  Skeleton,
+  Typography,
+} from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { ChangeEvent, useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
-import { WarningAmberRounded, Edit } from "@mui/icons-material";
+import { WarningAmberRounded, Edit, Add } from "@mui/icons-material";
 import { StoredCourse } from "../types/Course";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { IconButton, Input } from "@mui/joy";
+import LabelsSelectionModal from "./modals/LabelSelectionModal";
+import { Label } from "../types/Label";
+import CourseLabel from "./CourseLabel";
 
 const MAX_TITLE_LENGTH: number = 20;
 
 export default function CourseInfoModal() {
+  const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
   const {
     setShowCourseInfoModal: setShowModal,
     showCourseInfoModal: showModal,
-    displayCourse: courseTerm,
   } = useContext(ModalsContext);
 
-  const { editCustomCourse } = useContext(PlannerContext);
+  const {
+    editCustomCourse,
+    getCourseLabels,
+    getAllLabels,
+    editCourseLabels,
+    updatePlannerLabels,
+  } = useContext(PlannerContext);
   const [editing, setEditing] = useState(false);
+  const { displayCourse: courseTerm, setDisplayCourse } =
+    useContext(PlannerContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
   const [customTitle, setCustomTitle] = useState("");
@@ -92,6 +112,29 @@ export default function CourseInfoModal() {
     return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
   }
 
+  const handleOpenLabels = () => {
+    setShowLabelSelectionModal(true);
+  };
+
+  const handleUpdateLabels = (labels: Label[]) => {
+    const newLabels = labels.map((label) => label.id);
+    // 1. set current course to new label ids
+    // 2. update any labels that got updated
+
+    const newCourse: StoredCourse = { ...course, labels: newLabels };
+    const courseTerm = [newCourse, term];
+    editCourseLabels(newCourse);
+    updatePlannerLabels(labels);
+    setDisplayCourse(courseTerm);
+  };
+
+  const labelsAreEditable = () => {
+    if (course.labels) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Modal
       open={showModal}
@@ -112,6 +155,15 @@ export default function CourseInfoModal() {
           boxShadow: "lg",
         }}
       >
+        {labelsAreEditable() && (
+          <LabelsSelectionModal
+            showModal={showLabelSelectionModal}
+            setShowModal={setShowLabelSelectionModal}
+            labels={getAllLabels()}
+            selectedLabels={getCourseLabels(course)}
+            onUpdateLabels={handleUpdateLabels}
+          />
+        )}
         <Typography
           component="h2"
           id="modal-title"
@@ -162,40 +214,73 @@ export default function CourseInfoModal() {
         {/* End title */}
         {/* Course details */}
         <Skeleton loading={loading} variant="text" width="50%">
-          {!isCSE(course) && !isCustomCourse(course) && (
-            <Typography
-              variant="soft"
-              color="warning"
-              component="p"
-              startDecorator={<WarningAmberRounded color="warning" />}
-            >
-              Warning: quarters offered information is unavailable for this
-              course.
-            </Typography>
-          )}
-          {isCSE(course) && !isOffered(course.quartersOffered, term) && (
-            <Typography
-              variant="soft"
-              color="warning"
-              component="p"
-              startDecorator={<WarningAmberRounded color="warning" />}
-            >
-              Warning: {course.departmentCode} {course.number} is not offered in{" "}
-              {` ${term}`}
-            </Typography>
-          )}
-          <Typography component="p">{quartersOffered(data)}</Typography>
-          <Typography component="p">Credits: {credits(data)}</Typography>
-          {data !== undefined && (
-            <>
-              <Typography component="p">{prerequisites(data)}</Typography>
-              <Typography component="p">GE: {ge(data)}</Typography>
-            </>
-          )}
+          <div className="space-y-2">
+            {!isCSE(course) && !isCustomCourse(course) && (
+              <Typography
+                variant="soft"
+                color="warning"
+                component="p"
+                startDecorator={<WarningAmberRounded color="warning" />}
+              >
+                Warning: quarters offered information is unavailable for this
+                course.
+              </Typography>
+            )}
+            {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+              <Typography
+                variant="soft"
+                color="warning"
+                component="p"
+                startDecorator={<WarningAmberRounded color="warning" />}
+              >
+                Warning: {course.departmentCode} {course.number} is not offered
+                in {` ${term}`}
+              </Typography>
+            )}
+            <Typography component="p">{quartersOffered(data)}</Typography>
+            <Typography component="p">Credits: {credits(data)}</Typography>
+            {data !== undefined && (
+              <>
+                <Typography component="p">{prerequisites(data)}</Typography>
+                <Typography component="p">GE: {ge(data)}</Typography>
+              </>
+            )}
+            {labelsAreEditable() && (
+              <SelectedLabels
+                labels={getCourseLabels(course)}
+                handleOpenLabels={handleOpenLabels}
+              />
+            )}
+          </div>
         </Skeleton>
         {/* End course details */}
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
+  );
+}
+
+function SelectedLabels({
+  labels,
+  handleOpenLabels,
+}: {
+  labels: Label[];
+  handleOpenLabels: () => void;
+}) {
+  return (
+    // align items left
+    <div className="flex flex-row items-center justify-start">
+      <Typography>Labels:</Typography>
+      <List orientation="horizontal">
+        {labels.map((label) => (
+          <ListItem key={label.id}>
+            <CourseLabel label={label} displayText={label.name.length > 0} />
+          </ListItem>
+        ))}
+        <IconButton onClick={handleOpenLabels} variant="solid">
+          <Add />
+        </IconButton>
+      </List>
+    </div>
   );
 }

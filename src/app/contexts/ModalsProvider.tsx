@@ -11,8 +11,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
     setShowExportModal,
     showCourseInfoModal,
     setShowCourseInfoModal,
-    displayCourse,
-    setDisplayCourse,
     onShowCourseInfoModal,
   } = useModals();
 
@@ -25,8 +23,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
         setShowExportModal,
         showCourseInfoModal,
         setShowCourseInfoModal,
-        displayCourse,
-        setDisplayCourse,
         onShowCourseInfoModal,
         courseState,
       }}

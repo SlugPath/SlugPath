@@ -20,15 +20,15 @@ model Planner {
   id        String    @id @default(uuid())
   title     String
   updatedAt DateTime  @updatedAt
-  quarters  Quarter[]
   order     Int
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quarters  Quarter[]
+  labels    Label[]   @relation()
 }
 
 model Quarter {
-  id      Int               @id @default(autoincrement())
+  id      Int              @id @default(autoincrement())
   term    Term
   year    Int
   courses EnrolledCourse[]
@@ -38,7 +38,7 @@ model Quarter {
 }
 
 model EnrolledCourse {
-  id              String      @id @default(uuid())
+  id              String   @id @default(uuid())
   title           String
   departmentCode  String
   number          String
@@ -47,6 +47,7 @@ model EnrolledCourse {
   quartersOffered String[]
   quarterId       Int
   quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+  labels          String[]
 }
 
 model Course {
@@ -61,6 +62,27 @@ model Course {
 
   // No two courses can have the same department code and course number
   @@id([departmentCode, number])
+}
+
+model Label {
+  id        String     @id @default(uuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  color     LabelColor
+
+  plannerId String
+  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+}
+
+enum LabelColor {
+  RED
+  ORANGE
+  YELLOW
+  GREEN
+  BLUE
+  PURPLE
+  PINK
 }
 
 enum Role {

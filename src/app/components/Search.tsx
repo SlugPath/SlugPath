@@ -24,6 +24,7 @@ export default function Search() {
   const {
     data,
     loading,
+    loadingUseQuery,
     departments,
     handleChangeDepartment,
     handleChangeNumber,
@@ -58,7 +59,7 @@ export default function Search() {
     return data.coursesBy[index];
   }
 
-  function getItemCount(data: any, snapshot?: DroppableStateSnapshot) {
+  function getItemCount(data: any, snapshot?: DroppableStateSnapshot): number {
     if (data) {
       return snapshot && snapshot.isUsingPlaceholder
         ? data.coursesBy.length + 1
@@ -74,6 +75,14 @@ export default function Search() {
     } else {
       return [];
     }
+  }
+
+  function getResultsString(data: any) {
+    const itemCount = getItemCount(data);
+    const loadingMoreResultsString = loadingUseQuery
+      ? "     Loading more results"
+      : "";
+    return itemCount.toString() + " results" + loadingMoreResultsString;
   }
 
   function getRowRender({
@@ -108,7 +117,7 @@ export default function Search() {
   }
 
   return (
-    <Card className="min-w-40">
+    <Card className="w-80" variant="plain">
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -120,10 +129,10 @@ export default function Search() {
             placeholder="Department"
             name="department"
             aria-label="department"
-            className="col-span-2"
+            className="col-span-2 bg-slate-100"
+            variant="soft"
             onChange={handleChangeDepartment}
             value={departmentCode ?? ""}
-            size="sm"
           >
             {departments.map((dep) => (
               <Option key={dep.value} value={dep.value}>
@@ -136,7 +145,7 @@ export default function Search() {
               className="col-span-2"
               color="neutral"
               placeholder="Number"
-              variant="outlined"
+              variant="soft"
               name="number"
               aria-label="number"
               onChange={(event) => handleChangeNumber(event.target.value)}
@@ -183,7 +192,7 @@ export default function Search() {
               </div>
               {hasResults(data) ? (
                 <div>
-                  <div className="mb-1">{getItemCount(data)} results</div>
+                  <div className="mb-1">{getResultsString(data)}</div>
                   <div className="overflow-y-auto h-[62vh]">
                     <AutoSizer>
                       {({ height, width }) => (

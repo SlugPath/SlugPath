@@ -13,7 +13,7 @@ export default function QuarterCard({
   courses: StoredCourse[];
 }) {
   return (
-    <Card size="sm" className="w-64 min-w-[130px]">
+    <Card size="md" className="min-w-[130px] w-full" variant="plain">
       {title}
       <Droppable droppableId={id}>
         {(provided) => {
