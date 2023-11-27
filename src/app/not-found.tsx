@@ -15,8 +15,9 @@ export default function NotFound() {
           <div className="text-center text-5xl text-bold">404 Error</div>
           <div className="text-center text-xl">Uh oh...</div>
           <div className="text-center">
-            We could not find requested resource. The page you&apos;re looking
-            for may have been removed, renamed, or possibly never existed.
+            We could not find the requested resource. The page you&apos;re
+            looking for may have been removed, renamed, or possibly never
+            existed.
           </div>
         </div>
       </div>
