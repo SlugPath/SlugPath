@@ -1,21 +1,26 @@
-import { Card, CircularProgress, Input, Option, Select } from "@mui/joy";
+import {
+  Card,
+  CircularProgress,
+  FormControl,
+  FormHelperText,
+  Input,
+  Option,
+  Select,
+} from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
 import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
-import { createIdFromCourse } from "../../lib/courseUtils";
 import { List, AutoSizer } from "react-virtualized";
 import useSearch from "../hooks/useSearch";
+import { customCourse } from "@/lib/plannerUtils";
+import { InfoOutlined } from "@mui/icons-material";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
  * already been added to the planner and should be disabled for dragging in search results.
  */
-export default function Search({
-  coursesInPlanner,
-}: {
-  coursesInPlanner: string[];
-}) {
+export default function Search() {
   const {
     data,
     loading,
@@ -24,10 +29,10 @@ export default function Search({
     handleChangeDepartment,
     handleChangeNumber,
     handleSearch,
-    courseIsAlreadyAdded,
     departmentCode,
     number,
-  } = useSearch({ coursesInPlanner });
+    error,
+  } = useSearch();
 
   function hasResults(data: any): boolean {
     return data && data.coursesBy.length > 0;
@@ -37,8 +42,17 @@ export default function Search({
     return (!loading && !data) || (data && data.coursesBy.length == 0);
   }
 
-  function createSearchIdFromCourse(course: StoredCourse): string {
-    return createIdFromCourse(course) + "-search";
+  function createSearchId({
+    title,
+    departmentCode,
+    number,
+    quartersOffered,
+    credits,
+    ge,
+  }: StoredCourse) {
+    return `${title};${departmentCode};${number};${quartersOffered.join(
+      ",",
+    )};${credits};${ge.join(",")};search`;
   }
 
   function getCourseByIndex(index: number) {
@@ -83,7 +97,7 @@ export default function Search({
   }) {
     const courses = getCoursesList(data);
     // We are rendering an extra item for the placeholder
-    // Do do this we increased our data set size to include one 'fake' item
+    // To do this we increased our data set size to include one 'fake' item
     if (!courses[index]) {
       return null;
     }
@@ -96,8 +110,7 @@ export default function Search({
           key={index}
           course={course}
           index={index}
-          draggableId={createSearchIdFromCourse(course)}
-          alreadyAdded={courseIsAlreadyAdded(course)}
+          draggableId={createSearchId(course)}
         />
       </div>
     );
@@ -111,7 +124,7 @@ export default function Search({
           handleSearch(departmentCode ?? "", number);
         }}
       >
-        <div className="grid grid-cols-2 gap-2 p-2">
+        <div className="grid gap-2 p-2">
           <Select
             placeholder="Department"
             name="department"
@@ -127,29 +140,40 @@ export default function Search({
               </Option>
             ))}
           </Select>
-          <Input
-            className="col-span-2"
-            color="neutral"
-            placeholder="Number"
-            variant="soft"
-            name="number"
-            aria-label="number"
-            onChange={(event) => handleChangeNumber(event.target.value)}
-          />
+          <FormControl error={error}>
+            <Input
+              className="col-span-2"
+              color="neutral"
+              placeholder="Number"
+              variant="soft"
+              name="number"
+              aria-label="number"
+              onChange={(event) => handleChangeNumber(event.target.value)}
+              size="sm"
+            />
+            {error && (
+              <FormHelperText>
+                <InfoOutlined />
+                Invalid course number
+              </FormHelperText>
+            )}
+          </FormControl>
         </div>
       </form>
+
       <Droppable
         droppableId={"search-droppable"}
         isDropDisabled={true}
         mode="virtual"
         renderClone={(provided, snapshot, rubric) => {
           const index = rubric.source.index;
-          const course = getCourseByIndex(index);
+          // Null coalesce to custom course since the custom course
+          // has an index of -1
+          const course = getCourseByIndex(index) ?? customCourse;
           return (
             <CourseCard
               course={course}
               index={index}
-              alreadyAdded={courseIsAlreadyAdded(course)}
               provided={provided}
               isDragging={snapshot.isDragging}
             />
@@ -159,6 +183,13 @@ export default function Search({
         {(provided, snapshot) => {
           return (
             <div {...provided.droppableProps} ref={provided.innerRef}>
+              <div className="mb-4">
+                <DraggableCourseCard
+                  index={-1}
+                  draggableId={createSearchId(customCourse)}
+                  course={customCourse}
+                />
+              </div>
               {hasResults(data) ? (
                 <div>
                   <div className="mb-1">{getResultsString(data)}</div>

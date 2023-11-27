@@ -1,5 +1,6 @@
-import { getTitle, isOffered } from "@/lib/courseUtils";
+import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import {
+  Grid,
   List,
   ListItem,
   Modal,
@@ -10,17 +11,17 @@ import {
 } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
-import { createQuartersOfferedString } from "@/lib/courseUtils";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
-import { WarningAmberRounded } from "@mui/icons-material";
-import { IconButton } from "theme-ui";
-import { Add } from "@mui/icons-material";
-import LabelSelectionModal from "./modals/LabelSelectionModal";
-import CourseLabel from "./CourseLabel";
+import { WarningAmberRounded, Edit, Add } from "@mui/icons-material";
+import { StoredCourse } from "../types/Course";
 import { PlannerContext } from "../contexts/PlannerProvider";
+import { IconButton, Input } from "@mui/joy";
+import LabelsSelectionModal from "./modals/LabelSelectionModal";
 import { Label } from "../types/Label";
-import { LabelsContext } from "../contexts/LabelsProvider";
+import CourseLabel from "./CourseLabel";
+
+const MAX_TITLE_LENGTH: number = 10;
 
 export default function CourseInfoModal() {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
@@ -29,32 +30,54 @@ export default function CourseInfoModal() {
     showCourseInfoModal: showModal,
   } = useContext(ModalsContext);
 
+  const {
+    editCustomCourse,
+    getCourseLabels,
+    getAllLabels,
+    editCourseLabels,
+    updatePlannerLabels,
+  } = useContext(PlannerContext);
+  const [editing, setEditing] = useState(false);
   const { displayCourse: courseTerm, setDisplayCourse } =
     useContext(PlannerContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
-  const { editCourse } = useContext(PlannerContext);
-  const { data, error, loading } = useQuery(GET_COURSE, {
+
+  const [customTitle, setCustomTitle] = useState("");
+
+  const handleEndEditing = () => {
+    if (course && editing) {
+      setEditing(false);
+      course.title = customTitle;
+      editCustomCourse(course.id, customTitle);
+    }
+  };
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCustomTitle(value.slice(0, MAX_TITLE_LENGTH));
+  };
+
+  const { data, loading } = useQuery(GET_COURSE, {
     variables: {
       departmentCode: course?.departmentCode,
       number: course?.number,
     },
-    skip: course === undefined,
+    skip: course === undefined || isCustomCourse(course),
   });
-  const { labels, updateLabels } = useContext(LabelsContext);
 
-  if (error) return `Error! ${error}`;
   if (course === undefined) return null;
 
   function title(data: any) {
-    return loading
-      ? ""
-      : getTitle(data.courseBy.departmentCode, data.courseBy.number) +
-          " " +
-          data.courseBy.title;
+    if (loading) return "";
+    if (!data) return course?.title;
+    const c = data.courseBy as StoredCourse;
+    return `${c.departmentCode} ${c.number} ${getTitle(c)}`;
   }
 
   function credits(data: any) {
-    return loading ? "" : data.courseBy.credits;
+    if (loading) return "";
+    if (!data) return course?.credits;
+    return data.courseBy.credits;
   }
 
   function ge(data: any) {
@@ -82,26 +105,24 @@ export default function CourseInfoModal() {
   }
 
   function quartersOffered(data: any) {
-    return loading ? "" : createQuartersOfferedString(data.courseBy);
+    if (loading) return "";
+    if (!data) return "Quarters Offered: Summer, Fall, Winter, Spring";
+    const c = data.courseBy as StoredCourse;
+    if (c.quartersOffered.length == 0) return "Quarters Offered: None";
+    return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
   }
 
-  const handleEditLabels = () => {
+  const handleOpenLabels = () => {
     setShowLabelSelectionModal(true);
   };
 
   const handleUpdateLabels = (labels: Label[]) => {
-    const newLabels = labels.map((label) => {
-      return {
-        id: label.id,
-        name: label.name,
-        color: label.color,
-      };
-    });
-    const newCourse = { ...course, labels: newLabels };
+    const newLabels = labels.map((label) => label.id);
+    const newCourse: StoredCourse = { ...course, labels: newLabels };
     const courseTerm = [newCourse, term];
-    editCourse(newCourse.number, newCourse.departmentCode, newCourse);
+    editCourseLabels(newCourse);
+    updatePlannerLabels(labels);
     setDisplayCourse(courseTerm);
-    updateLabels(newLabels);
   };
 
   const labelsAreEditable = () => {
@@ -114,7 +135,11 @@ export default function CourseInfoModal() {
   return (
     <Modal
       open={showModal}
-      onClose={() => setShowModal(false)}
+      onClose={() => {
+        setShowModal(false);
+        setCustomTitle("");
+        setEditing(false);
+      }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
@@ -128,11 +153,11 @@ export default function CourseInfoModal() {
         }}
       >
         {labelsAreEditable() && (
-          <LabelSelectionModal
+          <LabelsSelectionModal
             showModal={showLabelSelectionModal}
             setShowModal={setShowLabelSelectionModal}
-            labels={labels}
-            selectedLabels={course.labels}
+            labels={getAllLabels()}
+            selectedLabels={getCourseLabels(course)}
             onUpdateLabels={handleUpdateLabels}
           />
         )}
@@ -144,13 +169,61 @@ export default function CourseInfoModal() {
           fontWeight="lg"
           mb={1}
         >
+          {/* Editable course title */}
           <Skeleton loading={loading} variant="text" width="50%">
-            {title(data)}
+            <Grid container alignItems="center" spacing="1">
+              <Grid>
+                {editing ? (
+                  <Input
+                    variant="soft"
+                    autoFocus
+                    value={customTitle}
+                    size="lg"
+                    placeholder={course.title}
+                    onChange={handleTitleChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleEndEditing();
+                    }}
+                    onBlur={handleEndEditing}
+                  />
+                ) : (
+                  title(data)
+                )}
+              </Grid>
+              <Grid>
+                {isCustomCourse(course) && term !== undefined && (
+                  <IconButton
+                    onClick={() => {
+                      if (editing) {
+                        handleEndEditing();
+                      } else {
+                        setEditing(true);
+                      }
+                    }}
+                  >
+                    <Edit />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
           </Skeleton>
         </Typography>
+        {/* End title */}
+        {/* Course details */}
         <Skeleton loading={loading} variant="text" width="50%">
           <div className="space-y-2">
-            {!isOffered(course.quartersOffered, term) && (
+            {!isCSE(course) && !isCustomCourse(course) && (
+              <Typography
+                variant="soft"
+                color="warning"
+                component="p"
+                startDecorator={<WarningAmberRounded color="warning" />}
+              >
+                Warning: quarters offered information is unavailable for this
+                course.
+              </Typography>
+            )}
+            {isCSE(course) && !isOffered(course.quartersOffered, term) && (
               <Typography
                 variant="soft"
                 color="warning"
@@ -158,23 +231,26 @@ export default function CourseInfoModal() {
                 startDecorator={<WarningAmberRounded color="warning" />}
               >
                 Warning: {course.departmentCode} {course.number} is not offered
-                in {term}
+                in {` ${term}`}
               </Typography>
             )}
-            <Typography component="p">
-              Quarters offered: {quartersOffered(data)}
-            </Typography>
+            <Typography component="p">{quartersOffered(data)}</Typography>
             <Typography component="p">Credits: {credits(data)}</Typography>
-            <Typography component="p">{prerequisites(data)}</Typography>
-            <Typography component="p">GE: {ge(data)}</Typography>
+            {data !== undefined && (
+              <>
+                <Typography component="p">{prerequisites(data)}</Typography>
+                <Typography component="p">GE: {ge(data)}</Typography>
+              </>
+            )}
             {labelsAreEditable() && (
               <SelectedLabels
-                labels={course.labels}
-                onEditLabels={handleEditLabels}
+                labels={getCourseLabels(course)}
+                handleOpenLabels={handleOpenLabels}
               />
             )}
           </div>
         </Skeleton>
+        {/* End course details */}
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
@@ -183,10 +259,10 @@ export default function CourseInfoModal() {
 
 function SelectedLabels({
   labels,
-  onEditLabels,
+  handleOpenLabels,
 }: {
   labels: Label[];
-  onEditLabels: () => void;
+  handleOpenLabels: () => void;
 }) {
   return (
     // align items left
@@ -198,7 +274,7 @@ function SelectedLabels({
             <CourseLabel label={label} displayText={label.name.length > 0} />
           </ListItem>
         ))}
-        <IconButton onClick={onEditLabels} variant="solid">
+        <IconButton onClick={handleOpenLabels} variant="solid">
           <Add />
         </IconButton>
       </List>

@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 export default function useModals() {
-  const [showMajorCompletionModal, setShowMajorCompletionModal] =
-    useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
 
@@ -11,8 +9,6 @@ export default function useModals() {
   }
 
   return {
-    showMajorCompletionModal,
-    setShowMajorCompletionModal,
     showExportModal,
     setShowExportModal,
     showCourseInfoModal,

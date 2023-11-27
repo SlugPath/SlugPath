@@ -1,5 +1,45 @@
+import { Label } from "@/app/types/Label";
+
+export const initialLabels: Label[] = [
+  {
+    id: "1",
+    name: "",
+    color: "RED",
+  },
+  {
+    id: "2",
+    name: "",
+    color: "GREEN",
+  },
+  {
+    id: "3",
+    name: "",
+    color: "BLUE",
+  },
+  {
+    id: "4",
+    name: "",
+    color: "YELLOW",
+  },
+  {
+    id: "5",
+    name: "",
+    color: "PURPLE",
+  },
+  {
+    id: "6",
+    name: "",
+    color: "ORANGE",
+  },
+  {
+    id: "7",
+    name: "",
+    color: "PINK",
+  },
+];
+
 /**
- *
+ * Retrieves the color for a label
  * @param color is a string such as "red", "blue", "green", etc.
  * @returns a string that is the tailwindcss class for the color
  */

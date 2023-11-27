@@ -99,13 +99,6 @@ export default function LabelsSelectionModal({
           mb={1}
         >
           Edit Labels
-          {selectedLabels.map((label: Label, index: number) => {
-            return (
-              <div key={index}>
-                {label.id} {label.color} {label.name}
-              </div>
-            );
-          })}
           <List>
             {labels.map((label: Label, index: number) => {
               let displayLabel = selectedLabels.find(

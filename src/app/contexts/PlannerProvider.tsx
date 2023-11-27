@@ -2,6 +2,7 @@ import { createContext } from "react";
 import usePlanner from "../hooks/usePlanner";
 import { useSession } from "next-auth/react";
 import { PlannerContextProps, PlannerProviderProps } from "../types/Context";
+import useHandleCourseDrag from "../hooks/useHandleCourseDrag";
 
 export const PlannerContext = createContext({} as PlannerContextProps);
 
@@ -14,17 +15,19 @@ export function PlannerProvider({
   const { data: session } = useSession();
   const {
     deleteCourse,
-    editCourse,
-    getCourse,
+    editCustomCourse,
     displayCourse,
     setDisplayCourse,
     totalCredits,
     geSatisfied,
     courseState,
-    handleDragEnd,
-    memoAlreadyCourses,
     saveStatus,
     saveError,
+    handleCourseUpdate,
+    getCourseLabels,
+    getAllLabels,
+    editCourseLabels,
+    updatePlannerLabels,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -32,21 +35,28 @@ export function PlannerProvider({
     order,
   });
 
+  const { handleDragEnd } = useHandleCourseDrag({
+    courseState,
+    handleCourseUpdate,
+  });
+
   return (
     <PlannerContext.Provider
       value={{
         deleteCourse,
-        editCourse,
-        getCourse,
+        editCustomCourse,
         displayCourse,
         setDisplayCourse,
         totalCredits,
         geSatisfied,
         courseState,
         handleDragEnd,
-        memoAlreadyCourses,
         saveStatus,
         saveError,
+        getCourseLabels,
+        getAllLabels,
+        editCourseLabels,
+        updatePlannerLabels,
       }}
     >
       {children}

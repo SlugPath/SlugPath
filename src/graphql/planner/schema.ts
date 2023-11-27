@@ -8,6 +8,10 @@ import { ArgsType, Field, InputType, Int, ObjectType } from "type-graphql";
 @InputType()
 export class StoredCourseInput {
   @Field()
+  @IsUUID("4")
+  id!: string;
+
+  @Field()
   @Matches(/[A-Z]{2,6}/g)
   departmentCode!: string;
 
@@ -16,13 +20,17 @@ export class StoredCourseInput {
   number!: string;
 
   @Field()
+  @Length(1, 255)
+  title!: string;
+
+  @Field()
   @IsInt()
   @Max(10)
   @Min(1)
   credits!: number;
 
-  @Field(() => [LabelInput])
-  labels!: LabelInput[];
+  @Field(() => [String])
+  labels!: string[];
 
   @Field(() => [String])
   ge!: string[];
@@ -60,6 +68,9 @@ export class PlannerDataInput {
   @Min(1)
   @Max(7)
   years!: number;
+
+  @Field(() => [LabelInput])
+  labels!: LabelInput[];
 }
 
 /**
@@ -67,6 +78,10 @@ export class PlannerDataInput {
  */
 @ObjectType()
 export class StoredCourse {
+  @Field()
+  @IsUUID("4")
+  id!: string;
+
   @Field()
   @Matches(/[A-Z]{2,6}/g)
   departmentCode!: string;
@@ -76,13 +91,17 @@ export class StoredCourse {
   number!: string;
 
   @Field()
+  @Length(1, 255)
+  title!: string;
+
+  @Field()
   @IsInt()
   @Max(10)
   @Min(1)
   credits!: number;
 
-  @Field(() => [Label])
-  labels!: Label[];
+  @Field(() => [String])
+  labels!: string[];
 
   @Field(() => [String])
   ge!: string[];
@@ -130,6 +149,9 @@ export class PlannerData {
   @Min(1)
   @Max(7)
   years!: number;
+
+  @Field(() => [Label])
+  labels!: Label[];
 }
 
 /**

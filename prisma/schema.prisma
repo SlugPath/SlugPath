@@ -24,19 +24,22 @@ model Planner {
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   quarters  Quarter[]
+  labels    Label[]   @relation()
 }
 
 model Quarter {
-  id        Int              @id @default(autoincrement())
-  term      Term
-  year      Int
+  id      Int              @id @default(autoincrement())
+  term    Term
+  year    Int
+  courses EnrolledCourse[]
+
   plannerId String
-  courses   EnrolledCourse[]
-  planner   Planner          @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
 model EnrolledCourse {
-  id              Int    @id @default(autoincrement())
+  id              String   @id @default(uuid())
+  title           String
   departmentCode  String
   number          String
   credits         Int
@@ -44,7 +47,7 @@ model EnrolledCourse {
   quartersOffered String[]
   quarterId       Int
   quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
-  labels          Label[]  @relation("EnrolledCourseToLabel")
+  labels          String[]
 }
 
 model Course {
@@ -62,13 +65,14 @@ model Course {
 }
 
 model Label {
-  id        String           @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   color     LabelColor
-  userId    String
-  courses   EnrolledCourse[] @relation("EnrolledCourseToLabel")
+
+  plannerId String
+  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
 enum LabelColor {

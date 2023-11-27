@@ -24,7 +24,7 @@ export default function CourseLabel({
   return (
     <div
       style={getColor(label.color)}
-      className={"rounded-lg px-1 px-3 py-2 mx-1"}
+      className={"rounded-md px-1 px-2 py-2 mx-1"}
     >
       {children}
     </div>

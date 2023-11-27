@@ -4,12 +4,11 @@ import {
   PlannerRetrieveInput,
   PlannerCreateInput,
   PlannerTitle,
+  StoredCourse,
 } from "./schema";
 import prisma from "@/lib/prisma";
-import { StoredCourse } from "@/app/types/Course";
-import { emptyPlanner } from "@/lib/initialPlanner";
-import { Prisma, Term } from "@prisma/client";
-import { LabelService } from "../label/service";
+import { emptyPlanner } from "@/lib/plannerUtils";
+import { LabelColor, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -43,24 +42,28 @@ export class PlannerService {
       );
     }
 
-    // Get the new quarters
+    // Update the labels
+    const labels = plannerData.labels.map((l) => {
+      return {
+        ...l,
+        color: l.color as LabelColor,
+      };
+    });
+    // Get the new quarters with their respective courses
     const newQuarters = plannerData.quarters.map((q) => {
       const qid = q.id;
       const [year, term] = qid.split("-").slice(1);
 
       const enrolledCourses = q.courses.map((c) => {
-        new LabelService().updateLabels(userId, c.labels);
         return {
+          id: c.id,
           departmentCode: c.departmentCode,
           number: c.number,
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
-          labels: {
-            connect: c.labels.map((l) => {
-              return { id: l.id };
-            }),
-          },
+          title: c.title,
+          labels: c.labels,
         };
       });
 
@@ -82,6 +85,11 @@ export class PlannerService {
           id: plannerId,
           quarters: {
             create: newQuarters,
+          },
+          labels: {
+            createMany: {
+              data: labels,
+            },
           },
         },
         select: {
@@ -137,13 +145,10 @@ export class PlannerService {
       include: {
         quarters: {
           include: {
-            courses: {
-              include: {
-                labels: true,
-              },
-            },
+            courses: true,
           },
         },
+        labels: true,
       },
     });
     return p !== null ? this.toPlannerData(p) : null;
@@ -188,20 +193,15 @@ export class PlannerService {
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
       const courses: StoredCourse[] = q.courses.map((c: StoredCourse) => {
-        const labels = c.labels.map((l: any) => {
-          return {
-            name: l.name,
-            color: l.color,
-            id: l.id,
-          };
-        });
         return {
+          id: c.id,
           departmentCode: c.departmentCode,
           number: c.number,
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
-          labels: labels,
+          title: c.title,
+          labels: c.labels,
         };
       });
       newPlanner.quarters.push({
@@ -210,6 +210,7 @@ export class PlannerService {
         courses,
       });
     });
+    newPlanner.labels = [...planner.labels];
 
     // Return new modified planner
     return newPlanner;

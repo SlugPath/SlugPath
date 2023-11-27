@@ -2,9 +2,10 @@ import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
-  getTitle,
+  getDeptAndNumber,
+  isCSE,
   isOffered,
-} from "../../lib/courseUtils";
+} from "../../lib/plannerUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import { PlannerContext } from "../contexts/PlannerProvider";
@@ -12,23 +13,23 @@ import { ModalsContext } from "../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
 import CloseIconButton from "./CloseIconButton";
 import CourseLabel from "./CourseLabel";
+import { Label } from "../types/Label";
 
 export default function CourseCard({
   course,
   index,
-  alreadyAdded,
   quarterId,
   provided,
   isDragging,
 }: {
   course: StoredCourse;
   index: number;
-  alreadyAdded?: boolean;
   quarterId?: string;
   provided: DraggableProvided;
   isDragging: boolean;
 }) {
-  const { deleteCourse, setDisplayCourse } = useContext(PlannerContext);
+  const { deleteCourse, setDisplayCourse, getCourseLabels } =
+    useContext(PlannerContext);
   const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
@@ -50,17 +51,13 @@ export default function CourseCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant={"soft"}
+      variant="outlined"
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
         backgroundColor:
-          isDragging || highlighted
-            ? "rgb(226 232 240)"
-            : alreadyAdded
-            ? ""
-            : "#F1F5F9",
+          isDragging || highlighted ? "rgb(226 232 240)" : "#F1F5F9",
       }}
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}
@@ -73,7 +70,7 @@ export default function CourseCard({
               onShowCourseInfoModal={handleShowCourseInfoModal}
               quarterId={quarterId}
             />
-            <CourseLabelList course={course} />
+            <CourseLabelList labels={getCourseLabels(course)} />
           </Grid>
           <Grid xs={2}>
             {quarterId !== undefined && (
@@ -105,6 +102,7 @@ const Title = ({
       // level="body-sm"
       endDecorator={
         course &&
+        isCSE(course) &&
         !isOffered(
           course.quartersOffered,
           extractTermFromQuarter(quarterId),
@@ -118,17 +116,17 @@ const Title = ({
         sx={{ color: "text.tertiary" }}
         onClick={() => onShowCourseInfoModal(course)}
       >
-        {course ? getTitle(course.departmentCode, course.number) : "No course"}
+        {course ? getDeptAndNumber(course) : "No course"}
       </Link>
     </Typography>
   );
 };
 
-const CourseLabelList = ({ course }: { course: StoredCourse }) => {
+const CourseLabelList = ({ labels }: { labels: Label[] }) => {
   return (
     <div className="flex truncate">
-      {course.labels
-        ? course.labels.map((label, index) => (
+      {labels
+        ? labels.map((label, index) => (
             <CourseLabel key={index} label={label} displayText={false} />
           ))
         : null}

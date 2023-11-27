@@ -1,6 +1,6 @@
 import QuarterCard from "./QuarterCard";
-import { quartersPerYear } from "../../lib/initialPlanner";
-import { PlannerData } from "../types/PlannerData";
+import { quartersPerYear } from "../../lib/plannerUtils";
+import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useState } from "react";
@@ -15,7 +15,6 @@ import PlannerActions from "./PlannerActions";
 import { ModalsProvider } from "../contexts/ModalsProvider";
 import ExportModal from "./ExportModal";
 import CourseInfoModal from "./CourseInfoModal";
-import { LabelsProvider } from "../contexts/LabelsProvider";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -23,7 +22,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     totalCredits,
     geSatisfied,
     courseState,
-    memoAlreadyCourses,
     saveStatus,
     saveError,
   } = useContext(PlannerContext);
@@ -45,46 +43,43 @@ export default function Planner({ isActive }: { isActive: boolean }) {
       <div>
         <DragDropContext onDragEnd={handleDragEnd}>
           <ModalsProvider>
-            <LabelsProvider>
-              <div className="flex justify-between space-x-4">
-                <div className="flex-initial">
-                  <Search coursesInPlanner={memoAlreadyCourses} />
-                </div>
-                {loading ? (
-                  <CircularProgress />
-                ) : (
-                  <>
-                    {/* make div expand to the full width of screen */}
-                    <div className="overflow-auto h-[92vh] w-full">
-                      <Quarters courseState={courseState} />
-                    </div>
-
-                    {/* Modals and Grad Progress */}
-                    <div className="self-start">
-                      <Card variant="plain">
-                        <div>
-                          <PlannerActions />
-                          <Modals />
-                        </div>
-
-                        <hr className="rounded border-t border-slate-300" />
-
-                        <div className="flex justify-items-center">
-                          <GradProgress credits={totalCredits} />
-                        </div>
-
-                        <hr className="rounded border-t border-slate-300" />
-
-                        <div className="flex place-items-center">
-                          <GEProgress ge={geSatisfied} />
-                        </div>
-                      </Card>
-                    </div>
-                    {/* End Modals */}
-                  </>
-                )}
+            <div className="flex justify-between space-x-4">
+              <div className="flex-initial pr-2">
+                <Search />
               </div>
-            </LabelsProvider>
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <>
+                  <div className="overflow-auto h-[92vh] w-full">
+                    <Quarters courseState={courseState} />
+                  </div>
+
+                  {/* Modals and Grad Progress */}
+                  <div className="self-start">
+                    <Card variant="plain">
+                      <div>
+                        <PlannerActions />
+                        <Modals />
+                      </div>
+
+                      <hr className="rounded border-t border-slate-300" />
+
+                      <div className="flex justify-items-center">
+                        <GradProgress credits={totalCredits} />
+                      </div>
+
+                      <hr className="rounded border-t border-slate-300" />
+
+                      <div className="flex place-items-center">
+                        <GEProgress ge={geSatisfied} />
+                      </div>
+                    </Card>
+                  </div>
+                  {/* End Modals */}
+                </>
+              )}
+            </div>
           </ModalsProvider>
         </DragDropContext>
       </div>
@@ -113,7 +108,7 @@ function Quarters({ courseState }: { courseState: PlannerData }) {
         return (
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarter) => {
-              const courses = quarter.courses;
+              const courses = findCoursesInQuarter(courseState, quarter.id);
               return (
                 <QuarterCard
                   id={quarter.id}

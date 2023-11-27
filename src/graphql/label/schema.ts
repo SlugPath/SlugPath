@@ -5,6 +5,7 @@ import { Field, InputType, ObjectType } from "type-graphql";
  * It has validation functions on its fields to ensure the integrity
  * of data sent to the UI from GraphQL.
  */
+
 @ObjectType()
 export class Label {
   @Field()

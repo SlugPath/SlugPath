@@ -1,7 +1,8 @@
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
-import { createCourseFromId } from "../../lib/courseUtils";
 import { PlannerData } from "../types/PlannerData";
 import { Quarter, findQuarter } from "../types/Quarter";
+import { v4 as uuidv4 } from "uuid";
+import { createCourseFromId } from "@/lib/plannerUtils";
 
 const REMOVE_COURSE_AREA1 = "remove-course-area1";
 const REMOVE_COURSE_AREA2 = "remove-course-area2";
@@ -51,11 +52,13 @@ export default function useHandleCourseDrag({
       destination.droppableId,
     );
     const newStoredCourses = Array.from(quarter.courses);
-    newStoredCourses.splice(
-      destination.index,
-      0,
-      createCourseFromId(draggableId),
-    );
+    const cid = uuidv4();
+    newStoredCourses.splice(destination.index, 0, cid);
+    const course = createCourseFromId(draggableId);
+    courseState.courses.push({
+      id: cid,
+      ...course,
+    });
     const newQuarter = {
       ...quarter,
       courses: newStoredCourses,
