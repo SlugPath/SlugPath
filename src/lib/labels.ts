@@ -1,38 +1,39 @@
 import { Label } from "@/app/types/Label";
+import { v4 as uuid } from "uuid";
 
 export const initialLabels: Label[] = [
   {
-    id: "1",
+    id: uuid(),
     name: "",
     color: "RED",
   },
   {
-    id: "2",
+    id: uuid(),
     name: "",
     color: "GREEN",
   },
   {
-    id: "3",
+    id: uuid(),
     name: "",
     color: "BLUE",
   },
   {
-    id: "4",
+    id: uuid(),
     name: "",
     color: "YELLOW",
   },
   {
-    id: "5",
+    id: uuid(),
     name: "",
     color: "PURPLE",
   },
   {
-    id: "6",
+    id: uuid(),
     name: "",
     color: "ORANGE",
   },
   {
-    id: "7",
+    id: uuid(),
     name: "",
     color: "PINK",
   },
