@@ -176,7 +176,7 @@ export function getTotalCredits(planner: PlannerData): number {
 }
 
 /**
- * Computes the total credits of a student planner
+ * Returns a list of all the satisfied GE's in a planner
  * @param planner a course planner object
  * @returns list of GEs satisfied
  */
