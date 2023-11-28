@@ -22,10 +22,12 @@ export default function Search({
     departments,
     handleChangeDepartment,
     handleChangeNumber,
+    handleChangeGE,
     handleSearch,
     courseIsAlreadyAdded,
     departmentCode,
     number,
+    ge,
   } = useSearch({ coursesInPlanner });
 
   function hasResults(data: any): boolean {
@@ -99,7 +101,7 @@ export default function Search({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(departmentCode ?? "", number);
+          handleSearch(departmentCode ?? "", number, ge ?? "");
         }}
       >
         <div className="grid grid-cols-2 gap-2 p-2">
@@ -128,6 +130,34 @@ export default function Search({
             onChange={(event) => handleChangeNumber(event.target.value)}
             size="sm"
           />
+          <Select
+            placeholder="GE Requirement"
+            name="ge"
+            aria-label="ge"
+            className="col-span-2"
+            onChange={handleChangeGE}
+            value={ge ?? ""}
+            size="sm"
+          >
+            <Option value="">No GE Filter</Option>{" "}
+            {/* Option for no specific GE filter */}
+            <Option value="c">C</Option>
+            <Option value="cc">CC</Option>
+            <Option value="er">ER</Option>
+            <Option value="im">IM</Option>
+            <Option value="mf">MF</Option>
+            <Option value="si">SI</Option>
+            <Option value="sr">SR</Option>
+            <Option value="ta">TA</Option>
+            {/* Include options for PE subcategories */}
+            <Option value="peT">PE-T</Option>
+            <Option value="peH">PE-H</Option>
+            <Option value="peE">PE-E</Option>
+            {/* Include options for PR subcategories */}
+            <Option value="prC">PR-C</Option>
+            <Option value="prE">PR-E</Option>
+            <Option value="prS">PR-S</Option>
+          </Select>
         </div>
       </form>
       <Droppable

@@ -20,9 +20,11 @@ export default function useSearch({
   // Query details for course search
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
+  const [ge, setGE] = useState<string | null>(null);
   const [queryDetails, setQueryDetails] = useState({
     departmentCode: "",
     number: "",
+    ge: "",
   });
 
   // useBackgroundQuery gives the queryRef to use in useReadQuery to instantly search the cache
@@ -39,6 +41,7 @@ export default function useSearch({
       variables: {
         departmentCode: queryDetails.departmentCode,
         number: nullIfNumberEmpty(queryDetails.number),
+        ge: nullIfEmpty(queryDetails.ge),
       },
     },
   );
@@ -71,9 +74,9 @@ export default function useSearch({
   }, [useReadQueryData, useQueryData, loadingUseQuery]);
 
   useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number),
+    callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
     delay: 500,
-    dependencies: [departmentCode, number],
+    dependencies: [departmentCode, number, ge],
   });
 
   const handleChangeDepartment = (
@@ -87,10 +90,22 @@ export default function useSearch({
     setNumber(number.toString());
   };
 
-  const handleSearch = (departmentCode: string, numberInput: string) => {
+  const handleChangeGE = (
+    event: React.SyntheticEvent | null,
+    newValue: string | null,
+  ) => {
+    setGE(newValue);
+  };
+
+  const handleSearch = (
+    departmentCode: string,
+    numberInput: string,
+    geInput: string,
+  ) => {
     setQueryDetails({
       departmentCode,
       number: numberInput.toUpperCase(),
+      ge: geInput,
     });
   };
 
@@ -112,14 +127,20 @@ export default function useSearch({
     return number.length > 0 ? number : null;
   }
 
+  function nullIfEmpty(input: string): string | null {
+    return input.length > 0 ? input : null;
+  }
+
   return {
     data,
     loading,
     departments,
     departmentCode,
     number,
+    ge,
     handleChangeDepartment,
     handleChangeNumber,
+    handleChangeGE,
     handleSearch,
     courseIsAlreadyAdded,
   };
