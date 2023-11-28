@@ -236,3 +236,24 @@ it("should handle department retrieval correctly", async () => {
     expect.objectContaining({ name: "Mathematics" }),
   );
 });
+
+it("should filter courses by GE requirement", async () => {
+  const service = new CourseService();
+
+  // Test filtering by a specific GE requirement
+  const geFilter = "mf";
+  const filteredCourses = await service.coursesBy({
+    departmentCode: "CSE",
+    ge: geFilter,
+  });
+
+  // Assert that all returned courses have the specified GE requirement
+  expect(filteredCourses).toBeDefined();
+  expect(Array.isArray(filteredCourses)).toBe(true);
+  filteredCourses.forEach((course) => {
+    expect(course.ge).toContain(geFilter);
+  });
+
+  // Assert that at least one course is returned
+  expect(filteredCourses.length).toBeGreaterThan(0);
+});
