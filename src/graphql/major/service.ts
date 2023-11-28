@@ -1,28 +1,36 @@
 import prisma from "@/lib/prisma";
 import { Major, MajorInput } from "./schema";
 
-export class CourseService {
+export class MajorService {
   public async getMajor(userId: string): Promise<Major | null> {
-    return await prisma.major.findUnique({
+    const major = await prisma.major.findUnique({
       where: {
         userId: userId,
       },
     });
+
+    if (!major) {
+      throw new Error("Major does not exist");
+    }
+
+    return major;
   }
 
-  public async upsertMajor(userId: string, major: MajorInput): Promise<Major> {
+  public async upsertMajor(major: MajorInput): Promise<Major> {
     return await prisma.major.upsert({
       where: {
-        userId: userId,
+        userId: major.userId,
       },
       update: {
         name: major.name,
+        catalog_year: major.catalog_year,
+        default_planner_id: major.default_planner_id,
       },
       create: {
         name: major.name,
         catalog_year: major.catalog_year,
         default_planner_id: major.default_planner_id,
-        userId: userId,
+        userId: major.userId,
       },
     });
   }

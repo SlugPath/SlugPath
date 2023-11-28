@@ -11,7 +11,7 @@ import {
   Button,
 } from "@mui/joy";
 import Info from "@mui/icons-material/Info";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
 
@@ -48,12 +48,22 @@ const years = [
 ];
 
 export default function MajorSelection() {
+  const { data: session, status } = useSession();
+  const { onSaveMajor, majorData, loading } = useMajorSelection(
+    session?.user.id,
+  );
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [defaultPlanner, setDefaultPlanner] = useState(0);
-  const { data: session, status } = useSession();
-  // const { onSaveMajor, majorData } = useMajorSelection(session?.user.id);
-  // console.log(majorData)
+
+  useEffect(() => {
+    if (majorData) {
+      const major = majorData.getMajor;
+      setMajor(major.name);
+      setCatalogYear(major.catalog_year);
+      setDefaultPlanner(major.default_planner_id);
+    }
+  }, [majorData]);
 
   function handleChangeMajor(
     event: React.SyntheticEvent | null,
@@ -82,15 +92,25 @@ export default function MajorSelection() {
     }
   }
 
+  function handleClickNext() {
+    onSaveMajor(major, catalogYear, defaultPlanner);
+  }
+
   return (
     <div className="space-y-4">
-      {/* <div>Major: {majorData.name}</div> */}
-      <div>Status: {status}</div>
       <div>
-        <SelectMajorName majors={majors} onChange={handleChangeMajor} />
+        <SelectMajorName
+          major={major}
+          majors={majors}
+          onChange={handleChangeMajor}
+        />
       </div>
       <div>
-        <SelectCatalogYear years={years} onChange={handleChangeCatalogYear} />
+        <SelectCatalogYear
+          catalogYear={catalogYear}
+          years={years}
+          onChange={handleChangeCatalogYear}
+        />
       </div>
       <div>
         <SelectDefaultPlanner
@@ -99,11 +119,7 @@ export default function MajorSelection() {
         />
       </div>
       <div className="flex justify-end w-full">
-        <Button
-          variant="solid"
-          color="primary"
-          // onClick={() => onSaveMajor(major, catalogYear, defaultPlanner.toString())}
-        >
+        <Button variant="solid" color="primary" onClick={handleClickNext}>
           Next
         </Button>
       </div>
@@ -112,16 +128,23 @@ export default function MajorSelection() {
 }
 
 function SelectMajorName({
+  major,
   majors,
   onChange,
 }: {
+  major: string;
   majors: string[];
   onChange: any;
 }) {
   return (
     <>
       <Typography level="body-lg">Select your major</Typography>
-      <Select placeholder="Choose one…" variant="soft" onChange={onChange}>
+      <Select
+        value={major}
+        placeholder="Choose one…"
+        variant="soft"
+        onChange={onChange}
+      >
         {majors.map((major, index) => (
           <Option key={index} value={major}>
             {major}
@@ -133,16 +156,23 @@ function SelectMajorName({
 }
 
 function SelectCatalogYear({
+  catalogYear,
   years,
   onChange,
 }: {
+  catalogYear: string;
   years: string[];
   onChange: any;
 }) {
   return (
     <>
       <Typography level="body-lg">Select your catalog year</Typography>
-      <Select placeholder="Choose one…" variant="soft" onChange={onChange}>
+      <Select
+        value={catalogYear}
+        placeholder="Choose one…"
+        variant="soft"
+        onChange={onChange}
+      >
         {years.map((year, index) => (
           <Option key={index} value={year}>
             {year}

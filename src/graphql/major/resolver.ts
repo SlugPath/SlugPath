@@ -1,4 +1,4 @@
-import { CourseService } from "./service";
+import { MajorService } from "./service";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Major, MajorInput } from "./schema";
 
@@ -13,7 +13,7 @@ export class MajorResolver {
    */
   @Query(() => Major)
   async getMajor(@Arg("userId") userId: string): Promise<Major | null> {
-    return await new CourseService().getMajor(userId);
+    return await new MajorService().getMajor(userId);
   }
 
   /**
@@ -22,10 +22,12 @@ export class MajorResolver {
    * @returns the updated or created `Major`
    */
   @Mutation(() => Major)
-  async upsertMajor(
-    @Arg("userId") userId: string,
-    @Arg("major") major: MajorInput,
-  ): Promise<Major> {
-    return await new CourseService().upsertMajor(userId, major);
+  // async upsertMajor(
+  //   @Arg("userId") userId: string,
+  //   @Arg("major") major: MajorInput,
+  // ): Promise<Major> {
+  async upsertMajor(@Arg("major") major: MajorInput): Promise<Major> {
+    console.log(major);
+    return await new MajorService().upsertMajor(major);
   }
 }

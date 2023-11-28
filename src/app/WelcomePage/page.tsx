@@ -4,6 +4,8 @@ import MajorSelection from "../components/MajorSelection";
 import LoginButton from "../components/LoginButton";
 import { useSession } from "next-auth/react";
 import { WarningAmberRounded } from "@mui/icons-material";
+import { ApolloProvider } from "@apollo/client";
+import apolloClient from "@/lib/apolloClient";
 
 export default function Page() {
   const { status } = useSession();
@@ -38,7 +40,9 @@ export default function Page() {
         </div>
       ) : null}
       <div className="flex flex-col items-center justify-center h-[80vh] w-[33vw] mx-auto">
-        <MajorSelection />
+        <ApolloProvider client={apolloClient}>
+          <MajorSelection />
+        </ApolloProvider>
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 // import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { MajorInput } from "@/graphql/major/schema";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 export const GET_MAJOR = gql`
   query major($userId: String!) {
-    major(userId: $userId) {
+    getMajor(userId: $userId) {
       name
       catalog_year
       default_planner_id
@@ -12,8 +13,8 @@ export const GET_MAJOR = gql`
 `;
 
 export const SAVE_MAJOR = gql`
-  mutation saveMajor($userId: String!, $major: MajorInput!) {
-    upsertMajor(userId: $userId, major: $major) {
+  mutation saveMajor($major: MajorInput!) {
+    upsertMajor(major: $major) {
       name
       catalog_year
       default_planner_id
@@ -22,30 +23,31 @@ export const SAVE_MAJOR = gql`
 `;
 
 export default function useMajorSelection(userId?: string) {
-  const { data: majorData } = useQuery(GET_MAJOR, {
+  const { data: majorData, loading } = useQuery(GET_MAJOR, {
     variables: {
       userId: userId,
     },
     skip: !userId,
   });
 
-  // create useLazyQuery for SAVE_MAJOR
-  const [saveMajor] = useLazyQuery(SAVE_MAJOR);
+  const [saveMajor] = useMutation(SAVE_MAJOR);
 
   function handleSaveMajor(
     name: string,
     catalog_year: string,
-    default_planner_id: string,
+    default_planner_id: number,
   ) {
     if (userId != undefined) {
+      const majorInput: MajorInput = {
+        name: name,
+        catalog_year: catalog_year,
+        default_planner_id: default_planner_id,
+        userId: userId,
+      };
+
       saveMajor({
         variables: {
-          userId: userId,
-          major: {
-            name: name,
-            catalog_year: catalog_year,
-            default_planner_id: default_planner_id,
-          },
+          major: majorInput,
         },
       });
     }
@@ -54,5 +56,6 @@ export default function useMajorSelection(userId?: string) {
   return {
     onSaveMajor: handleSaveMajor,
     majorData,
+    loading,
   };
 }

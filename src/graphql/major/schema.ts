@@ -1,3 +1,4 @@
+import { Length } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 
 /**
@@ -20,6 +21,7 @@ export class Major {
 @InputType()
 export class MajorInput {
   @Field()
+  @Length(1, 64)
   name!: string;
 
   @Field()
@@ -27,4 +29,7 @@ export class MajorInput {
 
   @Field()
   default_planner_id!: number;
+
+  @Field()
+  userId!: string;
 }
