@@ -14,12 +14,14 @@ import { WarningAmberRounded } from "@mui/icons-material";
 import CloseIconButton from "./CloseIconButton";
 import CourseLabel from "./CourseLabel";
 import { Label } from "../types/Label";
+import { ENROLLED_COURSE_BG, COURSE_BG } from "@/lib/colorConstants";
 
 export default function CourseCard({
   course,
   index,
   quarterId,
   provided,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isDragging,
 }: {
   course: StoredCourse;
@@ -38,6 +40,7 @@ export default function CourseCard({
     margin: `0 0 ${margin}px 0`,
     ...draggableStyle,
   });
+  const isEnrolledCourse = quarterId !== undefined;
 
   function handleShowCourseInfoModal(course: StoredCourse) {
     const courseTerm = [course, extractTermFromQuarter(quarterId)];
@@ -51,13 +54,17 @@ export default function CourseCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant="outlined"
+      sx={{
+        "&:hover": {
+          opacity: 0.5,
+        },
+      }}
+      variant={quarterId ? "plain" : "outlined"}
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
         justifyContent: "center",
-        backgroundColor:
-          isDragging || highlighted ? "rgb(226 232 240)" : "#F1F5F9",
+        backgroundColor: `${isEnrolledCourse ? ENROLLED_COURSE_BG : COURSE_BG}`,
       }}
       onMouseEnter={() => setHighlighted(true)}
       onMouseLeave={() => setHighlighted(false)}
