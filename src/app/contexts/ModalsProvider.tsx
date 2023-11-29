@@ -12,6 +12,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
     showCourseInfoModal,
     setShowCourseInfoModal,
     onShowCourseInfoModal,
+    showMajorSelectionModal,
+    setShowMajorSelectionModal,
   } = useModals();
 
   const { courseState } = useContext(PlannerContext);
@@ -24,6 +26,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
         showCourseInfoModal,
         setShowCourseInfoModal,
         onShowCourseInfoModal,
+        showMajorSelectionModal,
+        setShowMajorSelectionModal,
         courseState,
       }}
     >

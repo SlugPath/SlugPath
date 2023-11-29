@@ -15,6 +15,7 @@ import PlannerActions from "./PlannerActions";
 import { ModalsProvider } from "../contexts/ModalsProvider";
 import ExportModal from "./ExportModal";
 import CourseInfoModal from "./CourseInfoModal";
+import MajorSelectionModal from "./modals/MajorSelectionModal";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -92,6 +93,7 @@ function Modals() {
     <>
       <CourseInfoModal />
       <ExportModal />
+      <MajorSelectionModal />
     </>
   );
 }

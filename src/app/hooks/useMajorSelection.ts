@@ -22,15 +22,21 @@ export const SAVE_MAJOR = gql`
   }
 `;
 
-export default function useMajorSelection(userId?: string) {
+export default function useMajorSelection(userId?: string, onCompleted?: any) {
   const { data: majorData, loading } = useQuery(GET_MAJOR, {
     variables: {
       userId: userId,
     },
     skip: !userId,
   });
-
-  const [saveMajor] = useMutation(SAVE_MAJOR);
+  const [saveMajor, { loading: loadingSaveMajor }] = useMutation(SAVE_MAJOR, {
+    onCompleted: (data) => {
+      onCompleted(data);
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
 
   function handleSaveMajor(
     name: string,
@@ -57,5 +63,6 @@ export default function useMajorSelection(userId?: string) {
     onSaveMajor: handleSaveMajor,
     majorData,
     loading,
+    loadingSaveMajor,
   };
 }

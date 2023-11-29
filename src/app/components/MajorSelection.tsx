@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Select,
   Option,
@@ -14,6 +13,7 @@ import Info from "@mui/icons-material/Info";
 import { useEffect, useState } from "react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
+import { initialPlanner, quartersPerYear } from "@/lib/plannerUtils";
 
 const majors = [
   "CSE BS",
@@ -47,21 +47,31 @@ const years = [
   "2024-2025",
 ];
 
-export default function MajorSelection() {
-  const { data: session, status } = useSession();
-  const { onSaveMajor, majorData, loading } = useMajorSelection(
-    session?.user.id,
-  );
+export default function MajorSelection({
+  saveButtonName,
+  handleSave,
+}: {
+  handleSave: any;
+  saveButtonName: string;
+}) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [defaultPlanner, setDefaultPlanner] = useState(0);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+  const { data: session } = useSession();
+  const { onSaveMajor, majorData } = useMajorSelection(
+    session?.user.id,
+    handleSaveCompleted,
+  );
 
   useEffect(() => {
     if (majorData) {
       const major = majorData.getMajor;
-      setMajor(major.name);
-      setCatalogYear(major.catalog_year);
-      setDefaultPlanner(major.default_planner_id);
+      updateMajorUseState(
+        major.name,
+        major.catalog_year,
+        major.default_planner_id,
+      );
     }
   }, [majorData]);
 
@@ -92,7 +102,29 @@ export default function MajorSelection() {
     }
   }
 
-  function handleClickNext() {
+  function updateMajorUseState(
+    name: string,
+    catalog_year: string,
+    default_planner_id: number,
+  ) {
+    setMajor(name);
+    setCatalogYear(catalog_year);
+    setDefaultPlanner(default_planner_id);
+  }
+
+  function handleSaveCompleted(data: any) {
+    const major = data.upsertMajor;
+    updateMajorUseState(
+      major.name,
+      major.catalog_year,
+      major.default_planner_id,
+    );
+    setSaveButtonDisabled(false);
+    handleSave();
+  }
+
+  function handleClickSave() {
+    setSaveButtonDisabled(true);
     onSaveMajor(major, catalogYear, defaultPlanner);
   }
 
@@ -119,8 +151,13 @@ export default function MajorSelection() {
         />
       </div>
       <div className="flex justify-end w-full">
-        <Button variant="solid" color="primary" onClick={handleClickNext}>
-          Next
+        <Button
+          disabled={saveButtonDisabled}
+          variant="plain"
+          color="primary"
+          onClick={handleClickSave}
+        >
+          {saveButtonName}
         </Button>
       </div>
     </div>
@@ -194,21 +231,49 @@ function SelectDefaultPlanner({
     <>
       <div className="flex flex-row space-x-2">
         <Typography level="body-lg">Select a default planner</Typography>
-        <Tooltip title="The default planner you select will be auto filled into your course planner">
+        <Tooltip title="The default planner you select will be auto filled into any new planners you create">
           <Info sx={{ color: "gray" }} />
         </Tooltip>
       </div>
-      <Tabs value={defaultPlanner} variant="soft" onChange={onChange}>
-        <TabList>
-          <Tab>4 Year Plan</Tab>
-          <Tab>4 Year Plan</Tab>
-          <Tab>2 Year Plan</Tab>
-          <Tab>None</Tab>
-        </TabList>
-      </Tabs>
-      <Card className="h-64 my-2" variant="soft">
-        Planner
-      </Card>
+      <div className="space-y-2">
+        <Tabs value={defaultPlanner} variant="soft" onChange={onChange}>
+          <TabList>
+            <Tab>4 Year Plan</Tab>
+            <Tab>4 Year Plan</Tab>
+            <Tab>2 Year Plan</Tab>
+            <Tab>None</Tab>
+          </TabList>
+        </Tabs>
+        <MiniPlanner />
+      </div>
     </>
+  );
+}
+
+function MiniPlanner() {
+  const planner = initialPlanner;
+
+  return (
+    <Card>
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
+        const quarters = planner.quarters.slice(
+          slice_val,
+          slice_val + quartersPerYear,
+        );
+        return (
+          <div key={i} className="flex flex-row space-x-2">
+            {quarters.map((quarter, index) => {
+              // const courses = findCoursesInQuarter(planner, quarter.id);
+              return (
+                <div key={index}>
+                  <Card>{quarter.title}</Card>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </Card>
   );
 }
