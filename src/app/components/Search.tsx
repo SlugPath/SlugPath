@@ -34,6 +34,7 @@ export default function Search() {
     number,
     ge,
     error,
+    geOptions,
   } = useSearch();
 
   function hasResults(data: any): boolean {
@@ -164,28 +165,17 @@ export default function Search() {
             placeholder="GE Requirement"
             name="ge"
             aria-label="ge"
-            className="col-span-2"
+            className="col-span-2 bg-slate-100"
+            variant="soft"
             onChange={handleChangeGE}
             value={ge ?? ""}
             size="sm"
           >
-            <Option value="">--</Option>
-            <Option value="c">C</Option>
-            <Option value="cc">CC</Option>
-            <Option value="er">ER</Option>
-            <Option value="im">IM</Option>
-            <Option value="mf">MF</Option>
-            <Option value="si">SI</Option>
-            <Option value="sr">SR</Option>
-            <Option value="ta">TA</Option>
-            {/* Include options for PE subcategories */}
-            <Option value="peT">PE-T</Option>
-            <Option value="peH">PE-H</Option>
-            <Option value="peE">PE-E</Option>
-            {/* Include options for PR subcategories */}
-            <Option value="prC">PR-C</Option>
-            <Option value="prE">PR-E</Option>
-            <Option value="prS">PR-S</Option>
+            {geOptions.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
           </Select>
         </div>
       </form>
