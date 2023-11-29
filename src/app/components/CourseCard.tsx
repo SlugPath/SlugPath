@@ -51,7 +51,7 @@ export default function CourseCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       size="sm"
-      variant="outlined"
+      variant="plain"
       style={{
         ...getItemStyle(provided.draggableProps.style),
         height: "35px",
@@ -99,7 +99,6 @@ const Title = ({
 }) => {
   return (
     <Typography
-      // level="body-sm"
       endDecorator={
         course &&
         isCSE(course) &&
