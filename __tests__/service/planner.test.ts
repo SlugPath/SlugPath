@@ -266,6 +266,27 @@ it("should handle department retrieval correctly", async () => {
   );
 });
 
+it("should filter courses by GE requirement", async () => {
+  const service = new CourseService();
+
+  // Test filtering by a specific GE requirement
+  const geFilter = "mf";
+  const filteredCourses = await service.coursesBy({
+    departmentCode: "CSE",
+    ge: geFilter,
+  });
+
+  // Assert that all returned courses have the specified GE requirement
+  expect(filteredCourses).toBeDefined();
+  expect(Array.isArray(filteredCourses)).toBe(true);
+  filteredCourses.forEach((course) => {
+    expect(course.ge).toContain(geFilter);
+  });
+
+  // Assert that at least one course is returned
+  expect(filteredCourses.length).toBeGreaterThan(0);
+});
+  
 it("should return the correct labels for each course", async () => {
   const user = await prisma.user.findFirst({
     where: {

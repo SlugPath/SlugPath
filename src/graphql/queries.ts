@@ -1,8 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const GET_COURSES = gql`
-  query getCourses($departmentCode: String!, $number: String = null) {
-    coursesBy(departmentCode: $departmentCode, number: $number) {
+  query getCourses(
+    $departmentCode: String!
+    $number: String = null
+    $ge: String
+  ) {
+    coursesBy(departmentCode: $departmentCode, number: $number, ge: $ge) {
       title
       department
       departmentCode

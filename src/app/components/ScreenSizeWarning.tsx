@@ -39,10 +39,11 @@ export const MobileWarningModal = ({
 // ScreenSizeWarning component
 const ScreenSizeWarning = () => {
   const [showMobileWarning, setShowMobileWarning] = useState(false);
+  const [userAcknowledged, setUserAcknowledged] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      if (isScreenTooSmall()) {
+      if (isScreenTooSmall() && !userAcknowledged) {
         setShowMobileWarning(true);
       } else {
         setShowMobileWarning(false);
@@ -53,12 +54,15 @@ const ScreenSizeWarning = () => {
     handleResize(); // Check screen size on initial load
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [userAcknowledged]);
 
   return (
     <MobileWarningModal
       show={showMobileWarning}
-      onClose={() => setShowMobileWarning(false)}
+      onClose={() => {
+        setShowMobileWarning(false);
+        setUserAcknowledged(true);
+      }}
     />
   );
 };
