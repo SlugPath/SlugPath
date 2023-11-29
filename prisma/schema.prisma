@@ -9,13 +9,13 @@ datasource db {
 }
 
 model User {
-  id       String    @id
-  email    String?
-  name     String?
-  major    Major?
-  role     Role      @default(USER)
-  planners Planner[]
-  majorId  String?
+  id               String    @id
+  email            String?
+  name             String?
+  major            Major?
+  role             Role      @default(USER)
+  defaultPlannerId String?
+  planners         Planner[]
 }
 
 model Planner {
@@ -24,7 +24,9 @@ model Planner {
   updatedAt DateTime  @updatedAt
   order     Int
   userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  majorId   Int
+  major     Major?    @relation(fields: [majorId], references: [id], onDelete: Cascade)
   quarters  Quarter[]
   labels    Label[]   @relation()
 }
@@ -67,15 +69,15 @@ model Course {
 }
 
 model Major {
-  id                 String   @id @default(uuid())
-  name               String
-  catalog_year       String
-  default_planner_id Int
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId             String   @unique
+  id              Int       @id @default(autoincrement())
+  name            String
+  catalogYear     String
+  defaultPlanners Planner[]
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String    @unique
 
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Label {
