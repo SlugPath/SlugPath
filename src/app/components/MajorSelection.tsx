@@ -59,7 +59,7 @@ export default function MajorSelection({
   const [defaultPlanner, setDefaultPlanner] = useState(0);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const { data: session } = useSession();
-  const { onSaveMajor, majorData } = useMajorSelection(
+  const { onSaveMajor, majorData, loadingSaveMajor } = useMajorSelection(
     session?.user.id,
     handleSaveCompleted,
   );
@@ -119,7 +119,6 @@ export default function MajorSelection({
       major.catalog_year,
       major.default_planner_id,
     );
-    setSaveButtonDisabled(false);
     handleSave();
   }
 
@@ -152,7 +151,7 @@ export default function MajorSelection({
       </div>
       <div className="flex justify-end w-full">
         <Button
-          disabled={saveButtonDisabled}
+          disabled={saveButtonDisabled || loadingSaveMajor}
           variant="plain"
           color="primary"
           onClick={handleClickSave}
