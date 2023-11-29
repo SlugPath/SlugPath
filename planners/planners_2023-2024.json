@@ -1,0 +1,11421 @@
+[
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "ENVS 80F",
+        "College 1"
+      ],
+      [
+        "SOCY/ANTH/PHIL course",
+        "ENVS 25",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ENVS 23"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "Upper-division elective",
+        "ENVS 83 or ENVS 84 or ENVS 199F"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ENVS 130A & ENVS 130L"
+      ],
+      [
+        "ENVS 130B",
+        "ENVS 133 or ENVS 135"
+      ],
+      [
+        "ENVS 130C or ENVS 133"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Agroecology B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "STAT 7 & STAT 7L",
+        "ENVS 80F",
+        "ENVS 83 or ENVS 84 or ENVS 199F"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "ENVS 130B"
+      ],
+      [
+        "ENVS 130C or ENVS 133",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ENVS 130A & ENVS 130L",
+        "Upper-division elective"
+      ],
+      [
+        "ENVS 133 or ENVS 135",
+        "Upper-division elective"
+      ],
+      [
+        "ENVS 130C",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "planner_name": "Agroecology B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "ANTH 1",
+        "College 1"
+      ],
+      [
+        "ANTH 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ANTH 3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Bio/Med/Env",
+        "WRIT 2"
+      ],
+      [
+        "Sociocultural"
+      ],
+      [
+        "Archaeology"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Theory"
+      ],
+      [
+        "Regional"
+      ],
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Senior Seminar"
+      ],
+      []
+    ],
+    "planner_name": "Anthropology B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "Theory",
+        "Upper-division elective"
+      ],
+      [
+        "Regional",
+        "Sociocultural"
+      ],
+      [
+        "Archaeology",
+        "Bio/Med/Env"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Senior Seminar"
+      ],
+      []
+    ],
+    "planner_name": "Anthropology B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "Language 1",
+        "College 1"
+      ],
+      [
+        "Language 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Language 3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Language 4",
+        "WRIT 2"
+      ],
+      [
+        "Language 5"
+      ],
+      [
+        "Language 6"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "APLX 80",
+        "LING 50"
+      ],
+      [
+        "APLX 101",
+        "LING 100 or 101"
+      ],
+      [
+        "LING 111 or LING 112",
+        "APLX elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Adv Language course",
+        "APLX elective"
+      ],
+      [
+        "Adv Language course",
+        "APLX elective"
+      ],
+      [
+        "APLX 190",
+        "Non-APLX elective"
+      ],
+      []
+    ],
+    "planner_name": "Applied Linguistics and Multilingualism B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "APLX 80",
+        "LING 50",
+        "Language 4"
+      ],
+      [
+        "APLX 101",
+        "LING 100 or 101",
+        "Language 5"
+      ],
+      [
+        "LING 111 or LING 112",
+        "APLX elective",
+        "Language 6"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Adv Language course",
+        "APLX elective"
+      ],
+      [
+        "Adv Language course",
+        "APLX elective"
+      ],
+      [
+        "APLX 190",
+        "Non-APLX elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Applied Linguistics and Multilingualism B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "AM 10",
+        "College 1"
+      ],
+      [
+        "CSE 20",
+        "MATH 19B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "AM 20",
+        "CSE 16",
+        "Lower div elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "AM 30",
+        "WRIT 2"
+      ],
+      [
+        "Lower-div elective",
+        "Lower-div elective"
+      ],
+      [
+        "STAT 131"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "AM 100",
+        "AM 114"
+      ],
+      [
+        "AM 170A",
+        "Upper-div elective"
+      ],
+      [
+        "Upper-div elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "AM 129"
+      ],
+      [
+        "AM 147"
+      ],
+      [
+        "AM 170B"
+      ],
+      []
+    ],
+    "planner_name": "Applied Mathematics B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2"
+      ],
+      [
+        "MATH 3",
+        "Lower-div elective",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 19A",
+        "Lower-div elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "AM 10",
+        "MATH 19B",
+        "WRIT 2"
+      ],
+      [
+        "AM 20",
+        "CSE 20"
+      ],
+      [
+        "AM 30",
+        "CSE 16"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "AM 100"
+      ],
+      [
+        "AM 147",
+        "Upper-div elective"
+      ],
+      [
+        "STAT 131",
+        "Upper-div elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "AM 129"
+      ],
+      [
+        "AM 112"
+      ],
+      [
+        "AM 170B"
+      ],
+      []
+    ],
+    "planner_name": "Applied Mathematics B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "CHEM 3A",
+        "PHYS 5A & PHYS 5L"
+      ],
+      [
+        "MATH 23A",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 5C & PHYS 5N",
+        "PHYS 5D",
+        "MATH 23B"
+      ],
+      [
+        "ASTR 119",
+        "PHYS 116A"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "PHYS 102",
+        "PHYS 110A",
+        "PHYS 133"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "PHYS 134",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Elective"
+      ],
+      [
+        "PHYS 182"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Applied Physics B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 102",
+        "ASTR 119"
+      ],
+      [
+        "PHYS 133",
+        "PHYS 116A",
+        "Elective"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "CHEM 3A"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "PHYS 134",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Applied Physics B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 5D",
+        "ASTR 119"
+      ],
+      [
+        "PHYS 102",
+        "PHYS 133",
+        "PHYS 116A"
+      ],
+      [
+        "PHYS 105",
+        "Elective",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "CHEM 3A"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "Elective",
+        "PHYS 182"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Applied Physics B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A",
+        "College 1"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "WRIT 1/WRIT 1E if needed",
+        "PHYS 5A & PHYS 5L"
+      ],
+      [
+        "MATH 23A",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 5C & PHYS 5N",
+        "PHYS 5D",
+        "MATH 23B"
+      ],
+      [
+        "WRIT 2",
+        "CSE 20",
+        "PHYS 116A"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C",
+        "CSE 30"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "PHYS 102",
+        "PHYS 110A"
+      ],
+      [
+        "PHYS 112"
+      ],
+      [
+        "STAT 131"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "PHYS 182",
+        "Elective"
+      ],
+      [
+        "PHYS 115",
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Applied Physics B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 102"
+      ],
+      [
+        "CSE 20",
+        "PHYS 116A"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C",
+        "CSE 30"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "PHYS 182"
+      ],
+      [
+        "PHYS 115",
+        "PHYS 112"
+      ],
+      [
+        "STAT 131",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Applied Physics B.S. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 5D"
+      ],
+      [
+        "PHYS 102",
+        "CSE 20",
+        "PHYS 116A"
+      ],
+      [
+        "PHYS 105",
+        "CSE 30",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "PHYS 182"
+      ],
+      [
+        "PHYS 115",
+        "PHYS 112"
+      ],
+      [
+        "Elective",
+        "STAT 131"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Applied Physics B.S. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "ARTG 10",
+        "College 1"
+      ],
+      [
+        "ARTG 20 or ARTG 25 or ARTG 30",
+        "HAVC elective",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ARTG 40 or ARTG 50",
+        "Lower-division arts elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ARTG 40 or ARTG 50",
+        "WRIT 2"
+      ],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-div ARTG req 1",
+        "Upper-div elective 1"
+      ],
+      [
+        "Upper-div ARTG req 2"
+      ],
+      [
+        "Upper-div elective 2",
+        "Upper-div elective 3"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-div  ARTG req 3 DC"
+      ],
+      [
+        "Upper-div ARTG req 4 SC"
+      ],
+      [
+        "Upper-div elective 4"
+      ],
+      []
+    ],
+    "planner_name": "Art & Design: Games + Playable Media B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "ARTG 10",
+        "ARTG 20 or ARTG 25 or ARTG 30",
+        "ARTG 40 or ARTG 50"
+      ],
+      [
+        "ARTG 40 or ARTG 50",
+        "Upper-div elective 1"
+      ],
+      [
+        "Upper-div ARTG req 1",
+        "Upper-div elective 2",
+        "HAVC Elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-div ARTG req 2 DC",
+        "Upper-div elective 3"
+      ],
+      [
+        "Upper-div ARTG req 3 SC",
+        "Upper-div ARTG req 4"
+      ],
+      [
+        "Upper-div elective 4"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Art & Design: Games + Playable Media B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "ART 10E",
+        "College 1"
+      ],
+      [
+        "ART 10D",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ART 10F"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ART 20 series",
+        "HAVC",
+        "WRIT 2"
+      ],
+      [
+        "ART 20 series",
+        "ART 80T"
+      ],
+      [
+        "ART 20 series",
+        "HAVC"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "UD studio"
+      ],
+      [
+        "ART 190A",
+        "UD studio"
+      ],
+      [
+        "UD Studio"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "UD studio",
+        "UD studio"
+      ],
+      [
+        "UD studio"
+      ],
+      [
+        "UD studio or ART 190B"
+      ],
+      []
+    ],
+    "planner_name": "Art B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "UD studio",
+        "ART 10 Series"
+      ],
+      [
+        "ART 190A",
+        "ART 80T"
+      ],
+      [
+        "UD studio",
+        "HAVC"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "UD studio",
+        "HAVC"
+      ],
+      [
+        "UD studio",
+        "UD studio"
+      ],
+      [
+        "UD studio",
+        "UD studio or ART 190B"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Art B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A  or CHEM 4A and CHEM 4AL",
+        "College 1"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B & CHEM 3BL or CHEM 4B & CHEM 4BL",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "BIOL 20A",
+        "CHEM 3C & CHEM 3CL not required if CHEM 4 series completed"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "CHEM 8A & CHEM 8L",
+        "WRIT 2"
+      ],
+      [
+        "PHYS 6A & PHYS 6L",
+        "CHEM 8B & CHEM 8M"
+      ],
+      [
+        "PHYS 6B and PHYS 6M",
+        "BIOL 20L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOC 100A",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "BIOC 100B",
+        "BIOL 105",
+        "MATH 22 optional"
+      ],
+      [
+        "BIOC 100C",
+        "BIOL 101L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOL 110"
+      ],
+      [
+        "BIOC 163A"
+      ],
+      [
+        "BIOC 163B"
+      ],
+      []
+    ],
+    "planner_name": "Biochemistry and Molecular Biology B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOC 100A",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "BIOC 100B",
+        "BIOL 105",
+        "PHYS 6B & PHYS 6M"
+      ],
+      [
+        "BIOC 100C",
+        "BIOL 101L",
+        "PHYS 6C and PHYS 6N"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOL 110",
+        "STAT 5 or STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOC 163A",
+        "BIOL 115"
+      ],
+      [
+        "BIOC 163B",
+        "Senior Exit Lab"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Biochemistry and Molecular Biology B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOE 20C",
+        "College 1"
+      ],
+      [
+        "CHEM 3A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "STAT 5 or STAT 7 & STAT 7L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOL 20A",
+        "WRIT 2"
+      ],
+      [
+        "BIOE 20B",
+        "PHYS 1A or PHYS 1B or PHYS 6A"
+      ],
+      [
+        "BIOL 105"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOE 109",
+        "Biology elective"
+      ],
+      [
+        "BIOE 107"
+      ],
+      [
+        "Anatomy/Physiology"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Biology elective"
+      ],
+      [
+        "Biology elective"
+      ],
+      [
+        "Biology elective"
+      ],
+      []
+    ],
+    "planner_name": "Biology B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105"
+      ],
+      [
+        "BIOE 107",
+        "BIOE 109"
+      ],
+      [
+        "Anatomy/Physiology",
+        "STAT 5 or STAT 7 & STAT 7L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Biology elective",
+        "Biology elective"
+      ],
+      [
+        "Biology elective",
+        "PHYS 1A or PHYS 1B or PHYS 6A"
+      ],
+      [
+        "Biology elective"
+      ],
+      []
+    ],
+    "planner_name": "Biology B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 11A or MATH 19A"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "MATH 11B or MATH 19B"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "BIOL 20A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "BIOL 20L",
+        "CHEM 8A & CHEM 8L"
+      ],
+      [
+        "BIOL 105",
+        "CHEM 8B"
+      ],
+      [
+        "BIOL 100",
+        "STAT 5 or STAT 7/STAT 7L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 101 & BIOL 101L",
+        "BIOE 20C"
+      ],
+      [
+        "BIOL 110",
+        "PHYS 6A & CHEM 6L"
+      ],
+      [
+        "BIOE 107",
+        "PHYS 6B & CHEM 6M"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOE 109",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "Biology Elective 1 of 3",
+        "Biology Elective 2 of 3"
+      ],
+      [
+        "Biology Elective 3 of 3",
+        "DC Lab unless satisfied via 2 of the electives"
+      ],
+      []
+    ],
+    "planner_name": "Biology B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "BIOE 107"
+      ],
+      [
+        "BIOL 100",
+        "PHYS 6A &  PHYS 6L"
+      ],
+      [
+        "BIOL 101 & BIOL 101L",
+        "PHYS 6B & BIOL 6M"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOL 110",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "BIOE 109",
+        "Biology Elective 1 of 3"
+      ],
+      [
+        "Biology Elective 2 of 3",
+        "Biology Elective 3 of 3"
+      ],
+      []
+    ],
+    "planner_name": "Biology B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 19A"
+      ],
+      [
+        "MATH 19B",
+        "CHEM 3B & CHEM 3BL",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "AM 10",
+        "CHEM 3C & CHEM 3CL",
+        "BME 21L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BME 22L",
+        "CHEM 8A",
+        "BIOL 20A",
+        "WRIT 2"
+      ],
+      [
+        "BME 23L",
+        "CHEM 8B",
+        "PHYS 5A & PHYS 5L",
+        "AM 20"
+      ],
+      [
+        "BME 105",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOC 100A",
+        "BME 110",
+        "BME 185"
+      ],
+      [
+        "BIOC 100B",
+        "BME 160",
+        "STAT 131"
+      ],
+      [
+        "AM 115",
+        "BME 163"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BME 129A"
+      ],
+      [
+        "BME 129B"
+      ],
+      [
+        "BME 129C"
+      ],
+      []
+    ],
+    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 19A"
+      ],
+      [
+        "MATH 19B",
+        "CHEM 3B & CHEM 3BL",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "BIOL 20A",
+        "CHEM 3C & CHEM 3CL",
+        "BME 21L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BME 22L",
+        "BIOC 100A",
+        "BME 80G",
+        "WRIT 2"
+      ],
+      [
+        "BME 23L",
+        "BIOC 100B",
+        "PHYS 5A & PHYS 5L"
+      ],
+      [
+        "BME 105",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BME 185",
+        "BME 110",
+        "AM 10"
+      ],
+      [
+        "AM 20",
+        "BME 160"
+      ],
+      [
+        "BME 163"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BME 129A",
+        "STAT 131"
+      ],
+      [
+        "BME 129B",
+        "STAT 132"
+      ],
+      [
+        "BME 129C",
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOC 100A",
+        "BME 80G",
+        "BME 185",
+        "BME 22L"
+      ],
+      [
+        "BIOC 100B",
+        "BME 110",
+        "AM 20",
+        "BME 23L"
+      ],
+      [
+        "BME 105",
+        "BME 160",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BME 129A",
+        "STAT 131"
+      ],
+      [
+        "BME 129B",
+        "STAT 132"
+      ],
+      [
+        "BME 129C",
+        "BME 163"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOC 100A",
+        "AM 10",
+        "STAT 131"
+      ],
+      [
+        "BME 110",
+        "BME 160",
+        "STAT 132"
+      ],
+      [
+        "BME 105",
+        "BME 163",
+        "CSE 30"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BME 205",
+        "BME 80G"
+      ],
+      [
+        "BME 230A",
+        "CSE 185E"
+      ],
+      [
+        "Elective",
+        "CSE 182"
+      ],
+      []
+    ],
+    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "BME 18",
+        "College 1"
+      ],
+      [
+        "CHEM 1A",
+        "BME 80H",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "BIOL 20A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "BME 5",
+        "CSE 20"
+      ],
+      [
+        "BME 105"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BME 130",
+        "BME 185"
+      ],
+      [
+        "BME 110",
+        "METX 100"
+      ],
+      [
+        "BME 160"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BME 132"
+      ],
+      [
+        "BME 175"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Biotechnology B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BME 130",
+        "BME 185"
+      ],
+      [
+        "BME 5",
+        "BME 160"
+      ],
+      [
+        "BME 80H",
+        "BME 105"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BME 132",
+        "BME 140"
+      ],
+      [
+        "BME 175",
+        "BME 110"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Biotechnology B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3"
+      ],
+      [
+        "ECON 1",
+        "AM 11A/ECON 11A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ECON 2",
+        "AM 11B/ECON 11B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ECON 100A",
+        "ECON 10A",
+        "WRIT 2"
+      ],
+      [
+        "ECON 100B",
+        "STAT 17 & STAT 17L"
+      ],
+      [
+        "ECON 113",
+        "ECON 10B"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Econ elective"
+      ],
+      [
+        "Business Management elective",
+        "Computer Course"
+      ],
+      [
+        "Business Management elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Business Management elective",
+        "Computer course"
+      ],
+      [
+        "ECON 104 or ECON 197",
+        "ECON 101"
+      ],
+      [
+        "Field Study optional",
+        "ECON 133 or ECON 135 Business Management elective"
+      ],
+      []
+    ],
+    "planner_name": "Business Management Economics B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "AM 11B/ECON 11B",
+        "ECON elective",
+        "ECON 10A"
+      ],
+      [
+        "ECON 100A",
+        "Computer course",
+        "ECON 10B"
+      ],
+      [
+        "ECON 100B",
+        "Business Management elective",
+        "STAT 17 & STAT 17L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECON 113",
+        "Business Management elective"
+      ],
+      [
+        "Business Management elective",
+        "ECON 101"
+      ],
+      [
+        "Field Study optional",
+        "ECON 133 or ECON 135 Business Management elective"
+      ],
+      [
+        "Computer Course"
+      ]
+    ],
+    "planner_name": "Business Management Economics B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "Writing course",
+        "College 1"
+      ],
+      [
+        "ECON 1",
+        "AM 11A/ECON 11A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ECON 2",
+        "AM 11B/ECON 11B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ECON 100A",
+        "ECON 10A",
+        "WRIT 2"
+      ],
+      [
+        "ECON 100B",
+        "ECON 10B",
+        "STAT 17 & STAT 17L"
+      ],
+      [
+        "ECON 113",
+        "ECON 110",
+        "Computer Literacy course"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECON 111A",
+        "ECON elective"
+      ],
+      [
+        "ECON 111B",
+        "ECON 112",
+        "Ethics course optional"
+      ],
+      [
+        "ECON 111C",
+        "ECON 116"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECON 117B",
+        "Field Study internship optional"
+      ],
+      [
+        "ECON 117A",
+        "ECON 104 or ECON 197"
+      ],
+      [
+        "Field Study optional"
+      ],
+      []
+    ],
+    "planner_name": "Business Management Economics B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "AM 11B/ECON 11B",
+        "ECON 111A",
+        "Computer literacy course"
+      ],
+      [
+        "ECON 100A",
+        "ECON 111B",
+        "Ethics course optional"
+      ],
+      [
+        "ECON 100B",
+        "ECON 111C",
+        "STAT 17 & STAT 17L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECON 113",
+        "ECON 117B"
+      ],
+      [
+        "ECON 101",
+        "ECON 117A"
+      ],
+      [
+        "ECON 133 or ECON 135",
+        "ECON 116"
+      ],
+      [
+        "ECON 110"
+      ]
+    ],
+    "planner_name": "Business Management Economics B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A or CHEM 4A and CHEM 4AL",
+        "College Core"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B and CHEM 3BL or CHEM 4B and CHEM 4BL",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C and CHEM 3CL not required if CHEM 4 series completed"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CHEM 8A & CHEM 8L",
+        "PHYS 6A & PHYS 6L",
+        "WRIT 2"
+      ],
+      [
+        "CHEM 8B & CHEM 8M",
+        "MATH 22"
+      ],
+      [
+        "CHEM 110 & CHEM 110L",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CHEM 163A",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "CHEM 163B",
+        "CHEM 151A & CHEM 151L"
+      ],
+      [
+        "CHEM elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CHEM elective or CHEM 146A"
+      ],
+      [
+        "CHEM 164"
+      ],
+      [
+        "CHEM elective or CHEM 146B/CHEM 146C"
+      ],
+      []
+    ],
+    "planner_name": "Chemistry B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 163A",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "CHEM 163B",
+        "CHEM 151A & CHEM 151L"
+      ],
+      [
+        "CHEM 110 & CHEM 110L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CHEM elective 1",
+        "CHEM 146A"
+      ],
+      [
+        "CHEM 164"
+      ],
+      [
+        "CHEM elective 2",
+        "CHEM 146B or CHEM 146C"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Chemistry B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A or CHEM 4A & CHEM 4AL",
+        "College Core"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B & CHEM 3BL or CHEM 4B & CHEM 4BL",
+        "WRIT 1 or WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL not required if CHEM 4 series completed",
+        "MATH 21"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CHEM 8A & CHEM 8L",
+        "PHYS 6A & PHYS 6L",
+        "WRIT 2"
+      ],
+      [
+        "CHEM 8B & CHEM 8M",
+        "MATH 22"
+      ],
+      [
+        "CHEM 110 & CHEM 110L",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CHEM 163A",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "CHEM 163B",
+        "CHEM 151A & CHEM 151L"
+      ],
+      [
+        "CHEM 163C",
+        "CHEM 103"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CHEM 146A",
+        "CHEM elective 1"
+      ],
+      [
+        "CHEM 164"
+      ],
+      [
+        "CHEM elective 2",
+        "CHEM 146B or CHEM 146C"
+      ],
+      []
+    ],
+    "planner_name": "Chemistry B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 163A",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "CHEM 163B",
+        "CHEM 151A & CHEM 151L"
+      ],
+      [
+        "CHEM 163C",
+        "CHEM 110 & CHEM 110L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CHEM 146A",
+        "CHEM elective 1"
+      ],
+      [
+        "CHEM 164",
+        "MATH 21"
+      ],
+      [
+        "CHEM elective 2",
+        "CHEM 103"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Chemistry B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A or CHEM 4A & CHEM 4AL",
+        "College 1"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B & CHEM 3BL or CHEM 4B & CHEM 4BL",
+        "WRIT 1 or WRIT 1E if needed"
+      ],
+      [
+        "BIOL 20A",
+        "CHEM 3C & CHEM 3CL not required if CHEM 4 series completed"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CHEM 8A & CHEM 8L",
+        "BIOE 20B",
+        "WRIT 2"
+      ],
+      [
+        "CHEM 8B & CHEM 8M",
+        "MATH 22"
+      ],
+      [
+        "CHEM 110 & CHEM 110L",
+        "MATH 21"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOC 100A",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "BIOC 100B",
+        "PHYS 6B & PHYS 6M"
+      ],
+      [
+        "BIOC 100C",
+        "PHYS 6C & PHYS 6N"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CHEM 163A"
+      ],
+      [
+        "CHEM 163B",
+        "CHEM 151A & CHEM 151L"
+      ],
+      [
+        "CHEM 163C",
+        "BIOC 110L"
+      ],
+      []
+    ],
+    "planner_name": "Chemistry B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOC 100A"
+      ],
+      [
+        "BIOC 100B"
+      ],
+      [
+        "BIOC 100C",
+        "CHEM 110 & CHEM 110L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CHEM 163A"
+      ],
+      [
+        "CHEM 163B",
+        "CHEM 151A & CHEM 151L"
+      ],
+      [
+        "CHEM 163C",
+        "BIOC 110L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Chemistry B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "GREE 1 or LATN 1",
+        "CLST lower-division survey",
+        "College 1"
+      ],
+      [
+        "GREE 2 or LATN 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "LIT 184A or LIT 186A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LIT 184-series/LIT 186-series",
+        "WRIT 2"
+      ],
+      [
+        "LIT 184-series/LIT 186-series"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "CLST 197F 2 credits"
+      ],
+      []
+    ],
+    "planner_name": "Classical Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "GREE 1 or LATN 1",
+        "CLST lower-division survey",
+        "Upper-division elective"
+      ],
+      [
+        "GREE 2 or LATN 2",
+        "Upper-division elective"
+      ],
+      [
+        "LIT 184A or LIT 186A",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LIT 184-series/LIT 186-series",
+        "Upper-division elective"
+      ],
+      [
+        "LIT 184-series/LIT 186-series",
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective",
+        "CLST 197F 2 credits"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Classical Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2",
+        "College 1"
+      ],
+      [
+        "MATH 3",
+        "Programming",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Calculus",
+        "WRIT 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PSYC 20",
+        "Interdisciplinary prerequisite"
+      ],
+      [
+        "PSYC 2",
+        "Interdisciplinary prerequisite"
+      ],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "PSYC 100",
+        "Interdisciplinary elective"
+      ],
+      [
+        "Cognitive core",
+        "Interdisciplinary elective UD"
+      ],
+      [
+        "Cognitive core",
+        "Interdisciplinary elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Interdisciplinary elective"
+      ],
+      [
+        "Senior Seminar"
+      ],
+      [
+        "Cognitive elective"
+      ],
+      []
+    ],
+    "planner_name": "Cognitive Science B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "PSYC 20",
+        "PSYC 100"
+      ],
+      [
+        "Cognitive core",
+        "Interdisciplinary elective"
+      ],
+      [
+        "Cognitive core",
+        "Interdisciplinary elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Cognitive elective"
+      ],
+      [
+        "Cognitive core"
+      ],
+      [
+        "Senior Seminar"
+      ],
+      []
+    ],
+    "planner_name": "Cognitive Science B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "CMMU 10",
+        "College 1"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "Topical course 1",
+        "WRIT 2"
+      ],
+      [],
+      [
+        "Topical course 2"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Topical course 3"
+      ],
+      [
+        "CMMU 101"
+      ],
+      [
+        "CMMU 102",
+        "DC REQ part 1"
+      ],
+      [
+        "CMMU 105 15 credits"
+      ]
+    ],
+    "Year 4": [
+      [
+        "CMMU 105 15 credits"
+      ],
+      [
+        "CMMU 107",
+        "DC REQ part 2"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Community Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "CMMU 10",
+        "Topical course 1"
+      ],
+      [
+        "CMMU 101",
+        "Topical course 2"
+      ],
+      [
+        "CMMU 102",
+        "DC REQ part 1",
+        "Topical course 3"
+      ],
+      [
+        "CMMU 105 15 credits"
+      ]
+    ],
+    "Year 4": [
+      [
+        "CMMU 105 15 credits"
+      ],
+      [
+        "CMMU 107",
+        "DC REQ part 2"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Community Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "CSE 30",
+        "COLL 1"
+      ],
+      [
+        "MATH 19B",
+        "PHYS 5A & PHYS 5L",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "AM 30",
+        "CSE 12"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "AM 10",
+        "PHYS 5C & PHYS 5N",
+        "CSE 16",
+        "WRIT 2"
+      ],
+      [
+        "AM 20",
+        "CSE 13S"
+      ],
+      [
+        "CSE 120",
+        "CSE 101",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECE 101 & ECE 101L",
+        "Concentration course"
+      ],
+      [
+        "CSE 107",
+        "CSE 100 & 100L"
+      ],
+      [
+        "CSE 185E",
+        "CSE 121",
+        "Concentration course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Concentration course",
+        "ECE 103 & ECE 103L"
+      ],
+      [
+        "Capstone course",
+        "Concentration course"
+      ],
+      [
+        "Capstone course",
+        "Concentration course"
+      ],
+      []
+    ],
+    "planner_name": "Computer Engineering B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3",
+        "CSE 20"
+      ],
+      [
+        "MATH 19A",
+        "CSE 12",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 19B",
+        "CSE 30"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 5A & PHYS 5L",
+        "CSE 13S",
+        "AM 10",
+        "WRIT 2"
+      ],
+      [
+        "PHYS 5C & PHYS 5N",
+        "CSE 16",
+        "AM 20"
+      ],
+      [
+        "PHYS 5B & PHYS 5M",
+        "AM 30",
+        "CSE 101"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECE 101 & ECE 101L",
+        "CSE 120"
+      ],
+      [
+        "CSE 107",
+        "CSE 100 & CSE 100L",
+        "Concentration course"
+      ],
+      [
+        "CSE 185E",
+        "ECE 103 & ECE 103L",
+        "Concentration course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CSE 121"
+      ],
+      [
+        "Capstone course"
+      ],
+      [
+        "Concentration course"
+      ],
+      []
+    ],
+    "planner_name": "Computer Engineering B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECE 101 & ECE 101L",
+        "CSE 185E",
+        "CSE 12"
+      ],
+      [
+        "CSE 107",
+        "CSE 100 & CSE 100L",
+        "CSE 101"
+      ],
+      [
+        "CSE 120",
+        "CSE 121",
+        "Concentration course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECE 103 & ECE 103L"
+      ],
+      [
+        "Capstone course"
+      ],
+      [
+        "Capstone course"
+      ],
+      []
+    ],
+    "planner_name": "Computer Engineering B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 30",
+        "MATH 19A",
+        "College 1"
+      ],
+      [
+        "CSE 12",
+        "MATH 19B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CSE 16"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CSE 13S",
+        "WRIT 2"
+      ],
+      [
+        "AM 10"
+      ],
+      [
+        "CSE 101"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Breadth",
+        "Elective"
+      ],
+      [
+        "Breadth",
+        "Elective"
+      ],
+      [
+        "Breadth"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "DC elective"
+      ],
+      [],
+      [
+        "Elective capstone"
+      ],
+      []
+    ],
+    "planner_name": "Computer Science B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 20",
+        "MATH 3"
+      ],
+      [
+        "CSE 30",
+        "MATH 19A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CSE 12",
+        "MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CSE 13S",
+        "WRIT 2"
+      ],
+      [
+        "AM 10",
+        "CSE 16"
+      ],
+      [
+        "CSE 101"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Breadth",
+        "Elective"
+      ],
+      [
+        "Breadth",
+        "Elective"
+      ],
+      [
+        "Breadth"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "DC elective"
+      ],
+      [],
+      [
+        "Capstone Elective"
+      ],
+      []
+    ],
+    "planner_name": "Computer Science B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 12",
+        "AM 10"
+      ],
+      [
+        "CSE 101"
+      ],
+      [
+        "Breadth"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Breadth",
+        "Elective"
+      ],
+      [
+        "Breadth",
+        "Elective"
+      ],
+      [
+        "DC elective",
+        "Capstone Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Computer Science B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 30",
+        "MATH 19A",
+        "College 1"
+      ],
+      [
+        "CSE 12",
+        "MATH 19B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CSE 16",
+        "AM 10"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CSE 13S",
+        "AM 30",
+        "WRIT 2"
+      ],
+      [
+        "CSE 101",
+        "CSE 107"
+      ],
+      [
+        "CSE 101M",
+        "ECE 30"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CSE 102",
+        "CSE 120"
+      ],
+      [
+        "CSE 130",
+        "Elective"
+      ],
+      [
+        "CSE 103"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Elective",
+        "DC elective"
+      ],
+      [
+        "CSE 114A"
+      ],
+      [
+        "Capstone elective"
+      ],
+      []
+    ],
+    "planner_name": "Computer Science B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 20",
+        "MATH 3"
+      ],
+      [
+        "CSE 30",
+        "MATH 19A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CSE 12",
+        "MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CSE 13S",
+        "WRIT 2",
+        "CSE 16"
+      ],
+      [
+        "AM 10",
+        "CSE 101"
+      ],
+      [
+        "AM 30",
+        "CSE 101M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CSE 120",
+        "CSE 114A"
+      ],
+      [
+        "CSE 102",
+        "CSE 107"
+      ],
+      [
+        "CSE 103",
+        "ECE 30"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CSE 130",
+        "DC Elective"
+      ],
+      [
+        "Elective",
+        "Elective"
+      ],
+      [
+        "Capstone elective"
+      ],
+      []
+    ],
+    "planner_name": "Computer Science B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 12",
+        "AM 30",
+        "STAT 131"
+      ],
+      [
+        "CSE 101",
+        "CSE 120"
+      ],
+      [
+        "CSE 101M",
+        "CSE 130"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CSE 103",
+        "CSE 114A DC Elective"
+      ],
+      [
+        "CSE 102",
+        "Elective"
+      ],
+      [
+        "Elective",
+        "Capstone elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Computer Science B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 20",
+        "MATH 3",
+        "College Core"
+      ],
+      [
+        "CSE 30",
+        "MATH 19A",
+        "College Writing Requirement",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CSE 12",
+        "MATH 19B",
+        "CMPM 80J"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CMPM 80K",
+        "ECE 13 or CSE 13S",
+        "CSE 16",
+        "WRIT 2"
+      ],
+      [
+        "FILM 80V",
+        "MATH 21 or AM 10",
+        "CSE 101"
+      ],
+      [
+        "CMPM 120"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CMPM 176",
+        "CMPM 121"
+      ],
+      [
+        "CMPM 130",
+        "Game Engineering Elective"
+      ],
+      [
+        "Game Engineering Elective",
+        "Game Engineering Elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CMPM 170",
+        "Game Engineering Elective"
+      ],
+      [
+        "CMPM 171",
+        "Game Engineering Elective"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Computer Science: Computer Game Design B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "College 1"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "CRES 10",
+        "WRIT 2"
+      ],
+      [
+        "CRES 100"
+      ],
+      [
+        "CRES 101",
+        "CRES elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CRES elective"
+      ],
+      [
+        "CRES elective",
+        "CRES elective"
+      ],
+      [
+        "CRES elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CRES elective"
+      ],
+      [
+        "CRES 190"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Critical Race and Ethnic Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "CRES 10"
+      ],
+      [
+        "CRES 100",
+        "CRES elective"
+      ],
+      [
+        "CRES 101",
+        "CRES elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CRES elective",
+        "CRES elective"
+      ],
+      [
+        "CRES elective",
+        "CRES elective"
+      ],
+      [
+        "CRES 190"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Critical Race and Ethnic Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "sr thesis only EART 199"
+      ],
+      [
+        "sr thesis only EART 199"
+      ],
+      [
+        "EART 195"
+      ]
+    ],
+    "Year 2": [
+      [
+        "EART 110A",
+        "MATH 23A or EART 111"
+      ],
+      [
+        "EART 110B & EART 110M",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "PHYS 6B & PHYS 6M"
+      ]
+    ],
+    "Year 3": [
+      [
+        "EART elective"
+      ],
+      [
+        "EART elective"
+      ],
+      [
+        "EART 110C & EART 110N",
+        "EART elective"
+      ]
+    ],
+    "Year 4": [
+      [
+        "EART elective"
+      ],
+      [
+        "EART elective"
+      ],
+      [
+        "EART 189A or senior thesis"
+      ]
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "EART 111",
+        "EART 110A"
+      ],
+      [
+        "PHYS 6A & PHYS 6L",
+        "EART 110B & EART 110M"
+      ],
+      [
+        "PHYS 6B & PHYS 6M",
+        "EART 110C & EART 110N"
+      ]
+    ],
+    "Year 2": [
+      [
+        "EART elective",
+        "EART elective"
+      ],
+      [
+        "EART elective",
+        "EART elective"
+      ],
+      [
+        "EART elective",
+        "EART elective"
+      ]
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "Geology elective",
+        "EART 110A"
+      ],
+      [
+        "PHYS 6A & PHYS 6L",
+        "EART 110B & EART 110M"
+      ],
+      [
+        "PHYS 6B & PHYS 6M",
+        "EART 109 & EART 109L"
+      ]
+    ],
+    "Year 2": [
+      [
+        "EART 150 & EART 150L"
+      ],
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      [
+        "EART 120 & EART 120L",
+        "EART 110C & EART 110N"
+      ]
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "CHEM 3A"
+      ],
+      [
+        "MATH 19B",
+        "CHEM 3B & CHEM 3BL",
+        "EART 10 & EART 10L",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "EART 110A",
+        "MATH 23A or EART 111",
+        "WRIT 2"
+      ],
+      [
+        "EART 110B & EART 110M",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "EART 110C & EART 110N",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "EART 160",
+        "EART 119A"
+      ],
+      [
+        "EART elective"
+      ],
+      [
+        "EART elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Sr thesis only EART 199"
+      ],
+      [
+        "Sr thesis only EART 199",
+        "EART 162"
+      ],
+      [
+        "Sr thesis EART 195 or EART 189A",
+        "EART elective"
+      ],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "EART 160",
+        "EART 110A"
+      ],
+      [
+        "PHYS 6A & PHYS 6L",
+        "EART 110B & EART 110M"
+      ],
+      [
+        "PHYS 6B & PHYS 6M",
+        "EART 110C & EART 110N"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "EART 111",
+        "EART 119A"
+      ],
+      [
+        "EART 162",
+        "EART elective"
+      ],
+      [
+        "EART elective",
+        "EART elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A"
+      ],
+      [
+        "CHEM 3B & CHEM 3 BL",
+        "MATH 11A or MATH 19A",
+        "EART 10 & EART 10L",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "MATH 11B or MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "EART 110A",
+        "BIOE 20C",
+        "WRIT 2"
+      ],
+      [
+        "EART 110B & EART 110M",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "EART 110C & EART 110N",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "EART elective",
+        "MATH 23A or EART 111"
+      ],
+      [
+        "OCEA 101",
+        "EART elective"
+      ],
+      [
+        "EART elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Sr thesis only EART 199"
+      ],
+      [
+        "EART elective",
+        "Sr thesis only EART 199"
+      ],
+      [
+        "Senior thesis EART 195 or EART 189A"
+      ],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 7"
+  },
+  {
+    "Year 1": [
+      [
+        "EART 111",
+        "EART 110A"
+      ],
+      [
+        "PHYS 6A & PHYS 6L",
+        "EART 110B & EART 110M"
+      ],
+      [
+        "PHYS 6B & PHYS 6M",
+        "EART 110C & EART 110N"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "EART elective",
+        "EART elective"
+      ],
+      [
+        "EART elective",
+        "OCEA 101"
+      ],
+      [
+        "EART elective",
+        "EART 189A or senior thesis EART 195"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 8"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "College 1"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "MATH 19A",
+        "EART 10 & EART 10L",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "EART 110A",
+        "MATH 23A or EART 111",
+        "WRIT 2"
+      ],
+      [
+        "EART 110B & EART 110M",
+        "PHYS 6A & PHYS 6L",
+        "AM 10 or MATH 21"
+      ],
+      [
+        "EART 110C & EART 110N",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "EART elective",
+        "EART 119A or EART 112"
+      ],
+      [
+        "EART elective",
+        "EART 118 or EART 126 or EART 162"
+      ],
+      [
+        "EART elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EART 199 Sr thesis only"
+      ],
+      [
+        "EART 199 Sr thesis only or EART 191C"
+      ],
+      [
+        "Senior thesis EART 195"
+      ],
+      []
+    ],
+    "planner_name": "Earth Sciences B.S. Planner 9"
+  },
+  {
+    "Year 1": [
+      [
+        "ANTH 1",
+        "College 1"
+      ],
+      [
+        "ANTH 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ANTH 3",
+        "EART 20 & EART 20L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 11A or MATH 19A",
+        "ANTH elective",
+        "WRIT 2"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM"
+      ],
+      [
+        "CHEM",
+        "PHYS or BIO"
+      ],
+      [
+        "PHYS or BIO",
+        "CHEM"
+      ]
+    ],
+    "Year 3": [
+      [
+        "EART 110A",
+        "CHEM"
+      ],
+      [
+        "EART elective",
+        "PHYS or BIO"
+      ],
+      [
+        "ANTH elective",
+        "CHEM"
+      ],
+      [
+        "PHYS or BIO"
+      ]
+    ],
+    "Year 4": [
+      [
+        "ANTH elective",
+        "Sr comp"
+      ],
+      [
+        "EART elective",
+        "Sr comp"
+      ],
+      [
+        "ANTH elective",
+        "Sr comp"
+      ],
+      []
+    ],
+    "planner_name": "Anthropology Combined Major B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "ANTH 1",
+        "EART 5 & EART 5L"
+      ],
+      [
+        "EART elective",
+        "ANTH elective"
+      ],
+      [
+        "EART elective",
+        "ANTH elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ANTH elective",
+        "EART 110A"
+      ],
+      [
+        "ANTH elective",
+        "EART elective"
+      ],
+      [
+        "ANTH 194 or ANTH 196 or EART 189A or EART 191 or sr thesis EART 195"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Anthropology Combined Major B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOE 20C",
+        "College 1"
+      ],
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B & CHEM 3BL"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOL 20A",
+        "CHEM 3C & 3CL",
+        "WRIT 2"
+      ],
+      [
+        "BIOE 20B",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "STAT 7 & STAT 7L",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "BIOE 107"
+      ],
+      [
+        "Physiology core",
+        "ECEV topical elective"
+      ],
+      [
+        "BIOE 109",
+        "Organismal core"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECEV topical elective"
+      ],
+      [
+        "ECEV topical elective",
+        "EEB general elective"
+      ],
+      [
+        "EEB general elective",
+        "EEB general elective"
+      ],
+      []
+    ],
+    "planner_name": "Ecology and Evolution B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "ECEV topical elective",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOE 107",
+        "ECEV topical elective"
+      ],
+      [
+        "BIOE 109",
+        "EEB general elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Organismal core",
+        "EEB general elective"
+      ],
+      [
+        "ECEV topical elective",
+        "EEB general elective"
+      ],
+      [
+        "Physiology core"
+      ],
+      []
+    ],
+    "planner_name": "Ecology and Evolution B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "Course",
+        "MATH 3 or AM 3",
+        "College 1"
+      ],
+      [
+        "Course",
+        "ECON 1",
+        "AM 11A/ECON 11A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Course",
+        "ECON 2",
+        "AM 11B/ECON 11B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ECON 100A",
+        "WRIT 2"
+      ],
+      [
+        "ECON 100B",
+        "STAT 17 & STAT 17L"
+      ],
+      [
+        "ECON 113"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECON elective"
+      ],
+      [
+        "ECON elective",
+        "Field Study Internship optional"
+      ],
+      [
+        "ECON elective",
+        "Field Study optional"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECON elective"
+      ],
+      [
+        "ECON 104 or ECON 197"
+      ],
+      [
+        "ECON elective"
+      ],
+      []
+    ],
+    "planner_name": "Economics B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "AM 11B/ECON 11B",
+        "ECON elective"
+      ],
+      [
+        "ECON 100A"
+      ],
+      [
+        "ECON 100B",
+        "ECON elective",
+        "STAT 17 & STAT 17L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECON 113",
+        "ECON elective"
+      ],
+      [
+        "ECON elective",
+        "ECON 104 or ECON 197 DC"
+      ],
+      [
+        "Field Study optional",
+        "ECON elective"
+      ],
+      []
+    ],
+    "planner_name": "Economics B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "College 1"
+      ],
+      [
+        "MATH 19B",
+        "ECON 1",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ECON 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 23A",
+        "MATH 21",
+        "WRIT 2"
+      ],
+      [
+        "ECON 100A",
+        "MATH 23B"
+      ],
+      [
+        "ECON 100B",
+        "MATH 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 105A",
+        "STAT 17 & STAT 17L"
+      ],
+      [
+        "ECON 113",
+        "Math elective"
+      ],
+      [
+        "Econ elective",
+        "Math elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Econ elective"
+      ],
+      [
+        "Math elective",
+        "ECON 104 or ECON 197"
+      ],
+      [
+        "Field Study optional"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Combined B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECON 100A",
+        "MATH 23B"
+      ],
+      [
+        "ECON 100B",
+        "MATH 21",
+        "STAT 17 & STAT 17L"
+      ],
+      [
+        "ECON 113",
+        "MATH 100"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 105A",
+        "Math elective"
+      ],
+      [
+        "Econ elective",
+        "ECON 104 or ECON 197"
+      ],
+      [
+        "Econ elective",
+        "Math elective"
+      ],
+      [
+        ""
+      ]
+    ],
+    "planner_name": "Mathematics Combined B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "EDUC 60",
+        "College 1"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "EDUC 10"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "WRIT 2"
+      ],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "EDUC 180"
+      ],
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC elective"
+      ],
+      [
+        "EDUC 190"
+      ],
+      [
+        ""
+      ]
+    ],
+    "planner_name": "Education\", Democracy,\" and Justice B.A. Planner 1\"\"\""
+  },
+  {
+    "Year 1": [
+      [
+        "EDUC 10"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "EDUC 60"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "WRIT 2"
+      ],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC 110"
+      ],
+      [
+        "EDUC elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC elective"
+      ],
+      [
+        "EDUC 190"
+      ],
+      [
+        ""
+      ]
+    ],
+    "planner_name": "Education\", Democracy,\" and Justice B.A. Planner 2\"\"\""
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "EDUC 60",
+        "EDUC elective"
+      ],
+      [
+        "EDUC 180"
+      ],
+      [
+        "EDUC 10",
+        "EDUC elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC 190"
+      ],
+      [
+        ""
+      ]
+    ],
+    "planner_name": "Education\", Democracy,\" and Justice B.A. Planner 3\"\"\""
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "EDUC 10",
+        "EDUC elective"
+      ],
+      [
+        "EDUC 110"
+      ],
+      [
+        "EDUC 60",
+        "EDUC elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC elective",
+        "EDUC elective"
+      ],
+      [
+        "EDUC 190"
+      ],
+      []
+    ],
+    "planner_name": "Education\", Democracy,\" and Justice B.A. Planner 4\"\"\""
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "CSE 12",
+        "College 1"
+      ],
+      [
+        "MATH 19B",
+        "PHYS 5A & PHYS 5L",
+        "ECE 80T",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "AM 10",
+        "PHYS 5B & PHYS 5M",
+        "ECE 13"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 23A",
+        "CSE 100 & CSE 100L",
+        "PHYS 5C & PHYS 5N",
+        "WRIT 2"
+      ],
+      [
+        "ECE 101 & ECE 101L",
+        "AM 20"
+      ],
+      [
+        "MATH 23B",
+        "ECE 103 & ECE 103L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "STAT 131",
+        "ECE 171 & ECE 171L",
+        "PHYS 5D"
+      ],
+      [
+        "Design elective",
+        "ECE 151"
+      ],
+      [
+        "Upper-division elective",
+        "ECE 135 & ECE 135L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECE 129A",
+        "ECE 102 & ECE 102L"
+      ],
+      [
+        "ECE 129B",
+        "Upper-division elective"
+      ],
+      [
+        "ECE 129C",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "planner_name": "Electrical Engineering B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "ECE 101 & ECE 101L",
+        "CSE 100 & CSE 100L",
+        "PHYS 5D or MATH 23B"
+      ],
+      [
+        "ECE 171 & ECE 171L",
+        "STAT 131",
+        "ECE 13 or MATH 23B"
+      ],
+      [
+        "ECE 103 & ECE 103L",
+        "Design elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ECE 129A",
+        "ECE 102 & ECE 102L"
+      ],
+      [
+        "ECE 129B",
+        "ECE 151"
+      ],
+      [
+        "ECE 129C",
+        "ECE 135 & ECE 135L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Electrical Engineering B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "ESCI 30",
+        "ESCI 160"
+      ],
+      [
+        "ENVS 25",
+        "ESCI 100A"
+      ],
+      [
+        "ESCI 100B",
+        "EART 20 & EART 20L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      [
+        "ESCI 191 or ESCI 195",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "planner_name": "Environmental Sciences B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3"
+      ],
+      [
+        "SOC/ANTH/PHIL course",
+        "ENVS 25",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ENVS 23"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "Upper-division ENVS"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division ENVS social science"
+      ],
+      [
+        "Upper-division ENVS natural science"
+      ],
+      [
+        "Upper-division ENVS"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division ENVS"
+      ],
+      [
+        "Upper-division ENVS"
+      ],
+      [
+        "Upper-division ENVS",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "Upper-division ENVS"
+      ],
+      [
+        "Upper-division ENVS",
+        "Upper-division ENVS social science"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division ENVS",
+        "Upper-division ENVS"
+      ],
+      [
+        "Upper-division ENVS",
+        "Upper-division ENVS natural science"
+      ],
+      [
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3"
+      ],
+      [
+        "ENVS 25",
+        "SOC/ANTH/PHIL course",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ENVS 23"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "ENVS upper-division"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ENVS 115A & ENVS 115L"
+      ],
+      [
+        "ENVS 115B"
+      ],
+      [
+        "ENVS 115C"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ENVS upper-division social science"
+      ],
+      [
+        "ENVS upper-division natural science"
+      ],
+      [
+        "ENVS upper-division",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "ENVS upper-division social science"
+      ],
+      [
+        "ENVS upper-division",
+        "ENVS upper-division natural science"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 115A & ENVS 115L"
+      ],
+      [
+        "ENVS 115B",
+        "ENVS upper-division"
+      ],
+      [
+        "ENVS 115C",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3"
+      ],
+      [
+        "ENVS 25",
+        "SOC/ANTH/PHIL course",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ENVS 23"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "ENVS 147 or ENVS 172"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ENVS 158 or ENVS 173"
+      ],
+      [
+        "ENVS upper-division concentration elective"
+      ],
+      [
+        "ENVS upper-division concentration elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ENVS upper-division natural science"
+      ],
+      [
+        "ENVS upper-division"
+      ],
+      [
+        "ENVS upper-division",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "ENVS 147 or ENVS 172"
+      ],
+      [
+        "ENVS upper-division concentration elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 158 or ENVS 173",
+        "ENVS upper-division natural science"
+      ],
+      [
+        "ENVS upper-division concentration elective",
+        "ENVS upper-division"
+      ],
+      [
+        "ENVS upper-division",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "College 1"
+      ],
+      [
+        "ENVS 25",
+        "SOC/ANTH/PHIL course",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ENVS 23"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "ENVS 140 or ENVS 150"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ENVS 120 or ENVS 160"
+      ],
+      [
+        "ENVS upper-division concentration elective"
+      ],
+      [
+        "ENVS upper-division concentration elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ENVS upper-division"
+      ],
+      [
+        "ENVS upper-division field course"
+      ],
+      [
+        "ENVS upper-division",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 7"
+  },
+  {
+    "Year 1": [
+      [
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "ENVS 140 or ENVS 150",
+        "ENVS upper-division concentration elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 120 or ENVS 160",
+        "ENVS upper-division field course"
+      ],
+      [
+        "ENVS upper-division concentration elective",
+        "ENVS upper-division"
+      ],
+      [
+        "ENVS upper-division",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Environmental Studies B.A. Planner 8"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "College 1"
+      ],
+      [
+        "CHEM 3A",
+        "ENVS 25",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3B/CHEM 3L",
+        "SOCY/ANTH/PHIL course"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "BIOL 20A"
+      ],
+      [
+        "BIOE 20B",
+        "CHEM 3C"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "Upper-division ENVS"
+      ],
+      [
+        "BIOE 109",
+        "PHYS 1"
+      ],
+      [
+        "Upper-division BIOE",
+        "Upper-division ENVS"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division BIOE",
+        "Upper-division ENVS social sciences"
+      ],
+      [
+        "Upper-division BIOE"
+      ],
+      [
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Biology Combined Major B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "BIOL 105"
+      ],
+      [
+        "Upper-division ENVS",
+        "BIOE 109"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division ENVS social sciences",
+        "Upper-division BIOE"
+      ],
+      [
+        "Upper-division ENVS",
+        "Upper-division BIOE"
+      ],
+      [
+        "Upper-division BIOE",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Biology Combined Major B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "College 1"
+      ],
+      [
+        "ENVS 25",
+        "EART 5 & EART 5L",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3A",
+        "SOCY/ANTH/PHIL course"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "STAT 7 & STAT 7L",
+        "WRIT 2"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "MATH 11A"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "PHYS 6A & PHYS 6L or PHYS 5A & PHYS 5L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CHEM 3C",
+        "MATH 11B"
+      ],
+      [
+        "Upper-division ENVS",
+        "EART 110B & EART 110M"
+      ],
+      [
+        "PHYS 6B & PHYS 6M or PHYS 5B & PHYS 5M",
+        "Upper-division ENVS"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division EART",
+        "Upper-division ENVS social sciences"
+      ],
+      [
+        "Upper-division EART"
+      ],
+      [
+        "Upper-division EART",
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Earth Sciences Combined Major B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "STAT 7 & STAT 7L",
+        "MATH 11B"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "EART 110B & EART 110M"
+      ],
+      [
+        "Upper-division EART",
+        "Upper-division ENVS"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division ENVS",
+        "Upper-division EART"
+      ],
+      [
+        "Upper-division ENVS social sciences",
+        "Upper-division EART"
+      ],
+      [
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Earth Sciences Combined Major B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "College 1"
+      ],
+      [
+        "ENVS 25",
+        "ECON 1",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ENVS 23",
+        "ECON 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ENVS 24 or BIOE 20C",
+        "AM 11A",
+        "WRIT 2"
+      ],
+      [
+        "STAT 7 & STAT 7L",
+        "AM 11B"
+      ],
+      [
+        "SOCY/ANTH/PHIL course",
+        "ECON 100A or ECON 100M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECON 113"
+      ],
+      [
+        "ENVS 100 & ENVS 100L",
+        "Upper-division ECON"
+      ],
+      [
+        "Upper-division ENVS natural science",
+        "Upper-division ECON"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division ENVS",
+        "Upper-division ECON"
+      ],
+      [
+        "Upper-division ENVS"
+      ],
+      [
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Economics Combined Major B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECON 100A or ECON 100M",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "ECON 113",
+        "ENVS 100 & ENVS 100L"
+      ],
+      [
+        "Upper-division ENVS natural sciences",
+        "Upper-division ECON"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division ENVS",
+        "Upper-division ECON"
+      ],
+      [
+        "Upper-division ENVS",
+        "Upper-division ECON"
+      ],
+      [
+        "Comprehensive requirement"
+      ],
+      []
+    ],
+    "planner_name": "Economics Combined Major B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "College 1"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "FMST 1",
+        "WRIT 2"
+      ],
+      [
+        "FMST 100"
+      ],
+      [
+        "FMST lower-division core"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "FMST elective"
+      ],
+      [
+        "FMST elective",
+        "FMST elective"
+      ],
+      [
+        "FMST elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FMST elective",
+        "FMST elective"
+      ],
+      [
+        "FMST 194 or FMST 195"
+      ],
+      [
+        "FMST elective"
+      ],
+      []
+    ],
+    "planner_name": "Feminist Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "FMST 1",
+        "FMST lower-division core",
+        "FMST elective"
+      ],
+      [
+        "FMST 100"
+      ],
+      [
+        "FMST elective",
+        "FMST elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FMST elective"
+      ],
+      [
+        "FMST elective"
+      ],
+      [
+        "FMST 194 or 195"
+      ],
+      []
+    ],
+    "planner_name": "Feminist Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "FILM 20A"
+      ],
+      [
+        "FILM 20B or FILM 20C or FILM 20P",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "FILM 20B or FILM 20C or FILM 20P"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "WRIT 2"
+      ],
+      [
+        "FILM 120"
+      ],
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FILM upper-division elective diversity requirement"
+      ],
+      [
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM 194 or FILM 196 or FILM 197"
+      ],
+      []
+    ],
+    "planner_name": "Film and Digital Media B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "FILM 80"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "FILM 20B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "FILM 20A",
+        "WRIT 2"
+      ],
+      [
+        "FILM 20C"
+      ],
+      [
+        "FILM 120",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FILM upper-division elective diversity requirement"
+      ],
+      [
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM 194 or FILM 196 or FILM 197"
+      ],
+      []
+    ],
+    "planner_name": "Film and Digital Media B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "FILM 20A",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      [
+        "FILM 20C",
+        "FILM 120",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      [
+        "FILM 20B",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FILM upper-division elective",
+        "FILM upper-division elective diversity requirement"
+      ],
+      [
+        "FILM upper-division elective",
+        "FILM upper-division elective"
+      ],
+      [
+        "FILM upper-division elective",
+        "FILM 194 or FILM 196 or FILM 197"
+      ],
+      []
+    ],
+    "planner_name": "Film and Digital Media B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "FILM 20A",
+        "College 1"
+      ],
+      [
+        "FILM 20C",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "FILM 20B or FILM 20P"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "WRIT 2"
+      ],
+      [
+        "FILM 120"
+      ],
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "FILM 170A or FILM 170B"
+      ],
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      [
+        "FILM upper-division elective diversity requirement",
+        "FILM upper-division production"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FILM upper-division production",
+        "FILM 194"
+      ],
+      [
+        "FILM 199",
+        "FILM upper-division production"
+      ],
+      [
+        "FILM 195 or FILM 196 or FILM 197"
+      ],
+      []
+    ],
+    "planner_name": "Film and Digital Media B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "FILM 80"
+      ],
+      [
+        "FILM 20B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "FILM 20C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "FILM 20A",
+        "WRIT 2"
+      ],
+      [
+        "FILM 120",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division elective diversity requirement"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "FILM 170A or FILM 170B"
+      ],
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      [
+        "FILM upper-division elective",
+        "FILM upper-division production"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FILM upper-division production",
+        "FILM 194"
+      ],
+      [
+        "FILM upper-division production",
+        "FILM 199"
+      ],
+      [
+        "FILM 195 or FILM 196 or FILM 197"
+      ],
+      []
+    ],
+    "planner_name": "Film and Digital Media B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "FILM 20A",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136"
+      ],
+      [
+        "FILM 20C",
+        "FILM 120",
+        "FILM 170A or FILM 170B"
+      ],
+      [
+        "FILM 20B",
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division production"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "FILM 130 or FILM 132 or FILM 134 or FILM 136",
+        "FILM upper-division production"
+      ],
+      [
+        "FILM upper-division elective",
+        "FILM upper-division production"
+      ],
+      [
+        "FILM upper-division elective diversity requirement",
+        "FILM 195 or FILM 196 or FILM 197"
+      ],
+      []
+    ],
+    "planner_name": "Film and Digital Media B.A. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "GCH 1",
+        "College 1"
+      ],
+      [
+        "Lower-Div GCH Competency 1",
+        "Lower-Div GCH Competency 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Lower-Div GCH Competency 3",
+        "Lower-Div GCH Competency 4"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Social Analysis for GCH Req",
+        "WRIT 2"
+      ],
+      [
+        "Upper-Div GCH Area"
+      ],
+      [
+        "Upper-Div GCH Area"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-Div GCH Area"
+      ],
+      [
+        "Upper-Div GCH Area"
+      ],
+      [
+        "Upper-Div GCH Area"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CMMU 165",
+        "Upper-Div GCH Area"
+      ],
+      [
+        "GCH 190 or GCH 199A"
+      ],
+      [
+        "GCH 195"
+      ],
+      []
+    ],
+    "planner_name": "Global and Community Health B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "GCH 1",
+        "Lower-Div GCH Competency 1",
+        "Lower-Div GCH Competency 2"
+      ],
+      [
+        "Lower-Div GCH Competency 3",
+        "Lower-Div GCH Competency 4",
+        "Upper Div GCH Area"
+      ],
+      [
+        "Upper-Div GCH Area",
+        "Upper-Div GCH Area",
+        "Upper-Div GCH Area"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "CMMU 165",
+        "Social Analysis for GCH Req"
+      ],
+      [
+        "GCH 190 or GCH 199A",
+        "Upper-Div GCH Area"
+      ],
+      [
+        "GCH 195"
+      ],
+      []
+    ],
+    "planner_name": "Global and Community Health B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 11A"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "MATH 11B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "BIOL 20A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "GCH 1",
+        "CHEM 8A & CHEM 8L",
+        "WRIT 2"
+      ],
+      [
+        "BIOL 20L",
+        "CHEM 8B & CHEM 8M"
+      ],
+      [
+        "BIOL 100",
+        "STAT 7 & STAT 7L",
+        "METX 115"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "SPAN 1",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "BIOL 101",
+        "PHYS 6B",
+        "SPAN 2"
+      ],
+      [
+        "BIOL 110",
+        "SPAN 3",
+        "BIOL 113"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOL 130 & BIOL 130L",
+        "SPAN 4"
+      ],
+      [
+        "GCH 195",
+        "SPAN 5M"
+      ],
+      [
+        "BIOL 189",
+        "GCH 190"
+      ],
+      []
+    ],
+    "planner_name": "Global and Community Health B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "GCH 1",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "BIOL 100",
+        "PHYS 6B",
+        "SPAN 1 STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOL 101",
+        "METX115",
+        "SPAN 2 PHYS 6C"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOL 110"
+      ],
+      [
+        "BIOL 130 & BIOL 130L",
+        "SPAN 4"
+      ],
+      [
+        "SPAN 5M",
+        "BIOL 189"
+      ],
+      []
+    ],
+    "planner_name": "Global and Community Health B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 11A",
+        "College 1"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "MATH 11B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "BIOL 20A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "BIOL 20L",
+        "GCH 1",
+        "WRIT 2"
+      ],
+      [
+        "METX 41",
+        "CHEM 8A & CHEM 8L"
+      ],
+      [
+        "CHEM 8B & CHEM 8M",
+        "Lower-Division Breadth"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "NON-STEM Elective 1",
+        "BIOL 100",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "CMMU 165",
+        "STEM Elective"
+      ],
+      [
+        "BIOL 113",
+        "METX 115",
+        "GCH 195"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "GCH 190"
+      ],
+      [
+        "Non-STEM Elective 2"
+      ],
+      [
+        "BIOL 189"
+      ],
+      []
+    ],
+    "planner_name": "Global and Community Health B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 100",
+        "GCH 1"
+      ],
+      [
+        "METX 41",
+        "STAT 7 & STAT 7L",
+        "NON-STEM Elective 1"
+      ],
+      [
+        "METX 115",
+        "NON-STEM Elective 2",
+        "BIOL 113"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "STEM Elective"
+      ],
+      [
+        "CMMU 165"
+      ],
+      [
+        "BIOL 189"
+      ],
+      []
+    ],
+    "planner_name": "Global and Community Health B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3 or AM 3",
+        "Language",
+        "College 1"
+      ],
+      [
+        "ECON 1",
+        "AM 11A/ECON 11A",
+        "Language",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ECON 2",
+        "AM 11B/ECON 11B",
+        "Language"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "ECON 100A",
+        "Language",
+        "WRIT 2"
+      ],
+      [
+        "ECON 100B",
+        "STAT 17 & STAT 17L",
+        "Language"
+      ],
+      [
+        "ECON 113",
+        "Language"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Study abroad for at least one quarter Students can apply up to two courses from study abroad toward major requirements Could be upper-division ECON electives or Area Studies or a combination of both"
+      ],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECON elective",
+        "ECON elective"
+      ],
+      [
+        "ECON 104 or ECON 197",
+        "ECON elective"
+      ],
+      [
+        "ECON elective",
+        "Field Study optional"
+      ],
+      []
+    ],
+    "planner_name": "Global Economics B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "Lower-division survey"
+      ],
+      [
+        "concentration",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Lower-division breadth area No 1"
+      ],
+      [
+        "Lower-division breadth area No 2"
+      ]
+    ],
+    "Year 2": [
+      [
+        "Lower-division concentration"
+      ],
+      [
+        "HIS 100",
+        "WRIT 2"
+      ],
+      [
+        "Upper-division breadth area No 1"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division concentration"
+      ],
+      [
+        "Upper-division breadth area No 2"
+      ],
+      [
+        "Upper-division concentration"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division concentration"
+      ],
+      [
+        "Exit seminar"
+      ],
+      [
+        "concentration"
+      ],
+      [
+        "Upper-division elective any"
+      ]
+    ],
+    "planner_name": "History B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "Lower-division survey"
+      ],
+      [
+        "concentration",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Lower-division breadth area No 1"
+      ],
+      [
+        "Lower-division breadth area No 2"
+      ]
+    ],
+    "Year 2": [
+      [
+        "Lower-division concentration",
+        "WRIT 2"
+      ],
+      [
+        "HIS 100",
+        "Upper-division concentration"
+      ],
+      [
+        "Upper-division breadth area No 1",
+        "Upper-division concentration"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division concentration"
+      ],
+      [
+        "Exit seminar"
+      ],
+      [
+        "concentration",
+        "Upper-division elective any"
+      ],
+      [
+        "Upper-division breadth area No 2"
+      ]
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "History B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "HIS 100",
+        "Upper-division concentration"
+      ],
+      [
+        "Lower-division concentration",
+        "Upper-division breadth area No 1"
+      ],
+      [
+        "Upper-division concentration",
+        "Upper-division breadth area No 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division concentration"
+      ],
+      [
+        "Exit seminar"
+      ],
+      [
+        "concentration"
+      ],
+      [
+        "Upper-division elective any"
+      ]
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "History B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "Lower-division survey",
+        "Language 1",
+        "College 1"
+      ],
+      [
+        "concentration",
+        "Language 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Lower-division breadth area No 1",
+        "Language 3"
+      ],
+      [
+        "Lower-division breadth area No 2"
+      ]
+    ],
+    "Year 2": [
+      [
+        "Lower-division concentration",
+        "WRIT 2"
+      ],
+      [
+        "HIS 100"
+      ],
+      [
+        "Upper-division breadth area No 1"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division concentration"
+      ],
+      [
+        "Upper-division breadth area No 2",
+        "Upper-division concentration"
+      ],
+      [
+        "Upper-division concentration"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Exit seminar"
+      ],
+      [
+        "concentration",
+        "Upper-division elective any"
+      ],
+      [
+        "Research course",
+        "Upper-division elective any"
+      ],
+      [
+        "Research course"
+      ]
+    ],
+    "planner_name": "History B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "HIS 100",
+        "Upper-division concentration",
+        "Language 1"
+      ],
+      [
+        "Lower-division concentration",
+        "Upper-division breadth area No 1",
+        "Language 2"
+      ],
+      [
+        "Upper-division concentration",
+        "Upper-division breadth area No 2",
+        "Language 3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division concentration",
+        "Exit seminar"
+      ],
+      [
+        "Research course",
+        "concentration"
+      ],
+      [
+        "Research course",
+        "Upper-division elective any"
+      ],
+      [
+        "Upper-division elective any"
+      ]
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "History B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "HAVC LD regional requirement"
+      ],
+      [
+        "HAVC LD regional requirement",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "HAVC LD regional requirement"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "HAVC LD regional requirement",
+        "WRIT 2"
+      ],
+      [
+        "HAVC 100A"
+      ],
+      [
+        "HAVC UD regional requirement"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "HAVC UD regional requirement"
+      ],
+      [
+        "HAVC UD any region"
+      ],
+      [
+        "HAVC UD any region"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "HAVC UD any region",
+        "HAVC seminar"
+      ],
+      [
+        "HAVC UD any region"
+      ],
+      [
+        "HAVC UD any region"
+      ],
+      []
+    ],
+    "planner_name": "History of Art and Visual Culture B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "HAVC LD regional requirement",
+        "HAVC LD regional requirement"
+      ],
+      [
+        "HAVC 100A",
+        "HAVC LD regional requirement"
+      ],
+      [
+        "HAVC LD regional requirement",
+        "HAVC UD regional requirement",
+        "HAVC UD any region"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "HAVC UD regional requirement",
+        "HAVC seminar"
+      ],
+      [
+        "HAVC UD any region",
+        "HAVC UD any region"
+      ],
+      [
+        "HAVC UD any region",
+        "HAVC UD any region"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "History of Art and Visual Culture B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "HAVC LD regional requirement",
+        "College 1"
+      ],
+      [
+        "HAVC LD regional requirement",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "HAVC LD regional requirement"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "HAVC LD regional requirement",
+        "WRIT 2"
+      ],
+      [
+        "HAVC 100A"
+      ],
+      [
+        "HAVC UD CHM course"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "HAVC UD regional requirement"
+      ],
+      [
+        "HAVC UD regional requirement"
+      ],
+      [
+        "HAVC UD CHM course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "HAVC UD CHM course",
+        "HAVC seminar"
+      ],
+      [
+        "HAVC UD CHM course"
+      ],
+      [
+        "HAVC UD any region"
+      ],
+      []
+    ],
+    "planner_name": "History of Art and Visual Culture B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "HAVC LD regional requirement",
+        "HAVC LD regional requirement"
+      ],
+      [
+        "HAVC 100A",
+        "HAVC LD regional requirement"
+      ],
+      [
+        "HAVC LD regional requirement",
+        "HAVC UD regional requirement",
+        "HAVC UD CHM course"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "HAVC UD regional requirement",
+        "HAVC UD CHM course"
+      ],
+      [
+        "HAVC UD CHM course",
+        "HAVC UD any region"
+      ],
+      [
+        "HAVC UD CHM course",
+        "HAVC seminar"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "History of Art and Visual Culture B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 1A",
+        "MATH 11A"
+      ],
+      [
+        "CHEM 1B & CHEM 1M",
+        "MATH 11B"
+      ],
+      [
+        "CHEM 1C & CHEM 1N",
+        "BIOL 20A"
+      ]
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "BIOL 20L",
+        "CHEM 8A & CHEM 8L"
+      ],
+      [
+        "BIOL 100",
+        "CHEM 8B & CHEM 8M"
+      ],
+      [
+        "BIOL 101",
+        "BIOL 105"
+      ]
+    ],
+    "Year 3": [
+      [
+        "BIOL 110",
+        "SPAN 1",
+        "STAT 5 or STAT 7 & STAT 7L"
+      ],
+      [
+        "SPAN 2",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "SPAN 3",
+        "PHYS 6B or PHYS 6C"
+      ]
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective",
+        "SPAN 4"
+      ],
+      [
+        "BIOL 130 & BIOL 130L",
+        "SPAN 5M"
+      ],
+      [
+        "BIOL 189",
+        "BIOL 189W"
+      ]
+    ],
+    "planner_name": "Human Biology B.S. (Discontinued) Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "SPAN 1"
+      ],
+      [
+        "BIOL 100",
+        "PHYS 6A & PHYS 6L",
+        "SPAN 2"
+      ],
+      [
+        "BIOL 101",
+        "PHYS 6B or PHYS 6C SPAN 3"
+      ]
+    ],
+    "Year 4": [
+      [
+        "BIOL 110",
+        "Upper-division elective"
+      ],
+      [
+        "BIOL 130 & BIOL 130L",
+        "SPAN 5M"
+      ],
+      [
+        "Upper-division elective",
+        "BIOL 189"
+      ]
+    ],
+    "planner_name": "Human Biology B.S. (Discontinued) Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "Language 1",
+        "HIS 74 or HIS 74A or HIS 74B or LIT 61J",
+        "College 1"
+      ],
+      [
+        "Language 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Language 3",
+        "HIS 75 or HIS 76"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division core course 1",
+        "WRIT 2"
+      ],
+      [
+        "Upper-division core course 2"
+      ],
+      [
+        "Upper-division core course 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division core course 4"
+      ],
+      [
+        "Additional core or elective 1 classical requirement"
+      ],
+      [
+        "Upper-division additional core or elective 2"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper division additional core or elective 3"
+      ],
+      [
+        "Upper division additional core or elective 4"
+      ],
+      [
+        "Exit seminar or thesis DC"
+      ],
+      []
+    ],
+    "planner_name": "Jewish Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "Language 1",
+        "HIS 74 or HIS 74A or HIS 74B or LIT 61J"
+      ],
+      [
+        "Language 2",
+        "Upper-division core course",
+        "Additional core or elective 1 classical requirement"
+      ],
+      [
+        "Language 3",
+        "HIS 75 or HIS 76",
+        "Upper-division core course 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division core course 3",
+        "Upper-division additional core or elective 2"
+      ],
+      [
+        "Upper-division core course 4",
+        "Upper-division additional core or elective 3"
+      ],
+      [
+        "Upper-division additional core or elective 4",
+        "Exit seminar or thesis DC"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Jewish Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "Context 1XX upper-division elective"
+      ],
+      [
+        "Context 1XX upper-division elective or Foreign language 1XX upper-division language"
+      ],
+      [
+        "LING 190 Senior Research"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LING 53",
+        "Foreign language level 1"
+      ],
+      [
+        "LING 100",
+        "Foreign language level 2"
+      ],
+      [
+        "LING 101",
+        "Foreign language level 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Context 1XX upper-division elective",
+        "Foreign language level 4"
+      ],
+      [
+        "LING 111 or 112",
+        "Foreign language level 5"
+      ],
+      [
+        "Context 1XX upper-division elective",
+        "Foreign language level 6"
+      ],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [
+        "LING 1XX capstone course or LING 195 Senior Thesis"
+      ],
+      []
+    ],
+    "planner_name": "Language Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "Foreign language 1XX upper-division language"
+      ],
+      [
+        "Context 1XX upper-division elective",
+        "Context 1XX upper-division elective or Foreign language 1XX upper-division language"
+      ],
+      [
+        "LING 190 Senior Research",
+        "Context 1XX upper-division elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Context 1XX upper-division elective"
+      ],
+      [],
+      [
+        "LING 1XX capstone course or LING 195 Senior Thesis"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Language Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "LALS lower-division elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LALS 100",
+        "WRIT 2"
+      ],
+      [
+        "LALS 100B"
+      ],
+      [
+        "LALS 100A/LALS 100L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "LALS upper-division elective",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS upper-division elective",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS 194/LALS 194L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Possible study abroad"
+      ],
+      [
+        "research"
+      ],
+      [
+        "or additional major or minor"
+      ],
+      []
+    ],
+    "planner_name": "Latin American and Latino Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1",
+        "LALS 100"
+      ],
+      [
+        "LALS 100B",
+        "LALS lower-division elective"
+      ],
+      [
+        "LALS 100A/LALS 100L",
+        "LALS upper-division elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Possible study abroad / research"
+      ],
+      [
+        "LALS upper-division elective",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS 194/LALS 194L",
+        "LALS upper-division elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Latin American and Latino Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1",
+        "College Core Course",
+        "Language preparation if needed",
+        "College 1"
+      ],
+      [
+        "LALS lower-division elective",
+        "WRIT 1/WRIT 1E if needed",
+        "Lang prep if needed"
+      ],
+      [
+        "LALS lower-division elective",
+        "Lang prep if needed"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LALS 100",
+        "WRIT 2",
+        "Lang prep if needed"
+      ],
+      [
+        "LALS 100B",
+        "Lang prep if needed"
+      ],
+      [
+        "LALS 100A/LALS 100L",
+        "Lang prep if needed"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "LALS upper-division elective in target language",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS upper-division elective",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "LALS upper-division elective in target language",
+        "Possible study abroad / research"
+      ],
+      [],
+      [
+        "LALS 194/LALS 194L"
+      ],
+      []
+    ],
+    "planner_name": "Latin American and Latino Studies B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1",
+        "LALS 100",
+        "Language preparation if needed"
+      ],
+      [
+        "LALS 100B",
+        "LALS lower-division elective",
+        "Lang prep if needed"
+      ],
+      [
+        "LALS 100A/LALS 100L",
+        "LALS lower-division elective",
+        "Lang prep if needed"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LALS upper-division elective in target language",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS upper-division elective in target language",
+        "LALS upper-division elective"
+      ],
+      [
+        "LALS 194/LALS 194L",
+        "LALS upper-division elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Latin American and Latino Studies B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1 ER",
+        "College 1"
+      ],
+      [
+        "POLI lower-division elective",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "LALS 100 ER",
+        "WRIT 2"
+      ],
+      [
+        "LALS 100B"
+      ],
+      [
+        "LALS 100A/LALS 100L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "POLI upper-division core",
+        "LALS upper-division elective"
+      ],
+      [
+        "POLI 140C",
+        "POLI upper-division core"
+      ],
+      [
+        "POLI upper-division core",
+        "POLI upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Possible study abroad / research"
+      ],
+      [],
+      [
+        "LALS 194/LALS 194L"
+      ],
+      []
+    ],
+    "planner_name": "Politics Combined B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1 ER",
+        "LALS 100 ER"
+      ],
+      [
+        "LALS 100B",
+        "POLI 140C"
+      ],
+      [
+        "LALS 100A/LALS 100L",
+        "POLI upper-division core"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "POLI upper-division core",
+        "LALS upper-division elective"
+      ],
+      [
+        "POLI upper-division core"
+      ],
+      [
+        "POLI upper-division elective",
+        "LALS 194"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Politics Combined B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1",
+        "College 1"
+      ],
+      [
+        "SOCY 10",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "SOCY 1"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LALS 100",
+        "WRIT 2"
+      ],
+      [
+        "LALS 100B"
+      ],
+      [
+        "LALS 100A/LALS 100L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "SOCY 105A",
+        "LALS elective"
+      ],
+      [
+        "SOCY 105B",
+        "SOCY elective"
+      ],
+      [
+        "SOCY elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Possible study abroad"
+      ],
+      [
+        "research"
+      ],
+      [
+        "or additional major or minor"
+      ],
+      []
+    ],
+    "planner_name": "Sociology Combined B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "LALS 1",
+        "LALS 100"
+      ],
+      [
+        "LALS 100B",
+        "SOCY 105A"
+      ],
+      [
+        "LALS 100A/LALS 100L",
+        "SOCY 105B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "SOCY elective",
+        "LALS elective"
+      ],
+      [
+        "SOCY elective"
+      ],
+      [
+        "LALS 194/LALS 194L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Sociology Combined B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [
+        "LGST 10",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Phil 9 or 22"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LGST Core - Law & Society LS",
+        "WRIT 2"
+      ],
+      [
+        "LGST Core - Theory T"
+      ],
+      [
+        "LGST  Core - Public Law & Institution PLI",
+        "POLI 160B/LGST 160B Required"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "LGST Core LS",
+        "LGST Core LS"
+      ],
+      [
+        "PLI or T",
+        "PLI or T"
+      ],
+      [
+        "POLI 111A/LGST 111A Required",
+        "LGST Core LS"
+      ],
+      [
+        "PLI or T"
+      ]
+    ],
+    "Year 4": [
+      [
+        "LGST 196 Capstone"
+      ],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Legal Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "LGST Core LS"
+      ],
+      [
+        "PLI or T"
+      ],
+      [
+        "POLI 111A/LGST 111A Required"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "LGST Core LS"
+      ],
+      [
+        "PLI or T"
+      ],
+      [
+        "LGST 196 Senior Capstone"
+      ],
+      [
+        "LGST Core LS"
+      ],
+      [
+        "PLI or T"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Legal Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "College 1",
+        "LING 50"
+      ],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "WRIT 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LING 53",
+        "Foreign language level 1"
+      ],
+      [
+        "LING 100",
+        "Foreign language level 2"
+      ],
+      [
+        "LING 101",
+        "Foreign language level 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "LING 111 or 112",
+        "Foreign language level 4"
+      ],
+      [
+        "LING 116 or LING 1XX elective",
+        "Foreign language level 5"
+      ],
+      [
+        "LING 113 or LING 1XX elective",
+        "LING 171"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "LING 102 or LING 1XX elective"
+      ],
+      [
+        "LING 1XX upper div elective"
+      ],
+      [
+        "LING 190 Senior Research"
+      ],
+      []
+    ],
+    "planner_name": "Linguistics B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "LING 50",
+        "LING 53",
+        "Foreign language level 1"
+      ],
+      [
+        "LING 111 or 112",
+        "LING 100",
+        "Foreign language level 2"
+      ],
+      [
+        "LING 101",
+        "LING 171",
+        "Foreign language level 3"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "LING 102 or LING 1XX elective",
+        "LING 1XX upper-div elective"
+      ],
+      [
+        "LING 116 or LING 1XX elective",
+        "LING 1XX upper-div elective"
+      ],
+      [
+        "LING 113 or LING 1XX elective",
+        "LING 1XX capstone course or LING 195 Senior Thesis"
+      ],
+      []
+    ],
+    "planner_name": "Linguistics B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division LIT course",
+        "Language Level 1",
+        "LIT 1"
+      ],
+      [
+        "LIT 101 if LIT 1 completed",
+        "Language Level 2"
+      ],
+      [
+        "Upper-division LIT course",
+        "Language Level 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT course global distribution requirement"
+      ],
+      [
+        "LIT 102"
+      ],
+      [
+        "Upper-division LIT course poetry/poetics distribution requirement",
+        "Upper-division LIT course pre-1750 distribution requirement"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT course pre-1750 distribution requirement"
+      ],
+      [
+        "LIT 190 senior seminar"
+      ],
+      [
+        "Upper-division LIT course"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "Upper-division LIT course"
+      ],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT course pre-1750 distribution requirement",
+        "Upper-division LIT course poetry distribution requirement"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT course global distribution requirement"
+      ],
+      [
+        "LIT 101",
+        "Upper-division LIT course pre-1750 distribution requirement"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT course"
+      ],
+      [
+        "LIT 190 senior seminar"
+      ],
+      [
+        "Upper-division LIT course"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "Upper-division LIT course"
+      ],
+      [
+        "Upper-division LIT course"
+      ],
+      [
+        "Upper-division LIT course"
+      ],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "LIT 1",
+        "LIT 60/LIT 61 or LIT 80/LIT 81",
+        "Language Level 1"
+      ],
+      [
+        "LIT 101",
+        "Upper-division LIT course pre-1750 distribution requirement",
+        "Language Level 2"
+      ],
+      [
+        "Upper-division LIT course poetry distribution requirement",
+        "Upper division LIT course global distribution requirement",
+        "Language Level 3"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT course pre-1750 distribution requirement"
+      ],
+      [
+        "LIT 102"
+      ],
+      [
+        "LIT 190 senior seminar"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division LIT course pre-1750 and poetry distribution requirements",
+        "Language Level 4",
+        "LIT 1"
+      ],
+      [
+        "LIT 101 if LIT 1 completed",
+        "Language Level 5"
+      ],
+      [
+        "Upper-division LIT course global distribution requirement",
+        "Language Level 6"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT Language course"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT Language course"
+      ],
+      [
+        "Upper-division LIT Language course pre-1750 distribution requirement"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT Language course"
+      ],
+      [
+        "Upper-division LIT Language course"
+      ],
+      [
+        "LIT 190 senior seminar"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT course pre-1750 and poetry distribution requirements",
+        "Language Level 4"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT course global distribution requirement",
+        "Language Level 5"
+      ],
+      [
+        "LIT 101",
+        "Upper-division LIT Language course",
+        "Language Level 6"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT Language course",
+        "Upper-division LIT Language course pre-1750 distribution requirement"
+      ],
+      [
+        "Upper-division LIT Language course"
+      ],
+      [
+        "Upper-division LIT Language course",
+        "LIT 190 senior seminar"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT Language course"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT Language course"
+      ],
+      [
+        "LIT 101",
+        "Upper division LIT Language course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT Language course pre-1750 distribution requirement",
+        "Upper-division LIT course"
+      ],
+      [
+        "Upper-division LIT Language course poetry distribution requirement",
+        "LIT 190 senior seminar"
+      ],
+      [
+        "Upper-division LIT course pre-1750 and global distribution requirements"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 6"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "LIT 1",
+        "Language Level 1"
+      ],
+      [
+        "LIT 101 if LIT 1 completed",
+        "Language Level 2",
+        "LIT 90 or LIT 90X"
+      ],
+      [
+        "Upper-division LIT course pre-1750 distribution requirement",
+        "Language Level 3",
+        "LIT 91A or LIT 91B"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT course global distribution requirement"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT course pre-1750 distribution requirement"
+      ],
+      [
+        "LIT 179A",
+        "Upper-division LIT course poetry/poetics distribution requirement"
+      ],
+      [
+        "LIT 179B"
+      ]
+    ],
+    "Year 4": [
+      [
+        "LIT 179A"
+      ],
+      [
+        "LIT 179B"
+      ],
+      [
+        "or LIT 179C"
+      ],
+      [
+        "LIT 179A"
+      ],
+      [
+        "LIT 179B"
+      ],
+      [
+        "or LIT 179C"
+      ],
+      [
+        "LIT 190V or LIT 190W senior seminar"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 7"
+  },
+  {
+    "Year 1": [
+      [
+        "Upper-division LIT course pre-1750 distribution requirement"
+      ],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division LIT course pre-1750 and poetry distribution requirements",
+        "Upper-division LIT course",
+        "LIT 90 or LIT 90X or LIT 91A or LIT 91B"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT course global distribution requirement"
+      ],
+      [
+        "LIT 101",
+        "LIT 179A"
+      ],
+      [
+        "LIT 179B"
+      ]
+    ],
+    "Year 4": [
+      [
+        "LIT 179A"
+      ],
+      [
+        "LIT 179B"
+      ],
+      [
+        "or LIT 179C"
+      ],
+      [
+        "LIT 179A"
+      ],
+      [
+        "LIT 179B"
+      ],
+      [
+        "or LIT 179C"
+      ],
+      [
+        "LIT 190V or LIT 190W senior seminar"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 8"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "LIT 1",
+        "LIT 90",
+        "Language Level 1"
+      ],
+      [
+        "LIT 60/61 or LIT 80/81",
+        "LIT 91A or LIT 91B",
+        "Language Level 2"
+      ],
+      [
+        "LIT 101",
+        "LIT 179A",
+        "Language Level 3"
+      ],
+      [
+        "LIT 179B"
+      ]
+    ],
+    "Year 4": [
+      [
+        "Upper-division LIT course pre-1750 distribution requirement",
+        "Upper-division LIT course"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT course pre-1750 and poetry distribution requirements"
+      ],
+      [
+        "Upper-division LIT course global distribution requirement",
+        "LIT 190V or LIT 190W senior seminar"
+      ],
+      []
+    ],
+    "planner_name": "Literature B.A. Planner 9"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOE 20C",
+        "College 1"
+      ],
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B & CHEM 3BL"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOL 20A",
+        "CHEM 3C & CHEM 3CL",
+        "WRIT 2"
+      ],
+      [
+        "BIOE 20B",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOL 105",
+        "PHYS 6A & PHYS 6L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOE 109",
+        "PHYS 6B & 6M"
+      ],
+      [
+        "BIOE 107 or BIOE 108",
+        "Marine core"
+      ],
+      [
+        "EEB general elective",
+        "MABI topical elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOE 109",
+        "MABI topical elective"
+      ],
+      [
+        "Marine environment core",
+        "MABI topical elective"
+      ],
+      [
+        "EEB general elective",
+        "EEB general elective"
+      ],
+      []
+    ],
+    "planner_name": "Marine Biology B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "MABI topical elective",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOE 107 or BIOE 108",
+        "MABI topical elective"
+      ],
+      [
+        "BIOE 109",
+        "MABI topical elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Marine core",
+        "EEB general elective"
+      ],
+      [
+        "Marine environment core",
+        "EEB general elective"
+      ],
+      [
+        "EEB general elective"
+      ],
+      []
+    ],
+    "planner_name": "Marine Biology B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A"
+      ],
+      [
+        "MATH 19B or MATH 20B"
+      ],
+      [
+        "MATH 23A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 21",
+        "MATH 23B"
+      ],
+      [
+        "MATH 100"
+      ],
+      [
+        "MATH 103A"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 24"
+      ],
+      [
+        "MATH 110"
+      ],
+      [
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3"
+      ],
+      [
+        "MATH 19A"
+      ],
+      [
+        "MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 21",
+        "MATH 23A"
+      ],
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      [
+        "MATH 103A"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 24"
+      ],
+      [
+        "MATH 110"
+      ],
+      [
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2"
+      ],
+      [
+        "MATH 3"
+      ],
+      [
+        "MATH 19A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 19B"
+      ],
+      [
+        "MATH 21",
+        "MATH 23A"
+      ],
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 24",
+        "MATH 110"
+      ],
+      [
+        "MATH 103A"
+      ],
+      [
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      [
+        "MATH 110"
+      ],
+      [
+        "MATH 103A",
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 24",
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Mathematics B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A",
+        "College 1"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 21",
+        "MATH 23A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 23B",
+        "WRIT 2"
+      ],
+      [
+        "MATH 24",
+        "MATH 100"
+      ],
+      [
+        "MATH 103A"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Elective"
+      ],
+      [
+        "MATH 105A",
+        "MATH 121A"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 117"
+      ],
+      [
+        "MATH 111A"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3"
+      ],
+      [
+        "MATH 19A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 21",
+        "MATH 23A",
+        "WRIT 2"
+      ],
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      [
+        "MATH 103A"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Math 24",
+        "Math 124"
+      ],
+      [
+        "Math 105A",
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 117",
+        "Elective"
+      ],
+      [
+        "MATH 111A"
+      ],
+      [
+        "MATH 194 or MATH 195"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2"
+      ],
+      [
+        "MATH 3",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 19A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 19B",
+        "WRIT 2"
+      ],
+      [
+        "MATH 21",
+        "MATH 23A"
+      ],
+      [
+        "MATH 23B",
+        "Math 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 24",
+        "Elective"
+      ],
+      [
+        "MATH 103A"
+      ],
+      [
+        "Elective",
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 105A",
+        "Elective"
+      ],
+      [
+        "MATH 111A"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Math 117"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      [
+        "MATH 103A",
+        "Elective"
+      ],
+      [
+        "MATH 128A",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 24"
+      ],
+      [
+        "MATH 105A"
+      ],
+      [
+        "MATH 194 or MATH 195"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Mathematics B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A",
+        "College 1"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "STAT 5",
+        "MATH 23A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 21",
+        "MATH 23B",
+        "WRIT 2"
+      ],
+      [
+        "MATH 100"
+      ],
+      [
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 110",
+        "EDUC 50B"
+      ],
+      [
+        "MATH 181",
+        "EDUC 100B"
+      ],
+      [
+        "MATH 111T"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "STAT 131"
+      ],
+      [
+        "MATH 103A or MATH 105A"
+      ],
+      [
+        "MATH 194"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Education B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3"
+      ],
+      [
+        "MATH 19A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "STAT 5",
+        "MATH 19B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 21",
+        "MATH 23A",
+        "WRIT 2"
+      ],
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      [
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 110",
+        "EDUC 50B"
+      ],
+      [
+        "MATH 181",
+        "EDUC 100B"
+      ],
+      [
+        "MATH 111T"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "STAT 131"
+      ],
+      [
+        "MATH 103A or MATH 105A"
+      ],
+      [
+        "MATH 194"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Education B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2"
+      ],
+      [
+        "MATH 3",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 19A",
+        "STAT 5"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 19B",
+        "WRIT 2"
+      ],
+      [
+        "MATH 21",
+        "MATH 23A"
+      ],
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 110",
+        "EDUC 50B"
+      ],
+      [
+        "MATH 181",
+        "EDUC 100B"
+      ],
+      [
+        "MATH 111T",
+        "MATH 128A"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "STAT 131"
+      ],
+      [
+        "MATH 103A or MATH 105A"
+      ],
+      [
+        "MATH 194"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Education B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 110",
+        "MATH 100"
+      ],
+      [
+        "MATH 103A or MATH 105A",
+        "MATH 181"
+      ],
+      [
+        "MATH 128A",
+        "STAT 5"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 110",
+        "EDUC 50B"
+      ],
+      [
+        "STAT 131",
+        "EDUC 100B"
+      ],
+      [
+        "MATH 194",
+        "MATH 111T"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Mathematics Education B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      [
+        "MATH 23A",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 21",
+        "MATH 23B",
+        "GE/ME"
+      ],
+      [
+        "MATH 24",
+        "MATH 100"
+      ],
+      [
+        "Elective 1"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Elective 2"
+      ],
+      [
+        "MATH 103A or MATH 105A",
+        "MATH 152"
+      ],
+      [
+        "MATH 148 & MATH 148L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 110 or MATH 111A or MATH 117"
+      ],
+      [
+        "MATH 115 or MATH 116 or MATH 134 or MATH 140 or MATH 160"
+      ],
+      [
+        "MATH 194 or MATH 195"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Theory and Computation B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 3",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      [
+        "MATH 19A or MATH 20A",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 23A",
+        "GE/ME"
+      ],
+      [
+        "MATH 21",
+        "MATH 23B"
+      ],
+      [
+        "MATH 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 24",
+        "Elective 1"
+      ],
+      [
+        "MATH 103A or MATH 105A",
+        "MATH 152"
+      ],
+      [
+        "MATH 148 &MATH 148L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 110 or MATH 111A or MATH 117"
+      ],
+      [
+        "MATH 115 or MATH 116 or MATH 134 or MATH 140 or MATH 160"
+      ],
+      [
+        "MATH 194 or MATH 195"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Theory and Computation B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      [
+        "MATH 3",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      [
+        "MATH 19A",
+        "Core/Writing",
+        "GE/ME"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 19B",
+        "GE/ME"
+      ],
+      [
+        "MATH 21",
+        "MATH 23A"
+      ],
+      [
+        "MATH23B",
+        "MATH 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MATH 24",
+        "Elective 1"
+      ],
+      [
+        "MATH 103A or MATH 105A",
+        "MATH 152"
+      ],
+      [
+        "MATH 148 &MATH 148L",
+        "Elective 2"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MATH 110 or MATH 111A or MATH 117"
+      ],
+      [
+        "MATH 115 or MATH 116 or MATH 134 or MATH 140 or MATH 160"
+      ],
+      [
+        "MATH 194 or MATH 195"
+      ],
+      []
+    ],
+    "planner_name": "Mathematics Theory and Computation B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 100"
+      ],
+      [
+        "MATH 103A or MATH 105A",
+        "MATH 152"
+      ],
+      [
+        "MATH 148 & MATH 148L",
+        "Elective 1"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 110 or MATH 111A or MATH 117",
+        "Elective 2"
+      ],
+      [
+        "MATH 115 or MATH 116 or MATH 134 or MATH 140 or MATH 160"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Mathematics Theory and Computation B.S. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "MATH 100"
+      ],
+      [
+        "MATH 24",
+        "MATH 152"
+      ],
+      [
+        "MATH 148 & MATH 148L",
+        "Elective 1"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MATH 110 or MATH 111A or MATH 117",
+        "Elective 2"
+      ],
+      [
+        "MATH 115 or MATH 116 or MATH 134 or MATH 140 or MATH 160",
+        "MATH 103A or MATH 105A"
+      ],
+      [
+        "MATH 194 or MATH 195",
+        "Elective 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Mathematics Theory and Computation B.S. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 11A or MATH 19A",
+        "College 1"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "MATH 11Bor MATH 19B",
+        "Writing 1"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "BIOL 20A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "CHEM 8A & CHEM 8L",
+        "Writing 2"
+      ],
+      [
+        "BIOL 20L",
+        "CHEM 8B",
+        "METX 100"
+      ],
+      [
+        "BIOE 20C",
+        "PHYS 6A & PHYS 6L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "STAT 7 & STAT 7L",
+        "METX 119L"
+      ],
+      [
+        "BME 110",
+        "BIOL 100"
+      ],
+      [
+        "PHYS 6B",
+        "BIOL 101L",
+        "METX 140"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "METX 150"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "planner_name": "Microbiology B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "METX 100",
+        "METX 119L"
+      ],
+      [
+        "BIOL 100",
+        "PHYS 6B"
+      ],
+      [
+        "BIOL 101L",
+        "METX 140",
+        "BME 110"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "METX 150"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        ""
+      ]
+    ],
+    "planner_name": "Microbiology B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "STAT 5 or STAT 7/STAT 7L"
+      ],
+      [
+        "BIOL 100",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "BIOL 101 & BIOL 101L",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOL 110",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "UD LAB/DC",
+        "BIOL 120"
+      ],
+      [
+        "MCD Elective 1",
+        "MCD Elective 2"
+      ],
+      []
+    ],
+    "planner_name": "Molecular\", Cell,\" and Developmental Biology B.S. Planner 2\"\"\""
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 16 if necessary",
+        "Module Lower-div 1"
+      ],
+      [
+        "MUSC 14 if necessary",
+        "Module Lower-div  2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Module Lower-div 3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 30A",
+        "WRIT 2",
+        "Module Ensemble 1"
+      ],
+      [
+        "MUSC 30B",
+        "Module Ensemble 1"
+      ],
+      [
+        "Module Upper-div 1",
+        "Elective ensemble"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MUSC 121",
+        "MUSC 101C DC",
+        "Module Ensemble 2"
+      ],
+      [
+        "MUSC 120",
+        "Elective upper-div DC",
+        "Module Ensemble 2"
+      ],
+      [
+        "Module Upper-div 2",
+        "Module Ensemble 3"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Elective upper-div 150"
+      ],
+      [
+        "MUSC 120",
+        "Module Upper-div 3"
+      ],
+      [
+        "MUSC 196A"
+      ],
+      []
+    ],
+    "planner_name": "Music B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 16 if necessary",
+        "MUSC 30A",
+        "Module Lower-div 1",
+        "Module Ensemble 1"
+      ],
+      [
+        "MUSC 30B",
+        "Module Lower-div 2",
+        "Elective Upper-div DC",
+        "Module Ensemble 1"
+      ],
+      [
+        "Module Lower-div 3",
+        "Module Upper-div 1",
+        "Module Ensemble 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 121",
+        "MUSC 101C DC",
+        "Module Upper-div 3",
+        "Module Ensemble 2"
+      ],
+      [
+        "MUSC 120",
+        "Module Upper-div 2",
+        "Elective Upper-div 150",
+        "Module Ensemble 3"
+      ],
+      [
+        "MUSC 120",
+        "MUSC 196A",
+        "Module Ensemble 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Music B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 16",
+        "Module Ensemble 1"
+      ],
+      [
+        "MUSC 14",
+        "Module Ensemble 1",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Module Lower-div 1",
+        "Elective ensemble"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 30A",
+        "Module Ensemble 2",
+        "WRIT 2"
+      ],
+      [
+        "Module Upper-div 1 DC possible",
+        "Module Lower-div 2",
+        "Module Ensemble 2"
+      ],
+      [
+        "Elective Upper-div DC poss",
+        "Elective ensemble"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Module Lower-div 3",
+        "Elective Upper-div DC poss",
+        "Module Ensemble 3"
+      ],
+      [
+        "Module Upper-div 2DC poss",
+        "Module Ensemble 3"
+      ],
+      [
+        "Module Upper-div 3 DC poss",
+        "Elective ensemble"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Research Foundations"
+      ],
+      [
+        "Elective Upper-div DC poss"
+      ],
+      [
+        "Capstone Upper-div DC poss",
+        "Capstone MUSC 195A or MUSC 196A"
+      ],
+      []
+    ],
+    "planner_name": "Music B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 16",
+        "Module Lower-div 1",
+        "Module Lower-div 1",
+        "Elective ensemble"
+      ],
+      [
+        "MUSC 14 if necessary",
+        "Module Lower-div 2",
+        "Module Ensemble 1",
+        "Module Ensemble 2"
+      ],
+      [
+        "Module Upper-div 1 DC possible",
+        "Module Upper-div 2 DC poss",
+        "Elective ensemble",
+        "Module Ensemble 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 30A",
+        "Module Lower-div 3",
+        "Research Foundations"
+      ],
+      [
+        "Elective Upper-div DC poss",
+        "Elective Upper-div DC poss",
+        "Module Upper-div 3 DC poss"
+      ],
+      [
+        "Capstone MUSC 195A/MUSC 196A",
+        "Capstone Upper-div DC poss",
+        "Elective Upper-div DC poss"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Music B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 11A recommended",
+        "College 1"
+      ],
+      [
+        "MUSC 14",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 30A & MUSC 60",
+        "WRIT 2",
+        "Individual Lessons1",
+        "Ensemble2"
+      ],
+      [
+        "MUSC 30B & MUSC 60",
+        "MUSC 101A",
+        "Individual Lessons",
+        "Ensemble2"
+      ],
+      [
+        "MUSC 30C & MUSC 60",
+        "MUSC 101B",
+        "Individual Lessons",
+        "Ensemble2"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MUSC 130",
+        "MUSC 101C",
+        "Individual Lessons",
+        "Ensemble2"
+      ],
+      [
+        "MUSC 105",
+        "Individual Lessons",
+        "Ensemble2"
+      ],
+      [
+        "MUSC 150",
+        "Individual Lessons",
+        "Ensemble2"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "MUSC 121"
+      ],
+      [
+        "MUSC 120"
+      ],
+      [
+        "MUSC 180"
+      ],
+      []
+    ],
+    "planner_name": "Music B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 30A & MUSC 60",
+        "Individual Lessons1",
+        "Ensemble2"
+      ],
+      [
+        "MUSC 30B & MUSC 60",
+        "MUSC 101A",
+        "Individual Lessons1",
+        "Ensemble2"
+      ],
+      [
+        "MUSC 30C & MUSC 60",
+        "MUSC 101B",
+        "Individual Lessons1",
+        "Ensemble2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 130",
+        "MUSC 101C",
+        "MUSC 121",
+        "Individual Lessons1"
+      ],
+      [
+        "MUSC 105",
+        "MUSC 120",
+        "Individual Lessons1"
+      ],
+      [
+        "MUSC 150",
+        "MUSC 180",
+        "Individual Lessons1"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Music B.A. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 11A recommended",
+        "Individual Lessons2",
+        "Ensemble3",
+        "College 1"
+      ],
+      [
+        "MUSC 14 if necessary",
+        "Individual Lessons2",
+        "Ensemble3",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "Language1",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 30A",
+        "WRIT 2",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      [
+        "MUSC 30B",
+        "MUSC 101A",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      [
+        "MUSC 30C",
+        "MUSC 101B",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "MUSC 130",
+        "MUSC 101C",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      [
+        "MUSC 105",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      [
+        "MUSC 150",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Language1",
+        "Individual Lessons2"
+      ],
+      [
+        "Language1",
+        "Individual Lessons2"
+      ],
+      [
+        "MUSC 180",
+        "MUSC 196B"
+      ],
+      []
+    ],
+    "planner_name": "Music B.M. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MUSC 30A",
+        "Language1",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      [
+        "MUSC 30B",
+        "MUSC 101A",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      [
+        "MUSC 30C",
+        "MUSIC 101B",
+        "Individual Lessons2",
+        "Ensemble3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "MUSC 130",
+        "MUSC 101C",
+        "Individual Lessons2"
+      ],
+      [
+        "MUSC 105",
+        "MUSC 150",
+        "Individual Lessons2"
+      ],
+      [
+        "MUSC 196B",
+        "MUSC 180",
+        "Individual Lessons2"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Music B.M. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CSE 12",
+        "CSE 30"
+      ],
+      [
+        "CSE13S",
+        "CSE 150"
+      ],
+      [
+        "AM 30",
+        "CSE101"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "CSE 185E",
+        "Elective"
+      ],
+      [
+        "Elective",
+        "Elective"
+      ],
+      [
+        "Capstone course",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Network and Digital Technology B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "CHEM 3A",
+        "MATH 11A or MATH 19A"
+      ],
+      [
+        "CHEM 3B & CHEM 3BL",
+        "MATH 11B or MATH 19B"
+      ],
+      [
+        "CHEM 3C & CHEM 3CL",
+        "BIOL 20A"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOE 20B",
+        "BIOL 20L",
+        "CHEM 8A & CHEM 8L"
+      ],
+      [
+        "CHEM 8B",
+        "PHYS 6A & PHYS 6L",
+        "WRIT 2/ME"
+      ],
+      [
+        "BIOL 105",
+        "PHYS 6B & PHYS 6M"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 100",
+        "PHYS 6C & PHYS 6N"
+      ],
+      [
+        "BIOL 125",
+        "STAT 5 or STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOL 101 & BIOL 101L",
+        "BIOL 126"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Neuro Elective 1 of 1"
+      ],
+      [
+        "BIOL 128",
+        "BIOL 129L"
+      ],
+      [
+        "BIOL 129A"
+      ],
+      [
+        "BIOL 129B or BIOL 129C"
+      ]
+    ],
+    "planner_name": "Neuroscience B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 100",
+        "PHYS 6A & PHYS 6L"
+      ],
+      [
+        "BIOL 105",
+        "PHYS 6B & PHYS 6M"
+      ],
+      [
+        "BIOL 125",
+        "PHYS 6C & PHYS 6N"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "BIOL 101 & BIOL 101L",
+        "Neuro Elective"
+      ],
+      [
+        "BIOL 126",
+        "BIOL 129L"
+      ],
+      [
+        "BIOL 128",
+        "BIOL 129A"
+      ],
+      [
+        "BIOL 129B or BIOL 129C"
+      ]
+    ],
+    "planner_name": "Neuroscience B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "PHIL 11",
+        "College 1"
+      ],
+      [
+        "PHIL 9",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "PHIL 100C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHIL 100A",
+        "WRIT 2"
+      ],
+      [
+        "PHIL 100B elective"
+      ],
+      [
+        "PHIL 1XX M&E"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "PHIL 1XX Value"
+      ],
+      [
+        "PHIL 1XX elective"
+      ],
+      [
+        "PHIL 1XX M&E"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "PHIL 1XX elective"
+      ],
+      [],
+      [
+        "PHIL 190"
+      ],
+      []
+    ],
+    "planner_name": "Philosophy B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "PHIL 11 or PHIL 22 if needed",
+        "PHIL 9"
+      ],
+      [
+        "PHIL 100B"
+      ],
+      [
+        "PHIL 100C",
+        "PHIL 1XX M&E"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHIL 100A elective",
+        "PHIL 1XX Value"
+      ],
+      [
+        "PHIL 1XX elective",
+        "PHIL 1XX M&E"
+      ],
+      [
+        "PHIL 1XX",
+        "PHIL 190"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Philosophy B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "PHYS 5A & PHYS 5L"
+      ],
+      [
+        "MATH 23A",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 5C & PHYS 5N",
+        "PHYS 5D",
+        "MATH 23B"
+      ],
+      [
+        "ASTR 119",
+        "PHYS 116A",
+        "ASTR 21"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "PHYS 110A",
+        "PHYS 102",
+        "PHYS 133"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "PHYS 135",
+        "PHYS 139A"
+      ],
+      [
+        "PHYS 182",
+        "Elective"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Physics (Astrophysics) B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 102",
+        "ASTR 119"
+      ],
+      [
+        "ASTR 21",
+        "PHYS 116A",
+        "PHYS 133"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "PHYS 139A",
+        "PHYS 135"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112",
+        "Elective"
+      ],
+      [
+        "PHYS 182",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Physics (Astrophysics) B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 5D",
+        "ASTR 119"
+      ],
+      [
+        "PHYS 102",
+        "PHYS 116A",
+        "PHYS 133"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "PHYS 139A"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "ASTR 136 or PHYS 135",
+        "PHYS 182"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Physics (Astrophysics) B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A or MATH 20A"
+      ],
+      [
+        "MATH 19B or MATH 20B",
+        "PHYS 5A & PHYS 5L"
+      ],
+      [
+        "MATH 23A",
+        "PHYS 5B & PHYS 5M"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 5C & PHYS 5N",
+        "PHYS 5D",
+        "ASTR 119"
+      ],
+      [
+        "PHYS 133",
+        "PHYS 116A",
+        "MATH 23B"
+      ],
+      [
+        "PHYS 105",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "PHYS 102",
+        "PHYS 110A"
+      ],
+      [
+        "PHYS 112",
+        "PHYS 110B"
+      ],
+      [],
+      []
+    ],
+    "Year 4": [
+      [
+        "PHYS 139A",
+        "Elective"
+      ],
+      [
+        "PHYS 182",
+        "PHYS 134"
+      ],
+      [
+        "Elective"
+      ],
+      []
+    ],
+    "planner_name": "Physics B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "ASTR 119",
+        "PHYS 102"
+      ],
+      [
+        "PHYS 116A",
+        "PHYS 133"
+      ],
+      [
+        "PHYS 116C",
+        "PHYS 105",
+        "PHYS 134"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "PHYS 139A"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "Elective",
+        "PHYS 182"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Physics B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 23B",
+        "PHYS 5D",
+        "ASTR 119"
+      ],
+      [
+        "PHYS 133",
+        "PHYS 102",
+        "PHYS 116A"
+      ],
+      [
+        "PHYS 105",
+        "Elective",
+        "PHYS 116C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 110A",
+        "PHYS 139A"
+      ],
+      [
+        "PHYS 110B",
+        "PHYS 112"
+      ],
+      [
+        "PHYS 134",
+        "Elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Physics B.S. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "BIOE 20C",
+        "College 1"
+      ],
+      [
+        "MATH 11A or MATH 19A",
+        "CHEM 3A",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "MATH 11B or MATH 19B",
+        "CHEM 3B & 3BL"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "BIOL 20A",
+        "CHEM 3C & 3CL",
+        "WRIT 2"
+      ],
+      [
+        "BIOE 20B",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOL 105",
+        "PHYS 6A & PHYS 6L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOE 109",
+        "PHYS 6B & PHYS 6M"
+      ],
+      [
+        "BIOE 107",
+        "PLNT topical elective"
+      ],
+      [
+        "EEB general elective",
+        "Botany & lab"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EEB general elective",
+        "Plant physiology"
+      ],
+      [
+        "PLNT topical elective",
+        "PLNT topical elective"
+      ],
+      [
+        "EEB general elective"
+      ],
+      []
+    ],
+    "planner_name": "Plant Sciences B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "BIOL 105",
+        "PLNT topical elective",
+        "STAT 7 & STAT 7L"
+      ],
+      [
+        "BIOE 107",
+        "PLNT topical elective"
+      ],
+      [
+        "BIOE 109",
+        "PLNT topical elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "EEB general elective",
+        "Plant physiology"
+      ],
+      [
+        "Botany & lab",
+        "EEB general elective"
+      ],
+      [
+        "EEB general elective"
+      ],
+      []
+    ],
+    "planner_name": "Plant Sciences B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "POLI Upper-division elective",
+        "WRIT 2"
+      ],
+      [
+        "POLI Upper-division elective"
+      ],
+      [
+        "POLI Upper-division core"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "POLI Upper-division core",
+        "POLI Upper-division elective"
+      ],
+      [
+        "POLI Upper-division elective",
+        "POLI Upper-division core"
+      ],
+      [
+        "POLI Upper-division core"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "POLI 190 Senior Seminar"
+      ],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Politics B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "POLI Upper-division elective"
+      ],
+      [
+        "POLI Upper-division core"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "POLI Upper-division core"
+      ],
+      [
+        "POLI 190 Senior Seminar"
+      ],
+      [],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Politics B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2"
+      ],
+      [
+        "AM 3",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "PSYC 1"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PSYC 20",
+        "WRIT 2"
+      ],
+      [
+        "PSYC 2"
+      ],
+      [
+        "PSYC 10"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "out of dept course"
+      ],
+      [
+        "PSYC 100",
+        "upper-division cognitive"
+      ],
+      [
+        "upper-division developmental"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "upper-division social",
+        "upper-division cognitive"
+      ],
+      [
+        "upper-division PSYC elective seminar",
+        "upper-division PSYC elective"
+      ],
+      [
+        "upper-division PSYC elective"
+      ],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2 if needed or any 5-credit class",
+        "College Core Course",
+        "SI Gen Ed"
+      ],
+      [
+        "PSYC 1 PE GE",
+        "AM 3 MF GE",
+        "Any 5-credit class",
+        "STEV 26"
+      ],
+      [
+        "PSYC 2 SR GE",
+        "CC Gen Ed",
+        "Writing 2 C GE"
+      ],
+      [
+        "PSYC 100 7 credits",
+        "Any 5-credit class"
+      ]
+    ],
+    "Year 2": [
+      [
+        "PSYC 20",
+        "Out of dept course"
+      ],
+      [
+        "PSYC 10"
+      ],
+      [
+        "Upper-division cognitive"
+      ],
+      [
+        "Upper-division PSYC elective"
+      ]
+    ],
+    "Year 3": [
+      [
+        "Upper-division developmental"
+      ],
+      [
+        "Upper-division social",
+        "Upper-division PSYC elective"
+      ],
+      [
+        "Upper-division PSYC elective seminar"
+      ],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "PSYC 100",
+        "PSYC 10"
+      ],
+      [
+        "PSYC 20",
+        "upper-division social"
+      ],
+      [
+        "upper-division developmental"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "upper-division cognitive",
+        "upper-division PSYC elective"
+      ],
+      [
+        "out of dept course",
+        "upper-division PSYC elective"
+      ],
+      [
+        "upper-division PSYC elective seminar"
+      ],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "College 1"
+      ],
+      [
+        "PSYC 1",
+        "WRIT 1/WRIT 1E if needed",
+        "AM 3"
+      ],
+      [
+        "PSYC 2"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PSYC 20",
+        "WRIT 2"
+      ],
+      [
+        "PSYC 10"
+      ],
+      [
+        "PSYC 100"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "Upper-division cognitive"
+      ],
+      [
+        "Upper-division developmental"
+      ],
+      [
+        "Upper-division social",
+        "Out of department course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "PSYC 193/ PSYC 194/ PSYC 195",
+        "Upper-division PSYC elective"
+      ],
+      [
+        "PSYC 193/ PSYC 194/ PSYC 195",
+        "PSYC 181/ PSYC 182"
+      ],
+      [
+        "Upper-division PSYC elective",
+        "Upper-division PSYC elective seminar"
+      ],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2"
+      ],
+      [
+        "PSYC 1",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "PSYC 20"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "AM 3",
+        "WRIT 2"
+      ],
+      [
+        "PSYC 2"
+      ],
+      [
+        "PSYC 10"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "PSYC 100"
+      ],
+      [
+        "Upper-division cognitive",
+        "Out of department course"
+      ],
+      [
+        "Upper-division developmental"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "PSYC 193/ PSYC 194/ PSYC 195",
+        "Upper-division PSYC elective"
+      ],
+      [
+        "PSYC 193/ PSYC 194/ PSYC 195",
+        "PSYC 181/ PSYC 182"
+      ],
+      [
+        "Upper-division PSYC elective",
+        "Upper-division PSYC elective seminar"
+      ],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 2 if needed or any 5-credit class",
+        "College Core Course",
+        "SI Gen Ed"
+      ],
+      [
+        "PSYC 1 PE GE",
+        "AM 3 MF GE",
+        "Any 5-credit class",
+        "STEV 26"
+      ],
+      [
+        "PSYC 2 SR GE",
+        "CC General Education Class",
+        "Writing 2 C GE"
+      ],
+      [
+        "PSYC 100 7 credits",
+        "Any 5-credit class"
+      ]
+    ],
+    "Year 2": [
+      [
+        "PSYC 20",
+        "Upper-division outside - PSYC",
+        "TA Gen Ed",
+        "PR Gen Ed 2 credits"
+      ],
+      [
+        "PSYC 10",
+        "ER Gen Ed",
+        "Any 5-credit class",
+        "Any 2-credit class"
+      ],
+      [
+        "Upper-division Cognitive",
+        "IM Gen Ed",
+        "Any 5-credit class",
+        "Any 2-credit class"
+      ],
+      [
+        "Upper-division PSYC elective",
+        "Any 5-credit class",
+        "Any 5-credit class"
+      ]
+    ],
+    "Year 3": [
+      [
+        "Upper-division Developmental",
+        "Any 5-credit class",
+        "Any 5-credit class"
+      ],
+      [
+        "Upper-division Social",
+        "Upper-division PSYC elective",
+        "Any 5-credit class"
+      ],
+      [
+        "Upper-division PSYC seminar  1/2 DC GE",
+        "Any 5-credit class",
+        "Any 5-credit class"
+      ],
+      [
+        "Any 5-credit class",
+        "Any 5-credit class"
+      ]
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 7"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "PSYC 100",
+        "PSYC 10"
+      ],
+      [
+        "Upper-division developmental",
+        "Out of department course"
+      ],
+      [
+        "Upper-division social",
+        "PSYC 20"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "PSYC 193/ PSYC 194/ PSYC 195",
+        "Upper-division PSYC elective"
+      ],
+      [
+        "PSYC 193/ PSYC 194/ PSYC 195",
+        "PSYC 181/ PSYC 182"
+      ],
+      [
+        "Upper-division PSYC elective seminar",
+        "Upper-division PSYC elective"
+      ],
+      []
+    ],
+    "planner_name": "Psychology B.A. Planner 8"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "CSE 20",
+        "College 1"
+      ],
+      [
+        "MATH 19B",
+        "PHYS 5A & PHYS 5L",
+        "CSE 12",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "AM 10",
+        "CSE 16",
+        "ECE 13"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "AM 30 or MATH 23A",
+        "PHYS 5C & PHYS 5N",
+        "ECE 8 recommended",
+        "WRIT 2"
+      ],
+      [
+        "ECE 9",
+        "AM 20",
+        "ECE 101 & ECE 101L"
+      ],
+      [
+        "ECE 10",
+        "CSE 30",
+        "CSE 107"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECE 103 & ECE 103L",
+        "CSE 100 & CSE 100L"
+      ],
+      [
+        "ECE 121",
+        "CSE 101"
+      ],
+      [
+        "Upper-division elective",
+        "ECE 118"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECE 129A",
+        "ECE 141"
+      ],
+      [
+        "ECE 129B",
+        "Advanced robotics elective"
+      ],
+      [
+        "ECE 129C",
+        "ECE 167"
+      ],
+      []
+    ],
+    "planner_name": "Robotics Engineering B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 2": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "ECE 101 & ECE 101L",
+        "CSE 101",
+        "CSE 100 & CSE 100L"
+      ],
+      [
+        "ECE 121",
+        "ECE 9",
+        "CSE 107"
+      ],
+      [
+        "ECE 118",
+        "ECE 10",
+        "ECE 103 & ECE 103L"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "ECE 129A",
+        "ECE 141"
+      ],
+      [
+        "ECE 129B",
+        "Advanced robotics elective"
+      ],
+      [
+        "ECE 129C",
+        "ECE 167"
+      ],
+      []
+    ],
+    "planner_name": "Robotics Engineering B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 11A",
+        "CHEM 3A"
+      ],
+      [
+        "MATH 11B",
+        "CHEM 3B & CHEM 3BL"
+      ],
+      [
+        "BIOE 20C",
+        "CHEM 3C & CHEM 3CL"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "PHYS 6A & PHYS 6L",
+        "EART 5 & EART 5L",
+        "EDUC 50C"
+      ],
+      [
+        "PHYS 6B & PHYS 6M",
+        "BIOL 20A",
+        "STAT 5"
+      ],
+      [
+        "PHYS 6C & PHYS 6N",
+        "BIOE 20B",
+        "EDUC 100C"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "ASTR 2",
+        "EART 110A",
+        "Field A course"
+      ],
+      [
+        "MATH 22",
+        "EDUC diversity course",
+        "Field A course"
+      ],
+      [
+        "EDUC 185C",
+        "Field A course"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Field B course"
+      ],
+      [
+        "Field B course"
+      ],
+      [
+        "Field B course",
+        "EDUC 185L"
+      ],
+      []
+    ],
+    "planner_name": "Science Education B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "EART 5 & EART 5L",
+        "ASTR 2",
+        "Field A course"
+      ],
+      [
+        "EDUC 50C",
+        "MATH 22",
+        "Field A course"
+      ],
+      [
+        "EDUC 100C",
+        "Field A course",
+        "EDUC 185C"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Breadth course 1",
+        "EART 110A"
+      ],
+      [
+        "Breadth course 2",
+        "EDUC diversity course"
+      ],
+      [
+        "Breadth course 3",
+        "EDUC 185L"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Science Education B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "SOCY 1"
+      ],
+      [
+        "SOCY 10",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "SOCY 3A",
+        "WRIT 2"
+      ],
+      [
+        "SOCY 3B"
+      ],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "SOCY 105A",
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY 105B",
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY 196S or SOCY graduate course or in fall or winter or thesis fall-winter-spring"
+      ],
+      []
+    ],
+    "planner_name": "Sociology B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "SOCY 3A",
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY 3B",
+        "SOCY 105A"
+      ],
+      [
+        "SOCY 105B",
+        "SOCY upper-division elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "SOCY upper-division elective",
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY 196S or SOCY graduate course or in fall or winter or thesis fall-winter-spring"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Sociology B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "SOCY 3A",
+        "SOCY 105A"
+      ],
+      [
+        "SOCY 3B",
+        "SOCY 105B"
+      ],
+      [
+        "SOCY upper-division elective",
+        "SOCY upper-division elective"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "SOCY upper-division elective",
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY upper-division elective"
+      ],
+      [
+        "SOCY 196S or in fall or winter or thesis fall-winter-spring"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Sociology B.A. Planner 4"
+  },
+  {
+    "Year 1": [
+      [
+        "SOCY 1",
+        "College 1"
+      ],
+      [
+        "SOCY 10",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [],
+      []
+    ],
+    "Year 2": [
+      [
+        "SOCY 3A",
+        "SOCY 30A",
+        "WRIT 2"
+      ],
+      [
+        "SOCY 3B",
+        "SOCY 107A"
+      ],
+      [
+        "SOCY 107B 3 credits"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "SOCY 105A",
+        "SOCY 196G"
+      ],
+      [
+        "SOCY 105B",
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective"
+      ],
+      [
+        "SOCY 196S or SOCY Graduate Course or in fall or winter or thesis fall-winter-spring"
+      ],
+      []
+    ],
+    "planner_name": "Sociology B.A. Planner 5"
+  },
+  {
+    "Year 1": [
+      [],
+      [
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "SOCY 1"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "SOCY 15",
+        "SOCY 3A",
+        "WRIT 2"
+      ],
+      [
+        "SOCY 3B"
+      ],
+      [],
+      []
+    ],
+    "Year 3": [
+      [
+        "SOCY 30A",
+        "Upper-division elective"
+      ],
+      [
+        "SOCY 107A",
+        "SOCY 105A"
+      ],
+      [
+        "SOCY 107B 3 credits",
+        "SOCY 105B"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "SOCY 196G",
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      [
+        "SOCY 196S or SOCY Graduate Course or in fall or winter or thesis fall-winter-spring",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "planner_name": "Sociology B.A. Planner 6"
+  },
+  {
+    "Year 1": [
+      [
+        "SOCY 3A",
+        "SOCY 30A"
+      ],
+      [
+        "SOCY 3B",
+        "SOCY 107A",
+        "SOCY 105A"
+      ],
+      [
+        "SOCY 107B 3 credits",
+        "SOCY 105B"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      [
+        "Upper-division elective",
+        "Upper-division elective"
+      ],
+      [
+        "SOCY 196S or SOCY Graduate Course or in fall or winter or thesis fall-winter-spring",
+        "Upper-division elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Sociology B.A. Planner 7"
+  },
+  {
+    "Year 1": [
+      [
+        "SPAN 1",
+        "College 1"
+      ],
+      [
+        "SPAN 2",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "SPAN 3"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "SPAN 4",
+        "LING 50",
+        "WRIT 2"
+      ],
+      [
+        "SPAN 5",
+        "HIS 12"
+      ],
+      [
+        "SPAN 6"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "SPAN 105/LIT 189C",
+        "SPAN 114 or SPHS 115"
+      ],
+      [
+        "SPAN 150",
+        "Elective"
+      ],
+      [
+        "LIT 189A or 189B"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Concentration 1",
+        "Concentration 2"
+      ],
+      [
+        "Concentration 3",
+        "Capstone"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Spanish Studies B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "SPHS 4"
+      ],
+      [
+        "SPHS 5",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "SPHS 6"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "LING 50",
+        "WRIT 2"
+      ],
+      [
+        "HIS 12"
+      ],
+      [
+        "SPAN 114 or SPHS 115"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "SPAN 105/LIT 189C"
+      ],
+      [
+        "SPAN 150",
+        "Elective"
+      ],
+      [
+        "LIT 189A or LIT 189B"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "Concentration 1",
+        "Concentration 2"
+      ],
+      [
+        "Concentration 3",
+        "Capstone"
+      ],
+      [],
+      []
+    ],
+    "planner_name": "Spanish Studies B.A. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "SPHS 4/SPAN 4",
+        "LING 50"
+      ],
+      [
+        "SPHS 5/SPAN 5",
+        "HIS 12"
+      ],
+      [
+        "SPHS 6/SPAN 6"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "SPAN 105/LIT 189C",
+        "SPAN 114 or SPHS 115"
+      ],
+      [
+        "LIT 189A or LIT 189B",
+        "Concentration 1"
+      ],
+      [
+        "Elective",
+        "Concentration 3"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Spanish Studies B.A. Planner 3"
+  },
+  {
+    "Year 1": [
+      [
+        "MATH 19A",
+        "ECON 10A",
+        "College 1"
+      ],
+      [
+        "MATH 19B",
+        "CSE 20",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "ECON 1",
+        "CSE 30",
+        "STAT 17 & STAT 17L"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "TIM 50",
+        "AM 10",
+        "WRIT 2"
+      ],
+      [
+        "ECON 2",
+        "MATH 22 or MATH 23A"
+      ],
+      [
+        "ECON 100A",
+        "TIM 170",
+        "CSE 12"
+      ],
+      []
+    ],
+    "Year 3": [
+      [
+        "CSE 13S",
+        "CSE 16"
+      ],
+      [
+        "CSE 150",
+        "TIM 58"
+      ],
+      [
+        "CSE 182",
+        "AM 20"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "TIM 172A & TIM 172P",
+        "ECON 113"
+      ],
+      [
+        "TIM 172B & TIM 172Q",
+        "BE elective"
+      ],
+      [
+        "TIM 175",
+        "BE elective"
+      ],
+      []
+    ],
+    "planner_name": "Technology and Information Management B.S. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "TIM 50",
+        "ECON 100A"
+      ],
+      [
+        "TIM 58",
+        "CSE 12",
+        "STAT 17 & STAT 17L"
+      ],
+      [
+        "TIM 170",
+        "CSE 150",
+        "ECON 113"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "TIM 172A & TIM 172P",
+        "BE elective"
+      ],
+      [
+        "TIM 172B & TIM 172Q",
+        "ECON elective"
+      ],
+      [
+        "TIM 175",
+        "BE elective"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Technology and Information Management B.S. Planner 2"
+  },
+  {
+    "Year 1": [
+      [
+        "THEA 20 or THEA 21",
+        "College 1"
+      ],
+      [
+        "THEA 61B offered winter quarter only",
+        "WRIT 1/WRIT 1E if needed"
+      ],
+      [
+        "THEA 61C offered spring quarter only",
+        "THEA 10"
+      ],
+      []
+    ],
+    "Year 2": [
+      [
+        "THEA 61A offered fall quarter only",
+        "Lower-division practice-based THEA dance class one of the following THEA 30",
+        "WRIT 2",
+        "THEA 50 2-credit"
+      ],
+      [
+        "THEA lower-division elective could be used to fulfill the Production Requirement  see info below",
+        "THEA 31A",
+        "THEA upper-division elective 1 could be used to fulfill the Production Requirement  see info below",
+        "THEA 50 2-credit"
+      ],
+      [
+        "THEA upper-division studio",
+        "THEA 31B",
+        "THEA 50 2-credit"
+      ],
+      [
+        "THEA 31C"
+      ]
+    ],
+    "Year 3": [
+      [
+        "THEA upper-division studio",
+        "THEA UD History/Theory/Critical Studies"
+      ],
+      [
+        "THEA upper-division History/Theory/Critical Studies",
+        "THEA upper-division elective 2 could be used to fulfill the Production Requirement  see info below"
+      ],
+      [
+        "THEA 160 offered spring quarter only this is the prerequisite for THEA 185"
+      ],
+      []
+    ],
+    "Year 4": [
+      [
+        "THEA 185 offered fall quarter only prerequisite is THEA 160"
+      ],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Theater Arts B.A. Planner 1"
+  },
+  {
+    "Year 1": [
+      [
+        "THEA 61A offered fall quarter only",
+        "THEA 20 or THEA 21",
+        "THEA 10"
+      ],
+      [
+        "THEA 61B offered winter quarter only",
+        "Lower-division practice-based THEA dance class one of the following THEA 30",
+        "THEA lower-division elective could be used to fulfill the Production Requirement  see info below",
+        "THEA 50 2-credit"
+      ],
+      [
+        "THEA 61C offered spring quarter only",
+        "THEA 31A",
+        "THEA upper-division elective 1 could be used to fulfill the Production Requirement  see info below",
+        "THEA 50 2-credit"
+      ],
+      [
+        "THEA 31B"
+      ]
+    ],
+    "Year 2": [
+      [
+        "THEA 185 offered fall quarter only prerequisite is THEA 160",
+        "THEA upper-division studio"
+      ],
+      [
+        "THEA upper-division History/Theory/Critical Studies",
+        "THEA upper-division studio"
+      ],
+      [
+        "THEA upper-division History/Theory/Critical Studies",
+        "THEA upper-division elective 2 could be used to fulfill the Production Requirement  see info below"
+      ],
+      []
+    ],
+    "Year 3": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "Year 4": [
+      [],
+      [],
+      [],
+      []
+    ],
+    "planner_name": "Theater Arts B.A. Planner 2"
+  }
+]
