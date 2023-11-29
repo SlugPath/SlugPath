@@ -9,11 +9,7 @@ export class MajorService {
       },
     });
 
-    if (!major) {
-      throw new Error("Major does not exist");
-    }
-
-    return major;
+    return major ? major : null;
   }
 
   public async upsertMajor(major: MajorInput): Promise<Major> {
@@ -31,6 +27,14 @@ export class MajorService {
         catalog_year: major.catalog_year,
         default_planner_id: major.default_planner_id,
         userId: major.userId,
+      },
+    });
+  }
+
+  public async deleteMajor(userId: string): Promise<Major> {
+    return await prisma.major.delete({
+      where: {
+        userId: userId,
       },
     });
   }

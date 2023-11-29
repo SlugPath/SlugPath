@@ -1,4 +1,5 @@
 import { CourseService } from "@/graphql/course/service";
+import { MajorService } from "@/graphql/major/service";
 import { PlannerService } from "@/graphql/planner/service";
 import { initialPlanner, serializePlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
@@ -349,4 +350,45 @@ it("should return the correct labels for each course", async () => {
   courses?.forEach((c, idx) => {
     expect(c).toStrictEqual(cseCourses[idx]);
   });
+});
+
+it("should add major information for 1 user", async () => {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: "Sammy Slug",
+    },
+  });
+  expect(user).not.toBeNull();
+
+  if (user === null) fail("User was null (this should not happen)");
+
+  const service = new MajorService();
+  const major = await service.getMajor(user.id);
+  expect(major).toBeNull();
+
+  // create major
+  const name = "Computer Science BS";
+  const catalog_year = "2020-2021";
+  const default_planner_id = 0;
+  const majorData = {
+    name: name,
+    catalog_year: catalog_year,
+    default_planner_id: default_planner_id,
+  };
+  const res = await service.upsertMajor({
+    userId: user.id,
+    ...majorData,
+  });
+  expect(res.name).toBe(name);
+  expect(res.catalog_year).toBe(catalog_year);
+  expect(res.default_planner_id).toBe(default_planner_id);
+
+  const check = await service.getMajor(user.id);
+  expect(check).not.toBeNull();
+
+  // cleanup
+  const deleted = await service.deleteMajor(user.id);
+  expect(deleted).toBeTruthy();
+  const deleteCheck = await service.getMajor(user.id);
+  expect(deleteCheck).toBeNull();
 });
