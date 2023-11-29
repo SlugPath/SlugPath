@@ -139,8 +139,7 @@ export default function Search({
             value={ge ?? ""}
             size="sm"
           >
-            <Option value="">No GE Filter</Option>{" "}
-            {/* Option for no specific GE filter */}
+            <Option value="">--</Option>
             <Option value="c">C</Option>
             <Option value="cc">CC</Option>
             <Option value="er">ER</Option>
