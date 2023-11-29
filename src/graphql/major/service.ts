@@ -2,36 +2,64 @@ import prisma from "@/lib/prisma";
 import { Major, MajorInput } from "./schema";
 
 export class MajorService {
-  public async getMajor(userId: string): Promise<Major | null> {
-    const major = await prisma.major.findUnique({
-      where: {
-        userId: userId,
-      },
-    });
-
-    if (!major) {
+  public async getUserMajor(userId: string): Promise<Major | null> {
+    const major = (
+      await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          major: {
+            select: {
+              name: true,
+              catalogYear: true,
+              defaultPlanners: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      })
+    )?.major;
+    if (major === undefined || major === null) {
       throw new Error("Major does not exist");
     }
 
-    return major;
+    return {
+      name: major.name,
+      catalogYear: major.catalogYear,
+      defaultPlanners: major.defaultPlanners.map((p) => p.id),
+    };
   }
 
-  public async upsertMajor(major: MajorInput): Promise<Major> {
-    return await prisma.major.upsert({
-      where: {
-        userId: major.userId,
-      },
-      update: {
-        name: major.name,
-        catalog_year: major.catalog_year,
-        default_planner_id: major.default_planner_id,
-      },
-      create: {
-        name: major.name,
-        catalog_year: major.catalog_year,
-        default_planner_id: major.default_planner_id,
-        userId: major.userId,
-      },
-    });
+  public async updateUserMajor(major: MajorInput): Promise<string> {
+    const majorId = (
+      await prisma.major.findFirst({
+        where: {
+          name: major.name,
+          catalogYear: major.catalogYear,
+        },
+      })
+    )?.id;
+
+    if (majorId === undefined)
+      throw new Error(
+        `could not find major with name ${major.name} and catalog year ${major.catalogYear}`,
+      );
+
+    return (
+      await prisma.user.update({
+        where: {
+          id: major.userId,
+        },
+        data: {
+          major: {
+            connect: { id: majorId },
+          },
+        },
+      })
+    ).id;
   }
 }

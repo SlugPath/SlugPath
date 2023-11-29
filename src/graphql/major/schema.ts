@@ -12,10 +12,10 @@ export class Major {
   name!: string;
 
   @Field()
-  catalog_year!: string;
+  catalogYear!: string;
 
-  @Field()
-  default_planner_id!: number;
+  @Field(() => [String])
+  defaultPlanners!: string[];
 }
 
 @InputType()
@@ -25,10 +25,7 @@ export class MajorInput {
   name!: string;
 
   @Field()
-  catalog_year!: string;
-
-  @Field()
-  default_planner_id!: number;
+  catalogYear!: string;
 
   @Field()
   userId!: string;

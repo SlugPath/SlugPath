@@ -12,7 +12,8 @@ model User {
   id               String    @id
   email            String?
   name             String?
-  major            Major?
+  majorId          Int?      @unique
+  major            Major?    @relation(fields: [majorId], references: [id])
   role             Role      @default(USER)
   defaultPlannerId String?
   planners         Planner[]
@@ -73,8 +74,7 @@ model Major {
   name            String
   catalogYear     String
   defaultPlanners Planner[]
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String    @unique
+  users           User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
