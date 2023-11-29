@@ -43,6 +43,26 @@ export default function useSearch() {
   );
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
 
+  const geOptions = [
+    { label: "--", value: null },
+    { label: "C", value: "c" },
+    { label: "CC", value: "cc" },
+    { label: "ER", value: "er" },
+    { label: "IM", value: "im" },
+    { label: "MF", value: "mf" },
+    { label: "SI", value: "si" },
+    { label: "SR", value: "sr" },
+    { label: "TA", value: "ta" },
+    /* Include options for PE subcategories */
+    { label: "PE-T", value: "peT" },
+    { label: "PE-H", value: "peH" },
+    { label: "PE-E", value: "peE" },
+    /* Include options for PR subcategories */
+    { label: "PR-C", value: "prC" },
+    { label: "PR-E", value: "prE" },
+    { label: "PR-S", value: "prS" },
+  ];
+
   useEffect(() => {
     if (!departmentsData || !departmentsData.departments) return;
     // Sort departments data
@@ -90,7 +110,7 @@ export default function useSearch() {
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    setGE(newValue);
+    setGE(newValue === "" ? null : newValue);
   };
 
   const handleSearch = (
@@ -107,7 +127,7 @@ export default function useSearch() {
     setQueryDetails({
       departmentCode,
       number: numberInput.toUpperCase(),
-      ge: geInput, 
+      ge: geInput,
     });
   };
 
@@ -128,6 +148,7 @@ export default function useSearch() {
     departmentCode,
     number,
     ge,
+    geOptions,
     handleChangeDepartment,
     handleChangeNumber,
     handleChangeGE,
