@@ -12,8 +12,10 @@ model User {
   id       String    @id
   email    String?
   name     String?
+  major    Major?
   role     Role      @default(USER)
   planners Planner[]
+  majorId  String?
 }
 
 model Planner {
@@ -62,6 +64,18 @@ model Course {
 
   // No two courses can have the same department code and course number
   @@id([departmentCode, number])
+}
+
+model Major {
+  id                 String   @id @default(uuid())
+  name               String
+  catalog_year       String
+  default_planner_id Int
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String   @unique
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model Label {

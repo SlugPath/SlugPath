@@ -99,7 +99,6 @@ const Title = ({
 }) => {
   return (
     <Typography
-      // level="body-sm"
       endDecorator={
         course &&
         isCSE(course) &&
