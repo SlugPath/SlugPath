@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import { useBackgroundQuery, useQuery, useReadQuery } from "@apollo/client";
 import useDebounce from "./useDebounce";
-import { StoredCourse } from "../types/Course";
 import { GET_COURSES, GET_DEPARTMENTS } from "@/graphql/queries";
 
 const initialData = { coursesBy: [] };
 
-export default function useSearch({
-  coursesInPlanner,
-}: {
-  coursesInPlanner: string[];
-}) {
+export default function useSearch() {
   const [data, setData] = useState<any>(initialData);
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<
     { label: string; value: string }[]
@@ -75,7 +71,7 @@ export default function useSearch({
 
   useDebounce({
     callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
-    delay: 500,
+    delay: 0,
     dependencies: [departmentCode, number, ge],
   });
 
@@ -102,26 +98,18 @@ export default function useSearch({
     numberInput: string,
     geInput: string,
   ) => {
+    if (numberInput !== "" && !/^\d{1,3}[a-zA-Z]?$/.test(numberInput)) {
+      setError(true);
+      return;
+    }
+    setError(false);
+
     setQueryDetails({
       departmentCode,
       number: numberInput.toUpperCase(),
-      ge: geInput,
+      ge: geInput, 
     });
   };
-
-  function courseIsAlreadyAdded(course: StoredCourse) {
-    let alreadyAdded = false;
-    coursesInPlanner.forEach((c) => {
-      const [departmentCode, number] = c.split("-");
-      if (
-        departmentCode === course.departmentCode &&
-        number === course.number
-      ) {
-        alreadyAdded = true;
-      }
-    });
-    return alreadyAdded;
-  }
 
   function nullIfNumberEmpty(number: string): string | null {
     return number.length > 0 ? number : null;
@@ -132,8 +120,10 @@ export default function useSearch({
   }
 
   return {
+    error,
     data,
     loading,
+    loadingUseQuery,
     departments,
     departmentCode,
     number,
@@ -142,6 +132,5 @@ export default function useSearch({
     handleChangeNumber,
     handleChangeGE,
     handleSearch,
-    courseIsAlreadyAdded,
   };
 }

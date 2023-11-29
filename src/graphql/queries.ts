@@ -41,3 +41,13 @@ export const GET_DEPARTMENTS = gql`
     }
   }
 `;
+
+export const GET_LABELS = gql`
+  query labels($userId: String!) {
+    getLabels(userId: $userId) {
+      color
+      name
+      id
+    }
+  }
+`;

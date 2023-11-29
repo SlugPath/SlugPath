@@ -1,12 +1,12 @@
 import { IconButton, Input, Tabs, TabList } from "@mui/joy";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import { Add } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
 import { useContext, useState } from "react";
 import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
+import CloseIconButton from "./CloseIconButton";
 
 const MAX_PLANNERS = 8;
 
@@ -55,7 +55,6 @@ export default function PlannerTabs() {
     if (typeof index === "string" && index !== "add-planner-tab") {
       const title = planners[index][0];
       switchPlanners(index, title);
-      console.log(index);
     }
   };
 
@@ -73,17 +72,15 @@ export default function PlannerTabs() {
           p: 0.5,
           gap: 0.5,
           borderRadius: "xl",
-          bgcolor: "background.level1",
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
-            boxShadow: "sm",
-            bgcolor: "#d5e7ed",
+            color: "white",
+            bgcolor: "rgb(96 165 250)",
           },
           [`& .${tabClasses.root}[aria-selected="false"]`]: {
-            boxShadow: "sm",
             bgcolor: "white",
           },
           [`& .${tabClasses.root}:hover`]: {
-            bgcolor: "background.level1",
+            bgcolor: "rgb(147 197 253)",
           },
         }}
       >
@@ -138,18 +135,7 @@ export default function PlannerTabs() {
             ) : (
               <span>{title}</span>
             )}
-            <IconButton
-              onClick={() => setAlert([id, title])}
-              variant="plain"
-              size="sm"
-              sx={{
-                "&:hover": {
-                  bgcolor: "background.level2",
-                },
-              }}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
+            <CloseIconButton onClick={() => setAlert([id, title])} />
           </Tab>
         ))}
         {/* Add new planner button */}

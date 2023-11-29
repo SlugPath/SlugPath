@@ -1,6 +1,6 @@
 import { ApolloError, gql, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { initialPlanner } from "@/lib/initialPlanner";
+import { deserializePlanner, initialPlanner } from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerTitle } from "@/graphql/planner/schema";
 import { PlannerData } from "../types/PlannerData";
@@ -22,14 +22,22 @@ const GET_PLANNER = gql`
         title
         id
         courses {
+          id
           departmentCode
           number
           quartersOffered
           ge
+          title
           credits
+          labels
         }
       }
       years
+      labels {
+        id
+        name
+        color
+      }
     }
   }
 `;
@@ -91,7 +99,7 @@ export const useLoadPlanner = (
       const planner = data.getPlanner;
       if (planner !== null) {
         removeTypenames(planner);
-        setState(planner);
+        setState(deserializePlanner(planner));
       }
     },
     onError: (err) => {

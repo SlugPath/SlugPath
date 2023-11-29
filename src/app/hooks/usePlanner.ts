@@ -1,17 +1,18 @@
 import {
-  createCourseFromId,
   getTotalCredits,
   getGeSatisfied,
-} from "@/lib/courseUtils";
+  serializePlanner,
+  isCustomCourse,
+} from "@/lib/plannerUtils";
 import { useState } from "react";
-import { PlannerData } from "../types/PlannerData";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
-import { findQuarter } from "../types/Quarter";
+import { Term, findQuarter } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
-import useDeepMemo from "./useDeepMemo";
-import { DropResult } from "@hello-pangea/dnd";
+import { StoredCourse } from "../types/Course";
+import { PlannerData } from "../types/PlannerData";
+import { Label } from "../types/Label";
 
 const SAVE_PLANNER = gql`
   mutation SavePlanner($input: PlannerCreateInput!) {
@@ -31,6 +32,11 @@ export default function usePlanner(input: {
     input.plannerId,
     input.userId,
   );
+
+  const handleCourseUpdate = (newState: PlannerData) => {
+    setCourseState(newState);
+  };
+
   const [totalCredits, setTotalCredits] = useState(
     getTotalCredits(courseState),
   );
@@ -39,10 +45,9 @@ export default function usePlanner(input: {
     SAVE_PLANNER,
     {},
   );
-  const memoAlreadyCourses = useDeepMemo(
-    () => coursesAlreadyAdded(),
-    [courseState],
-  );
+  const [displayCourse, setDisplayCourse] = useState<
+    [StoredCourse, Term | undefined] | undefined
+  >();
 
   // Auto-saving
   useEffect(() => {
@@ -54,7 +59,7 @@ export default function usePlanner(input: {
       const variables = {
         input: {
           ...input,
-          plannerData: courseState,
+          plannerData: serializePlanner(courseState),
         },
       };
       saveData({
@@ -85,6 +90,7 @@ export default function usePlanner(input: {
     const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
     return (deleteIdx: number) => {
       const quarterCourses = quarter.courses;
+      const deleteCid = quarter.courses[deleteIdx];
       const newCourses = [
         ...quarterCourses.slice(0, deleteIdx),
         ...quarterCourses.slice(deleteIdx + 1),
@@ -92,6 +98,7 @@ export default function usePlanner(input: {
       setCourseState((prev) => {
         return {
           ...prev,
+          courses: prev.courses.filter((c) => c.id !== deleteCid),
           quarters: [
             ...prev.quarters.slice(0, idx),
             {
@@ -108,169 +115,81 @@ export default function usePlanner(input: {
     };
   };
 
-  const handleDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
-
-    if (!destination) return;
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-
-    // add course dragged from 'search-droppable' to quarter
-    if (source.droppableId === "search-droppable") {
-      const { quarter, idx } = findQuarter(
-        courseState.quarters,
-        destination.droppableId,
-      );
-
-      const newStoredCourses = Array.from(quarter.courses);
-      newStoredCourses.splice(
-        destination.index,
-        0,
-        createCourseFromId(draggableId),
-      );
-      const newQuarter = {
-        ...quarter,
-        courses: newStoredCourses,
+  /**
+   * A function that is used to edit a custom course and reflect changes in
+   * the entire planner state
+   * @param cid id of custom course being edited
+   * @param newTitle new title of custom course
+   */
+  const editCustomCourse = (cid: string, newTitle: string) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        courses: prev.courses.map((c) => {
+          if (c.id === cid && isCustomCourse(c)) {
+            return {
+              ...c,
+              title: newTitle,
+            };
+          }
+          return c;
+        }),
       };
-
-      const newState = {
-        ...courseState,
-        quarters: [
-          ...courseState.quarters.slice(0, idx),
-          newQuarter,
-          ...courseState.quarters.slice(idx + 1),
-        ],
-      };
-
-      setCourseState(newState);
-      return;
-    }
-
-    // delete course dragged into delete area or search-droppable
-    if (
-      destination.droppableId == "remove-course-area1" ||
-      destination.droppableId == "remove-course-area2" ||
-      destination.droppableId == "search-droppable"
-    ) {
-      const { quarter: startQuarter, idx } = findQuarter(
-        courseState.quarters,
-        result.source.droppableId,
-      );
-      const newStoredCourses = Array.from(startQuarter.courses);
-      newStoredCourses.splice(result.source.index, 1);
-
-      const newQuarter = {
-        ...startQuarter,
-        courses: newStoredCourses,
-      };
-
-      const newState = {
-        ...courseState,
-        quarters: [
-          ...courseState.quarters.slice(0, idx),
-          newQuarter,
-          ...courseState.quarters.slice(idx + 1),
-        ],
-      };
-
-      setCourseState(newState);
-      return;
-    }
-
-    const { quarter: startQuarter, idx } = findQuarter(
-      courseState.quarters,
-      source.droppableId,
-    );
-    const { quarter: finishQuarter, idx: idx2 } = findQuarter(
-      courseState.quarters,
-      destination.droppableId,
-    );
-    if (startQuarter === finishQuarter) {
-      // moving course within startQuarter
-      const newStoredCourses = Array.from(startQuarter.courses);
-      newStoredCourses.splice(source.index, 1);
-      newStoredCourses.splice(
-        destination.index,
-        0,
-        startQuarter.courses[source.index],
-      );
-
-      const newQuarter = {
-        ...startQuarter,
-        courses: newStoredCourses,
-      };
-
-      const newState = {
-        ...courseState,
-        quarters: [
-          ...courseState.quarters.slice(0, idx),
-          newQuarter,
-          ...courseState.quarters.slice(idx + 1),
-        ],
-      };
-
-      setCourseState(newState);
-    } else {
-      // moving course from startQuarter to finishQuarter
-      const movedStoredCourse = startQuarter.courses[source.index];
-      const startStoredCourses = Array.from(startQuarter.courses);
-      startStoredCourses.splice(source.index, 1);
-      const newStart = {
-        ...startQuarter,
-        courses: startStoredCourses,
-      };
-
-      const finishStoredCourses = Array.from(finishQuarter.courses);
-      finishStoredCourses.splice(destination.index, 0, movedStoredCourse);
-      const newFinish = {
-        ...finishQuarter,
-        courses: finishStoredCourses,
-      };
-
-      let newState: PlannerData = {
-        ...courseState,
-        quarters: [
-          ...courseState.quarters.slice(0, idx),
-          newStart,
-          ...courseState.quarters.slice(idx + 1),
-        ],
-      };
-      newState = {
-        ...newState,
-        quarters: [
-          ...newState.quarters.slice(0, idx2),
-          newFinish,
-          ...newState.quarters.slice(idx2 + 1),
-        ],
-      };
-
-      setCourseState(newState);
-    }
+    });
   };
 
-  function coursesAlreadyAdded(): string[] {
-    const coursesAlreadyAdded: string[] = [];
-    Object.values(courseState.quarters).forEach((quarter) => {
-      quarter.courses.forEach((course) => {
-        coursesAlreadyAdded.push(course.departmentCode + "-" + course.number);
-      });
+  const getAllLabels = () => {
+    return courseState.labels;
+  };
+
+  const getCourseLabels = (course: StoredCourse): Label[] => {
+    if (course.labels === undefined) return [];
+    return course.labels.map((lid) => {
+      const label = courseState.labels.find((l) => l.id === lid);
+      if (label === undefined) throw new Error("label not found");
+      return label;
     });
-    return coursesAlreadyAdded;
-  }
+  };
+
+  const updatePlannerLabels = (newLabels: Label[]) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        labels: prev.labels.map((old) => {
+          // Update only the labels that got updated (their names changed)
+          const updated = newLabels.find((l) => l.id === old.id);
+          if (updated === undefined) return old;
+          return updated;
+        }),
+      };
+    });
+  };
+
+  const editCourseLabels = (newCourse: StoredCourse) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        courses: prev.courses.map((c) => {
+          return c.id === newCourse.id ? newCourse : c;
+        }),
+      };
+    });
+  };
 
   return {
     courseState,
     totalCredits,
     geSatisfied,
-    handleDragEnd,
-    memoAlreadyCourses,
     saveStatus,
     saveError,
     deleteCourse,
+    editCustomCourse,
+    handleCourseUpdate,
+    displayCourse,
+    setDisplayCourse,
+    getCourseLabels,
+    getAllLabels,
+    updatePlannerLabels,
+    editCourseLabels,
   };
 }

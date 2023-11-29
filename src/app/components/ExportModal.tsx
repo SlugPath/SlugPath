@@ -1,5 +1,5 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { PlannerData } from "../types/PlannerData";
+import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
 import {
   Document,
   Image,
@@ -11,8 +11,12 @@ import {
 } from "@react-pdf/renderer";
 import { StoredCourse } from "../types/Course";
 import { findQuarter, Quarter } from "../types/Quarter";
-import { getTitle } from "../../lib/courseUtils";
-import { quartersPerYear } from "@/lib/initialPlanner";
+import {
+  getDeptAndNumber,
+  getTitle,
+  isCustomCourse,
+} from "../../lib/plannerUtils";
+import { quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsContext } from "../contexts/ModalsProvider";
 import { useContext } from "react";
 import { PlannersContext } from "../contexts/PlannersProvider";
@@ -148,7 +152,7 @@ function PDFQuarters({
     <View style={styles.yearView}>
       {quarters.map((q) => {
         const { quarter } = findQuarter(courseState.quarters, q);
-        const courses = quarter.courses;
+        const courses = findCoursesInQuarter(courseState, q);
         return <PDFQuarter key={q} quarter={quarter} courses={courses} />;
       })}
     </View>
@@ -169,7 +173,11 @@ function PDFQuarter({
         {courses.map((course, idx) => {
           return (
             <View key={idx} style={styles.course}>
-              <Text>{getTitle(course.departmentCode, course.number)}</Text>
+              <Text>
+                {isCustomCourse(course)
+                  ? getTitle(course)
+                  : getDeptAndNumber(course)}
+              </Text>
             </View>
           );
         })}
