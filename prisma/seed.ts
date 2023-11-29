@@ -39,7 +39,16 @@ async function main() {
   }
   await prisma.$transaction([...ops]);
   console.log(`Loaded ${courses.length} courses`);
-  console.log(`${JSON.stringify(getPlanners)}`);
+
+  const planners = await getPlanners();
+
+  /*
+  Object.keys(planners).forEach((year) => {
+    
+  })
+  */
+
+  console.log(`${JSON.stringify(planners, null, 2)}`);
 }
 
 main()

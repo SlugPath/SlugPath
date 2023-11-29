@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 const filePathCourses = "../courses.csv";
 const filePathPlanners = "../planners/";
 
-export function getPlanners() {
+export async function getPlanners() {
   const planners = [
     "planners_2020-2021.json",
     "planners_2021-2022.json",
@@ -19,15 +19,20 @@ export function getPlanners() {
   ];
 
   const plannerData: any = {};
-  planners.forEach((p) => {
-    fs.readFile(filePathPlanners + p, "utf-8", (err, data) => {
-      if (err) {
-        console.error("An error occurred:", err);
-        return;
-      }
-      plannerData[p.split("_")[1].replace(".json", "")] = JSON.parse(data);
-    });
-  });
+
+  for (const p of planners) {
+    try {
+      const data = await fs.promises.readFile(
+        path.resolve(__dirname, filePathPlanners + p),
+        "utf-8",
+      );
+      const parsedData = JSON.parse(data);
+      const yearKey = p.split("_")[1].replace(".json", "");
+      plannerData[yearKey] = parsedData;
+    } catch (err) {
+      console.error("An error occurred:", err);
+    }
+  }
 
   return plannerData;
 }
