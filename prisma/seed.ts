@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { getCourses } from "./csvreader";
+import { getCourses, getPlanners } from "./csvreader";
 
 const prisma = new PrismaClient();
 
@@ -39,6 +39,7 @@ async function main() {
   }
   await prisma.$transaction([...ops]);
   console.log(`Loaded ${courses.length} courses`);
+  console.log(`${JSON.stringify(getPlanners)}`);
 }
 
 main()

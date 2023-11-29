@@ -8,17 +8,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const filePathCourses = "../courses.csv";
-const filePathPlanners = "../planners.json";
+const filePathPlanners = "../planners/";
 
 export function getPlanners() {
-  fs.readFile(filePathPlanners, "utf-8", (err, data) => {
-    if (err) {
-      console.error("An error occurred:", err);
-      return;
-    }
+  const planners = [
+    "planners_2020-2021.json",
+    "planners_2021-2022.json",
+    "planners_2022-2023.json",
+    "planners_2023-2024.json",
+  ];
 
-    return JSON.parse(data);
+  const plannerData: any = {};
+  planners.forEach((p) => {
+    fs.readFile(filePathPlanners + p, "utf-8", (err, data) => {
+      if (err) {
+        console.error("An error occurred:", err);
+        return;
+      }
+      plannerData[p.split("_")[1].replace(".json", "")] = JSON.parse(data);
+    });
   });
+
+  return plannerData;
 }
 
 export function getCourses() {
