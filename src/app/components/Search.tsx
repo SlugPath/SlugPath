@@ -34,7 +34,7 @@ export default function Search() {
     number,
     ge,
     error,
-  } = useSearch({ coursesInPlanner });
+  } = useSearch();
 
   function hasResults(data: any): boolean {
     return data && data.coursesBy.length > 0;
