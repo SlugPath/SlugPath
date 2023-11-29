@@ -8,6 +8,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const filePathCourses = "../courses.csv";
+const filePathPlanners = "../planners.json";
+
+export function getPlanners() {
+  fs.readFile(filePathPlanners, "utf-8", (err, data) => {
+    if (err) {
+      console.error("An error occurred:", err);
+      return;
+    }
+
+    return JSON.parse(data);
+  });
+}
 
 export function getCourses() {
   const csvFilePath = path.resolve(__dirname, filePathCourses);
