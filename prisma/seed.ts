@@ -1,7 +1,7 @@
 import { Term, PrismaClient, EnrolledCourse } from "@prisma/client";
 import { getCourses, getPlanners } from "./csvreader";
 import { majors, years } from "@/lib/defaultPlanners";
-import { customCourse } from "@/lib/plannerUtils";
+import { getRealEquivalent } from "@/lib/plannerUtils";
 import { zip } from "@/lib/utils";
 
 const prisma = new PrismaClient();
@@ -71,10 +71,7 @@ async function main() {
         const qs = zip(planner[`Year ${y}`], terms).map((ct) => {
           const [cs, t] = ct;
           const plannedCourses: EnrolledCourse[] = cs.map((c: string) => {
-            return {
-              ...customCourse,
-              title: c,
-            };
+            return getRealEquivalent(c);
           });
           return {
             year: y,
@@ -92,7 +89,7 @@ async function main() {
       const pid = (
         await prisma.planner.create({
           data: {
-            title: planner["planner_name"],
+            title: `${planner["planner_name"]} (${catalogYear})`,
             order: parseInt(order),
             quarters: {
               create: quarters,

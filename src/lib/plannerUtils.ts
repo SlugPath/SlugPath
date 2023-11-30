@@ -10,6 +10,7 @@ import { StoredCourse } from "@/app/types/Course";
 import { v4 as uuidv4 } from "uuid";
 import { initialLabels } from "./labels";
 import { LabelColor } from "@prisma/client";
+import prisma from "./prisma";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
@@ -123,6 +124,49 @@ export function getDeptAndNumber({
   if (departmentCode !== "" && number !== "")
     return `${departmentCode} ${number}`;
   return `${title}`;
+}
+
+/**
+ * Returns the real equivalent of a course if it exists.
+ * Otherwise it returns a custom course with the custom title.
+ * For use with seeding default planners
+ * @param title title of the course
+ */
+export async function getRealEquivalent(title: string): Promise<StoredCourse> {
+  const regex = /^[A-Z]{1,5} [0-9]{1,3}[A-Z]?$/;
+
+  if (!regex.test(title)) {
+    return {
+      ...customCourse,
+      title,
+    };
+  }
+
+  const [dept, num] = title.split(" ");
+  const equivalent = await prisma.course.findFirst({
+    where: {
+      departmentCode: dept,
+      number: num,
+    },
+  });
+
+  // Should not happen
+  if (equivalent === null) {
+    return {
+      ...customCourse,
+      title,
+    };
+  }
+
+  return {
+    ...customCourse,
+    title: equivalent.title,
+    departmentCode: equivalent.departmentCode,
+    number: equivalent.number,
+    credits: equivalent.credits,
+    ge: equivalent.ge,
+    quartersOffered: equivalent.quartersOffered,
+  };
 }
 
 export function isCustomCourse({
