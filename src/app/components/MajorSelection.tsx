@@ -174,12 +174,18 @@ function SelectMajorName({
 }) {
   return (
     <>
-      <Typography level="body-lg">Select your major</Typography>
+      <Typography
+        level="body-lg"
+        className="text-dark-text dark:text-light-secondary-text"
+      >
+        Select your major
+      </Typography>
       <Select
         value={major}
         placeholder="Choose one…"
         variant="soft"
         onChange={onChange}
+        className="dark:bg-blue dark:hover:bg-tertiary-blue dark:text-light-secondary-text"
       >
         {majors.map((major, index) => (
           <Option key={index} value={major}>
@@ -202,12 +208,18 @@ function SelectCatalogYear({
 }) {
   return (
     <>
-      <Typography level="body-lg">Select your catalog year</Typography>
+      <Typography
+        level="body-lg"
+        className="text-dark-text dark:text-light-secondary-text"
+      >
+        Select your catalog year
+      </Typography>
       <Select
         value={catalogYear}
         placeholder="Choose one…"
         variant="soft"
         onChange={onChange}
+        className="dark:bg-blue dark:hover:bg-tertiary-blue dark:text-light-secondary-text"
       >
         {years.map((year, index) => (
           <Option key={index} value={year}>
@@ -229,13 +241,23 @@ function SelectDefaultPlanner({
   return (
     <>
       <div className="flex flex-row space-x-2">
-        <Typography level="body-lg">Select a default planner</Typography>
+        <Typography
+          level="body-lg"
+          className="text-dark-text dark:text-light-secondary-text"
+        >
+          Select a default planner
+        </Typography>
         <Tooltip title="The default planner you select will be auto filled into any new planners you create">
           <Info sx={{ color: "gray" }} />
         </Tooltip>
       </div>
       <div className="space-y-2">
-        <Tabs value={defaultPlanner} variant="soft" onChange={onChange}>
+        <Tabs
+          value={defaultPlanner}
+          variant="solid"
+          color="primary"
+          onChange={onChange}
+        >
           <TabList>
             <Tab>4 Year Plan</Tab>
             <Tab>4 Year Plan</Tab>
@@ -253,7 +275,7 @@ function MiniPlanner() {
   const planner = initialPlanner;
 
   return (
-    <Card>
+    <Card variant="solid" color="primary">
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
         const slice_val = quartersPerYear * i;
         const quarters = planner.quarters.slice(
@@ -261,12 +283,17 @@ function MiniPlanner() {
           slice_val + quartersPerYear,
         );
         return (
-          <div key={i} className="flex flex-row space-x-2">
+          <div
+            key={i}
+            className="flex flex-row space-x-2 bg-bg-light dark:bg-bg-dark"
+          >
             {quarters.map((quarter, index) => {
               // const courses = findCoursesInQuarter(planner, quarter.id);
               return (
                 <div key={index}>
-                  <Card>{quarter.title}</Card>
+                  <Card variant="solid" color="neutral">
+                    {quarter.title}
+                  </Card>
                 </div>
               );
             })}

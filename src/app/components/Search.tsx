@@ -1,6 +1,7 @@
 import {
   Card,
   CircularProgress,
+  CssVarsProvider,
   FormControl,
   FormHelperText,
   Input,
@@ -120,131 +121,133 @@ export default function Search() {
   }
 
   return (
-    <Card className="w-80" variant="plain">
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleSearch(departmentCode ?? "", number, ge ?? "");
-        }}
-      >
-        <div className="grid gap-2 p-2">
-          <Select
-            placeholder="Department"
-            name="department"
-            aria-label="department"
-            className="col-span-2"
-            variant="soft"
-            onChange={handleChangeDepartment}
-            value={departmentCode ?? ""}
-            slotProps={{
-              listbox: {
-                sx: { minWidth: 270 },
-              },
-            }}
-          >
-            {departments.map((dep) => (
-              <Option key={dep.value} value={dep.value}>
-                {dep.label}
-              </Option>
-            ))}
-          </Select>
-          <FormControl error={error}>
-            <Input
+    <CssVarsProvider>
+      <Card className="w-80 dark:bg-blue" variant="plain">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleSearch(departmentCode ?? "", number, ge ?? "");
+          }}
+        >
+          <div className="grid gap-2 p-2">
+            <Select
+              placeholder="Department"
+              name="department"
+              aria-label="department"
               className="col-span-2"
-              color="neutral"
-              placeholder="Number"
               variant="soft"
-              name="number"
-              aria-label="number"
-              onChange={(event) => handleChangeNumber(event.target.value)}
-              size="sm"
-            />
-            {error && (
-              <FormHelperText>
-                <InfoOutlined />
-                Invalid course number
-              </FormHelperText>
-            )}
-          </FormControl>
-          <Select
-            placeholder="GE Requirement"
-            name="ge"
-            aria-label="ge"
-            className="col-span-2 bg-slate-100"
-            variant="soft"
-            onChange={handleChangeGE}
-            value={ge ?? ""}
-            size="sm"
-          >
-            {geOptions.map((option) => (
-              <Option key={option.value} value={option.value}>
-                {option.label}
-              </Option>
-            ))}
-          </Select>
-        </div>
-      </form>
-
-      <Droppable
-        droppableId={"search-droppable"}
-        isDropDisabled={true}
-        mode="virtual"
-        renderClone={(provided, snapshot, rubric) => {
-          const index = rubric.source.index;
-          // Null coalesce to custom course since the custom course
-          // has an index of -1
-          const course = getCourseByIndex(index) ?? customCourse;
-          return (
-            <CourseCard
-              course={course}
-              index={index}
-              provided={provided}
-              isDragging={snapshot.isDragging}
-            />
-          );
-        }}
-      >
-        {(provided, snapshot) => {
-          return (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              <div className="mb-4">
-                <DraggableCourseCard
-                  index={-1}
-                  draggableId={createSearchId(customCourse)}
-                  course={customCourse}
-                />
-              </div>
-              {hasResults(data) ? (
-                <div>
-                  <div className="mb-1">{getResultsString(data)}</div>
-                  <div className="overflow-y-auto h-[62vh]">
-                    <AutoSizer>
-                      {({ height, width }) => (
-                        <List
-                          height={height}
-                          rowCount={getItemCount(data, snapshot)}
-                          rowHeight={40}
-                          width={width}
-                          rowRenderer={(props) => getRowRender(props)}
-                        />
-                      )}
-                    </AutoSizer>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex justify-center items-center h-96">
-                  {noResults(data) ? (
-                    <p className="text-gray-400">No results</p>
-                  ) : null}
-                  {loading ? (
-                    <CircularProgress variant="plain" color="primary" />
-                  ) : null}
-                </div>
+              onChange={handleChangeDepartment}
+              value={departmentCode ?? ""}
+              slotProps={{
+                listbox: {
+                  sx: { minWidth: 270 },
+                },
+              }}
+            >
+              {departments.map((dep) => (
+                <Option key={dep.value} value={dep.value}>
+                  {dep.label}
+                </Option>
+              ))}
+            </Select>
+            <FormControl error={error}>
+              <Input
+                className="col-span-2"
+                color="neutral"
+                placeholder="Number"
+                variant="soft"
+                name="number"
+                aria-label="number"
+                onChange={(event) => handleChangeNumber(event.target.value)}
+                size="sm"
+              />
+              {error && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  Invalid course number
+                </FormHelperText>
               )}
-            </div>
-          );
-        }}
-      </Droppable>
-    </Card>
+            </FormControl>
+            <Select
+              placeholder="GE Requirement"
+              name="ge"
+              aria-label="ge"
+              className="col-span-2"
+              variant="soft"
+              onChange={handleChangeGE}
+              value={ge ?? ""}
+              size="sm"
+            >
+              {geOptions.map((option) => (
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              ))}
+            </Select>
+          </div>
+        </form>
+
+        <Droppable
+          droppableId={"search-droppable"}
+          isDropDisabled={true}
+          mode="virtual"
+          renderClone={(provided, snapshot, rubric) => {
+            const index = rubric.source.index;
+            // Null coalesce to custom course since the custom course
+            // has an index of -1
+            const course = getCourseByIndex(index) ?? customCourse;
+            return (
+              <CourseCard
+                course={course}
+                index={index}
+                provided={provided}
+                isDragging={snapshot.isDragging}
+              />
+            );
+          }}
+        >
+          {(provided, snapshot) => {
+            return (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                <div className="mb-4">
+                  <DraggableCourseCard
+                    index={-1}
+                    draggableId={createSearchId(customCourse)}
+                    course={customCourse}
+                  />
+                </div>
+                {hasResults(data) ? (
+                  <div>
+                    <div className="mb-1">{getResultsString(data)}</div>
+                    <div className="overflow-y-auto h-[62vh]">
+                      <AutoSizer>
+                        {({ height, width }) => (
+                          <List
+                            height={height}
+                            rowCount={getItemCount(data, snapshot)}
+                            rowHeight={40}
+                            width={width}
+                            rowRenderer={(props) => getRowRender(props)}
+                          />
+                        )}
+                      </AutoSizer>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center h-96">
+                    {noResults(data) ? (
+                      <p className="text-gray-400">No results</p>
+                    ) : null}
+                    {loading ? (
+                      <CircularProgress variant="plain" color="primary" />
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            );
+          }}
+        </Droppable>
+      </Card>
+    </CssVarsProvider>
   );
 }

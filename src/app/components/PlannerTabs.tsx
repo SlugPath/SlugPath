@@ -73,14 +73,13 @@ export default function PlannerTabs() {
           gap: 0.5,
           borderRadius: "xl",
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
-            // color: "white",
-            bgcolor: "#60a5fa",
+            bgcolor: "#60A5FA",
           },
           [`& .${tabClasses.root}[aria-selected="false"]`]: {
-            bgcolor: "#bfdbfe",
+            bgcolor: "#BFDBFE",
           },
           [`& .${tabClasses.root}:hover`]: {
-            bgcolor: "rgb(147 197 253)",
+            bgcolor: "#93C5FD",
           },
         }}
       >

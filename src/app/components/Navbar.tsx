@@ -6,7 +6,7 @@ export default function Navbar() {
   const { status } = useSession();
 
   return (
-    <header className="bg-blue-800 w-full">
+    <header className="bg-blue w-full">
       <nav className={`${status !== "authenticated" ? "py-1.5" : "py-1"} px-5`}>
         <div className="flex flex-row">
           {/* Logo and title start */}
@@ -17,7 +17,7 @@ export default function Navbar() {
               height={30}
               alt="Slug Icon"
             />
-            <a href="#" className="text-xl font-medium text-slate-100">
+            <a href="#" className="text-xl font-medium text-light-text">
               UCSC Course Planner
             </a>
           </div>
