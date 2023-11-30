@@ -1,6 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { Term, PrismaClient, EnrolledCourse } from "@prisma/client";
 import { getCourses, getPlanners } from "./csvreader";
 import { majors, years } from "@/lib/defaultPlanners";
+import { customCourse } from "@/lib/plannerUtils";
+import { zip } from "@/lib/utils";
 
 const prisma = new PrismaClient();
 
@@ -58,32 +60,43 @@ async function main() {
 
   const planners = await getPlanners();
 
-  // const terms = [Term.Fall, Term.Winter, Term.Spring, Term.Summer]
-  // const yearKeys = ["Year 1", "Year 2", "Year 3", "Year 4"]
+  const terms = [Term.Fall, Term.Winter, Term.Spring, Term.Summer];
+  const yearKeys = ["1", "2", "3", "4"];
 
   Object.keys(planners).forEach((catalogYear) => {
     planners[catalogYear].forEach(async (planner: any) => {
       // get quarters and courses
-      /*
-      const quarters = []
-      years.forEach((y) => {
-        const qs = zip(planners[y], terms).forEach((ct => {
+      const quarters: any[] = [];
+      yearKeys.forEach((y) => {
+        const qs = zip(planner[`Year ${y}`], terms).map((ct) => {
           const [cs, t] = ct;
-          cs.map((c) => {
+          const plannedCourses: EnrolledCourse[] = cs.map((c: string) => {
             return {
-              ...customCourse
-            }
-          })
-        }))
-      })
-      */
+              ...customCourse,
+              title: c,
+            };
+          });
+          return {
+            year: y,
+            term: t as Term,
+            courses: {
+              create: plannedCourses,
+            },
+          };
+        });
+        quarters.concat(qs);
+      });
 
+      // create the default planner
       const [majorName, order] = planner["planner_name"].split(" Planner ");
       const pid = (
         await prisma.planner.create({
           data: {
             title: planner["planner_name"],
-            order,
+            order: parseInt(order),
+            quarters: {
+              create: quarters,
+            },
           },
         })
       ).id;
@@ -109,8 +122,6 @@ async function main() {
     
   })
   */
-
-  console.log(`${JSON.stringify(planners, null, 2)}`);
 }
 
 main()
