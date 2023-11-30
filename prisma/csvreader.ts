@@ -33,7 +33,7 @@ export async function getPlanners() {
       console.error("An error occurred:", err);
     }
   }
-
+  console.log(`✨ Done parsing planners ✨`);
   return plannerData;
 }
 
@@ -83,7 +83,7 @@ export function getCourses() {
         courses.push(course);
       })
       .on("end", () => {
-        console.log("done");
+        console.log("✨ Done parsing courses ✨");
         resolve(courses);
       });
   });

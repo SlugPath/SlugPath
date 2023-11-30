@@ -285,7 +285,7 @@ it("should filter courses by GE requirement", async () => {
   // Assert that at least one course is returned
   expect(filteredCourses.length).toBeGreaterThan(0);
 });
-  
+
 it("should return the correct labels for each course", async () => {
   const user = await prisma.user.findFirst({
     where: {

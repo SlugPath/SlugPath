@@ -40,7 +40,6 @@ async function main() {
       }),
     );
   }
-  console.log(`Loaded ${courses.length} courses`);
 
   // Load all majors
   for (const m of majors) {
@@ -56,7 +55,8 @@ async function main() {
     }
   }
   await prisma.$transaction([...ops]);
-  console.log(`Loaded all majors`);
+  console.log(`✨ Loaded ${courses.length} courses ✨`);
+  console.log(`✨ Loaded all majors ✨`);
 
   const planners = await getPlanners();
 
@@ -101,27 +101,27 @@ async function main() {
         })
       ).id;
 
-      await prisma.major.update({
-        where: {
-          name_catalogYear: {
-            name: majorName,
-            catalogYear,
+      try {
+        await prisma.major.update({
+          where: {
+            name_catalogYear: {
+              name: majorName,
+              catalogYear,
+            },
           },
-        },
-        data: {
-          defaultPlanners: {
-            connect: [{ id: pid }],
+          data: {
+            defaultPlanners: {
+              connect: [{ id: pid }],
+            },
           },
-        },
-      });
+        });
+      } catch (e) {
+        console.log(`Couldn't find ${majorName} in ${catalogYear}`);
+      }
     });
   });
 
-  /*
-  Object.keys(planners).forEach((year) => {
-    
-  })
-  */
+  console.log(`✨ Loaded all default planners ✨`);
 }
 
 main()
