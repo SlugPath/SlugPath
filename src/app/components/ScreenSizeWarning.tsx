@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 
 // Function to check if the screen size is too small

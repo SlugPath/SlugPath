@@ -1,7 +1,8 @@
 "use client";
-import { Typography } from "@mui/joy";
+import Image from "next/image";
 import MajorSelection from "./components/MajorSelection";
 import LoginButton from "./components/LoginButton";
+import Footer from "./components/Footer";
 import { useSession } from "next-auth/react";
 import { WarningAmberRounded } from "@mui/icons-material";
 import { ApolloProvider } from "@apollo/client";
@@ -14,12 +15,18 @@ export default function Page() {
 
   return (
     <div className="bg-slate-200 h-full min-h-screen">
-      <div className="flex flex-row justify-between items-center px-5 py-2">
-        <div className="flex" />
-        <Typography level="h1" className="flex text-center">
-          Welcome to the UCSC Course Planner!
-        </Typography>
-        <div className="flex justify-end">
+      <div className="bg-blue-800 text-slate-100 max-h-20 grid grid-cols-5 px-5 py-4">
+        <div className="col-span-1" />
+        <div className="col-span-3 flex flex-row place-items-center gap-4 text-center text-4xl place-self-center">
+          <Image
+            src="/images/slug-icon.png"
+            width={45}
+            height={45}
+            alt="Slug Icon"
+          />
+          <div>Welcome to the UCSC Course Planner!</div>
+        </div>
+        <div className="col-span-1 self-center justify-self-end">
           <LoginButton />
         </div>
       </div>
@@ -40,6 +47,10 @@ export default function Page() {
             handleSave={() => router.push("/Planner")}
           />
         </ApolloProvider>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0">
+        <Footer />
       </div>
     </div>
   );

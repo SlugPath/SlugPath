@@ -2,7 +2,6 @@ import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
 import PlannerTabs from "./PlannerTabs";
 import Navbar from "./Navbar";
-import ScreenSizeWarning from "./ScreenSizeWarning";
 import Footer from "./Footer";
 import { useContext } from "react";
 import {
@@ -15,7 +14,6 @@ export default function App() {
   return (
     <PlannersProvider>
       <div className="h-full min-h-screen w-full bg-slate-200 flex flex-col justify-between">
-        <ScreenSizeWarning />
         <Navbar />
         <div className="pt-4 mb-auto">
           <div className="flex justify-left px-7">
