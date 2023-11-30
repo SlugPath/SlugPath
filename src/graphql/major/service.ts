@@ -58,6 +58,7 @@ export class MajorService {
           major: {
             connect: { id: majorId },
           },
+          defaultPlannerId: major.defaultPlannerId,
         },
       })
     ).id;

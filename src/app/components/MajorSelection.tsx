@@ -14,38 +14,7 @@ import Info from "@mui/icons-material/Info";
 import { useEffect, useState } from "react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
-
-const majors = [
-  "CSE BS",
-  "CSE BA",
-  "AMS BS",
-  "AMS BA",
-  "BIO BS",
-  "BIO BA",
-  "CHEM BS",
-  "CHEM BA",
-  "ECON BS",
-  "ECON BA",
-  "MATH BS",
-  "MATH BA",
-  "PHYS BS",
-  "PHYS BA",
-  "PSY BS",
-  "PSY BA",
-  "STA BS",
-  "STA BA",
-];
-
-const years = [
-  "2016-2017",
-  "2018-2019",
-  "2019-2020",
-  "2020-2021",
-  "2021-2022",
-  "2022-2023",
-  "2023-2024",
-  "2024-2025",
-];
+import { majors, years } from "@/lib/defaultPlanners";
 
 export default function MajorSelection() {
   const { data: session, status } = useSession();
@@ -54,7 +23,7 @@ export default function MajorSelection() {
   );
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
-  const [defaultPlanner, setDefaultPlanner] = useState(0);
+  const [defaultPlanner, setDefaultPlanner] = useState("");
 
   useEffect(() => {
     if (majorData) {
@@ -88,7 +57,8 @@ export default function MajorSelection() {
     index: number | string | null,
   ) {
     if (typeof index === "number") {
-      setDefaultPlanner(index);
+      // TODO: get id here instead of index
+      setDefaultPlanner(index.toString());
     }
   }
 
@@ -187,7 +157,7 @@ function SelectDefaultPlanner({
   defaultPlanner,
   onChange,
 }: {
-  defaultPlanner: number;
+  defaultPlanner: string;
   onChange: any;
 }) {
   return (

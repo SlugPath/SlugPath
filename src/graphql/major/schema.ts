@@ -29,4 +29,7 @@ export class MajorInput {
 
   @Field()
   userId!: string;
+
+  @Field()
+  defaultPlannerId!: string;
 }
