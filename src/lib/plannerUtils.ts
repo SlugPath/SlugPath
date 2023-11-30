@@ -138,6 +138,7 @@ export async function getRealEquivalent(title: string): Promise<StoredCourse> {
   if (!regex.test(title)) {
     return {
       ...customCourse,
+      id: uuidv4(),
       title,
     };
   }
@@ -154,12 +155,14 @@ export async function getRealEquivalent(title: string): Promise<StoredCourse> {
   if (equivalent === null) {
     return {
       ...customCourse,
+      id: uuidv4(),
       title,
     };
   }
 
   return {
     ...customCourse,
+    id: uuidv4(),
     title: equivalent.title,
     departmentCode: equivalent.departmentCode,
     number: equivalent.number,

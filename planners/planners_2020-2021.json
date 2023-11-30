@@ -2775,69 +2775,6 @@
     "planner_name": "Literature B.A. Planner 6"
   },
   {
-    "Year 1": [[], [], []],
-    "Year 2": [
-      [
-        "Upper-division LIT course Histories critical approach",
-        "Language Level 1"
-      ],
-      [
-        "pre-1750 distribution requirement",
-        "LIT 90 or LIT 90X",
-        "Language Level 2"
-      ],
-      ["LIT 101", "LIT 91A or LIT 91B", "Language Level 3"]
-    ],
-    "Year 3": [
-      ["Upper-division LIT course Geographies critical approach"],
-      ["global distribution requirement"],
-      ["LIT 102", "Upper-division LIT course Canons critical approach"]
-    ],
-    "Year 4": [
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 190V or LIT 190W Media critical approach"],
-      ["senior seminar"]
-    ],
-    "planner_name": "Literature B.A. Planner 7"
-  },
-  {
-    "Year 1": [
-      ["Upper-division LIT course Histories critical approach"],
-      ["pre-1750 distribution requirement"],
-      [],
-      []
-    ],
-    "Year 2": [[], [], [], []],
-    "Year 3": [
-      [
-        "Upper-division LIT course Canons critical approach",
-        "Upper-division LIT course Power and Subjectivities critical approach",
-        "LIT 90 or LIT 90X or LIT 91A or LIT 91B"
-      ],
-      [
-        "pre-1750 and poetry distribution requirements",
-        "Upper-division LIT course Geographies critical approach"
-      ],
-      ["LIT 102", "global distribution requirement"]
-    ],
-    "Year 4": [
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 190V or LIT 190W Media critical approach"],
-      ["senior seminar"]
-    ],
-    "planner_name": "Literature B.A. Planner 8"
-  },
-  {
     "Year 1": [[], [], [], []],
     "Year 2": [[], [], [], []],
     "Year 3": [
@@ -2857,9 +2794,9 @@
       ["LIT 102", "pre-1750 and poetry distribution requirements"],
       [
         "Upper-division LIT course Geographies critical approach",
-        "LIT 190V or LIT 190W Media critical approach"
-      ],
-      ["global distribution requirement", "senior seminar"]
+        "LIT 190V or LIT 190W Media critical approach",
+      "global distribution requirement", "senior seminar"
+      ]
     ],
     "planner_name": "Literature B.A. Planner 9"
   },

@@ -1,4 +1,4 @@
-import { Term, PrismaClient, EnrolledCourse } from "@prisma/client";
+import { Term, PrismaClient } from "@prisma/client";
 import { getCourses, getPlanners } from "./csvreader";
 import { majors, years } from "@/lib/defaultPlanners";
 import { getRealEquivalent } from "@/lib/plannerUtils";
@@ -66,39 +66,43 @@ async function main() {
   Object.keys(planners).forEach((catalogYear) => {
     planners[catalogYear].forEach(async (planner: any) => {
       // get quarters and courses
-      const quarters: any[] = [];
-      yearKeys.forEach((y) => {
-        const qs = zip(planner[`Year ${y}`], terms).map((ct) => {
-          const [cs, t] = ct;
-          const plannedCourses: EnrolledCourse[] = cs.map((c: string) => {
-            return getRealEquivalent(c);
-          });
-          return {
-            year: y,
-            term: t as Term,
-            courses: {
-              create: plannedCourses,
-            },
-          };
-        });
-        quarters.concat(qs);
-      });
+      let quarters: any[] = [];
+      for (const y of yearKeys) {
+        const qs = await Promise.all(
+          zip(planner[`Year ${y}`], terms).map(async (ct) => {
+            const [cs, t] = ct;
+            const plannedCourses = await Promise.all(
+              cs.map(async (c: string) => {
+                return await getRealEquivalent(c);
+              }),
+            );
 
+            return {
+              year: parseInt(y),
+              term: t,
+              courses: {
+                create: plannedCourses,
+              },
+            };
+          }),
+        );
+
+        quarters = quarters.concat(qs);
+      }
       // create the default planner
       const [majorName, order] = planner["planner_name"].split(" Planner ");
-      const pid = (
-        await prisma.planner.create({
-          data: {
-            title: `${planner["planner_name"]} (${catalogYear})`,
-            order: parseInt(order),
-            quarters: {
-              create: quarters,
-            },
-          },
-        })
-      ).id;
-
       try {
+        const pid = (
+          await prisma.planner.create({
+            data: {
+              title: `${planner["planner_name"]} (${catalogYear})`,
+              order: parseInt(order),
+              quarters: {
+                create: quarters,
+              },
+            },
+          })
+        ).id;
         await prisma.major.update({
           where: {
             name_catalogYear: {
@@ -113,7 +117,9 @@ async function main() {
           },
         });
       } catch (e) {
-        console.log(`Couldn't find ${majorName} in ${catalogYear}`);
+        console.log(
+          `Couldn't properly create planner ${planner["planner_name"]} for catalog year ${catalogYear}`,
+        );
       }
     });
   });

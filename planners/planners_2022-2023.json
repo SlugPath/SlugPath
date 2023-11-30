@@ -2625,8 +2625,7 @@
       ["LGST Core LS"],
       ["PLI or T"],
       ["LGST 196 Senior Capstone"],
-      ["LGST Core LS"],
-      ["PLI or T"]
+      ["LGST Core LS", "PLI or T"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
@@ -2808,62 +2807,6 @@
       ]
     ],
     "planner_name": "Literature B.A. Planner 6"
-  },
-  {
-    "Year 1": [[], [], []],
-    "Year 2": [
-      [
-        "Upper-division LIT course pre-1750 distribution requirement",
-        "Language Level 1"
-      ],
-      ["LIT 101", "LIT 90 or LIT 90X", "Language Level 2"],
-      ["Upper-division LIT course", "LIT 91A or LIT 91B", "Language Level 3"]
-    ],
-    "Year 3": [
-      ["Upper-division LIT course global distribution requirement"],
-      ["LIT 102"],
-      [
-        "LIT 179A",
-        "Upper-division LIT course pre-1750 and poetry distribution requirements"
-      ]
-    ],
-    "Year 4": [
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 190V or LIT 190W senior seminar"]
-    ],
-    "planner_name": "Literature B.A. Planner 7"
-  },
-  {
-    "Year 1": [
-      ["Upper-division LIT course pre-1750 distribution requirement"],
-      [],
-      []
-    ],
-    "Year 2": [[], [], [], []],
-    "Year 3": [
-      [
-        "Upper-division LIT course pre-1750 and poetry distribution requirements",
-        "Upper-division LIT course",
-        "LIT 90 or LIT 90X or LIT 91A or LIT 91B"
-      ],
-      ["LIT 102", "Upper-division LIT course global distribution requirement"],
-      ["LIT 101", "LIT 179A"]
-    ],
-    "Year 4": [
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 179A"],
-      ["LIT 179B"],
-      ["or LIT 179C"],
-      ["LIT 190V or LIT 190W senior seminar"]
-    ],
-    "planner_name": "Literature B.A. Planner 8"
   },
   {
     "Year 1": [[], [], [], []],
