@@ -15,9 +15,9 @@ export default function Page() {
 
   return (
     <div className="bg-slate-200 h-full min-h-screen">
-      <div className="bg-blue-800 text-slate-100 max-h-20 grid grid-cols-5 px-5 py-4">
+      <div className="bg-blue-800 text-slate-100 h-auto flex flex-row md:grid md:grid-cols-5 px-5 py-4">
         <div className="col-span-1" />
-        <div className="col-span-3 flex flex-row place-items-center gap-4 text-center text-4xl place-self-center">
+        <div className="col-span-3 flex flex-row place-items-center gap-2 md:gap-6 text-center text-4xl place-self-center">
           <Image
             src="/images/slug-icon.png"
             width={45}
@@ -40,7 +40,7 @@ export default function Page() {
           </div>
         </div>
       ) : null}
-      <div className="flex flex-col items-center justify-center h-[80vh] w-[33vw] mx-auto">
+      <div className="flex flex-col items-center md:py-6 justify-center h-[80vh] w-[33vw] mx-auto">
         <ApolloProvider client={apolloClient}>
           <MajorSelection
             saveButtonName="Next"
@@ -49,7 +49,7 @@ export default function Page() {
         </ApolloProvider>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0">
+      <div className="sm:absolute sm:inset-x-0 sm:bottom-0">
         <Footer />
       </div>
     </div>
