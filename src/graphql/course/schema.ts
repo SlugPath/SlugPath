@@ -86,4 +86,7 @@ export class QueryInput {
   @Min(1)
   @Max(10)
   credits?: number;
+
+  @Field({ nullable: true })
+  ge?: string;
 }

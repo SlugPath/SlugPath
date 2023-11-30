@@ -28,10 +28,13 @@ export default function Search() {
     departments,
     handleChangeDepartment,
     handleChangeNumber,
+    handleChangeGE,
     handleSearch,
     departmentCode,
     number,
+    ge,
     error,
+    geOptions,
   } = useSearch();
 
   function hasResults(data: any): boolean {
@@ -121,7 +124,7 @@ export default function Search() {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          handleSearch(departmentCode ?? "", number);
+          handleSearch(departmentCode ?? "", number, ge ?? "");
         }}
       >
         <div className="grid gap-2 p-2">
@@ -158,6 +161,22 @@ export default function Search() {
               </FormHelperText>
             )}
           </FormControl>
+          <Select
+            placeholder="GE Requirement"
+            name="ge"
+            aria-label="ge"
+            className="col-span-2 bg-slate-100"
+            variant="soft"
+            onChange={handleChangeGE}
+            value={ge ?? ""}
+            size="sm"
+          >
+            {geOptions.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
         </div>
       </form>
 
