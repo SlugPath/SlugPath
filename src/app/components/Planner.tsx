@@ -63,16 +63,16 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   </div>
 
                   {/* Modals and Grad Progress */}
-                  <div className="self-start">
+                  <div className="flex flex-col self-start gap-3">
                     <Card variant="plain">
                       <div>
                         <PlannerActions />
                         <Modals />
                       </div>
+                    </Card>
 
-                      <hr className="rounded border-t border-slate-300" />
-
-                      <div className="flex justify-items-center">
+                    <Card variant="plain">
+                      <div className="flex place-items-center">
                         <GradProgress credits={totalCredits} />
                       </div>
 

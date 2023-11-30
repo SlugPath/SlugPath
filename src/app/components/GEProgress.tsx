@@ -41,10 +41,13 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
 
   return (
     <>
-      <div className="flex flex-col place-items-center xl:w-64">
-        <div className="flex flex-row py-1 justify-between w-full">
+      <div className="flex flex-col place-items-center pt-2 w-full">
+        <div className="flex flex-row py-1 justify-between w-full pb-4">
           <Typography>GE Progress</Typography>
-          <Tooltip title="You must satisfy all general education requirements to graduate">
+          <Tooltip
+            title="You must satisfy all general education requirements to graduate"
+            size="sm"
+          >
             <InfoIcon sx={{ color: "gray" }} />
           </Tooltip>
         </div>

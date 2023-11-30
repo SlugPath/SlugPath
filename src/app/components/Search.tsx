@@ -136,6 +136,11 @@ export default function Search() {
             variant="soft"
             onChange={handleChangeDepartment}
             value={departmentCode ?? ""}
+            slotProps={{
+              listbox: {
+                sx: { minWidth: 270 },
+              },
+            }}
           >
             {departments.map((dep) => (
               <Option key={dep.value} value={dep.value}>
