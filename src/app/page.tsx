@@ -17,7 +17,7 @@ export default function Page() {
   return (
     <CssVarsProvider defaultMode="system">
       <div className="bg-bg-light dark:bg-bg-dark h-full min-h-screen">
-        <div className="bg-blue text-light-text dark:text-light-secondary-text h-auto flex flex-row md:grid md:grid-cols-5 px-5 py-4">
+        <div className="bg-primary-500 text-secondary-100 dark:text-secondary-200 h-auto flex flex-row md:grid md:grid-cols-5 px-5 py-4">
           <div className="col-span-1" />
           <div className="col-span-3 flex flex-row place-items-center gap-2 md:gap-6 text-center text-4xl place-self-center">
             <Image

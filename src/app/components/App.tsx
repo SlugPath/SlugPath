@@ -23,7 +23,9 @@ export default function App() {
             <PlannerList />
           </div>
         </div>
-        <Footer />
+        <div className="mt-6">
+          <Footer />
+        </div>
       </div>
     </PlannersProvider>
   );
@@ -35,7 +37,7 @@ function PlannerList() {
     <>
       {/* Start helpful tips for user */}
       {Object.keys(planners).length == 0 && (
-        <div className="flex flex-col items-center justify-center h-[80vh] text-dark-text dark:text-light-secondary-text">
+        <div className="flex flex-col items-center justify-center h-[80vh] text-secondary-900 dark:text-secondary-200">
           <div className="text-2xl font-semibold">
             Welcome to UCSC Course Planner!
           </div>

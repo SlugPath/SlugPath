@@ -10,17 +10,19 @@ const config: Config = {
     extend: {
       colors: {
         "bg-light": "#e2e8f0",
-        "bg-dark": "#10142c",
-        blue: "#1e40af",
-        "secondary-blue": "#0a2744", // FIXME: rename to darker blue
-        "tertiary-blue": "#0b6bcb", // FIXME: rename to lighter blue
-        "hover-blue": "#93c5fd",
-        "hover-secondary-blue": "#12467b",
-        grey: "#8899a6",
-        "dark-grey": "#22303c",
-        "light-text": "#f1f5f9",
-        "light-secondary-text": "#cbd5e1",
-        "dark-text": "#27272a",
+        "bg-dark": "#171d40",
+        "primary-100": "#bfdbfe",
+        "primary-200": "#93c5fd",
+        "primary-400": "#0b6bcb",
+        "primary-500": "#1e40af", // Primary blue
+        "primary-700": "#12467b",
+        "primary-900": "#0a2744",
+
+        "secondary-100": "#f1f5f9",
+        "secondary-200": "#e2e8f0",
+        "secondary-300": "#cbd5e1",
+        "secondary-900": "#27272a",
+
         "warning-light": "#ffedd5",
         "warning-dark": "#fdba74",
       },

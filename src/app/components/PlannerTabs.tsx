@@ -1,4 +1,4 @@
-import { IconButton, Input, Tabs, TabList } from "@mui/joy";
+import { CssVarsProvider, IconButton, Input, Tabs, TabList } from "@mui/joy";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
@@ -59,95 +59,100 @@ export default function PlannerTabs() {
   };
 
   return (
-    <Tabs
-      aria-label="tabs"
-      defaultValue={0}
-      sx={{ bgcolor: "transparent" }}
-      onChange={handleTabChange}
-      value={activePlanner ? activePlanner.id : null}
-    >
-      <TabList
-        disableUnderline
-        sx={{
-          p: 0.5,
-          gap: 0.5,
-          borderRadius: "xl",
-          [`& .${tabClasses.root}[aria-selected="true"]`]: {
-            bgcolor: "#60A5FA",
-          },
-          [`& .${tabClasses.root}[aria-selected="false"]`]: {
-            bgcolor: "#BFDBFE",
-          },
-          [`& .${tabClasses.root}:hover`]: {
-            bgcolor: "#93C5FD",
-          },
-        }}
+    <CssVarsProvider defaultMode="system">
+      <Tabs
+        aria-label="tabs"
+        defaultValue={0}
+        sx={{ bgcolor: "transparent" }}
+        onChange={handleTabChange}
+        value={activePlanner ? activePlanner.id : null}
       >
-        {/* Start alerts */}
-        <PlannerDeleteAlert
-          open={openAlert}
-          onClose={() => setAlert(["", ""])}
-          onDelete={deletePlanner}
-        />
-        <TooManyPlannersAlert
-          open={openTooMany}
-          onClose={() => setTooMany(false)}
-        />
-        {/* End alerts */}
-        {Object.entries(planners).map(([id, [title]]) => (
-          <Tab
-            onDoubleClick={() => setIsEditing(id)}
-            key={id}
-            disableIndicator
-            value={id}
-          >
-            {/* Editable planner titles */}
-            {isEditing === id ? (
-              <>
-                <TitleSnackbar error={title.length < 2} />
-                <Input
-                  variant="soft"
-                  value={title}
-                  autoFocus
-                  error={title.length < 2}
-                  size="md"
-                  sx={{
-                    "--Input-focusedInset": "var(--any, )",
-                    "--Input-focusedThickness": "0.25rem",
-                    "&::before": {
-                      transition: "box-shadow .15s ease-in-out",
-                    },
-                    "&:focus-within": {
-                      borderColor: "#86b7fe",
-                    },
-                    maxWidth: "15ch",
-                  }}
-                  onChange={(e) => changePlannerName(e, id)}
-                  onBlur={() => handleBlur(title)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleBlur(title);
-                    }
-                  }}
-                />
-              </>
-            ) : (
-              <span>{title}</span>
-            )}
-            <CloseIconButton onClick={() => setAlert([id, title])} />
-          </Tab>
-        ))}
-        {/* Add new planner button */}
-        <IconButton
-          onClick={() => handleAddPlanner()}
-          aria-label="Add"
-          size="sm"
-          variant="plain"
-          color="primary"
+        <TabList
+          disableUnderline
+          sx={{
+            p: 0.5,
+            gap: 0.5,
+            borderRadius: "xl",
+            [`& .${tabClasses.root}[aria-selected="true"]`]: {
+              color: "#F1F5F9",
+              bgcolor: "#3B82F6",
+            },
+            [`& .${tabClasses.root}[aria-selected="false"]`]: {
+              color: "#334155",
+              bgcolor: "#93C5FD",
+            },
+            [`& .${tabClasses.root}:hover`]: {
+              color: "#334155",
+              bgcolor: "#BFDBFE",
+            },
+          }}
         >
-          <Add />
-        </IconButton>
-      </TabList>
-    </Tabs>
+          {/* Start alerts */}
+          <PlannerDeleteAlert
+            open={openAlert}
+            onClose={() => setAlert(["", ""])}
+            onDelete={deletePlanner}
+          />
+          <TooManyPlannersAlert
+            open={openTooMany}
+            onClose={() => setTooMany(false)}
+          />
+          {/* End alerts */}
+          {Object.entries(planners).map(([id, [title]]) => (
+            <Tab
+              onDoubleClick={() => setIsEditing(id)}
+              key={id}
+              disableIndicator
+              value={id}
+            >
+              {/* Editable planner titles */}
+              {isEditing === id ? (
+                <>
+                  <TitleSnackbar error={title.length < 2} />
+                  <Input
+                    variant="soft"
+                    value={title}
+                    autoFocus
+                    error={title.length < 2}
+                    size="md"
+                    sx={{
+                      "--Input-focusedInset": "var(--any, )",
+                      "--Input-focusedThickness": "0.25rem",
+                      "&::before": {
+                        transition: "box-shadow .15s ease-in-out",
+                      },
+                      "&:focus-within": {
+                        borderColor: "#86b7fe",
+                      },
+                      maxWidth: "15ch",
+                    }}
+                    onChange={(e) => changePlannerName(e, id)}
+                    onBlur={() => handleBlur(title)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleBlur(title);
+                      }
+                    }}
+                  />
+                </>
+              ) : (
+                <span>{title}</span>
+              )}
+              <CloseIconButton onClick={() => setAlert([id, title])} />
+            </Tab>
+          ))}
+          {/* Add new planner button */}
+          <IconButton
+            onClick={() => handleAddPlanner()}
+            aria-label="Add"
+            size="sm"
+            variant="plain"
+            color="primary"
+          >
+            <Add />
+          </IconButton>
+        </TabList>
+      </Tabs>
+    </CssVarsProvider>
   );
 }

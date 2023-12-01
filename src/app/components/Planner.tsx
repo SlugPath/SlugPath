@@ -5,7 +5,7 @@ import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useState } from "react";
 import SaveSnackbars from "./SaveSnackbars";
-import { Card, CircularProgress } from "@mui/joy";
+import { Card, CircularProgress, CssVarsProvider } from "@mui/joy";
 import useDebounce from "../hooks/useDebounce";
 import { GradProgress } from "./GradProgress";
 import { GEProgress } from "./GEProgress";
@@ -105,28 +105,30 @@ function Modals() {
 
 function Years({ courseState }: { courseState: PlannerData }) {
   return (
-    <AccordionGroup>
-      <div className="space-y-2">
-        {Array.from({ length: quartersPerYear }, (_, index) => index).map(
-          (i) => {
-            const slice_val = quartersPerYear * i;
-            const quarters = courseState.quarters.slice(
-              slice_val,
-              slice_val + quartersPerYear,
-            );
+    <CssVarsProvider defaultMode="dark">
+      <AccordionGroup>
+        <div className="space-y-2">
+          {Array.from({ length: quartersPerYear }, (_, index) => index).map(
+            (i) => {
+              const slice_val = quartersPerYear * i;
+              const quarters = courseState.quarters.slice(
+                slice_val,
+                slice_val + quartersPerYear,
+              );
 
-            return (
-              <Quarters
-                key={i}
-                year={i + 1}
-                quarters={quarters}
-                courseState={courseState}
-              />
-            );
-          },
-        )}
-      </div>
-    </AccordionGroup>
+              return (
+                <Quarters
+                  key={i}
+                  year={i + 1}
+                  quarters={quarters}
+                  courseState={courseState}
+                />
+              );
+            },
+          )}
+        </div>
+      </AccordionGroup>
+    </CssVarsProvider>
   );
 }
 
@@ -142,7 +144,6 @@ function Quarters({
   return (
     <Accordion
       sx={{
-        backgroundColor: "white",
         borderRadius: "0.5rem",
         "&.MuiAccordion-root": {
           "& .MuiAccordionSummary-root": {

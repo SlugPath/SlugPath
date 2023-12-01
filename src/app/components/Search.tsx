@@ -122,7 +122,7 @@ export default function Search() {
 
   return (
     <CssVarsProvider defaultMode="system">
-      <Card className="w-80 dark:bg-blue" variant="plain">
+      <Card className="w-80" variant="plain">
         <form
           onSubmit={(event) => {
             event.preventDefault();

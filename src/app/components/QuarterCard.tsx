@@ -2,7 +2,6 @@ import { Card } from "@mui/joy";
 import DraggableCourseCard from "./DraggableCourseCard";
 import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
-import { QUARTER_CARD_BG } from "@/lib/colorConstants";
 
 export default function QuarterCard({
   title,
@@ -14,14 +13,7 @@ export default function QuarterCard({
   courses: StoredCourse[];
 }) {
   return (
-    <Card
-      size="md"
-      className="min-w-[130px] w-full"
-      variant="plain"
-      style={{
-        backgroundColor: QUARTER_CARD_BG,
-      }}
-    >
+    <Card size="md" className="min-w-[130px] w-full" variant="plain">
       {title}
       <Droppable droppableId={id}>
         {(provided) => {

@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="flex text-light-secondary-text bg-blue h-12 grid place-items-center">
+    <footer className="flex text-secondary-300 bg-primary-500 h-12 grid place-items-center">
       <p className="text-center text-xs self-end pt-2">
         Please check with your Academic and Major advisor(s) for the most
         accurate information.

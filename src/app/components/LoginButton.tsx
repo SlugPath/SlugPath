@@ -14,7 +14,7 @@ export default function LoginButton() {
           onClick={() => {
             signIn("google");
           }}
-          className="text-light-text dark:text-light-secondary-text hover:bg-hover-blue"
+          className="text-secondary-100 dark:text-secondary-200 hover:bg-hover-blue"
         >
           Login with UCSC account
         </Button>
