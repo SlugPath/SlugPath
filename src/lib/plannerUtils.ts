@@ -18,23 +18,26 @@ const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
 export const quartersPerYear = 4;
 
-export const initialPlanner: PlannerData = {
-  quarters: createQuarters(),
-  years,
-  courses: [],
-  labels: initialLabels,
+export const initialPlanner = (): PlannerData => {
+  return {
+    quarters: createQuarters(),
+    years,
+    courses: [],
+    labels: initialLabels,
+  };
 };
 
-export const emptyPlanner: PlannerData = {
-  quarters: [],
-  years,
-  courses: [],
-  labels: [],
+export const emptyPlanner = (): PlannerData => {
+  return {
+    quarters: [],
+    years,
+    courses: [],
+    labels: [],
+  };
 };
 
 export function createQuarters() {
   const quarters: Quarter[] = [];
-
   for (let year = 0; year < years; year++) {
     for (let quarter = 0; quarter < quartersPerYear; quarter++) {
       const id = `quarter-${year}-${quarterNames[quarter]}`;
@@ -78,7 +81,6 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
 }
 
 export function deserializePlanner(output: PlannerDataOutput): PlannerData {
-  console.log(`GOT ${JSON.stringify(output, null, 2)}`);
   const result: PlannerData = {
     years: output.years,
     quarters: [],
@@ -107,15 +109,17 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
   return result;
 }
 
-export const customCourse: StoredCourse = {
-  id: uuidv4(),
-  credits: 5,
-  departmentCode: "",
-  number: "",
-  title: "Custom Course",
-  ge: [],
-  quartersOffered: ["Fall", "Winter", "Spring"],
-  labels: [],
+export const customCourse = (): StoredCourse => {
+  return {
+    id: uuidv4(),
+    credits: 5,
+    departmentCode: "",
+    number: "",
+    title: "Custom Course",
+    ge: [],
+    quartersOffered: ["Fall", "Winter", "Spring"],
+    labels: [],
+  };
 };
 
 export function getDeptAndNumber({
@@ -155,8 +159,7 @@ export async function getRealEquivalent(title: string): Promise<StoredCourse> {
 
   if (!regex.test(title)) {
     return {
-      ...customCourse,
-      id: uuidv4(),
+      ...customCourse(),
       title,
     };
   }
@@ -172,15 +175,13 @@ export async function getRealEquivalent(title: string): Promise<StoredCourse> {
   // Should not happen
   if (equivalent === null) {
     return {
-      ...customCourse,
-      id: uuidv4(),
+      ...customCourse(),
       title,
     };
   }
 
   return {
-    ...customCourse,
-    id: uuidv4(),
+    ...customCourse(),
     title: equivalent.title,
     departmentCode: equivalent.departmentCode,
     number: equivalent.number,
