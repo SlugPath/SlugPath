@@ -3,7 +3,7 @@ import { MajorInput, MajorDefaultsInput, UserMajorOutput } from "./schema";
 import { PlannerTitle } from "../planner/schema";
 
 export class MajorService {
-  public async getUserMajor(userId: string): Promise<UserMajorOutput> {
+  public async getUserMajor(userId: string): Promise<UserMajorOutput | null> {
     const userData = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -20,7 +20,7 @@ export class MajorService {
     });
     const major = userData?.major;
     if (major === undefined || major === null) {
-      throw new Error("Major does not exist");
+      return null;
     }
 
     return {
@@ -75,9 +75,6 @@ export class MajorService {
           name,
           catalogYear,
         },
-      },
-      orderBy: {
-        order: "asc",
       },
       select: {
         id: true,

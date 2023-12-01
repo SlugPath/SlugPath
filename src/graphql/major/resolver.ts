@@ -17,8 +17,10 @@ export class MajorResolver {
   /**
    * @returns a unique `Major` associated with a userId
    */
-  @Query(() => UserMajorOutput)
-  async getUserMajor(@Arg("userId") userId: string): Promise<UserMajorOutput> {
+  @Query(() => UserMajorOutput, { nullable: true })
+  async getUserMajor(
+    @Arg("userId") userId: string,
+  ): Promise<UserMajorOutput | null> {
     return await new MajorService().getUserMajor(userId);
   }
 
