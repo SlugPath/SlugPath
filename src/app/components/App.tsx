@@ -35,7 +35,7 @@ function PlannerList() {
     <>
       {/* Start helpful tips for user */}
       {Object.keys(planners).length == 0 && (
-        <div className="flex flex-col items-center justify-center h-[80vh]">
+        <div className="flex flex-col items-center justify-center h-[80vh] text-dark-text dark:text-light-secondary-text">
           <div className="text-2xl font-semibold">
             Welcome to UCSC Course Planner!
           </div>

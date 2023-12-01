@@ -121,7 +121,7 @@ export default function Search() {
   }
 
   return (
-    <CssVarsProvider>
+    <CssVarsProvider defaultMode="system">
       <Card className="w-80 dark:bg-blue" variant="plain">
         <form
           onSubmit={(event) => {
