@@ -27,10 +27,10 @@ export default function MajorSelection() {
 
   useEffect(() => {
     if (majorData) {
-      const major = majorData.getMajor;
+      const major = majorData.getUserMajor;
       setMajor(major.name);
-      setCatalogYear(major.catalog_year);
-      setDefaultPlanner(major.default_planner_id);
+      setCatalogYear(major.catalogYear);
+      setDefaultPlanner(major.defaultPlanners[0].id);
     }
   }, [majorData]);
 

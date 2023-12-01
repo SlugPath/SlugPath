@@ -1,28 +1,24 @@
 import prisma from "@/lib/prisma";
-import { Major, MajorInput } from "./schema";
+import { MajorInput, MajorDefaultsInput, UserMajorOutput } from "./schema";
+import { PlannerTitle } from "../planner/schema";
 
 export class MajorService {
-  public async getUserMajor(userId: string): Promise<Major | null> {
-    const major = (
-      await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          major: {
-            select: {
-              name: true,
-              catalogYear: true,
-              defaultPlanners: {
-                select: {
-                  id: true,
-                },
-              },
-            },
+  public async getUserMajor(userId: string): Promise<UserMajorOutput> {
+    const userData = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        major: {
+          select: {
+            name: true,
+            catalogYear: true,
           },
         },
-      })
-    )?.major;
+        defaultPlannerId: true,
+      },
+    });
+    const major = userData?.major;
     if (major === undefined || major === null) {
       throw new Error("Major does not exist");
     }
@@ -30,37 +26,63 @@ export class MajorService {
     return {
       name: major.name,
       catalogYear: major.catalogYear,
-      defaultPlanners: major.defaultPlanners.map((p) => p.id),
+      defaultPlannerId: userData?.defaultPlannerId ?? "",
     };
   }
 
-  public async updateUserMajor(major: MajorInput): Promise<string> {
+  public async updateUserMajor({
+    userId,
+    name,
+    catalogYear,
+    defaultPlannerId,
+  }: MajorInput): Promise<string> {
     const majorId = (
       await prisma.major.findFirst({
         where: {
-          name: major.name,
-          catalogYear: major.catalogYear,
+          name,
+          catalogYear,
         },
       })
     )?.id;
 
     if (majorId === undefined)
       throw new Error(
-        `could not find major with name ${major.name} and catalog year ${major.catalogYear}`,
+        `could not find major with name ${name} and catalog year ${catalogYear}`,
       );
 
     return (
       await prisma.user.update({
         where: {
-          id: major.userId,
+          id: userId,
         },
         data: {
           major: {
             connect: { id: majorId },
           },
-          defaultPlannerId: major.defaultPlannerId,
+          defaultPlannerId: defaultPlannerId,
         },
       })
     ).id;
+  }
+
+  public async getMajorDefaultPlanners({
+    name,
+    catalogYear,
+  }: MajorDefaultsInput): Promise<PlannerTitle[]> {
+    return await prisma.planner.findMany({
+      where: {
+        major: {
+          name,
+          catalogYear,
+        },
+      },
+      orderBy: {
+        order: "asc",
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
   }
 }

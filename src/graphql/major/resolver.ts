@@ -1,6 +1,12 @@
 import { MajorService } from "./service";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { Major, MajorInput } from "./schema";
+import {
+  MajorDefaultsInput,
+  MajorInput,
+  MajorUpdatedOutput,
+  UserMajorOutput,
+} from "./schema";
+import { PlannerTitle } from "../planner/schema";
 
 /**
  * CourseResolver is a Resolver class that provides custom functionality for
@@ -11,18 +17,33 @@ export class MajorResolver {
   /**
    * @returns a unique `Major` associated with a userId
    */
-  @Query(() => Major)
-  async getUserMajor(@Arg("userId") userId: string): Promise<Major | null> {
+  @Query(() => UserMajorOutput)
+  async getUserMajor(@Arg("userId") userId: string): Promise<UserMajorOutput> {
     return await new MajorService().getUserMajor(userId);
   }
 
   /**
-   * Updates or creates a new major and associates it with a userId
+   * Returns the ids and titles of all the planners associated with a major
+   * in a catalog year
+   * @param input catalog year and major name
+   * @returns a PlannerTitle list
+   */
+  @Query(() => [PlannerTitle])
+  async getMajorDefaults(
+    @Arg("input") input: MajorDefaultsInput,
+  ): Promise<PlannerTitle[]> {
+    return await new MajorService().getMajorDefaultPlanners(input);
+  }
+
+  /**
+   * Updates a user's major and defaultPlannerId fields
    * @param major is a type containing a students' major information
    * @returns the user id upon success
    */
-  @Mutation(() => Major)
-  async updateUserMajor(@Arg("major") major: MajorInput): Promise<string> {
-    return await new MajorService().updateUserMajor(major);
+  @Mutation(() => MajorUpdatedOutput)
+  async updateUserMajor(
+    @Arg("input") input: MajorInput,
+  ): Promise<MajorUpdatedOutput> {
+    return { userId: await new MajorService().updateUserMajor(input) };
   }
 }

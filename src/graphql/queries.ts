@@ -71,3 +71,39 @@ export const SAVE_MAJOR = gql`
     }
   }
 `;
+
+export const GET_PLANNERS = gql`
+  query ($userId: String!) {
+    getAllPlanners(userId: $userId) {
+      title
+      id
+    }
+  }
+`;
+
+export const GET_PLANNER = gql`
+  query ($userId: String!, $plannerId: String!) {
+    getPlanner(userId: $userId, plannerId: $plannerId) {
+      quarters {
+        title
+        id
+        courses {
+          id
+          departmentCode
+          number
+          quartersOffered
+          ge
+          title
+          credits
+          labels
+        }
+      }
+      years
+      labels {
+        id
+        name
+        color
+      }
+    }
+  }
+`;
