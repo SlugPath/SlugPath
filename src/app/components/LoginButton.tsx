@@ -10,11 +10,11 @@ export default function LoginButton() {
     <div>
       {status !== "authenticated" ? (
         <Button
-          variant="outlined"
+          variant="solid"
           onClick={() => {
             signIn("google");
           }}
-          className="text-secondary-100 dark:text-secondary-200 hover:bg-primary-400 border-0.5 border-secondary-100"
+          className="text-secondary-100 dark:text-secondary-200 hover:bg-primary-400"
         >
           Login with UCSC account
         </Button>
