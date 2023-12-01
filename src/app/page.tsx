@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <CssVarsProvider defaultMode="system">
-      <div className="bg-bg-light dark:bg-bg-dark h-full min-h-screen">
+      <div className="bg-bg-light dark:bg-bg-dark min-h-screen">
         <div className="bg-primary-500 text-secondary-100 dark:text-secondary-200 h-auto flex flex-row md:grid md:grid-cols-5 px-5 py-4">
           <div className="col-span-1" />
           <div className="col-span-3 flex flex-row place-items-center gap-2 md:gap-6 text-center text-4xl place-self-center">
@@ -48,7 +48,7 @@ export default function Page() {
             </Typography>
           </div>
         ) : null}
-        <div className="flex flex-col items-center md:py-6 justify-center h-[80vh] w-[33vw] mx-auto">
+        <div className="grid place-items-center my-3 2xl:my-8 justify-center h-auto w-[33vw] mx-auto">
           <ApolloProvider client={apolloClient}>
             <MajorSelection
               saveButtonName="Next"
@@ -56,8 +56,7 @@ export default function Page() {
             />
           </ApolloProvider>
         </div>
-
-        <div className="sm:absolute sm:inset-x-0 sm:bottom-0">
+        <div className="xl:absolute xl:inset-x-0 xl:bottom-0">
           <Footer />
         </div>
       </div>
