@@ -19,7 +19,7 @@ export const initialPlanner: PlannerData = {
   quarters: createQuarters(),
   years,
   courses: [],
-  labels: initialLabels,
+  labels: initialLabels(),
 };
 
 export const emptyPlanner: PlannerData = {

@@ -1,43 +1,45 @@
 import { Label } from "@/app/types/Label";
 import { v4 as uuid } from "uuid";
 
-export const initialLabels: Label[] = [
-  {
-    id: uuid(),
-    name: "",
-    color: "RED",
-  },
-  {
-    id: uuid(),
-    name: "",
-    color: "GREEN",
-  },
-  {
-    id: uuid(),
-    name: "",
-    color: "BLUE",
-  },
-  {
-    id: uuid(),
-    name: "",
-    color: "YELLOW",
-  },
-  {
-    id: uuid(),
-    name: "",
-    color: "PURPLE",
-  },
-  {
-    id: uuid(),
-    name: "",
-    color: "ORANGE",
-  },
-  {
-    id: uuid(),
-    name: "",
-    color: "PINK",
-  },
-];
+export const initialLabels = (): Label[] => {
+  return [
+    {
+      id: uuid(),
+      name: "",
+      color: "RED",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "GREEN",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "BLUE",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "YELLOW",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "PURPLE",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "ORANGE",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "PINK",
+    },
+  ];
+};
 
 /**
  * Retrieves the color for a label
