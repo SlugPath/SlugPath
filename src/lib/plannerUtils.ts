@@ -11,7 +11,6 @@ import { StoredCourse } from "@/app/types/Course";
 import { v4 as uuidv4 } from "uuid";
 import { initialLabels } from "./labels";
 import { LabelColor } from "@prisma/client";
-import prisma from "./prisma";
 import { MultiPlanner } from "@/app/types/MultiPlanner";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
@@ -154,7 +153,10 @@ export const convertPlannerTitles = (
  * For use with seeding default planners
  * @param title title of the course
  */
-export async function getRealEquivalent(title: string): Promise<StoredCourse> {
+export async function getRealEquivalent(
+  prisma: any,
+  title: string,
+): Promise<StoredCourse> {
   const regex = /^[A-Z]{1,5} [0-9]{1,3}[A-Z]?$/;
 
   if (!regex.test(title)) {
