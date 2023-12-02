@@ -63,16 +63,7 @@ export default function CourseCard({
         size="sm"
         variant="soft"
         color={isEnrolledCourse ? "primary" : "neutral"}
-        // variant={quarterId ? "plain" : "outlined"}
         className="hover:opacity-50"
-        // className={`
-        //   ${
-        //     isEnrolledCourse
-        //       ? "bg-primary-100 dark:bg-primary-500"
-        //       : "hover:bg-slate-300 dark:hover:bg-opacity-0"
-        //   }
-        //   hover:opacity-50
-        // `}
         style={{
           ...getItemStyle(provided.draggableProps.style),
           height: "35px",

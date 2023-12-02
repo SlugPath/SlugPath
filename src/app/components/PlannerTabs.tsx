@@ -82,7 +82,6 @@ export default function PlannerTabs() {
               bgcolor: "#93C5FD",
             },
             [`& .${tabClasses.root}:hover`]: {
-              color: "#334155",
               bgcolor: "#BFDBFE",
             },
           }}
