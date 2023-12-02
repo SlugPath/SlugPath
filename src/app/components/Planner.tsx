@@ -105,7 +105,7 @@ function Modals() {
 
 function Years({ courseState }: { courseState: PlannerData }) {
   return (
-    <CssVarsProvider defaultMode="dark">
+    <CssVarsProvider defaultMode="system">
       <AccordionGroup>
         <div className="space-y-2">
           {Array.from({ length: quartersPerYear }, (_, index) => index).map(
