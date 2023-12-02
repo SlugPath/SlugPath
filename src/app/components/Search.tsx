@@ -138,6 +138,12 @@ export default function Search() {
               variant="soft"
               onChange={handleChangeDepartment}
               value={departmentCode ?? ""}
+              size="md"
+              slotProps={{
+                listbox: {
+                  sx: { minWidth: 270 },
+                },
+              }}
             >
               {departments.map((dep) => (
                 <Option key={dep.value} value={dep.value}>
@@ -154,7 +160,7 @@ export default function Search() {
                 name="number"
                 aria-label="number"
                 onChange={(event) => handleChangeNumber(event.target.value)}
-                size="sm"
+                size="md"
               />
               {error && (
                 <FormHelperText>
@@ -171,7 +177,7 @@ export default function Search() {
               variant="soft"
               onChange={handleChangeGE}
               value={ge ?? ""}
-              size="sm"
+              size="md"
             >
               {geOptions.map((option) => (
                 <Option key={option.value} value={option.value}>
