@@ -80,12 +80,14 @@ afterAll(async () => {
   const deleteQuarters = prisma.quarter.deleteMany();
   const deleteCourses = prisma.course.deleteMany();
   const deleteLabels = prisma.label.deleteMany();
+  const deleteMajors = prisma.major.deleteMany();
 
   await prisma.$transaction([
     deleteUsers,
     deleteQuarters,
     deleteCourses,
     deleteLabels,
+    deleteMajors,
   ]);
 
   await prisma.$disconnect();
