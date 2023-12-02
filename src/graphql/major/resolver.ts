@@ -1,6 +1,12 @@
 import { MajorService } from "./service";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { Major, MajorInput } from "./schema";
+import {
+  MajorDefaultsInput,
+  MajorInput,
+  MajorUpdatedOutput,
+  UserMajorOutput,
+} from "./schema";
+import { PlannerTitle } from "../planner/schema";
 
 /**
  * CourseResolver is a Resolver class that provides custom functionality for
@@ -11,23 +17,35 @@ export class MajorResolver {
   /**
    * @returns a unique `Major` associated with a userId
    */
-  @Query(() => Major)
-  async getMajor(@Arg("userId") userId: string): Promise<Major | null> {
-    return await new MajorService().getMajor(userId);
+  @Query(() => UserMajorOutput, { nullable: true })
+  async getUserMajor(
+    @Arg("userId") userId: string,
+  ): Promise<UserMajorOutput | null> {
+    return await new MajorService().getUserMajor(userId);
   }
 
   /**
-   * Updates or creates a new major and associates it with a userId
-   * @param major is a type containing a students' major information
-   * @returns the updated or created `Major`
+   * Returns the ids and titles of all the planners associated with a major
+   * in a catalog year
+   * @param input catalog year and major name
+   * @returns a PlannerTitle list
    */
-  @Mutation(() => Major)
-  // async upsertMajor(
-  //   @Arg("userId") userId: string,
-  //   @Arg("major") major: MajorInput,
-  // ): Promise<Major> {
-  async upsertMajor(@Arg("major") major: MajorInput): Promise<Major> {
-    console.log(major);
-    return await new MajorService().upsertMajor(major);
+  @Query(() => [PlannerTitle])
+  async getMajorDefaults(
+    @Arg("input") input: MajorDefaultsInput,
+  ): Promise<PlannerTitle[]> {
+    return await new MajorService().getMajorDefaultPlanners(input);
+  }
+
+  /**
+   * Updates a user's major and defaultPlannerId fields
+   * @param major is a type containing a students' major information
+   * @returns the user id upon success
+   */
+  @Mutation(() => MajorUpdatedOutput)
+  async updateUserMajor(
+    @Arg("input") input: MajorInput,
+  ): Promise<MajorUpdatedOutput> {
+    return { userId: await new MajorService().updateUserMajor(input) };
   }
 }

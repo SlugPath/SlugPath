@@ -13,39 +13,8 @@ import Info from "@mui/icons-material/Info";
 import { useEffect, useState } from "react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
+import { majors, years } from "@/lib/defaultPlanners";
 import { initialPlanner, quartersPerYear } from "@/lib/plannerUtils";
-
-const majors = [
-  "CSE BS",
-  "CSE BA",
-  "AMS BS",
-  "AMS BA",
-  "BIO BS",
-  "BIO BA",
-  "CHEM BS",
-  "CHEM BA",
-  "ECON BS",
-  "ECON BA",
-  "MATH BS",
-  "MATH BA",
-  "PHYS BS",
-  "PHYS BA",
-  "PSY BS",
-  "PSY BA",
-  "STA BS",
-  "STA BA",
-];
-
-const years = [
-  "2016-2017",
-  "2018-2019",
-  "2019-2020",
-  "2020-2021",
-  "2021-2022",
-  "2022-2023",
-  "2023-2024",
-  "2024-2025",
-];
 
 export default function MajorSelection({
   saveButtonName,
@@ -69,8 +38,8 @@ export default function MajorSelection({
       const major = majorData.getMajor;
       updateMajorUseState(
         major.name,
-        major.catalog_year,
-        major.default_planner_id,
+        major.catalogYear,
+        major.defaultPlannerId,
       );
     }
   }, [majorData]);
@@ -98,6 +67,7 @@ export default function MajorSelection({
     index: number | string | null,
   ) {
     if (typeof index === "number") {
+      // TODO: get id here instead of index
       setDefaultPlanner(index);
     }
   }
@@ -124,7 +94,7 @@ export default function MajorSelection({
 
   function handleClickSave() {
     setSaveButtonDisabled(true);
-    onSaveMajor(major, catalogYear, defaultPlanner);
+    onSaveMajor(major, catalogYear, defaultPlanner.toString());
   }
 
   return (
@@ -250,7 +220,7 @@ function SelectDefaultPlanner({
 }
 
 function MiniPlanner() {
-  const planner = initialPlanner;
+  const planner = initialPlanner();
 
   return (
     <Card>

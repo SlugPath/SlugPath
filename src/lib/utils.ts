@@ -28,3 +28,7 @@ export const removeTypenames = (value: any) => {
     });
   }
 };
+
+export const zip = (arr1: any[], arr2: any[]) => {
+  return arr1.map((elem, index) => [elem, arr2[index]]);
+};

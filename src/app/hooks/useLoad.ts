@@ -1,46 +1,11 @@
-import { ApolloError, gql, useLazyQuery } from "@apollo/client";
+import { ApolloError, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { deserializePlanner, initialPlanner } from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
-import { PlannerTitle } from "@/graphql/planner/schema";
 import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
-
-const GET_PLANNERS = gql`
-  query ($userId: String!) {
-    getAllPlanners(userId: $userId) {
-      title
-      id
-    }
-  }
-`;
-
-const GET_PLANNER = gql`
-  query ($userId: String!, $plannerId: String!) {
-    getPlanner(userId: $userId, plannerId: $plannerId) {
-      quarters {
-        title
-        id
-        courses {
-          id
-          departmentCode
-          number
-          quartersOffered
-          ge
-          title
-          credits
-          labels
-        }
-      }
-      years
-      labels {
-        id
-        name
-        color
-      }
-    }
-  }
-`;
+import { convertPlannerTitles } from "@/lib/plannerUtils";
+import { GET_PLANNERS, GET_PLANNER } from "@/graphql/queries";
 
 /**
  * Custom hook to load all planners for a particular user
@@ -88,11 +53,15 @@ export const useLoadAllPlanners = (
 export const useLoadPlanner = (
   plannerId: string,
   userId: string | undefined,
+  /* defaultPlannerId: string | undefined | null, */
 ): [
   PlannerData,
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
+  // TODO: instead of initialPlanner use the defaultPlanner.
+  // potentially store the defaultPlanner data in a context to avoid
+  // having to make multiple network calls in one session.
   const [state, setState] = useState<PlannerData>(initialPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
@@ -119,18 +88,4 @@ export const useLoadPlanner = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
   return [state, setState, { loading, error }];
-};
-
-const convertPlannerTitles = (queryResult: PlannerTitle[]): MultiPlanner => {
-  const mp: MultiPlanner = {};
-
-  queryResult.forEach((p, idx) => {
-    if (idx == 0) {
-      mp[p.id] = [p.title, true];
-    } else {
-      mp[p.id] = [p.title, false];
-    }
-  });
-
-  return mp;
 };
