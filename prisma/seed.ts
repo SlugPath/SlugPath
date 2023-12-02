@@ -26,7 +26,6 @@ async function main() {
         quartersOffered: course.quartersOffered,
       },
     };
-
     ops.push(
       prisma.course.upsert({
         where: {
@@ -60,12 +59,27 @@ async function main() {
 
   const planners = await getPlanners();
 
+  for (const catalogYear of Object.keys(planners)) {
+    await delay(2000);
+    await addPlannersInCatalogYear(planners, catalogYear);
+    console.log(`✨ Loaded default planners for (${catalogYear}) ✨`);
+  }
+
+  console.log(`✨ Loaded all default planners ✨`);
+}
+
+function delay(milliseconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+async function addPlannersInCatalogYear(planners: any, catalogYear: string) {
   const terms = [Term.Fall, Term.Winter, Term.Spring, Term.Summer];
   const yearKeys = ["1", "2", "3", "4"];
 
-  Object.keys(planners).forEach((catalogYear) => {
-    planners[catalogYear].forEach(async (planner: any) => {
-      // get quarters and courses
+  for (const planner of planners[catalogYear]) {
+    // get quarters and courses
+    await delay(50);
+    await prisma.$transaction(async (p) => {
       let quarters: any[] = [];
       for (const y of yearKeys) {
         const qs = await Promise.all(
@@ -73,7 +87,7 @@ async function main() {
             const [cs, t] = ct;
             const plannedCourses = await Promise.all(
               cs.map(async (c: string) => {
-                return await getRealEquivalent(c);
+                return await getRealEquivalent(p, c);
               }),
             );
 
@@ -91,40 +105,32 @@ async function main() {
       }
       // create the default planner
       const [majorName, order] = planner["planner_name"].split(" Planner ");
-      try {
-        const pid = (
-          await prisma.planner.create({
-            data: {
-              title: `${planner["planner_name"]} (${catalogYear})`,
-              order: parseInt(order),
-              quarters: {
-                create: quarters,
-              },
-            },
-          })
-        ).id;
-        await prisma.major.update({
-          where: {
-            name_catalogYear: {
-              name: majorName,
-              catalogYear,
-            },
-          },
+      const pid = (
+        await p.planner.create({
           data: {
-            defaultPlanners: {
-              connect: [{ id: pid }],
+            title: `${planner["planner_name"]} (${catalogYear})`,
+            order: parseInt(order),
+            quarters: {
+              create: quarters,
             },
           },
-        });
-      } catch (e) {
-        console.log(
-          `Couldn't properly create planner ${planner["planner_name"]} for catalog year ${catalogYear}`,
-        );
-      }
+        })
+      ).id;
+      await p.major.update({
+        where: {
+          name_catalogYear: {
+            name: majorName,
+            catalogYear,
+          },
+        },
+        data: {
+          defaultPlanners: {
+            connect: [{ id: pid }],
+          },
+        },
+      });
     });
-  });
-
-  console.log(`✨ Loaded all default planners ✨`);
+  }
 }
 
 main()
