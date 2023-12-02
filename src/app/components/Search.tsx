@@ -129,20 +129,15 @@ export default function Search() {
             handleSearch(departmentCode ?? "", number, ge ?? "");
           }}
         >
-          <div className="grid gap-2 p-2">
+          <div className="grid grid-cols-4 gap-2 p-2">
             <Select
               placeholder="Department"
               name="department"
               aria-label="department"
-              className="col-span-2"
+              className="col-span-4"
               variant="soft"
               onChange={handleChangeDepartment}
               value={departmentCode ?? ""}
-              slotProps={{
-                listbox: {
-                  sx: { minWidth: 270 },
-                },
-              }}
             >
               {departments.map((dep) => (
                 <Option key={dep.value} value={dep.value}>
@@ -150,9 +145,9 @@ export default function Search() {
                 </Option>
               ))}
             </Select>
-            <FormControl error={error}>
+            <FormControl error={error} className="col-span-2">
               <Input
-                className="col-span-2"
+                className="w-full"
                 color="neutral"
                 placeholder="Number"
                 variant="soft"
@@ -169,7 +164,7 @@ export default function Search() {
               )}
             </FormControl>
             <Select
-              placeholder="GE Requirement"
+              placeholder="GE"
               name="ge"
               aria-label="ge"
               className="col-span-2"
