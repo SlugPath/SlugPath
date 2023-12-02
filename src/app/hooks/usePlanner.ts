@@ -1,14 +1,14 @@
 import {
-  getTotalCredits,
   getGeSatisfied,
-  serializePlanner,
+  getTotalCredits,
   isCustomCourse,
+  serializePlanner,
 } from "@/lib/plannerUtils";
 import { useState } from "react";
 import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
-import { Term, findQuarter } from "../types/Quarter";
+import { findQuarter, Term } from "../types/Quarter";
 import { useLoadPlanner } from "./useLoad";
 import { StoredCourse } from "../types/Course";
 import { PlannerData } from "../types/PlannerData";

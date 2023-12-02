@@ -8,6 +8,34 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const filePathCourses = "../courses.csv";
+const filePathPlanners = "../planners/";
+
+export async function getPlanners() {
+  const planners = [
+    "planners_2020-2021.json",
+    "planners_2021-2022.json",
+    "planners_2022-2023.json",
+    "planners_2023-2024.json",
+  ];
+
+  const plannerData: any = {};
+
+  for (const p of planners) {
+    try {
+      const data = await fs.promises.readFile(
+        path.resolve(__dirname, filePathPlanners + p),
+        "utf-8",
+      );
+      const parsedData = JSON.parse(data);
+      const yearKey = p.split("_")[1].replace(".json", "");
+      plannerData[yearKey] = parsedData;
+    } catch (err) {
+      console.error("An error occurred:", err);
+    }
+  }
+  console.log(`✨ Done parsing planners ✨`);
+  return plannerData;
+}
 
 export function getCourses() {
   const csvFilePath = path.resolve(__dirname, filePathCourses);
@@ -55,7 +83,7 @@ export function getCourses() {
         courses.push(course);
       })
       .on("end", () => {
-        console.log("done");
+        console.log("✨ Done parsing courses ✨");
         resolve(courses);
       });
   });

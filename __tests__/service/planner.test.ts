@@ -80,12 +80,14 @@ afterAll(async () => {
   const deleteQuarters = prisma.quarter.deleteMany();
   const deleteCourses = prisma.course.deleteMany();
   const deleteLabels = prisma.label.deleteMany();
+  const deleteMajors = prisma.major.deleteMany();
 
   await prisma.$transaction([
     deleteUsers,
     deleteQuarters,
     deleteCourses,
     deleteLabels,
+    deleteMajors,
   ]);
 
   await prisma.$disconnect();
@@ -112,7 +114,7 @@ it("should create 1 empty planner for 1 user", async () => {
     plannerId: plannerId,
     title: "Planner 1",
     order: 0,
-    plannerData: serializePlanner(initialPlanner),
+    plannerData: serializePlanner(initialPlanner()),
   });
   expect(res.plannerId).toBe(plannerId);
 
@@ -147,7 +149,7 @@ it("should update 1 planner for 1 user", async () => {
     plannerId,
     title: "Planner 1",
     order: 0,
-    plannerData: serializePlanner(initialPlanner),
+    plannerData: serializePlanner(initialPlanner()),
   });
   expect(res1.plannerId).toBe(plannerId);
 
@@ -197,7 +199,7 @@ it("should update 1 planner for 1 user", async () => {
       labels: [],
     },
   ];
-  const plannerData = initialPlanner;
+  const plannerData = initialPlanner();
   cseCourses.forEach((c) => {
     plannerData.quarters[0].courses.push(c.id);
     plannerData.courses.push(c);
@@ -286,7 +288,7 @@ it("should filter courses by GE requirement", async () => {
   // Assert that at least one course is returned
   expect(filteredCourses.length).toBeGreaterThan(0);
 });
-  
+
 it("should return the correct labels for each course", async () => {
   const user = await prisma.user.findFirst({
     where: {
@@ -301,7 +303,7 @@ it("should return the correct labels for each course", async () => {
   expect(planners).toHaveLength(0);
 
   const plannerId = uuidv4();
-  const plannerData = initialPlanner;
+  const plannerData = initialPlanner();
   plannerData.labels[0].name = "Elective";
   plannerData.labels[1].name = "Capstone";
   plannerData.labels[2].name = "DC";
@@ -381,35 +383,112 @@ it("should add major information for 1 user", async () => {
   });
   expect(user).not.toBeNull();
 
+  // create major
+  const name = "Computer Science B.S";
+  const catalogYear = "2020-2021";
+  const majorData = {
+    name,
+    catalogYear,
+  };
+  await prisma.major.create({
+    data: {
+      ...majorData,
+    },
+  });
+
   if (user === null) fail("User was null (this should not happen)");
 
   const service = new MajorService();
-  const major = await service.getMajor(user.id);
-  expect(major).toBeNull();
+  const userMajor = await service.getUserMajor(user.id);
+  expect(userMajor).toBeNull();
 
-  // create major
-  const name = "Computer Science BS";
-  const catalog_year = "2020-2021";
-  const default_planner_id = 0;
-  const majorData = {
-    name: name,
-    catalog_year: catalog_year,
-    default_planner_id: default_planner_id,
-  };
-  const res = await service.upsertMajor({
+  const defaultPlannerId = uuidv4();
+  const res = await service.updateUserMajor({
     userId: user.id,
     ...majorData,
+    defaultPlannerId,
   });
-  expect(res.name).toBe(name);
-  expect(res.catalog_year).toBe(catalog_year);
-  expect(res.default_planner_id).toBe(default_planner_id);
+  expect(res).toBe(user.id);
 
-  const check = await service.getMajor(user.id);
+  const check = await service.getUserMajor(user.id);
   expect(check).not.toBeNull();
+  expect(check?.catalogYear).toBe(catalogYear);
+  expect(check?.name).toBe(name);
+  expect(check?.defaultPlannerId).toBe(defaultPlannerId);
 
-  // cleanup
-  const deleted = await service.deleteMajor(user.id);
-  expect(deleted).toBeTruthy();
-  const deleteCheck = await service.getMajor(user.id);
-  expect(deleteCheck).toBeNull();
+  // Clean up
+  await prisma.major.delete({
+    where: {
+      name_catalogYear: {
+        name,
+        catalogYear,
+      },
+    },
+  });
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      major: undefined,
+    },
+  });
+});
+
+it("should fail since major doesn't exist", async () => {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: "Sammy Slug",
+    },
+  });
+  expect(user).not.toBeNull();
+  if (user === null) fail("User was null (this should not happen)");
+
+  const service = new MajorService();
+  const userMajor = await service.getUserMajor(user.id);
+  expect(userMajor).toBeNull();
+
+  const defaultPlannerId = uuidv4();
+  const name = "Unknown major";
+  const catalogYear = "2020-2021";
+
+  await expect(
+    service.updateUserMajor({
+      userId: user.id,
+      name,
+      catalogYear,
+      defaultPlannerId,
+    }),
+  ).rejects.toThrow(
+    `could not find major with name ${name} and catalog year ${catalogYear}`,
+  );
+});
+
+it("should return an empty listt", async () => {
+  const name = "Computer Science B.S";
+  const catalogYear = "2020-2021";
+
+  await prisma.major.create({
+    data: {
+      name,
+      catalogYear,
+    },
+  });
+
+  const res = await new MajorService().getMajorDefaultPlanners({
+    name,
+    catalogYear,
+  });
+
+  await prisma.major.delete({
+    where: {
+      name_catalogYear: {
+        name,
+        catalogYear,
+      },
+    },
+  });
+
+  expect(res).toHaveLength(0);
 });

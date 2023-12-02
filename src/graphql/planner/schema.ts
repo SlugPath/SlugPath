@@ -194,8 +194,8 @@ export class PlannerCreateInput {
  */
 @ArgsType()
 export class PlannerRetrieveInput {
-  @Field()
-  userId!: string;
+  @Field({ nullable: true })
+  userId?: string;
 
   @Field()
   @IsUUID("4")

@@ -4,20 +4,20 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 
 export const GET_MAJOR = gql`
   query major($userId: String!) {
-    getMajor(userId: $userId) {
+    getUserMajor(userId: $userId) {
       name
-      catalog_year
-      default_planner_id
+      catalogYear
+      defaultPlanners
     }
   }
 `;
 
 export const SAVE_MAJOR = gql`
   mutation saveMajor($major: MajorInput!) {
-    upsertMajor(major: $major) {
+    updateUserMajor(major: $major) {
       name
-      catalog_year
-      default_planner_id
+      catalogYear
+      defaultPlannerId
     }
   }
 `;
@@ -40,14 +40,14 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
 
   function handleSaveMajor(
     name: string,
-    catalog_year: string,
-    default_planner_id: number,
+    catalogYear: string,
+    defaultPlannerId: string,
   ) {
     if (userId != undefined) {
       const majorInput: MajorInput = {
-        name: name,
-        catalog_year: catalog_year,
-        default_planner_id: default_planner_id,
+        name,
+        catalogYear,
+        defaultPlannerId,
         userId: userId,
       };
 

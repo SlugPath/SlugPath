@@ -1,21 +1,16 @@
-import { Length } from "class-validator";
+import { IsUUID, Length } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 
-/**
- * `Major` is an `ObjectType` class used as a data transfer object
- * for major information.
- */
-
 @ObjectType()
-export class Major {
+export class UserMajorOutput {
   @Field()
   name!: string;
 
   @Field()
-  catalog_year!: string;
+  catalogYear!: string;
 
   @Field()
-  default_planner_id!: number;
+  defaultPlannerId!: string;
 }
 
 @InputType()
@@ -25,11 +20,30 @@ export class MajorInput {
   name!: string;
 
   @Field()
-  catalog_year!: string;
-
-  @Field()
-  default_planner_id!: number;
+  catalogYear!: string;
 
   @Field()
   userId!: string;
+
+  // optional so
+  @Field()
+  @IsUUID("4")
+  defaultPlannerId!: string;
+}
+
+@ObjectType()
+export class MajorUpdatedOutput {
+  @Field()
+  @Length(1)
+  userId!: string;
+}
+
+@InputType()
+export class MajorDefaultsInput {
+  @Field()
+  @Length(1, 64)
+  name!: string;
+
+  @Field()
+  catalogYear!: string;
 }

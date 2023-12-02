@@ -4,34 +4,40 @@ import {
   PlannerDataInput,
   QuarterInput,
   PlannerData as PlannerDataOutput,
+  PlannerTitle,
 } from "@/graphql/planner/schema";
 import { Term } from "../app/types/Quarter";
 import { StoredCourse } from "@/app/types/Course";
 import { v4 as uuidv4 } from "uuid";
 import { initialLabels } from "./labels";
 import { LabelColor } from "@prisma/client";
+import prisma from "./prisma";
+import { MultiPlanner } from "@/app/types/MultiPlanner";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
 export const quartersPerYear = 4;
 
-export const initialPlanner: PlannerData = {
-  quarters: createQuarters(),
-  years,
-  courses: [],
-  labels: initialLabels,
+export const initialPlanner = (): PlannerData => {
+  return {
+    quarters: createQuarters(),
+    years,
+    courses: [],
+    labels: initialLabels(),
+  };
 };
 
-export const emptyPlanner: PlannerData = {
-  quarters: [],
-  years,
-  courses: [],
-  labels: [],
+export const emptyPlanner = (): PlannerData => {
+  return {
+    quarters: [],
+    years,
+    courses: [],
+    labels: [],
+  };
 };
 
 export function createQuarters() {
   const quarters: Quarter[] = [];
-
   for (let year = 0; year < years; year++) {
     for (let quarter = 0; quarter < quartersPerYear; quarter++) {
       const id = `quarter-${year}-${quarterNames[quarter]}`;
@@ -75,7 +81,6 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
 }
 
 export function deserializePlanner(output: PlannerDataOutput): PlannerData {
-  console.log(`GOT ${JSON.stringify(output, null, 2)}`);
   const result: PlannerData = {
     years: output.years,
     quarters: [],
@@ -104,15 +109,17 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
   return result;
 }
 
-export const customCourse: StoredCourse = {
-  id: uuidv4(),
-  credits: 5,
-  departmentCode: "",
-  number: "",
-  title: "Custom Course",
-  ge: [],
-  quartersOffered: ["Fall", "Winter", "Spring"],
-  labels: [],
+export const customCourse = (): StoredCourse => {
+  return {
+    id: uuidv4(),
+    credits: 5,
+    departmentCode: "",
+    number: "",
+    title: "Custom Course",
+    ge: [],
+    quartersOffered: ["Fall", "Winter", "Spring"],
+    labels: [],
+  };
 };
 
 export function getDeptAndNumber({
@@ -123,6 +130,65 @@ export function getDeptAndNumber({
   if (departmentCode !== "" && number !== "")
     return `${departmentCode} ${number}`;
   return `${title}`;
+}
+
+export const convertPlannerTitles = (
+  queryResult: PlannerTitle[],
+): MultiPlanner => {
+  const mp: MultiPlanner = {};
+
+  queryResult.forEach((p, idx) => {
+    if (idx == 0) {
+      mp[p.id] = [p.title, true];
+    } else {
+      mp[p.id] = [p.title, false];
+    }
+  });
+
+  return mp;
+};
+
+/**
+ * Returns the real equivalent of a course if it exists.
+ * Otherwise it returns a custom course with the custom title.
+ * For use with seeding default planners
+ * @param title title of the course
+ */
+export async function getRealEquivalent(title: string): Promise<StoredCourse> {
+  const regex = /^[A-Z]{1,5} [0-9]{1,3}[A-Z]?$/;
+
+  if (!regex.test(title)) {
+    return {
+      ...customCourse(),
+      title,
+    };
+  }
+
+  const [dept, num] = title.split(" ");
+  const equivalent = await prisma.course.findFirst({
+    where: {
+      departmentCode: dept,
+      number: num,
+    },
+  });
+
+  // Should not happen
+  if (equivalent === null) {
+    return {
+      ...customCourse(),
+      title,
+    };
+  }
+
+  return {
+    ...customCourse(),
+    title: equivalent.title,
+    departmentCode: equivalent.departmentCode,
+    number: equivalent.number,
+    credits: equivalent.credits,
+    ge: equivalent.ge,
+    quartersOffered: equivalent.quartersOffered,
+  };
 }
 
 export function isCustomCourse({
