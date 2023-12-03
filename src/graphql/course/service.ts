@@ -9,7 +9,7 @@ import { isAlpha } from "class-validator";
  * @param b another Course instance
  * @returns
  */
-const compareCoursesByNum = function (a: Course, b: Course): number {
+export const compareCoursesByNum = function (a: Course, b: Course): number {
   // Check departments first
   if (a.departmentCode !== b.departmentCode)
     return a.departmentCode.localeCompare(b.departmentCode);
@@ -28,7 +28,9 @@ const compareCoursesByNum = function (a: Course, b: Course): number {
   const bLastChar = b.number[b.number.length - 1];
   const bLet = isAlpha(bLastChar) ? bLastChar : "";
 
-  if (aLet == "") return 0;
+  if (aLet == "" && bLet == "") return 0;
+  if (aLet == "") return -1;
+  if (bLet == "") return 1;
 
   if (aLet > bLet) return 1;
   if (bLet > aLet) return -1;
@@ -100,20 +102,6 @@ export class CourseService {
     }
     // Return a sorted array of courses
     return res.sort(compareCoursesByNum);
-  }
-
-  /**
-   * `courseBy` returns a course that satisfies a predicate `pred`
-   * or null if no such course exists
-   * @returns a `Course` instance
-   */
-  public async courseBy(pred: QueryInput): Promise<Course | null> {
-    return await prisma.course.findFirst({
-      where: {
-        departmentCode: pred.departmentCode,
-        number: pred.number,
-      },
-    });
   }
 
   /**

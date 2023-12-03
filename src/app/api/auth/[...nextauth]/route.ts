@@ -34,6 +34,17 @@ const handler = NextAuth({
     async session({ session, token }) {
       if (token) {
         session.user.id = token.sub ?? "";
+        // Put the default planner id of the current user into the session context
+        session.user.defaultPlannerId = (
+          await prisma.user.findFirst({
+            where: {
+              id: session.user.id,
+            },
+            select: {
+              defaultPlannerId: true,
+            },
+          })
+        )?.defaultPlannerId;
         session.user.email = token.email;
         session.user.name = token.name;
       }

@@ -19,16 +19,6 @@ export class CourseResolver {
   }
 
   /**
-   * Return a `Course` instance that matches the `department` and `number` in `input`
-   * @param input a QueryInput instance
-   * @returns a `Course` instance
-   */
-  @Query(() => Course)
-  async courseBy(@Args() input: QueryInput): Promise<Course | null> {
-    return await new CourseService().courseBy(input);
-  }
-
-  /**
    * A custom query that asynchronously retrieves a list of unique `Department` names.
    * @returns a list of `Department` instances with unique department names
    */

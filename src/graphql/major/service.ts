@@ -1,40 +1,84 @@
 import prisma from "@/lib/prisma";
-import { Major, MajorInput } from "./schema";
+import { MajorInput, MajorDefaultsInput, UserMajorOutput } from "./schema";
+import { PlannerTitle } from "../planner/schema";
 
 export class MajorService {
-  public async getMajor(userId: string): Promise<Major | null> {
-    const major = await prisma.major.findUnique({
+  public async getUserMajor(userId: string): Promise<UserMajorOutput | null> {
+    const userData = await prisma.user.findUnique({
       where: {
-        userId: userId,
+        id: userId,
+      },
+      select: {
+        major: {
+          select: {
+            name: true,
+            catalogYear: true,
+          },
+        },
+        defaultPlannerId: true,
       },
     });
+    const major = userData?.major;
+    if (major === undefined || major === null) {
+      return null;
+    }
 
-    return major ? major : null;
+    return {
+      name: major.name,
+      catalogYear: major.catalogYear,
+      defaultPlannerId: userData?.defaultPlannerId ?? "",
+    };
   }
 
-  public async upsertMajor(major: MajorInput): Promise<Major> {
-    return await prisma.major.upsert({
-      where: {
-        userId: major.userId,
-      },
-      update: {
-        name: major.name,
-        catalog_year: major.catalog_year,
-        default_planner_id: major.default_planner_id,
-      },
-      create: {
-        name: major.name,
-        catalog_year: major.catalog_year,
-        default_planner_id: major.default_planner_id,
-        userId: major.userId,
-      },
-    });
+  public async updateUserMajor({
+    userId,
+    name,
+    catalogYear,
+    defaultPlannerId,
+  }: MajorInput): Promise<string> {
+    const majorId = (
+      await prisma.major.findFirst({
+        where: {
+          name,
+          catalogYear,
+        },
+      })
+    )?.id;
+
+    if (majorId === undefined)
+      throw new Error(
+        `could not find major with name ${name} and catalog year ${catalogYear}`,
+      );
+
+    return (
+      await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          major: {
+            connect: { id: majorId },
+          },
+          defaultPlannerId: defaultPlannerId,
+        },
+      })
+    ).id;
   }
 
-  public async deleteMajor(userId: string): Promise<Major> {
-    return await prisma.major.delete({
+  public async getMajorDefaultPlanners({
+    name,
+    catalogYear,
+  }: MajorDefaultsInput): Promise<PlannerTitle[]> {
+    return await prisma.planner.findMany({
       where: {
-        userId: userId,
+        major: {
+          name,
+          catalogYear,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
       },
     });
   }

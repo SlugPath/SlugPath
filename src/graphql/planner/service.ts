@@ -189,7 +189,7 @@ export class PlannerService {
    */
   private toPlannerData(planner: any): PlannerData {
     // Set all the courses for each quarter
-    const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner));
+    const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner()));
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
       const courses: StoredCourse[] = q.courses.map((c: StoredCourse) => {

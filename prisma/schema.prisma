@@ -9,13 +9,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id
-  email    String?
-  name     String?
-  major    Major?
-  role     Role      @default(USER)
-  planners Planner[]
-  majorId  String?
+  id               String    @id
+  email            String?
+  name             String?
+  majorId          Int?      @unique
+  role             Role      @default(USER)
+  defaultPlannerId String?
+  planners         Planner[]
+  major            Major?    @relation(fields: [majorId], references: [id])
 }
 
 model Planner {
@@ -23,20 +24,21 @@ model Planner {
   title     String
   updatedAt DateTime  @updatedAt
   order     Int
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  majorId   Int?
+  labels    Label[]
+  major     Major?    @relation(fields: [majorId], references: [id], onDelete: Cascade)
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   quarters  Quarter[]
-  labels    Label[]   @relation()
 }
 
 model Quarter {
-  id      Int              @id @default(autoincrement())
-  term    Term
-  year    Int
-  courses EnrolledCourse[]
-
+  id        Int              @id @default(autoincrement())
+  term      Term
+  year      Int
   plannerId String
-  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+  courses   EnrolledCourse[]
+  planner   Planner          @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
 model EnrolledCourse {
@@ -48,8 +50,8 @@ model EnrolledCourse {
   ge              String[]
   quartersOffered String[]
   quarterId       Int
-  quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
   labels          String[]
+  quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {
@@ -62,20 +64,19 @@ model Course {
   ge              String[]
   quartersOffered String[]
 
-  // No two courses can have the same department code and course number
   @@id([departmentCode, number])
 }
 
 model Major {
-  id                 String   @id @default(uuid())
-  name               String
-  catalog_year       String
-  default_planner_id Int
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId             String   @unique
+  id              Int       @id @default(autoincrement())
+  name            String
+  catalogYear     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  defaultPlanners Planner[]
+  users           User?
 
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  @@unique([name, catalogYear])
 }
 
 model Label {
@@ -84,9 +85,8 @@ model Label {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   color     LabelColor
-
   plannerId String
-  planner   Planner @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+  planner   Planner    @relation(fields: [plannerId], references: [id], onDelete: Cascade)
 }
 
 enum LabelColor {

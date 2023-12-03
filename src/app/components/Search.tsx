@@ -196,7 +196,7 @@ export default function Search() {
             const index = rubric.source.index;
             // Null coalesce to custom course since the custom course
             // has an index of -1
-            const course = getCourseByIndex(index) ?? customCourse;
+            const course = getCourseByIndex(index) ?? customCourse();
             return (
               <CourseCard
                 course={course}
@@ -208,13 +208,14 @@ export default function Search() {
           }}
         >
           {(provided, snapshot) => {
+            const custom = customCourse();
             return (
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 <div className="mb-4">
                   <DraggableCourseCard
                     index={-1}
-                    draggableId={createSearchId(customCourse)}
-                    course={customCourse}
+                    draggableId={createSearchId(custom)}
+                    course={custom}
                   />
                 </div>
                 {hasResults(data) ? (
