@@ -7,10 +7,12 @@ export default function useCustomCourseSelection() {
 
   const handleAddCustom = (newTitle: string) => {
     setCourses((prev) => {
-      const newCourse: StoredCourse = {
+      const newCourse: any = {
         ...customCourse(),
         title: newTitle,
       };
+      delete newCourse.labels;
+      console.log(`${JSON.stringify(newCourse, null, 2)}`);
       return [newCourse, ...prev];
     });
   };
@@ -19,7 +21,6 @@ export default function useCustomCourseSelection() {
     setCourses((prev) => {
       return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
     });
-    console.log(`HERE`);
   };
 
   return {

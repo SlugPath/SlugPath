@@ -23,6 +23,7 @@ export default function CustomCourseSelection() {
 
   // TODO: add a context field in PlannerContext for custom courses
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTooShortError(false);
     setCourseTitle(e.target.value);
   };
 
