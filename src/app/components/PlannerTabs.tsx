@@ -26,6 +26,13 @@ export default function PlannerTabs() {
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
   const [openTooMany, setTooMany] = useState(false);
 
+  // Utility function to truncate tab title
+  const truncateTitle = (title: string, maxLength: number = 20) => {
+    return title.length > maxLength
+      ? `${title.substring(0, maxLength)}...`
+      : title;
+  };
+
   /**
    * Event listener that runs when user clicks the add button
    */
@@ -133,7 +140,7 @@ export default function PlannerTabs() {
                 />
               </>
             ) : (
-              <span>{title}</span>
+              <span>{truncateTitle(title)}</span>
             )}
             <CloseIconButton onClick={() => setAlert([id, title])} />
           </Tab>
