@@ -46,7 +46,7 @@ export default function CustomCourseSelection() {
   }, [customCourses]);
 
   useEffect(() => {
-    setTooManyError(memoLength);
+    if (!memoLength) setTooManyError(false);
   }, [memoLength]);
 
   return (
