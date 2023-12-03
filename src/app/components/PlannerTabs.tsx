@@ -8,7 +8,7 @@ import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
 import CloseIconButton from "./CloseIconButton";
 
-const MAX_PLANNERS = 8;
+const MAX_PLANNERS = 10;
 
 export default function PlannerTabs() {
   const {
