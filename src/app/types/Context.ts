@@ -54,6 +54,7 @@ export interface PlannersContextProps {
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
   activePlanner: { id: string; title: string } | undefined;
+  plannersLoading: boolean;
 }
 
 export interface LabelsContextProps {
