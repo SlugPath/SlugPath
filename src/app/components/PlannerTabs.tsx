@@ -8,7 +8,7 @@ import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
 import CloseIconButton from "./CloseIconButton";
 
-const MAX_PLANNERS = 8;
+const MAX_PLANNERS = 10;
 
 export default function PlannerTabs() {
   const {
@@ -79,6 +79,10 @@ export default function PlannerTabs() {
           p: 0.5,
           gap: 0.5,
           borderRadius: "xl",
+          overflow: "auto",
+          width: 2017,
+          scrollSnapType: "x mandatory",
+          "&::-webkit-scrollbar": { display: "none" },
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
             color: "white",
             bgcolor: "rgb(96 165 250)",
@@ -108,6 +112,7 @@ export default function PlannerTabs() {
             key={id}
             disableIndicator
             value={id}
+            sx={{ flex: "none", scrollSnapAlign: "start" }}
           >
             {/* Editable planner titles */}
             {isEditing === id ? (
