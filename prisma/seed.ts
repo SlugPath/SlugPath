@@ -64,8 +64,16 @@ async function main() {
     await addPlannersInCatalogYear(planners, catalogYear);
     console.log(`✨ Loaded default planners for (${catalogYear}) ✨`);
   }
-
   console.log(`✨ Loaded all default planners ✨`);
+
+  await prisma.major.deleteMany({
+    where: {
+      defaultPlanners: {
+        none: {},
+      },
+    },
+  });
+  console.log(`✨ Pruned invalid majors ✨`);
 }
 
 function delay(milliseconds: number) {

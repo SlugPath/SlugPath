@@ -3,6 +3,26 @@ import { MajorInput, MajorDefaultsInput, UserMajorOutput } from "./schema";
 import { PlannerTitle } from "../planner/schema";
 
 export class MajorService {
+  public async getAllMajors(catalogYear: string): Promise<string[]> {
+    const res = await prisma.major.findMany({
+      where: {
+        catalogYear,
+      },
+      select: {
+        name: true,
+      },
+      orderBy: [
+        {
+          name: "asc",
+        },
+        {
+          catalogYear: "desc",
+        },
+      ],
+    });
+    return res.map((major) => major.name);
+  }
+
   public async getUserMajor(userId: string): Promise<UserMajorOutput | null> {
     const userData = await prisma.user.findUnique({
       where: {
