@@ -131,9 +131,9 @@ export function getDeptAndNumber({
   return `${title}`;
 }
 
-export const convertPlannerTitles = (
+export function convertPlannerTitles(
   queryResult: PlannerTitle[],
-): MultiPlanner => {
+): MultiPlanner {
   const mp: MultiPlanner = {};
 
   queryResult.forEach((p, idx) => {
@@ -145,7 +145,16 @@ export const convertPlannerTitles = (
   });
 
   return mp;
-};
+}
+
+export function createCourseDraggableId(
+  { title, departmentCode, number, quartersOffered, credits, ge }: StoredCourse,
+  suffix: string,
+) {
+  return `${title};${departmentCode};${number};${quartersOffered.join(
+    ",",
+  )};${credits};${ge.join(",")};${suffix}`;
+}
 
 /**
  * Returns the real equivalent of a course if it exists.

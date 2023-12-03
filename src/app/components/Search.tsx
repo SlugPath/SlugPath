@@ -13,8 +13,9 @@ import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
 import useSearch from "../hooks/useSearch";
-import { customCourse } from "@/lib/plannerUtils";
+import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { InfoOutlined } from "@mui/icons-material";
+import CustomCourseSelection from "./CustomCourseSelection";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -43,19 +44,6 @@ export default function Search() {
 
   function noResults(data: any): boolean {
     return (!loading && !data) || (data && data.coursesBy.length == 0);
-  }
-
-  function createSearchId({
-    title,
-    departmentCode,
-    number,
-    quartersOffered,
-    credits,
-    ge,
-  }: StoredCourse) {
-    return `${title};${departmentCode};${number};${quartersOffered.join(
-      ",",
-    )};${credits};${ge.join(",")};search`;
   }
 
   function getCourseByIndex(index: number) {
@@ -113,134 +101,129 @@ export default function Search() {
           key={index}
           course={course}
           index={index}
-          draggableId={createSearchId(course)}
+          draggableId={createCourseDraggableId(course, "search")}
+          isCustom={false}
         />
       </div>
     );
   }
 
   return (
-    <Card className="w-80" variant="plain">
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleSearch(departmentCode ?? "", number, ge ?? "");
-        }}
-      >
-        <div className="grid grid-cols-4 gap-2 p-2">
-          <Select
-            placeholder="Department"
-            name="department"
-            aria-label="department"
-            className="col-span-4 bg-slate-100"
-            variant="soft"
-            onChange={handleChangeDepartment}
-            value={departmentCode ?? ""}
-          >
-            {departments.map((dep) => (
-              <Option key={dep.value} value={dep.value}>
-                {dep.label}
-              </Option>
-            ))}
-          </Select>
-          <FormControl error={error} className="col-span-2">
-            <Input
-              className="w-full"
-              color="neutral"
-              placeholder="Number"
+    <>
+      <CustomCourseSelection />
+      <Card className="w-80" variant="plain">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleSearch(departmentCode ?? "", number, ge ?? "");
+          }}
+        >
+          <div className="grid grid-cols-4 gap-2 p-2">
+            <Select
+              placeholder="Department"
+              name="department"
+              aria-label="department"
+              className="col-span-4 bg-slate-100"
               variant="soft"
-              name="number"
-              aria-label="number"
-              onChange={(event) => handleChangeNumber(event.target.value)}
-              size="sm"
-            />
-            {error && (
-              <FormHelperText>
-                <InfoOutlined />
-                Invalid course number
-              </FormHelperText>
-            )}
-          </FormControl>
-          <Select
-            placeholder="GE"
-            name="ge"
-            aria-label="ge"
-            className="col-span-2 bg-slate-100"
-            variant="soft"
-            onChange={handleChangeGE}
-            value={ge ?? ""}
-            size="sm"
-          >
-            {geOptions.map((option) => (
-              <Option key={option.value} value={option.value}>
-                {option.label}
-              </Option>
-            ))}
-          </Select>
-        </div>
-      </form>
-
-      <Droppable
-        droppableId={"search-droppable"}
-        isDropDisabled={true}
-        mode="virtual"
-        renderClone={(provided, snapshot, rubric) => {
-          const index = rubric.source.index;
-          // Null coalesce to custom course since the custom course
-          // has an index of -1
-          const course = getCourseByIndex(index) ?? customCourse();
-          return (
-            <CourseCard
-              course={course}
-              index={index}
-              provided={provided}
-              isDragging={snapshot.isDragging}
-            />
-          );
-        }}
-      >
-        {(provided, snapshot) => {
-          const custom = customCourse();
-          return (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              <div className="mb-4">
-                <DraggableCourseCard
-                  index={-1}
-                  draggableId={createSearchId(custom)}
-                  course={custom}
-                />
-              </div>
-              {hasResults(data) ? (
-                <div>
-                  <div className="mb-1">{getResultsString(data)}</div>
-                  <div className="overflow-y-auto h-[62vh]">
-                    <AutoSizer>
-                      {({ height, width }) => (
-                        <List
-                          height={height}
-                          rowCount={getItemCount(data, snapshot)}
-                          rowHeight={40}
-                          width={width}
-                          rowRenderer={(props) => getRowRender(props)}
-                        />
-                      )}
-                    </AutoSizer>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex justify-center items-center h-96">
-                  {noResults(data) ? (
-                    <p className="text-gray-400">No results</p>
-                  ) : null}
-                  {loading ? (
-                    <CircularProgress variant="plain" color="primary" />
-                  ) : null}
-                </div>
+              onChange={handleChangeDepartment}
+              value={departmentCode ?? ""}
+            >
+              {departments.map((dep) => (
+                <Option key={dep.value} value={dep.value}>
+                  {dep.label}
+                </Option>
+              ))}
+            </Select>
+            <FormControl error={error} className="col-span-2">
+              <Input
+                className="w-full"
+                color="neutral"
+                placeholder="Number"
+                variant="soft"
+                name="number"
+                aria-label="number"
+                onChange={(event) => handleChangeNumber(event.target.value)}
+                size="sm"
+              />
+              {error && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  Invalid course number
+                </FormHelperText>
               )}
-            </div>
-          );
-        }}
-      </Droppable>
-    </Card>
+            </FormControl>
+            <Select
+              placeholder="GE"
+              name="ge"
+              aria-label="ge"
+              className="col-span-2 bg-slate-100"
+              variant="soft"
+              onChange={handleChangeGE}
+              value={ge ?? ""}
+              size="sm"
+            >
+              {geOptions.map((option) => (
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              ))}
+            </Select>
+          </div>
+        </form>
+
+        <Droppable
+          droppableId={"search-droppable"}
+          isDropDisabled={true}
+          mode="virtual"
+          renderClone={(provided, snapshot, rubric) => {
+            const index = rubric.source.index;
+            const course = getCourseByIndex(index);
+            return (
+              <CourseCard
+                course={course}
+                index={index}
+                provided={provided}
+                isDragging={snapshot.isDragging}
+                isCustom={false}
+              />
+            );
+          }}
+        >
+          {(provided, snapshot) => {
+            return (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {hasResults(data) ? (
+                  <div>
+                    <div className="mb-1">{getResultsString(data)}</div>
+                    <div className="overflow-y-auto h-[62vh]">
+                      <AutoSizer>
+                        {({ height, width }) => (
+                          <List
+                            height={height}
+                            rowCount={getItemCount(data, snapshot)}
+                            rowHeight={40}
+                            width={width}
+                            rowRenderer={(props) => getRowRender(props)}
+                          />
+                        )}
+                      </AutoSizer>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center h-96">
+                    {noResults(data) ? (
+                      <p className="text-gray-400">No results</p>
+                    ) : null}
+                    {loading ? (
+                      <CircularProgress variant="plain" color="primary" />
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            );
+          }}
+        </Droppable>
+      </Card>
+    </>
   );
 }
