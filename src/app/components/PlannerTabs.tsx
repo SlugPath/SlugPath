@@ -80,9 +80,7 @@ export default function PlannerTabs() {
           gap: 0.5,
           borderRadius: "xl",
           overflow: "auto",
-          width: 2017,
-          scrollSnapType: "x mandatory",
-          "&::-webkit-scrollbar": { display: "none" },
+          width: "78.6vw",
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
             color: "white",
             bgcolor: "rgb(96 165 250)",
