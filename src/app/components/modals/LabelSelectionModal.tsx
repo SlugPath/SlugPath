@@ -14,6 +14,8 @@ import { Label } from "../../types/Label";
 import CourseLabel from "../CourseLabel";
 import { useEffect, useState } from "react";
 import { Edit } from "@mui/icons-material";
+import { truncateTitle } from "@/lib/utils";
+import { MAX_LABEL_NAME } from "@/lib/consts";
 
 interface LabelsSelectionModalProps {
   setShowModal: (showModal: boolean) => void;
@@ -161,7 +163,7 @@ function LabelListItem({
     if (editing) {
       setEditing(false);
       const newLabel = { ...label };
-      newLabel.name = labelName;
+      newLabel.name = truncateTitle(labelName, MAX_LABEL_NAME);
       onLabelChanged(newLabel);
       setUpdatedLabel(newLabel);
     }

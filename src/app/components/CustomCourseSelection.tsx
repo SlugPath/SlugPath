@@ -21,7 +21,6 @@ export default function CustomCourseSelection() {
   const [tooShortError, setTooShortError] = useState(false);
   const { customCourses, handleAddCustom } = useContext(PlannerContext);
 
-  // TODO: add a context field in PlannerContext for custom courses
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTooShortError(false);
     setCourseTitle(e.target.value);
