@@ -1,4 +1,4 @@
-import { IsUUID, Length } from "class-validator";
+import { Length } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 
 @ObjectType()
@@ -27,15 +27,7 @@ export class MajorInput {
 
   // optional so
   @Field()
-  @IsUUID("4")
   defaultPlannerId!: string;
-}
-
-@ObjectType()
-export class MajorUpdatedOutput {
-  @Field()
-  @Length(1)
-  userId!: string;
 }
 
 @InputType()

@@ -1,11 +1,6 @@
 import { MajorService } from "./service";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import {
-  MajorDefaultsInput,
-  MajorInput,
-  MajorUpdatedOutput,
-  UserMajorOutput,
-} from "./schema";
+import { MajorDefaultsInput, MajorInput, UserMajorOutput } from "./schema";
 import { PlannerTitle } from "../planner/schema";
 
 /**
@@ -43,13 +38,11 @@ export class MajorResolver {
 
   /**
    * Updates a user's major and defaultPlannerId fields
-   * @param major is a type containing a students' major information
+   * @param input is a type containing a students' major information
    * @returns the user id upon success
    */
-  @Mutation(() => MajorUpdatedOutput)
-  async updateUserMajor(
-    @Arg("input") input: MajorInput,
-  ): Promise<MajorUpdatedOutput> {
-    return { userId: await new MajorService().updateUserMajor(input) };
+  @Mutation(() => String)
+  async updateUserMajor(@Arg("input") input: MajorInput): Promise<string> {
+    return await new MajorService().updateUserMajor(input);
   }
 }

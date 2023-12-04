@@ -1,42 +1,30 @@
-// import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
+import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { MajorInput } from "@/graphql/major/schema";
-import { gql, useMutation, useQuery } from "@apollo/client";
-
-export const GET_MAJOR = gql`
-  query major($userId: String!) {
-    getUserMajor(userId: $userId) {
-      name
-      catalogYear
-      defaultPlanners
-    }
-  }
-`;
-
-export const SAVE_MAJOR = gql`
-  mutation saveMajor($major: MajorInput!) {
-    updateUserMajor(major: $major) {
-      name
-      catalogYear
-      defaultPlannerId
-    }
-  }
-`;
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { useEffect } from "react";
 
 export default function useMajorSelection(userId?: string, onCompleted?: any) {
-  const { data: majorData, loading } = useQuery(GET_MAJOR, {
+  const [getMajor, { data: majorData, loading }] = useLazyQuery(GET_MAJOR, {
     variables: {
       userId: userId,
     },
-    skip: !userId,
   });
   const [saveMajor, { loading: loadingSaveMajor }] = useMutation(SAVE_MAJOR, {
-    onCompleted: (data) => {
-      onCompleted(data);
+    onCompleted: () => {
+      onCompleted();
     },
     onError: (err) => {
       console.error(err);
     },
   });
+
+  useEffect(() => {
+    console.log("useEffect");
+    if (userId != undefined) {
+      console.log("useMajorSelection: userId changed, refetching");
+      getMajor();
+    }
+  }, [userId, getMajor]);
 
   function handleSaveMajor(
     name: string,
@@ -53,7 +41,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
 
       saveMajor({
         variables: {
-          major: majorInput,
+          input: majorInput,
         },
       });
     }
@@ -61,7 +49,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
 
   return {
     onSaveMajor: handleSaveMajor,
-    majorData,
+    userMajorData: majorData ? majorData.getUserMajor : null,
     loading,
     loadingSaveMajor,
   };

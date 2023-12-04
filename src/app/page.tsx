@@ -37,7 +37,7 @@ export default function Page() {
         <ApolloProvider client={apolloClient}>
           <MajorSelection
             saveButtonName="Next"
-            handleSave={() => router.push("/Planner")}
+            handleSave={() => router.push("/planner")}
           />
         </ApolloProvider>
       </div>

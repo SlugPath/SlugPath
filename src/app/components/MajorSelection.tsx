@@ -31,9 +31,10 @@ export default function MajorSelection({
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
   const { data: session } = useSession();
-  const [lazyGet] = useLazyQuery(GET_ALL_MAJORS);
-
-  const getAllMajors = useCallback(lazyGet, [lazyGet]);
+  const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
+  const getAllMajors = useCallback(lazyGetAllMajors, [lazyGetAllMajors]);
+  const { onSaveMajor, userMajorData, loadingSaveMajor, loading } =
+    useMajorSelection(session?.user.id, handleSaveCompleted);
 
   useEffect(() => {
     getAllMajors({
@@ -46,21 +47,15 @@ export default function MajorSelection({
     });
   }, [catalogYear, getAllMajors]);
 
-  const { onSaveMajor, majorData, loadingSaveMajor } = useMajorSelection(
-    session?.user.id,
-    handleSaveCompleted,
-  );
-
   useEffect(() => {
-    if (majorData) {
-      const major = majorData.getMajor;
+    if (userMajorData) {
       updateMajorUseState(
-        major.name,
-        major.catalogYear,
-        major.defaultPlannerId,
+        userMajorData.name,
+        userMajorData.catalogYear,
+        userMajorData.defaultPlannerId,
       );
     }
-  }, [majorData]);
+  }, [userMajorData]);
 
   function handleChangeMajor(
     event: React.SyntheticEvent | null,
@@ -92,17 +87,15 @@ export default function MajorSelection({
 
   function updateMajorUseState(
     name: string,
-    catalog_year: string,
-    default_planner_id: number,
+    catalogYear: string,
+    defaultPlannerId: number,
   ) {
     setMajor(name);
-    setCatalogYear(catalog_year);
-    setDefaultPlanner(default_planner_id);
+    setCatalogYear(catalogYear);
+    setDefaultPlanner(defaultPlannerId);
   }
 
-  function handleSaveCompleted(data: any) {
-    const major = data.upsertMajor;
-    updateMajorUseState(major.name, major.catalogYear, major.defaultPlannerId);
+  function handleSaveCompleted() {
     handleSave();
   }
 
@@ -113,6 +106,7 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4">
+      {loading && <div>Loading...</div>}
       <div>
         <SelectCatalogYear
           catalogYear={catalogYear}
