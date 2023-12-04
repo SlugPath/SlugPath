@@ -1,10 +1,9 @@
 import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { MajorInput } from "@/graphql/major/schema";
-import { useMutation, useLazyQuery } from "@apollo/client";
-import { useEffect } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 
 export default function useMajorSelection(userId?: string, onCompleted?: any) {
-  const [getMajor, { data: majorData, loading }] = useLazyQuery(GET_MAJOR, {
+  const { data: majorData, loading } = useQuery(GET_MAJOR, {
     variables: {
       userId: userId,
     },
@@ -17,14 +16,6 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
       console.error(err);
     },
   });
-
-  useEffect(() => {
-    console.log("useEffect");
-    if (userId != undefined) {
-      console.log("useMajorSelection: userId changed, refetching");
-      getMajor();
-    }
-  }, [userId, getMajor]);
 
   function handleSaveMajor(
     name: string,

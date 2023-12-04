@@ -8,6 +8,7 @@ import {
   Card,
   Tooltip,
   Button,
+  CircularProgress,
 } from "@mui/joy";
 import Info from "@mui/icons-material/Info";
 import { useCallback, useEffect, useState } from "react";
@@ -104,9 +105,12 @@ export default function MajorSelection({
     onSaveMajor(major, catalogYear, defaultPlanner.toString());
   }
 
+  if (loading) {
+    return <CircularProgress variant="plain" color="primary" />;
+  }
+
   return (
     <div className="space-y-4">
-      {loading && <div>Loading...</div>}
       <div>
         <SelectCatalogYear
           catalogYear={catalogYear}
