@@ -1,11 +1,10 @@
 import {
   Card,
   CircularProgress,
-  FormControl,
-  FormHelperText,
   Input,
   Option,
   Select,
+  Typography,
 } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
@@ -134,24 +133,17 @@ export default function Search() {
                 </Option>
               ))}
             </Select>
-            <FormControl error={error} className="col-span-2">
-              <Input
-                className="w-full"
-                color="neutral"
-                placeholder="Number"
-                variant="soft"
-                name="number"
-                aria-label="number"
-                onChange={(event) => handleChangeNumber(event.target.value)}
-                size="sm"
-              />
-              {error && (
-                <FormHelperText>
-                  <InfoOutlined />
-                  Invalid course number
-                </FormHelperText>
-              )}
-            </FormControl>
+            <Input
+              error={error}
+              className="w-full col-span-2 bg-slate-100"
+              color="neutral"
+              placeholder="Number"
+              variant="soft"
+              name="number"
+              aria-label="number"
+              onChange={(event) => handleChangeNumber(event.target.value)}
+              size="sm"
+            />
             <Select
               placeholder="GE"
               name="ge"
@@ -168,6 +160,12 @@ export default function Search() {
                 </Option>
               ))}
             </Select>
+            {error && (
+              <Typography className="col-span-4" color="danger">
+                <InfoOutlined />
+                Invalid course number
+              </Typography>
+            )}
           </div>
         </form>
 
