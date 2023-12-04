@@ -8,7 +8,7 @@ import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
 import CloseIconButton from "./CloseIconButton";
 
-const MAX_PLANNERS = 8;
+const MAX_PLANNERS = 10;
 
 export default function PlannerTabs() {
   const {
@@ -26,6 +26,13 @@ export default function PlannerTabs() {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
   const [openTooMany, setTooMany] = useState(false);
+
+  // Utility function to truncate tab title
+  const truncateTitle = (title: string, maxLength: number = 20) => {
+    return title.length > maxLength
+      ? `${title.substring(0, maxLength)}...`
+      : title;
+  };
 
   /**
    * Event listener that runs when user clicks the add button
@@ -73,6 +80,8 @@ export default function PlannerTabs() {
           p: 0.5,
           gap: 0.5,
           borderRadius: "xl",
+          overflow: "auto",
+          width: "78.6vw",
           [`& .${tabClasses.root}[aria-selected="true"]`]: {
             color: "white",
             bgcolor: "rgb(96 165 250)",
@@ -102,6 +111,7 @@ export default function PlannerTabs() {
             key={id}
             disableIndicator
             value={id}
+            sx={{ flex: "none", scrollSnapAlign: "start" }}
           >
             {/* Editable planner titles */}
             {isEditing === id ? (
@@ -134,7 +144,7 @@ export default function PlannerTabs() {
                 />
               </>
             ) : (
-              <span>{title}</span>
+              <span>{truncateTitle(title)}</span>
             )}
             <CloseIconButton onClick={() => setAlert([id, title])} />
           </Tab>
