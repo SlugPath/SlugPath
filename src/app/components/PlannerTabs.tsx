@@ -111,7 +111,7 @@ export default function PlannerTabs() {
             key={id}
             disableIndicator
             value={id}
-            sx={{ flex: "none", scrollSnapAlign: "start" }}
+            sx={{ flex: "none", scrollSnapAlign: "end" }}
           >
             {/* Editable planner titles */}
             {isEditing === id ? (
@@ -137,7 +137,8 @@ export default function PlannerTabs() {
                   onChange={(e) => changePlannerName(e, id)}
                   onBlur={() => handleBlur(title)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
+                    e.stopPropagation();
+                    if (e.key === "Enter" || e.key === "Escape") {
                       handleBlur(title);
                     }
                   }}
