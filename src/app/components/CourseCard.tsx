@@ -14,6 +14,8 @@ import { WarningAmberRounded } from "@mui/icons-material";
 import CloseIconButton from "./CloseIconButton";
 import CourseLabel from "./CourseLabel";
 import { Label } from "../types/Label";
+import { truncateTitle } from "@/lib/utils";
+import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
 
 export default function CourseCard({
   course,
@@ -129,7 +131,10 @@ const Title = ({
         sx={{ color: "text.tertiary" }}
         onClick={() => onShowCourseInfoModal(course)}
       >
-        {course ? getDeptAndNumber(course) : "No course"}
+        {truncateTitle(
+          course ? getDeptAndNumber(course) : "No course",
+          MAX_VISIBLE_COURSE_TITLE,
+        )}
       </Link>
     </Typography>
   );

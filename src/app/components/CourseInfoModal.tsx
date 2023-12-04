@@ -13,7 +13,7 @@ import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { ChangeEvent, useContext, useState } from "react";
 import { ModalsContext } from "../contexts/ModalsProvider";
-import { WarningAmberRounded, Edit, Add } from "@mui/icons-material";
+import { Add, Edit, WarningAmberRounded } from "@mui/icons-material";
 import { StoredCourse } from "../types/Course";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { IconButton, Input } from "@mui/joy";
@@ -21,7 +21,7 @@ import LabelsSelectionModal from "./modals/LabelSelectionModal";
 import { Label } from "../types/Label";
 import CourseLabel from "./CourseLabel";
 
-const MAX_TITLE_LENGTH: number = 10;
+const MAX_MODAL_TITLE = 50;
 
 export default function CourseInfoModal() {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
@@ -45,7 +45,7 @@ export default function CourseInfoModal() {
   const [customTitle, setCustomTitle] = useState("");
 
   const handleEndEditing = () => {
-    if (course && editing) {
+    if (course && editing && customTitle.length > 0) {
       setEditing(false);
       course.title = customTitle;
       editCustomCourse(course.id, customTitle);
@@ -54,7 +54,7 @@ export default function CourseInfoModal() {
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setCustomTitle(value.slice(0, MAX_TITLE_LENGTH));
+    setCustomTitle(value);
   };
 
   const { data, loading } = useQuery(GET_COURSE, {
@@ -69,9 +69,12 @@ export default function CourseInfoModal() {
 
   function title(data: any) {
     if (loading) return "";
-    if (!data) return course?.title;
+    if (!data) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
     const c = data.courseBy as StoredCourse;
-    return `${c.departmentCode} ${c.number} ${getTitle(c)}`;
+    return `${c.departmentCode} ${c.number} ${getTitle(c)}`.slice(
+      0,
+      MAX_MODAL_TITLE,
+    );
   }
 
   function credits(data: any) {
