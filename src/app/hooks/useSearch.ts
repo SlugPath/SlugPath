@@ -23,7 +23,7 @@ export default function useSearch() {
     ge: "",
   });
 
-  // useBackgroundQuery gives the queryRef to use in useReadQuery to instantly search the cache
+  // useBackgroundQuery gives the queryRef to use in useReadQuery
   const [queryRef] = useBackgroundQuery(GET_COURSES, {
     variables: {
       departmentCode: queryDetails.departmentCode,

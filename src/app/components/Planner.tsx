@@ -3,10 +3,8 @@ import { quartersPerYear } from "../../lib/plannerUtils";
 import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { useState } from "react";
 import SaveSnackbars from "./SaveSnackbars";
-import { Card, CircularProgress } from "@mui/joy";
-import useDebounce from "../hooks/useDebounce";
+import { Card } from "@mui/joy";
 import { GradProgress } from "./GradProgress";
 import { GEProgress } from "./GEProgress";
 import { PlannerContext } from "../contexts/PlannerProvider";
@@ -26,14 +24,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     saveStatus,
     saveError,
   } = useContext(PlannerContext);
-  const [loading, setLoading] = useState(true);
-
-  useDebounce({
-    callback: () => setLoading(status === "loading"),
-    delay: 1000,
-    dependencies: [status],
-  });
-
   if (!isActive) {
     return <></>;
   }
@@ -48,38 +38,32 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <div className="flex-initial pr-2">
                 <Search />
               </div>
-              {loading ? (
-                <CircularProgress />
-              ) : (
-                <>
-                  <div className="overflow-auto h-[92vh] w-full">
-                    <Quarters courseState={courseState} />
+              <div className="overflow-auto h-[92vh] w-full">
+                <Quarters courseState={courseState} />
+              </div>
+
+              {/* Modals and Grad Progress */}
+              <div className="self-start">
+                <Card variant="plain">
+                  <div>
+                    <PlannerActions />
+                    <Modals />
                   </div>
 
-                  {/* Modals and Grad Progress */}
-                  <div className="self-start">
-                    <Card variant="plain">
-                      <div>
-                        <PlannerActions />
-                        <Modals />
-                      </div>
+                  <hr className="rounded border-t border-slate-300" />
 
-                      <hr className="rounded border-t border-slate-300" />
-
-                      <div className="flex justify-items-center">
-                        <GradProgress credits={totalCredits} />
-                      </div>
-
-                      <hr className="rounded border-t border-slate-300" />
-
-                      <div className="flex place-items-center">
-                        <GEProgress ge={geSatisfied} />
-                      </div>
-                    </Card>
+                  <div className="flex justify-items-center">
+                    <GradProgress credits={totalCredits} />
                   </div>
-                  {/* End Modals */}
-                </>
-              )}
+
+                  <hr className="rounded border-t border-slate-300" />
+
+                  <div className="flex place-items-center">
+                    <GEProgress ge={geSatisfied} />
+                  </div>
+                </Card>
+              </div>
+              {/* End Modals */}
             </div>
           </ModalsProvider>
         </DragDropContext>

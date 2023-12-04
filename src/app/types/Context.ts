@@ -35,6 +35,9 @@ export interface PlannerContextProps {
   getAllLabels: () => Label[];
   editCourseLabels: (course: StoredCourse) => void;
   updatePlannerLabels: (labels: Label[]) => void;
+  customCourses: StoredCourse[];
+  handleAddCustom: (newTitle: string) => void;
+  handleRemoveCustom: (idx: number) => void;
 }
 
 export interface PlannerProviderProps {
@@ -51,6 +54,7 @@ export interface PlannersContextProps {
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
   activePlanner: { id: string; title: string } | undefined;
+  plannersLoading: boolean;
 }
 
 export interface LabelsContextProps {

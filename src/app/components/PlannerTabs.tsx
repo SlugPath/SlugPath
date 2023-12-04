@@ -1,4 +1,4 @@
-import { IconButton, Input, Tabs, TabList } from "@mui/joy";
+import { Input, Tabs, TabList, Button } from "@mui/joy";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
@@ -18,6 +18,7 @@ export default function PlannerTabs() {
     changePlannerName,
     addPlanner,
     activePlanner,
+    plannersLoading,
   } = useContext(PlannersContext);
 
   // State-ful variables for managing the editing of planner names
@@ -149,15 +150,15 @@ export default function PlannerTabs() {
           </Tab>
         ))}
         {/* Add new planner button */}
-        <IconButton
-          onClick={() => handleAddPlanner()}
+        <Button
+          loading={plannersLoading}
           aria-label="Add"
+          onClick={() => handleAddPlanner()}
           size="sm"
           variant="plain"
           color="primary"
-        >
-          <Add />
-        </IconButton>
+          startDecorator={<Add />}
+        />
       </TabList>
     </Tabs>
   );

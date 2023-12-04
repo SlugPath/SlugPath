@@ -14,6 +14,10 @@ import { PlannerTitle } from "../planner/schema";
  */
 @Resolver()
 export class MajorResolver {
+  @Query(() => [String])
+  async getAllMajors(@Arg("catalogYear") catalogYear: string) {
+    return new MajorService().getAllMajors(catalogYear);
+  }
   /**
    * @returns a unique `Major` associated with a userId
    */
