@@ -12,7 +12,6 @@ export default function useCustomCourseSelection() {
         title: newTitle,
       };
       delete newCourse.labels;
-      console.log(`${JSON.stringify(newCourse, null, 2)}`);
       return [newCourse, ...prev];
     });
   };
