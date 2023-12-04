@@ -18,6 +18,7 @@ import { years } from "@/lib/defaultPlanners";
 import { initialPlanner, quartersPerYear } from "@/lib/plannerUtils";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_MAJORS } from "@/graphql/queries";
+import useDefaultPlanners from "../hooks/useDefaultPlanners";
 
 export default function MajorSelection({
   saveButtonName,
@@ -34,8 +35,10 @@ export default function MajorSelection({
   const { data: session } = useSession();
   const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
   const getAllMajors = useCallback(lazyGetAllMajors, [lazyGetAllMajors]);
-  const { onSaveMajor, userMajorData, loadingSaveMajor, loading } =
+  const { onSaveMajor, userMajorData, loadingSaveMajor, loadingMajorData } =
     useMajorSelection(session?.user.id, handleSaveCompleted);
+  const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
+    useDefaultPlanners(catalogYear, major);
 
   useEffect(() => {
     getAllMajors({
@@ -105,7 +108,7 @@ export default function MajorSelection({
     onSaveMajor(major, catalogYear, defaultPlanner.toString());
   }
 
-  if (loading) {
+  if (loadingMajorData) {
     return <CircularProgress variant="plain" color="primary" />;
   }
 
@@ -129,6 +132,9 @@ export default function MajorSelection({
         <SelectDefaultPlanner
           defaultPlanner={defaultPlanner}
           onChange={handleChangeDefaultPlanner}
+          majorDefaultPlanners={
+            loadingMajorDefaultPlanners ? [] : majorDefaultPlanners
+          }
         />
       </div>
       <div className="flex justify-end w-full">
@@ -205,9 +211,11 @@ function SelectCatalogYear({
 function SelectDefaultPlanner({
   defaultPlanner,
   onChange,
+  majorDefaultPlanners,
 }: {
   defaultPlanner: number;
   onChange: any;
+  majorDefaultPlanners: any;
 }) {
   return (
     <>
@@ -220,10 +228,12 @@ function SelectDefaultPlanner({
       <div className="space-y-2">
         <Tabs value={defaultPlanner} variant="soft" onChange={onChange}>
           <TabList>
-            <Tab>4 Year Plan</Tab>
-            <Tab>4 Year Plan</Tab>
-            <Tab>2 Year Plan</Tab>
-            <Tab>None</Tab>
+            {majorDefaultPlanners &&
+              majorDefaultPlanners.map((planner: any, index: number) => (
+                <Tab key={index} value={index}>
+                  {planner.title}
+                </Tab>
+              ))}
           </TabList>
         </Tabs>
         <MiniPlanner />

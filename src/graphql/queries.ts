@@ -67,6 +67,15 @@ export const GET_MAJOR = gql`
   }
 `;
 
+export const GET_MAJOR_DEFAULT_PLANNERS = gql`
+  query getMajorDefaultPlannerIds($input: MajorDefaultsInput!) {
+    getMajorDefaults(input: $input) {
+      title
+      id
+    }
+  }
+`;
+
 export const SAVE_MAJOR = gql`
   mutation saveMajor($input: MajorInput!) {
     updateUserMajor(input: $input)
