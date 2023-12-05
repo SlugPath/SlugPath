@@ -1,16 +1,16 @@
 import {
-  Input,
+  Card,
   FormControl,
   FormHelperText,
-  Card,
-  Tooltip,
   Grid,
+  IconButton,
+  Input,
 } from "@mui/joy";
-import { InfoOutlined, Info } from "@mui/icons-material";
+import { Add, InfoOutlined } from "@mui/icons-material";
 import DraggableCourseCard from "./DraggableCourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { PlannerContext } from "../contexts/PlannerProvider";
-import { useState, useContext, ChangeEvent, useEffect, useMemo } from "react";
+import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 
 const MAX_CUSTOM_COURSES = 3;
@@ -21,13 +21,12 @@ export default function CustomCourseSelection() {
   const [tooShortError, setTooShortError] = useState(false);
   const { customCourses, handleAddCustom } = useContext(PlannerContext);
 
-  // TODO: add a context field in PlannerContext for custom courses
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTooShortError(false);
     setCourseTitle(e.target.value);
   };
 
-  const handleEnter = () => {
+  const handleAdd = () => {
     if (customCourses.length == MAX_CUSTOM_COURSES) {
       setTooManyError(true);
       return;
@@ -54,9 +53,9 @@ export default function CustomCourseSelection() {
     <Card className="w-80 mb-2" variant="plain">
       <FormControl error={tooManyError || tooShortError}>
         <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={10} className="flex flex-row whitespace-nowrap">
+          <Grid xs={10}>
             <Input
-              placeholder="+ Custom Course"
+              placeholder="Custom Course"
               value={courseTitle}
               sx={{
                 "--Input-focusedInset": "var(--any, )",
@@ -70,14 +69,19 @@ export default function CustomCourseSelection() {
                 },
               }}
               onChange={handleChange}
-              onKeyDown={(e) => e.key === "Enter" && handleEnter()}
+              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
             />
           </Grid>
           <Grid xs={2}>
+            <IconButton onClick={() => handleAdd()}>
+              <Add color="primary" />
+            </IconButton>
+          </Grid>
+          {/* <Grid xs={2}>
             <Tooltip title="Drag custom courses to add to planner">
               <Info sx={{ color: "gray" }} />
             </Tooltip>
-          </Grid>
+          </Grid> */}
         </Grid>
         {tooManyError && (
           <FormHelperText>

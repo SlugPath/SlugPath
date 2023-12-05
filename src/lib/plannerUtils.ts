@@ -12,6 +12,8 @@ import { v4 as uuidv4 } from "uuid";
 import { initialLabels } from "./labels";
 import { LabelColor } from "@prisma/client";
 import { MultiPlanner } from "@/app/types/MultiPlanner";
+import { truncateTitle } from "./utils";
+import { MAX_STORED_COURSE_TITLE } from "./consts";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
 const years = 4;
@@ -69,7 +71,7 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
       title: q.title,
       courses: q.courses.map((cid) => {
         const course = findCourseById(courseState, cid);
-        course.title = getTitle(course);
+        course.title = truncateTitle(getTitle(course), MAX_STORED_COURSE_TITLE);
         return course;
       }),
     };
