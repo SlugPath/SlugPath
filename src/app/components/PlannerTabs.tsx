@@ -1,4 +1,4 @@
-import { CssVarsProvider, IconButton, Input, Tabs, TabList } from "@mui/joy";
+import { CssVarsProvider, Input, Tabs, TabList, Button } from "@mui/joy";
 import Tab, { tabClasses } from "@mui/joy/Tab";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
@@ -8,7 +8,7 @@ import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
 import CloseIconButton from "./CloseIconButton";
 
-const MAX_PLANNERS = 8;
+const MAX_PLANNERS = 10;
 
 export default function PlannerTabs() {
   const {
@@ -18,6 +18,7 @@ export default function PlannerTabs() {
     changePlannerName,
     addPlanner,
     activePlanner,
+    plannersLoading,
   } = useContext(PlannersContext);
 
   // State-ful variables for managing the editing of planner names
@@ -25,6 +26,13 @@ export default function PlannerTabs() {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
   const [openTooMany, setTooMany] = useState(false);
+
+  // Utility function to truncate tab title
+  const truncateTitle = (title: string, maxLength: number = 20) => {
+    return title.length > maxLength
+      ? `${title.substring(0, maxLength)}...`
+      : title;
+  };
 
   /**
    * Event listener that runs when user clicks the add button
@@ -73,6 +81,8 @@ export default function PlannerTabs() {
             p: 0.5,
             gap: 0.5,
             borderRadius: "xl",
+            overflow: "auto",
+            width: "78.6vw",
             [`& .${tabClasses.root}[aria-selected="true"]`]: {
               color: "#F1F5F9",
               bgcolor: "#3B82F6",
@@ -103,6 +113,7 @@ export default function PlannerTabs() {
               key={id}
               disableIndicator
               value={id}
+              sx={{ flex: "none" }}
             >
               {/* Editable planner titles */}
               {isEditing === id ? (
@@ -135,21 +146,21 @@ export default function PlannerTabs() {
                   />
                 </>
               ) : (
-                <span>{title}</span>
+                <span>{truncateTitle(title)}</span>
               )}
               <CloseIconButton onClick={() => setAlert([id, title])} />
             </Tab>
           ))}
           {/* Add new planner button */}
-          <IconButton
-            onClick={() => handleAddPlanner()}
+          <Button
+            loading={plannersLoading}
             aria-label="Add"
+            onClick={() => handleAddPlanner()}
             size="sm"
             variant="plain"
             color="primary"
-          >
-            <Add />
-          </IconButton>
+            startDecorator={<Add />}
+          />
         </TabList>
       </Tabs>
     </CssVarsProvider>

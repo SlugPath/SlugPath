@@ -4,8 +4,7 @@ import { Quarter, findQuarter } from "../types/Quarter";
 import { v4 as uuidv4 } from "uuid";
 import { createCourseFromId } from "@/lib/plannerUtils";
 
-const REMOVE_COURSE_AREA1 = "remove-course-area1";
-const REMOVE_COURSE_AREA2 = "remove-course-area2";
+const CUSTOM_DROPPABLE = "custom-droppable";
 const SEARCH_DROPPABLE = "search-droppable";
 
 export default function useHandleCourseDrag({
@@ -19,7 +18,11 @@ export default function useHandleCourseDrag({
     const { destination, source, draggableId } = result;
 
     function draggedFromSearch(droppableId: string) {
-      return droppableId === "search-droppable";
+      return droppableId === SEARCH_DROPPABLE;
+    }
+
+    function draggedFromCustom(droppableId: string) {
+      return droppableId === CUSTOM_DROPPABLE;
     }
 
     // ensure that drag is valid
@@ -30,13 +33,11 @@ export default function useHandleCourseDrag({
     )
       return;
 
-    if (draggedFromSearch(source.droppableId)) {
+    if (
+      draggedFromSearch(source.droppableId) ||
+      draggedFromCustom(source.droppableId)
+    ) {
       addCourseFromSearch(draggableId, destination);
-      return;
-    }
-
-    if (shouldDeleteCourse(destination)) {
-      deleteCourse(source);
       return;
     }
 
@@ -61,39 +62,6 @@ export default function useHandleCourseDrag({
     });
     const newQuarter = {
       ...quarter,
-      courses: newStoredCourses,
-    };
-
-    const newState = {
-      ...courseState,
-      quarters: [
-        ...courseState.quarters.slice(0, idx),
-        newQuarter,
-        ...courseState.quarters.slice(idx + 1),
-      ],
-    };
-
-    handleCourseUpdate(newState);
-  }
-
-  function shouldDeleteCourse(destination: DraggableLocation) {
-    return (
-      destination.droppableId == REMOVE_COURSE_AREA1 ||
-      destination.droppableId == REMOVE_COURSE_AREA2 ||
-      destination.droppableId == SEARCH_DROPPABLE
-    );
-  }
-
-  function deleteCourse(source: DraggableLocation) {
-    const { quarter: startQuarter, idx } = findQuarter(
-      courseState.quarters,
-      source.droppableId,
-    );
-    const newStoredCourses = Array.from(startQuarter.courses);
-    newStoredCourses.splice(source.index, 1);
-
-    const newQuarter = {
-      ...startQuarter,
       courses: newStoredCourses,
     };
 

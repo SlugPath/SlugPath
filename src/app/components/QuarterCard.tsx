@@ -30,6 +30,7 @@ export default function QuarterCard({
                   index={index}
                   draggableId={course.id}
                   quarterId={id}
+                  isCustom={false}
                 />
               ))}
             </div>

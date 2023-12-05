@@ -12,7 +12,7 @@ import {
   getDeptAndNumber,
   isCSE,
   isOffered,
-} from "../../lib/plannerUtils";
+} from "@/lib/plannerUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import { PlannerContext } from "../contexts/PlannerProvider";
@@ -29,15 +29,21 @@ export default function CourseCard({
   provided,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isDragging,
+  isCustom,
 }: {
   course: StoredCourse;
   index: number;
   quarterId?: string;
   provided: DraggableProvided;
   isDragging: boolean;
+  isCustom: boolean;
 }) {
-  const { deleteCourse, setDisplayCourse, getCourseLabels } =
-    useContext(PlannerContext);
+  const {
+    deleteCourse,
+    setDisplayCourse,
+    getCourseLabels,
+    handleRemoveCustom,
+  } = useContext(PlannerContext);
   const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
@@ -91,6 +97,14 @@ export default function CourseCard({
               {quarterId !== undefined && (
                 <CloseIconButton
                   onClick={() => deleteCourse(quarterId)(index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              )}
+              {isCustom && (
+                <CloseIconButton
+                  onClick={() => handleRemoveCustom(index)}
                   sx={{
                     visibility: highlighted ? "visible" : "hidden",
                   }}

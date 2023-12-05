@@ -1,5 +1,5 @@
 /**
- * `StoredCourse` is a type to represent dummy courses for now
+ * `StoredCourse` is a type to represent courses
  */
 export interface StoredCourse {
   id: string;

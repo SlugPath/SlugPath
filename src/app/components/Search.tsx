@@ -2,11 +2,10 @@ import {
   Card,
   CircularProgress,
   CssVarsProvider,
-  FormControl,
-  FormHelperText,
   Input,
   Option,
   Select,
+  Typography,
 } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import DraggableCourseCard from "./DraggableCourseCard";
@@ -14,8 +13,9 @@ import CourseCard from "./CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
 import useSearch from "../hooks/useSearch";
-import { customCourse } from "@/lib/plannerUtils";
+import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { InfoOutlined } from "@mui/icons-material";
+import CustomCourseSelection from "./CustomCourseSelection";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
@@ -44,19 +44,6 @@ export default function Search() {
 
   function noResults(data: any): boolean {
     return (!loading && !data) || (data && data.coursesBy.length == 0);
-  }
-
-  function createSearchId({
-    title,
-    departmentCode,
-    number,
-    quartersOffered,
-    credits,
-    ge,
-  }: StoredCourse) {
-    return `${title};${departmentCode};${number};${quartersOffered.join(
-      ",",
-    )};${credits};${ge.join(",")};search`;
   }
 
   function getCourseByIndex(index: number) {
@@ -114,7 +101,8 @@ export default function Search() {
           key={index}
           course={course}
           index={index}
-          draggableId={createSearchId(course)}
+          draggableId={createCourseDraggableId(course, "search")}
+          isCustom={false}
         />
       </div>
     );
@@ -122,6 +110,7 @@ export default function Search() {
 
   return (
     <CssVarsProvider defaultMode="system">
+      <CustomCourseSelection />
       <Card className="w-80" variant="plain">
         <form
           onSubmit={(event) => {
@@ -151,24 +140,17 @@ export default function Search() {
                 </Option>
               ))}
             </Select>
-            <FormControl error={error} className="col-span-2">
-              <Input
-                className="w-full"
-                color="neutral"
-                placeholder="Number"
-                variant="soft"
-                name="number"
-                aria-label="number"
-                onChange={(event) => handleChangeNumber(event.target.value)}
-                size="md"
-              />
-              {error && (
-                <FormHelperText>
-                  <InfoOutlined />
-                  Invalid course number
-                </FormHelperText>
-              )}
-            </FormControl>
+            <Input
+              error={error}
+              className="w-full col-span-2"
+              color="neutral"
+              placeholder="Number"
+              variant="soft"
+              name="number"
+              aria-label="number"
+              onChange={(event) => handleChangeNumber(event.target.value)}
+              size="md"
+            />
             <Select
               placeholder="GE"
               name="ge"
@@ -185,6 +167,12 @@ export default function Search() {
                 </Option>
               ))}
             </Select>
+            {error && (
+              <Typography className="col-span-4" color="danger">
+                <InfoOutlined />
+                Invalid course number
+              </Typography>
+            )}
           </div>
         </form>
 
@@ -194,30 +182,21 @@ export default function Search() {
           mode="virtual"
           renderClone={(provided, snapshot, rubric) => {
             const index = rubric.source.index;
-            // Null coalesce to custom course since the custom course
-            // has an index of -1
-            const course = getCourseByIndex(index) ?? customCourse();
+            const course = getCourseByIndex(index);
             return (
               <CourseCard
                 course={course}
                 index={index}
                 provided={provided}
                 isDragging={snapshot.isDragging}
+                isCustom={false}
               />
             );
           }}
         >
           {(provided, snapshot) => {
-            const custom = customCourse();
             return (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <div className="mb-4">
-                  <DraggableCourseCard
-                    index={-1}
-                    draggableId={createSearchId(custom)}
-                    course={custom}
-                  />
-                </div>
                 {hasResults(data) ? (
                   <div>
                     <div className="mb-1">{getResultsString(data)}</div>

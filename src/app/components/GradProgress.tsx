@@ -1,7 +1,7 @@
 import { Tooltip, Typography } from "@mui/joy";
 import { Donut } from "theme-ui";
 import { lighten } from "@theme-ui/color";
-import InfoIcon from "@mui/icons-material/Info";
+import { Info } from "@mui/icons-material";
 
 const TOTAL_CREDITS_NEEDED = 180;
 
@@ -19,7 +19,7 @@ export const GradProgress = ({ credits }: { credits: number }) => {
           </div>
           <div className="justify-self-end">
             <Tooltip title="180 credits is needed for graduation" size="sm">
-              <InfoIcon sx={{ color: "gray" }} />
+              <Info sx={{ color: "gray" }} />
             </Tooltip>
           </div>
         </div>

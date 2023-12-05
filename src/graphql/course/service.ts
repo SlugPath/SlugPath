@@ -103,6 +103,19 @@ export class CourseService {
     // Return a sorted array of courses
     return res.sort(compareCoursesByNum);
   }
+  /**
+   * `courseBy` returns a course that satisfies a predicate `pred`
+   * or null if no such course exists
+   * @returns a `Course` instance
+   */
+  public async courseBy(pred: QueryInput): Promise<Course | null> {
+    return await prisma.course.findFirst({
+      where: {
+        departmentCode: pred.departmentCode,
+        number: pred.number,
+      },
+    });
+  }
 
   /**
    * Fetches all unique department names and their codes from the database.

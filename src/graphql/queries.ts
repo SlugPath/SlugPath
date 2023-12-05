@@ -52,6 +52,11 @@ export const GET_LABELS = gql`
   }
 `;
 
+export const GET_ALL_MAJORS = gql`
+  query getMajors($catalogYear: String!) {
+    getAllMajors(catalogYear: $catalogYear)
+  }
+`;
 export const GET_MAJOR = gql`
   query major($userId: String!) {
     major(userId: $userId) {

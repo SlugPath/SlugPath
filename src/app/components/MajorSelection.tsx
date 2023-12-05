@@ -10,11 +10,13 @@ import {
   Typography,
 } from "@mui/joy";
 import Info from "@mui/icons-material/Info";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
-import { majors, years } from "@/lib/defaultPlanners";
+import { years } from "@/lib/defaultPlanners";
 import { initialPlanner, quartersPerYear } from "@/lib/plannerUtils";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ALL_MAJORS } from "@/graphql/queries";
 
 export default function MajorSelection({
   saveButtonName,
@@ -27,7 +29,23 @@ export default function MajorSelection({
   const [catalogYear, setCatalogYear] = useState("");
   const [defaultPlanner, setDefaultPlanner] = useState(0);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+  const [majors, setMajors] = useState<string[]>([]);
   const { data: session } = useSession();
+  const [lazyGet] = useLazyQuery(GET_ALL_MAJORS);
+
+  const getAllMajors = useCallback(lazyGet, [lazyGet]);
+
+  useEffect(() => {
+    getAllMajors({
+      variables: {
+        catalogYear,
+      },
+      onCompleted: (data) => {
+        setMajors(data.getAllMajors);
+      },
+    });
+  }, [catalogYear, getAllMajors]);
+
   const { onSaveMajor, majorData, loadingSaveMajor } = useMajorSelection(
     session?.user.id,
     handleSaveCompleted,
@@ -84,11 +102,7 @@ export default function MajorSelection({
 
   function handleSaveCompleted(data: any) {
     const major = data.upsertMajor;
-    updateMajorUseState(
-      major.name,
-      major.catalog_year,
-      major.default_planner_id,
-    );
+    updateMajorUseState(major.name, major.catalogYear, major.defaultPlannerId);
     handleSave();
   }
 
@@ -100,17 +114,17 @@ export default function MajorSelection({
   return (
     <div className="space-y-4">
       <div>
-        <SelectMajorName
-          major={major}
-          majors={majors}
-          onChange={handleChangeMajor}
-        />
-      </div>
-      <div>
         <SelectCatalogYear
           catalogYear={catalogYear}
           years={years}
           onChange={handleChangeCatalogYear}
+        />
+      </div>
+      <div>
+        <SelectMajorName
+          major={major}
+          majors={majors}
+          onChange={handleChangeMajor}
         />
       </div>
       <div>
@@ -148,6 +162,7 @@ function SelectMajorName({
         placeholder="Choose one…"
         variant="soft"
         onChange={onChange}
+        disabled={majors.length == 0}
       >
         {majors.map((major, index) => (
           <Option key={index} value={major}>
