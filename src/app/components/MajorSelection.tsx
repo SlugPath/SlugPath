@@ -1,12 +1,13 @@
 import {
-  Select,
+  Button,
+  Card,
   Option,
-  Typography,
+  Select,
   Tab,
   Tabs,
   TabList,
-  Card,
   Tooltip,
+  Typography,
   Button,
   CircularProgress,
   List,
@@ -151,8 +152,6 @@ export default function MajorSelection({
       <div className="flex justify-end w-full">
         <Button
           disabled={saveButtonDisabled || loadingSaveMajor}
-          variant="plain"
-          color="primary"
           onClick={handleClickSave}
         >
           {saveButtonName}
