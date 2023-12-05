@@ -1,13 +1,13 @@
 import {
-  Select,
+  Button,
+  Card,
   Option,
-  Typography,
+  Select,
   Tab,
   Tabs,
   TabList,
-  Card,
   Tooltip,
-  Button,
+  Typography,
 } from "@mui/joy";
 import Info from "@mui/icons-material/Info";
 import { useCallback, useEffect, useState } from "react";
@@ -136,8 +136,6 @@ export default function MajorSelection({
       <div className="flex justify-end w-full">
         <Button
           disabled={saveButtonDisabled || loadingSaveMajor}
-          variant="plain"
-          color="primary"
           onClick={handleClickSave}
         >
           {saveButtonName}
@@ -220,7 +218,7 @@ function SelectDefaultPlanner({
         </Tooltip>
       </div>
       <div className="space-y-2">
-        <Tabs value={defaultPlanner} variant="soft" onChange={onChange}>
+        <Tabs value={defaultPlanner} onChange={onChange}>
           <TabList>
             <Tab>4 Year Plan</Tab>
             <Tab>4 Year Plan</Tab>
@@ -248,7 +246,6 @@ function MiniPlanner() {
         return (
           <div key={i} className="flex flex-row space-x-2">
             {quarters.map((quarter, index) => {
-              // const courses = findCoursesInQuarter(planner, quarter.id);
               return (
                 <div key={index}>
                   <Card>{quarter.title}</Card>

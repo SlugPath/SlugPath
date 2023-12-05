@@ -1,6 +1,7 @@
 import {
   Card,
   CircularProgress,
+  CssVarsProvider,
   Input,
   Option,
   Select,
@@ -108,7 +109,7 @@ export default function Search() {
   }
 
   return (
-    <>
+    <CssVarsProvider defaultMode="system">
       <CustomCourseSelection />
       <Card className="w-80" variant="plain">
         <form
@@ -122,10 +123,16 @@ export default function Search() {
               placeholder="Department"
               name="department"
               aria-label="department"
-              className="col-span-4 bg-slate-100"
+              className="col-span-4"
               variant="soft"
               onChange={handleChangeDepartment}
               value={departmentCode ?? ""}
+              size="md"
+              slotProps={{
+                listbox: {
+                  sx: { minWidth: 270 },
+                },
+              }}
             >
               {departments.map((dep) => (
                 <Option key={dep.value} value={dep.value}>
@@ -135,24 +142,24 @@ export default function Search() {
             </Select>
             <Input
               error={error}
-              className="w-full col-span-2 bg-slate-100"
+              className="w-full col-span-2"
               color="neutral"
               placeholder="Number"
               variant="soft"
               name="number"
               aria-label="number"
               onChange={(event) => handleChangeNumber(event.target.value)}
-              size="sm"
+              size="md"
             />
             <Select
               placeholder="GE"
               name="ge"
               aria-label="ge"
-              className="col-span-2 bg-slate-100"
+              className="col-span-2"
               variant="soft"
               onChange={handleChangeGE}
               value={ge ?? ""}
-              size="sm"
+              size="md"
             >
               {geOptions.map((option) => (
                 <Option key={option.value} value={option.value}>
@@ -222,6 +229,6 @@ export default function Search() {
           }}
         </Droppable>
       </Card>
-    </>
+    </CssVarsProvider>
   );
 }

@@ -33,7 +33,6 @@ export default function QuarterCard({
                   isCustom={false}
                 />
               ))}
-              {provided.placeholder}
             </div>
           );
         }}

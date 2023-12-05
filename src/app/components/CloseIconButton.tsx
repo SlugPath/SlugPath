@@ -23,6 +23,7 @@ export default function CloseIconButton({
     >
       <CloseIcon
         fontSize="small"
+        className="text-black"
         sx={{
           "&:hover": {
             opacity: 0.2,

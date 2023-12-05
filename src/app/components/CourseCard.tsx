@@ -1,4 +1,11 @@
-import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
+import {
+  Card,
+  CardContent,
+  CssVarsProvider,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
@@ -22,6 +29,7 @@ export default function CourseCard({
   index,
   quarterId,
   provided,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isDragging,
   isCustom,
 }: {
@@ -46,6 +54,7 @@ export default function CourseCard({
     margin: `0 0 ${margin}px 0`,
     ...draggableStyle,
   });
+  const isEnrolledCourse = quarterId !== undefined;
 
   function handleShowCourseInfoModal(course: StoredCourse) {
     const courseTerm = [course, extractTermFromQuarter(quarterId)];
@@ -54,53 +63,60 @@ export default function CourseCard({
   }
 
   return (
-    <Card
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
-      size="sm"
-      variant="outlined"
-      style={{
-        ...getItemStyle(provided.draggableProps.style),
-        height: "35px",
-        justifyContent: "center",
-        backgroundColor:
-          isDragging || highlighted ? "rgb(226 232 240)" : "#F1F5F9",
-      }}
-      onMouseEnter={() => setHighlighted(true)}
-      onMouseLeave={() => setHighlighted(false)}
-    >
-      <CardContent>
-        <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={10} className="flex flex-row whitespace-nowrap">
-            <Title
-              course={course}
-              onShowCourseInfoModal={handleShowCourseInfoModal}
-              quarterId={quarterId}
-            />
-            <CourseLabelList labels={getCourseLabels(course)} />
-          </Grid>
-          <Grid xs={2}>
-            {quarterId !== undefined && (
-              <CloseIconButton
-                onClick={() => deleteCourse(quarterId)(index)}
-                sx={{
-                  visibility: highlighted ? "visible" : "hidden",
-                }}
+    <CssVarsProvider defaultMode="system">
+      <Card
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        size="sm"
+        variant="soft"
+        color={isEnrolledCourse ? "primary" : "neutral"}
+        className="hover:opacity-50"
+        style={{
+          ...getItemStyle(provided.draggableProps.style),
+          height: "35px",
+          justifyContent: "center",
+        }}
+        onMouseEnter={() => setHighlighted(true)}
+        onMouseLeave={() => setHighlighted(false)}
+      >
+        <CardContent>
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            spacing={1}
+          >
+            <Grid xs={10} className="flex flex-row whitespace-nowrap">
+              <Title
+                course={course}
+                onShowCourseInfoModal={handleShowCourseInfoModal}
+                quarterId={quarterId}
               />
-            )}
-            {isCustom && (
-              <CloseIconButton
-                onClick={() => handleRemoveCustom(index)}
-                sx={{
-                  visibility: highlighted ? "visible" : "hidden",
-                }}
-              />
-            )}
+              <CourseLabelList labels={getCourseLabels(course)} />
+            </Grid>
+            <Grid xs={2}>
+              {quarterId !== undefined && (
+                <CloseIconButton
+                  onClick={() => deleteCourse(quarterId)(index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              )}
+              {isCustom && (
+                <CloseIconButton
+                  onClick={() => handleRemoveCustom(index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </CssVarsProvider>
   );
 }
 

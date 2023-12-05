@@ -4,7 +4,7 @@ import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
 import Search from "./Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import SaveSnackbars from "./SaveSnackbars";
-import { Card } from "@mui/joy";
+import { Card, CssVarsProvider } from "@mui/joy";
 import { GradProgress } from "./GradProgress";
 import { GEProgress } from "./GEProgress";
 import { PlannerContext } from "../contexts/PlannerProvider";
@@ -13,7 +13,13 @@ import PlannerActions from "./PlannerActions";
 import { ModalsProvider } from "../contexts/ModalsProvider";
 import ExportModal from "./ExportModal";
 import CourseInfoModal from "./CourseInfoModal";
-import MajorSelectionModal from "./modals/MajorSelectionModal";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionGroup,
+  AccordionSummary,
+} from "@mui/joy";
+import { Quarter } from "../types/Quarter";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -39,20 +45,20 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <Search />
               </div>
               <div className="overflow-auto h-[92vh] w-full">
-                <Quarters courseState={courseState} />
+                <Years courseState={courseState} />
               </div>
 
               {/* Modals and Grad Progress */}
-              <div className="self-start">
+              <div className="flex flex-col self-start gap-3">
                 <Card variant="plain">
                   <div>
                     <PlannerActions />
                     <Modals />
                   </div>
+                </Card>
 
-                  <hr className="rounded border-t border-slate-300" />
-
-                  <div className="flex justify-items-center">
+                <Card variant="plain">
+                  <div className="flex place-items-center">
                     <GradProgress credits={totalCredits} />
                   </div>
 
@@ -77,36 +83,77 @@ function Modals() {
     <>
       <CourseInfoModal />
       <ExportModal />
-      <MajorSelectionModal />
     </>
   );
 }
 
-function Quarters({ courseState }: { courseState: PlannerData }) {
+function Years({ courseState }: { courseState: PlannerData }) {
   return (
-    <div className="space-y-2">
-      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
-        const slice_val = quartersPerYear * i;
-        const quarters = courseState.quarters.slice(
-          slice_val,
-          slice_val + quartersPerYear,
-        );
-        return (
-          <div key={i} className="flex flex-row space-x-2">
-            {quarters.map((quarter) => {
-              const courses = findCoursesInQuarter(courseState, quarter.id);
+    <CssVarsProvider defaultMode="system">
+      <AccordionGroup>
+        <div className="space-y-2">
+          {Array.from({ length: quartersPerYear }, (_, index) => index).map(
+            (i) => {
+              const slice_val = quartersPerYear * i;
+              const quarters = courseState.quarters.slice(
+                slice_val,
+                slice_val + quartersPerYear,
+              );
+
               return (
-                <QuarterCard
-                  id={quarter.id}
-                  key={quarter.id}
-                  title={quarter.title}
-                  courses={courses}
+                <Quarters
+                  key={i}
+                  year={i + 1}
+                  quarters={quarters}
+                  courseState={courseState}
                 />
               );
-            })}
-          </div>
-        );
-      })}
-    </div>
+            },
+          )}
+        </div>
+      </AccordionGroup>
+    </CssVarsProvider>
+  );
+}
+
+function Quarters({
+  year,
+  quarters,
+  courseState,
+}: {
+  year: number;
+  quarters: Quarter[];
+  courseState: PlannerData;
+}) {
+  return (
+    <Accordion
+      sx={{
+        borderRadius: "0.5rem",
+        "&.MuiAccordion-root": {
+          "& .MuiAccordionSummary-root": {
+            padding: "0.5rem 0",
+            paddingX: "0.5rem",
+          },
+        },
+      }}
+      defaultExpanded={true}
+    >
+      <AccordionSummary>Year {year}</AccordionSummary>
+      <AccordionDetails>
+        <div className="flex flex-row space-x-2">
+          {quarters.map((quarter) => {
+            const courses = findCoursesInQuarter(courseState, quarter.id);
+            return (
+              <QuarterCard
+                id={quarter.id}
+                key={quarter.id}
+                title={quarter.title}
+                courses={courses}
+              />
+            );
+          })}
+        </div>
+      </AccordionDetails>
+    </Accordion>
   );
 }
