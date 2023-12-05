@@ -5,10 +5,12 @@ export default function CourseLabel({
   label,
   displayText,
   children,
+  inMenu,
 }: {
   label: Label;
   displayText?: boolean;
   children?: React.ReactNode;
+  inMenu: boolean;
 }) {
   const displayTextDefault = displayText === undefined ? true : displayText;
 
@@ -24,7 +26,9 @@ export default function CourseLabel({
   return (
     <div
       style={getColor(label.color)}
-      className={"rounded-md px-1 px-2 py-2 mx-1"}
+      className={
+        inMenu ? "rounded-md px-6 py-2 mx-1 " : "rounded-md px-2 py-2 mx-1"
+      }
     >
       {children}
     </div>

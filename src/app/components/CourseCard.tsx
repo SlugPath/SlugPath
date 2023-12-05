@@ -145,7 +145,12 @@ const CourseLabelList = ({ labels }: { labels: Label[] }) => {
     <div className="flex truncate">
       {labels
         ? labels.map((label, index) => (
-            <CourseLabel key={index} label={label} displayText={false} />
+            <CourseLabel
+              key={index}
+              label={label}
+              displayText={false}
+              inMenu={false}
+            />
           ))
         : null}
     </div>

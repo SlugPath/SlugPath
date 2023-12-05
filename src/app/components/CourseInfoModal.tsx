@@ -274,7 +274,11 @@ function SelectedLabels({
       <List orientation="horizontal">
         {labels.map((label) => (
           <ListItem key={label.id}>
-            <CourseLabel label={label} displayText={label.name.length > 0} />
+            <CourseLabel
+              label={label}
+              displayText={label.name.length > 0}
+              inMenu={true}
+            />
           </ListItem>
         ))}
         <IconButton onClick={handleOpenLabels} variant="solid">
