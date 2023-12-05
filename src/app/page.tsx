@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import MajorSelection from "./components/MajorSelection";
+import MajorSelection from "./components/majorSelection/MajorSelection";
 import LoginButton from "./components/LoginButton";
 import Footer from "./components/Footer";
 import { useSession } from "next-auth/react";

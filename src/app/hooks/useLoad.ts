@@ -53,6 +53,7 @@ export const useLoadAllPlanners = (
 export const useLoadPlanner = (
   plannerId: string,
   userId: string | undefined,
+  skipLoad?: boolean,
   /* defaultPlannerId: string | undefined | null, */
 ): [
   PlannerData,
@@ -77,13 +78,14 @@ export const useLoadPlanner = (
   });
 
   useEffect(() => {
+    if (skipLoad) return;
     getData({
       variables: {
         userId,
         plannerId,
       },
     });
-  }, [userId, plannerId, getData]);
+  }, [userId, plannerId, getData, skipLoad]);
 
   return [state, setState, { loading, error }];
 };

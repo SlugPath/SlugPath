@@ -22,15 +22,19 @@ const SAVE_PLANNER = gql`
   }
 `;
 
-export default function usePlanner(input: {
-  userId: string | undefined;
-  plannerId: string;
-  title: string;
-  order: number;
-}) {
+export default function usePlanner(
+  input: {
+    userId: string | undefined;
+    plannerId: string;
+    title: string;
+    order: number;
+  },
+  skipLoad?: boolean,
+) {
   const [courseState, setCourseState] = useLoadPlanner(
     input.plannerId,
     input.userId,
+    skipLoad,
   );
 
   const handleCourseUpdate = (newState: PlannerData) => {
@@ -72,13 +76,11 @@ export default function usePlanner(input: {
   // Update total credits
   useEffect(() => {
     setTotalCredits(getTotalCredits(courseState));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseState]);
 
   // Update list of GEs satisfied
   useEffect(() => {
     setGeSatisfied(getGeSatisfied(courseState));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseState]);
 
   /**

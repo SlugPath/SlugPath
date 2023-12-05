@@ -39,10 +39,12 @@ export class MajorResolver {
   /**
    * Updates a user's major and defaultPlannerId fields
    * @param input is a type containing a students' major information
-   * @returns the user id upon success
+   * @returns the users major information after updating
    */
-  @Mutation(() => String)
-  async updateUserMajor(@Arg("input") input: MajorInput): Promise<string> {
+  @Mutation(() => UserMajorOutput)
+  async updateUserMajor(
+    @Arg("input") input: MajorInput,
+  ): Promise<UserMajorOutput> {
     return await new MajorService().updateUserMajor(input);
   }
 }

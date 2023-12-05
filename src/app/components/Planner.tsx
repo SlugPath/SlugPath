@@ -20,6 +20,7 @@ import {
   AccordionSummary,
 } from "@mui/joy";
 import { Quarter } from "../types/Quarter";
+import MajorSelectionModal from "./majorSelection/MajorSelectionModal";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -83,6 +84,7 @@ function Modals() {
     <>
       <CourseInfoModal />
       <ExportModal />
+      <MajorSelectionModal />
     </>
   );
 }

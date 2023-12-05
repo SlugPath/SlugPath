@@ -16,8 +16,9 @@ import { truncateTitle } from "./utils";
 import { MAX_STORED_COURSE_TITLE } from "./consts";
 
 const quarterNames = ["Summer", "Fall", "Winter", "Spring"];
-const years = 4;
+export const years = 4;
 export const quartersPerYear = 4;
+export const EMPTY_PLANNER = "emptyPlanner";
 
 export const initialPlanner = (): PlannerData => {
   return {

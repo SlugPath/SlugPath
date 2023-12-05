@@ -4,6 +4,7 @@ import { Field, InputType, ObjectType } from "type-graphql";
 @ObjectType()
 export class UserMajorOutput {
   @Field()
+  @Length(1, 64)
   name!: string;
 
   @Field()

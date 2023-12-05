@@ -3,7 +3,11 @@ import { MajorInput } from "@/graphql/major/schema";
 import { useMutation, useQuery } from "@apollo/client";
 
 export default function useMajorSelection(userId?: string, onCompleted?: any) {
-  const { data: majorData, loading: loadingMajorData } = useQuery(GET_MAJOR, {
+  const {
+    data: majorData,
+    loading: loadingMajorData,
+    refetch,
+  } = useQuery(GET_MAJOR, {
     variables: {
       userId: userId,
     },
@@ -12,6 +16,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
   const [saveMajor, { loading: loadingSaveMajor }] = useMutation(SAVE_MAJOR, {
     onCompleted: () => {
       onCompleted();
+      refetch();
     },
     onError: (err) => {
       console.error(err);

@@ -78,7 +78,11 @@ export const GET_MAJOR_DEFAULT_PLANNERS = gql`
 
 export const SAVE_MAJOR = gql`
   mutation saveMajor($input: MajorInput!) {
-    updateUserMajor(input: $input)
+    updateUserMajor(input: $input) {
+      name
+      catalogYear
+      defaultPlannerId
+    }
   }
 `;
 

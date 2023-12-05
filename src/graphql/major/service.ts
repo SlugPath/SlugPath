@@ -55,15 +55,14 @@ export class MajorService {
     name,
     catalogYear,
     defaultPlannerId,
-  }: MajorInput): Promise<string> {
-    const majorId = (
-      await prisma.major.findFirst({
-        where: {
-          name,
-          catalogYear,
-        },
-      })
-    )?.id;
+  }: MajorInput): Promise<UserMajorOutput> {
+    const major = await prisma.major.findFirst({
+      where: {
+        name,
+        catalogYear,
+      },
+    });
+    const majorId = major?.id;
 
     if (majorId === undefined)
       throw new Error(
@@ -82,7 +81,11 @@ export class MajorService {
       },
     });
 
-    return user.id;
+    return {
+      name: major!.name,
+      catalogYear: major!.catalogYear,
+      defaultPlannerId: user.defaultPlannerId!,
+    };
   }
 
   public async getMajorDefaultPlanners({
