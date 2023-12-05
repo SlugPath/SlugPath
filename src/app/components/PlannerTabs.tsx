@@ -7,6 +7,7 @@ import TooManyPlannersAlert from "./TooManyPlannersAlert";
 import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
 import CloseIconButton from "./CloseIconButton";
+import { truncateTitle } from "@/lib/utils";
 
 const MAX_PLANNERS = 10;
 
@@ -26,13 +27,6 @@ export default function PlannerTabs() {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [openAlert, setAlert] = useState<OpenState>(["", ""]);
   const [openTooMany, setTooMany] = useState(false);
-
-  // Utility function to truncate tab title
-  const truncateTitle = (title: string, maxLength: number = 20) => {
-    return title.length > maxLength
-      ? `${title.substring(0, maxLength)}...`
-      : title;
-  };
 
   /**
    * Event listener that runs when user clicks the add button
