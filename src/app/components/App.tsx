@@ -9,6 +9,7 @@ import {
   PlannersProvider,
 } from "../contexts/PlannersProvider";
 import { PlannerProvider } from "../contexts/PlannerProvider";
+import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
 
 export default function App() {
   return (
@@ -79,7 +80,9 @@ function PlannerList() {
               title={planners[id][0]}
               order={index}
             >
-              <Planner isActive={planners[id][1]} />
+              <DefaultPlannerProvider>
+                <Planner isActive={planners[id][1]} />
+              </DefaultPlannerProvider>
             </PlannerProvider>
           </ListItem>
         ))}

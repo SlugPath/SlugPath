@@ -61,3 +61,7 @@ export interface LabelsContextProps {
   labels: Label[];
   updateLabels: (label: Label[]) => void;
 }
+
+export interface DefaultPlannerContextProps {
+  defaultPlanner: PlannerData;
+}

@@ -53,8 +53,8 @@ export const useLoadAllPlanners = (
 export const useLoadPlanner = (
   plannerId: string,
   userId: string | undefined,
+  defaultPlanner: PlannerData,
   skipLoad?: boolean,
-  /* defaultPlannerId: string | undefined | null, */
 ): [
   PlannerData,
   React.Dispatch<React.SetStateAction<PlannerData>>,
@@ -71,12 +71,23 @@ export const useLoadPlanner = (
         removeTypenames(planner);
         setState(deserializePlanner(planner));
       }
+
+      if (data.getPlanner === null) {
+        autofillWithDefaultPlanner();
+      }
     },
     onError: (err) => {
       console.error(err);
     },
     fetchPolicy: "no-cache",
   });
+
+  function autofillWithDefaultPlanner() {
+    setState({
+      ...defaultPlanner,
+      labels: initialPlanner().labels,
+    });
+  }
 
   useEffect(() => {
     if (skipLoad) return;

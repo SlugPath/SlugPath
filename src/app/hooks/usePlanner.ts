@@ -29,16 +29,20 @@ export default function usePlanner(
     title: string;
     order: number;
   },
+  defaultPlanner: PlannerData,
   skipLoad?: boolean,
 ) {
   const [courseState, setCourseState] = useLoadPlanner(
     input.plannerId,
     input.userId,
+    defaultPlanner,
     skipLoad,
   );
 
   const handleCourseUpdate = (newState: PlannerData) => {
     setCourseState(newState);
+
+    // TODO set default planner right here if planner is new
   };
 
   const [totalCredits, setTotalCredits] = useState(
