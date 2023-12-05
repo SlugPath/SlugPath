@@ -105,7 +105,7 @@ export default function PlannerTabs() {
             key={id}
             disableIndicator
             value={id}
-            sx={{ flex: "none", scrollSnapAlign: "end" }}
+            sx={{ flex: "none" }}
           >
             {/* Editable planner titles */}
             {isEditing === id ? (
