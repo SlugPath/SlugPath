@@ -17,7 +17,7 @@ export default function MajorSelectionModal() {
       <Sheet
         variant="outlined"
         sx={{
-          // width: "%",
+          width: "60%",
           margin: 10,
           borderRadius: "md",
           p: 3,

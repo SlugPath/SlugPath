@@ -92,7 +92,7 @@ export const GET_PLANNERS = gql`
 `;
 
 export const GET_PLANNER = gql`
-  query ($userId: String!, $plannerId: String!) {
+  query ($userId: String, $plannerId: String!) {
     getPlanner(userId: $userId, plannerId: $plannerId) {
       quarters {
         title

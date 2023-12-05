@@ -77,15 +77,13 @@ export const useLoadPlanner = (
   });
 
   useEffect(() => {
-    if (userId !== undefined) {
-      getData({
-        variables: {
-          userId,
-          plannerId,
-        },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+    getData({
+      variables: {
+        userId,
+        plannerId,
+      },
+    });
+  }, [userId, plannerId, getData]);
+
   return [state, setState, { loading, error }];
 };

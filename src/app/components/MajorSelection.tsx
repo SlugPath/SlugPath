@@ -9,6 +9,8 @@ import {
   Tooltip,
   Button,
   CircularProgress,
+  List,
+  ListItem,
 } from "@mui/joy";
 import Info from "@mui/icons-material/Info";
 import { useCallback, useEffect, useState } from "react";
@@ -19,6 +21,10 @@ import { initialPlanner, quartersPerYear } from "@/lib/plannerUtils";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_MAJORS } from "@/graphql/queries";
 import useDefaultPlanners from "../hooks/useDefaultPlanners";
+import usePlanner from "../hooks/usePlanner";
+import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
+import { StoredCourse } from "../types/Course";
+import { Quarter } from "../types/Quarter";
 
 export default function MajorSelection({
   saveButtonName,
@@ -29,7 +35,7 @@ export default function MajorSelection({
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
-  const [defaultPlanner, setDefaultPlanner] = useState(0);
+  const [defaultPlannerIndex, setDefaultPlannerIndex] = useState(0);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
   const { data: session } = useSession();
@@ -61,6 +67,12 @@ export default function MajorSelection({
     }
   }, [userMajorData]);
 
+  // set default planner index to 0 when majorDefaultPlanners changes
+  // so that default planner tabs work correctly
+  useEffect(() => {
+    setDefaultPlannerIndex(0);
+  }, [majorDefaultPlanners]);
+
   function handleChangeMajor(
     event: React.SyntheticEvent | null,
     newValue: string | null,
@@ -85,7 +97,7 @@ export default function MajorSelection({
   ) {
     if (typeof index === "number") {
       // TODO: get id here instead of index
-      setDefaultPlanner(index);
+      setDefaultPlannerIndex(index);
     }
   }
 
@@ -96,7 +108,7 @@ export default function MajorSelection({
   ) {
     setMajor(name);
     setCatalogYear(catalogYear);
-    setDefaultPlanner(defaultPlannerId);
+    setDefaultPlannerIndex(defaultPlannerId);
   }
 
   function handleSaveCompleted() {
@@ -105,7 +117,7 @@ export default function MajorSelection({
 
   function handleClickSave() {
     setSaveButtonDisabled(true);
-    onSaveMajor(major, catalogYear, defaultPlanner.toString());
+    onSaveMajor(major, catalogYear, defaultPlannerIndex.toString());
   }
 
   if (loadingMajorData) {
@@ -130,11 +142,10 @@ export default function MajorSelection({
       </div>
       <div>
         <SelectDefaultPlanner
-          defaultPlanner={defaultPlanner}
+          defaultPlannerIndex={defaultPlannerIndex}
           onChange={handleChangeDefaultPlanner}
-          majorDefaultPlanners={
-            loadingMajorDefaultPlanners ? [] : majorDefaultPlanners
-          }
+          majorDefaultPlanners={majorDefaultPlanners}
+          loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
         />
       </div>
       <div className="flex justify-end w-full">
@@ -209,14 +220,19 @@ function SelectCatalogYear({
 }
 
 function SelectDefaultPlanner({
-  defaultPlanner,
+  defaultPlannerIndex,
   onChange,
   majorDefaultPlanners,
+  loadingMajorDefaultPlanners,
 }: {
-  defaultPlanner: number;
+  defaultPlannerIndex: number;
   onChange: any;
   majorDefaultPlanners: any;
+  loadingMajorDefaultPlanners: boolean;
 }) {
+  const defaultPlanners: { id: string; title: string }[] =
+    majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
+
   return (
     <>
       <div className="flex flex-row space-x-2">
@@ -226,46 +242,146 @@ function SelectDefaultPlanner({
         </Tooltip>
       </div>
       <div className="space-y-2">
-        <Tabs value={defaultPlanner} variant="soft" onChange={onChange}>
+        <Tabs
+          defaultValue={0}
+          value={defaultPlannerIndex}
+          variant="soft"
+          onChange={onChange}
+        >
           <TabList>
-            {majorDefaultPlanners &&
-              majorDefaultPlanners.map((planner: any, index: number) => (
+            {defaultPlanners &&
+              defaultPlanners.map((planner: any, index: number) => (
                 <Tab key={index} value={index}>
                   {planner.title}
                 </Tab>
               ))}
+            <Tab value={-1}>None</Tab>
           </TabList>
         </Tabs>
-        <MiniPlanner />
+        {loadingMajorDefaultPlanners && (
+          // <div className="flex justify-center">
+          //   <CircularProgress variant="plain" color="primary" />
+          // </div>
+          <MiniPlanner
+            plannerId={"wow random stuff"}
+            title={"Loading..."}
+            order={0}
+            active={true}
+          />
+        )}
+        {!loadingMajorDefaultPlanners && (
+          <>
+            <List>
+              {Object.keys(defaultPlanners).map((id, index: number) => {
+                const plannerIsSelected = defaultPlannerIndex == index;
+                return (
+                  <ListItem
+                    sx={{ display: plannerIsSelected ? "block" : "none" }}
+                    key={index}
+                  >
+                    <MiniPlanner
+                      plannerId={defaultPlanners[index].id}
+                      title={defaultPlanners[index].title}
+                      order={index}
+                      active={plannerIsSelected}
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </>
+        )}
       </div>
     </>
   );
 }
 
-function MiniPlanner() {
-  const planner = initialPlanner();
+function MiniPlanner({
+  plannerId,
+  title,
+  order,
+  active,
+}: {
+  plannerId: string;
+  title: string;
+  order: number;
+  active?: boolean;
+}) {
+  const { courseState } = usePlanner({
+    userId: undefined,
+    plannerId: plannerId,
+    title,
+    order,
+  });
+
+  if (!active) {
+    return <></>;
+  }
 
   return (
-    <Card>
+    <>
+      <Card>
+        <MiniQuarters
+          courseState={courseState ? courseState : initialPlanner()}
+        />
+      </Card>
+    </>
+  );
+}
+
+function MiniQuarters({ courseState }: { courseState: PlannerData }) {
+  return (
+    <>
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
         const slice_val = quartersPerYear * i;
-        const quarters = planner.quarters.slice(
+        const quarters = courseState.quarters.slice(
           slice_val,
           slice_val + quartersPerYear,
         );
         return (
           <div key={i} className="flex flex-row space-x-2">
-            {quarters.map((quarter, index) => {
-              // const courses = findCoursesInQuarter(planner, quarter.id);
+            {quarters.map((quarter: Quarter, index: number) => {
+              const courses: StoredCourse[] = findCoursesInQuarter(
+                courseState,
+                quarter.id,
+              );
               return (
-                <div key={index}>
-                  <Card>{quarter.title}</Card>
-                </div>
+                <MiniQuarterCard
+                  key={index}
+                  quarter={quarter}
+                  courses={courses}
+                />
               );
             })}
           </div>
         );
       })}
+    </>
+  );
+}
+
+function MiniQuarterCard({
+  quarter,
+  courses,
+}: {
+  quarter: Quarter;
+  courses: StoredCourse[];
+}) {
+  function courseTitle(course: StoredCourse) {
+    if (course.departmentCode && course.number) {
+      return `${course.departmentCode} ${course.number}`;
+    }
+    return course.title;
+  }
+
+  return (
+    <Card size="sm" className="w-full">
+      {quarter.title}
+      {courses.map((course, index) => (
+        <div key={index} className="pl-4">
+          <li>{courseTitle(course)}</li>
+        </div>
+      ))}
     </Card>
   );
 }
