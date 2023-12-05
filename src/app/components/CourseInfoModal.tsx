@@ -277,7 +277,7 @@ function SelectedLabels({
             <CourseLabel
               label={label}
               displayText={label.name.length > 0}
-              inMenu={true}
+              inMenu
             />
           </ListItem>
         ))}

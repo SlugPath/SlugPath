@@ -176,11 +176,7 @@ function LabelListItem({
   return (
     <ListItem key={index}>
       <Checkbox onChange={() => handleToggle(label)} checked={isChecked} />
-      <CourseLabel
-        label={updatedLabel}
-        displayText={displayText()}
-        inMenu={true}
-      >
+      <CourseLabel label={updatedLabel} displayText={displayText()} inMenu>
         {editing ? (
           <Input
             variant="soft"

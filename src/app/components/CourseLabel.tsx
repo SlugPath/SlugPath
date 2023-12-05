@@ -5,12 +5,12 @@ export default function CourseLabel({
   label,
   displayText,
   children,
-  inMenu,
+  inMenu = false,
 }: {
   label: Label;
   displayText?: boolean;
   children?: React.ReactNode;
-  inMenu: boolean;
+  inMenu?: boolean;
 }) {
   const displayTextDefault = displayText === undefined ? true : displayText;
 

@@ -100,7 +100,7 @@ async function addPlannersInCatalogYear(planners: any, catalogYear: string) {
             );
 
             return {
-              year: parseInt(y),
+              year: parseInt(y) - 1,
               term: t,
               courses: {
                 create: plannedCourses,
