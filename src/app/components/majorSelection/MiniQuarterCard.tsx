@@ -1,5 +1,5 @@
 import { StoredCourse } from "@/graphql/planner/schema";
-import { Typography, Card } from "@mui/joy";
+import { Card, ListItem, List } from "@mui/joy";
 import { Quarter } from "../../types/Quarter";
 
 export default function MiniQuarterCard({
@@ -17,13 +17,25 @@ export default function MiniQuarterCard({
   }
 
   return (
-    <Card size="sm" className="w-full">
-      <Typography level="body-md">{quarter.title}</Typography>
-      {courses.map((course, index) => (
-        <div key={index} className="pl-4">
-          <li>{courseTitle(course)}</li>
-        </div>
-      ))}
+    <Card
+      size="sm"
+      className="w-full"
+      sx={{
+        minHeight: "6rem",
+      }}
+    >
+      {/* <Typography level="body-sm">{quarter.title}</Typography> */}
+      <div>{quarter.title}</div>
+      <List
+        marker="disc"
+        sx={{
+          "--ListItem-minHeight": "24px",
+        }}
+      >
+        {courses.map((course, index) => (
+          <ListItem key={index}>{courseTitle(course)}</ListItem>
+        ))}
+      </List>
     </Card>
   );
 }

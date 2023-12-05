@@ -12,7 +12,7 @@ export default function MiniQuarters({
   const quartersAndTerms: QuarterYearTerm[] = getQuartersAndTerms(years);
 
   return (
-    <>
+    <div className="space-y-1">
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
         const slice_val = quartersPerYear * i;
         const quarters = quartersAndTerms.slice(
@@ -20,7 +20,7 @@ export default function MiniQuarters({
           slice_val + quartersPerYear,
         );
         return (
-          <div key={i} className="flex flex-row space-x-2">
+          <div key={i} className="flex flex-row space-x-1">
             {quarters.map((quarterYearTerm: QuarterYearTerm, index: number) => {
               const quarter = findQuarterInCourseState(
                 quarterYearTerm.year,
@@ -64,7 +64,7 @@ export default function MiniQuarters({
           </div>
         );
       })}
-    </>
+    </div>
   );
 }
 

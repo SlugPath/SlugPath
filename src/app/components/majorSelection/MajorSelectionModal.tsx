@@ -1,5 +1,4 @@
-import { Modal, Sheet, DialogActions, Typography } from "@mui/joy";
-import { Button } from "@mui/joy";
+import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import MajorSelection from "./MajorSelection";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { useContext } from "react";
@@ -38,15 +37,7 @@ export default function MajorSelectionModal() {
           saveButtonName="Save"
           handleSave={() => setShowMajorSelectionModal(false)}
         />
-        <DialogActions>
-          <Button
-            variant="plain"
-            color="neutral"
-            onClick={() => setShowMajorSelectionModal(false)}
-          >
-            Cancel
-          </Button>
-        </DialogActions>
+        <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
   );

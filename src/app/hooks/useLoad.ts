@@ -75,6 +75,7 @@ export const useLoadPlanner = (
     onError: (err) => {
       console.error(err);
     },
+    fetchPolicy: "no-cache",
   });
 
   useEffect(() => {

@@ -135,19 +135,21 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4">
-      <div>
-        <SelectCatalogYear
-          catalogYear={catalogYear}
-          years={years}
-          onChange={handleChangeCatalogYear}
-        />
-      </div>
-      <div>
-        <SelectMajorName
-          major={major}
-          majors={majors}
-          onChange={handleChangeMajor}
-        />
+      <div className="grid grid-cols-4 gap-2">
+        <div className="col-span-2">
+          <SelectCatalogYear
+            catalogYear={catalogYear}
+            years={years}
+            onChange={handleChangeCatalogYear}
+          />
+        </div>
+        <div className="col-span-2">
+          <SelectMajorName
+            major={major}
+            majors={majors}
+            onChange={handleChangeMajor}
+          />
+        </div>
       </div>
       <div>
         <SelectDefaultPlanner
@@ -260,7 +262,6 @@ function SelectDefaultPlanner({
               defaultPlanners.map((planner: any, index: number) => (
                 <Tab key={index} value={planner.id}>
                   {planner.title}
-                  {planner.id}
                 </Tab>
               ))}
             <Tab value={-1}>None</Tab>
