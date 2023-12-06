@@ -39,8 +39,6 @@ export default function usePlanner(
 
   const handleCourseUpdate = (newState: PlannerData) => {
     setCourseState(newState);
-
-    // TODO set default planner right here if planner is new
   };
 
   const [totalCredits, setTotalCredits] = useState(

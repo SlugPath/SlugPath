@@ -90,8 +90,15 @@ async function addPlannersInCatalogYear(planners: any, catalogYear: string) {
     await prisma.$transaction(async (p) => {
       let quarters: any[] = [];
       for (const y of yearKeys) {
+        const quarterCourses = planner[`Year ${y}`] as any[];
+        // Pad the list of quarter courses to get 4 quarters per year even if no courses
+        // are taken during summer
+        const paddedQuarterCourses = [
+          ...quarterCourses,
+          ...new Array(Math.max(4 - quarterCourses.length, 0)).fill([]),
+        ];
         const qs = await Promise.all(
-          zip(planner[`Year ${y}`], terms).map(async (ct) => {
+          zip(paddedQuarterCourses, terms).map(async (ct) => {
             const [cs, t] = ct;
             const plannedCourses = await Promise.all(
               cs.map(async (c: string) => {
@@ -108,7 +115,6 @@ async function addPlannersInCatalogYear(planners: any, catalogYear: string) {
             };
           }),
         );
-
         quarters = quarters.concat(qs);
       }
       // create the default planner
