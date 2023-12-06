@@ -21,6 +21,8 @@ import { GET_ALL_MAJORS } from "@/graphql/queries";
 import useDefaultPlanners from "../../hooks/useDefaultPlanners";
 import MiniPlanner from "./miniPlanner/MiniPlanner";
 import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import { Alert } from "@mui/joy";
+import ReportIcon from "@mui/icons-material/Report";
 
 export default function MajorSelection({
   saveButtonName,
@@ -34,6 +36,7 @@ export default function MajorSelection({
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
+  const [showSelectionError, setShowSelectionError] = useState(false);
   const { data: session } = useSession();
   const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
   const getAllMajors = useCallback(lazyGetAllMajors, [lazyGetAllMajors]);
@@ -128,8 +131,18 @@ export default function MajorSelection({
   }
 
   function handleClickSave() {
-    setSaveButtonDisabled(true);
-    onSaveMajor(major, catalogYear, selectedDefaultPlanner);
+    if (majorSelectionIsValid()) {
+      setSaveButtonDisabled(true);
+      onSaveMajor(major, catalogYear, selectedDefaultPlanner);
+      setShowSelectionError(false);
+    } else {
+      setShowSelectionError(true);
+    }
+  }
+
+  function majorSelectionIsValid() {
+    const isLoggedIn = session?.user.id !== undefined;
+    return major !== "" && catalogYear !== "" && isLoggedIn;
   }
 
   if (loadingMajorData) {
@@ -138,6 +151,14 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4">
+      <div>
+        {showSelectionError && (
+          <Alert color="danger" startDecorator={<ReportIcon />}>
+            You must select a major and catalog year, and be logged into your
+            UCSC email to save your major.
+          </Alert>
+        )}
+      </div>
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-2">
           <SelectCatalogYear
