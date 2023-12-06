@@ -8,7 +8,7 @@ import {
 } from "./schema";
 import prisma from "@/lib/prisma";
 import { emptyPlanner } from "@/lib/plannerUtils";
-import { LabelColor, Prisma, Term } from "@prisma/client";
+import { LabelColor, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -99,9 +99,7 @@ export class PlannerService {
     );
 
     // Perform all queries as a serial transaction
-    const result = await prisma.$transaction(operations, {
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-    });
+    const result = await prisma.$transaction(operations);
 
     // Return the id
     return { plannerId: result[0].id };

@@ -1,37 +1,79 @@
+import { serializePlanner } from "@/lib/plannerUtils";
 import { debounce } from "@/lib/utils";
-import {
-  MutationHookOptions,
-  useMutation,
-  TypedDocumentNode,
-  ApolloCache,
-  DefaultContext,
-  MutationTuple,
-} from "@apollo/client";
-import { DocumentNode } from "graphql";
+import { useEffect } from "react";
+import { PlannerData } from "../types/PlannerData";
+import { gql, useMutation } from "@apollo/client";
 
-const debounceMutation = debounce((mutation, options) => {
-  const controller = new AbortController();
-  return mutation({
-    ...options,
-    options: {
-      context: {
-        fetchOptions: {
-          signal: controller.signal,
+const SAVE_PLANNER = gql`
+  mutation SavePlanner($input: PlannerCreateInput!) {
+    upsertPlanner(input: $input) {
+      plannerId
+    }
+  }
+`;
+
+interface AutosaveInput {
+  plannerData: PlannerData;
+  userId: string | undefined;
+  plannerId: string;
+  title: string;
+  order: number;
+}
+
+export default function useAutosave(input: AutosaveInput) {
+  // Mutation function from Apollo Client to invoke the GraphQL API
+  const [mutation, { loading, error }] = useMutation(SAVE_PLANNER);
+
+  // Abort controller
+  let controller = new AbortController();
+
+  // Debounced save -- save after 3 seconds of changes
+  const saveData = debounce((options) => {
+    // Abort any previous outgoing requests
+    if (controller) {
+      controller.abort();
+    }
+    controller = new AbortController();
+    return mutation({
+      ...options,
+      options: {
+        context: {
+          fetchoptions: {
+            signal: controller.signal,
+          },
         },
       },
-    },
-  });
-}, 3000);
+    });
+  }, 3000);
 
-export default function useAutosave<
-  TData,
-  TVariables,
-  TCache extends ApolloCache<any> = ApolloCache<any>,
->(
-  GQL: DocumentNode | TypedDocumentNode<TData, TVariables>,
-  options: MutationHookOptions<TData, TVariables, DefaultContext>,
-): MutationTuple<TData, TVariables, DefaultContext, TCache> {
-  const [mutation, rest] = useMutation<TData, TVariables>(GQL, options);
+  // Executes saving side effect
+  useEffect(() => {
+    // Abort controller to cancel outgoing requests
+    const controller = new AbortController();
 
-  return [(options: any) => debounceMutation(mutation, options), rest];
+    if (
+      input.userId !== undefined &&
+      input.title.length > 1 &&
+      input.title.length < 20
+    ) {
+      const variables = {
+        input: {
+          ...input,
+          plannerData: serializePlanner(input.plannerData),
+        },
+      };
+      saveData({
+        variables,
+      });
+    }
+
+    // Cancels any in-flight requests to prevent phantom planners
+    return () => {
+      console.log(`Aborting`);
+      controller.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(input)]);
+
+  return { loading, error };
 }
