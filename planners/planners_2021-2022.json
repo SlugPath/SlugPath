@@ -618,8 +618,8 @@
   },
   {
     "Year 1": [
-      ["CHEM 163A", "PHYS 6C & PHYS 6N", "Winter"],
-      ["CHEM 163B", "CHEM 151A & CHEM 151L", "CHEM 110 & CHEM 110L", "Spring"],
+      ["CHEM 163A", "PHYS 6C & PHYS 6N"],
+      ["CHEM 163B", "CHEM 151A & CHEM 151L", "CHEM 110 & CHEM 110L"],
       ["CHEM 163C", "1st junior", "1st junior", "2nd senior"]
     ],
     "Year 2": [
@@ -656,9 +656,9 @@
   },
   {
     "Year 1": [
-      ["BIOC 100A", "Fall"],
-      ["BIOC 100B", "Winter"],
-      ["BIOC 100C", "CHEM 110 & CHEM 110L", "Spring"]
+      ["BIOC 100A"],
+      ["BIOC 100B"],
+      ["BIOC 100C", "CHEM 110 & CHEM 110L"]
     ],
     "Year 2": [
       ["CHEM 163A"],
@@ -1318,11 +1318,7 @@
     "planner_name": "Economics B.A. Planner 2"
   },
   {
-    "Year 1": [
-      ["Fall", "MATH 19A"],
-      ["Winter", "MATH 19B", "ECON 1"],
-      ["Spring", "ECON 2"]
-    ],
+    "Year 1": [["MATH 19A"], ["MATH 19B", "ECON 1"], ["ECON 2"]],
     "Year 2": [
       ["MATH 23A", "MATH 21"],
       ["ECON 100A", "MATH 23B"],

@@ -1,37 +1,31 @@
-// import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
+import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { MajorInput } from "@/graphql/major/schema";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
-export const GET_MAJOR = gql`
-  query major($userId: String!) {
-    getUserMajor(userId: $userId) {
-      name
-      catalogYear
-      defaultPlanners
-    }
-  }
-`;
-
-export const SAVE_MAJOR = gql`
-  mutation saveMajor($major: MajorInput!) {
-    updateUserMajor(major: $major) {
-      name
-      catalogYear
-      defaultPlannerId
-    }
-  }
-`;
-
+/**
+ *
+ * @param userId a unique id that identifies a user
+ * @param onCompleted a callback to invoke upon completion of a query
+ * @returns
+ */
 export default function useMajorSelection(userId?: string, onCompleted?: any) {
-  const { data: majorData, loading } = useQuery(GET_MAJOR, {
+  // Get user major data from backend
+  const {
+    data: majorData,
+    loading: loadingMajorData,
+    refetch,
+  } = useQuery(GET_MAJOR, {
     variables: {
       userId: userId,
     },
-    skip: !userId,
   });
+
+  // Update user major data
+  const userMajorData = majorData ? majorData.getUserMajor : null;
   const [saveMajor, { loading: loadingSaveMajor }] = useMutation(SAVE_MAJOR, {
-    onCompleted: (data) => {
-      onCompleted(data);
+    onCompleted: () => {
+      onCompleted();
+      refetch();
     },
     onError: (err) => {
       console.error(err);
@@ -43,26 +37,25 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
     catalogYear: string,
     defaultPlannerId: string,
   ) {
-    if (userId != undefined) {
-      const majorInput: MajorInput = {
-        name,
-        catalogYear,
-        defaultPlannerId,
-        userId: userId,
-      };
+    if (userId === undefined) return;
+    const majorInput: MajorInput = {
+      name,
+      catalogYear,
+      defaultPlannerId,
+      userId: userId,
+    };
 
-      saveMajor({
-        variables: {
-          major: majorInput,
-        },
-      });
-    }
+    saveMajor({
+      variables: {
+        input: majorInput,
+      },
+    });
   }
 
   return {
     onSaveMajor: handleSaveMajor,
-    majorData,
-    loading,
+    userMajorData: userMajorData,
+    loadingMajorData,
     loadingSaveMajor,
   };
 }

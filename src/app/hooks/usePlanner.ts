@@ -9,7 +9,7 @@ import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
 import { findQuarter, Term } from "../types/Quarter";
-import { useLoadPlanner } from "./useLoad";
+import { useLoadUserPlanner } from "./useLoad";
 import { StoredCourse } from "../types/Course";
 import { PlannerData } from "../types/PlannerData";
 import { Label } from "../types/Label";
@@ -22,16 +22,20 @@ const SAVE_PLANNER = gql`
   }
 `;
 
-export default function usePlanner(input: {
-  userId: string | undefined;
-  plannerId: string;
-  title: string;
-  order: number;
-}) {
-  const [courseState, setCourseState] = useLoadPlanner(
-    input.plannerId,
-    input.userId,
-  );
+export default function usePlanner(
+  input: {
+    userId: string | undefined;
+    plannerId: string;
+    title: string;
+    order: number;
+  },
+  skipLoad?: boolean,
+) {
+  const [courseState, setCourseState] = useLoadUserPlanner({
+    plannerId: input.plannerId,
+    userId: input.userId,
+    skipLoad,
+  });
 
   const handleCourseUpdate = (newState: PlannerData) => {
     setCourseState(newState);
@@ -72,13 +76,11 @@ export default function usePlanner(input: {
   // Update total credits
   useEffect(() => {
     setTotalCredits(getTotalCredits(courseState));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseState]);
 
   // Update list of GEs satisfied
   useEffect(() => {
     setGeSatisfied(getGeSatisfied(courseState));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseState]);
 
   /**

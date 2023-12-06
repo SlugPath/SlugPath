@@ -59,20 +59,29 @@ export const GET_ALL_MAJORS = gql`
 `;
 export const GET_MAJOR = gql`
   query major($userId: String!) {
-    major(userId: $userId) {
+    getUserMajor(userId: $userId) {
       name
-      catalog_year
-      default_planner_id
+      catalogYear
+      defaultPlannerId
+    }
+  }
+`;
+
+export const GET_MAJOR_DEFAULT_PLANNERS = gql`
+  query getMajorDefaultPlannerIds($input: MajorDefaultsInput!) {
+    getMajorDefaults(input: $input) {
+      title
+      id
     }
   }
 `;
 
 export const SAVE_MAJOR = gql`
-  mutation saveMajor($userId: String!, $major: MajorInput!) {
-    upsertMajor(userId: $userId, major: $major) {
+  mutation saveMajor($input: MajorInput!) {
+    updateUserMajor(input: $input) {
       name
-      catalog_year
-      default_planner_id
+      catalogYear
+      defaultPlannerId
     }
   }
 `;
@@ -87,7 +96,7 @@ export const GET_PLANNERS = gql`
 `;
 
 export const GET_PLANNER = gql`
-  query ($userId: String!, $plannerId: String!) {
+  query ($userId: String, $plannerId: String!) {
     getPlanner(userId: $userId, plannerId: $plannerId) {
       quarters {
         title

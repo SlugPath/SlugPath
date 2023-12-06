@@ -408,7 +408,8 @@ it("should add major information for 1 user", async () => {
     ...majorData,
     defaultPlannerId,
   });
-  expect(res).toBe(user.id);
+  expect(res.name).toBe(name);
+  expect(res.catalogYear).toBe(catalogYear);
 
   const check = await service.getUserMajor(user.id);
   expect(check).not.toBeNull();
@@ -417,14 +418,7 @@ it("should add major information for 1 user", async () => {
   expect(check?.defaultPlannerId).toBe(defaultPlannerId);
 
   // Clean up
-  await prisma.major.delete({
-    where: {
-      name_catalogYear: {
-        name,
-        catalogYear,
-      },
-    },
-  });
+  await prisma.major.deleteMany();
 
   await prisma.user.update({
     where: {
@@ -465,8 +459,8 @@ it("should fail since major doesn't exist", async () => {
   );
 });
 
-it("should return an empty listt", async () => {
-  const name = "Computer Science B.S";
+it("should return an empty list", async () => {
+  const name = "Brand New Major B.S";
   const catalogYear = "2020-2021";
 
   await prisma.major.create({
@@ -491,4 +485,19 @@ it("should return an empty listt", async () => {
   });
 
   expect(res).toHaveLength(0);
+});
+
+it("should return correct number of majors", async () => {
+  const res = await new MajorService().getAllMajors("2020-2021");
+  expect(res).toHaveLength(0);
+
+  await prisma.major.create({
+    data: {
+      catalogYear: "2020-2021",
+      name: "Computer Engineering B.S.",
+    },
+  });
+
+  const res2 = await new MajorService().getAllMajors("2020-2021");
+  expect(res2).toHaveLength(1);
 });

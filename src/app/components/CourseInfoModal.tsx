@@ -17,7 +17,7 @@ import { Add, Edit, WarningAmberRounded } from "@mui/icons-material";
 import { StoredCourse } from "../types/Course";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { IconButton, Input } from "@mui/joy";
-import LabelsSelectionModal from "./modals/LabelSelectionModal";
+import LabelsSelectionModal from "./LabelSelectionModal";
 import { Label } from "../types/Label";
 import CourseLabel from "./CourseLabel";
 

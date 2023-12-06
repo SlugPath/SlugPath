@@ -77,11 +77,6 @@ export default function CustomCourseSelection() {
               <Add color="primary" />
             </IconButton>
           </Grid>
-          {/* <Grid xs={2}>
-            <Tooltip title="Drag custom courses to add to planner">
-              <Info sx={{ color: "gray" }} />
-            </Tooltip>
-          </Grid> */}
         </Grid>
         {tooManyError && (
           <FormHelperText>
@@ -103,7 +98,7 @@ export default function CustomCourseSelection() {
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={{ height: "100%", minHeight: "112px" }}
+              style={{ height: "100%" }}
             >
               {customCourses.map((course, index) => (
                 <DraggableCourseCard
