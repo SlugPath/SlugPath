@@ -9,6 +9,7 @@ import { GET_PLANNERS, GET_PLANNER } from "@/graphql/queries";
 import { initialLabels } from "@/lib/labels";
 import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
 import useMajorSelection from "./useMajorSelection";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Custom hook to load all planners for a particular user
@@ -65,6 +66,35 @@ export const useLoadDefaultPlanner = (userId?: string) => {
 };
 
 /**
+ * Copies a PlannerData, but changes the id's of the courses within the planner
+ * to prevent data inconsistencies
+ * @param defaultPlanner a defaultPlanner
+ * @returns a unique PlannerData instance
+ */
+const cloneDefaultPlanner = (defaultPlanner: PlannerData): PlannerData => {
+  const clone = { ...defaultPlanner };
+  // Create a lookup table between old ids and newStoredCourse
+  const lookup = {} as any;
+  defaultPlanner.courses.forEach((c) => {
+    lookup[c.id] = { ...c, id: uuidv4() };
+  });
+  // Pass the new Stored courses to the clone
+  clone.courses = Object.values(lookup);
+
+  // Replace all the references in the quarters to course ids with their new
+  // counterparts
+  clone.quarters = defaultPlanner.quarters.map((q) => {
+    return {
+      ...q,
+      courses: q.courses.map((crs) => {
+        return lookup[crs].id;
+      }),
+    };
+  });
+  return clone;
+};
+
+/**
  * Hook to load a user planner
  */
 export const useLoadUserPlanner = ({
@@ -77,7 +107,13 @@ export const useLoadUserPlanner = ({
   skipLoad?: boolean;
 }) => {
   const { defaultPlanner } = useContext(DefaultPlannerContext);
-  return useLoadPlanner({ plannerId, userId, defaultPlanner, skipLoad });
+  const clonedPlanner = cloneDefaultPlanner(defaultPlanner);
+  return useLoadPlanner({
+    plannerId,
+    userId,
+    defaultPlanner: clonedPlanner,
+    skipLoad,
+  });
 };
 
 /**
