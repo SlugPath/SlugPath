@@ -717,9 +717,9 @@
   },
   {
     "Year 1": [
-      ["BIOC 100A", "Fall"],
-      ["BIOC 100B", "Winter"],
-      ["BIOC 100C", "CHEM 110 & CHEM 110L", "Spring"]
+      ["BIOC 100A"],
+      ["BIOC 100B"],
+      ["BIOC 100C", "CHEM 110 & CHEM 110L"]
     ],
     "Year 2": [
       ["CHEM 163A"],
@@ -1367,9 +1367,9 @@
   },
   {
     "Year 1": [
-      ["Fall", "MATH 19A"],
-      ["Winter", "MATH 19B", "ECON 1"],
-      ["Spring", "ECON 2"]
+      ["MATH 19A"],
+      ["MATH 19B", "ECON 1"],
+      ["ECON 2"]
     ],
     "Year 2": [
       ["MATH 23A", "MATH 21"],
