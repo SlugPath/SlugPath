@@ -12,7 +12,7 @@ export default function useDefaultPlanners(
         name: majorName,
       },
     },
-    skip: catalogYear === null || majorName === null,
+    skip: catalogYear === "" || majorName === "",
   });
 
   return {

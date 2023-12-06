@@ -8,6 +8,7 @@ import { CssVarsProvider, Typography } from "@mui/joy";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
+import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
 
 export default function Page() {
   const { status } = useSession();
@@ -49,10 +50,12 @@ export default function Page() {
         ) : null}
         <div className="grid place-items-center my-3 justify-center h-auto w-[66vw] mx-auto overflow-auto">
           <ApolloProvider client={apolloClient}>
-            <MajorSelection
-              saveButtonName="Next"
-              handleSave={() => router.push("/planner")}
-            />
+            <DefaultPlannerProvider>
+              <MajorSelection
+                saveButtonName="Next"
+                handleSave={() => router.push("/planner")}
+              />
+            </DefaultPlannerProvider>
           </ApolloProvider>
         </div>
       </div>

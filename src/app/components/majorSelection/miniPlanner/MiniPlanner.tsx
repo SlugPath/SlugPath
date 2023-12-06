@@ -1,29 +1,22 @@
-import usePlanner from "../../../hooks/usePlanner";
+import { useLoadPlanner } from "@/app/hooks/useLoad";
 import MiniQuarters from "./MiniQuarters";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import { EMPTY_PLANNER, emptyPlanner } from "@/lib/plannerUtils";
 import { Skeleton } from "@mui/joy";
 
 export default function MiniPlanner({
   plannerId,
-  title,
-  order,
   active,
 }: {
   plannerId: string;
-  title: string;
-  order: number;
   active?: boolean;
 }) {
   const skipLoad = plannerId == EMPTY_PLANNER;
-  const { courseState } = usePlanner(
-    {
-      userId: undefined,
-      plannerId: plannerId,
-      title,
-      order,
-    },
+  const [courseState] = useLoadPlanner({
+    userId: undefined,
+    plannerId: plannerId,
     skipLoad,
-  );
+    defaultPlanner: emptyPlanner(),
+  });
 
   if (!active) {
     return <></>;

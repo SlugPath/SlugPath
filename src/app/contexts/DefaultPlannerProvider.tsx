@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { DefaultPlannerContextProps } from "../types/Context";
 import { useSession } from "next-auth/react";
-import { useDefaultPlanner } from "../hooks/useDefaultPlanner";
+import { useLoadDefaultPlanner } from "../hooks/useLoad";
 
 export const DefaultPlannerContext = createContext(
   {} as DefaultPlannerContextProps,
@@ -13,7 +13,7 @@ export function DefaultPlannerProvider({
   children: React.ReactNode;
 }) {
   const { data: session } = useSession();
-  const { defaultPlanner } = useDefaultPlanner(session?.user.id);
+  const [defaultPlanner] = useLoadDefaultPlanner(session?.user.id);
 
   return (
     <DefaultPlannerContext.Provider

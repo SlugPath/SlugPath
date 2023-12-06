@@ -1,11 +1,14 @@
 import { ApolloError, useLazyQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { deserializePlanner, initialPlanner } from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
 import { convertPlannerTitles } from "@/lib/plannerUtils";
 import { GET_PLANNERS, GET_PLANNER } from "@/graphql/queries";
+import { initialLabels } from "@/lib/labels";
+import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
+import useMajorSelection from "./useMajorSelection";
 
 /**
  * Custom hook to load all planners for a particular user
@@ -45,17 +48,55 @@ export const useLoadAllPlanners = (
 };
 
 /**
- * Custom hook to load a particular user's planner
+ * Hook that loads the default planner of a particular user.
+ * @param userId id of a user
+ * @returns
+ */
+export const useLoadDefaultPlanner = (userId?: string) => {
+  const { userMajorData } = useMajorSelection(userId);
+  const plannerId = userMajorData?.defaultPlannerId;
+  const skipLoad = userMajorData === undefined || plannerId === undefined;
+  return useLoadPlanner({
+    plannerId,
+    userId: undefined,
+    defaultPlanner: initialPlanner(),
+    skipLoad,
+  });
+};
+
+/**
+ * Hook to load a user planner
+ */
+export const useLoadUserPlanner = ({
+  userId,
+  plannerId,
+  skipLoad,
+}: {
+  userId: string | undefined;
+  plannerId: string;
+  skipLoad?: boolean;
+}) => {
+  const { defaultPlanner } = useContext(DefaultPlannerContext);
+  return useLoadPlanner({ plannerId, userId, defaultPlanner, skipLoad });
+};
+
+/**
+ * Hook to load a planner
  * @param plannerId id of the planner to load
  * @param userId id of the user
  * @returns
  */
-export const useLoadPlanner = (
-  plannerId: string,
-  userId: string | undefined,
-  defaultPlanner: PlannerData,
-  skipLoad?: boolean,
-): [
+export const useLoadPlanner = ({
+  plannerId,
+  userId,
+  defaultPlanner,
+  skipLoad,
+}: {
+  plannerId: string;
+  userId: string | undefined;
+  defaultPlanner: PlannerData;
+  skipLoad?: boolean;
+}): [
   PlannerData,
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
@@ -63,13 +104,13 @@ export const useLoadPlanner = (
   // TODO: instead of initialPlanner use the defaultPlanner.
   // potentially store the defaultPlanner data in a context to avoid
   // having to make multiple network calls in one session.
-  const [state, setState] = useState<PlannerData>(initialPlanner);
+  const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
       const planner = data.getPlanner;
       if (planner !== null) {
         removeTypenames(planner);
-        setState(deserializePlanner(planner));
+        setPlanner(deserializePlanner(planner));
       }
 
       if (data.getPlanner === null) {
@@ -83,9 +124,9 @@ export const useLoadPlanner = (
   });
 
   function autofillWithDefaultPlanner() {
-    setState({
+    setPlanner({
       ...defaultPlanner,
-      labels: initialPlanner().labels,
+      labels: initialLabels(),
     });
   }
 
@@ -99,5 +140,5 @@ export const useLoadPlanner = (
     });
   }, [userId, plannerId, getData, skipLoad]);
 
-  return [state, setState, { loading, error }];
+  return [planner, setPlanner, { loading, error }];
 };

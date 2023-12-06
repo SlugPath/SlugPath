@@ -9,7 +9,7 @@ import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
 import { findQuarter, Term } from "../types/Quarter";
-import { useLoadPlanner } from "./useLoad";
+import { useLoadUserPlanner } from "./useLoad";
 import { StoredCourse } from "../types/Course";
 import { PlannerData } from "../types/PlannerData";
 import { Label } from "../types/Label";
@@ -29,15 +29,13 @@ export default function usePlanner(
     title: string;
     order: number;
   },
-  defaultPlanner: PlannerData,
   skipLoad?: boolean,
 ) {
-  const [courseState, setCourseState] = useLoadPlanner(
-    input.plannerId,
-    input.userId,
-    defaultPlanner,
+  const [courseState, setCourseState] = useLoadUserPlanner({
+    plannerId: input.plannerId,
+    userId: input.userId,
     skipLoad,
-  );
+  });
 
   const handleCourseUpdate = (newState: PlannerData) => {
     setCourseState(newState);

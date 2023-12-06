@@ -268,31 +268,20 @@ function SelectDefaultPlanner({
           </TabList>
         </Tabs>
         {loadingMajorDefaultPlanners && (
-          <MiniPlanner
-            plannerId={EMPTY_PLANNER}
-            title={"Loading..."}
-            order={0}
-            active={true}
-          />
+          <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
         )}
         {!loadingMajorDefaultPlanners && (
           <>
             <List>
               {defaultPlanners.map((defaultPlanner, index: number) => {
                 const id = defaultPlanner.id;
-                const title = defaultPlanner.title;
                 const plannerIsSelected = selectedDefaultPlanner == id;
                 return (
                   <ListItem
                     sx={{ display: plannerIsSelected ? "block" : "none" }}
                     key={index}
                   >
-                    <MiniPlanner
-                      plannerId={id}
-                      title={title}
-                      order={index}
-                      active={plannerIsSelected}
-                    />
+                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
                   </ListItem>
                 );
               })}
