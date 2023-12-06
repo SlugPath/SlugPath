@@ -1318,11 +1318,7 @@
     "planner_name": "Economics B.A. Planner 2"
   },
   {
-    "Year 1": [
-      ["MATH 19A"],
-      ["MATH 19B", "ECON 1"],
-      ["ECON 2"]
-    ],
+    "Year 1": [["MATH 19A"], ["MATH 19B", "ECON 1"], ["ECON 2"]],
     "Year 2": [
       ["MATH 23A", "MATH 21"],
       ["ECON 100A", "MATH 23B"],

@@ -10,20 +10,20 @@ export default function MiniPlanner({
   plannerId: string;
   active?: boolean;
 }) {
-  const skipLoad = plannerId == EMPTY_PLANNER;
-  const [courseState] = useLoadPlanner({
+  const skipLoad = plannerId === EMPTY_PLANNER;
+  const [courseState, , { loading }] = useLoadPlanner({
     userId: undefined,
     plannerId: plannerId,
     skipLoad,
     defaultPlanner: emptyPlanner(),
   });
 
-  if (!active) {
+  if (!active || plannerId === EMPTY_PLANNER) {
     return <></>;
   }
 
   return (
-    <Skeleton loading={skipLoad} variant="rectangular">
+    <Skeleton loading={loading} variant="rectangular">
       <MiniQuarters courseState={courseState} />
     </Skeleton>
   );

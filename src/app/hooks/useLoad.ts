@@ -137,9 +137,6 @@ export const useLoadPlanner = ({
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  // TODO: instead of initialPlanner use the defaultPlanner.
-  // potentially store the defaultPlanner data in a context to avoid
-  // having to make multiple network calls in one session.
   const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {

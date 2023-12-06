@@ -74,6 +74,9 @@ export default function MajorSelection({
         const plannerIds = majorDefaultPlanners.map(
           (planner: any) => planner.id,
         );
+        if (selectedDefaultPlanner === EMPTY_PLANNER) {
+          return;
+        }
         if (!plannerIds.includes(selectedDefaultPlanner)) {
           setSelectedDefaultPlanner(majorDefaultPlanners[0]?.id);
         }
@@ -264,13 +267,14 @@ function SelectDefaultPlanner({
                   {planner.title}
                 </Tab>
               ))}
-            <Tab value={-1}>None</Tab>
+            <Tab key={defaultPlanners.length + 1} value={EMPTY_PLANNER}>
+              None
+            </Tab>
           </TabList>
         </Tabs>
-        {loadingMajorDefaultPlanners && (
+        {loadingMajorDefaultPlanners ? (
           <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
-        )}
-        {!loadingMajorDefaultPlanners && (
+        ) : (
           <>
             <List>
               {defaultPlanners.map((defaultPlanner, index: number) => {
@@ -285,6 +289,12 @@ function SelectDefaultPlanner({
                   </ListItem>
                 );
               })}
+              <ListItem key={defaultPlanners.length}>
+                <MiniPlanner
+                  plannerId={EMPTY_PLANNER}
+                  active={selectedDefaultPlanner === EMPTY_PLANNER}
+                />
+              </ListItem>
             </List>
           </>
         )}
