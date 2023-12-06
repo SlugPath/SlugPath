@@ -1,4 +1,4 @@
-import { Term, PrismaClient, Major } from "@prisma/client";
+import { Term, PrismaClient, Major, PrismaPromise } from "@prisma/client";
 import { getCourses, getPlanners } from "./csvreader";
 import { majors, years } from "@/lib/defaultPlanners";
 import { createQuarters, getRealEquivalent } from "@/lib/plannerUtils";
@@ -76,15 +76,18 @@ async function main() {
 
   console.log(`✨ Pruned invalid majors ✨`);
 
-  const allMajors = await prisma.major.findMany({});
+  const allMajors = await prisma.major.findMany();
 
+  await delay(50);
+  const ops2 = [];
   for (const m of allMajors) {
-    createNonePlannerForMajor(m);
+    ops2.push(createNonePlannerForMajor(m));
   }
+  await prisma.$transaction([...ops2]);
   console.log(`✨ Done ✨`);
 }
 
-async function createNonePlannerForMajor(major: Major) {
+function createNonePlannerForMajor(major: Major): PrismaPromise<any> {
   const noneQuarters: any[] = createQuarters();
   let idx = 0;
   for (const y of [1, 2, 3, 4]) {
@@ -98,7 +101,7 @@ async function createNonePlannerForMajor(major: Major) {
     }
   }
 
-  await prisma.planner.create({
+  return prisma.planner.create({
     data: {
       title: "None",
       order: 10,
