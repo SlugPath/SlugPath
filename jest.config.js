@@ -32,8 +32,11 @@ const customJestConfig = {
     "<rootDir>/src/app/hooks/",
     "<rootDir>/src/config.ts",
     "<rootDir>/src/app/types",
+    "<rootDir>/src/lib",
     "schema\\.ts",
     "\\.tsx",
+    "resolver.ts",
+    "queries.ts",
   ],
 
   // Searches for matching test files

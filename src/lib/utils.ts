@@ -29,6 +29,13 @@ export const removeTypenames = (value: any) => {
   }
 };
 
-export const deepEqual = (val: any, val2: any) => {
-  return JSON.stringify(val) == JSON.stringify(val2);
+export const zip = (arr1: any[], arr2: any[]) => {
+  return arr1.map((elem, index) => [elem, arr2[index]]);
+};
+
+// Utility function to truncate tab title
+export const truncateTitle = (title: string, maxLength: number = 20) => {
+  return title.length > maxLength
+    ? `${title.substring(0, maxLength)}...`
+    : title;
 };

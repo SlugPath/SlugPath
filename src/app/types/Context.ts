@@ -4,6 +4,7 @@ import { PlannerData } from "./PlannerData";
 import { DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
 import { MultiPlanner } from "./MultiPlanner";
+import { Label } from "./Label";
 import { Term } from "./Quarter";
 
 type setShow = React.Dispatch<SetStateAction<boolean>>;
@@ -13,21 +14,30 @@ export interface ModalsContextProps {
   setShowExportModal: setShow;
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: setShow;
-  displayCourse: [StoredCourse, Term | undefined] | undefined;
-  setDisplayCourse: any;
-  onShowCourseInfoModal: (courseTerm: [StoredCourse, Term | undefined]) => void;
+  onShowCourseInfoModal: () => void;
+  showMajorSelectionModal: boolean;
+  setShowMajorSelectionModal: setShow;
   courseState: PlannerData;
 }
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
+  editCustomCourse: (cid: string, newTitle: string) => void;
+  displayCourse: [StoredCourse, Term | undefined] | undefined;
+  setDisplayCourse: any;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
-  memoAlreadyCourses: string[];
   saveStatus: boolean;
   saveError: ApolloError | undefined;
+  getCourseLabels: (course: StoredCourse) => Label[];
+  getAllLabels: () => Label[];
+  editCourseLabels: (course: StoredCourse) => void;
+  updatePlannerLabels: (labels: Label[]) => void;
+  customCourses: StoredCourse[];
+  handleAddCustom: (newTitle: string) => void;
+  handleRemoveCustom: (idx: number) => void;
 }
 
 export interface PlannerProviderProps {
@@ -44,4 +54,14 @@ export interface PlannersContextProps {
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
   activePlanner: { id: string; title: string } | undefined;
+  plannersLoading: boolean;
+}
+
+export interface LabelsContextProps {
+  labels: Label[];
+  updateLabels: (label: Label[]) => void;
+}
+
+export interface DefaultPlannerContextProps {
+  defaultPlanner: PlannerData;
 }

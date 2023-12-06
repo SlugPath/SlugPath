@@ -9,7 +9,7 @@ import { isAlpha } from "class-validator";
  * @param b another Course instance
  * @returns
  */
-const compareCoursesByNum = function (a: Course, b: Course): number {
+export const compareCoursesByNum = function (a: Course, b: Course): number {
   // Check departments first
   if (a.departmentCode !== b.departmentCode)
     return a.departmentCode.localeCompare(b.departmentCode);
@@ -28,7 +28,9 @@ const compareCoursesByNum = function (a: Course, b: Course): number {
   const bLastChar = b.number[b.number.length - 1];
   const bLet = isAlpha(bLastChar) ? bLastChar : "";
 
-  if (aLet == "") return 0;
+  if (aLet == "" && bLet == "") return 0;
+  if (aLet == "") return -1;
+  if (bLet == "") return 1;
 
   if (aLet > bLet) return 1;
   if (bLet > aLet) return -1;
@@ -49,7 +51,27 @@ export class CourseService {
     let res: Course[];
     if (pred.departmentCode?.length == 0) pred.departmentCode = undefined;
 
-    if (pred.number && pred.number?.length > 0) {
+    // Check if both number and ge filters are provided
+    if (
+      pred.number &&
+      pred.number?.length > 0 &&
+      pred.ge &&
+      pred.ge?.length > 0
+    ) {
+      res = await prisma.course.findMany({
+        where: {
+          departmentCode: pred.departmentCode,
+          number: {
+            contains: pred.number,
+          },
+          ge: {
+            has: pred.ge,
+          },
+        },
+      });
+    }
+    // Check if only number filter is provided
+    else if (pred.number && pred.number?.length > 0) {
       res = await prisma.course.findMany({
         where: {
           departmentCode: pred.departmentCode,
@@ -58,7 +80,20 @@ export class CourseService {
           },
         },
       });
-    } else {
+    }
+    // Check if only ge filter is provided
+    else if (pred.ge && pred.ge?.length > 0) {
+      res = await prisma.course.findMany({
+        where: {
+          departmentCode: pred.departmentCode,
+          ge: {
+            has: pred.ge,
+          },
+        },
+      });
+    }
+    // If no specific filters are provided, only filter by departmentCode
+    else {
       res = await prisma.course.findMany({
         where: {
           departmentCode: pred.departmentCode,
@@ -68,7 +103,6 @@ export class CourseService {
     // Return a sorted array of courses
     return res.sort(compareCoursesByNum);
   }
-
   /**
    * `courseBy` returns a course that satisfies a predicate `pred`
    * or null if no such course exists

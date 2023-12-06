@@ -8,6 +8,7 @@ declare module "next-auth" {
     user: {
       /** The user's id */
       id: string;
+      defaultPlannerId: string | null | undefined;
     } & DefaultSession["user"];
   }
 }

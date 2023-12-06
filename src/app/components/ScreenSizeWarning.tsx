@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 
 // Function to check if the screen size is too small
@@ -27,7 +28,7 @@ export const MobileWarningModal = ({
         </p>
         <button
           onClick={onClose}
-          className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded"
+          className="mt-4 bg-primary-400 text-white font-bold py-2 px-4 rounded"
         >
           Continue Anyway
         </button>
@@ -39,10 +40,11 @@ export const MobileWarningModal = ({
 // ScreenSizeWarning component
 const ScreenSizeWarning = () => {
   const [showMobileWarning, setShowMobileWarning] = useState(false);
+  const [userAcknowledged, setUserAcknowledged] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      if (isScreenTooSmall()) {
+      if (isScreenTooSmall() && !userAcknowledged) {
         setShowMobileWarning(true);
       } else {
         setShowMobileWarning(false);
@@ -53,12 +55,15 @@ const ScreenSizeWarning = () => {
     handleResize(); // Check screen size on initial load
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [userAcknowledged]);
 
   return (
     <MobileWarningModal
       show={showMobileWarning}
-      onClose={() => setShowMobileWarning(false)}
+      onClose={() => {
+        setShowMobileWarning(false);
+        setUserAcknowledged(true);
+      }}
     />
   );
 };

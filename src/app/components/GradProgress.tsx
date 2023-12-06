@@ -1,37 +1,35 @@
-import { Typography } from "@mui/joy";
+import { Tooltip, Typography } from "@mui/joy";
 import { Donut } from "theme-ui";
+import { lighten } from "@theme-ui/color";
+import { Info } from "@mui/icons-material";
 
 const TOTAL_CREDITS_NEEDED = 180;
-const colors = ["red", "orange", "blue", "green"];
-
-const getColor = (percentage: number) => {
-  const idx = Math.floor((colors.length - 1) * percentage);
-  return colors[idx] ?? "neutral";
-};
 
 export const GradProgress = ({ credits }: { credits: number }) => {
   const percentage = Math.min(credits / TOTAL_CREDITS_NEEDED, 1);
   return (
     <>
-      <div className="flex flex-col place-items-center gap-4 xl:w-64">
+      <div className="flex flex-col place-items-center w-full pb-2">
+        <div className="grid grid-cols-5 py-1 w-full">
+          <div className="col-span-4">
+            <Typography>Total Credits:</Typography>
+            <Typography>
+              {credits} / {TOTAL_CREDITS_NEEDED}
+            </Typography>
+          </div>
+          <div className="justify-self-end">
+            <Tooltip title="180 credits is needed for graduation" size="sm">
+              <Info sx={{ color: "gray" }} />
+            </Tooltip>
+          </div>
+        </div>
         <Donut
           value={percentage}
           sx={{
-            color: getColor(percentage),
+            color: lighten("blue", 0.2),
             strokeWidth: 3,
           }}
         ></Donut>
-        <div className="grid grid-cols-2 items-center">
-          <Typography className="text-sm grid-cols-1 pl-2 xl:pl-0 justify-self-end">
-            Total Credits:
-          </Typography>
-          <Typography className="grid-cols-1 pl-2 xl:pl-0 xl:justify-self-center">
-            {credits} / {TOTAL_CREDITS_NEEDED}
-          </Typography>
-        </div>
-        <Typography className="text-sm grid-cols-1 text-center">
-          The total number of credits needed for graduation is 180.
-        </Typography>
       </div>
     </>
   );

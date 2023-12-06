@@ -4,11 +4,11 @@ import {
   PlannerRetrieveInput,
   PlannerCreateInput,
   PlannerTitle,
+  StoredCourse,
 } from "./schema";
 import prisma from "@/lib/prisma";
-import { StoredCourse } from "@/app/types/Course";
-import { emptyPlanner } from "@/lib/initialPlanner";
-import { Course, Prisma, Term } from "@prisma/client";
+import { emptyPlanner } from "@/lib/plannerUtils";
+import { LabelColor, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -42,20 +42,31 @@ export class PlannerService {
       );
     }
 
-    // Get the new quarters
+    // Update the labels
+    const labels = plannerData.labels.map((l) => {
+      return {
+        ...l,
+        color: l.color as LabelColor,
+      };
+    });
+    // Get the new quarters with their respective courses
     const newQuarters = plannerData.quarters.map((q) => {
       const qid = q.id;
       const [year, term] = qid.split("-").slice(1);
 
       const enrolledCourses = q.courses.map((c) => {
         return {
+          id: c.id,
           departmentCode: c.departmentCode,
           number: c.number,
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
+          title: c.title,
+          labels: c.labels,
         };
       });
+
       return {
         year: parseInt(year),
         term: term as Term,
@@ -74,6 +85,11 @@ export class PlannerService {
           id: plannerId,
           quarters: {
             create: newQuarters,
+          },
+          labels: {
+            createMany: {
+              data: labels,
+            },
           },
         },
         select: {
@@ -132,6 +148,7 @@ export class PlannerService {
             courses: true,
           },
         },
+        labels: true,
       },
     });
     return p !== null ? this.toPlannerData(p) : null;
@@ -172,24 +189,28 @@ export class PlannerService {
    */
   private toPlannerData(planner: any): PlannerData {
     // Set all the courses for each quarter
-    const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner));
+    const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner()));
     planner?.quarters.forEach((q: any) => {
       const quarterId = `quarter-${q.year}-${q.term}`;
-      const courses: StoredCourse[] = q.courses.map((c: Course) => {
+      const courses: StoredCourse[] = q.courses.map((c: StoredCourse) => {
         return {
+          id: c.id,
           departmentCode: c.departmentCode,
           number: c.number,
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
+          title: c.title,
+          labels: c.labels,
         };
       });
       newPlanner.quarters.push({
         id: quarterId,
-        title: `Year ${q.year + 1}: ${q.term}`,
+        title: `${q.term}`,
         courses,
       });
     });
+    newPlanner.labels = [...planner.labels];
 
     // Return new modified planner
     return newPlanner;
