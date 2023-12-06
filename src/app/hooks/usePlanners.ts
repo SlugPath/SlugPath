@@ -13,7 +13,7 @@ const DELETE_PLANNER = gql`
 export function usePlanners(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners] = useLoadAllPlanners(userId);
+  const [planners, setPlanners, { loading }] = useLoadAllPlanners(userId);
 
   const [mutation] = useMutation(DELETE_PLANNER);
 
@@ -114,5 +114,6 @@ export function usePlanners(userId: string | undefined) {
     addPlanner,
     removePlanner,
     activePlanner: getActivePlanner(),
+    plannersLoading: loading,
   };
 }

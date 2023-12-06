@@ -2,6 +2,8 @@ import { createContext } from "react";
 import usePlanner from "../hooks/usePlanner";
 import { useSession } from "next-auth/react";
 import { PlannerContextProps, PlannerProviderProps } from "../types/Context";
+import useHandleCourseDrag from "../hooks/useHandleCourseDrag";
+import useCustomCourseSelection from "../hooks/useCustomCourseSelection";
 
 export const PlannerContext = createContext({} as PlannerContextProps);
 
@@ -14,13 +16,19 @@ export function PlannerProvider({
   const { data: session } = useSession();
   const {
     deleteCourse,
+    editCustomCourse,
+    displayCourse,
+    setDisplayCourse,
     totalCredits,
     geSatisfied,
     courseState,
-    handleDragEnd,
-    memoAlreadyCourses,
     saveStatus,
     saveError,
+    handleCourseUpdate,
+    getCourseLabels,
+    getAllLabels,
+    editCourseLabels,
+    updatePlannerLabels,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -28,17 +36,34 @@ export function PlannerProvider({
     order,
   });
 
+  const { handleDragEnd } = useHandleCourseDrag({
+    courseState,
+    handleCourseUpdate,
+  });
+
+  const { customCourses, handleAddCustom, handleRemoveCustom } =
+    useCustomCourseSelection();
+
   return (
     <PlannerContext.Provider
       value={{
         deleteCourse,
+        editCustomCourse,
+        displayCourse,
+        setDisplayCourse,
         totalCredits,
         geSatisfied,
         courseState,
         handleDragEnd,
-        memoAlreadyCourses,
         saveStatus,
         saveError,
+        getCourseLabels,
+        getAllLabels,
+        editCourseLabels,
+        updatePlannerLabels,
+        customCourses,
+        handleAddCustom,
+        handleRemoveCustom,
       }}
     >
       {children}

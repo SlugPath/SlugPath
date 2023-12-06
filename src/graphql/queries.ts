@@ -1,8 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const GET_COURSES = gql`
-  query getCourses($departmentCode: String!, $number: String = null) {
-    coursesBy(departmentCode: $departmentCode, number: $number) {
+  query getCourses(
+    $departmentCode: String!
+    $number: String = null
+    $ge: String
+  ) {
+    coursesBy(departmentCode: $departmentCode, number: $number, ge: $ge) {
       title
       department
       departmentCode
@@ -34,6 +38,86 @@ export const GET_DEPARTMENTS = gql`
     departments {
       name
       code
+    }
+  }
+`;
+
+export const GET_LABELS = gql`
+  query labels($userId: String!) {
+    getLabels(userId: $userId) {
+      color
+      name
+      id
+    }
+  }
+`;
+
+export const GET_ALL_MAJORS = gql`
+  query getMajors($catalogYear: String!) {
+    getAllMajors(catalogYear: $catalogYear)
+  }
+`;
+export const GET_MAJOR = gql`
+  query major($userId: String!) {
+    getUserMajor(userId: $userId) {
+      name
+      catalogYear
+      defaultPlannerId
+    }
+  }
+`;
+
+export const GET_MAJOR_DEFAULT_PLANNERS = gql`
+  query getMajorDefaultPlannerIds($input: MajorDefaultsInput!) {
+    getMajorDefaults(input: $input) {
+      title
+      id
+    }
+  }
+`;
+
+export const SAVE_MAJOR = gql`
+  mutation saveMajor($input: MajorInput!) {
+    updateUserMajor(input: $input) {
+      name
+      catalogYear
+      defaultPlannerId
+    }
+  }
+`;
+
+export const GET_PLANNERS = gql`
+  query ($userId: String!) {
+    getAllPlanners(userId: $userId) {
+      title
+      id
+    }
+  }
+`;
+
+export const GET_PLANNER = gql`
+  query ($userId: String, $plannerId: String!) {
+    getPlanner(userId: $userId, plannerId: $plannerId) {
+      quarters {
+        title
+        id
+        courses {
+          id
+          departmentCode
+          number
+          quartersOffered
+          ge
+          title
+          credits
+          labels
+        }
+      }
+      years
+      labels {
+        id
+        name
+        color
+      }
     }
   }
 `;

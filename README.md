@@ -63,7 +63,7 @@ npx prisma db push
 ```
 
 Before starting work on an issue make sure that it has not been assigned already or has not been actively worked on recently.
-Create PR's upon completion of work, and we will review it and merge it as soon as possible.
+Create PR's onto the `dev` branch upon completion of work, and we will review it and merge it as soon as possible.
 
 ## Deployment
 

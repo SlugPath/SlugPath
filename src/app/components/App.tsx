@@ -2,7 +2,6 @@ import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
 import PlannerTabs from "./PlannerTabs";
 import Navbar from "./Navbar";
-import ScreenSizeWarning from "./ScreenSizeWarning";
 import Footer from "./Footer";
 import { useContext } from "react";
 import {
@@ -10,24 +9,28 @@ import {
   PlannersProvider,
 } from "../contexts/PlannersProvider";
 import { PlannerProvider } from "../contexts/PlannerProvider";
+import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
 
 export default function App() {
   return (
-    <PlannersProvider>
-      <div className="h-full min-h-screen w-full bg-gray-100 flex flex-col justify-between">
-        <ScreenSizeWarning />
-        <Navbar />
-        <div className="pt-4 mb-auto">
-          <div className="flex justify-left px-7">
-            <PlannerTabs />
+    <DefaultPlannerProvider>
+      <PlannersProvider>
+        <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
+          <Navbar />
+          <div className="pt-4 mb-auto">
+            <div className="flex justify-left px-7">
+              <PlannerTabs />
+            </div>
+            <div className="px-5">
+              <PlannerList />
+            </div>
           </div>
-          <div className="px-5">
-            <PlannerList />
+          <div className="mt-6">
+            <Footer />
           </div>
         </div>
-        <Footer />
-      </div>
-    </PlannersProvider>
+      </PlannersProvider>
+    </DefaultPlannerProvider>
   );
 }
 
@@ -37,7 +40,7 @@ function PlannerList() {
     <>
       {/* Start helpful tips for user */}
       {Object.keys(planners).length == 0 && (
-        <div className="flex flex-col items-center justify-center h-[80vh]">
+        <div className="flex flex-col items-center justify-center h-[80vh] text-secondary-900 dark:text-secondary-200">
           <div className="text-2xl font-semibold">
             Welcome to UCSC Course Planner!
           </div>
@@ -45,7 +48,7 @@ function PlannerList() {
             To get started, click the <b>+</b> button above to create a new
             planner.
           </div>
-          <div className="text-sm text-slate-600 flex flex-row items-end gap-2 text-center pt-4">
+          <div className="text-sm flex flex-row items-end gap-2 text-center pt-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

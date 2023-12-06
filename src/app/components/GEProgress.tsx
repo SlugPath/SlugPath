@@ -1,12 +1,17 @@
-import { Typography } from "@mui/joy";
+import { CssVarsProvider, Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { green, grey } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
+import InfoIcon from "@mui/icons-material/Info";
 
-const satisfied = green[500];
-const notSatisfied = grey[400];
+const satisfied = blue[200];
+const satisfiedDark = blue[800];
+const notSatisfied = grey[300];
+const notSatisfiedDark = grey[700];
 
-export const GEProgress = ({ ge }: { ge: string[] }) => {
+const GEProgressModal = ({ ge }: { ge: string[] }) => {
+  const { systemMode } = useColorScheme();
+
   const [data, setData] = useState([
     { id: 1, value: 10, label: "CC", color: "grey" },
     { id: 2, value: 10, label: "ER", color: "grey" },
@@ -20,11 +25,11 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
     { id: 10, value: 10, label: "C", color: "grey" },
   ]);
 
-  const PE_GE = ["peT", "peH", "peE"];
-  const PR_GE = ["prC", "prE", "prS"];
-
   // Update the color of the pie slices when "ge" prop changes
   useEffect(() => {
+    const PE_GE = ["peT", "peH", "peE"];
+    const PR_GE = ["prC", "prE", "prS"];
+
     setData((currData) =>
       currData.map((item) => ({
         ...item,
@@ -33,15 +38,28 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
           (item.label === "PE" && PE_GE.some((g) => ge.includes(g))) ||
           (item.label === "PR" && PR_GE.some((g) => ge.includes(g))) ||
           ge.includes(item.label.toLowerCase())
-            ? satisfied
-            : notSatisfied,
+            ? systemMode == "light"
+              ? satisfied
+              : satisfiedDark
+            : systemMode == "light"
+            ? notSatisfied
+            : notSatisfiedDark,
       })),
     );
-  }, [ge]);
+  }, [ge, systemMode]);
 
   return (
     <>
-      <div className="flex flex-col place-items-center xl:w-64">
+      <div className="flex flex-col place-items-center pt-2 w-full">
+        <div className="flex flex-row py-1 justify-between w-full pb-4">
+          <Typography>GE Progress</Typography>
+          <Tooltip
+            title="You must satisfy all general education requirements to graduate"
+            size="sm"
+          >
+            <InfoIcon sx={{ color: "gray" }} />
+          </Tooltip>
+        </div>
         <PieChart
           tooltip={{ trigger: "none" }}
           series={[
@@ -51,7 +69,7 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
               data,
               innerRadius: 40,
               outerRadius: 80,
-              paddingAngle: 0,
+              paddingAngle: 1.5,
               cornerRadius: 5,
               startAngle: 0,
               endAngle: 360,
@@ -72,10 +90,15 @@ export const GEProgress = ({ ge }: { ge: string[] }) => {
             },
           }}
         />
-        <Typography className="text-sm text-center">
-          You must satisfy all general education requirements to graduate.
-        </Typography>
       </div>
     </>
+  );
+};
+
+export const GEProgress = ({ ge }: { ge: string[] }) => {
+  return (
+    <CssVarsProvider defaultMode="system">
+      <GEProgressModal ge={ge} />
+    </CssVarsProvider>
   );
 };

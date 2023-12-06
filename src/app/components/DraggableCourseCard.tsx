@@ -6,31 +6,26 @@ export default function DraggableCourseCard({
   course,
   index,
   draggableId,
-  alreadyAdded,
   quarterId,
+  isCustom = false,
 }: {
   course: StoredCourse;
   index: number;
   draggableId: string;
-  alreadyAdded?: boolean;
   quarterId?: string;
+  isCustom: boolean;
 }) {
   return (
-    <Draggable
-      key={draggableId}
-      draggableId={draggableId}
-      index={index}
-      isDragDisabled={alreadyAdded}
-    >
+    <Draggable key={draggableId} draggableId={draggableId} index={index}>
       {(provided, snapshot) => {
         return (
           <CourseCard
             course={course}
             index={index}
-            alreadyAdded={alreadyAdded}
             quarterId={quarterId}
             provided={provided}
             isDragging={snapshot.isDragging}
+            isCustom={isCustom}
           />
         );
       }}
