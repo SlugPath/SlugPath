@@ -206,7 +206,7 @@ export class PlannerService {
       });
       newPlanner.quarters.push({
         id: quarterId,
-        title: `Year ${q.year + 1}: ${q.term}`,
+        title: `${q.term}`,
         courses,
       });
     });
