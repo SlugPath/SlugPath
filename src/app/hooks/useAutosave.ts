@@ -44,12 +44,12 @@ export default function useAutosave(input: AutosaveInput) {
         },
       },
     });
-  }, 3000);
+  }, 5000);
 
   // Executes saving side effect
   useEffect(() => {
     // Abort controller to cancel outgoing requests
-    const controller = new AbortController();
+    controller = new AbortController();
 
     if (
       input.userId !== undefined &&
@@ -67,13 +67,19 @@ export default function useAutosave(input: AutosaveInput) {
       });
     }
 
-    // Cancels any in-flight requests to prevent phantom planners
     return () => {
-      console.log(`Aborting`);
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input)]);
+
+  // Clean-up
+  useEffect(() => {
+    return () => {
+      console.log(`Aborting on dismount...`);
+      controller.abort();
+    };
+  }, []);
 
   return { loading, error };
 }
