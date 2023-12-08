@@ -118,6 +118,7 @@ export const GET_PLANNER = gql`
         name
         color
       }
+      notes
     }
   }
 `;

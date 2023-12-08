@@ -23,6 +23,8 @@ export class PlannerService {
     title,
     order,
   }: PlannerCreateInput): Promise<PlannerId> {
+    console.log(plannerData);
+
     // Delete old planner
     const operations = [];
     const old = await prisma.planner.findUnique({
@@ -80,6 +82,7 @@ export class PlannerService {
       prisma.planner.create({
         data: {
           title,
+          notes: plannerData.notes,
           userId,
           order,
           id: plannerId,
@@ -211,6 +214,7 @@ export class PlannerService {
       });
     });
     newPlanner.labels = [...planner.labels];
+    newPlanner.notes = planner.notes;
 
     // Return new modified planner
     return newPlanner;

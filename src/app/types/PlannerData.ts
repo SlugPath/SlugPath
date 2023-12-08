@@ -10,6 +10,7 @@ export interface PlannerData {
   years: number;
   courses: StoredCourse[];
   labels: Label[];
+  notes: string;
 }
 
 export interface CourseTable {
