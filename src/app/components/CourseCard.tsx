@@ -87,7 +87,7 @@ export default function CourseCard({
             justifyContent="center"
             spacing={1}
           >
-            <Grid xs={10} className="flex flex-row whitespace-nowrap">
+            <Grid xs={11} className="flex flex-row whitespace-nowrap">
               <Title
                 course={course}
                 onShowCourseInfoModal={handleShowCourseInfoModal}
@@ -95,7 +95,7 @@ export default function CourseCard({
               />
               <CourseLabelList labels={getCourseLabels(course)} />
             </Grid>
-            <Grid xs={2}>
+            <Grid xs={1}>
               {quarterId !== undefined && (
                 <CloseIconButton
                   onClick={() => deleteCourse(quarterId)(index)}

@@ -60,7 +60,6 @@ async function main() {
   const planners = await getPlanners();
 
   for (const catalogYear of Object.keys(planners)) {
-    await delay(200);
     await addPlannersInCatalogYear(planners, catalogYear);
     console.log(`✨ Loaded default planners for (${catalogYear}) ✨`);
   }
@@ -78,7 +77,6 @@ async function main() {
 
   const allMajors = await prisma.major.findMany();
 
-  await delay(50);
   const ops2 = [];
   for (const m of allMajors) {
     ops2.push(createNonePlannerForMajor(m));
@@ -117,73 +115,66 @@ function createNonePlannerForMajor(major: Major): PrismaPromise<any> {
   });
 }
 
-function delay(milliseconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
-
 async function addPlannersInCatalogYear(planners: any, catalogYear: string) {
   const terms = [Term.Fall, Term.Winter, Term.Spring, Term.Summer];
   const yearKeys = ["1", "2", "3", "4"];
 
   for (const planner of planners[catalogYear]) {
     // get quarters and courses
-    await delay(5);
-    await prisma.$transaction(async (p) => {
-      let quarters: any[] = [];
-      for (const y of yearKeys) {
-        const quarterCourses = planner[`Year ${y}`] as any[];
-        // Pad the list of quarter courses to get 4 quarters per year even if no courses
-        // are taken during a quarter
-        const paddedQuarterCourses = [
-          ...quarterCourses,
-          ...new Array(Math.max(4 - quarterCourses.length, 0)).fill([]),
-        ];
-        const qs = await Promise.all(
-          zip(paddedQuarterCourses, terms).map(async (ct) => {
-            const [cs, t] = ct;
-            const plannedCourses = await Promise.all(
-              cs.map(async (c: string) => {
-                return await getRealEquivalent(p, c);
-              }),
-            );
+    let quarters: any[] = [];
+    for (const y of yearKeys) {
+      const quarterCourses = planner[`Year ${y}`] as any[];
+      // Pad the list of quarter courses to get 4 quarters per year even if no courses
+      // are taken during a quarter
+      const paddedQuarterCourses = [
+        ...quarterCourses,
+        ...new Array(Math.max(4 - quarterCourses.length, 0)).fill([]),
+      ];
+      const qs = await Promise.all(
+        zip(paddedQuarterCourses, terms).map(async (ct) => {
+          const [cs, t] = ct;
+          const plannedCourses = await Promise.all(
+            cs.map(async (c: string) => {
+              return await getRealEquivalent(prisma, c);
+            }),
+          );
 
-            return {
-              year: parseInt(y) - 1,
-              term: t,
-              courses: {
-                create: plannedCourses,
-              },
-            };
-          }),
-        );
-        quarters = quarters.concat(qs);
-      }
-      // create the default planner
-      const [majorName, order] = planner["planner_name"].split(" Planner ");
-      const pid = (
-        await p.planner.create({
-          data: {
-            title: `${planner["planner_name"]} (${catalogYear})`,
-            order: parseInt(order),
-            quarters: {
-              create: quarters,
+          return {
+            year: parseInt(y) - 1,
+            term: t,
+            courses: {
+              create: plannedCourses,
             },
-          },
-        })
-      ).id;
-      await p.major.update({
-        where: {
-          name_catalogYear: {
-            name: majorName,
-            catalogYear,
-          },
-        },
+          };
+        }),
+      );
+      quarters = quarters.concat(qs);
+    }
+    // create the default planner
+    const [majorName, order] = planner["planner_name"].split(" Planner ");
+    const pid = (
+      await prisma.planner.create({
         data: {
-          defaultPlanners: {
-            connect: [{ id: pid }],
+          title: `${planner["planner_name"]} (${catalogYear})`,
+          order: parseInt(order),
+          quarters: {
+            create: quarters,
           },
         },
-      });
+      })
+    ).id;
+    await prisma.major.update({
+      where: {
+        name_catalogYear: {
+          name: majorName,
+          catalogYear,
+        },
+      },
+      data: {
+        defaultPlanners: {
+          connect: [{ id: pid }],
+        },
+      },
     });
   }
 }
