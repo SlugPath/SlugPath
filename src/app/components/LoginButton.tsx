@@ -2,9 +2,11 @@ import { Dropdown, Menu, MenuItem } from "@mui/joy";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button, MenuButton } from "@mui/joy";
 import UserAvatar from "./UserAvatar";
+import { useRouter } from "next/navigation";
 
 export default function LoginButton() {
   const { data: session, status } = useSession();
+  const { replace } = useRouter();
 
   return (
     <div>
@@ -26,8 +28,8 @@ export default function LoginButton() {
           <Menu variant="soft">
             <MenuItem
               onClick={() => {
-                localStorage.clear();
                 signOut();
+                replace("/");
               }}
             >
               Sign out

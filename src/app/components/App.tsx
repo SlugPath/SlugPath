@@ -1,3 +1,4 @@
+"use client";
 import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
 import PlannerTabs from "./PlannerTabs";
