@@ -67,16 +67,12 @@ export default function useAutosave(input: AutosaveInput) {
       });
     }
 
-    return () => {
-      controller.abort();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(input)]);
 
   // Clean-up
   useEffect(() => {
     return () => {
-      console.log(`Aborting on dismount...`);
       controller.abort();
     };
   }, []);
