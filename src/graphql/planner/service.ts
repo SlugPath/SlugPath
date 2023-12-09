@@ -23,51 +23,20 @@ export class PlannerService {
     title,
     order,
   }: PlannerCreateInput): Promise<PlannerId> {
-    console.log(plannerData);
+    // Process labels and quarters outside the transaction
+    const labels = plannerData.labels.map((l) => ({
+      ...l,
+      color: l.color as LabelColor,
+    }));
+    const notes = plannerData.notes;
 
-    // Delete old planner
-    const operations = [];
-    const old = await prisma.planner.findUnique({
-      where: {
-        userId,
-        id: plannerId,
-      },
-    });
-    if (old !== null) {
-      operations.push(
-        prisma.planner.delete({
-          where: {
-            userId,
-            id: plannerId,
-          },
-        }),
-      );
-    }
-
-    // Update the labels
-    const labels = plannerData.labels.map((l) => {
-      return {
-        ...l,
-        color: l.color as LabelColor,
-      };
-    });
-    // Get the new quarters with their respective courses
     const newQuarters = plannerData.quarters.map((q) => {
-      const qid = q.id;
-      const [year, term] = qid.split("-").slice(1);
-
-      const enrolledCourses = q.courses.map((c) => {
-        return {
-          id: c.id,
-          departmentCode: c.departmentCode,
-          number: c.number,
-          credits: c.credits,
-          ge: [...c.ge],
-          quartersOffered: [...c.quartersOffered],
-          title: c.title,
-          labels: c.labels,
-        };
-      });
+      const [year, term] = q.id.split("-").slice(1);
+      const enrolledCourses = q.courses.map((c) => ({
+        ...c,
+        ge: [...c.ge],
+        quartersOffered: [...c.quartersOffered],
+      }));
 
       return {
         year: parseInt(year),
@@ -77,36 +46,58 @@ export class PlannerService {
         },
       };
     });
-    // Perform upsert
-    operations.push(
-      prisma.planner.create({
-        data: {
-          title,
-          notes: plannerData.notes,
-          userId,
-          order,
-          id: plannerId,
-          quarters: {
-            create: newQuarters,
+
+    const result = await prisma.$transaction(
+      [
+        // Delete existing quarters and labels (if necessary)
+        // Perform the upsert
+        prisma.planner.upsert({
+          where: {
+            userId,
+            id: plannerId,
           },
-          labels: {
-            createMany: {
-              data: labels,
+          create: {
+            title,
+            notes,
+            userId,
+            order,
+            id: plannerId,
+            quarters: {
+              create: newQuarters,
+            },
+            labels: {
+              createMany: {
+                data: labels,
+              },
             },
           },
-        },
-        select: {
-          id: true,
-        },
-      }),
+          update: {
+            title,
+            notes,
+            order,
+            // Logic to replace quarters and labels
+            quarters: {
+              deleteMany: {}, // Deletes all quarters
+              create: newQuarters,
+            },
+            labels: {
+              deleteMany: {}, // Deletes all labels
+              createMany: {
+                data: labels,
+              },
+            },
+          },
+          select: {
+            id: true,
+          },
+        }),
+      ],
+      {
+        isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
+      },
     );
 
-    // Perform all queries as a serial transaction
-    const result = await prisma.$transaction(operations, {
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-    });
-
-    // Return the id
+    // Return the result
     return { plannerId: result[0].id };
   }
 
@@ -154,6 +145,9 @@ export class PlannerService {
         labels: true,
       },
     });
+
+    console.log(p);
+
     return p !== null ? this.toPlannerData(p) : null;
   }
 
@@ -214,7 +208,7 @@ export class PlannerService {
       });
     });
     newPlanner.labels = [...planner.labels];
-    newPlanner.notes = planner.notes;
+    newPlanner.notes = planner.notes ? planner.notes : "";
 
     // Return new modified planner
     return newPlanner;

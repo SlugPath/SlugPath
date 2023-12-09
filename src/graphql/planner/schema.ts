@@ -72,7 +72,7 @@ export class PlannerDataInput {
   @Field(() => [LabelInput])
   labels!: LabelInput[];
 
-  @Field(() => String)
+  @Field()
   notes!: string;
 }
 
