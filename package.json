@@ -14,7 +14,7 @@
     "test:watch": "jest --runInBand --forceExit --watchAll",
     "analyze": "cross-env ANALYZE=true next build",
     "prepare": "husky install",
-    "init-db": "npx prisma db push && npx prisma db seed"
+    "init-db": "npx prisma migrate deploy && npx prisma db seed"
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
