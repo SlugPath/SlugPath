@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export const useLoadAllPlanners = (
   userId: string | undefined,
+  handleLoadedPlanners?: any,
 ): [
   MultiPlanner,
   React.Dispatch<React.SetStateAction<MultiPlanner>>,
@@ -29,11 +30,15 @@ export const useLoadAllPlanners = (
       if (data.getAllPlanners.length > 0) {
         setState(convertPlannerTitles(data.getAllPlanners));
       }
+      if (handleLoadedPlanners !== undefined) {
+        handleLoadedPlanners(data.getAllPlanners.length);
+      }
     },
     onError: (err) => {
       console.error(err);
     },
   });
+
   useEffect(() => {
     if (userId !== undefined) {
       getData({
@@ -68,6 +73,7 @@ export const useLoadDefaultPlanner = (userId?: string) => {
 /**
  * Copies a PlannerData, but changes the id's of the courses within the planner
  * to prevent data inconsistencies
+ * Also adds a value for notes
  * @param defaultPlanner a defaultPlanner
  * @returns a unique PlannerData instance
  */
@@ -89,6 +95,7 @@ const cloneDefaultPlanner = (defaultPlanner: PlannerData): PlannerData => {
       courses: q.courses.map((crs) => {
         return lookup[crs].id;
       }),
+      notes: "",
     };
   });
   return clone;

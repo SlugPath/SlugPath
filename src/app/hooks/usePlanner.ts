@@ -2,10 +2,8 @@ import {
   getGeSatisfied,
   getTotalCredits,
   isCustomCourse,
-  serializePlanner,
 } from "@/lib/plannerUtils";
 import { useState } from "react";
-import { gql } from "@apollo/client";
 import useAutosave from "./useAutosave";
 import { useEffect } from "react";
 import { findQuarter, Term } from "../types/Quarter";
@@ -13,14 +11,6 @@ import { useLoadUserPlanner } from "./useLoad";
 import { StoredCourse } from "../types/Course";
 import { PlannerData } from "../types/PlannerData";
 import { Label } from "../types/Label";
-
-const SAVE_PLANNER = gql`
-  mutation SavePlanner($input: PlannerCreateInput!) {
-    upsertPlanner(input: $input) {
-      plannerId
-    }
-  }
-`;
 
 export default function usePlanner(
   input: {
@@ -45,33 +35,16 @@ export default function usePlanner(
     getTotalCredits(courseState),
   );
   const [geSatisfied, setGeSatisfied] = useState(getGeSatisfied(courseState));
-  const [saveData, { loading: saveStatus, error: saveError }] = useAutosave(
-    SAVE_PLANNER,
-    {},
-  );
+
+  // Auto-saving
+  const { loading: saveStatus, error: saveError } = useAutosave({
+    ...input,
+    plannerData: courseState,
+  });
+
   const [displayCourse, setDisplayCourse] = useState<
     [StoredCourse, Term | undefined] | undefined
   >();
-
-  // Auto-saving
-  useEffect(() => {
-    if (
-      input.userId !== undefined &&
-      input.title.length > 1 &&
-      input.title.length < 20
-    ) {
-      const variables = {
-        input: {
-          ...input,
-          plannerData: serializePlanner(courseState),
-        },
-      };
-      saveData({
-        variables,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(input), JSON.stringify(courseState)]);
 
   // Update total credits
   useEffect(() => {
@@ -178,6 +151,15 @@ export default function usePlanner(
     });
   };
 
+  const updateNotes = (content: string) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        notes: content,
+      };
+    });
+  };
+
   return {
     courseState,
     totalCredits,
@@ -193,5 +175,6 @@ export default function usePlanner(
     getAllLabels,
     updatePlannerLabels,
     editCourseLabels,
+    updateNotes,
   };
 }

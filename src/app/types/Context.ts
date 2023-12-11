@@ -38,6 +38,7 @@ export interface PlannerContextProps {
   customCourses: StoredCourse[];
   handleAddCustom: (newTitle: string) => void;
   handleRemoveCustom: (idx: number) => void;
+  updateNotes: (content: string) => void;
 }
 
 export interface PlannerProviderProps {

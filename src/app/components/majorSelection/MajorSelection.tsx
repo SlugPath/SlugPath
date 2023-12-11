@@ -1,17 +1,4 @@
-import {
-  Button,
-  Option,
-  Select,
-  Tab,
-  Tabs,
-  TabList,
-  Tooltip,
-  Typography,
-  CircularProgress,
-  List,
-  ListItem,
-} from "@mui/joy";
-import Info from "@mui/icons-material/Info";
+import { Button, CircularProgress } from "@mui/joy";
 import { useCallback, useEffect, useState } from "react";
 import useMajorSelection from "../../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
@@ -19,17 +6,22 @@ import { years } from "@/lib/defaultPlanners";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_MAJORS } from "@/graphql/queries";
 import useDefaultPlanners from "../../hooks/useDefaultPlanners";
-import MiniPlanner from "./miniPlanner/MiniPlanner";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { Alert } from "@mui/joy";
 import ReportIcon from "@mui/icons-material/Report";
+import SelectMajorName from "./SelectMajorName";
+import SelectCatalogYear from "./SelectCatalogYear";
+import SelectDefaultPlanner from "./SelectDefaultPlanner";
 
 export default function MajorSelection({
   saveButtonName,
   handleSave,
+  handleUserMajorAlreadyExists,
+  handleSkip,
 }: {
   handleSave: any;
   saveButtonName: string;
+  handleUserMajorAlreadyExists?: any;
+  handleSkip?: any;
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
@@ -40,10 +32,21 @@ export default function MajorSelection({
   const { data: session } = useSession();
   const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
   const getAllMajors = useCallback(lazyGetAllMajors, [lazyGetAllMajors]);
-  const { onSaveMajor, userMajorData, loadingSaveMajor, loadingMajorData } =
-    useMajorSelection(session?.user.id, handleSaveCompleted);
+  const {
+    onSaveMajor,
+    userMajorData,
+    loadingSaveMajor,
+    loadingMajorData,
+    errorLoadingMajorData,
+    errorSavingMajorData,
+  } = useMajorSelection(session?.user.id, handleSaveCompleted);
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
+  const majorSelectionIsValidCallback = useCallback(majorSelectionIsValid, [
+    major,
+    catalogYear,
+    session,
+  ]);
 
   useEffect(() => {
     getAllMajors({
@@ -63,8 +66,16 @@ export default function MajorSelection({
         userMajorData.catalogYear,
         userMajorData.defaultPlannerId,
       );
+
+      if (majorSelectionIsValidCallback()) {
+        handleUserMajorAlreadyExists();
+      }
     }
-  }, [userMajorData]);
+  }, [
+    handleUserMajorAlreadyExists,
+    majorSelectionIsValidCallback,
+    userMajorData,
+  ]);
 
   useEffect(() => {
     /**
@@ -146,16 +157,42 @@ export default function MajorSelection({
     return <CircularProgress variant="plain" color="primary" />;
   }
 
+  const SelectionErrorAlert = () => (
+    <div>
+      {showSelectionError && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          You must select a major and catalog year, and be logged into your UCSC
+          email to save your major.
+        </Alert>
+      )}
+    </div>
+  );
+
+  const LoadingMajorDataErrorAlert = () => (
+    <div>
+      {errorLoadingMajorData && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          Error loading major data. Please log out and try again.
+        </Alert>
+      )}
+    </div>
+  );
+
+  const SavingMajorDataErrorAlert = () => (
+    <div>
+      {errorSavingMajorData && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          Error saving major data. Please log out and try again.
+        </Alert>
+      )}
+    </div>
+  );
+
   return (
     <div className="space-y-4">
-      <div>
-        {showSelectionError && (
-          <Alert color="danger" startDecorator={<ReportIcon />}>
-            You must select a major and catalog year, and be logged into your
-            UCSC email to save your major.
-          </Alert>
-        )}
-      </div>
+      <SelectionErrorAlert />
+      <LoadingMajorDataErrorAlert />
+      <SavingMajorDataErrorAlert />
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-2">
           <SelectCatalogYear
@@ -181,133 +218,19 @@ export default function MajorSelection({
         />
       </div>
       <div className="flex justify-end w-full">
-        <Button
-          disabled={saveButtonDisabled || loadingSaveMajor}
-          onClick={handleClickSave}
-        >
-          {saveButtonName}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function SelectMajorName({
-  major,
-  majors,
-  onChange,
-}: {
-  major: string;
-  majors: string[];
-  onChange: any;
-}) {
-  return (
-    <>
-      <Typography level="body-lg">Select your major</Typography>
-      <Select
-        value={major}
-        placeholder="Choose one…"
-        variant="soft"
-        onChange={onChange}
-        disabled={majors.length == 0}
-      >
-        {majors.map((major, index) => (
-          <Option key={index} value={major}>
-            {major}
-          </Option>
-        ))}
-      </Select>
-    </>
-  );
-}
-
-function SelectCatalogYear({
-  catalogYear,
-  years,
-  onChange,
-}: {
-  catalogYear: string;
-  years: string[];
-  onChange: any;
-}) {
-  return (
-    <>
-      <Typography level="body-lg">Select your catalog year</Typography>
-      <Select
-        value={catalogYear}
-        placeholder="Choose one…"
-        variant="soft"
-        onChange={onChange}
-      >
-        {years.map((year, index) => (
-          <Option key={index} value={year}>
-            {year}
-          </Option>
-        ))}
-      </Select>
-    </>
-  );
-}
-
-function SelectDefaultPlanner({
-  selectedDefaultPlanner,
-  onChange,
-  majorDefaultPlanners,
-  loadingMajorDefaultPlanners,
-}: {
-  selectedDefaultPlanner: string;
-  onChange: any;
-  majorDefaultPlanners: any;
-  loadingMajorDefaultPlanners: boolean;
-}) {
-  const defaultPlanners: { id: string; title: string }[] =
-    majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
-
-  return (
-    <>
-      <div className="flex flex-row space-x-2">
-        <Typography level="body-lg">Select a default planner</Typography>
-        <Tooltip title="The default planner you select will be auto filled into any new planners you create">
-          <Info sx={{ color: "gray" }} />
-        </Tooltip>
-      </div>
-      <div className="space-y-2">
-        <Tabs
-          defaultValue={selectedDefaultPlanner}
-          value={selectedDefaultPlanner}
-          variant="soft"
-          onChange={onChange}
-        >
-          <TabList>
-            {defaultPlanners &&
-              defaultPlanners.map((planner: any, index: number) => (
-                <Tab key={index} value={planner.id}>
-                  {planner.title}
-                </Tab>
-              ))}
-          </TabList>
-        </Tabs>
-        {loadingMajorDefaultPlanners ? (
-          <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
+        {saveButtonDisabled || loadingSaveMajor ? (
+          <CircularProgress variant="plain" color="primary" />
         ) : (
-          <>
-            <List>
-              {defaultPlanners.map((defaultPlanner, index: number) => {
-                const id = defaultPlanner.id;
-                const plannerIsSelected = selectedDefaultPlanner == id;
-                return (
-                  <ListItem
-                    sx={{ display: plannerIsSelected ? "block" : "none" }}
-                    key={index}
-                  >
-                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </>
+          <div>
+            {handleSkip && (
+              <Button onClick={handleSkip} variant="plain">
+                Skip
+              </Button>
+            )}
+            <Button onClick={handleClickSave}>{saveButtonName}</Button>
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

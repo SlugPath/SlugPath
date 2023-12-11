@@ -14,7 +14,7 @@
     "test:watch": "jest --runInBand --forceExit --watchAll",
     "analyze": "cross-env ANALYZE=true next build",
     "prepare": "husky install",
-    "init-db": "npx prisma db push && npx prisma db seed"
+    "init-db": "npx prisma migrate deploy && npx prisma db seed"
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
@@ -29,6 +29,10 @@
     "@prisma/client": "^5.5.2",
     "@react-pdf/renderer": "^3.1.14",
     "@theme-ui/color": "^0.16.1",
+    "@tiptap/extension-color": "^2.1.13",
+    "@tiptap/pm": "^2.1.13",
+    "@tiptap/react": "^2.1.13",
+    "@tiptap/starter-kit": "^2.1.13",
     "class-validator": "^0.14.0",
     "next": "13.5.4",
     "next-auth": "^4.24.4",
