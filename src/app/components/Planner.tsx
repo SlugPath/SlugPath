@@ -54,6 +54,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                     <div className="space-y-2">
                       <Years courseState={courseState} />
                       <Accordion
+                        variant="soft"
                         sx={{
                           borderRadius: "0.5rem",
                           "&.MuiAccordion-root": {
@@ -62,7 +63,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                               paddingX: "0.5rem",
                             },
                           },
-                          backgroundColor: "white",
                         }}
                         defaultExpanded={true}
                       >
@@ -145,6 +145,7 @@ function Years({ courseState }: { courseState: PlannerData }) {
 function StyledAccordion({ children }: { children: React.ReactNode }) {
   return (
     <Accordion
+      variant="soft"
       sx={{
         borderRadius: "0.5rem",
         "&.MuiAccordion-root": {
@@ -153,7 +154,6 @@ function StyledAccordion({ children }: { children: React.ReactNode }) {
             paddingX: "0.5rem",
           },
         },
-        backgroundColor: "white",
       }}
       defaultExpanded={true}
     >
