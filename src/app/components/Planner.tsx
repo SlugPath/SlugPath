@@ -21,6 +21,7 @@ import {
 } from "@mui/joy";
 import { Quarter } from "../types/Quarter";
 import MajorSelectionModal from "./majorSelection/MajorSelectionModal";
+import NotesEditor from "./NotesEditor";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -30,7 +31,9 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     courseState,
     saveStatus,
     saveError,
+    updateNotes,
   } = useContext(PlannerContext);
+
   if (!isActive) {
     return <></>;
   }
@@ -45,8 +48,35 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <div className="flex-initial pr-2">
                 <Search />
               </div>
-              <div className="overflow-auto h-[92vh] w-full">
-                <Years courseState={courseState} />
+              <div className="overflow-auto w-full h-[85vh]">
+                <AccordionGroup>
+                  <CssVarsProvider defaultMode="system">
+                    <div className="space-y-2">
+                      <Years courseState={courseState} />
+                      <Accordion
+                        variant="soft"
+                        sx={{
+                          borderRadius: "0.5rem",
+                          "&.MuiAccordion-root": {
+                            "& .MuiAccordionSummary-root": {
+                              padding: "0.5rem 0",
+                              paddingX: "0.5rem",
+                            },
+                          },
+                        }}
+                        defaultExpanded={true}
+                      >
+                        <AccordionSummary>Notes</AccordionSummary>
+                        <AccordionDetails>
+                          <NotesEditor
+                            content={courseState.notes}
+                            onUpdateNotes={updateNotes}
+                          />
+                        </AccordionDetails>
+                      </Accordion>
+                    </div>
+                  </CssVarsProvider>
+                </AccordionGroup>
               </div>
 
               {/* Modals and Grad Progress */}
@@ -91,30 +121,44 @@ function Modals() {
 
 function Years({ courseState }: { courseState: PlannerData }) {
   return (
-    <CssVarsProvider defaultMode="system">
-      <AccordionGroup>
-        <div className="space-y-2">
-          {Array.from({ length: quartersPerYear }, (_, index) => index).map(
-            (i) => {
-              const slice_val = quartersPerYear * i;
-              const quarters = courseState.quarters.slice(
-                slice_val,
-                slice_val + quartersPerYear,
-              );
+    <div className="space-y-2">
+      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
+        const slice_val = quartersPerYear * i;
+        const quarters = courseState.quarters.slice(
+          slice_val,
+          slice_val + quartersPerYear,
+        );
 
-              return (
-                <Quarters
-                  key={i}
-                  year={i + 1}
-                  quarters={quarters}
-                  courseState={courseState}
-                />
-              );
-            },
-          )}
-        </div>
-      </AccordionGroup>
-    </CssVarsProvider>
+        return (
+          <Quarters
+            key={i}
+            year={i + 1}
+            quarters={quarters}
+            courseState={courseState}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function StyledAccordion({ children }: { children: React.ReactNode }) {
+  return (
+    <Accordion
+      variant="soft"
+      sx={{
+        borderRadius: "0.5rem",
+        "&.MuiAccordion-root": {
+          "& .MuiAccordionSummary-root": {
+            padding: "0.5rem 0",
+            paddingX: "0.5rem",
+          },
+        },
+      }}
+      defaultExpanded={true}
+    >
+      {children}
+    </Accordion>
   );
 }
 
@@ -128,18 +172,7 @@ function Quarters({
   courseState: PlannerData;
 }) {
   return (
-    <Accordion
-      sx={{
-        borderRadius: "0.5rem",
-        "&.MuiAccordion-root": {
-          "& .MuiAccordionSummary-root": {
-            padding: "0.5rem 0",
-            paddingX: "0.5rem",
-          },
-        },
-      }}
-      defaultExpanded={true}
-    >
+    <StyledAccordion>
       <AccordionSummary>Year {year}</AccordionSummary>
       <AccordionDetails>
         <div className="flex flex-row space-x-2">
@@ -156,6 +189,6 @@ function Quarters({
           })}
         </div>
       </AccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   );
 }

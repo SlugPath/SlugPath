@@ -26,6 +26,7 @@ export const initialPlanner = (): PlannerData => {
     years,
     courses: [],
     labels: initialLabels(),
+    notes: "",
   };
 };
 
@@ -35,6 +36,7 @@ export const emptyPlanner = (): PlannerData => {
     years,
     courses: [],
     labels: [],
+    notes: "",
   };
 };
 
@@ -64,6 +66,7 @@ export function serializePlanner(courseState: PlannerData): PlannerDataInput {
         color: l.color as string,
       };
     }),
+    notes: courseState.notes,
   };
 
   courseState.quarters.forEach((q) => {
@@ -93,6 +96,7 @@ export function deserializePlanner(output: PlannerDataOutput): PlannerData {
         color: l.color as LabelColor,
       };
     }),
+    notes: output.notes,
   };
 
   output.quarters.forEach((q) => {

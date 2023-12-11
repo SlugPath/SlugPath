@@ -28,6 +28,7 @@ export class PlannerService {
       ...l,
       color: l.color as LabelColor,
     }));
+    const notes = plannerData.notes;
 
     const newQuarters = plannerData.quarters.map((q) => {
       const [year, term] = q.id.split("-").slice(1);
@@ -46,7 +47,6 @@ export class PlannerService {
       };
     });
 
-    // Perform operations within a transaction
     const result = await prisma.$transaction(
       [
         // Delete existing quarters and labels (if necessary)
@@ -58,6 +58,7 @@ export class PlannerService {
           },
           create: {
             title,
+            notes,
             userId,
             order,
             id: plannerId,
@@ -72,6 +73,7 @@ export class PlannerService {
           },
           update: {
             title,
+            notes,
             order,
             // Logic to replace quarters and labels
             quarters: {
@@ -143,6 +145,7 @@ export class PlannerService {
         labels: true,
       },
     });
+
     return p !== null ? this.toPlannerData(p) : null;
   }
 
@@ -203,6 +206,7 @@ export class PlannerService {
       });
     });
     newPlanner.labels = [...planner.labels];
+    newPlanner.notes = planner.notes ? planner.notes : "";
 
     // Return new modified planner
     return newPlanner;

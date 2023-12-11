@@ -151,6 +151,15 @@ export default function usePlanner(
     });
   };
 
+  const updateNotes = (content: string) => {
+    setCourseState((prev) => {
+      return {
+        ...prev,
+        notes: content,
+      };
+    });
+  };
+
   return {
     courseState,
     totalCredits,
@@ -166,5 +175,6 @@ export default function usePlanner(
     getAllLabels,
     updatePlannerLabels,
     editCourseLabels,
+    updateNotes,
   };
 }

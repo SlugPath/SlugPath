@@ -29,6 +29,7 @@ export function PlannerProvider({
     getAllLabels,
     editCourseLabels,
     updatePlannerLabels,
+    updateNotes,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -64,6 +65,7 @@ export function PlannerProvider({
         customCourses,
         handleAddCustom,
         handleRemoveCustom,
+        updateNotes,
       }}
     >
       {children}

@@ -68,6 +68,7 @@ export const useLoadDefaultPlanner = (userId?: string) => {
 /**
  * Copies a PlannerData, but changes the id's of the courses within the planner
  * to prevent data inconsistencies
+ * Also adds a value for notes
  * @param defaultPlanner a defaultPlanner
  * @returns a unique PlannerData instance
  */
@@ -89,6 +90,7 @@ const cloneDefaultPlanner = (defaultPlanner: PlannerData): PlannerData => {
       courses: q.courses.map((crs) => {
         return lookup[crs].id;
       }),
+      notes: "",
     };
   });
   return clone;

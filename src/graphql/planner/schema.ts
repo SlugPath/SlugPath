@@ -71,6 +71,9 @@ export class PlannerDataInput {
 
   @Field(() => [LabelInput])
   labels!: LabelInput[];
+
+  @Field()
+  notes!: string;
 }
 
 /**
@@ -152,6 +155,9 @@ export class PlannerData {
 
   @Field(() => [Label])
   labels!: Label[];
+
+  @Field(() => String)
+  notes!: string;
 }
 
 /**
