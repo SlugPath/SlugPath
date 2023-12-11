@@ -1,3 +1,4 @@
+import { PlannerData } from "@/app/types/PlannerData";
 import { CourseService } from "@/graphql/course/service";
 import { MajorService } from "@/graphql/major/service";
 import { PlannerService } from "@/graphql/planner/service";
@@ -94,32 +95,12 @@ afterAll(async () => {
 });
 
 it("should create 1 empty planner for 1 user", async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: "Sammy Slug",
-    },
-  });
-  expect(user).not.toBeNull();
-
-  if (user === null) fail("User was null (this should not happen)");
-
+  const user = await createUser();
   const service = new PlannerService();
   const planners = await service.allPlanners(user.id);
   expect(planners).toHaveLength(0);
 
-  // Empty planner
-  const plannerId = uuidv4();
-  const res = await service.upsertPlanner({
-    userId: user.id,
-    plannerId: plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData: serializePlanner(initialPlanner()),
-  });
-  expect(res.plannerId).toBe(plannerId);
-
-  const check = await service.getPlanner({ userId: user.id, plannerId });
-  expect(check).not.toBeNull();
+  const plannerId = await createPlanner(initialPlanner(), service, user);
 
   // Cleanup
   const deleted = await service.deletePlanner({ userId: user.id, plannerId });
@@ -129,32 +110,13 @@ it("should create 1 empty planner for 1 user", async () => {
 });
 
 it("should update 1 planner for 1 user", async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: "Sammy Slug",
-    },
-  });
-  expect(user).not.toBeNull();
-
-  if (user === null) fail("User was null (this should not happen)");
+  const user = await createUser();
 
   const service = new PlannerService();
   const planners = await service.allPlanners(user.id);
   expect(planners).toHaveLength(0);
-  const plannerId = uuidv4();
 
-  // Create empty planner
-  const res1 = await service.upsertPlanner({
-    userId: user.id,
-    plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData: serializePlanner(initialPlanner()),
-  });
-  expect(res1.plannerId).toBe(plannerId);
-
-  const check1 = await service.getPlanner({ userId: user.id, plannerId });
-  expect(check1).not.toBeNull();
+  const plannerId = await createPlanner(initialPlanner(), service, user);
 
   // Update planner with some courses
   const cseCourses = [
@@ -234,17 +196,8 @@ it("should update 1 planner for 1 user", async () => {
 });
 
 it("should return null to delete missing planner", async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: "Sammy Slug",
-    },
-  });
-  expect(user).not.toBeNull();
-
-  if (user === null) fail("User was null (this should not happen)");
-
+  const user = await createUser();
   const service = new PlannerService();
-
   const res = await service.deletePlanner({
     plannerId: uuidv4(),
     userId: user.id,
@@ -290,12 +243,7 @@ it("should filter courses by GE requirement", async () => {
 });
 
 it("should return the correct labels for each course", async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: "Sammy Slug",
-    },
-  });
-  expect(user).not.toBeNull();
+  const user = await createUser();
 
   if (user === null) fail("User was null (this should not happen)");
   const service = new PlannerService();
@@ -373,15 +321,14 @@ it("should return the correct labels for each course", async () => {
   courses?.forEach((c, idx) => {
     expect(c).toStrictEqual(cseCourses[idx]);
   });
+
+  // delete the planner
+  const deleted = await service.deletePlanner({ userId: user.id, plannerId });
+  expect(deleted).toBeTruthy();
 });
 
 it("should add major information for 1 user", async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: "Sammy Slug",
-    },
-  });
-  expect(user).not.toBeNull();
+  const user = await createUser();
 
   // create major
   const name = "Computer Science B.S";
@@ -431,13 +378,7 @@ it("should add major information for 1 user", async () => {
 });
 
 it("should fail since major doesn't exist", async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: "Sammy Slug",
-    },
-  });
-  expect(user).not.toBeNull();
-  if (user === null) fail("User was null (this should not happen)");
+  const user = await createUser();
 
   const service = new MajorService();
   const userMajor = await service.getUserMajor(user.id);
@@ -501,3 +442,81 @@ it("should return correct number of majors", async () => {
   const res2 = await new MajorService().getAllMajors("2020-2021");
   expect(res2).toHaveLength(1);
 });
+
+it("should set the notes field correctly for a planner", async () => {
+  const user = await createUser();
+
+  const service = new PlannerService();
+  const planners = await service.allPlanners(user.id);
+  expect(planners).toHaveLength(0);
+
+  // Create a planner with notes in it
+  const notes = "This is a new note";
+  const planner = initialPlanner();
+  planner.notes = notes;
+  const plannerId = await createPlanner(planner, service, user);
+
+  const check1 = await service.getPlanner({ userId: user.id, plannerId });
+  expect(check1?.notes).toBe(notes);
+
+  const newNotes = "Updated notes";
+  const newPlanner = initialPlanner();
+  newPlanner.notes = newNotes;
+  const res2 = await service.upsertPlanner({
+    userId: user.id,
+    plannerId: plannerId,
+    title: "Planner 1",
+    order: 0,
+    plannerData: serializePlanner(newPlanner),
+  });
+  expect(res2.plannerId).toBe(plannerId);
+
+  // Ensure there is only 1 planner for that user
+  const allPlanners = await service.allPlanners(user.id);
+  expect(allPlanners).toHaveLength(1);
+
+  // Ensure the content of that planner is updated
+  const check2 = await service.getPlanner({ userId: user.id, plannerId });
+  expect(check2).not.toBeNull();
+  expect(check2?.notes).toBe(newNotes);
+
+  // Cleanup
+  const deleted = await service.deletePlanner({ userId: user.id, plannerId });
+  expect(deleted).toBeTruthy();
+  const deleteCheck = await service.getPlanner({ userId: user.id, plannerId });
+  expect(deleteCheck).toBeNull();
+});
+
+async function createUser() {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: "Sammy Slug",
+    },
+  });
+  expect(user).not.toBeNull();
+
+  if (user === null) fail("User was null (this should not happen)");
+
+  return user;
+}
+
+async function createPlanner(
+  planner: PlannerData,
+  service: PlannerService,
+  user: any,
+): Promise<string> {
+  const plannerId = uuidv4();
+  const res = await service.upsertPlanner({
+    userId: user.id,
+    plannerId: plannerId,
+    title: "Planner 1",
+    order: 0,
+    plannerData: serializePlanner(planner),
+  });
+  expect(res.plannerId).toBe(plannerId);
+
+  const check = await service.getPlanner({ userId: user.id, plannerId });
+  expect(check).not.toBeNull();
+
+  return plannerId;
+}
