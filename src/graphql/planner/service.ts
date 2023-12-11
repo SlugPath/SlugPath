@@ -146,8 +146,6 @@ export class PlannerService {
       },
     });
 
-    console.log(p);
-
     return p !== null ? this.toPlannerData(p) : null;
   }
 
