@@ -1,6 +1,6 @@
 import { serializePlanner } from "@/lib/plannerUtils";
 import { debounce } from "@/lib/utils";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { PlannerData } from "../types/PlannerData";
 import { gql, useMutation } from "@apollo/client";
 
@@ -25,21 +25,19 @@ export default function useAutosave(input: AutosaveInput) {
   const [mutation, { loading, error }] = useMutation(SAVE_PLANNER);
 
   // Abort controller
-  let controller = new AbortController();
+  const controller = useRef(new AbortController());
 
   // Debounced save -- save after 3 seconds of changes
   const saveData = debounce((options) => {
     // Abort any previous outgoing requests
-    if (controller) {
-      controller.abort();
-    }
-    controller = new AbortController();
+    controller.current.abort();
+    controller.current = new AbortController();
     return mutation({
       ...options,
       options: {
         context: {
           fetchoptions: {
-            signal: controller.signal,
+            signal: controller.current.signal,
           },
         },
       },
@@ -48,9 +46,6 @@ export default function useAutosave(input: AutosaveInput) {
 
   // Executes saving side effect
   useEffect(() => {
-    // Abort controller to cancel outgoing requests
-    controller = new AbortController();
-
     if (
       input.userId !== undefined &&
       input.title.length > 1 &&
@@ -73,7 +68,7 @@ export default function useAutosave(input: AutosaveInput) {
   // Clean-up
   useEffect(() => {
     return () => {
-      controller.abort();
+      controller.current.abort();
     };
   }, []);
 

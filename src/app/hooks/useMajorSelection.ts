@@ -54,7 +54,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
 
   return {
     onSaveMajor: handleSaveMajor,
-    userMajorData: userMajorData,
+    userMajorData,
     loadingMajorData,
     loadingSaveMajor,
   };

@@ -74,10 +74,8 @@ export class MajorService {
         id: userId,
       },
       data: {
-        major: {
-          connect: { id: majorId },
-        },
-        defaultPlannerId: defaultPlannerId,
+        majorId,
+        defaultPlannerId,
       },
     });
 

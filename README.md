@@ -69,6 +69,12 @@ Create PR's onto the `dev` branch upon completion of work, and we will review it
 
 We use Vercel to deploy as it is the most convenient way to deploy a Next.js application.
 
+## Database Information
+
+- To backup any existing data in a database use the `pg_dump "<connection string>" > outfile.sql` command
+- To restore from backup use `psql "<connection string>" < outfile.sql`
+- Make sure to create and deploy migrations whenever the schema is changed
+
 ## Built With
 
 - [Next.js](https://nextjs.org/) and [React](https://react.dev/)

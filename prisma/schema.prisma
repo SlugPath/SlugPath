@@ -12,7 +12,7 @@ model User {
   id               String    @id
   email            String?
   name             String?
-  majorId          Int?      @unique
+  majorId          Int?
   role             Role      @default(USER)
   defaultPlannerId String?
   planners         Planner[]
@@ -75,7 +75,7 @@ model Major {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   defaultPlanners Planner[]
-  users           User?
+  users           User[]
 
   @@unique([name, catalogYear])
 }
