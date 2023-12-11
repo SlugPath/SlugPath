@@ -3,7 +3,6 @@ import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
 import PlannerTabs from "./PlannerTabs";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 import { useContext } from "react";
 import {
   PlannersContext,
@@ -18,16 +17,13 @@ export default function App() {
       <PlannersProvider>
         <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
           <Navbar />
-          <div className="pt-4 mb-auto">
+          <div className="pt-4">
             <div className="flex justify-left px-7">
               <PlannerTabs />
             </div>
             <div className="px-5">
               <PlannerList />
             </div>
-          </div>
-          <div className="mt-6">
-            <Footer />
           </div>
         </div>
       </PlannersProvider>
