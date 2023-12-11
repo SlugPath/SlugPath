@@ -9,6 +9,7 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
+import BetaWarning from "./components/BetaWarning";
 
 export default function Page() {
   const { status } = useSession();
@@ -48,6 +49,7 @@ export default function Page() {
             </Typography>
           </div>
         ) : null}
+        <BetaWarning />
         <div className="grid place-items-center my-3 justify-center h-auto w-[66vw] mx-auto overflow-auto">
           <ApolloProvider client={apolloClient}>
             <DefaultPlannerProvider>
