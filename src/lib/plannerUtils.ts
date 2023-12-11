@@ -248,12 +248,12 @@ export function getUniqueCoursesForGrad(planner: PlannerData): any[] {
 }
 
 /**
- * Computes the total credits of a student planner
- * @param planner a course planner object
- * @returns total number of credits
+ * Computes the total credits for courses
+ * @param courses is a list of courses
+ * @returns total number of credits not including repeated courses
  */
-export function getTotalCredits(planner: PlannerData): number {
-  const uniqueCourses = getUniqueCoursesForGrad(planner);
+export function getTotalCredits(courses: StoredCourse[]): number {
+  const uniqueCourses = getUniqueCoursesForGrad({ courses } as PlannerData);
   return uniqueCourses.reduce((acc, c) => {
     return acc + c.credits;
   }, 0);
