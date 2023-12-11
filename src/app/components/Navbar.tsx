@@ -1,8 +1,8 @@
 import Image from "next/image";
 import LoginButton from "./LoginButton";
 import { useSession } from "next-auth/react";
-import { Button } from "@mui/joy";
-import { OpenInNew } from "@mui/icons-material";
+import { Button, IconButton } from "@mui/joy";
+import { OpenInNew, GitHub } from "@mui/icons-material";
 
 export default function Navbar() {
   const { status } = useSession();
@@ -26,6 +26,16 @@ export default function Navbar() {
           {/* Logo and title end */}
 
           <div className="flex flex-1 justify-end place-items-center gap-4">
+            <IconButton
+              component="a"
+              target="_blank"
+              href="https://github.com/fercevik729/UCSC-Course-Planner"
+              sx={{
+                color: "white",
+              }}
+            >
+              <GitHub />
+            </IconButton>
             <Button
               component="a"
               target="_blank"
