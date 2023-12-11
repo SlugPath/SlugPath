@@ -3,7 +3,7 @@ import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
 import PlannerTabs from "./PlannerTabs";
 import Navbar from "./Navbar";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   PlannersContext,
   PlannersProvider,
@@ -12,6 +12,8 @@ import { PlannerProvider } from "../contexts/PlannerProvider";
 import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
 import UnauthenticatedWarning from "./UnauthenticatedWarning";
 import { useSession } from "next-auth/react";
+import useMajorSelection from "../hooks/useMajorSelection";
+import { useRouter } from "next/navigation";
 
 export default function App() {
   return (
@@ -34,8 +36,20 @@ export default function App() {
 }
 
 function PlannerList() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const { planners } = useContext(PlannersContext);
-  const { status } = useSession();
+  const { userMajorData, loadingMajorData } = useMajorSelection(
+    session?.user.id,
+  );
+
+  useEffect(() => {
+    if (status === "authenticated" && !loadingMajorData) {
+      if (userMajorData === null) {
+        router.push("/");
+      }
+    }
+  }, [userMajorData, loadingMajorData, status, router]);
 
   return (
     <>
