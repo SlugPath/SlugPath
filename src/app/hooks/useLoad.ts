@@ -38,6 +38,7 @@ export const useLoadAllPlanners = (
       console.error(err);
     },
   });
+
   useEffect(() => {
     if (userId !== undefined) {
       getData({

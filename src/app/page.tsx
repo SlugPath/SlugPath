@@ -3,12 +3,12 @@ import Image from "next/image";
 import MajorSelection from "./components/majorSelection/MajorSelection";
 import LoginButton from "./components/LoginButton";
 import { useSession } from "next-auth/react";
-import { WarningAmberRounded } from "@mui/icons-material";
-import { CssVarsProvider, Typography } from "@mui/joy";
+import { CssVarsProvider } from "@mui/joy";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
+import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
 
 export default function Page() {
   const { status } = useSession();
@@ -56,20 +56,5 @@ export default function Page() {
         </div>
       </div>
     </CssVarsProvider>
-  );
-}
-
-function UnauthenticatedWarning() {
-  return (
-    <Typography
-      variant="soft"
-      color="warning"
-      component="p"
-      startDecorator={<WarningAmberRounded color="warning" />}
-      justifyContent="center"
-      className="py-2 px-6 rounded-b-2xl"
-    >
-      We recommend logging in with your UCSC email in order to save your data.
-    </Typography>
   );
 }
