@@ -1,6 +1,8 @@
 import Image from "next/image";
 import LoginButton from "./LoginButton";
 import { useSession } from "next-auth/react";
+import { Button } from "@mui/joy";
+import { OpenInNew } from "@mui/icons-material";
 
 export default function Navbar() {
   const { status } = useSession();
@@ -23,7 +25,15 @@ export default function Navbar() {
           </div>
           {/* Logo and title end */}
 
-          <div className="flex flex-1 justify-end">
+          <div className="flex flex-1 justify-end place-items-center gap-4">
+            <Button
+              component="a"
+              target="_blank"
+              href="https://forms.gle/g6jsmGj2r2SCipwC6"
+              endDecorator={<OpenInNew />}
+            >
+              Feedback
+            </Button>
             <LoginButton />
           </div>
         </div>
