@@ -14,6 +14,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
     data: majorData,
     loading: loadingMajorData,
     refetch,
+    error: errorLoadingMajorData,
   } = useQuery(GET_MAJOR, {
     variables: {
       userId: userId,
@@ -22,7 +23,10 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
 
   // Update user major data
   const userMajorData = majorData ? majorData.getUserMajor : null;
-  const [saveMajor, { loading: loadingSaveMajor }] = useMutation(SAVE_MAJOR, {
+  const [
+    saveMajor,
+    { loading: loadingSaveMajor, error: errorSavingMajorData },
+  ] = useMutation(SAVE_MAJOR, {
     onCompleted: () => {
       onCompleted();
       refetch();
@@ -57,5 +61,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
     userMajorData,
     loadingMajorData,
     loadingSaveMajor,
+    errorLoadingMajorData,
+    errorSavingMajorData,
   };
 }
