@@ -15,9 +15,13 @@ import SelectDefaultPlanner from "./SelectDefaultPlanner";
 export default function MajorSelection({
   saveButtonName,
   handleSave,
+  handleUserMajorAlreadyExists,
+  handleSkip,
 }: {
   handleSave: any;
   saveButtonName: string;
+  handleUserMajorAlreadyExists?: any;
+  handleSkip?: any;
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
@@ -38,6 +42,11 @@ export default function MajorSelection({
   } = useMajorSelection(session?.user.id, handleSaveCompleted);
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
+  const majorSelectionIsValidCallback = useCallback(majorSelectionIsValid, [
+    major,
+    catalogYear,
+    session,
+  ]);
 
   useEffect(() => {
     getAllMajors({
@@ -57,8 +66,16 @@ export default function MajorSelection({
         userMajorData.catalogYear,
         userMajorData.defaultPlannerId,
       );
+
+      if (majorSelectionIsValidCallback()) {
+        handleUserMajorAlreadyExists();
+      }
     }
-  }, [userMajorData]);
+  }, [
+    handleUserMajorAlreadyExists,
+    majorSelectionIsValidCallback,
+    userMajorData,
+  ]);
 
   useEffect(() => {
     /**
@@ -204,7 +221,14 @@ export default function MajorSelection({
         {saveButtonDisabled || loadingSaveMajor ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
-          <Button onClick={handleClickSave}>{saveButtonName}</Button>
+          <div>
+            {handleSkip && (
+              <Button onClick={handleSkip} variant="plain">
+                Skip
+              </Button>
+            )}
+            <Button onClick={handleClickSave}>{saveButtonName}</Button>
+          </div>
         )}
       </div>
     </div>

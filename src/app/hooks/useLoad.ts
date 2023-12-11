@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export const useLoadAllPlanners = (
   userId: string | undefined,
+  handleLoadedPlanners?: any,
 ): [
   MultiPlanner,
   React.Dispatch<React.SetStateAction<MultiPlanner>>,
@@ -28,6 +29,9 @@ export const useLoadAllPlanners = (
     onCompleted: (data) => {
       if (data.getAllPlanners.length > 0) {
         setState(convertPlannerTitles(data.getAllPlanners));
+      }
+      if (handleLoadedPlanners !== undefined) {
+        handleLoadedPlanners(data.getAllPlanners.length);
       }
     },
     onError: (err) => {

@@ -19,6 +19,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
     variables: {
       userId: userId,
     },
+    skip: userId === undefined,
   });
 
   // Update user major data

@@ -160,8 +160,6 @@ export default function usePlanner(
     });
   };
 
-  console.log(courseState.notes);
-
   return {
     courseState,
     totalCredits,

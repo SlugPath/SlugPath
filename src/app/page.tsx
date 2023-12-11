@@ -14,6 +14,10 @@ export default function Page() {
   const { status } = useSession();
   const router = useRouter();
 
+  function redirectToPlanner() {
+    router.push("/planner");
+  }
+
   return (
     <CssVarsProvider defaultMode="system">
       <div className="bg-bg-light dark:bg-bg-dark h-screen">
@@ -35,17 +39,7 @@ export default function Page() {
 
         {status !== "authenticated" ? (
           <div className="space-y-2 grid place-items-center">
-            <Typography
-              variant="soft"
-              color="warning"
-              component="p"
-              startDecorator={<WarningAmberRounded color="warning" />}
-              justifyContent="center"
-              className="py-2 px-6 rounded-b-2xl"
-            >
-              We recommend logging in with your UCSC email for a better
-              experience.
-            </Typography>
+            <UnauthenticatedWarning />
           </div>
         ) : null}
         <div className="grid place-items-center my-3 justify-center h-auto w-[66vw] mx-auto overflow-auto">
@@ -53,12 +47,29 @@ export default function Page() {
             <DefaultPlannerProvider>
               <MajorSelection
                 saveButtonName="Next"
-                handleSave={() => router.push("/planner")}
+                handleSave={redirectToPlanner}
+                handleUserMajorAlreadyExists={redirectToPlanner}
+                handleSkip={redirectToPlanner}
               />
             </DefaultPlannerProvider>
           </ApolloProvider>
         </div>
       </div>
     </CssVarsProvider>
+  );
+}
+
+function UnauthenticatedWarning() {
+  return (
+    <Typography
+      variant="soft"
+      color="warning"
+      component="p"
+      startDecorator={<WarningAmberRounded color="warning" />}
+      justifyContent="center"
+      className="py-2 px-6 rounded-b-2xl"
+    >
+      We recommend logging in with your UCSC email in order to save your data.
+    </Typography>
   );
 }
