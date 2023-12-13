@@ -2,7 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ScreenSizeWarning from "./components/ScreenSizeWarning";
-import { NextAuthProvider } from "./Providers";
+import NextAuthProvider from "./contexts/NextAuthProvider";
+import ThemeProvider from "./contexts/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <NextAuthProvider>
-        <ScreenSizeWarning />
-        <body className={inter.className}>{children}</body>
+        <ThemeProvider>
+          <ScreenSizeWarning />
+          <body className={inter.className}>{children}</body>
+        </ThemeProvider>
       </NextAuthProvider>
     </html>
   );

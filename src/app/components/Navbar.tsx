@@ -36,6 +36,7 @@ export default function Navbar() {
             >
               <GitHub />
             </IconButton>
+            <Button color="warning">Open Beta</Button>
             <Button
               component="a"
               target="_blank"
