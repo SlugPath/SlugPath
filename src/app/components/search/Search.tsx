@@ -7,19 +7,19 @@ import {
   Select,
   Typography,
 } from "@mui/joy";
-import { StoredCourse } from "../types/Course";
-import DraggableCourseCard from "./DraggableCourseCard";
-import CourseCard from "./CourseCard";
+import { StoredCourse } from "../../types/Course";
+import DraggableCourseCard from "../DraggableCourseCard";
+import CourseCard from "../CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
-import useSearch from "../hooks/useSearch";
+import useSearch from "../../hooks/useSearch";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { InfoOutlined } from "@mui/icons-material";
 import CustomCourseSelection from "./CustomCourseSelection";
 
 /**
  * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
- * already been added to the planner and should be disabled for dragging in search results.
+ * already been added to the planner
  */
 export default function Search() {
   const {
