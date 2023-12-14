@@ -23,7 +23,6 @@ export default function Navbar() {
               UCSC Course Planner
             </a>
           </div>
-          {/* Logo and title end */}
 
           <div className="flex flex-1 justify-end place-items-center gap-4">
             <IconButton
@@ -36,7 +35,7 @@ export default function Navbar() {
             >
               <GitHub />
             </IconButton>
-            <Button color="warning">Open Beta</Button>
+            <Button color="danger">Open Beta</Button>
             <Button
               component="a"
               target="_blank"
