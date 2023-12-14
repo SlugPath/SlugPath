@@ -6,16 +6,16 @@ import { useEffect } from "react";
 export default function SearchInputs({
   onUpdateCourses,
   onUpdateLoading,
-  onUpdateLoadingUseQuery,
+  onUpdateLoadingMoreResults,
 }: {
   onUpdateCourses: any;
   onUpdateLoading: any;
-  onUpdateLoadingUseQuery: any;
+  onUpdateLoadingMoreResults: any;
 }) {
   const {
     courses,
     loading,
-    loadingUseQuery,
+    loadingMoreResults,
     departments,
     handleChangeDepartment,
     handleChangeNumber,
@@ -37,8 +37,8 @@ export default function SearchInputs({
   }, [loading, onUpdateLoading]);
 
   useEffect(() => {
-    onUpdateLoadingUseQuery(loadingUseQuery);
-  }, [loadingUseQuery, onUpdateLoadingUseQuery]);
+    onUpdateLoadingMoreResults(loadingMoreResults);
+  }, [loadingMoreResults, onUpdateLoadingMoreResults]);
 
   return (
     <form

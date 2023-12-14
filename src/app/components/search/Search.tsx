@@ -11,7 +11,7 @@ import SearchResults from "./SearchResults";
 export default function Search() {
   const [courses, setCourses] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingUseQuery, setLoadingUseQuery] = useState<boolean>(false);
+  const [loadingMoreResults, setLoadingMoreResults] = useState<boolean>(false);
 
   return (
     <CssVarsProvider defaultMode="system">
@@ -20,12 +20,12 @@ export default function Search() {
         <SearchInputs
           onUpdateCourses={setCourses}
           onUpdateLoading={setLoading}
-          onUpdateLoadingUseQuery={setLoadingUseQuery}
+          onUpdateLoadingMoreResults={setLoadingMoreResults}
         />
         <SearchResults
           courses={courses}
           loading={loading}
-          loadingUseQuery={loadingUseQuery}
+          loadingUseQuery={loadingMoreResults}
         />
       </Card>
     </CssVarsProvider>
