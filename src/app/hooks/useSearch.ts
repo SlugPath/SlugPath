@@ -174,7 +174,7 @@ export default function useSearch() {
 
   return {
     error,
-    data,
+    courses: data && data.coursesBy ? data.coursesBy : [],
     loading,
     loadingUseQuery,
     departments,

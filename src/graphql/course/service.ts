@@ -60,7 +60,9 @@ export class CourseService {
     ) {
       res = await prisma.course.findMany({
         where: {
-          departmentCode: pred.departmentCode,
+          departmentCode: {
+            contains: pred.departmentCode,
+          },
           number: {
             contains: pred.number,
           },
@@ -74,7 +76,9 @@ export class CourseService {
     else if (pred.number && pred.number?.length > 0) {
       res = await prisma.course.findMany({
         where: {
-          departmentCode: pred.departmentCode,
+          departmentCode: {
+            contains: pred.departmentCode,
+          },
           number: {
             contains: pred.number,
           },
