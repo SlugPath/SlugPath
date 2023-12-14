@@ -43,21 +43,19 @@ export default function useSearch() {
   });
 
   // useBackgroundQuery gives the queryRef to use in useReadQuery
+  const variables = {
+    departmentCode: queryDetails.departmentCode,
+    number: nullIfEmpty(queryDetails.number),
+    ge: nullIfEmpty(queryDetails.ge),
+  };
   const [queryRef] = useBackgroundQuery(GET_COURSES, {
-    variables: {
-      departmentCode: queryDetails.departmentCode,
-      number: nullIfEmpty(queryDetails.number),
-    },
+    variables: variables,
   });
   const { data: useReadQueryData } = useReadQuery(queryRef);
   const { data: useQueryData, loading: loadingUseQuery } = useQuery(
     GET_COURSES,
     {
-      variables: {
-        departmentCode: queryDetails.departmentCode,
-        number: nullIfEmpty(queryDetails.number),
-        ge: nullIfEmpty(queryDetails.ge),
-      },
+      variables: variables,
     },
   );
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);

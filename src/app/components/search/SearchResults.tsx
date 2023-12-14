@@ -109,7 +109,9 @@ export default function SearchResults({
             ) : (
               <div className="flex justify-center items-center h-96">
                 {!hasResults() ? (
-                  <p className="text-gray-400">No results</p>
+                  <p className="text-gray-400 text-center">
+                    No results. Try changing the search parameters.
+                  </p>
                 ) : null}
                 {loading ? (
                   <CircularProgress variant="plain" color="primary" />
