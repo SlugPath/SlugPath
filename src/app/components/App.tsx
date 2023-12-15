@@ -44,10 +44,16 @@ function PlannerList() {
   );
 
   useEffect(() => {
-    if (status === "authenticated" && !loadingMajorData) {
-      if (userMajorData === null) {
-        router.push("/");
-      }
+    function shouldRedirectToMajorSelectionPage(): boolean {
+      return (
+        status === "authenticated" &&
+        !loadingMajorData &&
+        userMajorData === null
+      );
+    }
+
+    if (shouldRedirectToMajorSelectionPage()) {
+      router.push("/");
     }
   }, [userMajorData, loadingMajorData, status, router]);
 
