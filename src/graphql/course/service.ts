@@ -48,63 +48,44 @@ export class CourseService {
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
-    let res: Course[];
-    if (pred.departmentCode?.length == 0) pred.departmentCode = undefined;
+    const deptCodeQuery = () => {
+      return pred.departmentCode?.length != 0
+        ? {
+            departmentCode: {
+              contains: pred.departmentCode,
+            },
+          }
+        : {};
+    };
 
-    // Check if both number and ge filters are provided
-    if (
-      pred.number &&
-      pred.number?.length > 0 &&
-      pred.ge &&
-      pred.ge?.length > 0
-    ) {
-      res = await prisma.course.findMany({
-        where: {
-          departmentCode: {
-            contains: pred.departmentCode,
-          },
-          number: {
-            contains: pred.number,
-          },
-          ge: {
-            has: pred.ge,
-          },
-        },
-      });
-    }
-    // Check if only number filter is provided
-    else if (pred.number && pred.number?.length > 0) {
-      res = await prisma.course.findMany({
-        where: {
-          departmentCode: {
-            contains: pred.departmentCode,
-          },
-          number: {
-            contains: pred.number,
-          },
-        },
-      });
-    }
-    // Check if only ge filter is provided
-    else if (pred.ge && pred.ge?.length > 0) {
-      res = await prisma.course.findMany({
-        where: {
-          departmentCode: pred.departmentCode,
-          ge: {
-            has: pred.ge,
-          },
-        },
-      });
-    }
-    // If no specific filters are provided, only filter by departmentCode
-    else {
-      res = await prisma.course.findMany({
-        where: {
-          departmentCode: pred.departmentCode,
-        },
-      });
-    }
-    // Return a sorted array of courses
+    const numberQuery = () => {
+      return pred.number
+        ? {
+            number: {
+              contains: pred.number,
+            },
+          }
+        : {};
+    };
+
+    const geQuery = () => {
+      return pred.ge
+        ? {
+            ge: {
+              has: pred.ge,
+            },
+          }
+        : {};
+    };
+
+    const res = await prisma.course.findMany({
+      where: {
+        departmentCode: deptCodeQuery().departmentCode,
+        number: numberQuery().number,
+        ge: geQuery().ge,
+      },
+    });
+
     return res.sort(compareCoursesByNum);
   }
   /**
