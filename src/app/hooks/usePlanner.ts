@@ -32,7 +32,7 @@ export default function usePlanner(
   };
 
   const [totalCredits, setTotalCredits] = useState(
-    getTotalCredits(courseState),
+    getTotalCredits(courseState.courses),
   );
   const [geSatisfied, setGeSatisfied] = useState(getGeSatisfied(courseState));
 
@@ -48,7 +48,7 @@ export default function usePlanner(
 
   // Update total credits
   useEffect(() => {
-    setTotalCredits(getTotalCredits(courseState));
+    setTotalCredits(getTotalCredits(courseState.courses));
   }, [courseState]);
 
   // Update list of GEs satisfied
@@ -85,7 +85,7 @@ export default function usePlanner(
           ],
         };
       });
-      setTotalCredits(getTotalCredits(courseState));
+      setTotalCredits(getTotalCredits(courseState.courses));
       setGeSatisfied(getGeSatisfied(courseState));
     };
   };
