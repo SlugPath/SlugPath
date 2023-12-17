@@ -10,6 +10,7 @@ import {
 } from "../contexts/PlannersProvider";
 import { PlannerProvider } from "../contexts/PlannerProvider";
 import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
+import BetaWarning from "./beta/BetaWarning";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <PlannersProvider>
         <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
           <Navbar />
+          <BetaWarning />
           <div className="pt-4 mb-auto">
             <div className="flex justify-left px-7">
               <PlannerTabs />

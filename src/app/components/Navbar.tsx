@@ -1,6 +1,9 @@
 import Image from "next/image";
 import LoginButton from "./LoginButton";
 import { useSession } from "next-auth/react";
+import { Button, IconButton } from "@mui/joy";
+import { OpenInNew, GitHub } from "@mui/icons-material";
+import BetaChip from "./beta/BetaChip";
 
 export default function Navbar() {
   const { status } = useSession();
@@ -21,9 +24,27 @@ export default function Navbar() {
               UCSC Course Planner
             </a>
           </div>
-          {/* Logo and title end */}
 
-          <div className="flex flex-1 justify-end">
+          <div className="flex flex-1 justify-end place-items-center gap-4">
+            <IconButton
+              component="a"
+              target="_blank"
+              href="https://github.com/fercevik729/UCSC-Course-Planner"
+              sx={{
+                color: "white",
+              }}
+            >
+              <GitHub />
+            </IconButton>
+            <BetaChip />
+            <Button
+              component="a"
+              target="_blank"
+              href="https://forms.gle/g6jsmGj2r2SCipwC6"
+              endDecorator={<OpenInNew />}
+            >
+              Feedback
+            </Button>
             <LoginButton />
           </div>
         </div>
