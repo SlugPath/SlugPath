@@ -48,41 +48,44 @@ export class CourseService {
    * @returns a list of `Course`
    */
   public async coursesBy(pred: QueryInput): Promise<Course[]> {
-    const deptCodeQuery = () => {
-      return pred.departmentCode?.length != 0
-        ? {
-            departmentCode: {
-              contains: pred.departmentCode,
-            },
-          }
-        : {};
+    const departmentCodeParam = () => {
+      if (pred.departmentCode?.length != 0) {
+        return {
+          departmentCode: {
+            contains: pred.departmentCode,
+          },
+        };
+      }
+      return {};
     };
 
-    const numberQuery = () => {
-      return pred.number
-        ? {
-            number: {
-              contains: pred.number,
-            },
-          }
-        : {};
+    const numberParam = () => {
+      if (pred.number) {
+        return {
+          number: {
+            contains: pred.number,
+          },
+        };
+      }
+      return {};
     };
 
-    const geQuery = () => {
-      return pred.ge
-        ? {
-            ge: {
-              has: pred.ge,
-            },
-          }
-        : {};
+    const geParam = () => {
+      if (pred.ge) {
+        return {
+          ge: {
+            has: pred.ge,
+          },
+        };
+      }
+      return {};
     };
 
     const res = await prisma.course.findMany({
       where: {
-        departmentCode: deptCodeQuery().departmentCode,
-        number: numberQuery().number,
-        ge: geQuery().ge,
+        departmentCode: departmentCodeParam().departmentCode,
+        number: numberParam().number,
+        ge: geParam().ge,
       },
     });
 
