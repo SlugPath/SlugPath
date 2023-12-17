@@ -5,8 +5,7 @@ import SearchInputs from "./SearchInputs";
 import SearchResults from "./SearchResults";
 
 /**
- * Component for searching for courses to add. `coursesAlreadyAdded` is a list of courses that have
- * already been added to the planner
+ * Component for searching for courses to add.
  */
 export default function Search() {
   const [courses, setCourses] = useState<any>([]);
