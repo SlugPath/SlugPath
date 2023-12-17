@@ -3,6 +3,7 @@ import LoginButton from "./LoginButton";
 import { useSession } from "next-auth/react";
 import { Button, IconButton } from "@mui/joy";
 import { OpenInNew, GitHub } from "@mui/icons-material";
+import BetaChip from "./beta/BetaChip";
 
 export default function Navbar() {
   const { status } = useSession();
@@ -35,7 +36,7 @@ export default function Navbar() {
             >
               <GitHub />
             </IconButton>
-            <Button color="danger">Open Beta</Button>
+            <BetaChip />
             <Button
               component="a"
               target="_blank"

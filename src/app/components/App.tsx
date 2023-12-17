@@ -10,7 +10,7 @@ import {
 } from "../contexts/PlannersProvider";
 import { PlannerProvider } from "../contexts/PlannerProvider";
 import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
-import BetaWarning from "./BetaWarning";
+import BetaWarning from "./beta/BetaWarning";
 
 export default function App() {
   return (
