@@ -6,9 +6,11 @@ import { Card, Skeleton } from "@mui/joy";
 export default function MiniPlanner({
   plannerId,
   active,
+  addCardContainer,
 }: {
   plannerId: string;
   active?: boolean;
+  addCardContainer?: boolean;
 }) {
   const skipLoad = plannerId === EMPTY_PLANNER;
   const [courseState, , { loading }] = useLoadPlanner({
@@ -24,9 +26,13 @@ export default function MiniPlanner({
 
   return (
     <Skeleton loading={loading} variant="rectangular">
-      <Card variant="soft">
+      {addCardContainer ? (
+        <Card variant="soft">
+          <MiniQuarters courseState={courseState} />
+        </Card>
+      ) : (
         <MiniQuarters courseState={courseState} />
-      </Card>
+      )}
     </Skeleton>
   );
 }

@@ -200,7 +200,7 @@ export default function Search() {
                 {hasResults(data) ? (
                   <div>
                     <div className="mb-1">{getResultsString(data)}</div>
-                    <div className="overflow-y-auto h-[62vh]">
+                    <div className="h-[48vh]">
                       <AutoSizer>
                         {({ height, width }) => (
                           <List

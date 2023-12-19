@@ -27,9 +27,11 @@ import ReportIcon from "@mui/icons-material/Report";
 export default function MajorSelection({
   saveButtonName,
   handleSave,
+  addPlannerCardContainer,
 }: {
   handleSave: any;
   saveButtonName: string;
+  addPlannerCardContainer?: boolean;
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
@@ -147,29 +149,32 @@ export default function MajorSelection({
   }
 
   return (
-    <div className="space-y-4">
+    // set maximum width
+    <div className="space-y-4 max-w-[1200px]">
       <div>
-        {showSelectionError && (
-          <Alert color="danger" startDecorator={<ReportIcon />}>
-            You must select a major and catalog year, and be logged into your
-            UCSC email to save your major.
-          </Alert>
-        )}
-      </div>
-      <div className="grid grid-cols-4 gap-2">
-        <div className="col-span-2">
-          <SelectCatalogYear
-            catalogYear={catalogYear}
-            years={years}
-            onChange={handleChangeCatalogYear}
-          />
+        <div>
+          {showSelectionError && (
+            <Alert color="danger" startDecorator={<ReportIcon />}>
+              You must select a major and catalog year, and be logged into your
+              UCSC email to save your major.
+            </Alert>
+          )}
         </div>
-        <div className="col-span-2">
-          <SelectMajorName
-            major={major}
-            majors={majors}
-            onChange={handleChangeMajor}
-          />
+        <div className="grid grid-cols-4 gap-2">
+          <div className="col-span-2">
+            <SelectCatalogYear
+              catalogYear={catalogYear}
+              years={years}
+              onChange={handleChangeCatalogYear}
+            />
+          </div>
+          <div className="col-span-2">
+            <SelectMajorName
+              major={major}
+              majors={majors}
+              onChange={handleChangeMajor}
+            />
+          </div>
         </div>
       </div>
       <div>
@@ -178,6 +183,7 @@ export default function MajorSelection({
           onChange={handleChangeDefaultPlanner}
           majorDefaultPlanners={majorDefaultPlanners}
           loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+          addPlannerCardContainer={addPlannerCardContainer}
         />
       </div>
       <div className="flex justify-end w-full">
@@ -254,11 +260,13 @@ function SelectDefaultPlanner({
   onChange,
   majorDefaultPlanners,
   loadingMajorDefaultPlanners,
+  addPlannerCardContainer,
 }: {
   selectedDefaultPlanner: string;
   onChange: any;
   majorDefaultPlanners: any;
   loadingMajorDefaultPlanners: boolean;
+  addPlannerCardContainer?: boolean;
 }) {
   const defaultPlanners: { id: string; title: string }[] =
     majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
@@ -288,7 +296,11 @@ function SelectDefaultPlanner({
           </TabList>
         </Tabs>
         {loadingMajorDefaultPlanners ? (
-          <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
+          <MiniPlanner
+            addCardContainer={addPlannerCardContainer}
+            plannerId={EMPTY_PLANNER}
+            active={true}
+          />
         ) : (
           <>
             <List>
@@ -300,7 +312,11 @@ function SelectDefaultPlanner({
                     sx={{ display: plannerIsSelected ? "block" : "none" }}
                     key={index}
                   >
-                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
+                    <MiniPlanner
+                      addCardContainer={addPlannerCardContainer}
+                      plannerId={id}
+                      active={plannerIsSelected}
+                    />
                   </ListItem>
                 );
               })}

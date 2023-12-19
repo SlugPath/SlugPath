@@ -48,10 +48,10 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <div className="flex-initial pr-2">
                 <Search />
               </div>
-              <div className="overflow-auto w-full h-[85vh]">
+              <div className="overflow-auto w-full flex-grow">
                 <AccordionGroup>
                   <CssVarsProvider defaultMode="system">
-                    <div className="space-y-2">
+                    <div className="space-y-2 h-[75vh] overflow-auto">
                       <Years courseState={courseState} />
                       <Accordion
                         variant="soft"

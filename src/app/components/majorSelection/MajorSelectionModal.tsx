@@ -33,10 +33,13 @@ export default function MajorSelectionModal() {
         >
           Edit Major
         </Typography>
-        <MajorSelection
-          saveButtonName="Save"
-          handleSave={() => setShowMajorSelectionModal(false)}
-        />
+        <div className="flex overflow-auto h-[80vh]">
+          <MajorSelection
+            saveButtonName="Save"
+            handleSave={() => setShowMajorSelectionModal(false)}
+            addPlannerCardContainer={true}
+          />
+        </div>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
