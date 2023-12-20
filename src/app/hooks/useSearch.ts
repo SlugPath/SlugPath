@@ -4,6 +4,25 @@ import useDebounce from "./useDebounce";
 import { GET_COURSES, GET_DEPARTMENTS } from "@/graphql/queries";
 
 const initialData = { coursesBy: [] };
+const geOptions = [
+  { label: "--", value: null },
+  { label: "C", value: "c" },
+  { label: "CC", value: "cc" },
+  { label: "ER", value: "er" },
+  { label: "IM", value: "im" },
+  { label: "MF", value: "mf" },
+  { label: "SI", value: "si" },
+  { label: "SR", value: "sr" },
+  { label: "TA", value: "ta" },
+  /* Include options for PE subcategories */
+  { label: "PE-T", value: "peT" },
+  { label: "PE-H", value: "peH" },
+  { label: "PE-E", value: "peE" },
+  /* Include options for PR subcategories */
+  { label: "PR-C", value: "prC" },
+  { label: "PR-E", value: "prE" },
+  { label: "PR-S", value: "prS" },
+];
 
 export default function useSearch() {
   const [data, setData] = useState<any>(initialData);
@@ -27,7 +46,7 @@ export default function useSearch() {
   const [queryRef] = useBackgroundQuery(GET_COURSES, {
     variables: {
       departmentCode: queryDetails.departmentCode,
-      number: nullIfNumberEmpty(queryDetails.number),
+      number: nullIfEmpty(queryDetails.number),
     },
   });
   const { data: useReadQueryData } = useReadQuery(queryRef);
@@ -36,32 +55,12 @@ export default function useSearch() {
     {
       variables: {
         departmentCode: queryDetails.departmentCode,
-        number: nullIfNumberEmpty(queryDetails.number),
+        number: nullIfEmpty(queryDetails.number),
         ge: nullIfEmpty(queryDetails.ge),
       },
     },
   );
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
-
-  const geOptions = [
-    { label: "--", value: null },
-    { label: "C", value: "c" },
-    { label: "CC", value: "cc" },
-    { label: "ER", value: "er" },
-    { label: "IM", value: "im" },
-    { label: "MF", value: "mf" },
-    { label: "SI", value: "si" },
-    { label: "SR", value: "sr" },
-    { label: "TA", value: "ta" },
-    /* Include options for PE subcategories */
-    { label: "PE-T", value: "peT" },
-    { label: "PE-H", value: "peH" },
-    { label: "PE-E", value: "peE" },
-    /* Include options for PR subcategories */
-    { label: "PR-C", value: "prC" },
-    { label: "PR-E", value: "prE" },
-    { label: "PR-S", value: "prS" },
-  ];
 
   useEffect(() => {
     if (!departmentsData || !departmentsData.departments) return;
@@ -113,27 +112,61 @@ export default function useSearch() {
     setGE(newValue === "" ? null : newValue);
   };
 
+  /**
+   * try to parse department code and course number from the courseNumber string
+   */
+  function parseCourseNumber(
+    courseNumber: string,
+  ): [string | null, string | null] {
+    const pattern = /([a-z]+)?\s*(\d+[a-z]*)?/i;
+    const match = courseNumber.match(pattern);
+
+    if (match) {
+      const departmentCode = match[1] || null;
+      const courseNumber = match[2] || null;
+      return [departmentCode, courseNumber];
+    } else {
+      return [null, null];
+    }
+  }
+
+  function getDepartmentCodeAndCourseNumber(
+    courseNumber: string,
+    departmentCode: string,
+  ): [string, string] {
+    const [parsedDepartmentCode, parsedCourseNumber] =
+      parseCourseNumber(courseNumber);
+
+    return [
+      parsedDepartmentCode
+        ? parsedDepartmentCode.toUpperCase()
+        : departmentCode,
+      parsedCourseNumber ? parsedCourseNumber.toUpperCase() : "",
+    ];
+  }
+
+  function searchInputIsValid(searchInput: string): boolean {
+    return searchInput === "" || /([a-z]+)?\s*(\d+[a-z]*)?/i.test(searchInput);
+  }
+
   const handleSearch = (
     departmentCode: string,
-    numberInput: string,
+    textInput: string,
     geInput: string,
   ) => {
-    if (numberInput !== "" && !/^\d{1,3}[a-zA-Z]?$/.test(numberInput)) {
-      setError(true);
-      return;
+    const inputIsValid = searchInputIsValid(textInput);
+    setError(!inputIsValid);
+
+    if (inputIsValid) {
+      const [departmentCodeParsed, numberParsed] =
+        getDepartmentCodeAndCourseNumber(textInput, departmentCode);
+      setQueryDetails({
+        departmentCode: departmentCodeParsed,
+        number: numberParsed,
+        ge: geInput,
+      });
     }
-    setError(false);
-
-    setQueryDetails({
-      departmentCode,
-      number: numberInput.toUpperCase(),
-      ge: geInput,
-    });
   };
-
-  function nullIfNumberEmpty(number: string): string | null {
-    return number.length > 0 ? number : null;
-  }
 
   function nullIfEmpty(input: string): string | null {
     return input.length > 0 ? input : null;

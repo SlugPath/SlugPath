@@ -14,6 +14,7 @@ import UnauthenticatedWarning from "./UnauthenticatedWarning";
 import { useSession } from "next-auth/react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useRouter } from "next/navigation";
+import BetaWarning from "./beta/BetaWarning";
 
 export default function App() {
   return (
@@ -21,7 +22,8 @@ export default function App() {
       <PlannersProvider>
         <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
           <Navbar />
-          <div className="pt-4">
+          <BetaWarning />
+          <div className="pt-4 mb-auto">
             <div className="flex justify-left px-7">
               <PlannerTabs />
             </div>

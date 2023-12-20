@@ -237,25 +237,31 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
   };
 }
 
-export function getUniqueCoursesForGrad(planner: PlannerData): any[] {
-  const unique = new Map();
+/**
+ * @param courses is a list of courses
+ * @returns courses with duplicates removed
+ */
+export function getUniqueCourses(courses: StoredCourse[]): StoredCourse[] {
+  const uniqueCourses = new Map();
 
-  for (const { departmentCode, number, title, credits } of planner.courses) {
+  for (const { departmentCode, number, title, credits } of courses) {
     const key = `${departmentCode}|${number}|${title}|${credits}`;
-    if (!unique.has(key)) unique.set(key, { credits });
+    if (!uniqueCourses.has(key)) {
+      uniqueCourses.set(key, { credits });
+    }
   }
-  return Array.from(unique.values());
+  return Array.from(uniqueCourses.values());
 }
 
 /**
- * Computes the total credits of a student planner
- * @param planner a course planner object
- * @returns total number of credits
+ * Computes the total credits for courses
+ * @param courses is a list of courses
+ * @returns total number of credits not including repeated courses
  */
-export function getTotalCredits(planner: PlannerData): number {
-  const uniqueCourses = getUniqueCoursesForGrad(planner);
-  return uniqueCourses.reduce((acc, c) => {
-    return acc + c.credits;
+export function getTotalCredits(courses: StoredCourse[]): number {
+  const uniqueCourses = getUniqueCourses(courses);
+  return uniqueCourses.reduce((accumulatedCredits, course) => {
+    return accumulatedCredits + course.credits;
   }, 0);
 }
 

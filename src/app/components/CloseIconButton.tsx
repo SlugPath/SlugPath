@@ -6,6 +6,7 @@ export default function CloseIconButton({
   sx,
 }: {
   onClick: () => void;
+  isLight?: boolean;
   sx?: any;
 }) {
   return (
@@ -23,7 +24,6 @@ export default function CloseIconButton({
     >
       <CloseIcon
         fontSize="small"
-        className="text-black"
         sx={{
           "&:hover": {
             opacity: 0.2,

@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ScreenSizeWarning from "./components/ScreenSizeWarning";
-import { NextAuthProvider } from "./Providers";
+import NextAuthProvider from "./contexts/NextAuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -101,6 +101,9 @@ export class MajorService {
         id: true,
         title: true,
       },
+      orderBy: {
+        order: "asc",
+      },
     });
   }
 }

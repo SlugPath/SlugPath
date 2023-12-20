@@ -1,7 +1,8 @@
-import { Card } from "@mui/joy";
+import { Card, Chip } from "@mui/joy";
 import DraggableCourseCard from "./DraggableCourseCard";
 import { StoredCourse } from "../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
+import { getTotalCredits } from "@/lib/plannerUtils";
 
 export default function QuarterCard({
   title,
@@ -12,9 +13,16 @@ export default function QuarterCard({
   id: string;
   courses: StoredCourse[];
 }) {
+  const totalCredits = getTotalCredits(courses);
+
   return (
-    <Card size="md" className="min-w-[130px] w-full" variant="outlined">
-      {title}
+    <Card size="md" className="min-w-[130px] w-full" variant="plain">
+      <div className="flex justify-between items-center">
+        {title}
+        <Chip component="span" size="sm">
+          {totalCredits} Credits
+        </Chip>
+      </div>
       <Droppable droppableId={id}>
         {(provided) => {
           return (

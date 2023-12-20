@@ -7,9 +7,9 @@ import {
   Input,
 } from "@mui/joy";
 import { Add, InfoOutlined } from "@mui/icons-material";
-import DraggableCourseCard from "./DraggableCourseCard";
+import DraggableCourseCard from "../DraggableCourseCard";
 import { Droppable } from "@hello-pangea/dnd";
-import { PlannerContext } from "../contexts/PlannerProvider";
+import { PlannerContext } from "../../contexts/PlannerProvider";
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 
@@ -57,6 +57,7 @@ export default function CustomCourseSelection() {
             <Input
               placeholder="Custom Course"
               value={courseTitle}
+              variant="soft"
               sx={{
                 "--Input-focusedInset": "var(--any, )",
                 "--Input-focusedThickness": "0.25rem",
@@ -92,28 +93,30 @@ export default function CustomCourseSelection() {
         )}
       </FormControl>
 
-      <Droppable droppableId="custom-droppable">
-        {(provided) => {
-          return (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={{ height: "100%" }}
-            >
-              {customCourses.map((course, index) => (
-                <DraggableCourseCard
-                  key={index}
-                  course={course}
-                  index={index}
-                  draggableId={createCourseDraggableId(course, "custom")}
-                  isCustom
-                />
-              ))}
-              {provided.placeholder}
-            </div>
-          );
-        }}
-      </Droppable>
+      {customCourses.length > 0 && (
+        <Droppable droppableId="custom-droppable">
+          {(provided) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={{ height: "100%" }}
+              >
+                {customCourses.map((course, index) => (
+                  <DraggableCourseCard
+                    key={index}
+                    course={course}
+                    index={index}
+                    draggableId={createCourseDraggableId(course, "custom")}
+                    isCustom
+                  />
+                ))}
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
+      )}
     </Card>
   );
 }

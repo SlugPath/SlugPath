@@ -8,6 +8,8 @@ import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
+import BetaWarning from "./components/beta/BetaWarning";
+import BetaChip from "./components/beta/BetaChip";
 import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
 
 export default function Page() {
@@ -32,7 +34,8 @@ export default function Page() {
             />
             <div>Welcome to the UCSC Course Planner!</div>
           </div>
-          <div className="col-span-1 self-center justify-self-end">
+          <div className="flex flex-1 justify-self-end">
+            <BetaChip />
             <LoginButton />
           </div>
         </div>
@@ -42,6 +45,7 @@ export default function Page() {
             <UnauthenticatedWarning />
           </div>
         ) : null}
+        <BetaWarning />
         <div className="grid place-items-center my-3 justify-center h-auto w-[66vw] mx-auto overflow-auto">
           <ApolloProvider client={apolloClient}>
             <DefaultPlannerProvider>
