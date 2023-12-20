@@ -1,7 +1,7 @@
 import QuarterCard from "./QuarterCard";
 import { quartersPerYear } from "../../lib/plannerUtils";
 import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
-import Search from "./Search";
+import Search from "./search/Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import SaveSnackbars from "./SaveSnackbars";
 import { Card, CssVarsProvider } from "@mui/joy";
