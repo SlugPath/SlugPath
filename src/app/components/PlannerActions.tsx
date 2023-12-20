@@ -7,7 +7,7 @@ export default function PlannerActions() {
   return (
     <div className="flex flex-col gap-1">
       <Button onClick={() => setShowExportModal(true)} variant="plain">
-        Export Planner to PDF
+        Export Plan
       </Button>
       <Button onClick={() => setShowMajorSelectionModal(true)} variant="plain">
         Edit Major
