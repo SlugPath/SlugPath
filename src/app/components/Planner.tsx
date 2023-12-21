@@ -22,6 +22,8 @@ import {
 import { Quarter } from "../types/Quarter";
 import MajorSelectionModal from "./majorSelection/MajorSelectionModal";
 import NotesEditor from "./NotesEditor";
+import AutoFillSnackbar from "./AutoFillSnackbar";
+import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -33,6 +35,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     saveError,
     updateNotes,
   } = useContext(PlannerContext);
+  const { hasAutoFilled, setHasAutoFilled } = useContext(DefaultPlannerContext);
 
   if (!isActive) {
     return <></>;
@@ -40,6 +43,10 @@ export default function Planner({ isActive }: { isActive: boolean }) {
 
   return (
     <>
+      <AutoFillSnackbar
+        openAutoFillSnackbar={hasAutoFilled}
+        setOpenAutoFillSnackbar={setHasAutoFilled}
+      />
       <SaveSnackbars saving={saveStatus} saveError={saveError} />
       <div>
         <DragDropContext onDragEnd={handleDragEnd}>

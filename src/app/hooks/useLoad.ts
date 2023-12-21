@@ -1,6 +1,10 @@
 import { ApolloError, useLazyQuery } from "@apollo/client";
 import { useContext, useEffect, useState } from "react";
-import { deserializePlanner, initialPlanner } from "@/lib/plannerUtils";
+import {
+  deserializePlanner,
+  getTotalCredits,
+  initialPlanner,
+} from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
@@ -139,6 +143,7 @@ export const useLoadPlanner = ({
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
+  const { setHasAutoFilled } = useContext(DefaultPlannerContext);
   const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
@@ -163,6 +168,9 @@ export const useLoadPlanner = ({
       ...defaultPlanner,
       labels: initialLabels(),
     });
+    if (getTotalCredits(defaultPlanner.courses) > 0) {
+      setHasAutoFilled(true);
+    }
   }
 
   useEffect(() => {

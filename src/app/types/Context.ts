@@ -65,4 +65,6 @@ export interface LabelsContextProps {
 
 export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
+  hasAutoFilled: boolean;
+  setHasAutoFilled: any;
 }

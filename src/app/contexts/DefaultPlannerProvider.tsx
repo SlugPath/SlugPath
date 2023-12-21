@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { DefaultPlannerContextProps } from "../types/Context";
 import { useSession } from "next-auth/react";
 import { useLoadDefaultPlanner } from "../hooks/useLoad";
@@ -14,11 +14,14 @@ export function DefaultPlannerProvider({
 }) {
   const { data: session } = useSession();
   const [defaultPlanner] = useLoadDefaultPlanner(session?.user.id);
+  const [hasAutoFilled, setHasAutoFilled] = useState(false);
 
   return (
     <DefaultPlannerContext.Provider
       value={{
         defaultPlanner,
+        hasAutoFilled,
+        setHasAutoFilled,
       }}
     >
       {children}
