@@ -1,5 +1,5 @@
 import { getTitle, isCustomCourse } from "@/lib/plannerUtils";
-import { Modal, ModalClose, Sheet, Skeleton } from "@mui/joy";
+import { Chip, Modal, ModalClose, Sheet, Skeleton, Tooltip } from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { ChangeEvent, useContext, useState } from "react";
@@ -110,17 +110,31 @@ export default function CourseInfoModal() {
             onUpdateLabels={handleUpdateLabels}
           />
         )}
-        <CourseTitle
-          course={course}
-          title={title(data)}
-          term={term}
-          editing={editing}
-          setEditing={setEditing}
-          customTitle={customTitle}
-          handleTitleChange={handleTitleChange}
-          handleEndEditing={handleEndEditing}
-          loading={loading}
-        />
+        <div className="flex flex-column justify-between items-center">
+          <Skeleton loading={loading} variant="text" width="50%">
+            <CourseTitle
+              course={course}
+              title={title(data)}
+              term={term}
+              editing={editing}
+              setEditing={setEditing}
+              customTitle={customTitle}
+              handleTitleChange={handleTitleChange}
+              handleEndEditing={handleEndEditing}
+            />
+          </Skeleton>
+          {isCustomCourse(course) ? (
+            <Tooltip title="We recommend replacing this custom course with a real course.">
+              <Chip color="warning" size="lg" className="mr-2">
+                Custom Course
+              </Chip>
+            </Tooltip>
+          ) : (
+            <Chip color="primary" size="lg" className="mr-2">
+              Official Course
+            </Chip>
+          )}
+        </div>
         <Skeleton loading={loading} variant="text" width="50%">
           <CourseDetails
             course={course}

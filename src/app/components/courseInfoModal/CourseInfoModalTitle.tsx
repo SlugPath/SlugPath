@@ -1,5 +1,5 @@
 import { isCustomCourse } from "@/lib/plannerUtils";
-import { Grid, Skeleton, Typography } from "@mui/joy";
+import { Grid, Typography } from "@mui/joy";
 import { ChangeEvent, useEffect } from "react";
 import { Edit } from "@mui/icons-material";
 import { StoredCourse } from "../../types/Course";
@@ -13,7 +13,6 @@ export default function CourseTitle({
   customTitle,
   handleTitleChange,
   handleEndEditing,
-  loading,
   term,
 }: {
   course: StoredCourse;
@@ -23,7 +22,6 @@ export default function CourseTitle({
   customTitle: string;
   handleTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleEndEditing: () => void;
-  loading: boolean;
   term?: string;
 }) {
   // If the course is a custom course, set the title to the custom title
@@ -44,43 +42,41 @@ export default function CourseTitle({
       fontWeight="lg"
       mb={1}
     >
-      <Skeleton loading={loading} variant="text" width="50%">
-        <Grid container alignItems="center" spacing="1">
-          <Grid>
-            {editing ? (
-              <Input
-                variant="soft"
-                autoFocus
-                value={customTitle}
-                size="lg"
-                placeholder={course.title}
-                onChange={handleTitleChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleEndEditing();
-                }}
-                onBlur={handleEndEditing}
-              />
-            ) : (
-              title
-            )}
-          </Grid>
-          <Grid>
-            {isCustomCourse(course) && term !== undefined && (
-              <IconButton
-                onClick={() => {
-                  if (editing) {
-                    handleEndEditing();
-                  } else {
-                    setEditing(true);
-                  }
-                }}
-              >
-                <Edit />
-              </IconButton>
-            )}
-          </Grid>
+      <Grid container alignItems="center" spacing="1">
+        <Grid>
+          {editing ? (
+            <Input
+              variant="soft"
+              autoFocus
+              value={customTitle}
+              size="lg"
+              placeholder={course.title}
+              onChange={handleTitleChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleEndEditing();
+              }}
+              onBlur={handleEndEditing}
+            />
+          ) : (
+            title
+          )}
         </Grid>
-      </Skeleton>
+        <Grid>
+          {isCustomCourse(course) && term !== undefined && (
+            <IconButton
+              onClick={() => {
+                if (editing) {
+                  handleEndEditing();
+                } else {
+                  setEditing(true);
+                }
+              }}
+            >
+              <Edit />
+            </IconButton>
+          )}
+        </Grid>
+      </Grid>
     </Typography>
   );
 }
