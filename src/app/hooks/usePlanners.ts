@@ -13,9 +13,21 @@ const DELETE_PLANNER = gql`
 export function usePlanners(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners, { loading }] = useLoadAllPlanners(userId);
-
+  const [planners, setPlanners, { loading }] = useLoadAllPlanners(
+    userId,
+    handleLoadedPlanners,
+  );
   const [mutation] = useMutation(DELETE_PLANNER);
+
+  /**
+   * @param numPlanners number of planners loaded.
+   * If no planners are loaded, add a planner
+   */
+  function handleLoadedPlanners(numPlanners: number) {
+    if (numPlanners === 0) {
+      addPlanner();
+    }
+  }
 
   /**
    * `switchPlanner` switches between planners
@@ -61,14 +73,14 @@ export function usePlanners(userId: string | undefined) {
    * `addPlanner` creates a new planner with a default, editable name.
    * It returns early if the user has too many planners already
    */
-  const addPlanner = () => {
+  function addPlanner() {
     const [id, title] = [uuidv4(), `New Planner`];
     setPlanners({
       ...planners,
       [id]: [title, false],
     });
     switchPlanners(id, title);
-  };
+  }
 
   /**
    * `removePlanner` removes a planner from the planner container

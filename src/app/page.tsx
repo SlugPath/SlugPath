@@ -3,18 +3,22 @@ import Image from "next/image";
 import MajorSelection from "./components/majorSelection/MajorSelection";
 import LoginButton from "./components/LoginButton";
 import { useSession } from "next-auth/react";
-import { WarningAmberRounded } from "@mui/icons-material";
-import { CssVarsProvider, Typography } from "@mui/joy";
+import { CssVarsProvider } from "@mui/joy";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
 import BetaWarning from "./components/beta/BetaWarning";
 import BetaChip from "./components/beta/BetaChip";
+import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
 
 export default function Page() {
   const { status } = useSession();
   const router = useRouter();
+
+  function redirectToPlanner() {
+    router.push("/planner");
+  }
 
   return (
     <CssVarsProvider defaultMode="system">
@@ -38,17 +42,7 @@ export default function Page() {
 
         {status !== "authenticated" ? (
           <div className="space-y-2 grid place-items-center">
-            <Typography
-              variant="soft"
-              color="warning"
-              component="p"
-              startDecorator={<WarningAmberRounded color="warning" />}
-              justifyContent="center"
-              className="py-2 px-6 rounded-b-2xl"
-            >
-              We recommend logging in with your UCSC email for a better
-              experience.
-            </Typography>
+            <UnauthenticatedWarning />
           </div>
         ) : null}
         <BetaWarning />
@@ -57,7 +51,9 @@ export default function Page() {
             <DefaultPlannerProvider>
               <MajorSelection
                 saveButtonName="Next"
-                handleSave={() => router.push("/planner")}
+                handleSave={redirectToPlanner}
+                handleUserMajorAlreadyExists={redirectToPlanner}
+                handleSkip={redirectToPlanner}
               />
             </DefaultPlannerProvider>
           </ApolloProvider>
