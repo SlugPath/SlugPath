@@ -10,6 +10,7 @@ import {
 import Info from "@mui/icons-material/Info";
 import MiniPlanner from "./miniPlanner/MiniPlanner";
 import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import { SyntheticEvent } from "react";
 
 export default function SelectDefaultPlanner({
   selectedDefaultPlanner,
@@ -18,7 +19,10 @@ export default function SelectDefaultPlanner({
   loadingMajorDefaultPlanners,
 }: {
   selectedDefaultPlanner: string;
-  onChange: any;
+  onChange: (
+    event: SyntheticEvent<Element, Event> | null,
+    value: string | number | null,
+  ) => void;
   majorDefaultPlanners: any;
   loadingMajorDefaultPlanners: boolean;
 }) {

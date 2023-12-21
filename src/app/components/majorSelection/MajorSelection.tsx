@@ -18,10 +18,10 @@ export default function MajorSelection({
   handleUserMajorAlreadyExists,
   handleSkip,
 }: {
-  handleSave: any;
+  handleSave: () => void;
   saveButtonName: string;
-  handleUserMajorAlreadyExists?: any;
-  handleSkip?: any;
+  handleUserMajorAlreadyExists?: () => void;
+  handleSkip?: () => void;
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
@@ -42,11 +42,6 @@ export default function MajorSelection({
   } = useMajorSelection(session?.user.id, handleSaveCompleted);
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
-  const majorSelectionIsValidCallback = useCallback(majorSelectionIsValid, [
-    major,
-    catalogYear,
-    session,
-  ]);
 
   useEffect(() => {
     getAllMajors({
@@ -60,6 +55,14 @@ export default function MajorSelection({
   }, [catalogYear, getAllMajors]);
 
   useEffect(() => {
+    function majorDataAlreadyChosen() {
+      return (
+        userMajorData !== null &&
+        userMajorData.name.length > 0 &&
+        userMajorData.catalogYear.length > 0
+      );
+    }
+
     if (userMajorData) {
       updateMajorUseState(
         userMajorData.name,
@@ -67,15 +70,11 @@ export default function MajorSelection({
         userMajorData.defaultPlannerId,
       );
 
-      if (majorSelectionIsValidCallback()) {
+      if (majorDataAlreadyChosen() && handleUserMajorAlreadyExists) {
         handleUserMajorAlreadyExists();
       }
     }
-  }, [
-    handleUserMajorAlreadyExists,
-    majorSelectionIsValidCallback,
-    userMajorData,
-  ]);
+  }, [handleUserMajorAlreadyExists, userMajorData]);
 
   useEffect(() => {
     /**
@@ -108,18 +107,18 @@ export default function MajorSelection({
 
   function handleChangeCatalogYear(
     event: React.SyntheticEvent | null,
-    newValue: string | null,
+    newCatalogYear: string | null,
   ) {
-    if (newValue != null) {
-      setCatalogYear(newValue);
+    if (typeof newCatalogYear === "string") {
+      setCatalogYear(newCatalogYear);
     }
   }
 
   function handleChangeDefaultPlanner(
     event: React.SyntheticEvent | null,
-    plannerId: string | null,
+    plannerId: string | number | null,
   ) {
-    if (plannerId != null) {
+    if (typeof plannerId === "string") {
       setSelectedDefaultPlanner(plannerId);
     }
   }

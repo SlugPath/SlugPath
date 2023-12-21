@@ -1,4 +1,5 @@
 import { Typography, Select, Option } from "@mui/joy";
+import { SyntheticEvent } from "react";
 
 export default function SelectMajorName({
   major,
@@ -7,7 +8,10 @@ export default function SelectMajorName({
 }: {
   major: string;
   majors: string[];
-  onChange: any;
+  onChange: (
+    event: SyntheticEvent<Element, Event> | null,
+    newValue: string | null,
+  ) => void;
 }) {
   return (
     <>
