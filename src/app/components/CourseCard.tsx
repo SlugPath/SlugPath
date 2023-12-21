@@ -140,7 +140,6 @@ const Title = ({
       <Link
         overlay
         underline="none"
-        href="#interactive-card"
         sx={{ color: "text.tertiary" }}
         onClick={() => onShowCourseInfoModal(course)}
       >

@@ -23,6 +23,9 @@ import MiniPlanner from "./miniPlanner/MiniPlanner";
 import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { Alert } from "@mui/joy";
 import ReportIcon from "@mui/icons-material/Report";
+import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
+import { ModalsProvider } from "@/app/contexts/ModalsProvider";
+import { PlannerProvider } from "@/app/contexts/PlannerProvider";
 
 export default function MajorSelection({
   saveButtonName,
@@ -149,8 +152,8 @@ export default function MajorSelection({
   }
 
   return (
-    // set maximum width
     <div className="space-y-4 max-w-[1200px]">
+      <CourseInfoModal />
       <div>
         <div>
           {showSelectionError && (
@@ -178,13 +181,18 @@ export default function MajorSelection({
         </div>
       </div>
       <div>
-        <SelectDefaultPlanner
-          selectedDefaultPlanner={selectedDefaultPlanner}
-          onChange={handleChangeDefaultPlanner}
-          majorDefaultPlanners={majorDefaultPlanners}
-          loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-          addPlannerCardContainer={addPlannerCardContainer}
-        />
+        <PlannerProvider plannerId={""} title={""} order={0}>
+          <ModalsProvider>
+            <SelectDefaultPlanner
+              selectedDefaultPlanner={selectedDefaultPlanner}
+              onChange={handleChangeDefaultPlanner}
+              majorDefaultPlanners={majorDefaultPlanners}
+              loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+              addPlannerCardContainer={addPlannerCardContainer}
+            />
+            <CourseInfoModal />
+          </ModalsProvider>
+        </PlannerProvider>
       </div>
       <div className="flex justify-end w-full">
         <Button
