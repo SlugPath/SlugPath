@@ -3,7 +3,7 @@ import { List, ListItem } from "@mui/joy";
 import Planner from "./Planner";
 import PlannerTabs from "./PlannerTabs";
 import Navbar from "./Navbar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   PlannersContext,
   PlannersProvider,
@@ -11,6 +11,7 @@ import {
 import { PlannerProvider } from "../contexts/PlannerProvider";
 import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
 import BetaWarning from "./beta/BetaWarning";
+import DeletedPlannerSnackbar from "./DeletedPlannerSnackbar";
 
 export default function App() {
   return (
@@ -34,7 +35,17 @@ export default function App() {
 }
 
 function PlannerList() {
-  const { planners } = useContext(PlannersContext);
+  const { planners, deletedPlanner, loadingDeletePlanner } =
+    useContext(PlannersContext);
+  const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
+    useState(false);
+
+  useEffect(() => {
+    if (deletedPlanner) {
+      setOpenDeletedPlannerSnackbar(true);
+    }
+  }, [deletedPlanner, loadingDeletePlanner]);
+
   return (
     <>
       {/* Start helpful tips for user */}
@@ -86,6 +97,10 @@ function PlannerList() {
           </ListItem>
         ))}
       </List>
+      <DeletedPlannerSnackbar
+        open={openDeletedPlannerSnackbar}
+        setOpen={setOpenDeletedPlannerSnackbar}
+      />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { useLoadAllPlanners } from "./useLoad";
 import { gql, useMutation } from "@apollo/client";
+import { useState } from "react";
 
 const DELETE_PLANNER = gql`
   mutation DeletePlanner($userId: String!, $plannerId: String!) {
@@ -14,8 +15,19 @@ export function usePlanners(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
   const [planners, setPlanners, { loading }] = useLoadAllPlanners(userId);
+  const [deletedPlanner, setDeletedPlanner] = useState<boolean>(false);
 
-  const [mutation] = useMutation(DELETE_PLANNER);
+  const [deletePlanner, { loading: loadingDeletePlanner }] = useMutation(
+    DELETE_PLANNER,
+    {
+      onCompleted: () => {
+        setDeletedPlanner(true);
+      },
+      onError: (err) => {
+        console.error(err);
+      },
+    },
+  );
 
   /**
    * `switchPlanner` switches between planners
@@ -78,7 +90,7 @@ export function usePlanners(userId: string | undefined) {
     const newPlanners = { ...planners };
     delete newPlanners[id];
     if (userId !== undefined) {
-      mutation({
+      deletePlanner({
         variables: {
           userId,
           plannerId: id,
@@ -115,5 +127,7 @@ export function usePlanners(userId: string | undefined) {
     removePlanner,
     activePlanner: getActivePlanner(),
     plannersLoading: loading,
+    loadingDeletePlanner,
+    deletedPlanner,
   };
 }
