@@ -85,7 +85,6 @@ export default function CourseSelectionModal() {
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        variant="outlined"
         sx={{
           margin: 10,
           borderRadius: "md",

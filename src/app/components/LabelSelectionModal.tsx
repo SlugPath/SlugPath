@@ -83,7 +83,6 @@ export default function LabelsSelectionModal({
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        variant="outlined"
         sx={{
           width: "30%",
           margin: 10,

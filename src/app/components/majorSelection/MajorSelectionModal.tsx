@@ -14,7 +14,6 @@ export default function MajorSelectionModal() {
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        variant="outlined"
         sx={{
           width: "60%",
           margin: 10,

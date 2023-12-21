@@ -92,7 +92,6 @@ export default function CourseInfoModal() {
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        variant="outlined"
         sx={{
           width: "50%",
           margin: 10,
