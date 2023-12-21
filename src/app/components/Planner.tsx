@@ -12,7 +12,7 @@ import { useContext } from "react";
 import PlannerActions from "./PlannerActions";
 import { ModalsProvider } from "../contexts/ModalsProvider";
 import ExportModal from "./ExportModal";
-import CourseInfoModal from "./CourseInfoModal";
+import CourseInfoModal from "./courseInfoModal/CourseInfoModal";
 import {
   Accordion,
   AccordionDetails,
