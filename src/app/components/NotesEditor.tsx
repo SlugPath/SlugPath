@@ -1,5 +1,5 @@
-import { EditorContent, Editor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { Textarea } from "@mui/joy";
+import { useState } from "react";
 
 export default function NotesEditor({
   content,
@@ -8,27 +8,22 @@ export default function NotesEditor({
   content: string;
   onUpdateNotes: (content: string) => void;
 }) {
-  const editor = new Editor({
-    extensions: [StarterKit],
-    editorProps: {
-      attributes: {
-        // class:
-        //   "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl rounded-md p-2 min-h-[200px]",
-
-        // make edit area lighter
-        class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl rounded-md p-2 min-h-[200px] bg-white dark:bg-gray-800",
-      },
-    },
-    content: content,
-    onBlur({ editor }) {
-      onUpdateNotes(editor.getHTML());
-    },
-  });
+  const [text, setText] = useState(content);
 
   return (
     <>
-      <EditorContent editor={editor} />
+      <Textarea
+        minRows={7}
+        onBlur={() => onUpdateNotes(text)}
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+        }}
+        sx={{
+          outline: "none",
+        }}
+        className="border-0"
+      />
     </>
   );
 }

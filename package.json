@@ -31,8 +31,6 @@
     "@theme-ui/color": "^0.16.1",
     "@tiptap/extension-color": "^2.1.13",
     "@tiptap/pm": "^2.1.13",
-    "@tiptap/react": "^2.1.13",
-    "@tiptap/starter-kit": "^2.1.13",
     "class-validator": "^0.14.0",
     "next": "13.5.4",
     "next-auth": "^4.24.4",
