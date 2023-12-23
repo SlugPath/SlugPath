@@ -1,4 +1,4 @@
-import { ChangeEvent, SetStateAction } from "react";
+import { SetStateAction } from "react";
 import { StoredCourse } from "./Course";
 import { PlannerData } from "./PlannerData";
 import { DropResult } from "@hello-pangea/dnd";
@@ -53,7 +53,7 @@ export interface PlannersContextProps {
   removePlanner: (plannerId: string) => void;
   addPlanner: () => void;
   switchPlanners: (id: string, title: string) => void;
-  changePlannerName: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
+  changePlannerName: (newName: string, id: string) => void;
   activePlanner: { id: string; title: string } | undefined;
   plannersLoading: boolean;
   loadingDeletePlanner: boolean;

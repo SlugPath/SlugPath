@@ -59,13 +59,10 @@ export function usePlanners(userId: string | undefined) {
    * @param event keyboard event
    * @param id unique planner id
    */
-  const changePlannerName = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    id: string,
-  ) => {
+  const changePlannerName = (newName: string, id: string) => {
     setPlanners({
       ...planners,
-      [id]: [event.target.value, planners[id][1]],
+      [id]: [newName, planners[id][1]],
     });
   };
 
