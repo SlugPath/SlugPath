@@ -3,7 +3,6 @@ import { useBackgroundQuery, useQuery, useReadQuery } from "@apollo/client";
 import useDebounce from "./useDebounce";
 import { GET_COURSES, GET_DEPARTMENTS } from "@/graphql/queries";
 
-const initialData = { coursesBy: [] };
 const geOptions = [
   { label: "--", value: null },
   { label: "C", value: "c" },
@@ -25,7 +24,7 @@ const geOptions = [
 ];
 
 export default function useSearch() {
-  const [data, setData] = useState<any>(initialData);
+  const [courses, setCourses] = useState<any>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<
@@ -43,21 +42,19 @@ export default function useSearch() {
   });
 
   // useBackgroundQuery gives the queryRef to use in useReadQuery
+  const variables = {
+    departmentCode: queryDetails.departmentCode,
+    number: nullIfEmpty(queryDetails.number),
+    ge: nullIfEmpty(queryDetails.ge),
+  };
   const [queryRef] = useBackgroundQuery(GET_COURSES, {
-    variables: {
-      departmentCode: queryDetails.departmentCode,
-      number: nullIfEmpty(queryDetails.number),
-    },
+    variables: variables,
   });
-  const { data: useReadQueryData } = useReadQuery(queryRef);
-  const { data: useQueryData, loading: loadingUseQuery } = useQuery(
+  const { data: cacheQueryData } = useReadQuery(queryRef);
+  const { data: useQueryData, loading: loadingMoreResults } = useQuery(
     GET_COURSES,
     {
-      variables: {
-        departmentCode: queryDetails.departmentCode,
-        number: nullIfEmpty(queryDetails.number),
-        ge: nullIfEmpty(queryDetails.ge),
-      },
+      variables: variables,
     },
   );
   const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
@@ -78,15 +75,17 @@ export default function useSearch() {
   }, [departmentsData]);
 
   useEffect(() => {
-    setLoading(loadingUseQuery);
+    setLoading(loadingMoreResults);
     if (useQueryData) {
-      setData(useQueryData);
-    } else if (useReadQueryData) {
-      setData({ coursesBy: useReadQueryData });
+      setCourses(
+        useQueryData && useQueryData.coursesBy ? useQueryData.coursesBy : [],
+      );
+    } else if (cacheQueryData) {
+      setCourses(cacheQueryData ? cacheQueryData : []);
     } else {
       setLoading(true);
     }
-  }, [useReadQueryData, useQueryData, loadingUseQuery]);
+  }, [cacheQueryData, useQueryData, loadingMoreResults]);
 
   useDebounce({
     callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
@@ -174,9 +173,9 @@ export default function useSearch() {
 
   return {
     error,
-    data,
+    courses,
     loading,
-    loadingUseQuery,
+    loadingMoreResults,
     departments,
     departmentCode,
     number,
