@@ -1,7 +1,7 @@
 import { CssVarsProvider, Input, Button } from "@mui/joy";
 import { Add } from "@mui/icons-material";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import PlannerDeleteAlert, { OpenState } from "./PlannerDeleteAlert";
+import { useContext, useState } from "react";
+import ConfirmAlert from "./ConfirmAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 import { PlannersContext } from "../contexts/PlannersProvider";
 import TitleSnackbar from "./TitleSnackbar";
@@ -9,6 +9,17 @@ import CloseIconButton from "./CloseIconButton";
 import { truncateTitle } from "@/lib/utils";
 
 const MAX_PLANNERS = 10;
+
+interface PlannerDeleteAlertData {
+  id: string;
+  title: string;
+  alertOpen: boolean;
+}
+const emptyDeleteAlertData: PlannerDeleteAlertData = {
+  id: "",
+  title: "",
+  alertOpen: false,
+};
 
 export default function PlannerTabs() {
   const {
@@ -26,7 +37,8 @@ export default function PlannerTabs() {
   const [plannerBeingEdited, setPlannerBeingEdited] = useState<string | null>(
     null,
   );
-  const [deleteAlert, setDeleteAlert] = useState<OpenState>(["", ""]);
+  const [deleteAlert, setDeleteAlert] =
+    useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
   const [tooManyAlertIsOpen, setTooManyAlertIsOpen] = useState(false);
 
   /**
@@ -46,8 +58,16 @@ export default function PlannerTabs() {
    * @param id planner id
    */
   const deletePlanner = (id: string) => {
-    setDeleteAlert(["", ""]);
+    setDeleteAlert(emptyDeleteAlertData);
     removePlanner(id);
+  };
+
+  const handleOpenDeleteAlert = (id: string, title: string) => {
+    setDeleteAlert({
+      id,
+      title: "Are you sure you want to delete your planner: " + title + "?",
+      alertOpen: true,
+    });
   };
 
   const handleBlur = (title: string) => {
@@ -77,7 +97,7 @@ export default function PlannerTabs() {
               handleBlur(newTitle);
             }}
             onClick={() => handleTabChange(id)}
-            setDeleteAlert={setDeleteAlert}
+            onOpenDeleteAlert={handleOpenDeleteAlert}
           />
         ))}
         <Button
@@ -90,10 +110,14 @@ export default function PlannerTabs() {
           startDecorator={<Add />}
         />
       </div>
-      <PlannerDeleteAlert
-        open={deleteAlert}
-        onClose={() => setDeleteAlert(["", ""])}
-        onDelete={deletePlanner}
+      <ConfirmAlert
+        open={deleteAlert.alertOpen}
+        onClose={() => setDeleteAlert(emptyDeleteAlertData)}
+        onConfirm={() => {
+          deletePlanner(deleteAlert.id);
+          setDeleteAlert(emptyDeleteAlertData);
+        }}
+        dialogText={deleteAlert.title}
       />
       <TooManyPlannersAlert
         open={tooManyAlertIsOpen}
@@ -111,7 +135,7 @@ function CustomTab({
   setPlannerBeingEdited,
   onEndEditing,
   onClick,
-  setDeleteAlert,
+  onOpenDeleteAlert,
 }: {
   title: string;
   id: string;
@@ -120,7 +144,7 @@ function CustomTab({
   setPlannerBeingEdited: (id: string) => void;
   onEndEditing: (newTitle: string) => void;
   onClick: () => void;
-  setDeleteAlert: Dispatch<SetStateAction<OpenState>>;
+  onOpenDeleteAlert: (id: string, title: string) => void;
 }) {
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
@@ -200,7 +224,7 @@ function CustomTab({
       ) : (
         <span className="truncate">{truncateTitle(text)}</span>
       )}
-      <CloseIconButton onClick={() => setDeleteAlert([id, title])} />
+      <CloseIconButton onClick={() => onOpenDeleteAlert(id, title)} />
     </div>
   );
 }

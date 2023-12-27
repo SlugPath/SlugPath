@@ -17,6 +17,7 @@ import SelectDefaultPlanner from "./SelectDefaultPlanner";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import { useLoadPlanner } from "@/app/hooks/useLoad";
 import { emptyPlanner } from "@/lib/plannerUtils";
+import ConfirmAlert from "../ConfirmAlert";
 
 enum ButtonName {
   Save = "Save",
@@ -46,6 +47,7 @@ export default function MajorSelection({
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
+  const [majorSelectionIsValid, setMajorSelectionIsValid] = useState(false);
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
   );
@@ -69,6 +71,16 @@ export default function MajorSelection({
     defaultPlanner: emptyPlanner(),
   });
   const { setDefaultPlanner } = useContext(DefaultPlannerContext);
+  const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
+
+  useEffect(() => {
+    function isMajorSelectionValid() {
+      const isLoggedIn = session?.user.id !== undefined;
+      return major !== "" && catalogYear !== "" && isLoggedIn;
+    }
+
+    setMajorSelectionIsValid(isMajorSelectionValid());
+  }, [major, catalogYear, selectedDefaultPlanner, session?.user.id]);
 
   useEffect(() => {
     getAllMajors({
@@ -180,38 +192,27 @@ export default function MajorSelection({
     }
   }
 
-  function majorSelectionIsValid() {
-    const isLoggedIn = session?.user.id !== undefined;
-    return major !== "" && catalogYear !== "" && isLoggedIn;
+  function handleSave(buttonName: ButtonName) {
+    setSaveButtonClicked(buttonName);
+    onSaveMajor(major, catalogYear, selectedDefaultPlanner);
+    setSaveButtonDisabled(true);
+    setShowSelectionError(false);
+  }
+
+  function handleConfirmReplaceCurrent() {
+    handleSave(ButtonName.ReplaceCurrent);
   }
 
   function handleClickSave() {
-    ifMajorIsValidCallFunc(() => {
-      setSaveButtonClicked(ButtonName.Save);
-    });
+    handleSave(ButtonName.Save);
   }
 
   function handleClickReplaceCurrent() {
-    ifMajorIsValidCallFunc(() => {
-      setSaveButtonClicked(ButtonName.ReplaceCurrent);
-    });
+    setReplaceAlertOpen(true);
   }
 
   function handleClickCreateNew() {
-    ifMajorIsValidCallFunc(() => {
-      setSaveButtonClicked(ButtonName.CreateNew);
-    });
-  }
-
-  function ifMajorIsValidCallFunc(func: () => void) {
-    if (majorSelectionIsValid()) {
-      func();
-      onSaveMajor(major, catalogYear, selectedDefaultPlanner);
-      setSaveButtonDisabled(true);
-      setShowSelectionError(false);
-    } else {
-      setShowSelectionError(true);
-    }
+    handleSave(ButtonName.CreateNew);
   }
 
   if (loadingMajorData) {
@@ -254,6 +255,12 @@ export default function MajorSelection({
       <SelectionErrorAlert />
       <LoadingMajorDataErrorAlert />
       <SavingMajorDataErrorAlert />
+      <ConfirmAlert
+        open={replaceAlertOpen}
+        onClose={() => setReplaceAlertOpen(false)}
+        onConfirm={handleConfirmReplaceCurrent}
+        dialogText="Are you sure you want to replace your current planner?"
+      />
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-2">
           <SelectCatalogYear
@@ -295,6 +302,7 @@ export default function MajorSelection({
             onClickSave={handleClickSave}
             onClickReplaceCurrent={handleClickReplaceCurrent}
             onClickCreateNew={handleClickCreateNew}
+            majorSelectionIsValid={majorSelectionIsValid}
           />
         )}
       </div>
@@ -309,6 +317,7 @@ function SaveButtons({
   onClickSave,
   onClickReplaceCurrent,
   onClickCreateNew,
+  majorSelectionIsValid,
 }: {
   saveButtonName: string;
   isInPlannerPage?: boolean;
@@ -316,6 +325,7 @@ function SaveButtons({
   onClickSave: () => void;
   onClickReplaceCurrent: () => void;
   onClickCreateNew: () => void;
+  majorSelectionIsValid: boolean;
 }) {
   return (
     <div>
@@ -325,13 +335,24 @@ function SaveButtons({
         </Button>
       )}
       <div>
-        <Button onClick={onClickSave}>{saveButtonName}</Button>
+        <Button disabled={!majorSelectionIsValid} onClick={onClickSave}>
+          {saveButtonName}
+        </Button>
         {isInPlannerPage && (
           <>
-            <Button color="warning" onClick={onClickReplaceCurrent}>
+            <Button
+              disabled={!majorSelectionIsValid}
+              color="warning"
+              onClick={onClickReplaceCurrent}
+            >
               Replace Current
             </Button>
-            <Button onClick={onClickCreateNew}>Create New</Button>
+            <Button
+              disabled={!majorSelectionIsValid}
+              onClick={onClickCreateNew}
+            >
+              Create New
+            </Button>
           </>
         )}
       </div>
