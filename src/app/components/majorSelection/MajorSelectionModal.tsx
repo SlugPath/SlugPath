@@ -43,7 +43,7 @@ export default function MajorSelectionModal() {
         >
           Edit Major
         </Typography>
-        <div className="flex overflow-auto h-[80vh]">
+        <div className="flex overflow-y-scroll h-[80vh]">
           <MajorSelection
             saveButtonName="Save"
             onSaved={() => setShowMajorSelectionModal(false)}
