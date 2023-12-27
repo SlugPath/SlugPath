@@ -54,6 +54,7 @@ export interface PlannersContextProps {
   addPlanner: () => void;
   switchPlanners: (id: string, title: string) => void;
   changePlannerName: (newName: string, id: string) => void;
+  replaceCurrentPlanner: () => void;
   activePlanner: { id: string; title: string } | undefined;
   plannersLoading: boolean;
   loadingDeletePlanner: boolean;
@@ -69,4 +70,5 @@ export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
   hasAutoFilled: boolean;
   setHasAutoFilled: any;
+  setDefaultPlanner: any;
 }

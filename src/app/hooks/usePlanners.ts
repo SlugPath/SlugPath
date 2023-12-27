@@ -92,6 +92,54 @@ export function usePlanners(userId: string | undefined) {
   }
 
   /**
+   * `replaceCurrentPlanner` replaces the current planner with a new planner
+   * if there are any other planners to replace it with. Otherwise, it adds
+   * a new planner. This new planner will later be auto filled by the selected
+   * default planner.
+   */
+  function replaceCurrentPlanner() {
+    const currentPlannerId = Object.keys(planners).find(
+      (plannerId) => planners[plannerId][1],
+    );
+    if (currentPlannerId === undefined) {
+      return;
+    }
+
+    const numPlanners = Object.keys(planners).length;
+    const currentPlannerIndex = Object.keys(planners).findIndex(
+      (plannerId) => plannerId === currentPlannerId,
+    );
+    const title = planners[currentPlannerId][0];
+
+    const plannersAsArray = Object.entries(planners);
+    const firstHalf = Object.fromEntries(
+      plannersAsArray.slice(0, currentPlannerIndex),
+    );
+    const secondHalf = Object.fromEntries(
+      plannersAsArray.slice(currentPlannerIndex + 1),
+    );
+
+    if (numPlanners > 0) {
+      deletePlanner({
+        variables: {
+          userId,
+          plannerId: Object.keys(planners)[0],
+        },
+      });
+
+      const newId = uuidv4();
+      setPlanners({
+        ...firstHalf,
+        [newId]: [title, false],
+        ...secondHalf,
+      });
+      switchPlanners(newId, title);
+    } else {
+      addPlanner();
+    }
+  }
+
+  /**
    * `removePlanner` removes a planner from the planner container
    * @param id unique planner id
    */
@@ -134,6 +182,7 @@ export function usePlanners(userId: string | undefined) {
     changePlannerName,
     addPlanner,
     removePlanner,
+    replaceCurrentPlanner,
     activePlanner: getActivePlanner(),
     plannersLoading: loading,
     loadingDeletePlanner,

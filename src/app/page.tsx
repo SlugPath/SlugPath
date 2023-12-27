@@ -33,9 +33,9 @@ export default function Page() {
             <DefaultPlannerProvider>
               <MajorSelection
                 saveButtonName="Next"
-                handleSave={redirectToPlanner}
-                handleUserMajorAlreadyExists={redirectToPlanner}
-                handleSkip={redirectToPlanner}
+                onSaved={redirectToPlanner}
+                onUserMajorAlreadyExists={redirectToPlanner}
+                onSkip={redirectToPlanner}
               />
             </DefaultPlannerProvider>
           </ApolloProvider>

@@ -18,7 +18,7 @@ export default function SelectDefaultPlanner({
   onChange,
   majorDefaultPlanners,
   loadingMajorDefaultPlanners,
-  isInPlannerPage,
+  addPlannerCardContainer,
 }: {
   selectedDefaultPlanner: string;
   onChange: (
@@ -27,7 +27,7 @@ export default function SelectDefaultPlanner({
   ) => void;
   majorDefaultPlanners: any;
   loadingMajorDefaultPlanners: boolean;
-  isInPlannerPage?: boolean;
+  addPlannerCardContainer?: boolean;
 }) {
   const defaultPlanners: { id: string; title: string }[] =
     majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
@@ -69,7 +69,7 @@ export default function SelectDefaultPlanner({
                     sx={{ display: plannerIsSelected ? "block" : "none" }}
                     key={index}
                   >
-                    {isInPlannerPage ? (
+                    {addPlannerCardContainer ? (
                       <Card variant="soft">
                         <MiniPlanner
                           plannerId={id}

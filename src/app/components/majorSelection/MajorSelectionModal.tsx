@@ -2,10 +2,21 @@ import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import MajorSelection from "./MajorSelection";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { useContext } from "react";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
 
 export default function MajorSelectionModal() {
   const { showMajorSelectionModal, setShowMajorSelectionModal } =
     useContext(ModalsContext);
+  const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
+
+  function handleCreateNewPlanner() {
+    addPlanner();
+    setShowMajorSelectionModal(false);
+  }
+
+  function handleReplaceCurrentPlanner() {
+    replaceCurrentPlanner();
+  }
 
   return (
     <Modal
@@ -35,8 +46,10 @@ export default function MajorSelectionModal() {
         <div className="flex overflow-auto h-[80vh]">
           <MajorSelection
             saveButtonName="Save"
-            handleSave={() => setShowMajorSelectionModal(false)}
-            addPlannerCardContainer={true}
+            onSaved={() => setShowMajorSelectionModal(false)}
+            isInPlannerPage={true}
+            onCreateNewPlanner={handleCreateNewPlanner}
+            onReplaceCurrentPlanner={handleReplaceCurrentPlanner}
           />
         </div>
         <ModalClose variant="plain" sx={{ m: 1 }} />
