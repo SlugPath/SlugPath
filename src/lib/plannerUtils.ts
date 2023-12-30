@@ -266,6 +266,43 @@ export function getTotalCredits(courses: StoredCourse[]): number {
 }
 
 /**
+ * @param courseState is the state of the course planner
+ * @returns every GE in courses in courseState mapped to the courses that satisfy it
+ */
+export function GESMappedToCourses({
+  courseState,
+}: {
+  courseState: PlannerData;
+}) {
+  const mapOfGeToCourses = new Map<string, string[]>();
+  for (const course of courseState.courses) {
+    if (course.ge.length > 0 && course.ge[0] !== "None") {
+      for (let ge of course.ge) {
+        // replaces pe-x with pe and pr-x with pr, where x is some letter
+        if (ge.includes("pe")) {
+          ge = "pe";
+        } else if (ge.includes("pr")) {
+          ge = "pr";
+        }
+
+        if (mapOfGeToCourses.has(ge)) {
+          const courses = mapOfGeToCourses.get(ge);
+          if (courses !== undefined) {
+            courses.push(course.departmentCode + " " + course.number);
+            mapOfGeToCourses.set(ge, courses);
+          }
+        } else {
+          mapOfGeToCourses.set(ge, [
+            course.departmentCode + " " + course.number,
+          ]);
+        }
+      }
+    }
+  }
+  return mapOfGeToCourses;
+}
+
+/**
  * Returns a list of all the satisfied GE's in a planner
  * @param planner a course planner object
  * @returns list of GEs satisfied

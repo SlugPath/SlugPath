@@ -103,7 +103,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   <hr className="rounded border-t border-slate-300" />
 
                   <div className="flex place-items-center">
-                    <GEProgress ge={geSatisfied} />
+                    <GEProgress ge={geSatisfied} courseState={courseState} />
                   </div>
                 </Card>
               </div>
