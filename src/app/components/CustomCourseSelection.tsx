@@ -1,11 +1,4 @@
-import {
-  Card,
-  FormControl,
-  FormHelperText,
-  Grid,
-  IconButton,
-  Input,
-} from "@mui/joy";
+import { Card, FormControl, FormHelperText, IconButton, Input } from "@mui/joy";
 import { Add, InfoOutlined } from "@mui/icons-material";
 import DraggableCourseCard from "./DraggableCourseCard";
 import { Droppable } from "@hello-pangea/dnd";
@@ -17,13 +10,21 @@ const MAX_CUSTOM_COURSES = 3;
 
 export default function CustomCourseSelection() {
   const [courseTitle, setCourseTitle] = useState("");
+  const [credits, setCredits] = useState(5);
+
   const [tooManyError, setTooManyError] = useState(false);
+  const [invalidCreditsError, setInvalidCreditsError] = useState(false);
   const [tooShortError, setTooShortError] = useState(false);
   const { customCourses, handleAddCustom } = useContext(PlannerContext);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTooShortError(false);
     setCourseTitle(e.target.value);
+  };
+
+  const handleCreditChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInvalidCreditsError(false);
+    setCredits(parseInt(e.target.value));
   };
 
   const handleAdd = () => {
@@ -35,10 +36,16 @@ export default function CustomCourseSelection() {
       setTooShortError(true);
       return;
     }
+    if (credits < 0 || credits > 15) {
+      setInvalidCreditsError(true);
+      return;
+    }
     setTooShortError(false);
     setTooManyError(false);
+    setInvalidCreditsError(false);
     handleAddCustom(courseTitle);
     setCourseTitle("");
+    setCredits(5);
   };
 
   const memoLength = useMemo(() => {
@@ -51,34 +58,38 @@ export default function CustomCourseSelection() {
 
   return (
     <Card className="w-80 mb-2" variant="plain">
-      <FormControl error={tooManyError || tooShortError}>
-        <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={10}>
-            <Input
-              placeholder="Custom Course"
-              value={courseTitle}
-              variant="soft"
-              sx={{
-                "--Input-focusedInset": "var(--any, )",
-                "--Input-focusedThickness": "0.25rem",
-                "--Input-focusedHighlight": "rgba(13,110,253,.25)",
-                "&::before": {
-                  transition: "box-shadow .15s ease-in-out",
-                },
-                "&:focus-within": {
-                  borderColor: "#86b7fe",
-                },
-              }}
-              onChange={handleChange}
-              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            />
-          </Grid>
-          <Grid xs={2}>
-            <IconButton onClick={() => handleAdd()}>
-              <Add color="primary" />
-            </IconButton>
-          </Grid>
-        </Grid>
+      <FormControl error={tooManyError || tooShortError || invalidCreditsError}>
+        <FormHelperText>Course Title</FormHelperText>
+        <Input
+          placeholder="Custom Course"
+          value={courseTitle}
+          variant="soft"
+          sx={{
+            "--Input-focusedInset": "var(--any, )",
+            "--Input-focusedThickness": "0.25rem",
+            "--Input-focusedHighlight": "rgba(13,110,253,.25)",
+            "&::before": {
+              transition: "box-shadow .15s ease-in-out",
+            },
+            "&:focus-within": {
+              borderColor: "#86b7fe",
+            },
+          }}
+          onChange={handleTitleChange}
+          onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+        />
+        <FormHelperText>Credits</FormHelperText>
+        <Input
+          type="number"
+          placeholder="Credits"
+          defaultValue={5}
+          value={credits}
+          onChange={handleCreditChange}
+          onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+        />
+        <IconButton onClick={() => handleAdd()}>
+          <Add color="primary" />
+        </IconButton>
         {tooManyError && (
           <FormHelperText>
             <InfoOutlined />
@@ -89,6 +100,12 @@ export default function CustomCourseSelection() {
           <FormHelperText>
             <InfoOutlined />
             Course name cannot be empty.
+          </FormHelperText>
+        )}
+        {invalidCreditsError && (
+          <FormHelperText>
+            <InfoOutlined />
+            Credits must be between 1 and 15.
           </FormHelperText>
         )}
       </FormControl>
@@ -107,7 +124,10 @@ export default function CustomCourseSelection() {
                     key={index}
                     course={course}
                     index={index}
-                    draggableId={createCourseDraggableId(course, "custom")}
+                    draggableId={createCourseDraggableId({
+                      ...course,
+                      suffix: "custom",
+                    })}
                     isCustom
                   />
                 ))}

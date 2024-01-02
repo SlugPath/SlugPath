@@ -101,7 +101,7 @@ export default function Search() {
           key={index}
           course={course}
           index={index}
-          draggableId={createCourseDraggableId(course, "search")}
+          draggableId={createCourseDraggableId({ ...course, suffix: "search" })}
           isCustom={false}
         />
       </div>

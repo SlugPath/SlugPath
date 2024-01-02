@@ -52,6 +52,7 @@ model EnrolledCourse {
   quartersOffered String[]
   quarterId       Int
   labels          String[]
+  description     String?
   quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
@@ -64,6 +65,7 @@ model Course {
   prerequisites   String
   ge              String[]
   quartersOffered String[]
+  description     String?
 
   @@id([departmentCode, number])
 }

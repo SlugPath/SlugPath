@@ -5,6 +5,8 @@ import { customCourse } from "@/lib/plannerUtils";
 export default function useCustomCourseSelection() {
   const [courses, setCourses] = useState<StoredCourse[]>([]);
 
+  // TODO: Add support for other fields like credits, quarters, description,
+  // etc. Currently, only title is supported.
   const handleAddCustom = (newTitle: string) => {
     setCourses((prev) => {
       const newCourse: any = {

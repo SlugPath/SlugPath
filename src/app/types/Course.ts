@@ -9,5 +9,6 @@ export interface StoredCourse {
   title: string;
   ge: string[];
   quartersOffered: string[];
+  description: string;
   labels: string[];
 }

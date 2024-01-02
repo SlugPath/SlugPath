@@ -48,6 +48,7 @@ export function getCourses() {
       title: string;
       credits: number;
       prerequisites: string;
+      description: string;
       ge: string[];
       quartersOffered: string[];
     }[]
@@ -59,6 +60,7 @@ export function getCourses() {
       title: string;
       credits: number;
       prerequisites: string;
+      description: string;
       ge: string[];
       quartersOffered: string[];
     }[] = [];
@@ -76,8 +78,9 @@ export function getCourses() {
           title: record[3] || "no name",
           credits: parseInt(record[4]) || 5,
           prerequisites: record[5] || "no prerequisites",
-          ge: record[6] ? record[6].split(",") : ["None"],
-          quartersOffered: record[7] ? record[7].split(",") : [],
+          description: record[6] || "no description",
+          ge: record[7] ? record[7].split(",") : ["None"],
+          quartersOffered: record[8] ? record[8].split(",") : [],
         };
 
         courses.push(course);

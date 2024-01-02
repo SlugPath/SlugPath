@@ -124,6 +124,7 @@ export const customCourse = (): StoredCourse => {
     title: "Custom Course",
     ge: [],
     quartersOffered: ["Fall", "Winter", "Spring"],
+    description: "",
     labels: [],
   };
 };
@@ -155,12 +156,9 @@ export function convertPlannerTitles(
 }
 
 export function createCourseDraggableId(
-  { title, departmentCode, number, quartersOffered, credits, ge }: StoredCourse,
-  suffix: string,
+  course: StoredCourse & { suffix: string },
 ) {
-  return `${title};${departmentCode};${number};${quartersOffered.join(
-    ",",
-  )};${credits};${ge.join(",")};${suffix}`;
+  return JSON.stringify(course);
 }
 
 /**
@@ -223,18 +221,21 @@ export function getTitle({ title, departmentCode, number }: StoredCourse) {
 }
 
 export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
-  const [title, departmentCode, number, quarters, credits, ge] = id.split(";");
-  const quartersOffered = quarters.split(",");
-  const ges = ge.split(",");
-  return {
-    title,
-    departmentCode,
-    number,
-    quartersOffered,
-    credits: parseInt(credits),
-    ge: ges,
-    labels: [],
-  };
+  try {
+    const course = JSON.parse(id);
+    return {
+      title: course.title,
+      departmentCode: course.departmentCode,
+      number: course.number,
+      quartersOffered: course.quartersOffered,
+      credits: course.credits,
+      description: course.description ?? "",
+      ge: course.ge,
+      labels: [],
+    };
+  } catch (e) {
+    throw new Error(`Invalid course id ${id}`);
+  }
 }
 
 /**
