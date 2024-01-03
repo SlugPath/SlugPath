@@ -107,6 +107,11 @@ export default function CourseInfoModal() {
     return preqs.includes(start) ? preqs : `${start} ${preqs}`;
   }
 
+  function description(data: any) {
+    if (loading || !data) return "";
+    return `${data.courseBy.description}`;
+  }
+
   function quartersOffered(data: any) {
     if (loading) return "";
     if (!data) return "Quarters Offered: Summer, Fall, Winter, Spring";
@@ -237,6 +242,7 @@ export default function CourseInfoModal() {
                 in {` ${term}`}
               </Typography>
             )}
+            <Typography component="p">{description(data)}</Typography>
             <Typography component="p">{quartersOffered(data)}</Typography>
             <Typography component="p">Credits: {credits(data)}</Typography>
             {data !== undefined && (

@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 
 async function main() {
   const courses = await getCourses();
-  console.log(`${JSON.stringify(courses[0], null, 2)}`);
   const ops = [];
 
   // load all the courses into the database

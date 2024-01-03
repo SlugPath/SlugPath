@@ -17,6 +17,9 @@ export class Course {
   departmentCode!: string;
 
   @Field()
+  description!: string;
+
+  @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
 

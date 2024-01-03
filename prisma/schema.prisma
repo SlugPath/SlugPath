@@ -65,7 +65,7 @@ model Course {
   prerequisites   String
   ge              String[]
   quartersOffered String[]
-  description     String?
+  description     String
 
   @@id([departmentCode, number])
 }

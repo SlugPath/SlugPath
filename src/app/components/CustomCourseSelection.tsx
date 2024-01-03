@@ -58,7 +58,7 @@ export default function CustomCourseSelection() {
 
   return (
     <Card className="w-80 mb-2" variant="plain">
-      <FormControl error={tooManyError || tooShortError || invalidCreditsError}>
+      <FormControl error={tooManyError || tooShortError}>
         <FormHelperText>Course Title</FormHelperText>
         <Input
           placeholder="Custom Course"
@@ -78,6 +78,8 @@ export default function CustomCourseSelection() {
           onChange={handleTitleChange}
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
         />
+      </FormControl>
+      <FormControl error={invalidCreditsError}>
         <FormHelperText>Credits</FormHelperText>
         <Input
           type="number"
