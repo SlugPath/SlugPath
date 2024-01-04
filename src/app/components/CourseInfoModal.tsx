@@ -108,6 +108,9 @@ export default function CourseInfoModal() {
   }
 
   function description(data: any) {
+    // If it is a custom course with a description, display it
+    if (course && isCustomCourse(course) && course.description !== "")
+      return `Description: ${course.description}`;
     if (loading || !data) return "";
     return `${data.courseBy.description}`;
   }

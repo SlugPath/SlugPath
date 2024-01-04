@@ -12,3 +12,12 @@ export interface StoredCourse {
   description: string;
   labels: string[];
 }
+
+/**
+ * `CustomCourseInput` is a type to represent the input for a custom course
+ */
+export interface CustomCourseInput {
+  title: string;
+  description: string;
+  credits: number;
+}

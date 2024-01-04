@@ -1,16 +1,27 @@
-import { Card, FormControl, FormHelperText, IconButton, Input } from "@mui/joy";
+import {
+  Card,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  Input,
+  Textarea,
+  Typography,
+} from "@mui/joy";
 import { Add, InfoOutlined } from "@mui/icons-material";
 import DraggableCourseCard from "./DraggableCourseCard";
 import { Droppable } from "@hello-pangea/dnd";
 import { PlannerContext } from "../contexts/PlannerProvider";
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { truncateTitle } from "@/lib/utils";
 
 const MAX_CUSTOM_COURSES = 3;
+const MAX_DESCRIPTION_LENGTH = 100;
 
 export default function CustomCourseSelection() {
   const [courseTitle, setCourseTitle] = useState("");
   const [credits, setCredits] = useState(5);
+  const [description, setDescription] = useState("");
 
   const [tooManyError, setTooManyError] = useState(false);
   const [invalidCreditsError, setInvalidCreditsError] = useState(false);
@@ -20,6 +31,18 @@ export default function CustomCourseSelection() {
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTooShortError(false);
     setCourseTitle(e.target.value);
+  };
+
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newDescription = truncateTitle(
+      e.target.value,
+      MAX_DESCRIPTION_LENGTH,
+    );
+    if (newDescription.length <= MAX_DESCRIPTION_LENGTH) {
+      setDescription(newDescription);
+      return;
+    }
+    setDescription(newDescription.slice(0, MAX_DESCRIPTION_LENGTH));
   };
 
   const handleCreditChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,9 +66,10 @@ export default function CustomCourseSelection() {
     setTooShortError(false);
     setTooManyError(false);
     setInvalidCreditsError(false);
-    handleAddCustom(courseTitle);
+    handleAddCustom({ description, title: courseTitle, credits });
     setCourseTitle("");
     setCredits(5);
+    setDescription("");
   };
 
   const memoLength = useMemo(() => {
@@ -78,20 +102,6 @@ export default function CustomCourseSelection() {
           onChange={handleTitleChange}
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
         />
-      </FormControl>
-      <FormControl error={invalidCreditsError}>
-        <FormHelperText>Credits</FormHelperText>
-        <Input
-          type="number"
-          placeholder="Credits"
-          defaultValue={5}
-          value={credits}
-          onChange={handleCreditChange}
-          onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-        />
-        <IconButton onClick={() => handleAdd()}>
-          <Add color="primary" />
-        </IconButton>
         {tooManyError && (
           <FormHelperText>
             <InfoOutlined />
@@ -104,6 +114,17 @@ export default function CustomCourseSelection() {
             Course name cannot be empty.
           </FormHelperText>
         )}
+      </FormControl>
+      <FormControl error={invalidCreditsError}>
+        <FormHelperText>Credits</FormHelperText>
+        <Input
+          type="number"
+          placeholder="Credits"
+          defaultValue={5}
+          value={credits}
+          onChange={handleCreditChange}
+          onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+        />
         {invalidCreditsError && (
           <FormHelperText>
             <InfoOutlined />
@@ -111,7 +132,27 @@ export default function CustomCourseSelection() {
           </FormHelperText>
         )}
       </FormControl>
-
+      <FormControl>
+        <FormHelperText>Description</FormHelperText>
+        <Textarea
+          placeholder="Type here..."
+          value={description}
+          onChange={handleDescriptionChange}
+          minRows={2}
+          maxRows={4}
+          endDecorator={
+            <Typography level="body-xs" sx={{ ml: "auto" }}>
+              {description.length} / {MAX_DESCRIPTION_LENGTH} character(s)
+            </Typography>
+          }
+          sx={{
+            minWidth: 300,
+          }}
+        />
+      </FormControl>
+      <IconButton onClick={() => handleAdd()}>
+        <Add color="primary" />
+      </IconButton>
       {customCourses.length > 0 && (
         <Droppable droppableId="custom-droppable">
           {(provided) => {

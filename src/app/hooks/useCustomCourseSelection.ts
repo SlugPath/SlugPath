@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StoredCourse } from "../types/Course";
+import { CustomCourseInput, StoredCourse } from "../types/Course";
 import { customCourse } from "@/lib/plannerUtils";
 
 export default function useCustomCourseSelection() {
@@ -7,11 +7,17 @@ export default function useCustomCourseSelection() {
 
   // TODO: Add support for other fields like credits, quarters, description,
   // etc. Currently, only title is supported.
-  const handleAddCustom = (newTitle: string) => {
+  const handleAddCustom = ({
+    title,
+    description,
+    credits,
+  }: CustomCourseInput) => {
     setCourses((prev) => {
       const newCourse: any = {
         ...customCourse(),
-        title: newTitle,
+        title,
+        description,
+        credits,
       };
       delete newCourse.labels;
       return [newCourse, ...prev];
