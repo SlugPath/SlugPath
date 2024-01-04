@@ -24,6 +24,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Computer Systems and Assembly Language and Lab",
+        description:
+          "Introduction to computer organization and systems programming. Study of number representations, assembly language, and machine organization. Includes laboratory.",
         number: "12",
         credits: 7,
         prerequisites: "CSE 20",
@@ -32,6 +34,8 @@ beforeAll(async () => {
       },
       {
         department: "Computer Science and Engineering",
+        description:
+          "Introduction to C programming language and computer programming in a UNIX environment. Topics include program structure, UNIX editors, compiling and linking, debugging tools, fundamentals of C programming, basic algorithms and data structures, and basic UNIX commands.",
         departmentCode: "CSE",
         title: "Computer Systems and C Programming",
         number: "13S",
@@ -44,6 +48,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Introduction to Data Structures and Algorithms",
+        description:
+          "Introduction to data structures and algorithms. Abstract data types including stacks, queues, priority queues, hash tables, binary trees, search trees, balanced trees and graphs. Sorting; asymptotic analysis; fundamental graph algorithms including graph search, shortest path, and minimum spanning trees; concurrency and synchronization. Credit is not given for both this course and CSE 100.",
         number: "101",
         credits: 5,
         prerequisites: "None",
@@ -54,6 +60,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Introduction to Algorithm Analysis",
+        description:
+          "introduction to the design and analysis of algorithms. Divide-and-conquer, dynamic programming, greedy algorithms, amortized analysis, randomization, and basic data structures. Credit is not given for both this course and CSE 101.",
         number: "102",
         credits: 5,
         prerequisites: "None",
@@ -67,6 +75,8 @@ beforeAll(async () => {
         number: "19A",
         credits: 5,
         prerequisites: "None",
+        description:
+          "Introduction to differential calculus of functions of one variable. Definition of the derivative, basic differentiation techniques, applications to graphing, rates, approximations, and extremum problems. Introduction to integral calculus of functions of one variable. Fundamental theorem of calculus, basic techniques of integration. Applications of the integral to area, volume, work, average value, center of mass, and probability. Prerequisite(s): Two years of high school algebra and a score of 3 or higher on the AP Calculus AB exam, or Math Placement Exam qualifying score.",
         ge: ["None"],
         quartersOffered: ["Fall", "Winter", "Spring"],
       },
@@ -124,6 +134,8 @@ it("should update 1 planner for 1 user", async () => {
       departmentCode: "CSE",
       number: "12",
       title: "CSE 12",
+      description:
+        "Introduction to computer organization and systems programming. Study of number representations, assembly language, and machine organization. Includes laboratory.",
       credits: 7,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter"],
@@ -135,6 +147,8 @@ it("should update 1 planner for 1 user", async () => {
       number: "16",
       title: "CSE 16",
       credits: 5,
+      description:
+        "Introduction to discrete mathematics, formal logic, and set theory. Topics include propositional and predicate logic; elementary set theory; proof techniques; mathematical induction; elementary combinatorics, probability theory, and graph theory; and applications in computer science.",
       ge: ["mf", "si"],
       quartersOffered: ["Fall", "Winter", "Spring"],
       labels: [],
@@ -143,6 +157,8 @@ it("should update 1 planner for 1 user", async () => {
       id: uuidv4(),
       departmentCode: "CSE",
       title: "CSE 30",
+      description:
+        "Introduction to Python programming. Topics include program structure, Python syntax and semantics, variables, expressions, conditionals, iteration, functions, objects, and classes. Assignments include programming problems and exercises on the theoretical concepts covered in class.",
       number: "30",
       credits: 5,
       ge: ["None"],
@@ -154,6 +170,7 @@ it("should update 1 planner for 1 user", async () => {
       departmentCode: "SGI",
       title: "Custom class",
       number: "40N",
+      description: "My custom class",
       credits: 5,
       ge: [],
       quartersOffered: ["Summer"],
@@ -261,6 +278,8 @@ it("should return the correct labels for each course", async () => {
       credits: 7,
       ge: ["None"],
       quartersOffered: ["Fall", "Winter"],
+      description:
+        "Introduction to computer organization and systems programming. Study of number representations, assembly language, and machine organization. Includes laboratory.",
       labels: [],
     },
     {
@@ -268,6 +287,8 @@ it("should return the correct labels for each course", async () => {
       departmentCode: "CSE",
       number: "16",
       title: "CSE 16",
+      description:
+        "Introduction to discrete mathematics, formal logic, and set theory. Topics include propositional and predicate logic; elementary set theory; proof techniques; mathematical induction; elementary combinatorics, probability theory, and graph theory; and applications in computer science.",
       credits: 5,
       ge: ["mf", "si"],
       quartersOffered: ["Fall", "Winter", "Spring"],
@@ -279,6 +300,8 @@ it("should return the correct labels for each course", async () => {
       title: "CSE 30",
       number: "30",
       credits: 5,
+      description:
+        "Introduction to Python programming. Topics include program structure, Python syntax and semantics, variables, expressions, conditionals, iteration, functions, objects, and classes. Assignments include programming problems and exercises on the theoretical concepts covered in class.",
       ge: ["None"],
       quartersOffered: ["Fall", "Winter", "Spring"],
       labels: [plannerData.labels[0].id, plannerData.labels[1].id],
@@ -290,6 +313,7 @@ it("should return the correct labels for each course", async () => {
       number: "40N",
       credits: 5,
       ge: [],
+      description: "My custom class",
       quartersOffered: ["Summer"],
       labels: [plannerData.labels[0].id],
     },
