@@ -3,20 +3,24 @@ import { Add } from "@mui/icons-material";
 import { IconButton } from "@mui/joy";
 import { Label } from "../../types/Label";
 import CourseLabel from "../CourseLabel";
+import { geLabels } from "@/lib/plannerUtils";
 
 export default function SelectedLabels({
   labels,
   handleOpenLabels,
+  ge,
 }: {
   labels: Label[];
   handleOpenLabels: () => void;
+  ge: string[];
 }) {
+  const allLabels = [...geLabels(ge), ...labels];
+
   return (
-    // align items left
     <div className="flex flex-row items-center justify-start">
       <Typography>Labels:</Typography>
       <List orientation="horizontal">
-        {labels.map((label) => (
+        {allLabels.map((label) => (
           <ListItem key={label.id}>
             <CourseLabel
               label={label}

@@ -100,6 +100,7 @@ export default function CourseDetails({
         <SelectedLabels
           labels={getCourseLabels(course)}
           handleOpenLabels={handleOpenLabels}
+          ge={course.ge}
         />
       )}
     </div>

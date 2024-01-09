@@ -14,6 +14,7 @@ import { LabelColor } from "@prisma/client";
 import { MultiPlanner } from "@/app/types/MultiPlanner";
 import { truncateTitle } from "./utils";
 import { MAX_STORED_COURSE_TITLE } from "./consts";
+import { Label } from "@/app/types/Label";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 export const years = 4;
@@ -300,6 +301,22 @@ export function GESMappedToCourses({
     }
   }
   return mapOfGeToCourses;
+}
+
+/**
+ * @param ge is a list of GEs
+ * @returns a list containing a label for the first GE in ge
+ */
+export function geLabels(ge: string[]): Label[] {
+  if (ge.length > 0 && ge[0] !== "None") {
+    const geLabel = {
+      id: "ge",
+      name: "GE",
+      color: LabelColor.GREEN,
+    };
+    return [geLabel];
+  }
+  return [];
 }
 
 /**

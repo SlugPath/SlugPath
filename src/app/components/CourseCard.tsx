@@ -2,6 +2,7 @@ import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
 import { StoredCourse } from "../types/Course";
 import {
   extractTermFromQuarter,
+  geLabels,
   getDeptAndNumber,
   isCSE,
   isCustomCourse,
@@ -91,7 +92,7 @@ export default function CourseCard({
               onShowCourseInfoModal={handleShowCourseInfoModal}
               quarterId={quarterId}
             />
-            <CourseLabelList labels={getCourseLabels(course)} />
+            <CourseLabelList labels={getCourseLabels(course)} ge={course.ge} />
           </Grid>
           <Grid xs={1}>
             {quarterId !== undefined && (
@@ -152,11 +153,13 @@ const Title = ({
   );
 };
 
-const CourseLabelList = ({ labels }: { labels: Label[] }) => {
+const CourseLabelList = ({ labels, ge }: { labels: Label[]; ge: string[] }) => {
+  const allLabels = [...geLabels(ge), ...labels];
+
   return (
     <div className="flex truncate">
-      {labels
-        ? labels.map((label, index) => (
+      {allLabels
+        ? allLabels.map((label, index) => (
             <CourseLabel key={index} label={label} displayText={false} />
           ))
         : null}
