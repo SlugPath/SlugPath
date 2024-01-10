@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/joy";
-import DraggableCourseCard from "../DraggableCourseCard";
-import CourseCard from "../CourseCard";
+import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
+import CourseCard from "../planner/quarters/courses/CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
 import { createCourseDraggableId } from "@/lib/plannerUtils";

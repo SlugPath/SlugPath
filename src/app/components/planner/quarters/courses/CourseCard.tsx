@@ -1,5 +1,5 @@
 import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
-import { StoredCourse } from "../types/Course";
+import { StoredCourse } from "../../../../types/Course";
 import {
   extractTermFromQuarter,
   geLabels,
@@ -10,12 +10,12 @@ import {
 } from "@/lib/plannerUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import { PlannerContext } from "../contexts/PlannerProvider";
-import { ModalsContext } from "../contexts/ModalsProvider";
+import { PlannerContext } from "../../../../contexts/PlannerProvider";
+import { ModalsContext } from "../../../../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
-import CloseIconButton from "./CloseIconButton";
+import CloseIconButton from "../../../CloseIconButton";
 import CourseLabel from "./CourseLabel";
-import { Label } from "../types/Label";
+import { Label } from "../../../../types/Label";
 import { truncateTitle } from "@/lib/utils";
 import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
 

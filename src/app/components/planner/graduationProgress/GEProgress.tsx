@@ -1,9 +1,9 @@
-import { CssVarsProvider, Tooltip, Typography, useColorScheme } from "@mui/joy";
+import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { blue, grey } from "@mui/material/colors";
 import InfoIcon from "@mui/icons-material/Info";
-import { PlannerData } from "../types/PlannerData";
+import { PlannerData } from "../../../types/PlannerData";
 import { GESMappedToCourses } from "@/lib/plannerUtils";
 
 const satisfied = blue[200];
@@ -94,9 +94,9 @@ const GEProgressModal = ({
           }}
           series={[
             {
+              data,
               arcLabel: (item) => `${item.label}`,
               arcLabelMinAngle: 10,
-              data,
               innerRadius: 40,
               outerRadius: 80,
               paddingAngle: 1.5,
@@ -133,9 +133,5 @@ export const GEProgress = ({
   ge: string[];
   courseState: PlannerData;
 }) => {
-  return (
-    <CssVarsProvider defaultMode="system">
-      <GEProgressModal ge={ge} courseState={courseState} />
-    </CssVarsProvider>
-  );
+  return <GEProgressModal ge={ge} courseState={courseState} />;
 };

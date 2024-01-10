@@ -1,11 +1,11 @@
-import { CssVarsProvider, Input, Button } from "@mui/joy";
+import { Input, Button } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
-import ConfirmAlert from "./ConfirmAlert";
+import ConfirmAlert from "../../ConfirmAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
-import { PlannersContext } from "../contexts/PlannersProvider";
-import TitleSnackbar from "./TitleSnackbar";
-import CloseIconButton from "./CloseIconButton";
+import { PlannersContext } from "../../../contexts/PlannersProvider";
+import TitleSnackbar from "../../TitleSnackbar";
+import CloseIconButton from "../../CloseIconButton";
 import { truncateTitle } from "@/lib/utils";
 
 const MAX_PLANNERS = 10;
@@ -82,7 +82,7 @@ export default function PlannerTabs() {
   };
 
   return (
-    <CssVarsProvider defaultMode="system">
+    <>
       <div className="grid grid-flow-col gap-2 ml-1 overflow-x-auto">
         {Object.entries(planners).map(([id, [title]]) => (
           <CustomTab
@@ -123,7 +123,7 @@ export default function PlannerTabs() {
         open={tooManyAlertIsOpen}
         onClose={() => setTooManyAlertIsOpen(false)}
       />
-    </CssVarsProvider>
+    </>
   );
 }
 

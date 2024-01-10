@@ -7,7 +7,7 @@ import { ModalsContext } from "../../contexts/ModalsProvider";
 import { StoredCourse } from "../../types/Course";
 import { PlannerContext } from "../../contexts/PlannerProvider";
 import { Label } from "../../types/Label";
-import LabelsSelectionModal from "../LabelSelectionModal";
+import LabelsSelectionModal from "./LabelSelectionModal";
 import CourseDetails from "./CourseDetails";
 import CourseTitle from "./CourseInfoModalTitle";
 

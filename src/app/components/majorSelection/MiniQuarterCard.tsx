@@ -1,5 +1,5 @@
 import { StoredCourse } from "@/graphql/planner/schema";
-import { Card, CssVarsProvider, Link, Typography } from "@mui/joy";
+import { Card, Link, Typography } from "@mui/joy";
 import { Quarter } from "../../types/Quarter";
 import { isCustomCourse } from "@/lib/plannerUtils";
 import { PlannerContext } from "@/app/contexts/PlannerProvider";
@@ -15,14 +15,12 @@ export default function MiniQuarterCard({
 }) {
   return (
     <Card size="sm" className="w-full" variant="plain">
-      <CssVarsProvider defaultMode="system">
-        <div className="space-y-1">
-          <Typography level="body-sm">{quarter.title}</Typography>
-          {courses.map((course, index) => (
-            <MiniCourseCard key={index} course={course} quarter={quarter} />
-          ))}
-        </div>
-      </CssVarsProvider>
+      <div className="space-y-1">
+        <Typography level="body-sm">{quarter.title}</Typography>
+        {courses.map((course, index) => (
+          <MiniCourseCard key={index} course={course} quarter={quarter} />
+        ))}
+      </div>
     </Card>
   );
 }

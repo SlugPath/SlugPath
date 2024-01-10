@@ -1,29 +1,29 @@
-import QuarterCard from "./QuarterCard";
-import { quartersPerYear } from "../../lib/plannerUtils";
-import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
-import Search from "./search/Search";
+import QuarterCard from "./quarters/QuarterCard";
+import { quartersPerYear } from "../../../lib/plannerUtils";
+import { PlannerData, findCoursesInQuarter } from "../../types/PlannerData";
+import Search from "../search/Search";
 import { DragDropContext } from "@hello-pangea/dnd";
 import SaveSnackbars from "./SaveSnackbars";
-import { Card, CssVarsProvider } from "@mui/joy";
-import { GradProgress } from "./GradProgress";
-import { GEProgress } from "./GEProgress";
-import { PlannerContext } from "../contexts/PlannerProvider";
+import { Card } from "@mui/joy";
+import { GradProgress } from "./graduationProgress/GradProgress";
+import { GEProgress } from "./graduationProgress/GEProgress";
+import { PlannerContext } from "../../contexts/PlannerProvider";
 import { useContext } from "react";
-import PlannerActions from "./PlannerActions";
-import { ModalsProvider } from "../contexts/ModalsProvider";
-import ExportModal from "./ExportModal";
-import CourseInfoModal from "./courseInfoModal/CourseInfoModal";
+import { ModalsProvider } from "../../contexts/ModalsProvider";
+import ExportModal from "../ExportModal";
+import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
 import {
   Accordion,
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
 } from "@mui/joy";
-import { Quarter } from "../types/Quarter";
-import MajorSelectionModal from "./majorSelection/MajorSelectionModal";
+import { Quarter } from "../../types/Quarter";
+import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
 import NotesEditor from "./NotesEditor";
-import AutoFillSnackbar from "./AutoFillSnackbar";
-import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
+import AutoFillSnackbar from "../AutoFillSnackbar";
+import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
+import PlannerActionsCard from "./PlannerActionsCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -57,62 +57,71 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               </div>
               <div className="overflow-auto w-full flex-grow">
                 <AccordionGroup>
-                  <CssVarsProvider defaultMode="system">
-                    <div className="space-y-2 h-[75vh] overflow-auto">
-                      <Years courseState={courseState} />
-                      <Accordion
-                        variant="soft"
-                        sx={{
-                          borderRadius: "0.5rem",
-                          "&.MuiAccordion-root": {
-                            "& .MuiAccordionSummary-root": {
-                              padding: "0.5rem 0",
-                              paddingX: "0.5rem",
-                            },
+                  <div className="space-y-2 h-[75vh] overflow-auto">
+                    <Years courseState={courseState} />
+                    <Accordion
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
                           },
-                        }}
-                        defaultExpanded={true}
-                      >
-                        <AccordionSummary>Notes</AccordionSummary>
-                        <AccordionDetails>
-                          <NotesEditor
-                            content={courseState.notes}
-                            onUpdateNotes={updateNotes}
-                          />
-                        </AccordionDetails>
-                      </Accordion>
-                    </div>
-                  </CssVarsProvider>
+                        },
+                      }}
+                      defaultExpanded={true}
+                    >
+                      <AccordionSummary>Notes</AccordionSummary>
+                      <AccordionDetails>
+                        <NotesEditor
+                          content={courseState.notes}
+                          onUpdateNotes={updateNotes}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
                 </AccordionGroup>
               </div>
 
-              {/* Modals and Grad Progress */}
               <div className="flex flex-col self-start gap-3">
-                <Card variant="plain">
-                  <div>
-                    <PlannerActions />
-                    <Modals />
-                  </div>
-                </Card>
-
-                <Card variant="plain">
-                  <div className="flex place-items-center">
-                    <GradProgress credits={totalCredits} />
-                  </div>
-
-                  <hr className="rounded border-t border-slate-300" />
-
-                  <div className="flex place-items-center">
-                    <GEProgress ge={geSatisfied} courseState={courseState} />
-                  </div>
-                </Card>
+                <PlannerActionsCard />
+                <GraduationProgressCard
+                  totalCredits={totalCredits}
+                  geSatisfied={geSatisfied}
+                  courseState={courseState}
+                />
               </div>
-              {/* End Modals */}
             </div>
+            <Modals />
           </ModalsProvider>
         </DragDropContext>
       </div>
     </>
+  );
+}
+
+function GraduationProgressCard({
+  totalCredits,
+  geSatisfied,
+  courseState,
+}: {
+  totalCredits: number;
+  geSatisfied: string[];
+  courseState: PlannerData;
+}) {
+  return (
+    <Card variant="plain">
+      <div className="flex place-items-center">
+        <GradProgress credits={totalCredits} />
+      </div>
+
+      <hr className="rounded border-t border-slate-300" />
+
+      <div className="flex place-items-center">
+        <GEProgress ge={geSatisfied} courseState={courseState} />
+      </div>
+    </Card>
   );
 }
 

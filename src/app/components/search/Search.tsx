@@ -1,4 +1,4 @@
-import { Card, CssVarsProvider } from "@mui/joy";
+import { Card } from "@mui/joy";
 import { useState } from "react";
 import CustomCourseSelection from "./CustomCourseSelection";
 import SearchInputs from "./SearchInputs";
@@ -13,7 +13,7 @@ export default function Search() {
   const [loadingMoreResults, setLoadingMoreResults] = useState<boolean>(false);
 
   return (
-    <CssVarsProvider defaultMode="system">
+    <>
       <CustomCourseSelection />
       <Card className="w-80" variant="plain">
         <SearchInputs
@@ -27,6 +27,6 @@ export default function Search() {
           loadingUseQuery={loadingMoreResults}
         />
       </Card>
-    </CssVarsProvider>
+    </>
   );
 }

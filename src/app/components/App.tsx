@@ -1,7 +1,13 @@
 "use client";
-import { List, ListItem } from "@mui/joy";
-import Planner from "./Planner";
-import PlannerTabs from "./PlannerTabs";
+import {
+  Button,
+  CssVarsProvider,
+  List,
+  ListItem,
+  useColorScheme,
+} from "@mui/joy";
+import Planner from "./planner/Planner";
+import PlannerTabs from "./planner/plannerTabs/PlannerTabs";
 import Navbar from "./Navbar";
 import { useContext, useState, useEffect } from "react";
 import {
@@ -15,27 +21,46 @@ import { useSession } from "next-auth/react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useRouter } from "next/navigation";
 import BetaWarning from "./beta/BetaWarning";
-import DeletedPlannerSnackbar from "./DeletedPlannerSnackbar";
+import DeletedPlannerSnackbar from "./planner/plannerTabs/DeletedPlannerSnackbar";
 
 export default function App() {
   return (
     <DefaultPlannerProvider>
       <PlannersProvider>
-        <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
-          <Navbar />
-          <BetaWarning />
-          <div className="pt-4 mb-auto">
-            <div className="flex justify-left px-7">
-              <PlannerTabs />
-            </div>
-            <div className="px-5">
-              <PlannerList />
+        <CssVarsProvider defaultMode="system">
+          <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
+            <Navbar />
+            <BetaWarning />
+            <ToggleButton />
+            <div className="pt-4 mb-auto">
+              <div className="flex justify-left px-7">
+                <PlannerTabs />
+              </div>
+              <div className="px-5">
+                <PlannerList />
+              </div>
             </div>
           </div>
-        </div>
+        </CssVarsProvider>
       </PlannersProvider>
     </DefaultPlannerProvider>
   );
+}
+
+function ToggleButton() {
+  const { mode, setMode } = useColorScheme();
+
+  function handleSetMode() {
+    // localStorage.clear()
+    if (mode === "dark") {
+      localStorage.theme = "light";
+    } else {
+      localStorage.theme = "dark";
+    }
+    setMode(mode === "dark" ? "light" : "dark");
+  }
+
+  return <Button onClick={handleSetMode}>Toggle</Button>;
 }
 
 function PlannerList() {
