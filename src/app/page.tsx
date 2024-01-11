@@ -7,7 +7,7 @@ import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
 import BetaWarning from "./components/beta/BetaWarning";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
 
 export default function Page() {
