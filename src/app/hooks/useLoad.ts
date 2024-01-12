@@ -66,9 +66,7 @@ export const useLoadDefaultPlanner = (userId?: string) => {
   const { userMajorData } = useMajorSelection(userId);
   const plannerId = userMajorData?.defaultPlannerId;
   const skipLoad = userMajorData === undefined || plannerId === undefined;
-  if (userMajorData) {
-    console.log("userMajorData", userMajorData);
-  }
+
   return useLoadPlanner({
     plannerId,
     userId: undefined,
@@ -172,7 +170,6 @@ export const useLoadPlanner = ({
   });
 
   function autofillWithDefaultPlanner() {
-    console.log("autofill with default planner");
     setPlanner({
       ...defaultPlanner,
       labels: initialLabels(),

@@ -6,6 +6,7 @@ import { ApolloError } from "@apollo/client";
 import { MultiPlanner } from "./MultiPlanner";
 import { Label } from "./Label";
 import { Term } from "./Quarter";
+import { RequirementList, Requirements } from "./Requirements";
 
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
@@ -17,6 +18,8 @@ export interface ModalsContextProps {
   onShowCourseInfoModal: () => void;
   showMajorSelectionModal: boolean;
   setShowMajorSelectionModal: setShow;
+  showMajorProgressModal: boolean;
+  setShowMajorProgressModal: setShow;
   courseState: PlannerData;
 }
 
@@ -71,4 +74,14 @@ export interface DefaultPlannerContextProps {
   hasAutoFilled: boolean;
   setHasAutoFilled: any;
   setDefaultPlanner: any;
+}
+
+export interface MajorVerificationContextProps {
+  isMajorRequirementsSatisfied: (
+    requirements: Requirements,
+    courses: StoredCourse[],
+  ) => boolean;
+  majorRequirements: RequirementList;
+  majorIsVerified: boolean;
+  errors: string;
 }
