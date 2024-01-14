@@ -26,7 +26,7 @@ import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
 import PlannerActionsCard from "./PlannerActionsCard";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
-import MajorProgressModal from "./graduationProgress/MajorProgressModal";
+import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {

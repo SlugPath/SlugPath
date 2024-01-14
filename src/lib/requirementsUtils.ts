@@ -13,3 +13,16 @@ export const isAtLeastRequirement = (obj: any): obj is RequirementList => {
     obj instanceof Object && obj.binder === Binder.AT_LEAST && "atLeast" in obj
   );
 };
+
+/**
+ * @param requirements is a RequirementList
+ * @returns "0" if if requirements binder is AND, otherwise returns the atLeast value
+ */
+export function getBinderValue(requirements: RequirementList): string {
+  if (requirements.binder === Binder.AND) {
+    return "0";
+  } else if (requirements.atLeast) {
+    return requirements.atLeast.toString();
+  }
+  return "0";
+}

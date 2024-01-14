@@ -14,6 +14,7 @@ export type Requirement = Course;
 export type RequirementList = {
   binder: Binder;
   requirements: Requirements[];
+  id: string;
   atLeast?: number; // for Binder.AT_LEAST, where atLeast there is the minimum number of requirements to be satisfied
   title?: string;
 };

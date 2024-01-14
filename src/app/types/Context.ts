@@ -84,4 +84,10 @@ export interface MajorVerificationContextProps {
   majorRequirements: RequirementList;
   majorIsVerified: boolean;
   errors: string;
+  addRequirementList: (parentRequirementListId: string) => void;
+  removeRequirementList: (requirementListId: string) => void;
+  updateRequirementList: (
+    requirementListId: string,
+    newRequirementList: RequirementList,
+  ) => void;
 }

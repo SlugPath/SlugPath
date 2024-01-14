@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { MajorVerificationContextProps } from "../types/Context";
 import { PlannerContext } from "./PlannerProvider";
 import {
@@ -10,6 +10,7 @@ import {
 import { getUniqueCourses } from "@/lib/plannerUtils";
 import { StoredCourse } from "../types/Course";
 import { isRequirementList } from "@/lib/requirementsUtils";
+import { v4 as uuid4 } from "uuid";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
@@ -21,6 +22,124 @@ export function MajorVerificationProvider({
   children: React.ReactNode;
 }) {
   const { courseState } = useContext(PlannerContext);
+  const [majorRequirements, setMajorRequirements] = useState<RequirementList>({
+    binder: Binder.AND,
+    title: "Computer Science BS Requirements",
+    id: uuid4(),
+    requirements: [
+      {
+        departmentCode: "CSE",
+        number: "12",
+      },
+    ],
+  });
+
+  function updateRequirementList(id: string, requirementList: RequirementList) {
+    const majorRequirementsCopy = { ...majorRequirements };
+    const requirementListToUpdate = findRequirementList(
+      id,
+      majorRequirementsCopy,
+    );
+
+    if (requirementListToUpdate) {
+      requirementListToUpdate.requirements = requirementList.requirements;
+      requirementListToUpdate.title = requirementList.title;
+      requirementListToUpdate.binder = requirementList.binder;
+      if (requirementList.atLeast) {
+        requirementListToUpdate.atLeast = requirementList.atLeast;
+      }
+    }
+
+    setMajorRequirements(majorRequirementsCopy);
+  }
+
+  function addRequirementList(parentRequirementListId: string) {
+    const newRequirementList: RequirementList = {
+      binder: Binder.AND,
+      title: "New Requirement List",
+      id: uuid4(),
+      requirements: [],
+    };
+
+    const majorRequirementsCopy = { ...majorRequirements };
+    const parentRequirementList = findRequirementList(
+      parentRequirementListId,
+      majorRequirementsCopy,
+    );
+
+    if (parentRequirementList) {
+      parentRequirementList.requirements.push(newRequirementList);
+    }
+
+    setMajorRequirements(majorRequirementsCopy);
+  }
+
+  function removeRequirementList(id: string) {
+    const majorRequirementsCopy = { ...majorRequirements };
+    const requirementList = findRequirementList(id, majorRequirementsCopy);
+
+    if (requirementList) {
+      const requirementListParent = findRequirementListParent(
+        id,
+        majorRequirementsCopy,
+      );
+      if (requirementListParent) {
+        requirementListParent.requirements =
+          requirementListParent.requirements.filter((requirement) => {
+            if (isRequirementList(requirement)) {
+              return requirement.id !== id;
+            }
+            return true;
+          });
+      }
+    }
+
+    setMajorRequirements(majorRequirementsCopy);
+  }
+
+  function findRequirementList(
+    id: string,
+    requirements: RequirementList,
+  ): RequirementList | null {
+    if (requirements.id === id) {
+      return requirements;
+    }
+
+    for (const requirement of requirements.requirements) {
+      if (isRequirementList(requirement)) {
+        const requirementList = findRequirementList(id, requirement);
+        if (requirementList) {
+          return requirementList;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function findRequirementListParent(
+    id: string,
+    requirements: RequirementList,
+  ): RequirementList | null {
+    if (requirements.id === id) {
+      return null;
+    }
+
+    for (const requirement of requirements.requirements) {
+      if (isRequirementList(requirement)) {
+        if (requirement.id === id) {
+          return requirements;
+        }
+
+        const requirementList = findRequirementListParent(id, requirement);
+        if (requirementList) {
+          return requirementList;
+        }
+      }
+    }
+
+    return null;
+  }
 
   const majorIsVerified = courseState
     ? isMajorRequirementsSatisfied(
@@ -33,9 +152,12 @@ export function MajorVerificationProvider({
     <MajorVerificationContext.Provider
       value={{
         isMajorRequirementsSatisfied: isMajorRequirementsSatisfied,
-        majorRequirements: csMajorRequirements,
+        majorRequirements: majorRequirements,
         majorIsVerified,
         errors: "",
+        addRequirementList,
+        removeRequirementList,
+        updateRequirementList,
       }}
     >
       {children}
@@ -45,10 +167,12 @@ export function MajorVerificationProvider({
 
 const csMajorRequirements: RequirementList = {
   binder: Binder.AND,
+  id: uuid4(),
   title: "Computer Science BS Requirements",
   requirements: [
     {
       binder: Binder.AND,
+      id: uuid4(),
       title: "Lower Division Courses",
       requirements: [
         {
@@ -75,10 +199,12 @@ const csMajorRequirements: RequirementList = {
     },
     {
       binder: Binder.OR,
+      id: uuid4(),
       title: "Mathematics",
       requirements: [
         {
           binder: Binder.AND,
+          id: uuid4(),
           requirements: [
             {
               departmentCode: "MATH",
@@ -92,6 +218,7 @@ const csMajorRequirements: RequirementList = {
         },
         {
           binder: Binder.AND,
+          id: uuid4(),
           requirements: [
             {
               departmentCode: "MATH",
@@ -107,10 +234,12 @@ const csMajorRequirements: RequirementList = {
     },
     {
       binder: Binder.AND,
+      id: uuid4(),
       title: "Applied Mathematics",
       requirements: [
         {
           binder: Binder.OR,
+          id: uuid4(),
           requirements: [
             {
               departmentCode: "AM",
@@ -124,6 +253,7 @@ const csMajorRequirements: RequirementList = {
         },
         {
           binder: Binder.OR,
+          id: uuid4(),
           requirements: [
             {
               departmentCode: "AM",
@@ -139,6 +269,7 @@ const csMajorRequirements: RequirementList = {
     },
     {
       binder: Binder.AND,
+      id: uuid4(),
       title: "Engineering Science",
       requirements: [
         {
