@@ -8,12 +8,14 @@ export default function DraggableCourseCard({
   draggableId,
   quarterId,
   isCustom = false,
+  customDeleteCourse,
 }: {
   course: StoredCourse;
   index: number;
   draggableId: string;
   quarterId?: string;
   isCustom: boolean;
+  customDeleteCourse?: () => void;
 }) {
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
@@ -26,6 +28,7 @@ export default function DraggableCourseCard({
             provided={provided}
             isDragging={snapshot.isDragging}
             isCustom={isCustom}
+            customDeleteCourse={customDeleteCourse}
           />
         );
       }}

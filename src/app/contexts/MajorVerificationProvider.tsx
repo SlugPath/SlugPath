@@ -26,12 +26,7 @@ export function MajorVerificationProvider({
     binder: Binder.AND,
     title: "Computer Science BS Requirements",
     id: uuid4(),
-    requirements: [
-      {
-        departmentCode: "CSE",
-        number: "12",
-      },
-    ],
+    requirements: [],
   });
 
   function updateRequirementList(id: string, requirementList: RequirementList) {
@@ -155,6 +150,7 @@ export function MajorVerificationProvider({
         majorRequirements: majorRequirements,
         majorIsVerified,
         errors: "",
+        findRequirementList,
         addRequirementList,
         removeRequirementList,
         updateRequirementList,
@@ -175,26 +171,26 @@ const csMajorRequirements: RequirementList = {
       id: uuid4(),
       title: "Lower Division Courses",
       requirements: [
-        {
-          departmentCode: "CSE",
-          number: "12",
-        },
-        {
-          departmentCode: "CSE",
-          number: "16",
-        },
-        {
-          departmentCode: "CSE",
-          number: "20",
-        },
-        {
-          departmentCode: "CSE",
-          number: "30",
-        },
-        {
-          departmentCode: "CSE",
-          number: "13S",
-        },
+        // {
+        //   departmentCode: "CSE",
+        //   number: "12",
+        // },
+        // {
+        //   departmentCode: "CSE",
+        //   number: "16",
+        // },
+        // {
+        //   departmentCode: "CSE",
+        //   number: "20",
+        // },
+        // {
+        //   departmentCode: "CSE",
+        //   number: "30",
+        // },
+        // {
+        //   departmentCode: "CSE",
+        //   number: "13S",
+        // },
       ],
     },
     {
@@ -206,28 +202,28 @@ const csMajorRequirements: RequirementList = {
           binder: Binder.AND,
           id: uuid4(),
           requirements: [
-            {
-              departmentCode: "MATH",
-              number: "19A",
-            },
-            {
-              departmentCode: "MATH",
-              number: "19B",
-            },
+            // {
+            //   departmentCode: "MATH",
+            //   number: "19A",
+            // },
+            // {
+            //   departmentCode: "MATH",
+            //   number: "19B",
+            // },
           ],
         },
         {
           binder: Binder.AND,
           id: uuid4(),
           requirements: [
-            {
-              departmentCode: "MATH",
-              number: "20A",
-            },
-            {
-              departmentCode: "MATH",
-              number: "20B",
-            },
+            // {
+            //   departmentCode: "MATH",
+            //   number: "20A",
+            // },
+            // {
+            //   departmentCode: "MATH",
+            //   number: "20B",
+            // },
           ],
         },
       ],
@@ -241,28 +237,28 @@ const csMajorRequirements: RequirementList = {
           binder: Binder.OR,
           id: uuid4(),
           requirements: [
-            {
-              departmentCode: "AM",
-              number: "10",
-            },
-            {
-              departmentCode: "MATH",
-              number: "21",
-            },
+            // {
+            //   departmentCode: "AM",
+            //   number: "10",
+            // },
+            // {
+            //   departmentCode: "MATH",
+            //   number: "21",
+            // },
           ],
         },
         {
           binder: Binder.OR,
           id: uuid4(),
           requirements: [
-            {
-              departmentCode: "AM",
-              number: "30",
-            },
-            {
-              departmentCode: "MATH",
-              number: "23A",
-            },
+            // {
+            //   departmentCode: "AM",
+            //   number: "30",
+            // },
+            // {
+            //   departmentCode: "MATH",
+            //   number: "23A",
+            // },
           ],
         },
       ],
@@ -272,10 +268,10 @@ const csMajorRequirements: RequirementList = {
       id: uuid4(),
       title: "Engineering Science",
       requirements: [
-        {
-          departmentCode: "ECE",
-          number: "30",
-        },
+        // {
+        //   departmentCode: "ECE",
+        //   number: "30",
+        // },
       ],
     },
   ],

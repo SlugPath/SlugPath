@@ -1,7 +1,4 @@
-type Course = {
-  departmentCode: string;
-  number: string;
-};
+import { StoredCourse } from "./Course";
 
 export enum Binder {
   AND,
@@ -9,7 +6,7 @@ export enum Binder {
   AT_LEAST,
 }
 
-export type Requirement = Course;
+export type Requirement = StoredCourse;
 
 export type RequirementList = {
   binder: Binder;

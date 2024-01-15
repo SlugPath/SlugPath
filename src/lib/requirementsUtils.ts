@@ -14,6 +14,19 @@ export const isAtLeastRequirement = (obj: any): obj is RequirementList => {
   );
 };
 
+export const isStoredCourse = (obj: any): boolean => {
+  return (
+    "id" in obj &&
+    "departmentCode" in obj &&
+    "number" in obj &&
+    "credits" in obj &&
+    "title" in obj &&
+    "ge" in obj &&
+    "quartersOffered" in obj &&
+    "labels" in obj
+  );
+};
+
 /**
  * @param requirements is a RequirementList
  * @returns "0" if if requirements binder is AND, otherwise returns the atLeast value

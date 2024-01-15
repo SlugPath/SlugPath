@@ -16,6 +16,7 @@ import useMajorSelection from "../hooks/useMajorSelection";
 import { useRouter } from "next/navigation";
 import BetaWarning from "./beta/BetaWarning";
 import DeletedPlannerSnackbar from "./planner/plannerTabs/DeletedPlannerSnackbar";
+import { MajorVerificationProvider } from "../contexts/MajorVerificationProvider";
 
 export default function App() {
   return (
@@ -81,13 +82,15 @@ function PlannerList() {
             sx={{ display: planners[id][1] ? "block" : "none" }}
             key={id}
           >
-            <PlannerProvider
-              plannerId={id}
-              title={planners[id][0]}
-              order={index}
-            >
-              <Planner isActive={planners[id][1]} />
-            </PlannerProvider>
+            <MajorVerificationProvider>
+              <PlannerProvider
+                plannerId={id}
+                title={planners[id][0]}
+                order={index}
+              >
+                <Planner isActive={planners[id][1]} />
+              </PlannerProvider>
+            </MajorVerificationProvider>
           </ListItem>
         ))}
       </List>

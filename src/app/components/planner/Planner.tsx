@@ -25,7 +25,6 @@ import AutoFillSnackbar from "../AutoFillSnackbar";
 import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
 import PlannerActionsCard from "./PlannerActionsCard";
 import MajorProgress from "./graduationProgress/MajorProgress";
-import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -54,51 +53,49 @@ export default function Planner({ isActive }: { isActive: boolean }) {
       <div>
         <DragDropContext onDragEnd={handleDragEnd}>
           <ModalsProvider>
-            <MajorVerificationProvider>
-              <div className="flex justify-between space-x-4">
-                <div className="flex-initial pr-2">
-                  <Search />
-                </div>
-                <div className="overflow-auto w-full flex-grow">
-                  <AccordionGroup>
-                    <div className="space-y-2 h-[75vh] overflow-auto">
-                      <Years courseState={courseState} />
-                      <Accordion
-                        variant="soft"
-                        sx={{
-                          borderRadius: "0.5rem",
-                          "&.MuiAccordion-root": {
-                            "& .MuiAccordionSummary-root": {
-                              padding: "0.5rem 0",
-                              paddingX: "0.5rem",
-                            },
-                          },
-                        }}
-                        defaultExpanded={true}
-                      >
-                        <AccordionSummary>Notes</AccordionSummary>
-                        <AccordionDetails>
-                          <NotesEditor
-                            content={courseState.notes}
-                            onUpdateNotes={updateNotes}
-                          />
-                        </AccordionDetails>
-                      </Accordion>
-                    </div>
-                  </AccordionGroup>
-                </div>
-
-                <div className="flex flex-col self-start gap-3">
-                  <PlannerActionsCard />
-                  <GraduationProgressCard
-                    totalCredits={totalCredits}
-                    geSatisfied={geSatisfied}
-                    courseState={courseState}
-                  />
-                </div>
+            <div className="flex justify-between space-x-4">
+              <div className="flex-initial pr-2">
+                <Search displayCustomCourseSelection={true} />
               </div>
-              <Modals />
-            </MajorVerificationProvider>
+              <div className="overflow-auto w-full flex-grow">
+                <AccordionGroup>
+                  <div className="space-y-2 h-[75vh] overflow-auto">
+                    <Years courseState={courseState} />
+                    <Accordion
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
+                          },
+                        },
+                      }}
+                      defaultExpanded={true}
+                    >
+                      <AccordionSummary>Notes</AccordionSummary>
+                      <AccordionDetails>
+                        <NotesEditor
+                          content={courseState.notes}
+                          onUpdateNotes={updateNotes}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                </AccordionGroup>
+              </div>
+
+              <div className="flex flex-col self-start gap-3">
+                <PlannerActionsCard />
+                <GraduationProgressCard
+                  totalCredits={totalCredits}
+                  geSatisfied={geSatisfied}
+                  courseState={courseState}
+                />
+              </div>
+            </div>
+            <Modals />
           </ModalsProvider>
         </DragDropContext>
       </div>

@@ -27,6 +27,7 @@ export default function CourseCard({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isDragging,
   isCustom,
+  customDeleteCourse,
 }: {
   course: StoredCourse;
   index: number;
@@ -34,6 +35,7 @@ export default function CourseCard({
   provided: DraggableProvided;
   isDragging: boolean;
   isCustom: boolean;
+  customDeleteCourse?: () => void;
 }) {
   const {
     deleteCourse,
@@ -67,6 +69,14 @@ export default function CourseCard({
     }
   }
 
+  function handleDeleteCourse(quarterId: string, index: number) {
+    if (customDeleteCourse) {
+      customDeleteCourse();
+    } else {
+      deleteCourse(quarterId)(index);
+    }
+  }
+
   return (
     <Card
       ref={provided.innerRef}
@@ -97,7 +107,7 @@ export default function CourseCard({
           <Grid xs={1}>
             {quarterId !== undefined && (
               <CloseIconButton
-                onClick={() => deleteCourse(quarterId)(index)}
+                onClick={() => handleDeleteCourse(quarterId, index)}
                 sx={{
                   visibility: highlighted ? "visible" : "hidden",
                 }}

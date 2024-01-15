@@ -3,6 +3,7 @@ import { PlannerData } from "../types/PlannerData";
 import { Quarter, findQuarter } from "../types/Quarter";
 import { v4 as uuidv4 } from "uuid";
 import { createCourseFromId } from "@/lib/plannerUtils";
+import useHandleRequirementListDrag from "./useHandleRequirementListDrag";
 
 const CUSTOM_DROPPABLE = "custom-droppable";
 const SEARCH_DROPPABLE = "search-droppable";
@@ -14,6 +15,12 @@ export default function useHandleCourseDrag({
   courseState: PlannerData;
   handleCourseUpdate: any;
 }) {
+  const {
+    draggedToRequirementList,
+    addCourseToRequirementList,
+    moveCourseRequirementList,
+  } = useHandleRequirementListDrag();
+
   function handleDragEnd(result: DropResult) {
     const { destination, source, draggableId } = result;
 
@@ -37,11 +44,23 @@ export default function useHandleCourseDrag({
       draggedFromSearch(source.droppableId) ||
       draggedFromCustom(source.droppableId)
     ) {
-      addCourseFromSearch(draggableId, destination);
+      if (draggedToRequirementList(destination.droppableId)) {
+        addCourseToRequirementList(
+          destination.droppableId,
+          draggableId,
+          destination,
+        );
+      } else {
+        addCourseFromSearch(draggableId, destination);
+      }
       return;
     }
 
-    moveCourse(source, destination);
+    if (draggedToRequirementList(source.droppableId)) {
+      moveCourseRequirementList(source, destination);
+    } else {
+      moveCourse(source, destination);
+    }
   }
 
   function addCourseFromSearch(
