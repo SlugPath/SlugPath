@@ -181,7 +181,7 @@ function CustomTab({
 
   return (
     <div
-      className="p-2 rounded-xl flex items-center justify-between"
+      className="p-2 rounded-3xl flex items-center justify-between"
       style={{
         backgroundColor: backgroundColor(),
         color: textColor(),
