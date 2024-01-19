@@ -9,10 +9,12 @@ export default function SearchResults({
   courses,
   loading,
   loadingUseQuery,
+  searchComponentId,
 }: {
   courses: any;
   loading: boolean;
   loadingUseQuery: boolean;
+  searchComponentId: string;
 }) {
   function hasResults(): boolean {
     return courses.length > 0;
@@ -60,7 +62,10 @@ export default function SearchResults({
           key={index}
           course={course}
           index={index}
-          draggableId={createCourseDraggableId(course, "search")}
+          draggableId={createCourseDraggableId(
+            course,
+            "search" + searchComponentId,
+          )}
           isCustom={false}
         />
       </div>
@@ -69,7 +74,7 @@ export default function SearchResults({
 
   return (
     <Droppable
-      droppableId={"search-droppable"}
+      droppableId={"search-droppable" + searchComponentId}
       isDropDisabled={true}
       mode="virtual"
       renderClone={(provided, snapshot, rubric) => {

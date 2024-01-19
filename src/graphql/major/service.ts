@@ -33,6 +33,7 @@ export class MajorService {
           select: {
             name: true,
             catalogYear: true,
+            id: true,
           },
         },
         defaultPlannerId: true,
@@ -43,10 +44,18 @@ export class MajorService {
       return null;
     }
 
+    console.log({
+      name: major.name,
+      catalogYear: major.catalogYear,
+      defaultPlannerId: userData?.defaultPlannerId ?? "",
+      id: major.id,
+    });
+
     return {
       name: major.name,
       catalogYear: major.catalogYear,
       defaultPlannerId: userData?.defaultPlannerId ?? "",
+      id: major.id,
     };
   }
 
@@ -83,6 +92,7 @@ export class MajorService {
       name: major!.name,
       catalogYear: major!.catalogYear,
       defaultPlannerId: user.defaultPlannerId!,
+      id: major!.id,
     };
   }
 

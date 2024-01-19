@@ -94,4 +94,5 @@ export interface MajorVerificationContextProps {
     requirementListId: string,
     newRequirementList: RequirementList,
   ) => void;
+  handleSaveMajorRequirements: () => void;
 }

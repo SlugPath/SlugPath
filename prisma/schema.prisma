@@ -69,15 +69,23 @@ model Course {
 }
 
 model Major {
-  id              Int       @id @default(autoincrement())
-  name            String
-  catalogYear     String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  defaultPlanners Planner[]
-  users           User[]
+  id                 Int              @id @default(autoincrement())
+  name               String
+  catalogYear        String
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  defaultPlanners    Planner[]
+  users              User[]
+  majorRequirement   MajorRequirement?
 
   @@unique([name, catalogYear])
+}
+
+model MajorRequirement {
+  id              Int     @id @default(autoincrement())
+  requirementList Json
+  major           Major   @relation(fields: [majorId], references: [id])
+  majorId         Int     @unique
 }
 
 model Label {

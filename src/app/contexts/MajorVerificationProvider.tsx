@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { MajorVerificationContextProps } from "../types/Context";
 import { PlannerContext } from "./PlannerProvider";
 import {
@@ -11,10 +11,47 @@ import { getUniqueCourses } from "@/lib/plannerUtils";
 import { StoredCourse } from "../types/Course";
 import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
+import {
+  getMajorRequirements,
+  saveMajorRequirements,
+} from "@/app/actions/actions";
+import useMajorSelection from "../hooks/useMajorSelection";
+import { useSession } from "next-auth/react";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
 );
+
+function useMajorRequirements(majorId: number | undefined) {
+  const [majorRequirements, setMajorRequirements] = useState<RequirementList>({
+    binder: Binder.AND,
+    title: "No title",
+    id: uuid4(),
+    requirements: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (majorId === undefined) return;
+      try {
+        const result = await getMajorRequirements(majorId);
+        setMajorRequirements(result); // Set the data to the state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (majorId) {
+      fetchData();
+    }
+  }, [majorId]);
+
+  return {
+    majorRequirements,
+    setMajorRequirements,
+    saveMajorRequirements,
+  };
+}
 
 export function MajorVerificationProvider({
   children,
@@ -22,12 +59,10 @@ export function MajorVerificationProvider({
   children: React.ReactNode;
 }) {
   const { courseState } = useContext(PlannerContext);
-  const [majorRequirements, setMajorRequirements] = useState<RequirementList>({
-    binder: Binder.AND,
-    title: "Computer Science BS Requirements",
-    id: uuid4(),
-    requirements: [],
-  });
+  const { data: session } = useSession();
+  const { userMajorData } = useMajorSelection(session?.user.id);
+  const { majorRequirements, setMajorRequirements, saveMajorRequirements } =
+    useMajorRequirements(userMajorData?.id);
 
   function updateRequirementList(id: string, requirementList: RequirementList) {
     const majorRequirementsCopy = { ...majorRequirements };
@@ -136,6 +171,10 @@ export function MajorVerificationProvider({
     return null;
   }
 
+  function handleSaveMajorRequirements() {
+    saveMajorRequirements(majorRequirements, userMajorData.id);
+  }
+
   const majorIsVerified = courseState
     ? isMajorRequirementsSatisfied(
         csMajorRequirements,
@@ -154,6 +193,7 @@ export function MajorVerificationProvider({
         addRequirementList,
         removeRequirementList,
         updateRequirementList,
+        handleSaveMajorRequirements,
       }}
     >
       {children}

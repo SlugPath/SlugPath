@@ -9,8 +9,10 @@ import SearchResults from "./SearchResults";
  */
 export default function Search({
   displayCustomCourseSelection,
+  searchComponentId,
 }: {
   displayCustomCourseSelection: boolean;
+  searchComponentId: string;
 }) {
   const [courses, setCourses] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,6 +31,7 @@ export default function Search({
           courses={courses}
           loading={loading}
           loadingUseQuery={loadingMoreResults}
+          searchComponentId={searchComponentId}
         />
       </Card>
     </>

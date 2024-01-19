@@ -25,7 +25,7 @@ export default function useHandleCourseDrag({
     const { destination, source, draggableId } = result;
 
     function draggedFromSearch(droppableId: string) {
-      return droppableId === SEARCH_DROPPABLE;
+      return droppableId.includes(SEARCH_DROPPABLE);
     }
 
     function draggedFromCustom(droppableId: string) {

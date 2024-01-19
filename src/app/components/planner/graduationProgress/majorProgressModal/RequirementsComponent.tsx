@@ -126,8 +126,6 @@ export function RequirementsComponentEditing({
     );
   }
 
-  console.log("binder value", getBinderValue(requirements));
-
   return (
     <Card variant="soft" style={cardStyleProps(parents, mode)}>
       <div className="flex flex-row justify-between items-center">
