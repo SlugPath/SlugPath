@@ -1,4 +1,4 @@
-import { Input, Button } from "@mui/joy";
+import { IconButton, Input } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
 import ConfirmAlert from "../../ConfirmAlert";
@@ -100,15 +100,15 @@ export default function PlannerTabs() {
             onOpenDeleteAlert={handleOpenDeleteAlert}
           />
         ))}
-        <Button
-          loading={plannersLoading}
+        <IconButton
+          disabled={plannersLoading}
           aria-label="Add"
           onClick={() => handleAddPlanner()}
           size="sm"
-          variant="plain"
           color="primary"
-          startDecorator={<Add />}
-        />
+        >
+          <Add />
+        </IconButton>
       </div>
       <ConfirmAlert
         open={deleteAlert.alertOpen}
@@ -222,7 +222,7 @@ function CustomTab({
           />
         </>
       ) : (
-        <span className="truncate">{truncateTitle(text)}</span>
+        <span className="truncate px-2">{truncateTitle(text)}</span>
       )}
       <CloseIconButton onClick={() => onOpenDeleteAlert(id, title)} />
     </div>
