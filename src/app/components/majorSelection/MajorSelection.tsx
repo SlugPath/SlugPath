@@ -45,7 +45,6 @@ export default function MajorSelection({
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
   const [majorSelectionIsValid, setMajorSelectionIsValid] = useState(false);
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
@@ -193,10 +192,13 @@ export default function MajorSelection({
   }
 
   function handleSave(buttonName: ButtonName) {
-    setSaveButtonClicked(buttonName);
-    onSaveMajor(major, catalogYear, selectedDefaultPlanner);
-    setSaveButtonDisabled(true);
-    setShowSelectionError(false);
+    if (majorSelectionIsValid) {
+      setSaveButtonClicked(buttonName);
+      onSaveMajor(major, catalogYear, selectedDefaultPlanner);
+      setShowSelectionError(false);
+    } else {
+      setShowSelectionError(true);
+    }
   }
 
   function handleConfirmReplaceCurrent() {
@@ -292,7 +294,7 @@ export default function MajorSelection({
         </PlannerProvider>
       </div>
       <div className="flex justify-end w-full">
-        {saveButtonDisabled || loadingSaveMajor ? (
+        {loadingSaveMajor ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
           <SaveButtons
@@ -335,9 +337,7 @@ function SaveButtons({
         </Button>
       )}
       <div>
-        <Button disabled={!majorSelectionIsValid} onClick={onClickSave}>
-          {saveButtonName}
-        </Button>
+        <Button onClick={onClickSave}>{saveButtonName}</Button>
         {isInPlannerPage && (
           <>
             <Button
