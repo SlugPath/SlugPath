@@ -95,8 +95,8 @@ export default function CourseCard({
       onMouseLeave={() => setHighlighted(false)}
     >
       <CardContent>
-        <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={11} className="flex flex-row whitespace-nowrap">
+        <Grid container alignItems="center" justifyContent="start" spacing={1}>
+          <Grid xs={10} className="flex flex-row whitespace-nowrap">
             <Title
               course={course}
               onShowCourseInfoModal={handleShowCourseInfoModal}
