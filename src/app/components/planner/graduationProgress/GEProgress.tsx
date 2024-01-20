@@ -1,15 +1,15 @@
 import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { blue, grey } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import InfoIcon from "@mui/icons-material/Info";
 import { PlannerData } from "../../../types/PlannerData";
 import { GESMappedToCourses } from "@/lib/plannerUtils";
 
 const satisfied = blue[200];
-const satisfiedDark = blue[800];
-const notSatisfied = grey[300];
-const notSatisfiedDark = grey[700];
+const satisfiedDark = blue[700];
+const notSatisfied = blue[50];
+const notSatisfiedDark = "#172554";
 
 const GEProgressModal = ({
   ge,
@@ -109,7 +109,6 @@ const GEProgressModal = ({
           ]}
           sx={{
             [`& .${pieArcLabelClasses.root}`]: {
-              fill: "black",
               fontSize: "0.8rem",
             },
           }}

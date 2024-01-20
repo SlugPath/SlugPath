@@ -1,15 +1,16 @@
 import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { Info } from "@mui/icons-material";
+import { blue } from "@mui/material/colors";
 
 const TOTAL_CREDITS_NEEDED = 180;
 
 export const GradProgress = ({ credits }: { credits: number }) => {
   const { mode } = useColorScheme();
 
-  const lightColor = "#93c5fd";
-  const darkColor = "#3b82f6";
-  const fadedLightColor = "#EFF6FF";
+  const lightColor = blue[200];
+  const darkColor = blue[600];
+  const fadedLightColor = blue[50];
   const fadedDarkColor = "#172554";
   const data = [
     {
