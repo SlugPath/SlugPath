@@ -18,7 +18,7 @@ const GEProgressModal = ({
   ge: string[];
   courseState: PlannerData;
 }) => {
-  const { systemMode } = useColorScheme();
+  const { mode } = useColorScheme();
   const mapOfGeToCourses = GESMappedToCourses({ courseState });
 
   const [data, setData] = useState([
@@ -47,15 +47,15 @@ const GEProgressModal = ({
           (item.label === "PE" && PE_GE.some((g) => ge.includes(g))) ||
           (item.label === "PR" && PR_GE.some((g) => ge.includes(g))) ||
           ge.includes(item.label.toLowerCase())
-            ? systemMode == "light"
+            ? mode == "light"
               ? satisfied
               : satisfiedDark
-            : systemMode == "light"
+            : mode == "light"
             ? notSatisfied
             : notSatisfiedDark,
       })),
     );
-  }, [ge, systemMode]);
+  }, [ge, mode]);
 
   return (
     <>
