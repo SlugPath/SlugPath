@@ -1,13 +1,29 @@
-import { Tooltip, Typography } from "@mui/joy";
+import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { Info } from "@mui/icons-material";
 
 const TOTAL_CREDITS_NEEDED = 180;
 
 export const GradProgress = ({ credits }: { credits: number }) => {
-  const percentage = Math.min(credits / TOTAL_CREDITS_NEEDED, 1);
+  const { mode } = useColorScheme();
 
-  const data = [{ value: 1, label: "", color: "#93c5fd" }];
+  const lightColor = "#93c5fd";
+  const darkColor = "#3b82f6";
+  const fadedLightColor = "#EFF6FF";
+  const fadedDarkColor = "#172554";
+  const data = [
+    {
+      value: credits,
+      label: "",
+      color: mode == "light" ? lightColor : darkColor,
+    },
+    {
+      value: TOTAL_CREDITS_NEEDED - credits,
+      label: "",
+      color: mode == "light" ? fadedLightColor : fadedDarkColor,
+      opacity: 0,
+    },
+  ];
 
   return (
     <>
@@ -35,7 +51,7 @@ export const GradProgress = ({ credits }: { credits: number }) => {
               outerRadius: 70,
               innerRadius: 50,
               startAngle: 360,
-              endAngle: (1 - percentage) * 360,
+              endAngle: 0,
             },
           ]}
           slotProps={{
