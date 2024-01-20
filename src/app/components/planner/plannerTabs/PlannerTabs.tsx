@@ -1,4 +1,4 @@
-import { IconButton, Input } from "@mui/joy";
+import { IconButton, useColorScheme, Input } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
 import ConfirmAlert from "../../ConfirmAlert";
@@ -146,26 +146,41 @@ function CustomTab({
   onClick: () => void;
   onOpenDeleteAlert: (id: string, title: string) => void;
 }) {
+  const { mode } = useColorScheme();
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
 
   function backgroundColor() {
-    if (hovering) {
-      return "#BFDBFE";
-    } else if (selected) {
-      return "#3B82F6";
+    if (mode === "light") {
+      if (hovering) {
+        return "#BFDBFE";
+      } else if (selected) {
+        return "#3B82F6";
+      } else {
+        return "#93C5FD";
+      }
     } else {
-      return "#93C5FD";
+      if (hovering) {
+        return "#334155";
+      } else if (selected) {
+        return "#3B82F6";
+      } else {
+        return "black";
+      }
     }
   }
 
   function textColor() {
-    if (hovering) {
-      return "#334155";
-    } else if (selected) {
-      return "#F1F5F9";
+    if (mode === "light") {
+      if (hovering) {
+        return "#334155";
+      } else if (selected) {
+        return "#F1F5F9";
+      } else {
+        return "#334155";
+      }
     } else {
-      return "#334155";
+      return "#F1F5F9";
     }
   }
 
