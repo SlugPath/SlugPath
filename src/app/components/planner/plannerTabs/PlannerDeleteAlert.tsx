@@ -25,7 +25,7 @@ export default function PlannerDeleteAlert(props: PlannerDeleteAlertProps) {
 
   return (
     <Modal open={id !== "" && title != ""} onClose={onClose}>
-      <ModalDialog variant="outlined" role="alertdialog">
+      <ModalDialog variant="plain" role="alertdialog">
         <DialogTitle>
           <WarningRounded />
           Confirmation

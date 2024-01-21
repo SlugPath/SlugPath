@@ -1,4 +1,5 @@
-import { Label } from "../types/Label";
+import { Chip } from "@mui/joy";
+import { Label } from "../../../../types/Label";
 import { getColor } from "@/lib/labels";
 
 export default function CourseLabel({
@@ -14,23 +15,13 @@ export default function CourseLabel({
 }) {
   const displayTextDefault = displayText === undefined ? true : displayText;
 
-  if (displayTextDefault) {
-    return (
-      <div style={getColor(label.color)} className={"rounded-lg px-1 mx-1"}>
-        <div>{label.name}</div>
-        {children}
-      </div>
-    );
-  }
-
   return (
-    <div
+    <Chip
       style={getColor(label.color)}
-      className={
-        inMenu ? "rounded-md px-6 py-2 mx-1 " : "rounded-md px-2 py-2 mx-1"
-      }
+      className={inMenu ? "px-4" : "px-2 mx-1"}
     >
+      {displayTextDefault && <div>{label.name}</div>}
       {children}
-    </div>
+    </Chip>
   );
 }

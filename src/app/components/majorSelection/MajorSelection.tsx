@@ -1,5 +1,5 @@
 import { Button, CircularProgress } from "@mui/joy";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import useMajorSelection from "../../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
 import { years } from "@/lib/defaultPlanners";
@@ -8,26 +8,48 @@ import { GET_ALL_MAJORS } from "@/graphql/queries";
 import useDefaultPlanners from "../../hooks/useDefaultPlanners";
 import { Alert } from "@mui/joy";
 import ReportIcon from "@mui/icons-material/Report";
+import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
+import { ModalsProvider } from "@/app/contexts/ModalsProvider";
+import { PlannerProvider } from "@/app/contexts/PlannerProvider";
 import SelectMajorName from "./SelectMajorName";
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
+import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import { useLoadPlanner } from "@/app/hooks/useLoad";
+import { emptyPlanner } from "@/lib/plannerUtils";
+import ConfirmAlert from "../ConfirmAlert";
+
+enum ButtonName {
+  Save = "Save",
+  CreateNew = "Create New",
+  ReplaceCurrent = "Replace Current",
+}
 
 export default function MajorSelection({
   saveButtonName,
-  handleSave,
-  handleUserMajorAlreadyExists,
-  handleSkip,
+  onSaved,
+  isInPlannerPage,
+  onUserMajorAlreadyExists,
+  onSkip,
+  onCreateNewPlanner,
+  onReplaceCurrentPlanner,
 }: {
-  handleSave: () => void;
+  onSaved: () => void;
   saveButtonName: string;
-  handleUserMajorAlreadyExists?: () => void;
-  handleSkip?: () => void;
+  isInPlannerPage?: boolean;
+  onUserMajorAlreadyExists?: () => void;
+  onSkip?: () => void;
+  onCreateNewPlanner?: () => void;
+  onReplaceCurrentPlanner?: () => void;
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
+  const [majorSelectionIsValid, setMajorSelectionIsValid] = useState(false);
+  const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
+    ButtonName.Save,
+  );
   const [showSelectionError, setShowSelectionError] = useState(false);
   const { data: session } = useSession();
   const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
@@ -42,6 +64,22 @@ export default function MajorSelection({
   } = useMajorSelection(session?.user.id, handleSaveCompleted);
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
+  const [plannerData, , { loading: loadingPlannerData }] = useLoadPlanner({
+    userId: undefined,
+    plannerId: selectedDefaultPlanner,
+    defaultPlanner: emptyPlanner(),
+  });
+  const { setDefaultPlanner } = useContext(DefaultPlannerContext);
+  const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
+
+  useEffect(() => {
+    function isMajorSelectionValid() {
+      const isLoggedIn = session?.user.id !== undefined;
+      return major !== "" && catalogYear !== "" && isLoggedIn;
+    }
+
+    setMajorSelectionIsValid(isMajorSelectionValid());
+  }, [major, catalogYear, selectedDefaultPlanner, session?.user.id]);
 
   useEffect(() => {
     getAllMajors({
@@ -70,11 +108,11 @@ export default function MajorSelection({
         userMajorData.defaultPlannerId,
       );
 
-      if (majorDataAlreadyChosen() && handleUserMajorAlreadyExists) {
-        handleUserMajorAlreadyExists();
+      if (majorDataAlreadyChosen() && onUserMajorAlreadyExists) {
+        onUserMajorAlreadyExists();
       }
     }
-  }, [handleUserMajorAlreadyExists, userMajorData]);
+  }, [onUserMajorAlreadyExists, userMajorData]);
 
   useEffect(() => {
     /**
@@ -134,12 +172,28 @@ export default function MajorSelection({
   }
 
   function handleSaveCompleted() {
-    handleSave();
+    setDefaultPlanner(plannerData);
+
+    switch (saveButtonClicked) {
+      case ButtonName.Save:
+        onSaved();
+        break;
+      case ButtonName.CreateNew:
+        if (onCreateNewPlanner && !loadingPlannerData) {
+          onCreateNewPlanner();
+        }
+        break;
+      case ButtonName.ReplaceCurrent:
+        if (onReplaceCurrentPlanner && !loadingPlannerData) {
+          onReplaceCurrentPlanner();
+        }
+        break;
+    }
   }
 
-  function handleClickSave() {
-    if (majorSelectionIsValid()) {
-      setSaveButtonDisabled(true);
+  function handleSave(buttonName: ButtonName) {
+    if (majorSelectionIsValid) {
+      setSaveButtonClicked(buttonName);
       onSaveMajor(major, catalogYear, selectedDefaultPlanner);
       setShowSelectionError(false);
     } else {
@@ -147,9 +201,20 @@ export default function MajorSelection({
     }
   }
 
-  function majorSelectionIsValid() {
-    const isLoggedIn = session?.user.id !== undefined;
-    return major !== "" && catalogYear !== "" && isLoggedIn;
+  function handleConfirmReplaceCurrent() {
+    handleSave(ButtonName.ReplaceCurrent);
+  }
+
+  function handleClickSave() {
+    handleSave(ButtonName.Save);
+  }
+
+  function handleClickReplaceCurrent() {
+    setReplaceAlertOpen(true);
+  }
+
+  function handleClickCreateNew() {
+    handleSave(ButtonName.CreateNew);
   }
 
   if (loadingMajorData) {
@@ -188,10 +253,16 @@ export default function MajorSelection({
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       <SelectionErrorAlert />
       <LoadingMajorDataErrorAlert />
       <SavingMajorDataErrorAlert />
+      <ConfirmAlert
+        open={replaceAlertOpen}
+        onClose={() => setReplaceAlertOpen(false)}
+        onConfirm={handleConfirmReplaceCurrent}
+        dialogText="Are you sure you want to replace your current planner?"
+      />
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-2">
           <SelectCatalogYear
@@ -209,25 +280,80 @@ export default function MajorSelection({
         </div>
       </div>
       <div>
-        <SelectDefaultPlanner
-          selectedDefaultPlanner={selectedDefaultPlanner}
-          onChange={handleChangeDefaultPlanner}
-          majorDefaultPlanners={majorDefaultPlanners}
-          loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-        />
+        <PlannerProvider plannerId={""} title={""} order={0}>
+          <ModalsProvider>
+            <SelectDefaultPlanner
+              selectedDefaultPlanner={selectedDefaultPlanner}
+              onChange={handleChangeDefaultPlanner}
+              majorDefaultPlanners={majorDefaultPlanners}
+              loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+              addPlannerCardContainer={isInPlannerPage}
+            />
+            <CourseInfoModal />
+          </ModalsProvider>
+        </PlannerProvider>
       </div>
       <div className="flex justify-end w-full">
-        {saveButtonDisabled || loadingSaveMajor ? (
+        {loadingSaveMajor ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
-          <div>
-            {handleSkip && (
-              <Button onClick={handleSkip} variant="plain">
-                Skip
-              </Button>
-            )}
-            <Button onClick={handleClickSave}>{saveButtonName}</Button>
-          </div>
+          <SaveButtons
+            saveButtonName={saveButtonName}
+            isInPlannerPage={isInPlannerPage}
+            onSkip={onSkip}
+            onClickSave={handleClickSave}
+            onClickReplaceCurrent={handleClickReplaceCurrent}
+            onClickCreateNew={handleClickCreateNew}
+            majorSelectionIsValid={majorSelectionIsValid}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function SaveButtons({
+  saveButtonName,
+  isInPlannerPage,
+  onSkip,
+  onClickSave,
+  onClickReplaceCurrent,
+  onClickCreateNew,
+  majorSelectionIsValid,
+}: {
+  saveButtonName: string;
+  isInPlannerPage?: boolean;
+  onSkip?: () => void;
+  onClickSave: () => void;
+  onClickReplaceCurrent: () => void;
+  onClickCreateNew: () => void;
+  majorSelectionIsValid: boolean;
+}) {
+  return (
+    <div>
+      {onSkip && (
+        <Button onClick={onSkip} variant="plain">
+          Skip
+        </Button>
+      )}
+      <div>
+        <Button onClick={onClickSave}>{saveButtonName}</Button>
+        {isInPlannerPage && (
+          <>
+            <Button
+              disabled={!majorSelectionIsValid}
+              color="warning"
+              onClick={onClickReplaceCurrent}
+            >
+              Replace Current
+            </Button>
+            <Button
+              disabled={!majorSelectionIsValid}
+              onClick={onClickCreateNew}
+            >
+              Create New
+            </Button>
+          </>
         )}
       </div>
     </div>

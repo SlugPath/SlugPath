@@ -1,9 +1,9 @@
 "use client";
-import { List, ListItem } from "@mui/joy";
-import Planner from "./Planner";
-import PlannerTabs from "./PlannerTabs";
-import Navbar from "./Navbar";
-import { useContext, useEffect } from "react";
+import { CssVarsProvider, List, ListItem } from "@mui/joy";
+import Planner from "./planner/Planner";
+import PlannerTabs from "./planner/plannerTabs/PlannerTabs";
+import Navbar from "./navbar/Navbar";
+import { useContext, useState, useEffect } from "react";
 import {
   PlannersContext,
   PlannersProvider,
@@ -15,23 +15,26 @@ import { useSession } from "next-auth/react";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useRouter } from "next/navigation";
 import BetaWarning from "./beta/BetaWarning";
+import DeletedPlannerSnackbar from "./planner/plannerTabs/DeletedPlannerSnackbar";
 
 export default function App() {
   return (
     <DefaultPlannerProvider>
       <PlannersProvider>
-        <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
-          <Navbar />
-          <BetaWarning />
-          <div className="pt-4 mb-auto">
-            <div className="flex justify-left px-7">
-              <PlannerTabs />
-            </div>
-            <div className="px-5">
-              <PlannerList />
+        <CssVarsProvider defaultMode="system">
+          <div className="h-full min-h-screen w-full bg-bg-light dark:bg-bg-dark flex flex-col justify-between">
+            <Navbar />
+            <BetaWarning />
+            <div className="pt-4 mb-auto">
+              <div className="flex justify-left px-7">
+                <PlannerTabs />
+              </div>
+              <div className="px-5">
+                <PlannerList />
+              </div>
             </div>
           </div>
-        </div>
+        </CssVarsProvider>
       </PlannersProvider>
     </DefaultPlannerProvider>
   );
@@ -40,7 +43,17 @@ export default function App() {
 function PlannerList() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { planners } = useContext(PlannersContext);
+  const { planners, deletedPlanner, loadingDeletePlanner } =
+    useContext(PlannersContext);
+  const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
+    useState(false);
+
+  useEffect(() => {
+    if (deletedPlanner) {
+      setOpenDeletedPlannerSnackbar(true);
+    }
+  }, [deletedPlanner, loadingDeletePlanner]);
+
   const { userMajorData, loadingMajorData } = useMajorSelection(
     session?.user.id,
   );
@@ -78,6 +91,10 @@ function PlannerList() {
           </ListItem>
         ))}
       </List>
+      <DeletedPlannerSnackbar
+        open={openDeletedPlannerSnackbar}
+        setOpen={setOpenDeletedPlannerSnackbar}
+      />
     </>
   );
 }

@@ -1,26 +1,21 @@
-import {
-  Card,
-  CardContent,
-  CssVarsProvider,
-  Grid,
-  Link,
-  Typography,
-} from "@mui/joy";
-import { StoredCourse } from "../types/Course";
+import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
+import { StoredCourse } from "../../../../types/Course";
 import {
   extractTermFromQuarter,
+  geLabels,
   getDeptAndNumber,
   isCSE,
+  isCustomCourse,
   isOffered,
 } from "@/lib/plannerUtils";
 import { useContext, useState } from "react";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import { PlannerContext } from "../contexts/PlannerProvider";
-import { ModalsContext } from "../contexts/ModalsProvider";
+import { PlannerContext } from "../../../../contexts/PlannerProvider";
+import { ModalsContext } from "../../../../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
-import CloseIconButton from "./CloseIconButton";
+import CloseIconButton from "../../../CloseIconButton";
 import CourseLabel from "./CourseLabel";
-import { Label } from "../types/Label";
+import { Label } from "../../../../types/Label";
 import { truncateTitle } from "@/lib/utils";
 import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
 
@@ -62,61 +57,64 @@ export default function CourseCard({
     onShowCourseInfoModal();
   }
 
+  function cardColor() {
+    if (isCustomCourse(course)) {
+      return "warning";
+    } else if (isEnrolledCourse) {
+      return "primary";
+    } else {
+      return "neutral";
+    }
+  }
+
   return (
-    <CssVarsProvider defaultMode="system">
-      <Card
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        size="sm"
-        variant="soft"
-        color={isEnrolledCourse ? "primary" : "neutral"}
-        className="hover:opacity-50"
-        style={{
-          ...getItemStyle(provided.draggableProps.style),
-          height: "35px",
-          justifyContent: "center",
-        }}
-        onMouseEnter={() => setHighlighted(true)}
-        onMouseLeave={() => setHighlighted(false)}
-      >
-        <CardContent>
-          <Grid
-            container
-            alignItems="center"
-            justifyContent="center"
-            spacing={1}
-          >
-            <Grid xs={11} className="flex flex-row whitespace-nowrap">
-              <Title
-                course={course}
-                onShowCourseInfoModal={handleShowCourseInfoModal}
-                quarterId={quarterId}
-              />
-              <CourseLabelList labels={getCourseLabels(course)} />
-            </Grid>
-            <Grid xs={1}>
-              {quarterId !== undefined && (
-                <CloseIconButton
-                  onClick={() => deleteCourse(quarterId)(index)}
-                  sx={{
-                    visibility: highlighted ? "visible" : "hidden",
-                  }}
-                />
-              )}
-              {isCustom && (
-                <CloseIconButton
-                  onClick={() => handleRemoveCustom(index)}
-                  sx={{
-                    visibility: highlighted ? "visible" : "hidden",
-                  }}
-                />
-              )}
-            </Grid>
+    <Card
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+      size="sm"
+      variant="soft"
+      color={cardColor()}
+      className="hover:opacity-50"
+      style={{
+        ...getItemStyle(provided.draggableProps.style),
+        height: "35px",
+        justifyContent: "center",
+      }}
+      onMouseEnter={() => setHighlighted(true)}
+      onMouseLeave={() => setHighlighted(false)}
+    >
+      <CardContent>
+        <Grid container alignItems="center" justifyContent="start" spacing={1}>
+          <Grid xs={10} className="flex flex-row whitespace-nowrap">
+            <Title
+              course={course}
+              onShowCourseInfoModal={handleShowCourseInfoModal}
+              quarterId={quarterId}
+            />
+            <CourseLabelList labels={getCourseLabels(course)} ge={course.ge} />
           </Grid>
-        </CardContent>
-      </Card>
-    </CssVarsProvider>
+          <Grid xs={1}>
+            {quarterId !== undefined && (
+              <CloseIconButton
+                onClick={() => deleteCourse(quarterId)(index)}
+                sx={{
+                  visibility: highlighted ? "visible" : "hidden",
+                }}
+              />
+            )}
+            {isCustom && (
+              <CloseIconButton
+                onClick={() => handleRemoveCustom(index)}
+                sx={{
+                  visibility: highlighted ? "visible" : "hidden",
+                }}
+              />
+            )}
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -143,7 +141,6 @@ const Title = ({
       <Link
         overlay
         underline="none"
-        href="#interactive-card"
         sx={{ color: "text.tertiary" }}
         onClick={() => onShowCourseInfoModal(course)}
       >
@@ -156,11 +153,13 @@ const Title = ({
   );
 };
 
-const CourseLabelList = ({ labels }: { labels: Label[] }) => {
+const CourseLabelList = ({ labels, ge }: { labels: Label[]; ge: string[] }) => {
+  const allLabels = [...geLabels(ge), ...labels];
+
   return (
     <div className="flex truncate">
-      {labels
-        ? labels.map((label, index) => (
+      {allLabels
+        ? allLabels.map((label, index) => (
             <CourseLabel key={index} label={label} displayText={false} />
           ))
         : null}

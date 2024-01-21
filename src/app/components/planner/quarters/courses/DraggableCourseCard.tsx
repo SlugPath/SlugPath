@@ -1,5 +1,5 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { StoredCourse } from "../types/Course";
+import { StoredCourse } from "../../../../types/Course";
 import CourseCard from "./CourseCard";
 
 export default function DraggableCourseCard({

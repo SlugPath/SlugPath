@@ -6,6 +6,7 @@ import {
   Typography,
   List,
   ListItem,
+  Card,
 } from "@mui/joy";
 import Info from "@mui/icons-material/Info";
 import MiniPlanner from "./miniPlanner/MiniPlanner";
@@ -17,6 +18,7 @@ export default function SelectDefaultPlanner({
   onChange,
   majorDefaultPlanners,
   loadingMajorDefaultPlanners,
+  addPlannerCardContainer,
 }: {
   selectedDefaultPlanner: string;
   onChange: (
@@ -25,6 +27,7 @@ export default function SelectDefaultPlanner({
   ) => void;
   majorDefaultPlanners: any;
   loadingMajorDefaultPlanners: boolean;
+  addPlannerCardContainer?: boolean;
 }) {
   const defaultPlanners: { id: string; title: string }[] =
     majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
@@ -66,7 +69,16 @@ export default function SelectDefaultPlanner({
                     sx={{ display: plannerIsSelected ? "block" : "none" }}
                     key={index}
                   >
-                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
+                    {addPlannerCardContainer ? (
+                      <Card variant="soft">
+                        <MiniPlanner
+                          plannerId={id}
+                          active={plannerIsSelected}
+                        />
+                      </Card>
+                    ) : (
+                      <MiniPlanner plannerId={id} active={plannerIsSelected} />
+                    )}
                   </ListItem>
                 );
               })}

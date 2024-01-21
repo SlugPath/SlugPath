@@ -1,16 +1,25 @@
-import { CssVarsProvider, Tooltip, Typography, useColorScheme } from "@mui/joy";
+import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { blue, grey } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import InfoIcon from "@mui/icons-material/Info";
+import { PlannerData } from "../../../types/PlannerData";
+import { GESMappedToCourses } from "@/lib/plannerUtils";
 
 const satisfied = blue[200];
-const satisfiedDark = blue[800];
-const notSatisfied = grey[300];
-const notSatisfiedDark = grey[700];
+const satisfiedDark = blue[700];
+const notSatisfied = blue[50];
+const notSatisfiedDark = "#172554";
 
-const GEProgressModal = ({ ge }: { ge: string[] }) => {
-  const { systemMode } = useColorScheme();
+const GEProgressModal = ({
+  ge,
+  courseState,
+}: {
+  ge: string[];
+  courseState: PlannerData;
+}) => {
+  const { mode } = useColorScheme();
+  const mapOfGeToCourses = GESMappedToCourses({ courseState });
 
   const [data, setData] = useState([
     { id: 1, value: 10, label: "CC", color: "grey" },
@@ -38,15 +47,15 @@ const GEProgressModal = ({ ge }: { ge: string[] }) => {
           (item.label === "PE" && PE_GE.some((g) => ge.includes(g))) ||
           (item.label === "PR" && PR_GE.some((g) => ge.includes(g))) ||
           ge.includes(item.label.toLowerCase())
-            ? systemMode == "light"
+            ? mode == "light"
               ? satisfied
               : satisfiedDark
-            : systemMode == "light"
+            : mode == "light"
             ? notSatisfied
             : notSatisfiedDark,
       })),
     );
-  }, [ge, systemMode]);
+  }, [ge, mode]);
 
   return (
     <>
@@ -61,12 +70,33 @@ const GEProgressModal = ({ ge }: { ge: string[] }) => {
           </Tooltip>
         </div>
         <PieChart
-          tooltip={{ trigger: "none" }}
+          tooltip={{
+            trigger: "item",
+            itemContent: (params) => {
+              const ge =
+                params.series.data[
+                  params.itemData.dataIndex
+                ].label.toLowerCase();
+              const coursesWithGE = mapOfGeToCourses.get(ge);
+
+              return (
+                <div className="p-1 bg-white rounded-md shadow-md">
+                  {coursesWithGE ? (
+                    coursesWithGE.map((course, index) => (
+                      <div key={index}>{course}</div>
+                    ))
+                  ) : (
+                    <div>None</div>
+                  )}
+                </div>
+              );
+            },
+          }}
           series={[
             {
+              data,
               arcLabel: (item) => `${item.label}`,
               arcLabelMinAngle: 10,
-              data,
               innerRadius: 40,
               outerRadius: 80,
               paddingAngle: 1.5,
@@ -79,7 +109,7 @@ const GEProgressModal = ({ ge }: { ge: string[] }) => {
           ]}
           sx={{
             [`& .${pieArcLabelClasses.root}`]: {
-              fill: "black",
+              fontSize: "0.8rem",
             },
           }}
           width={220}
@@ -95,10 +125,12 @@ const GEProgressModal = ({ ge }: { ge: string[] }) => {
   );
 };
 
-export const GEProgress = ({ ge }: { ge: string[] }) => {
-  return (
-    <CssVarsProvider defaultMode="system">
-      <GEProgressModal ge={ge} />
-    </CssVarsProvider>
-  );
+export const GEProgress = ({
+  ge,
+  courseState,
+}: {
+  ge: string[];
+  courseState: PlannerData;
+}) => {
+  return <GEProgressModal ge={ge} courseState={courseState} />;
 };

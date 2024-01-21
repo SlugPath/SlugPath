@@ -6,6 +6,7 @@ const config: Config = {
     "./src/app/Components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -15,7 +16,7 @@ const config: Config = {
         "primary-100": "#bfdbfe",
         "primary-200": "#93c5fd",
         "primary-400": "#0b6bcb",
-        "primary-500": "#1e40af", // Primary blue
+        "primary-500": "#3b82f6",
         "primary-700": "#12467b",
         "primary-900": "#0a2744",
 
