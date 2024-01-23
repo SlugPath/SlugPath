@@ -1,0 +1,38 @@
+import { useEffect, useState } from "react";
+import { Binder, RequirementList } from "../types/Requirements";
+import { v4 as uuid4 } from "uuid";
+import {
+  getMajorRequirements,
+  saveMajorRequirements,
+} from "@/app/actions/actions";
+
+export default function useMajorRequirements(majorId: number | undefined) {
+  const [majorRequirements, setMajorRequirements] = useState<RequirementList>({
+    binder: Binder.AND,
+    title: "No title",
+    id: uuid4(),
+    requirements: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (majorId === undefined) return;
+      try {
+        const result = await getMajorRequirements(majorId);
+        setMajorRequirements(result); // Set the data to the state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (majorId) {
+      fetchData();
+    }
+  }, [majorId]);
+
+  return {
+    majorRequirements,
+    setMajorRequirements,
+    saveMajorRequirements,
+  };
+}

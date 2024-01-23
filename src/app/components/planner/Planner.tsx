@@ -26,6 +26,8 @@ import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
 import PlannerActionsCard from "./PlannerActionsCard";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
+import PermissionsModal from "../permissionsModal/PermissionsModal";
+import StyledAccordion from "./StyledAccordion";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
@@ -141,6 +143,7 @@ function Modals() {
       <ExportModal />
       <MajorSelectionModal />
       <MajorProgressModal />
+      <PermissionsModal />
     </>
   );
 }
@@ -165,26 +168,6 @@ function Years({ courseState }: { courseState: PlannerData }) {
         );
       })}
     </div>
-  );
-}
-
-function StyledAccordion({ children }: { children: React.ReactNode }) {
-  return (
-    <Accordion
-      variant="soft"
-      sx={{
-        borderRadius: "0.5rem",
-        "&.MuiAccordion-root": {
-          "& .MuiAccordionSummary-root": {
-            padding: "0.5rem 0",
-            paddingX: "0.5rem",
-          },
-        },
-      }}
-      defaultExpanded={true}
-    >
-      {children}
-    </Accordion>
   );
 }
 

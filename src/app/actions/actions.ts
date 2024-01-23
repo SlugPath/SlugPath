@@ -3,6 +3,8 @@
 import prisma from "@/lib/prisma";
 import { Binder, RequirementList } from "../types/Requirements";
 import { v4 as uuid4 } from "uuid";
+import { Major } from "../types/Major";
+import { Permissions } from "../types/Permissions";
 
 export async function saveMajorRequirements(
   requirements: RequirementList,
@@ -59,4 +61,125 @@ export async function getMajorRequirements(
   ) as RequirementList;
 
   return requirementList;
+}
+
+export async function getMajors(): Promise<
+  {
+    name: string;
+    id: number;
+    catalogYear: string;
+  }[]
+> {
+  const majors = await prisma.major.findMany({
+    orderBy: {
+      name: "asc",
+    },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
+  });
+
+  return majors;
+}
+
+export async function savePermissions(permissions: Permissions[]) {
+  await prisma.permissions.deleteMany({
+    where: {
+      userEmail: {
+        notIn: permissions.map((permission) => permission.userEmail),
+      },
+    },
+  });
+
+  permissions.forEach(async (permission) => {
+    if (permission.userEmail !== undefined) {
+      const result = await prisma.permissions.upsert({
+        where: {
+          userEmail: permission.userEmail,
+        },
+        update: {
+          majorsAllowedToEdit: {
+            connect: permission.majorsAllowedToEdit.map((major) => {
+              return {
+                id: major.id,
+              };
+            }),
+          },
+        },
+        create: {
+          userEmail: permission.userEmail,
+          majorsAllowedToEdit: {
+            connect: permission.majorsAllowedToEdit.map((major) => {
+              return {
+                id: major.id,
+              };
+            }),
+          },
+        },
+      });
+
+      console.log("result=====");
+      console.log(result);
+    }
+  });
+
+  // return;
+}
+
+export async function getPermissions(): Promise<Permissions[]> {
+  const usersPermissions = await prisma.permissions.findMany({
+    select: {
+      userEmail: true,
+      majorsAllowedToEdit: {
+        select: {
+          name: true,
+          catalogYear: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  if (usersPermissions === null) {
+    return [];
+  }
+
+  return usersPermissions;
+}
+
+export async function userHasMajorEditingPermission(
+  userId: string,
+  major: Major,
+): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      email: true,
+    },
+  });
+
+  if (user?.email !== undefined) {
+    const permissions = await prisma.permissions.findUnique({
+      where: {
+        userEmail: user.email ? user.email : "",
+      },
+      select: {
+        majorsAllowedToEdit: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (permissions?.majorsAllowedToEdit !== undefined) {
+      const majorIds = permissions.majorsAllowedToEdit.map((major) => major.id);
+      return majorIds.includes(major.id);
+    }
+  }
+
+  return false;
 }

@@ -5,6 +5,7 @@ export default function useModals() {
   const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
   const [showMajorSelectionModal, setShowMajorSelectionModal] = useState(false);
   const [showMajorProgressModal, setShowMajorProgressModal] = useState(false);
+  const [showPermissionsModal, setShowPermissionsModal] = useState(false);
 
   function handleShowCourseInfoModal() {
     setShowCourseInfoModal(true);
@@ -20,5 +21,7 @@ export default function useModals() {
     setShowMajorSelectionModal,
     showMajorProgressModal,
     setShowMajorProgressModal,
+    showPermissionsModal,
+    setShowPermissionsModal,
   };
 }

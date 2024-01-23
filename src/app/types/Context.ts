@@ -20,6 +20,8 @@ export interface ModalsContextProps {
   setShowMajorSelectionModal: setShow;
   showMajorProgressModal: boolean;
   setShowMajorProgressModal: setShow;
+  showPermissionsModal: boolean;
+  setShowPermissionsModal: setShow;
   courseState: PlannerData;
 }
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import { MajorVerificationContextProps } from "../types/Context";
 import { PlannerContext } from "./PlannerProvider";
 import {
@@ -11,47 +11,13 @@ import { getUniqueCourses } from "@/lib/plannerUtils";
 import { StoredCourse } from "../types/Course";
 import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
-import {
-  getMajorRequirements,
-  saveMajorRequirements,
-} from "@/app/actions/actions";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
+import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
 );
-
-function useMajorRequirements(majorId: number | undefined) {
-  const [majorRequirements, setMajorRequirements] = useState<RequirementList>({
-    binder: Binder.AND,
-    title: "No title",
-    id: uuid4(),
-    requirements: [],
-  });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (majorId === undefined) return;
-      try {
-        const result = await getMajorRequirements(majorId);
-        setMajorRequirements(result); // Set the data to the state
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (majorId) {
-      fetchData();
-    }
-  }, [majorId]);
-
-  return {
-    majorRequirements,
-    setMajorRequirements,
-    saveMajorRequirements,
-  };
-}
 
 export function MajorVerificationProvider({
   children,

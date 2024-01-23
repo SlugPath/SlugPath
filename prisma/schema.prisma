@@ -9,14 +9,14 @@ datasource db {
 }
 
 model User {
-  id               String    @id
+  id               String        @id
   email            String?
   name             String?
-  majorId          Int?
-  role             Role      @default(USER)
+  role             Role          @default(USER)
   defaultPlannerId String?
   planners         Planner[]
-  major            Major?    @relation(fields: [majorId], references: [id])
+  majorId          Int?
+  major            Major?        @relation(fields: [majorId], references: [id])
 }
 
 model Planner {
@@ -69,23 +69,30 @@ model Course {
 }
 
 model Major {
-  id                 Int              @id @default(autoincrement())
-  name               String
-  catalogYear        String
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  defaultPlanners    Planner[]
-  users              User[]
-  majorRequirement   MajorRequirement?
+  id               Int               @id @default(autoincrement())
+  name             String
+  catalogYear      String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  defaultPlanners  Planner[]
+  users            User[]
+  majorRequirement MajorRequirement?
+  permissions      Permissions[]
 
   @@unique([name, catalogYear])
 }
 
 model MajorRequirement {
-  id              Int     @id @default(autoincrement())
+  id              Int   @id @default(autoincrement())
   requirementList Json
-  major           Major   @relation(fields: [majorId], references: [id])
-  majorId         Int     @unique
+  major           Major @relation(fields: [majorId], references: [id])
+  majorId         Int   @unique
+}
+
+model Permissions {
+  id                  Int     @id @default(autoincrement())
+  majorsAllowedToEdit Major[]
+  userEmail           String  @unique
 }
 
 model Label {

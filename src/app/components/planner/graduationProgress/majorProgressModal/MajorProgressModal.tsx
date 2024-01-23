@@ -15,6 +15,7 @@ import {
   RequirementsComponentEditing,
 } from "./RequirementsComponent";
 import Search from "@/app/components/search/Search";
+import useUserPermissions from "@/app/hooks/useUserPermissions";
 
 export default function MajorProgressModal() {
   const {
@@ -24,8 +25,8 @@ export default function MajorProgressModal() {
   const { majorRequirements, handleSaveMajorRequirements } = useContext(
     MajorVerificationContext,
   );
+  const { hasPermissionToEdit } = useUserPermissions();
   const [editing, setEditing] = useState(false);
-  const hasEditPermission = true;
 
   function Title() {
     return (
@@ -61,20 +62,19 @@ export default function MajorProgressModal() {
         }}
       >
         <div className="mb-4">
-          {/* <Typography level="title-lg">Major Progress</Typography> */}
           <Title />
         </div>
         <div className="flex flex-row">
-          <div className="flex-initial pr-2">
-            <Card variant="soft" size="sm">
-              {showModal && (
+          {showModal && hasPermissionToEdit && (
+            <div className="flex-initial pr-2">
+              <Card variant="soft" size="sm">
                 <Search
                   displayCustomCourseSelection={false}
                   searchComponentId="majorprogress"
                 />
-              )}
-            </Card>
-          </div>
+              </Card>
+            </div>
+          )}
           <div
             className="overflow-y-scroll w-full"
             style={{ maxHeight: "80vh" }}
@@ -92,7 +92,7 @@ export default function MajorProgressModal() {
             )}
           </div>
         </div>
-        {hasEditPermission && (
+        {hasPermissionToEdit && (
           <div className="flex flex-row justify-end space-x-2">
             <Chip color="success" variant="solid">
               You have edit permission
