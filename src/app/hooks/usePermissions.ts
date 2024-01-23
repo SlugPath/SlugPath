@@ -4,6 +4,8 @@ import { Permissions } from "@/app/types/Permissions";
 
 export default function usePermissions() {
   const [permissionsList, setPermissionsList] = useState<Permissions[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,17 +20,27 @@ export default function usePermissions() {
     fetchData();
   }, []);
 
+  function handleSetPermissionsList(newPermissionsList: Permissions[]) {
+    setPermissionsList(newPermissionsList);
+    setIsSaved(false);
+  }
+
   async function handleSaveUsers() {
+    setLoading(true);
     try {
       await savePermissions(permissionsList);
+      setIsSaved(true);
     } catch (error) {
       console.error("Error saving users permissions:", error);
     }
+    setLoading(false);
   }
 
   return {
+    isSaved,
+    loading,
     permissionsList,
-    setPermissionsList,
+    onSetPermissionsList: handleSetPermissionsList,
     onSavePermissions: handleSaveUsers,
   };
 }

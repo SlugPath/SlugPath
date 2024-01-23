@@ -27,6 +27,8 @@ import { Permissions } from "@/app/types/Permissions";
 import usePermissions from "@/app/hooks/usePermissions";
 import StyledAccordion from "../planner/StyledAccordion";
 import ConfirmAlert from "../ConfirmAlert";
+import { CircularProgress } from "@mui/material";
+import IsSatisfiedMark from "../IsSatisfiedMark";
 
 export default function PermissionsModal() {
   const { showPermissionsModal, setShowPermissionsModal } =
@@ -34,8 +36,13 @@ export default function PermissionsModal() {
 
   const [email, setEmail] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const { permissionsList, setPermissionsList, onSavePermissions } =
-    usePermissions();
+  const {
+    loading: loadingPermissions,
+    isSaved,
+    permissionsList,
+    onSetPermissionsList,
+    onSavePermissions,
+  } = usePermissions();
 
   const [permissionsAlertOpen, setPermissionsAlertOpen] =
     useState<boolean>(false);
@@ -44,7 +51,7 @@ export default function PermissionsModal() {
 
   function handleAddUser() {
     if (selectionIsValid()) {
-      setPermissionsList([
+      onSetPermissionsList([
         ...permissionsList,
         { userEmail: email, majorsAllowedToEdit: [] },
       ]);
@@ -60,7 +67,7 @@ export default function PermissionsModal() {
   }
 
   function handleRemovePermissions(permissions: Permissions) {
-    setPermissionsList(
+    onSetPermissionsList(
       permissionsList.filter((u) => u.userEmail !== permissions.userEmail),
     );
   }
@@ -74,7 +81,7 @@ export default function PermissionsModal() {
     }
     const permissionsCopy = { ...permissions };
     permissionsCopy.majorsAllowedToEdit.push(major);
-    setPermissionsList([
+    onSetPermissionsList([
       ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
       permissionsCopy,
     ]);
@@ -87,7 +94,7 @@ export default function PermissionsModal() {
     const permissionsCopy = { ...permissions };
     permissionsCopy.majorsAllowedToEdit =
       permissionsCopy.majorsAllowedToEdit.filter((m) => m.name !== major.name);
-    setPermissionsList([
+    onSetPermissionsList([
       ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
       permissionsCopy,
     ]);
@@ -133,6 +140,7 @@ export default function PermissionsModal() {
           textColor="inherit"
           fontWeight="lg"
           mb={1}
+          className="ml-3"
         >
           Permissions Page
         </Typography>
@@ -159,9 +167,20 @@ export default function PermissionsModal() {
                 />
                 <Button onClick={handleAddUser}>Add</Button>
               </div>
-              <Button color="primary" onClick={onSavePermissions}>
-                Save
-              </Button>
+              <div className="flex flex-row gap-1 items-center">
+                <IsSatisfiedMark isSatisfied={isSaved} />
+                {loadingPermissions ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    disabled={isSaved}
+                    color="primary"
+                    onClick={onSavePermissions}
+                  >
+                    Save
+                  </Button>
+                )}
+              </div>
             </div>
             <PermissionsList
               permissionsList={permissionsList}
