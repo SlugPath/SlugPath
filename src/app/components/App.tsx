@@ -82,7 +82,7 @@ function PlannerList() {
             sx={{ display: planners[id][1] ? "block" : "none" }}
             key={id}
           >
-            <MajorVerificationProvider>
+            <MajorVerificationProvider plannerId={id}>
               <PlannerProvider
                 plannerId={id}
                 title={planners[id][0]}

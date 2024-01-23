@@ -16,15 +16,15 @@ import {
 } from "./RequirementsComponent";
 import Search from "@/app/components/search/Search";
 import useUserPermissions from "@/app/hooks/useUserPermissions";
+import { CircularProgress } from "@mui/material";
 
 export default function MajorProgressModal() {
   const {
     setShowMajorProgressModal: setShowModal,
     showMajorProgressModal: showModal,
   } = useContext(ModalsContext);
-  const { majorRequirements, handleSaveMajorRequirements } = useContext(
-    MajorVerificationContext,
-  );
+  const { loadingSave, majorRequirements, onSaveMajorRequirements } =
+    useContext(MajorVerificationContext);
   const { hasPermissionToEdit } = useUserPermissions();
   const [editing, setEditing] = useState(false);
 
@@ -40,7 +40,7 @@ export default function MajorProgressModal() {
   function handleToggleEditButton() {
     setEditing(!editing);
     if (editing) {
-      handleSaveMajorRequirements();
+      onSaveMajorRequirements();
     }
   }
 
@@ -97,9 +97,13 @@ export default function MajorProgressModal() {
             <Chip color="success" variant="solid">
               You have edit permission
             </Chip>
-            <Button onClick={handleToggleEditButton}>
-              {editing ? "Done" : "Edit"}
-            </Button>
+            {loadingSave ? (
+              <CircularProgress />
+            ) : (
+              <Button onClick={handleToggleEditButton}>
+                {editing ? "Done" : "Edit"}
+              </Button>
+            )}
           </div>
         )}
         <ModalClose variant="plain" />

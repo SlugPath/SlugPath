@@ -85,13 +85,7 @@ export async function getMajors(): Promise<
 }
 
 export async function savePermissions(permissions: Permissions[]) {
-  await prisma.permissions.deleteMany({
-    where: {
-      userEmail: {
-        notIn: permissions.map((permission) => permission.userEmail),
-      },
-    },
-  });
+  await prisma.permissions.deleteMany();
 
   permissions.forEach(async (permission) => {
     if (permission.userEmail !== undefined) {

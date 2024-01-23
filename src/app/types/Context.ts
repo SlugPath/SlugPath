@@ -86,6 +86,8 @@ export interface MajorVerificationContextProps {
   majorRequirements: RequirementList;
   majorIsVerified: boolean;
   errors: string;
+  loadingSave: boolean;
+  isSaved: boolean;
   findRequirementList: (
     id: string,
     requirements: RequirementList,
@@ -96,5 +98,5 @@ export interface MajorVerificationContextProps {
     requirementListId: string,
     newRequirementList: RequirementList,
   ) => void;
-  handleSaveMajorRequirements: () => void;
+  onSaveMajorRequirements: () => void;
 }

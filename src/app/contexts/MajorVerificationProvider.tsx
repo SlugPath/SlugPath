@@ -1,19 +1,18 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 import { MajorVerificationContextProps } from "../types/Context";
-import { PlannerContext } from "./PlannerProvider";
 import {
   Binder,
   Requirement,
   RequirementList,
   Requirements,
 } from "../types/Requirements";
-import { getUniqueCourses } from "@/lib/plannerUtils";
 import { StoredCourse } from "../types/Course";
 import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
 import useMajorSelection from "../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
 import useMajorRequirements from "@/app/hooks/useMajorRequirements";
+import usePlanner from "../hooks/usePlanner";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
@@ -21,14 +20,26 @@ export const MajorVerificationContext = createContext(
 
 export function MajorVerificationProvider({
   children,
+  plannerId,
 }: {
   children: React.ReactNode;
+  plannerId: string;
 }) {
-  const { courseState } = useContext(PlannerContext);
   const { data: session } = useSession();
+  const { courseState } = usePlanner({
+    userId: session?.user.id,
+    plannerId: plannerId,
+    title: "Title",
+    order: 0,
+  });
   const { userMajorData } = useMajorSelection(session?.user.id);
-  const { majorRequirements, setMajorRequirements, saveMajorRequirements } =
-    useMajorRequirements(userMajorData?.id);
+  const {
+    loadingSave,
+    isSaved,
+    majorRequirements,
+    onSetMajorRequirements,
+    onSaveMajorRequirements,
+  } = useMajorRequirements(userMajorData?.id);
 
   function updateRequirementList(id: string, requirementList: RequirementList) {
     const majorRequirementsCopy = { ...majorRequirements };
@@ -46,7 +57,7 @@ export function MajorVerificationProvider({
       }
     }
 
-    setMajorRequirements(majorRequirementsCopy);
+    onSetMajorRequirements(majorRequirementsCopy);
   }
 
   function addRequirementList(parentRequirementListId: string) {
@@ -67,7 +78,7 @@ export function MajorVerificationProvider({
       parentRequirementList.requirements.push(newRequirementList);
     }
 
-    setMajorRequirements(majorRequirementsCopy);
+    onSetMajorRequirements(majorRequirementsCopy);
   }
 
   function removeRequirementList(id: string) {
@@ -90,7 +101,7 @@ export function MajorVerificationProvider({
       }
     }
 
-    setMajorRequirements(majorRequirementsCopy);
+    onSetMajorRequirements(majorRequirementsCopy);
   }
 
   function findRequirementList(
@@ -138,14 +149,11 @@ export function MajorVerificationProvider({
   }
 
   function handleSaveMajorRequirements() {
-    saveMajorRequirements(majorRequirements, userMajorData.id);
+    onSaveMajorRequirements(userMajorData.id);
   }
 
   const majorIsVerified = courseState
-    ? isMajorRequirementsSatisfied(
-        csMajorRequirements,
-        getUniqueCourses(courseState.courses),
-      )
+    ? isMajorRequirementsSatisfied(majorRequirements, courseState.courses)
     : false;
 
   return (
@@ -155,133 +163,19 @@ export function MajorVerificationProvider({
         majorRequirements: majorRequirements,
         majorIsVerified,
         errors: "",
+        loadingSave,
+        isSaved,
         findRequirementList,
         addRequirementList,
         removeRequirementList,
         updateRequirementList,
-        handleSaveMajorRequirements,
+        onSaveMajorRequirements: handleSaveMajorRequirements,
       }}
     >
       {children}
     </MajorVerificationContext.Provider>
   );
 }
-
-const csMajorRequirements: RequirementList = {
-  binder: Binder.AND,
-  id: uuid4(),
-  title: "Computer Science BS Requirements",
-  requirements: [
-    {
-      binder: Binder.AND,
-      id: uuid4(),
-      title: "Lower Division Courses",
-      requirements: [
-        // {
-        //   departmentCode: "CSE",
-        //   number: "12",
-        // },
-        // {
-        //   departmentCode: "CSE",
-        //   number: "16",
-        // },
-        // {
-        //   departmentCode: "CSE",
-        //   number: "20",
-        // },
-        // {
-        //   departmentCode: "CSE",
-        //   number: "30",
-        // },
-        // {
-        //   departmentCode: "CSE",
-        //   number: "13S",
-        // },
-      ],
-    },
-    {
-      binder: Binder.OR,
-      id: uuid4(),
-      title: "Mathematics",
-      requirements: [
-        {
-          binder: Binder.AND,
-          id: uuid4(),
-          requirements: [
-            // {
-            //   departmentCode: "MATH",
-            //   number: "19A",
-            // },
-            // {
-            //   departmentCode: "MATH",
-            //   number: "19B",
-            // },
-          ],
-        },
-        {
-          binder: Binder.AND,
-          id: uuid4(),
-          requirements: [
-            // {
-            //   departmentCode: "MATH",
-            //   number: "20A",
-            // },
-            // {
-            //   departmentCode: "MATH",
-            //   number: "20B",
-            // },
-          ],
-        },
-      ],
-    },
-    {
-      binder: Binder.AND,
-      id: uuid4(),
-      title: "Applied Mathematics",
-      requirements: [
-        {
-          binder: Binder.OR,
-          id: uuid4(),
-          requirements: [
-            // {
-            //   departmentCode: "AM",
-            //   number: "10",
-            // },
-            // {
-            //   departmentCode: "MATH",
-            //   number: "21",
-            // },
-          ],
-        },
-        {
-          binder: Binder.OR,
-          id: uuid4(),
-          requirements: [
-            // {
-            //   departmentCode: "AM",
-            //   number: "30",
-            // },
-            // {
-            //   departmentCode: "MATH",
-            //   number: "23A",
-            // },
-          ],
-        },
-      ],
-    },
-    {
-      binder: Binder.AND,
-      id: uuid4(),
-      title: "Engineering Science",
-      requirements: [
-        // {
-        //   departmentCode: "ECE",
-        //   number: "30",
-        // },
-      ],
-    },
-  ],
-};
 
 function isMajorRequirementsSatisfied(
   requirements: Requirements,

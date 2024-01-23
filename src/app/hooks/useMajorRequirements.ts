@@ -13,6 +13,20 @@ export default function useMajorRequirements(majorId: number | undefined) {
     id: uuid4(),
     requirements: [],
   });
+  const [loadingSave, setLoadingSave] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(true);
+
+  function handleSetMajorRequirements(newMajorRequirements: RequirementList) {
+    setMajorRequirements(newMajorRequirements);
+    setIsSaved(false);
+  }
+
+  async function handleSaveMajorRequirements(majorId: number) {
+    setLoadingSave(true);
+    await saveMajorRequirements(majorRequirements, majorId);
+    setLoadingSave(false);
+    setIsSaved(true);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,8 +45,10 @@ export default function useMajorRequirements(majorId: number | undefined) {
   }, [majorId]);
 
   return {
+    isSaved,
+    loadingSave,
     majorRequirements,
-    setMajorRequirements,
-    saveMajorRequirements,
+    onSetMajorRequirements: handleSetMajorRequirements,
+    onSaveMajorRequirements: handleSaveMajorRequirements,
   };
 }
