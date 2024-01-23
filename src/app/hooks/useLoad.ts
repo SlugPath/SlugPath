@@ -1,6 +1,10 @@
 import { ApolloError, useLazyQuery } from "@apollo/client";
 import { useContext, useEffect, useState } from "react";
-import { deserializePlanner, initialPlanner } from "@/lib/plannerUtils";
+import {
+  deserializePlanner,
+  getTotalCredits,
+  initialPlanner,
+} from "@/lib/plannerUtils";
 import { MultiPlanner } from "../types/MultiPlanner";
 import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
@@ -18,6 +22,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 export const useLoadAllPlanners = (
   userId: string | undefined,
+  onLoadedPlanners?: (numPlanners: number) => void,
 ): [
   MultiPlanner,
   React.Dispatch<React.SetStateAction<MultiPlanner>>,
@@ -29,11 +34,15 @@ export const useLoadAllPlanners = (
       if (data.getAllPlanners.length > 0) {
         setState(convertPlannerTitles(data.getAllPlanners));
       }
+      if (onLoadedPlanners !== undefined) {
+        onLoadedPlanners(data.getAllPlanners.length);
+      }
     },
     onError: (err) => {
       console.error(err);
     },
   });
+
   useEffect(() => {
     if (userId !== undefined) {
       getData({
@@ -57,6 +66,7 @@ export const useLoadDefaultPlanner = (userId?: string) => {
   const { userMajorData } = useMajorSelection(userId);
   const plannerId = userMajorData?.defaultPlannerId;
   const skipLoad = userMajorData === undefined || plannerId === undefined;
+
   return useLoadPlanner({
     plannerId,
     userId: undefined,
@@ -139,6 +149,7 @@ export const useLoadPlanner = ({
   React.Dispatch<React.SetStateAction<PlannerData>>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
+  const { setHasAutoFilled } = useContext(DefaultPlannerContext);
   const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
     onCompleted: (data) => {
@@ -159,10 +170,14 @@ export const useLoadPlanner = ({
   });
 
   function autofillWithDefaultPlanner() {
+    console.log("autofill with default planner");
     setPlanner({
       ...defaultPlanner,
       labels: initialLabels(),
     });
+    if (getTotalCredits(defaultPlanner.courses) > 0) {
+      setHasAutoFilled(true);
+    }
   }
 
   useEffect(() => {

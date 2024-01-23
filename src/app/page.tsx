@@ -1,54 +1,30 @@
 "use client";
-import Image from "next/image";
 import MajorSelection from "./components/majorSelection/MajorSelection";
-import LoginButton from "./components/LoginButton";
 import { useSession } from "next-auth/react";
-import { WarningAmberRounded } from "@mui/icons-material";
-import { CssVarsProvider, Typography } from "@mui/joy";
+import { CssVarsProvider } from "@mui/joy";
 import { ApolloProvider } from "@apollo/client";
 import apolloClient from "@/lib/apolloClient";
 import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
 import BetaWarning from "./components/beta/BetaWarning";
-import BetaChip from "./components/beta/BetaChip";
+import Navbar from "./components/navbar/Navbar";
+import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
 
 export default function Page() {
   const { status } = useSession();
   const router = useRouter();
 
+  function redirectToPlanner() {
+    router.push("/planner");
+  }
+
   return (
     <CssVarsProvider defaultMode="system">
-      <div className="bg-bg-light dark:bg-bg-dark h-screen">
-        <div className="bg-primary-500 text-secondary-100 dark:text-secondary-200 h-auto flex flex-row md:grid md:grid-cols-5 px-5 py-4">
-          <div className="col-span-1" />
-          <div className="col-span-3 flex flex-row place-items-center gap-2 md:gap-6 text-center text-4xl place-self-center">
-            <Image
-              src="/images/slug-icon.png"
-              width={45}
-              height={45}
-              alt="Slug Icon"
-            />
-            <div>Welcome to the UCSC Course Planner!</div>
-          </div>
-          <div className="flex flex-1 justify-self-end">
-            <BetaChip />
-            <LoginButton />
-          </div>
-        </div>
-
+      <div className="bg-bg-light dark:bg-bg-dark min-h-screen pb-1">
+        <Navbar />
         {status !== "authenticated" ? (
           <div className="space-y-2 grid place-items-center">
-            <Typography
-              variant="soft"
-              color="warning"
-              component="p"
-              startDecorator={<WarningAmberRounded color="warning" />}
-              justifyContent="center"
-              className="py-2 px-6 rounded-b-2xl"
-            >
-              We recommend logging in with your UCSC email for a better
-              experience.
-            </Typography>
+            <UnauthenticatedWarning />
           </div>
         ) : null}
         <BetaWarning />
@@ -57,7 +33,9 @@ export default function Page() {
             <DefaultPlannerProvider>
               <MajorSelection
                 saveButtonName="Next"
-                handleSave={() => router.push("/planner")}
+                onSaved={redirectToPlanner}
+                onUserMajorAlreadyExists={redirectToPlanner}
+                onSkip={redirectToPlanner}
               />
             </DefaultPlannerProvider>
           </ApolloProvider>

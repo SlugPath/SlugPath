@@ -1,9 +1,10 @@
 import Image from "next/image";
-import LoginButton from "./LoginButton";
+import LoginButton from "../LoginButton";
 import { useSession } from "next-auth/react";
 import { Button, IconButton } from "@mui/joy";
-import { OpenInNew, GitHub } from "@mui/icons-material";
-import BetaChip from "./beta/BetaChip";
+import { GitHub, OpenInNew } from "@mui/icons-material";
+import BetaChip from "../beta/BetaChip";
+import ToggleDarkModeButton from "./ToggleDarkModeButton";
 
 export default function Navbar() {
   const { status } = useSession();
@@ -21,11 +22,12 @@ export default function Navbar() {
               alt="Slug Icon"
             />
             <a href="#" className="text-xl font-medium text-secondary-100">
-              UCSC Course Planner
+              Slug Path
             </a>
           </div>
 
           <div className="flex flex-1 justify-end place-items-center gap-4">
+            <ToggleDarkModeButton />
             <IconButton
               component="a"
               target="_blank"

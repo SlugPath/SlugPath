@@ -2,10 +2,21 @@ import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import MajorSelection from "./MajorSelection";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { useContext } from "react";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
 
 export default function MajorSelectionModal() {
   const { showMajorSelectionModal, setShowMajorSelectionModal } =
     useContext(ModalsContext);
+  const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
+
+  function handleCreateNewPlanner() {
+    addPlanner();
+    setShowMajorSelectionModal(false);
+  }
+
+  function handleReplaceCurrentPlanner() {
+    replaceCurrentPlanner();
+  }
 
   return (
     <Modal
@@ -14,7 +25,6 @@ export default function MajorSelectionModal() {
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet
-        variant="outlined"
         sx={{
           width: "60%",
           margin: 10,
@@ -33,10 +43,15 @@ export default function MajorSelectionModal() {
         >
           Edit Major
         </Typography>
-        <MajorSelection
-          saveButtonName="Save"
-          handleSave={() => setShowMajorSelectionModal(false)}
-        />
+        <div className="flex overflow-y-scroll h-[80vh]">
+          <MajorSelection
+            saveButtonName="Save"
+            onSaved={() => setShowMajorSelectionModal(false)}
+            isInPlannerPage={true}
+            onCreateNewPlanner={handleCreateNewPlanner}
+            onReplaceCurrentPlanner={handleReplaceCurrentPlanner}
+          />
+        </div>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>

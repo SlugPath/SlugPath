@@ -14,6 +14,7 @@ import { LabelColor } from "@prisma/client";
 import { MultiPlanner } from "@/app/types/MultiPlanner";
 import { truncateTitle } from "./utils";
 import { MAX_STORED_COURSE_TITLE } from "./consts";
+import { Label } from "@/app/types/Label";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 export const years = 4;
@@ -264,6 +265,59 @@ export function getTotalCredits(courses: StoredCourse[]): number {
   return uniqueCourses.reduce((accumulatedCredits, course) => {
     return accumulatedCredits + course.credits;
   }, 0);
+}
+
+/**
+ * @param courseState is the state of the course planner
+ * @returns every GE in courses in courseState mapped to the courses that satisfy it
+ */
+export function GESMappedToCourses({
+  courseState,
+}: {
+  courseState: PlannerData;
+}) {
+  const mapOfGeToCourses = new Map<string, string[]>();
+  for (const course of courseState.courses) {
+    if (course.ge.length > 0 && course.ge[0] !== "None") {
+      for (let ge of course.ge) {
+        // replaces pe-x with pe and pr-x with pr, where x is some letter
+        if (ge.includes("pe")) {
+          ge = "pe";
+        } else if (ge.includes("pr")) {
+          ge = "pr";
+        }
+
+        if (mapOfGeToCourses.has(ge)) {
+          const courses = mapOfGeToCourses.get(ge);
+          if (courses !== undefined) {
+            courses.push(course.departmentCode + " " + course.number);
+            mapOfGeToCourses.set(ge, courses);
+          }
+        } else {
+          mapOfGeToCourses.set(ge, [
+            course.departmentCode + " " + course.number,
+          ]);
+        }
+      }
+    }
+  }
+  return mapOfGeToCourses;
+}
+
+/**
+ * @param ge is a list of GEs
+ * @returns a list containing a label for the first GE in ge
+ */
+export function geLabels(ge: string[]): Label[] {
+  if (ge.length > 0 && ge[0] !== "None") {
+    const geLabel = {
+      id: "ge",
+      name: "GE",
+      color: LabelColor.GREEN,
+    };
+    return [geLabel];
+  }
+  return [];
 }
 
 /**

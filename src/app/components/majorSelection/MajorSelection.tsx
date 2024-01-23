@@ -1,49 +1,85 @@
-import {
-  Button,
-  Option,
-  Select,
-  Tab,
-  Tabs,
-  TabList,
-  Tooltip,
-  Typography,
-  CircularProgress,
-  List,
-  ListItem,
-} from "@mui/joy";
-import Info from "@mui/icons-material/Info";
-import { useCallback, useEffect, useState } from "react";
+import { Button, CircularProgress } from "@mui/joy";
+import { useCallback, useContext, useEffect, useState } from "react";
 import useMajorSelection from "../../hooks/useMajorSelection";
 import { useSession } from "next-auth/react";
 import { years } from "@/lib/defaultPlanners";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_MAJORS } from "@/graphql/queries";
 import useDefaultPlanners from "../../hooks/useDefaultPlanners";
-import MiniPlanner from "./miniPlanner/MiniPlanner";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { Alert } from "@mui/joy";
 import ReportIcon from "@mui/icons-material/Report";
+import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
+import { ModalsProvider } from "@/app/contexts/ModalsProvider";
+import { PlannerProvider } from "@/app/contexts/PlannerProvider";
+import SelectMajorName from "./SelectMajorName";
+import SelectCatalogYear from "./SelectCatalogYear";
+import SelectDefaultPlanner from "./SelectDefaultPlanner";
+import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import { useLoadPlanner } from "@/app/hooks/useLoad";
+import { emptyPlanner } from "@/lib/plannerUtils";
+import ConfirmAlert from "../ConfirmAlert";
+
+enum ButtonName {
+  Save = "Save",
+  CreateNew = "Create New",
+  ReplaceCurrent = "Replace Current",
+}
 
 export default function MajorSelection({
   saveButtonName,
-  handleSave,
+  onSaved,
+  isInPlannerPage,
+  onUserMajorAlreadyExists,
+  onSkip,
+  onCreateNewPlanner,
+  onReplaceCurrentPlanner,
 }: {
-  handleSave: any;
+  onSaved: () => void;
   saveButtonName: string;
+  isInPlannerPage?: boolean;
+  onUserMajorAlreadyExists?: () => void;
+  onSkip?: () => void;
+  onCreateNewPlanner?: () => void;
+  onReplaceCurrentPlanner?: () => void;
 }) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [majors, setMajors] = useState<string[]>([]);
+  const [majorSelectionIsValid, setMajorSelectionIsValid] = useState(false);
+  const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
+    ButtonName.Save,
+  );
   const [showSelectionError, setShowSelectionError] = useState(false);
   const { data: session } = useSession();
   const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
   const getAllMajors = useCallback(lazyGetAllMajors, [lazyGetAllMajors]);
-  const { onSaveMajor, userMajorData, loadingSaveMajor, loadingMajorData } =
-    useMajorSelection(session?.user.id, handleSaveCompleted);
+  const {
+    onSaveMajor,
+    userMajorData,
+    loadingSaveMajor,
+    loadingMajorData,
+    errorLoadingMajorData,
+    errorSavingMajorData,
+  } = useMajorSelection(session?.user.id, handleSaveCompleted);
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
+  const [plannerData, , { loading: loadingPlannerData }] = useLoadPlanner({
+    userId: undefined,
+    plannerId: selectedDefaultPlanner,
+    defaultPlanner: emptyPlanner(),
+  });
+  const { setDefaultPlanner } = useContext(DefaultPlannerContext);
+  const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
+
+  useEffect(() => {
+    function isMajorSelectionValid() {
+      const isLoggedIn = session?.user.id !== undefined;
+      return major !== "" && catalogYear !== "" && isLoggedIn;
+    }
+
+    setMajorSelectionIsValid(isMajorSelectionValid());
+  }, [major, catalogYear, selectedDefaultPlanner, session?.user.id]);
 
   useEffect(() => {
     getAllMajors({
@@ -57,14 +93,26 @@ export default function MajorSelection({
   }, [catalogYear, getAllMajors]);
 
   useEffect(() => {
+    function majorDataAlreadyChosen() {
+      return (
+        userMajorData !== null &&
+        userMajorData.name.length > 0 &&
+        userMajorData.catalogYear.length > 0
+      );
+    }
+
     if (userMajorData) {
       updateMajorUseState(
         userMajorData.name,
         userMajorData.catalogYear,
         userMajorData.defaultPlannerId,
       );
+
+      if (majorDataAlreadyChosen() && onUserMajorAlreadyExists) {
+        onUserMajorAlreadyExists();
+      }
     }
-  }, [userMajorData]);
+  }, [onUserMajorAlreadyExists, userMajorData]);
 
   useEffect(() => {
     /**
@@ -97,18 +145,18 @@ export default function MajorSelection({
 
   function handleChangeCatalogYear(
     event: React.SyntheticEvent | null,
-    newValue: string | null,
+    newCatalogYear: string | null,
   ) {
-    if (newValue != null) {
-      setCatalogYear(newValue);
+    if (typeof newCatalogYear === "string") {
+      setCatalogYear(newCatalogYear);
     }
   }
 
   function handleChangeDefaultPlanner(
     event: React.SyntheticEvent | null,
-    plannerId: string | null,
+    plannerId: string | number | null,
   ) {
-    if (plannerId != null) {
+    if (typeof plannerId === "string") {
       setSelectedDefaultPlanner(plannerId);
     }
   }
@@ -124,12 +172,28 @@ export default function MajorSelection({
   }
 
   function handleSaveCompleted() {
-    handleSave();
+    setDefaultPlanner(plannerData);
+
+    switch (saveButtonClicked) {
+      case ButtonName.Save:
+        onSaved();
+        break;
+      case ButtonName.CreateNew:
+        if (onCreateNewPlanner && !loadingPlannerData) {
+          onCreateNewPlanner();
+        }
+        break;
+      case ButtonName.ReplaceCurrent:
+        if (onReplaceCurrentPlanner && !loadingPlannerData) {
+          onReplaceCurrentPlanner();
+        }
+        break;
+    }
   }
 
-  function handleClickSave() {
-    if (majorSelectionIsValid()) {
-      setSaveButtonDisabled(true);
+  function handleSave(buttonName: ButtonName) {
+    if (majorSelectionIsValid) {
+      setSaveButtonClicked(buttonName);
       onSaveMajor(major, catalogYear, selectedDefaultPlanner);
       setShowSelectionError(false);
     } else {
@@ -137,25 +201,68 @@ export default function MajorSelection({
     }
   }
 
-  function majorSelectionIsValid() {
-    const isLoggedIn = session?.user.id !== undefined;
-    return major !== "" && catalogYear !== "" && isLoggedIn;
+  function handleConfirmReplaceCurrent() {
+    handleSave(ButtonName.ReplaceCurrent);
+  }
+
+  function handleClickSave() {
+    handleSave(ButtonName.Save);
+  }
+
+  function handleClickReplaceCurrent() {
+    setReplaceAlertOpen(true);
+  }
+
+  function handleClickCreateNew() {
+    handleSave(ButtonName.CreateNew);
   }
 
   if (loadingMajorData) {
     return <CircularProgress variant="plain" color="primary" />;
   }
 
+  const SelectionErrorAlert = () => (
+    <div>
+      {showSelectionError && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          You must select a major and catalog year, and be logged into your UCSC
+          email to save your major.
+        </Alert>
+      )}
+    </div>
+  );
+
+  const LoadingMajorDataErrorAlert = () => (
+    <div>
+      {errorLoadingMajorData && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          Error loading major data. Please log out and try again.
+        </Alert>
+      )}
+    </div>
+  );
+
+  const SavingMajorDataErrorAlert = () => (
+    <div>
+      {errorSavingMajorData && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          Error saving major data. Please log out and try again.
+        </Alert>
+      )}
+    </div>
+  );
+
   return (
-    <div className="space-y-4">
-      <div>
-        {showSelectionError && (
-          <Alert color="danger" startDecorator={<ReportIcon />}>
-            You must select a major and catalog year, and be logged into your
-            UCSC email to save your major.
-          </Alert>
-        )}
-      </div>
+    <div className="space-y-4 w-full">
+      <SelectionErrorAlert />
+      <LoadingMajorDataErrorAlert />
+      <SavingMajorDataErrorAlert />
+      <ConfirmAlert
+        open={replaceAlertOpen}
+        onClose={() => setReplaceAlertOpen(false)}
+        onConfirm={handleConfirmReplaceCurrent}
+        dialogText="Are you sure you want to replace your current planner?"
+      />
       <div className="grid grid-cols-4 gap-2">
         <div className="col-span-2">
           <SelectCatalogYear
@@ -173,141 +280,82 @@ export default function MajorSelection({
         </div>
       </div>
       <div>
-        <SelectDefaultPlanner
-          selectedDefaultPlanner={selectedDefaultPlanner}
-          onChange={handleChangeDefaultPlanner}
-          majorDefaultPlanners={majorDefaultPlanners}
-          loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-        />
+        <PlannerProvider plannerId={""} title={""} order={0}>
+          <ModalsProvider>
+            <SelectDefaultPlanner
+              selectedDefaultPlanner={selectedDefaultPlanner}
+              onChange={handleChangeDefaultPlanner}
+              majorDefaultPlanners={majorDefaultPlanners}
+              loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+              addPlannerCardContainer={isInPlannerPage}
+            />
+            <CourseInfoModal />
+          </ModalsProvider>
+        </PlannerProvider>
       </div>
       <div className="flex justify-end w-full">
-        <Button
-          disabled={saveButtonDisabled || loadingSaveMajor}
-          onClick={handleClickSave}
-        >
-          {saveButtonName}
-        </Button>
+        {loadingSaveMajor ? (
+          <CircularProgress variant="plain" color="primary" />
+        ) : (
+          <SaveButtons
+            saveButtonName={saveButtonName}
+            isInPlannerPage={isInPlannerPage}
+            onSkip={onSkip}
+            onClickSave={handleClickSave}
+            onClickReplaceCurrent={handleClickReplaceCurrent}
+            onClickCreateNew={handleClickCreateNew}
+            majorSelectionIsValid={majorSelectionIsValid}
+          />
+        )}
       </div>
     </div>
   );
 }
 
-function SelectMajorName({
-  major,
-  majors,
-  onChange,
+function SaveButtons({
+  saveButtonName,
+  isInPlannerPage,
+  onSkip,
+  onClickSave,
+  onClickReplaceCurrent,
+  onClickCreateNew,
+  majorSelectionIsValid,
 }: {
-  major: string;
-  majors: string[];
-  onChange: any;
+  saveButtonName: string;
+  isInPlannerPage?: boolean;
+  onSkip?: () => void;
+  onClickSave: () => void;
+  onClickReplaceCurrent: () => void;
+  onClickCreateNew: () => void;
+  majorSelectionIsValid: boolean;
 }) {
   return (
-    <>
-      <Typography level="body-lg">Select your major</Typography>
-      <Select
-        value={major}
-        placeholder="Choose one…"
-        variant="soft"
-        onChange={onChange}
-        disabled={majors.length == 0}
-      >
-        {majors.map((major, index) => (
-          <Option key={index} value={major}>
-            {major}
-          </Option>
-        ))}
-      </Select>
-    </>
-  );
-}
-
-function SelectCatalogYear({
-  catalogYear,
-  years,
-  onChange,
-}: {
-  catalogYear: string;
-  years: string[];
-  onChange: any;
-}) {
-  return (
-    <>
-      <Typography level="body-lg">Select your catalog year</Typography>
-      <Select
-        value={catalogYear}
-        placeholder="Choose one…"
-        variant="soft"
-        onChange={onChange}
-      >
-        {years.map((year, index) => (
-          <Option key={index} value={year}>
-            {year}
-          </Option>
-        ))}
-      </Select>
-    </>
-  );
-}
-
-function SelectDefaultPlanner({
-  selectedDefaultPlanner,
-  onChange,
-  majorDefaultPlanners,
-  loadingMajorDefaultPlanners,
-}: {
-  selectedDefaultPlanner: string;
-  onChange: any;
-  majorDefaultPlanners: any;
-  loadingMajorDefaultPlanners: boolean;
-}) {
-  const defaultPlanners: { id: string; title: string }[] =
-    majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
-
-  return (
-    <>
-      <div className="flex flex-row space-x-2">
-        <Typography level="body-lg">Select a default planner</Typography>
-        <Tooltip title="The default planner you select will be auto filled into any new planners you create">
-          <Info sx={{ color: "gray" }} />
-        </Tooltip>
-      </div>
-      <div className="space-y-2">
-        <Tabs
-          defaultValue={selectedDefaultPlanner}
-          value={selectedDefaultPlanner}
-          variant="soft"
-          onChange={onChange}
-        >
-          <TabList>
-            {defaultPlanners &&
-              defaultPlanners.map((planner: any, index: number) => (
-                <Tab key={index} value={planner.id}>
-                  {planner.title}
-                </Tab>
-              ))}
-          </TabList>
-        </Tabs>
-        {loadingMajorDefaultPlanners ? (
-          <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
-        ) : (
+    <div>
+      {onSkip && (
+        <Button onClick={onSkip} variant="plain">
+          Skip
+        </Button>
+      )}
+      <div>
+        <Button onClick={onClickSave}>{saveButtonName}</Button>
+        {isInPlannerPage && (
           <>
-            <List>
-              {defaultPlanners.map((defaultPlanner, index: number) => {
-                const id = defaultPlanner.id;
-                const plannerIsSelected = selectedDefaultPlanner == id;
-                return (
-                  <ListItem
-                    sx={{ display: plannerIsSelected ? "block" : "none" }}
-                    key={index}
-                  >
-                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
-                  </ListItem>
-                );
-              })}
-            </List>
+            <Button
+              disabled={!majorSelectionIsValid}
+              color="warning"
+              onClick={onClickReplaceCurrent}
+            >
+              Replace Current
+            </Button>
+            <Button
+              disabled={!majorSelectionIsValid}
+              onClick={onClickCreateNew}
+            >
+              Create New
+            </Button>
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }

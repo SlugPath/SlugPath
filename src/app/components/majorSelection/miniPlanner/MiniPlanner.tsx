@@ -1,14 +1,16 @@
 import { useLoadPlanner } from "@/app/hooks/useLoad";
 import MiniQuarters from "./MiniQuarters";
 import { EMPTY_PLANNER, emptyPlanner } from "@/lib/plannerUtils";
-import { Skeleton } from "@mui/joy";
+import { Card, Skeleton } from "@mui/joy";
 
 export default function MiniPlanner({
   plannerId,
   active,
+  addCardContainer,
 }: {
   plannerId: string;
   active?: boolean;
+  addCardContainer?: boolean;
 }) {
   const skipLoad = plannerId === EMPTY_PLANNER;
   const [courseState, , { loading }] = useLoadPlanner({
@@ -24,7 +26,13 @@ export default function MiniPlanner({
 
   return (
     <Skeleton loading={loading} variant="rectangular">
-      <MiniQuarters courseState={courseState} />
+      {addCardContainer ? (
+        <Card variant="soft">
+          <MiniQuarters courseState={courseState} />
+        </Card>
+      ) : (
+        <MiniQuarters courseState={courseState} />
+      )}
     </Skeleton>
   );
 }

@@ -13,8 +13,11 @@ export function PlannersProvider({ children }: { children: React.ReactNode }) {
     addPlanner,
     switchPlanners,
     changePlannerName,
+    replaceCurrentPlanner,
     activePlanner,
     plannersLoading,
+    loadingDeletePlanner,
+    deletedPlanner,
   } = usePlanners(session?.user.id);
 
   return (
@@ -25,8 +28,11 @@ export function PlannersProvider({ children }: { children: React.ReactNode }) {
         addPlanner,
         switchPlanners,
         changePlannerName,
+        replaceCurrentPlanner,
         activePlanner,
         plannersLoading,
+        loadingDeletePlanner,
+        deletedPlanner,
       }}
     >
       {children}

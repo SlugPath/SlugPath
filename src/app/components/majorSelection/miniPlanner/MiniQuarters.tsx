@@ -10,7 +10,7 @@ export default function MiniQuarters({
   courseState: PlannerData;
 }) {
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 min-w-[130px]">
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
         const slice_val = quartersPerYear * i;
         const quarters = courseState.quarters.slice(

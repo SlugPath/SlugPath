@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/joy";
 import { Add, InfoOutlined } from "@mui/icons-material";
-import DraggableCourseCard from "./DraggableCourseCard";
+import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
 import { Droppable } from "@hello-pangea/dnd";
-import { PlannerContext } from "../contexts/PlannerProvider";
+import { PlannerContext } from "../../contexts/PlannerProvider";
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
