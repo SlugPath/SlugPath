@@ -1,46 +1,44 @@
 import { useEffect, useState } from "react";
 import { getPermissions, savePermissions } from "@/app/actions/actions";
 import { Permissions } from "@/app/types/Permissions";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 export default function usePermissions() {
   const [permissionsList, setPermissionsList] = useState<Permissions[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(true);
+  const { isPending, data } = useQuery({
+    queryKey: ["getPermissions"],
+    queryFn: () => getPermissions(),
+  });
+  const mutation = useMutation({
+    mutationFn: () => savePermissions(permissionsList),
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getPermissions();
-        setPermissionsList(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    if (data) {
+      setPermissionsList(data);
+      setIsSaved(true);
+    }
+  }, [data, isPending]);
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      setIsSaved(true);
+    }
+  }, [mutation.isSuccess]);
 
   function handleSetPermissionsList(newPermissionsList: Permissions[]) {
     setPermissionsList(newPermissionsList);
     setIsSaved(false);
   }
 
-  async function handleSaveUsers() {
-    setLoading(true);
-    try {
-      await savePermissions(permissionsList);
-      setIsSaved(true);
-    } catch (error) {
-      console.error("Error saving users permissions:", error);
-    }
-    setLoading(false);
-  }
-
   return {
     isSaved,
-    loading,
+    isPending: isPending || mutation.isPending,
     permissionsList,
     onSetPermissionsList: handleSetPermissionsList,
-    onSavePermissions: handleSaveUsers,
+    onSavePermissions: () => {
+      mutation.mutate();
+    },
   };
 }

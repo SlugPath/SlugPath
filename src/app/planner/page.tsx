@@ -4,6 +4,9 @@ import apolloClient from "@/lib/apolloClient";
 import { useSession } from "next-auth/react";
 import useConfirmPageLeave from "../hooks/useConfirmPageLeave";
 import App from "../components/App";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function Home() {
   const { status } = useSession();
@@ -11,7 +14,9 @@ export default function Home() {
   useConfirmPageLeave(status === "unauthenticated");
   return (
     <ApolloProvider client={apolloClient}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </ApolloProvider>
   );
 }

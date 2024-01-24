@@ -9,26 +9,20 @@ import {
   List,
   ListItem,
   ListItemContent,
-  Select,
-  Option,
-  Card,
   AccordionGroup,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/joy";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { SyntheticEvent, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { z } from "zod";
 import ReportIcon from "@mui/icons-material/Report";
 import useMajors from "@/app/hooks/useMajors";
 import { Major } from "@/app/types/Major";
-import CloseIconButton from "../CloseIconButton";
 import { Permissions } from "@/app/types/Permissions";
 import usePermissions from "@/app/hooks/usePermissions";
-import StyledAccordion from "../planner/StyledAccordion";
 import ConfirmAlert from "../ConfirmAlert";
 import { CircularProgress } from "@mui/material";
 import IsSatisfiedMark from "../IsSatisfiedMark";
+import PermissionsAccordion from "./PermissionsAccordion";
 
 export default function PermissionsModal() {
   const { showPermissionsModal, setShowPermissionsModal } =
@@ -37,7 +31,7 @@ export default function PermissionsModal() {
   const [email, setEmail] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const {
-    loading: loadingPermissions,
+    isPending: loadingPermissions,
     isSaved,
     permissionsList,
     onSetPermissionsList,
@@ -57,7 +51,7 @@ export default function PermissionsModal() {
       ]);
       setEmail("");
     } else {
-      setErrorMsg("Invalid email");
+      setErrorMsg("Invalid email or email has already been added");
     }
   }
 
@@ -100,6 +94,10 @@ export default function PermissionsModal() {
     ]);
   }
 
+  function isUserAlreadyAdded(email: string) {
+    return permissionsList.some((p) => p.userEmail === email);
+  }
+
   function isMajorAlreadyAdded(permissions: Permissions, major: Major) {
     return permissions.majorsAllowedToEdit.some(
       (m) => m.name === major.name && m.catalogYear === major.catalogYear,
@@ -107,6 +105,8 @@ export default function PermissionsModal() {
   }
 
   function selectionIsValid() {
+    if (isUserAlreadyAdded(email)) return false;
+
     const emailSchema = z.string().email();
     try {
       emailSchema.parse(email);
@@ -175,7 +175,10 @@ export default function PermissionsModal() {
                   <Button
                     disabled={isSaved}
                     color="primary"
-                    onClick={onSavePermissions}
+                    onClick={() => {
+                      onSavePermissions();
+                      setErrorMsg("");
+                    }}
                   >
                     Save
                   </Button>
@@ -233,104 +236,5 @@ function PermissionsList({
         ))}
       </List>
     </AccordionGroup>
-  );
-}
-
-function PermissionsAccordion({
-  permissions,
-  majors,
-  onAddMajorEditPermission,
-  onRemoveMajorEditPermission,
-  onRemovePermissions,
-}: {
-  permissions: Permissions;
-  majors: Major[];
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemovePermissions: (permissions: Permissions) => void;
-}) {
-  return (
-    <StyledAccordion>
-      <AccordionSummary>
-        <div className="flex flex-row ml-2 gap-1 items-center justify-between w-full">
-          <Typography>{permissions.userEmail}</Typography>
-          <Button
-            color="danger"
-            onClick={() => onRemovePermissions(permissions)}
-          >
-            Remove
-          </Button>
-        </div>
-      </AccordionSummary>
-      <AccordionDetails>
-        <List>
-          {permissions.majorsAllowedToEdit.map((major, index) => {
-            return (
-              <ListItem key={index}>
-                <ListItemContent>
-                  <Card
-                    variant="plain"
-                    size="sm"
-                    className="flex flex-row gap-1 items-center justify-between p-1"
-                  >
-                    <Typography>
-                      {major.name} {major.catalogYear}
-                    </Typography>
-                    <CloseIconButton
-                      onClick={() =>
-                        onRemoveMajorEditPermission(permissions, major)
-                      }
-                    />
-                  </Card>
-                </ListItemContent>
-              </ListItem>
-            );
-          })}
-        </List>
-        <SelectMajor
-          majors={majors}
-          permissions={permissions}
-          onAddMajorEditPermission={onAddMajorEditPermission}
-        />
-      </AccordionDetails>
-    </StyledAccordion>
-  );
-}
-
-function SelectMajor({
-  majors,
-  permissions,
-  onAddMajorEditPermission,
-}: {
-  majors: Major[];
-  permissions: Permissions;
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
-}) {
-  const [value, setValue] = useState<Major | null>(null);
-
-  function onChange(
-    event: SyntheticEvent<Element, Event> | null,
-    newValue: Major | null,
-  ) {
-    if (newValue) {
-      onAddMajorEditPermission(permissions, newValue);
-      setValue(null);
-    }
-  }
-
-  return (
-    <Select
-      value={value}
-      placeholder="Add a major..."
-      variant="plain"
-      onChange={onChange}
-      disabled={majors.length == 0}
-    >
-      {majors.map((major, index) => (
-        <Option key={index} value={major}>
-          {major.name} {major.catalogYear}
-        </Option>
-      ))}
-    </Select>
   );
 }
