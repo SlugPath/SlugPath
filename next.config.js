@@ -35,6 +35,11 @@ module.exports = withBundleAnalyzer({
         "globalThis.__DEV__": false,
       }),
     );
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+
     return config;
   },
 });
