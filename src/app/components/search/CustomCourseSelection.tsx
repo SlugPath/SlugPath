@@ -2,6 +2,7 @@ import {
   Card,
   FormControl,
   FormHelperText,
+  Grid,
   IconButton,
   Input,
   Textarea,
@@ -20,7 +21,7 @@ const MAX_DESCRIPTION_LENGTH = 100;
 
 export default function CustomCourseSelection() {
   const [courseTitle, setCourseTitle] = useState("");
-  const [credits, setCredits] = useState(5);
+  const [creditsStr, setCredits] = useState("5");
   const [description, setDescription] = useState("");
 
   const [tooManyError, setTooManyError] = useState(false);
@@ -47,7 +48,7 @@ export default function CustomCourseSelection() {
 
   const handleCreditChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInvalidCreditsError(false);
-    setCredits(parseInt(e.target.value));
+    setCredits(e.target.value);
   };
 
   const handleAdd = () => {
@@ -59,7 +60,8 @@ export default function CustomCourseSelection() {
       setTooShortError(true);
       return;
     }
-    if (credits < 0 || credits > 15) {
+    const credits = parseInt(creditsStr);
+    if (credits === undefined || credits < 0 || credits > 15) {
       setInvalidCreditsError(true);
       return;
     }
@@ -68,7 +70,7 @@ export default function CustomCourseSelection() {
     setInvalidCreditsError(false);
     handleAddCustom({ description, title: courseTitle, credits });
     setCourseTitle("");
-    setCredits(5);
+    setCredits("5");
     setDescription("");
   };
 
@@ -115,23 +117,6 @@ export default function CustomCourseSelection() {
           </FormHelperText>
         )}
       </FormControl>
-      <FormControl error={invalidCreditsError}>
-        <FormHelperText>Credits</FormHelperText>
-        <Input
-          type="number"
-          placeholder="Credits"
-          defaultValue={5}
-          value={credits}
-          onChange={handleCreditChange}
-          onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-        />
-        {invalidCreditsError && (
-          <FormHelperText>
-            <InfoOutlined />
-            Credits must be between 1 and 15.
-          </FormHelperText>
-        )}
-      </FormControl>
       <FormControl>
         <FormHelperText>Description</FormHelperText>
         <Textarea
@@ -150,9 +135,31 @@ export default function CustomCourseSelection() {
           }}
         />
       </FormControl>
-      <IconButton onClick={() => handleAdd()}>
-        <Add color="primary" />
-      </IconButton>
+      <Grid container alignItems="flex-end" spacing={3}>
+        <Grid xs={8}>
+          <FormControl error={invalidCreditsError}>
+            <FormHelperText>Credits</FormHelperText>
+            <Input
+              placeholder="Credits"
+              defaultValue={"5"}
+              value={creditsStr}
+              onChange={handleCreditChange}
+              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+            />
+            {invalidCreditsError && (
+              <FormHelperText>
+                <InfoOutlined />
+                Credits must be between 1 and 15.
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+        <Grid>
+          <IconButton onClick={() => handleAdd()}>
+            <Add color="primary" />
+          </IconButton>
+        </Grid>
+      </Grid>
       {customCourses.length > 0 && (
         <Droppable droppableId="custom-droppable">
           {(provided) => {

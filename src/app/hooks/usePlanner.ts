@@ -96,7 +96,11 @@ export default function usePlanner(
    * @param cid id of custom course being edited
    * @param newTitle new title of custom course
    */
-  const editCustomCourse = (cid: string, newTitle: string) => {
+  const editCustomCourse = (
+    cid: string,
+    newTitle: string,
+    newDescription: string,
+  ) => {
     setCourseState((prev) => {
       return {
         ...prev,
@@ -105,6 +109,7 @@ export default function usePlanner(
             return {
               ...c,
               title: newTitle,
+              description: newDescription,
             };
           }
           return c;

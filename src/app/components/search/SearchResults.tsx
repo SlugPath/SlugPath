@@ -4,6 +4,7 @@ import CourseCard from "../planner/quarters/courses/CourseCard";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { List, AutoSizer } from "react-virtualized";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { StoredCourse } from "@/app/types/Course";
 
 export default function SearchResults({
   courses,
@@ -52,7 +53,7 @@ export default function SearchResults({
       return null;
     }
 
-    const course = courses[index];
+    const course = courses[index] as StoredCourse;
 
     return (
       <div key={key} style={style}>
@@ -60,7 +61,7 @@ export default function SearchResults({
           key={index}
           course={course}
           index={index}
-          draggableId={createCourseDraggableId(course, "search")}
+          draggableId={createCourseDraggableId({ ...course, suffix: "search" })}
           isCustom={false}
         />
       </div>

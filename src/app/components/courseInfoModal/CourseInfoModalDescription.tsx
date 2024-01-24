@@ -1,60 +1,56 @@
 import { isCustomCourse } from "@/lib/plannerUtils";
-import { Grid, Typography } from "@mui/joy";
+import { Grid, IconButton, Input, Typography } from "@mui/joy";
 import { ChangeEvent } from "react";
 import { Edit } from "@mui/icons-material";
 import { StoredCourse } from "../../types/Course";
-import { IconButton, Input } from "@mui/joy";
 
-export default function CourseTitle({
+export default function CourseDescription({
   course,
-  title,
+  description,
   editing,
   setEditing,
-  customTitle,
-  handleTitleChange,
+  customDescription,
+  handleDescriptionChange,
   handleEndEditing,
   term,
 }: {
   course: StoredCourse;
-  title: string;
+  description: string;
   editing: boolean;
   setEditing: (editing: boolean) => void;
-  customTitle: string;
-  handleTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  customDescription: string;
+  handleDescriptionChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleEndEditing: () => void;
   term?: string;
 }) {
   return (
-    <Typography
-      component="h2"
-      id="modal-title"
-      level="h4"
-      textColor="inherit"
-      fontWeight="lg"
-      mb={1}
-    >
+    <Typography component="p" id="modal-description" textColor="inherit" mb={1}>
       <Grid container alignItems="center" spacing="1">
         <Grid>
           {editing ? (
-            <Input
-              variant="soft"
-              autoFocus
-              value={customTitle}
-              size="lg"
-              placeholder={course.title}
-              onChange={handleTitleChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleEndEditing();
-              }}
-              onBlur={handleEndEditing}
-            />
+            <>
+              <Typography component="p">Description:</Typography>
+              <Input
+                variant="soft"
+                autoFocus
+                value={customDescription}
+                size="md"
+                placeholder={course.description}
+                onChange={handleDescriptionChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleEndEditing();
+                }}
+                onBlur={handleEndEditing}
+              />
+            </>
           ) : (
-            title
+            description
           )}
         </Grid>
         <Grid>
           {isCustomCourse(course) && term !== undefined && (
             <IconButton
+              size="sm"
               onClick={() => {
                 if (editing) {
                   handleEndEditing();

@@ -22,7 +22,7 @@ export interface ModalsContextProps {
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
-  editCustomCourse: (cid: string, newTitle: string) => void;
+  editCustomCourse: (cid: string, newTitle: string, newDesc: string) => void;
   displayCourse: [StoredCourse, Term | undefined] | undefined;
   setDisplayCourse: any;
   totalCredits: number;

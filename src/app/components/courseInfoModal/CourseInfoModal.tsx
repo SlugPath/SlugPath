@@ -10,6 +10,7 @@ import { Label } from "../../types/Label";
 import LabelsSelectionModal from "./LabelSelectionModal";
 import CourseDetails from "./CourseDetails";
 import CourseTitle from "./CourseInfoModalTitle";
+import CourseDescription from "./CourseInfoModalDescription";
 
 const MAX_MODAL_TITLE = 50;
 
@@ -27,7 +28,9 @@ export default function CourseInfoModal() {
     editCourseLabels,
     updatePlannerLabels,
   } = useContext(PlannerContext);
-  const [editing, setEditing] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingDesc, setEditingDesc] = useState(false);
+
   const { displayCourse: courseTerm, setDisplayCourse } =
     useContext(PlannerContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
@@ -39,18 +42,31 @@ export default function CourseInfoModal() {
     skip: course === undefined || isCustomCourse(course),
   });
   const [customTitle, setCustomTitle] = useState("");
+  const [customDescription, setCustomDescription] = useState("");
 
-  const handleEndEditing = () => {
-    if (course && editing && customTitle.length > 0) {
-      setEditing(false);
+  // Handlers
+  const handleEndEditingTitle = () => {
+    if (course && editingTitle && customTitle.length > 0) {
+      setEditingTitle(false);
       course.title = customTitle;
-      editCustomCourse(course.id, customTitle);
+      editCustomCourse(course.id, customTitle, course.description);
+    }
+  };
+
+  const handleEndEditingDesc = () => {
+    if (course && editingDesc && customDescription.length > 0) {
+      setEditingDesc(false);
+      course.description = customDescription;
+      editCustomCourse(course.id, course.title, customDescription);
     }
   };
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCustomTitle(value);
+    setCustomTitle(e.target.value);
+  };
+
+  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCustomDescription(e.target.value);
   };
 
   function title(data: any) {
@@ -61,6 +77,15 @@ export default function CourseInfoModal() {
       0,
       MAX_MODAL_TITLE,
     );
+  }
+
+  function description(data: any) {
+    // If it is a custom course with a description, display it
+    if (loading) return "";
+    if (course && isCustomCourse(course)) {
+      return `Description: ${course.description}`;
+    }
+    return `${data.courseBy.description}`;
   }
 
   if (course === undefined) return null;
@@ -87,7 +112,7 @@ export default function CourseInfoModal() {
       onClose={() => {
         setShowModal(false);
         setCustomTitle("");
-        setEditing(false);
+        setEditingTitle(false);
       }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
@@ -115,11 +140,11 @@ export default function CourseInfoModal() {
               course={course}
               title={title(data)}
               term={term}
-              editing={editing}
-              setEditing={setEditing}
+              editing={editingTitle}
+              setEditing={setEditingTitle}
               customTitle={customTitle}
               handleTitleChange={handleTitleChange}
-              handleEndEditing={handleEndEditing}
+              handleEndEditing={handleEndEditingTitle}
             />
           </Skeleton>
           {isCustomCourse(course) ? (
@@ -134,6 +159,18 @@ export default function CourseInfoModal() {
             </Chip>
           )}
         </div>
+        <Skeleton loading={loading} variant="text" width="50%">
+          <CourseDescription
+            course={course}
+            description={description(data)}
+            term={term}
+            editing={editingDesc}
+            setEditing={setEditingDesc}
+            customDescription={customDescription}
+            handleDescriptionChange={handleDescriptionChange}
+            handleEndEditing={handleEndEditingDesc}
+          />
+        </Skeleton>
         <Skeleton loading={loading} variant="text" width="50%">
           <CourseDetails
             course={course}

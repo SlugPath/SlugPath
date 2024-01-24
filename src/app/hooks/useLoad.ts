@@ -170,7 +170,6 @@ export const useLoadPlanner = ({
   });
 
   function autofillWithDefaultPlanner() {
-    console.log("autofill with default planner");
     setPlanner({
       ...defaultPlanner,
       labels: initialLabels(),
