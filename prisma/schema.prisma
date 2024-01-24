@@ -22,11 +22,11 @@ model User {
 model Planner {
   id        String    @id @default(uuid())
   title     String
-  notes     String?
   updatedAt DateTime  @updatedAt
   order     Int
   userId    String?
   majorId   Int?
+  notes     String?
   labels    Label[]
   major     Major?    @relation(fields: [majorId], references: [id], onDelete: Cascade)
   user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -65,7 +65,7 @@ model Course {
   prerequisites   String
   ge              String[]
   quartersOffered String[]
-  description     String
+  description     String?
 
   @@id([departmentCode, number])
 }
