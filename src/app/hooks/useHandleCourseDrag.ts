@@ -7,24 +7,26 @@ import { createCourseFromId } from "@/lib/plannerUtils";
 const CUSTOM_DROPPABLE = "custom-droppable";
 const SEARCH_DROPPABLE = "search-droppable";
 
+// Helpers
+const draggedFromSearch = (droppableId: string) => {
+  return droppableId === SEARCH_DROPPABLE;
+};
+
+const draggedFromCustom = (droppableId: string) => {
+  return droppableId === CUSTOM_DROPPABLE;
+};
+
 export default function useHandleCourseDrag({
   courseState,
   handleCourseUpdate,
+  handleRemoveCustom,
 }: {
   courseState: PlannerData;
-  handleCourseUpdate: any;
+  handleCourseUpdate: (newState: PlannerData) => void;
+  handleRemoveCustom: (idx: number) => void;
 }) {
   function handleDragEnd(result: DropResult) {
     const { destination, source, draggableId } = result;
-
-    function draggedFromSearch(droppableId: string) {
-      return droppableId === SEARCH_DROPPABLE;
-    }
-
-    function draggedFromCustom(droppableId: string) {
-      return droppableId === CUSTOM_DROPPABLE;
-    }
-
     // ensure that drag is valid
     if (
       !destination ||
@@ -38,6 +40,10 @@ export default function useHandleCourseDrag({
       draggedFromCustom(source.droppableId)
     ) {
       addCourseFromSearch(draggableId, destination);
+      // Remove from the custom course selection
+      if (draggedFromCustom(source.droppableId)) {
+        handleRemoveCustom(source.index);
+      }
       return;
     }
 

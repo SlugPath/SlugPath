@@ -37,13 +37,14 @@ export function PlannerProvider({
     order,
   });
 
+  const { customCourses, handleAddCustom, handleRemoveCustom } =
+    useCustomCourseSelection();
+
   const { handleDragEnd } = useHandleCourseDrag({
     courseState,
     handleCourseUpdate,
+    handleRemoveCustom,
   });
-
-  const { customCourses, handleAddCustom, handleRemoveCustom } =
-    useCustomCourseSelection();
 
   return (
     <PlannerContext.Provider

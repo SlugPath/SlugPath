@@ -65,7 +65,7 @@ export default function CourseInfoModal() {
     setCustomTitle(e.target.value);
   };
 
-  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCustomDescription(e.target.value);
   };
 

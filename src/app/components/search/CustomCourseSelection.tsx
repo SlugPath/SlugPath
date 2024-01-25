@@ -17,7 +17,7 @@ import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 
 const MAX_CUSTOM_COURSES = 3;
-const MAX_DESCRIPTION_LENGTH = 100;
+const MAX_DESCRIPTION_LENGTH = 2000;
 
 export default function CustomCourseSelection() {
   const [courseTitle, setCourseTitle] = useState("");
@@ -85,9 +85,8 @@ export default function CustomCourseSelection() {
   return (
     <Card className="w-80 mb-2" variant="plain">
       <FormControl error={tooManyError || tooShortError}>
-        <FormHelperText>Course Title</FormHelperText>
         <Input
-          placeholder="Custom Course"
+          placeholder="Course Title"
           value={courseTitle}
           variant="soft"
           sx={{
@@ -118,11 +117,11 @@ export default function CustomCourseSelection() {
         )}
       </FormControl>
       <FormControl>
-        <FormHelperText>Description</FormHelperText>
         <Textarea
-          placeholder="Type here..."
+          placeholder="Description"
           value={description}
           onChange={handleDescriptionChange}
+          variant="soft"
           minRows={2}
           maxRows={4}
           endDecorator={
@@ -140,6 +139,7 @@ export default function CustomCourseSelection() {
           <FormControl error={invalidCreditsError}>
             <FormHelperText>Credits</FormHelperText>
             <Input
+              variant="soft"
               placeholder="Credits"
               defaultValue={"5"}
               value={creditsStr}
