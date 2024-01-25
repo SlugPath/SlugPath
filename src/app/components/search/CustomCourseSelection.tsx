@@ -2,7 +2,6 @@ import {
   Card,
   FormControl,
   FormHelperText,
-  Grid,
   IconButton,
   Input,
   Textarea,
@@ -83,7 +82,7 @@ export default function CustomCourseSelection() {
   }, [memoLength]);
 
   return (
-    <Card className="w-80 mb-2" variant="plain">
+    <Card className="w-80 mb-2 mr-2" variant="plain">
       <FormControl error={tooManyError || tooShortError}>
         <Input
           placeholder="Course Title"
@@ -129,37 +128,30 @@ export default function CustomCourseSelection() {
               {description.length} / {MAX_DESCRIPTION_LENGTH} character(s)
             </Typography>
           }
-          sx={{
-            minWidth: 300,
-          }}
         />
       </FormControl>
-      <Grid container alignItems="flex-end" spacing={3}>
-        <Grid xs={8}>
-          <FormControl error={invalidCreditsError}>
-            <FormHelperText>Credits</FormHelperText>
-            <Input
-              variant="soft"
-              placeholder="Credits"
-              defaultValue={"5"}
-              value={creditsStr}
-              onChange={handleCreditChange}
-              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            />
-            {invalidCreditsError && (
-              <FormHelperText>
-                <InfoOutlined />
-                Credits must be between 1 and 15.
-              </FormHelperText>
-            )}
-          </FormControl>
-        </Grid>
-        <Grid>
-          <IconButton onClick={() => handleAdd()}>
-            <Add color="primary" />
-          </IconButton>
-        </Grid>
-      </Grid>
+      <div className="flex flex-row flex-end items-end gap-4 text-center">
+        <FormControl>
+          <FormHelperText>Credits</FormHelperText>
+          <Input
+            variant="soft"
+            placeholder="Credits"
+            defaultValue={"5"}
+            disabled={invalidCreditsError}
+            value={creditsStr}
+            onChange={handleCreditChange}
+            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+          />
+          {invalidCreditsError && (
+            <div className="text-red text-md">
+              Credits must be between 1 and 15
+            </div>
+          )}
+        </FormControl>
+        <IconButton onClick={() => handleAdd()}>
+          <Add color="primary" />
+        </IconButton>
+      </div>
       {customCourses.length > 0 && (
         <Droppable droppableId="custom-droppable">
           {(provided) => {
