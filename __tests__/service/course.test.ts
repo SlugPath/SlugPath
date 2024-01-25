@@ -1,4 +1,6 @@
+import { Course } from "@/graphql/course/schema";
 import { CourseService } from "@/graphql/course/service";
+import { compareCoursesByNum } from "@/graphql/course/service";
 import prisma from "@/lib/prisma";
 
 beforeAll(async () => {
@@ -106,5 +108,177 @@ describe("test courseBy", () => {
       ge: [],
       quartersOffered: [],
     });
+  });
+});
+
+describe("test compareCoursesByNum", () => {
+  it("compare courses by department", () => {
+    const a: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101",
+      title: "Introduction to Data Structures and Algorithms",
+      description: "Introduction to data structures and algorithms.",
+      prerequisites: "Some lower-division CSE classes",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    };
+    const b: Course = {
+      department: "Anthropology",
+      departmentCode: "ANTH",
+      number: "1",
+      title: "Introduction to Anthropology",
+      description: "Introduction to anthropology.",
+      prerequisites: "",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    };
+
+    expect(compareCoursesByNum(a, b)).toEqual(1);
+    expect(compareCoursesByNum(b, a)).toEqual(-1);
+  });
+
+  it("compare courses by course number and letter suffix", () => {
+    const a: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101",
+      title: "Introduction to Data Structures and Algorithms",
+      description: "Introduction to data structures and algorithms.",
+      prerequisites: "Some lower-division CSE classes",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    };
+    const b: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101M",
+      title: "Introduction to Proof-Writing",
+      description: "Introduction to proof-writing.",
+      prerequisites: "CSE 101",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    expect(compareCoursesByNum(a, b)).toEqual(-1);
+    expect(compareCoursesByNum(b, a)).toEqual(1);
+  });
+
+  it("compare courses by number", () => {
+    const a: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101",
+      title: "Introduction to Data Structures and Algorithms",
+      description: "Introduction to data structures and algorithms.",
+      prerequisites: "Some lower-division CSE classes",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    };
+    const b: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "102",
+      title: "Introduction to Algorithms Analysis",
+      description: "Introduction to algorithms analysis.",
+      prerequisites: "CSE 101",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    expect(compareCoursesByNum(a, b)).toEqual(-1);
+    expect(compareCoursesByNum(b, a)).toEqual(1);
+  });
+
+  it("compare courses by letter suffix", () => {
+    const a: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101A",
+      title: "Introduction to Data Structures and Algorithms",
+      description: "Introduction to data structures and algorithms.",
+      prerequisites: "Some lower-division CSE classes",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter", "Spring"],
+    };
+    const b: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101M",
+      title: "Introduction to Proof-Writing",
+      description: "Introduction to proof-writing.",
+      prerequisites: "CSE 101",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    expect(compareCoursesByNum(a, b)).toEqual(-1);
+    expect(compareCoursesByNum(b, a)).toEqual(1);
+  });
+
+  it("compare two courses with same number and letter suffix", () => {
+    const a: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101M",
+      title: "Introduction to Proof-Writing",
+      prerequisites: "CSE 101",
+      description: "Introduction to proof-writing.",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    const b: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101M",
+      title: "Introduction to Proof-Writing",
+      description: "Introduction to proof-writing.",
+      prerequisites: "CSE 101",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    expect(compareCoursesByNum(a, b)).toEqual(0);
+    expect(compareCoursesByNum(b, a)).toEqual(0);
+  });
+
+  it("compare two courses with same numbers", () => {
+    const a: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101",
+      title: "Introduction to Proof-Writing",
+      description: "Introduction to proof-writing.",
+      prerequisites: "CSE 101",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    const b: Course = {
+      department: "Computer Science and Engineering",
+      departmentCode: "CSE",
+      number: "101",
+      title: "Introduction to Proof-Writing",
+      description: "Introduction to proof-writing.",
+      prerequisites: "CSE 101",
+      ge: [],
+      credits: 5,
+      quartersOffered: ["Fall", "Winter"],
+    };
+
+    expect(compareCoursesByNum(a, b)).toEqual(0);
+    expect(compareCoursesByNum(b, a)).toEqual(0);
   });
 });
