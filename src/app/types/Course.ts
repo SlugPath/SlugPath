@@ -20,4 +20,5 @@ export interface CustomCourseInput {
   title: string;
   description: string;
   credits: number;
+  quartersOffered: string[];
 }

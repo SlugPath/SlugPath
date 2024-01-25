@@ -11,15 +11,19 @@ export default function useCustomCourseSelection() {
     title,
     description,
     credits,
+    quartersOffered,
   }: CustomCourseInput) => {
+    console.log(`custom: ${quartersOffered.length}`);
     setCourses((prev) => {
       const newCourse: any = {
         ...customCourse(),
         title,
         description,
         credits,
+        quartersOffered,
       };
       delete newCourse.labels;
+      console.log(`newCourse: ${JSON.stringify(newCourse, null, 2)}`);
       return [newCourse, ...prev];
     });
   };

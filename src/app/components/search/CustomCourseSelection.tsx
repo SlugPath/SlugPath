@@ -18,17 +18,22 @@ export default function CustomCourseSelection() {
   const [open, setOpen] = useState(false);
 
   // Handlers
-  const handleAdd = ({ description, title, credits }: StoredCourse) => {
+  const handleAdd = ({
+    description,
+    title,
+    credits,
+    quartersOffered,
+  }: StoredCourse) => {
     if (
       description === undefined ||
       title === undefined ||
-      credits === undefined
+      credits === undefined ||
+      quartersOffered === undefined
     ) {
       setOpen(false);
       return;
     }
-    console.log(`HERE`);
-    handleAddCustom({ description, title, credits });
+    handleAddCustom({ description, title, credits, quartersOffered });
     setOpen(false);
   };
 
@@ -47,7 +52,9 @@ export default function CustomCourseSelection() {
   return (
     <Card className="w-80 mb-2 mr-2" variant="plain">
       <Button onClick={handleOpen} startDecorator={<Add />}>
-        <Typography level="body-md">Add Custom Course</Typography>
+        <Typography level="body-md" fontWeight="lg">
+          Add Custom Course
+        </Typography>
       </Button>
       <CustomCourseModal isOpen={open} onClose={handleAdd} />
       {tooManyError && (

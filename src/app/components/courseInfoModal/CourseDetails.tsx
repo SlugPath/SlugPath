@@ -25,7 +25,7 @@ export default function CourseDetails({
 }) {
   function quartersOffered(data: any) {
     if (loading) return "";
-    if (!data) return "Quarters Offered: Summer, Fall, Winter, Spring";
+    if (!data) return `Quarters Offered: ${course.quartersOffered.join(", ")}`;
     const c = data.courseBy as StoredCourse;
     if (c.quartersOffered.length == 0) return "Quarters Offered: None";
     return `Quarters Offered: ${c.quartersOffered.join(", ")}`;

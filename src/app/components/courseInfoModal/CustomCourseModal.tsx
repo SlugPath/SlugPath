@@ -4,12 +4,17 @@ import { truncateTitle } from "@/lib/utils";
 import { InfoOutlined, SaveOutlined } from "@mui/icons-material";
 import {
   Button,
+  Checkbox,
+  Chip,
   FormControl,
   FormHelperText,
   Input,
+  List,
+  ListItem,
   Modal,
   Sheet,
   Textarea,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import { ChangeEvent, useState } from "react";
@@ -22,6 +27,20 @@ export interface CustomCourseModalProps {
   defaultCourse?: StoredCourse | undefined;
 }
 
+type QuartersOffered = {
+  Fall: boolean;
+  Winter: boolean;
+  Spring: boolean;
+  Summer: boolean;
+};
+
+const allQuartersOffered = {
+  Fall: true,
+  Winter: true,
+  Spring: true,
+  Summer: true,
+};
+
 export default function CustomCourseModal({
   isOpen,
   onClose,
@@ -30,6 +49,10 @@ export default function CustomCourseModal({
   const [course, setCustomCourse] = useState<StoredCourse>(
     defaultCourse ? { ...defaultCourse } : customCourse(),
   );
+
+  const [quarters, setQuarters] = useState<QuartersOffered>({
+    ...allQuartersOffered,
+  });
 
   // Errors
   const [invalidCreditsError, setInvalidCreditsError] = useState(false);
@@ -69,6 +92,18 @@ export default function CustomCourseModal({
     });
   };
 
+  const handleQuarterChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    item: keyof QuartersOffered,
+  ) => {
+    setQuarters((prev) => {
+      return {
+        ...prev,
+        [item]: e.target.checked,
+      };
+    });
+  };
+
   const onSave = () => {
     // Validation
     if (course.title.length == 0) {
@@ -80,11 +115,17 @@ export default function CustomCourseModal({
       setInvalidCreditsError(true);
       return;
     }
+
+    // Get all the quarters
+    const quartersOffered = Object.keys(quarters).filter(
+      (q) => quarters[q as keyof QuartersOffered],
+    );
+    course.quartersOffered = quartersOffered;
     onClose(course);
 
-    // Reset custom course
-    console.log(`Resetting`);
+    // Reset custom course and quarters
     setCustomCourse(customCourse());
+    setQuarters({ ...allQuartersOffered });
   };
 
   return (
@@ -101,10 +142,22 @@ export default function CustomCourseModal({
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
+          position: "relative",
         }}
       >
+        <Tooltip title="We recommend replacing this custom course with a real course.">
+          <Chip
+            color="warning"
+            size="lg"
+            className="absolute top-0 right-0 mt-2"
+          >
+            Custom Course
+          </Chip>
+        </Tooltip>
+        <Typography level="h3">Custom Course Selection</Typography>
         <FormControl error={tooShortError}>
           <Input
+            className="mt-2"
             placeholder="Course Title"
             value={course.title}
             variant="soft"
@@ -144,13 +197,9 @@ export default function CustomCourseModal({
             </Typography>
           }
         />
-        <div
-          className={`flex flex-row flex-end text-center gap-4 ${
-            invalidCreditsError ? "items-center" : "items-end"
-          }`}
-        >
+        <div className="flex flex-row flex-end text-center gap-4">
           <div className="flex flex-col items-start">
-            <p className="text-md justify-left">Credits</p>
+            <p className="text-md justify-left mb-2">Credits</p>
             <Input
               variant="soft"
               placeholder="Credits"
@@ -164,10 +213,42 @@ export default function CustomCourseModal({
               </div>
             )}
           </div>
-          <Button startDecorator={<SaveOutlined />} onClick={onSave}>
-            Save Custom Course
-          </Button>
+          <div className="flex flex-col">
+            <p className="text-md mb-2">Quarters Offered</p>
+            <div role="group" aria-labelledby="quarters">
+              <List
+                orientation="horizontal"
+                wrap
+                sx={{
+                  "--List-gap": "8px",
+                  "--ListItem-radius": "20px",
+                }}
+              >
+                {["Fall", "Winter", "Spring", "Summer"].map((item) => (
+                  <ListItem key={item}>
+                    <Checkbox
+                      overlay
+                      disableIcon
+                      checked={quarters[item as keyof QuartersOffered]}
+                      onChange={(e) =>
+                        handleQuarterChange(e, item as keyof QuartersOffered)
+                      }
+                      variant="soft"
+                      label={item}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          </div>
         </div>
+        <Button
+          className="mt-2"
+          startDecorator={<SaveOutlined />}
+          onClick={onSave}
+        >
+          <Typography level="h4">Save Course</Typography>
+        </Button>
       </Sheet>
     </Modal>
   );
