@@ -1,7 +1,7 @@
 import { StoredCourse } from "@/graphql/planner/schema";
 import { customCourse } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { InfoOutlined, SaveOutlined } from "@mui/icons-material";
+import { InfoOutlined } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
@@ -149,12 +149,12 @@ export default function CustomCourseModal({
           <Chip
             color="warning"
             size="lg"
-            className="absolute top-0 right-0 mt-2"
+            className="absolute top-0 right-0 mt-2 mr-2"
           >
             Custom Course
           </Chip>
         </Tooltip>
-        <Typography level="h3">Custom Course Selection</Typography>
+        <Typography level="h3">Edit Custom Course</Typography>
         <FormControl error={tooShortError}>
           <Input
             className="mt-2"
@@ -197,7 +197,7 @@ export default function CustomCourseModal({
             </Typography>
           }
         />
-        <div className="flex flex-row flex-end text-center gap-4">
+        <div className="flex flex-row flex-end text-center gap-4 justify-between">
           <div className="flex flex-col items-start">
             <p className="text-md justify-left mb-2">Credits</p>
             <Input
@@ -242,12 +242,8 @@ export default function CustomCourseModal({
             </div>
           </div>
         </div>
-        <Button
-          className="mt-2"
-          startDecorator={<SaveOutlined />}
-          onClick={onSave}
-        >
-          <Typography level="h4">Save Course</Typography>
+        <Button className="mt-2 justify-right w-full" onClick={onSave}>
+          <Typography level="h4">Save</Typography>
         </Button>
       </Sheet>
     </Modal>
