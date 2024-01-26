@@ -236,7 +236,14 @@ export default function CourseInfoModal() {
           <ModalClose variant="plain" />
           {customCourseInPlanner && (
             <Button onClick={() => setEditing(true)} className="w-full">
-              <Typography level="body-lg">Edit</Typography>
+              <Typography
+                level="body-lg"
+                sx={{
+                  color: "white",
+                }}
+              >
+                Edit
+              </Typography>
             </Button>
           )}
         </div>

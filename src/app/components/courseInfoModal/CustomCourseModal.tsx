@@ -244,7 +244,14 @@ export default function CustomCourseModal({
             </div>
           </div>
           <Button className="w-full" onClick={onSave}>
-            <Typography level="body-lg">Save</Typography>
+            <Typography
+              level="body-lg"
+              sx={{
+                color: "white",
+              }}
+            >
+              Save
+            </Typography>
           </Button>
           <ModalClose />
         </div>
