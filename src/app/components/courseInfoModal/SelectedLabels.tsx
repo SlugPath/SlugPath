@@ -29,7 +29,7 @@ export default function SelectedLabels({
             />
           </ListItem>
         ))}
-        <IconButton onClick={handleOpenLabels} variant="solid">
+        <IconButton onClick={handleOpenLabels}>
           <Add />
         </IconButton>
       </List>

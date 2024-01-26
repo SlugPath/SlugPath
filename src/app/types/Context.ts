@@ -1,5 +1,5 @@
 import { SetStateAction } from "react";
-import { StoredCourse } from "./Course";
+import { CustomCourseInput, StoredCourse } from "./Course";
 import { PlannerData } from "./PlannerData";
 import { DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
@@ -22,7 +22,7 @@ export interface ModalsContextProps {
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
-  editCustomCourse: (cid: string, newTitle: string) => void;
+  editCustomCourse: (course: StoredCourse) => void;
   displayCourse: [StoredCourse, Term | undefined] | undefined;
   setDisplayCourse: any;
   totalCredits: number;
@@ -36,7 +36,7 @@ export interface PlannerContextProps {
   editCourseLabels: (course: StoredCourse) => void;
   updatePlannerLabels: (labels: Label[]) => void;
   customCourses: StoredCourse[];
-  handleAddCustom: (newTitle: string) => void;
+  handleAddCustom: (input: CustomCourseInput) => void;
   handleRemoveCustom: (idx: number) => void;
   updateNotes: (content: string) => void;
 }

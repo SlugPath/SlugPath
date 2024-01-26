@@ -195,6 +195,7 @@ export class PlannerService {
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
+          description: c.description,
           title: c.title,
           labels: c.labels,
         };

@@ -56,7 +56,6 @@ export default function SearchInputs({
           variant="soft"
           onChange={handleChangeDepartment}
           value={departmentCode ?? ""}
-          size="md"
           slotProps={{
             listbox: {
               sx: { minWidth: 270 },
@@ -78,7 +77,6 @@ export default function SearchInputs({
           name="number"
           aria-label="number"
           onChange={(event) => handleChangeNumber(event.target.value)}
-          size="md"
         />
         <Select
           placeholder="GE"
@@ -88,7 +86,6 @@ export default function SearchInputs({
           variant="soft"
           onChange={handleChangeGE}
           value={ge ?? ""}
-          size="md"
         >
           {geOptions.map((option) => (
             <Option key={option.value} value={option.value}>

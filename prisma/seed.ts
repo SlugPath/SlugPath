@@ -22,6 +22,7 @@ async function main() {
         title: course.title,
         credits: course.credits,
         prerequisites: course.prerequisites,
+        description: course.description,
         ge: course.ge,
         quartersOffered: course.quartersOffered,
       },

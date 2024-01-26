@@ -13,6 +13,7 @@ export const GET_COURSES = gql`
       number
       credits
       ge
+      description
       quartersOffered
     }
   }
@@ -27,6 +28,7 @@ export const GET_COURSE = gql`
       number
       credits
       ge
+      description
       quartersOffered
       prerequisites
     }
@@ -107,6 +109,7 @@ export const GET_PLANNER = gql`
           number
           quartersOffered
           ge
+          description
           title
           credits
           labels

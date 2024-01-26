@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Course, QueryInput, Department } from "./schema";
+import { Course, QueryInput, Department, SingleQueryInput } from "./schema";
 import { isAlpha } from "class-validator";
 
 /**
@@ -81,7 +81,7 @@ export class CourseService {
       return {};
     };
 
-    const res = await prisma.course.findMany({
+    const courses = await prisma.course.findMany({
       where: {
         departmentCode: departmentCodeParam().departmentCode,
         number: numberParam().number,
@@ -89,20 +89,30 @@ export class CourseService {
       },
     });
 
-    return res.sort(compareCoursesByNum);
+    const res = courses.map((r) => {
+      return {
+        ...r,
+        description: r.description ?? "",
+      };
+    });
+
+    res.sort(compareCoursesByNum);
+    return res;
   }
   /**
    * `courseBy` returns a course that satisfies a predicate `pred`
    * or null if no such course exists
    * @returns a `Course` instance
    */
-  public async courseBy(pred: QueryInput): Promise<Course | null> {
-    return await prisma.course.findFirst({
+  public async courseBy(pred: SingleQueryInput): Promise<Course | null> {
+    const course = await prisma.course.findFirst({
       where: {
         departmentCode: pred.departmentCode,
         number: pred.number,
       },
     });
+    if (!course) return null;
+    return { ...course, description: course.description ?? "" };
   }
 
   /**

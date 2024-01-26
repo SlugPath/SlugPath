@@ -27,6 +27,7 @@ CREATE TABLE "Planner" (
     "order" INTEGER NOT NULL,
     "userId" TEXT,
     "majorId" INTEGER,
+    "notes" TEXT,
 
     CONSTRAINT "Planner_pkey" PRIMARY KEY ("id")
 );
@@ -94,9 +95,6 @@ CREATE TABLE "Label" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_majorId_key" ON "User"("majorId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Major_name_catalogYear_key" ON "Major"("name", "catalogYear");
 
 -- AddForeignKey
@@ -116,3 +114,4 @@ ALTER TABLE "EnrolledCourse" ADD CONSTRAINT "EnrolledCourse_quarterId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "Label" ADD CONSTRAINT "Label_plannerId_fkey" FOREIGN KEY ("plannerId") REFERENCES "Planner"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+

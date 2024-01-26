@@ -7,8 +7,8 @@ import NextAuthProvider from "./contexts/NextAuthProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "UCSC Course Planner",
-  description: "A simple and easy to use course planner",
+  title: "Slug Path",
+  description: "A simple course planner for UCSC students",
 };
 
 export default function RootLayout({

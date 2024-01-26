@@ -96,7 +96,8 @@ export default function usePlanner(
    * @param cid id of custom course being edited
    * @param newTitle new title of custom course
    */
-  const editCustomCourse = (cid: string, newTitle: string) => {
+  const editCustomCourse = (course: StoredCourse) => {
+    const cid = course.id;
     setCourseState((prev) => {
       return {
         ...prev,
@@ -104,7 +105,7 @@ export default function usePlanner(
           if (c.id === cid && isCustomCourse(c)) {
             return {
               ...c,
-              title: newTitle,
+              ...course,
             };
           }
           return c;

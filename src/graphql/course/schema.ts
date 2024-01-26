@@ -17,6 +17,9 @@ export class Course {
   departmentCode!: string;
 
   @Field()
+  description!: string;
+
+  @Field()
   @Matches(/[0-9]{1,3}[A-Z]?/g)
   number!: string;
 
@@ -89,4 +92,15 @@ export class QueryInput {
 
   @Field({ nullable: true })
   ge?: string;
+}
+
+@ArgsType()
+export class SingleQueryInput {
+  @Field({ nullable: true })
+  @Matches(/[A-Z]{0,6}/g)
+  departmentCode?: string;
+
+  @Field({ nullable: true })
+  @Matches(/[0-9]{1,3}[A-Z]?/g)
+  number?: string;
 }

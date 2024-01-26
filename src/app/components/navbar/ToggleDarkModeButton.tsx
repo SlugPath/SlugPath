@@ -18,7 +18,7 @@ export default function ToggleButton() {
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [mode]);
+  }, [isDark]);
 
   return (
     <Switch
