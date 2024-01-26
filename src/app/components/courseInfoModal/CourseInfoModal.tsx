@@ -163,7 +163,7 @@ export default function CourseInfoModal() {
           boxShadow: "lg",
         }}
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           {course.labels && (
             <LabelsSelectionModal
               showModal={showLabelSelectionModal}
@@ -175,7 +175,15 @@ export default function CourseInfoModal() {
           )}
           <div className="flex justify-between items-center">
             <Skeleton loading={loading} variant="text" width="50%">
-              <Typography level="title-md">{title(data)}</Typography>
+              <Typography
+                component="h2"
+                id="modal-title"
+                level="h4"
+                textColor="inherit"
+                fontWeight="lg"
+              >
+                {title(data)}
+              </Typography>
             </Skeleton>
             {isCustomCourse(course) ? (
               <Tooltip title="We recommend replacing this custom course with a real course.">
