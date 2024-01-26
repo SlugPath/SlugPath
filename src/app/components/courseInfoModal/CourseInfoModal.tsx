@@ -165,36 +165,36 @@ export default function CourseInfoModal() {
           boxShadow: "lg",
         }}
       >
-        {course.labels && (
-          <LabelsSelectionModal
-            showModal={showLabelSelectionModal}
-            setShowModal={setShowLabelSelectionModal}
-            labels={getAllLabels()}
-            selectedLabels={getCourseLabels(course)}
-            onUpdateLabels={handleUpdateLabels}
-          />
-        )}
-        <div className="flex justify-between items-center">
-          <Skeleton loading={loading} variant="text" width="50%">
-            <Typography level="title-md">{title(data)}</Typography>
-          </Skeleton>
-          {isCustomCourse(course) ? (
-            <Tooltip title="We recommend replacing this custom course with a real course.">
-              <Chip color="warning" size="lg" className="mr-2">
-                Custom Course
-              </Chip>
-            </Tooltip>
-          ) : (
-            <Chip color="primary" size="lg" className="mr-2">
-              Official Course
-            </Chip>
+        <div className="flex flex-col gap-4">
+          {course.labels && (
+            <LabelsSelectionModal
+              showModal={showLabelSelectionModal}
+              setShowModal={setShowLabelSelectionModal}
+              labels={getAllLabels()}
+              selectedLabels={getCourseLabels(course)}
+              onUpdateLabels={handleUpdateLabels}
+            />
           )}
-        </div>
-        <Skeleton loading={loading} variant="text" width="50%">
-          <Typography level="body-md">{description(data)}</Typography>
-        </Skeleton>
-        <Skeleton loading={loading} variant="text" width="50%">
-          <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <Skeleton loading={loading} variant="text" width="50%">
+              <Typography level="title-md">{title(data)}</Typography>
+            </Skeleton>
+            {isCustomCourse(course) ? (
+              <Tooltip title="We recommend replacing this custom course with a real course.">
+                <Chip color="warning" size="lg" className="mr-2">
+                  Custom Course
+                </Chip>
+              </Tooltip>
+            ) : (
+              <Chip color="primary" size="lg" className="mr-2">
+                Official Course
+              </Chip>
+            )}
+          </div>
+          <Skeleton loading={loading} variant="text" width="50%">
+            <Typography level="body-md">{description(data)}</Typography>
+          </Skeleton>
+          <Skeleton loading={loading} variant="text" width="50%">
             {!isCSE(course) && !isCustomCourse(course) && (
               <Typography
                 variant="soft"
@@ -232,14 +232,14 @@ export default function CourseInfoModal() {
                 ge={course.ge}
               />
             )}
-          </div>
-        </Skeleton>
-        <ModalClose variant="plain" />
-        {customCourseInPlanner && (
-          <Button onClick={() => setEditing(true)} className="w-full mt-4">
-            <Typography level="body-lg">Edit</Typography>
-          </Button>
-        )}
+          </Skeleton>
+          <ModalClose variant="plain" />
+          {customCourseInPlanner && (
+            <Button onClick={() => setEditing(true)} className="w-full">
+              <Typography level="body-lg">Edit</Typography>
+            </Button>
+          )}
+        </div>
       </Sheet>
     </Modal>
   );

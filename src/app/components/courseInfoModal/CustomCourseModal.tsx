@@ -145,108 +145,109 @@ export default function CustomCourseModal({
           boxShadow: "lg",
         }}
       >
-        <div className="flex flex-row justify-between items-center">
-          <Typography level="title-lg">Edit Custom Course</Typography>
-          <Tooltip title="We recommend replacing this custom course with a real course.">
-            <Chip color="warning" size="lg" className="mt-2 mr-2">
-              Custom Course
-            </Chip>
-          </Tooltip>
-        </div>
-        <FormControl error={tooShortError}>
-          <Input
-            className="mt-2"
-            placeholder="Course Title"
-            value={course.title}
-            variant="soft"
-            sx={{
-              marginBottom: "1rem",
-              "--Input-focusedInset": "var(--any, )",
-              "--Input-focusedThickness": "0.25rem",
-              "--Input-focusedHighlight": "rgba(13,110,253,.25)",
-              "&::before": {
-                transition: "box-shadow .15s ease-in-out",
-              },
-              "&:focus-within": {
-                borderColor: "#86b7fe",
-              },
-            }}
-            onChange={handleTitleChange}
-          />
-          {tooShortError && (
-            <FormHelperText>
-              <InfoOutlined />
-              Course name cannot be empty.
-            </FormHelperText>
-          )}
-        </FormControl>
-        <Textarea
-          placeholder="Description"
-          className="mb-2 border-0"
-          value={course.description}
-          onChange={handleDescriptionChange}
-          variant="soft"
-          minRows={2}
-          maxRows={4}
-          sx={{
-            outline: "none",
-          }}
-          endDecorator={
-            <Typography level="body-xs" sx={{ ml: "auto" }}>
-              {course.description.length} / {MAX_DESCRIPTION_LENGTH}{" "}
-              character(s)
-            </Typography>
-          }
-        />
-        <div className="flex flex-row flex-end text-center gap-4 justify-between">
-          <div className="flex flex-col items-start">
-            <p className="text-md justify-left mb-2">Credits</p>
-            <Input
-              variant="soft"
-              placeholder="Credits"
-              defaultValue={"5"}
-              value={course.credits ? course.credits.toString() : ""}
-              onChange={handleCreditChange}
-            />
-            {invalidCreditsError && (
-              <div className="text-red-600 text-md">
-                Credits must be between 1 and 15
-              </div>
-            )}
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-row justify-between items-center">
+            <Typography level="title-lg">Edit Custom Course</Typography>
+            <Tooltip title="We recommend replacing this custom course with a real course.">
+              <Chip color="warning" size="lg" className="mt-2 mr-2">
+                Custom Course
+              </Chip>
+            </Tooltip>
           </div>
-          <div className="flex flex-col">
-            <p className="text-md mb-2">Quarters Offered</p>
-            <div role="group" aria-labelledby="quarters">
-              <List
-                orientation="horizontal"
-                wrap
-                sx={{
-                  "--List-gap": "8px",
-                  "--ListItem-radius": "20px",
-                }}
-              >
-                {["Fall", "Winter", "Spring", "Summer"].map((item) => (
-                  <ListItem key={item}>
-                    <Checkbox
-                      overlay
-                      disableIcon
-                      checked={quarters[item as keyof QuartersOffered]}
-                      onChange={(e) =>
-                        handleQuarterChange(e, item as keyof QuartersOffered)
-                      }
-                      variant="soft"
-                      label={item}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+          <FormControl error={tooShortError}>
+            <Input
+              placeholder="Course Title"
+              value={course.title}
+              variant="soft"
+              sx={{
+                marginBottom: "1rem",
+                "--Input-focusedInset": "var(--any, )",
+                "--Input-focusedThickness": "0.25rem",
+                "--Input-focusedHighlight": "rgba(13,110,253,.25)",
+                "&::before": {
+                  transition: "box-shadow .15s ease-in-out",
+                },
+                "&:focus-within": {
+                  borderColor: "#86b7fe",
+                },
+              }}
+              onChange={handleTitleChange}
+            />
+            {tooShortError && (
+              <FormHelperText>
+                <InfoOutlined />
+                Course name cannot be empty.
+              </FormHelperText>
+            )}
+          </FormControl>
+          <Textarea
+            placeholder="Description"
+            className="border-0"
+            value={course.description}
+            onChange={handleDescriptionChange}
+            variant="soft"
+            minRows={2}
+            maxRows={4}
+            sx={{
+              outline: "none",
+            }}
+            endDecorator={
+              <Typography level="body-xs" sx={{ ml: "auto" }}>
+                {course.description.length} / {MAX_DESCRIPTION_LENGTH}{" "}
+                character(s)
+              </Typography>
+            }
+          />
+          <div className="flex flex-row flex-end text-center gap-4 justify-between">
+            <div className="flex flex-col items-start">
+              <p className="text-md justify-left mb-2">Credits</p>
+              <Input
+                variant="soft"
+                placeholder="Credits"
+                defaultValue={"5"}
+                value={course.credits ? course.credits.toString() : ""}
+                onChange={handleCreditChange}
+              />
+              {invalidCreditsError && (
+                <div className="text-red-600 text-md">
+                  Credits must be between 1 and 15
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <p className="text-md mb-2">Quarters Offered</p>
+              <div role="group" aria-labelledby="quarters">
+                <List
+                  orientation="horizontal"
+                  wrap
+                  sx={{
+                    "--List-gap": "8px",
+                    "--ListItem-radius": "20px",
+                  }}
+                >
+                  {["Fall", "Winter", "Spring", "Summer"].map((item) => (
+                    <ListItem key={item}>
+                      <Checkbox
+                        overlay
+                        disableIcon
+                        checked={quarters[item as keyof QuartersOffered]}
+                        onChange={(e) =>
+                          handleQuarterChange(e, item as keyof QuartersOffered)
+                        }
+                        variant="soft"
+                        label={item}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
             </div>
           </div>
+          <Button className="w-full" onClick={onSave}>
+            <Typography level="body-lg">Save</Typography>
+          </Button>
+          <ModalClose />
         </div>
-        <Button className="mt-4 justify-right w-full" onClick={onSave}>
-          <Typography level="body-lg">Save</Typography>
-        </Button>
-        <ModalClose />
       </Sheet>
     </Modal>
   );

@@ -52,7 +52,13 @@ export default function CustomCourseSelection() {
   return (
     <Card className="w-80 mb-2 mr-2" variant="plain">
       <Button onClick={handleOpen} startDecorator={<Add />}>
-        <Typography level="body-md" fontWeight="lg">
+        <Typography
+          level="body-md"
+          fontWeight="lg"
+          sx={{
+            color: "white",
+          }}
+        >
           Add Custom Course
         </Typography>
       </Button>
