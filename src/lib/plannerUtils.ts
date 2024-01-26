@@ -1,10 +1,10 @@
 import { Quarter } from "../app/types/Quarter";
-import { PlannerData, findCourseById } from "../app/types/PlannerData";
+import { findCourseById, PlannerData } from "../app/types/PlannerData";
 import {
-  PlannerDataInput,
-  QuarterInput,
   PlannerData as PlannerDataOutput,
+  PlannerDataInput,
   PlannerTitle,
+  QuarterInput,
 } from "@/graphql/planner/schema";
 import { Term } from "../app/types/Quarter";
 import { StoredCourse } from "@/app/types/Course";
@@ -135,8 +135,9 @@ export function getDeptAndNumber({
   number,
   title,
 }: StoredCourse): string {
-  if (departmentCode !== "" && number !== "")
+  if (departmentCode !== "" && number !== "") {
     return `${departmentCode} ${number}`;
+  }
   return `${title}`;
 }
 
@@ -208,10 +209,8 @@ export async function getRealEquivalent(
   };
 }
 
-export function isCustomCourse({
-  departmentCode,
-  number,
-}: StoredCourse): boolean {
+export function isCustomCourse(c: StoredCourse): boolean {
+  const { departmentCode, number } = c;
   return departmentCode === "" || number === "";
 }
 

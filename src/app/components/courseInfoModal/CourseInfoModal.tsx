@@ -1,16 +1,25 @@
-import { getTitle, isCustomCourse } from "@/lib/plannerUtils";
-import { Chip, Modal, ModalClose, Sheet, Skeleton, Tooltip } from "@mui/joy";
+import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import {
+  Button,
+  Chip,
+  Modal,
+  ModalClose,
+  Sheet,
+  Skeleton,
+  Tooltip,
+  Typography,
+} from "@mui/joy";
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
-import { ChangeEvent, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { ModalsContext } from "../../contexts/ModalsProvider";
 import { StoredCourse } from "../../types/Course";
 import { PlannerContext } from "../../contexts/PlannerProvider";
 import { Label } from "../../types/Label";
 import LabelsSelectionModal from "./LabelSelectionModal";
-import CourseDetails from "./CourseDetails";
-import CourseTitle from "./CourseInfoModalTitle";
-import CourseDescription from "./CourseInfoModalDescription";
+import { WarningAmberRounded } from "@mui/icons-material";
+import CustomCourseModal from "./CustomCourseModal";
+import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 50;
 
@@ -28,9 +37,8 @@ export default function CourseInfoModal() {
     editCourseLabels,
     updatePlannerLabels,
   } = useContext(PlannerContext);
-  const [editingTitle, setEditingTitle] = useState(false);
-  const [editingDesc, setEditingDesc] = useState(false);
 
+  const [editing, setEditing] = useState(false);
   const { displayCourse: courseTerm, setDisplayCourse } =
     useContext(PlannerContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
@@ -41,34 +49,13 @@ export default function CourseInfoModal() {
     },
     skip: course === undefined || isCustomCourse(course),
   });
-  const [customTitle, setCustomTitle] = useState("");
-  const [customDescription, setCustomDescription] = useState("");
 
-  // Handlers
-  const handleEndEditingTitle = () => {
-    if (course && editingTitle && customTitle.length > 0) {
-      setEditingTitle(false);
-      course.title = customTitle;
-      editCustomCourse(course.id, customTitle, course.description);
-    }
-  };
+  // This is to prevent accidentally opening the modal when it shouldn't be
+  if (course === undefined || course.departmentCode === undefined) {
+    return null;
+  }
 
-  const handleEndEditingDesc = () => {
-    if (course && editingDesc && customDescription.length > 0) {
-      setEditingDesc(false);
-      course.description = customDescription;
-      editCustomCourse(course.id, course.title, customDescription);
-    }
-  };
-
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCustomTitle(e.target.value);
-  };
-
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setCustomDescription(e.target.value);
-  };
-
+  // Accessors
   function title(data: any) {
     if (loading) return "";
     if (!data) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
@@ -85,34 +72,87 @@ export default function CourseInfoModal() {
     if (course && isCustomCourse(course)) {
       return `Description: ${course.description}`;
     }
+    console.log(`deptCode: ${course?.title}`);
+    console.log(`description: ${data.courseBy.description}`);
     return `${data.courseBy.description}`;
   }
 
-  if (course === undefined) return null;
+  function quartersOffered(data: any) {
+    if (loading) return "";
+    if (!data) return `Quarters Offered: ${course?.quartersOffered.join(", ")}`;
+    const c = data.courseBy as StoredCourse;
+    if (c.quartersOffered.length == 0) return "Quarters Offered: None";
+    return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
+  }
+
+  function credits(data: any) {
+    if (loading) return "";
+    if (!data) return course?.credits;
+    return data.courseBy.credits;
+  }
+
+  function ge(data: any) {
+    if (loading) return "";
+    const capitalize: { [key: string]: string } = {
+      peT: "PE-T",
+      peH: "PE-H",
+      peE: "PE-E",
+      prC: "PR-C",
+      prS: "PR-S",
+      prE: "PR-E",
+    };
+    return data.courseBy.ge.map((code: string) => {
+      if (code === "None") return code;
+      if (Object.keys(capitalize).includes(code)) return capitalize[code];
+      return code.toLocaleUpperCase();
+    });
+  }
+
+  function prerequisites(data: any) {
+    const start = "Prerequisite(s):";
+    if (loading) return `${start} None`;
+    const preqs: string = data.courseBy.prerequisites;
+    return preqs.includes(start) ? preqs : `${start} ${preqs}`;
+  }
+
+  // Handlers
+  const handleOpenLabels = () => {
+    setShowLabelSelectionModal(true);
+  };
 
   const handleUpdateLabels = (labels: Label[]) => {
     const newLabels = labels.map((label) => label.id);
     const newCourse: StoredCourse = { ...course, labels: newLabels };
-    const courseTerm = [newCourse, term];
     editCourseLabels(newCourse);
     updatePlannerLabels(labels);
-    setDisplayCourse(courseTerm);
+    setDisplayCourse([newCourse, term]);
   };
 
-  const labelsAreEditable = () => {
-    if (course.labels) {
-      return true;
-    }
-    return false;
+  const handleClose = (crs: StoredCourse) => {
+    editCustomCourse(crs);
+    setDisplayCourse([crs, term]);
+    setEditing(false);
   };
+
+  // Only show this second modal if it is a custom course,
+  // in the planner, and the course is being edited
+  const customCourseInPlanner = isCustomCourse(course) && term !== undefined;
+  if (editing && customCourseInPlanner) {
+    return (
+      <CustomCourseModal
+        onClose={handleClose}
+        defaultCourse={course}
+        isOpen={editing}
+      />
+    );
+  }
 
   return (
     <Modal
       open={showModal}
       onClose={() => {
         setShowModal(false);
-        setCustomTitle("");
-        setEditingTitle(false);
+        setEditing(false);
       }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
@@ -125,7 +165,7 @@ export default function CourseInfoModal() {
           boxShadow: "lg",
         }}
       >
-        {labelsAreEditable() && (
+        {course.labels && (
           <LabelsSelectionModal
             showModal={showLabelSelectionModal}
             setShowModal={setShowLabelSelectionModal}
@@ -136,16 +176,7 @@ export default function CourseInfoModal() {
         )}
         <div className="flex flex-column justify-between items-center">
           <Skeleton loading={loading} variant="text" width="50%">
-            <CourseTitle
-              course={course}
-              title={title(data)}
-              term={term}
-              editing={editingTitle}
-              setEditing={setEditingTitle}
-              customTitle={customTitle}
-              handleTitleChange={handleTitleChange}
-              handleEndEditing={handleEndEditingTitle}
-            />
+            <Typography level="title-md">{title(data)}</Typography>
           </Skeleton>
           {isCustomCourse(course) ? (
             <Tooltip title="We recommend replacing this custom course with a real course.">
@@ -160,29 +191,55 @@ export default function CourseInfoModal() {
           )}
         </div>
         <Skeleton loading={loading} variant="text" width="50%">
-          <CourseDescription
-            course={course}
-            description={description(data)}
-            term={term}
-            editing={editingDesc}
-            setEditing={setEditingDesc}
-            customDescription={customDescription}
-            handleDescriptionChange={handleDescriptionChange}
-            handleEndEditing={handleEndEditingDesc}
-          />
+          <Typography level="body-md">{description(data)}</Typography>
         </Skeleton>
         <Skeleton loading={loading} variant="text" width="50%">
-          <CourseDetails
-            course={course}
-            data={data}
-            loading={loading}
-            setShowLabelSelectionModal={setShowLabelSelectionModal}
-            getCourseLabels={getCourseLabels}
-            labelsAreEditable={labelsAreEditable()}
-            term={term}
-          />
+          <div className="space-y-2">
+            {!isCSE(course) && !isCustomCourse(course) && (
+              <Typography
+                variant="soft"
+                color="warning"
+                component="p"
+                startDecorator={<WarningAmberRounded color="warning" />}
+              >
+                Warning: quarters offered information is unavailable for this
+                course.
+              </Typography>
+            )}
+            {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+              <Typography
+                variant="soft"
+                color="warning"
+                component="p"
+                startDecorator={<WarningAmberRounded color="warning" />}
+              >
+                Warning: {course.departmentCode} {course.number} is not offered
+                in {` ${term}`}
+              </Typography>
+            )}
+            <Typography component="p">{quartersOffered(data)}</Typography>
+            <Typography component="p">Credits: {credits(data)}</Typography>
+            {data !== undefined && (
+              <>
+                <Typography component="p">{prerequisites(data)}</Typography>
+                <Typography component="p">GE: {ge(data)}</Typography>
+              </>
+            )}
+            {course.labels && (
+              <SelectedLabels
+                labels={getCourseLabels(course)}
+                handleOpenLabels={handleOpenLabels}
+                ge={course.ge}
+              />
+            )}
+          </div>
         </Skeleton>
         <ModalClose variant="plain" />
+        {customCourseInPlanner && (
+          <Button onClick={() => setEditing(true)} className="w-full">
+            Edit
+          </Button>
+        )}
       </Sheet>
     </Modal>
   );

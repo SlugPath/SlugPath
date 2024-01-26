@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   Modal,
+  ModalClose,
   Sheet,
   Textarea,
   Tooltip,
@@ -149,7 +150,7 @@ export default function CustomCourseModal({
           <Chip
             color="warning"
             size="lg"
-            className="absolute top-0 right-0 mt-2 mr-2"
+            className="absolute top-6 right-6 mt-2 mr-2"
           >
             Custom Course
           </Chip>
@@ -184,12 +185,15 @@ export default function CustomCourseModal({
         </FormControl>
         <Textarea
           placeholder="Description"
-          className="mb-2"
+          className="mb-2 border-0"
           value={course.description}
           onChange={handleDescriptionChange}
           variant="soft"
           minRows={2}
           maxRows={4}
+          sx={{
+            outline: "none",
+          }}
           endDecorator={
             <Typography level="body-xs" sx={{ ml: "auto" }}>
               {course.description.length} / {MAX_DESCRIPTION_LENGTH}{" "}
@@ -245,6 +249,7 @@ export default function CustomCourseModal({
         <Button className="mt-2 justify-right w-full" onClick={onSave}>
           <Typography level="h4">Save</Typography>
         </Button>
+        <ModalClose />
       </Sheet>
     </Modal>
   );
