@@ -174,7 +174,7 @@ export default function CourseInfoModal() {
             onUpdateLabels={handleUpdateLabels}
           />
         )}
-        <div className="flex flex-column justify-between items-center">
+        <div className="flex justify-between items-center">
           <Skeleton loading={loading} variant="text" width="50%">
             <Typography level="title-md">{title(data)}</Typography>
           </Skeleton>
@@ -237,7 +237,7 @@ export default function CourseInfoModal() {
         <ModalClose variant="plain" />
         {customCourseInPlanner && (
           <Button onClick={() => setEditing(true)} className="w-full">
-            Edit
+            <Typography level="body-lg">Edit</Typography>
           </Button>
         )}
       </Sheet>

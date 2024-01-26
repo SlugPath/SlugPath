@@ -143,19 +143,16 @@ export default function CustomCourseModal({
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
-          position: "relative",
         }}
       >
-        <Tooltip title="We recommend replacing this custom course with a real course.">
-          <Chip
-            color="warning"
-            size="lg"
-            className="absolute top-6 right-6 mt-2 mr-2"
-          >
-            Custom Course
-          </Chip>
-        </Tooltip>
-        <Typography level="h3">Edit Custom Course</Typography>
+        <div className="flex flex-row justify-between items-center">
+          <Typography level="title-lg">Edit Custom Course</Typography>
+          <Tooltip title="We recommend replacing this custom course with a real course.">
+            <Chip color="warning" size="lg" className="mt-2 mr-2">
+              Custom Course
+            </Chip>
+          </Tooltip>
+        </div>
         <FormControl error={tooShortError}>
           <Input
             className="mt-2"
@@ -247,7 +244,7 @@ export default function CustomCourseModal({
           </div>
         </div>
         <Button className="mt-2 justify-right w-full" onClick={onSave}>
-          <Typography level="h4">Save</Typography>
+          <Typography level="body-lg">Save</Typography>
         </Button>
         <ModalClose />
       </Sheet>
