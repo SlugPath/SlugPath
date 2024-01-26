@@ -243,7 +243,7 @@ export default function CustomCourseModal({
             </div>
           </div>
         </div>
-        <Button className="mt-2 justify-right w-full" onClick={onSave}>
+        <Button className="mt-4 justify-right w-full" onClick={onSave}>
           <Typography level="body-lg">Save</Typography>
         </Button>
         <ModalClose />

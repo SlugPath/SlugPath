@@ -236,7 +236,7 @@ export default function CourseInfoModal() {
         </Skeleton>
         <ModalClose variant="plain" />
         {customCourseInPlanner && (
-          <Button onClick={() => setEditing(true)} className="w-full">
+          <Button onClick={() => setEditing(true)} className="w-full mt-4">
             <Typography level="body-lg">Edit</Typography>
           </Button>
         )}
