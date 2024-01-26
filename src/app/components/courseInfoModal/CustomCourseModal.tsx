@@ -134,7 +134,6 @@ export default function CustomCourseModal({
       onClose={onClose}
       open={isOpen}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      onKeyDown={(e) => e.key === "Enter" && onSave()}
     >
       <Sheet
         sx={{

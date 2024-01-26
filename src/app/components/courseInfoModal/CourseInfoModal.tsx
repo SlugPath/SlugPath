@@ -50,7 +50,7 @@ export default function CourseInfoModal() {
     skip: course === undefined || isCustomCourse(course),
   });
 
-  // This is to prevent accidentally opening the modal when it shouldn't be
+  // This is to prevent illegally opening the modal
   if (course === undefined || course.departmentCode === undefined) {
     return null;
   }
@@ -72,8 +72,6 @@ export default function CourseInfoModal() {
     if (course && isCustomCourse(course)) {
       return `Description: ${course.description}`;
     }
-    console.log(`deptCode: ${course?.title}`);
-    console.log(`description: ${data.courseBy.description}`);
     return `${data.courseBy.description}`;
   }
 
