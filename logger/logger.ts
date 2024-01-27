@@ -1,10 +1,10 @@
-import { ENV, LOGFLARE_API_KEY, LOGFLARE_SOURCE_TOKEN, SHA } from "@/config";
+import { env } from "@/env/server.mjs";
 import pino from "pino";
 import { logflarePinoVercel } from "pino-logflare";
 
 const { stream, send } = logflarePinoVercel({
-  apiKey: LOGFLARE_API_KEY,
-  sourceToken: LOGFLARE_SOURCE_TOKEN,
+  apiKey: env.LOGFLARE_API_KEY,
+  sourceToken: env.LOGFLARE_SOURCE_TOKEN,
 });
 
 // create pino logger
@@ -18,8 +18,8 @@ const logger = pino(
     },
     level: "debug",
     base: {
-      env: ENV,
-      revision: SHA,
+      env: process.env,
+      revision: env.SHA,
     },
   },
   stream,

@@ -1,10 +1,13 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
+import "./src/env/server.mjs";
+import withBundleAnalyzer from "@next/bundle-analyzer";
+
+const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
 /** @type {import('next').NextConfig} */
 
-module.exports = withBundleAnalyzer({
+const nextConfig = bundleAnalyzer({
   output: "standalone",
   experimental: {
     serverMinification: false,
@@ -43,3 +46,5 @@ module.exports = withBundleAnalyzer({
     return config;
   },
 });
+
+export default nextConfig;
