@@ -1,4 +1,5 @@
 import { env } from "@/env/server.mjs";
+import { SHA } from "@/config";
 import pino from "pino";
 import { logflarePinoVercel } from "pino-logflare";
 
@@ -19,7 +20,7 @@ const logger = pino(
     level: "debug",
     base: {
       env: process.env,
-      revision: env.SHA,
+      revision: SHA,
     },
   },
   stream,

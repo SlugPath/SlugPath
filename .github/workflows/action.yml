@@ -10,15 +10,13 @@ env:
   PAUSE_TOKEN: "github-actions"
   WEBHOOK_SECRET: "github-actions"
   PROJECT_ID: "github-actions"
-  TEAM_ID: "github-actions"
-  SHA: ${{ github.sha }}
 
 jobs:
   print-commit:
     runs-on: ubuntu-latest
     steps:
     - name: Print Git Commit
-      run: echo ${{ env.SHA}}
+      run: echo ${{ github.sha}}
 
   lint:
     runs-on: ubuntu-latest

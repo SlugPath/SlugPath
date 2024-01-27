@@ -9,7 +9,6 @@ export const env = createEnv({
     WEBHOOK_SECRET: z.string().min(1),
     PROJECT_ID: z.string().min(1),
     TEAM_ID: z.string().min(1),
-    SHA: z.string().min(1),
     POSTGRES_PRISMA_URL: z.string().url(),
   },
   runtimeEnv: {
@@ -19,7 +18,6 @@ export const env = createEnv({
     WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
     PROJECT_ID: process.env.PROJECT_ID,
     TEAM_ID: process.env.TEAM_ID,
-    SHA: process.env.SHA,
     POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
   },
 });
