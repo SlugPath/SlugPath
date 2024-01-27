@@ -2,5 +2,10 @@ import { Major } from "./Major";
 
 export interface Permissions {
   userEmail: string;
-  majorsAllowedToEdit: Major[];
+  majorEditingPermissions: MajorEditingPermission[];
+}
+
+export interface MajorEditingPermission {
+  major: Major;
+  expirationDate: Date;
 }

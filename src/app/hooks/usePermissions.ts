@@ -18,6 +18,8 @@ export default function usePermissions() {
     if (data) {
       setPermissionsList(data);
       setIsSaved(true);
+      console.log("data");
+      console.log(data);
     }
   }, [data, isPending]);
 

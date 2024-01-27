@@ -39,7 +39,7 @@ export function MajorVerificationProvider({
     majorRequirements,
     onSetMajorRequirements,
     onSaveMajorRequirements,
-  } = useMajorRequirements(userMajorData?.id);
+  } = useMajorRequirements(userMajorData?.id, session?.user.id);
 
   function updateRequirementList(id: string, requirementList: RequirementList) {
     const majorRequirementsCopy = { ...majorRequirements };

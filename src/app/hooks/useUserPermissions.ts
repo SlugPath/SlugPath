@@ -16,6 +16,7 @@ export default function useUserPermissions() {
           session!.user.id,
           userMajorData,
         );
+        console.log("userHasMajorEditingPermission: " + result);
         setHasPermissionToEdit(result);
       } catch (error) {
         console.error("Error fetching data:", error);

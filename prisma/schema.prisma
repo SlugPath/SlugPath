@@ -77,7 +77,7 @@ model Major {
   defaultPlanners  Planner[]
   users            User[]
   majorRequirement MajorRequirement?
-  permissions      Permissions[]
+  permissions      MajorEditingPermission[]
 
   @@unique([name, catalogYear])
 }
@@ -90,9 +90,18 @@ model MajorRequirement {
 }
 
 model Permissions {
-  id                  Int     @id @default(autoincrement())
-  majorsAllowedToEdit Major[]
-  userEmail           String  @unique
+  id                      Int     @id @default(autoincrement())
+  majorEditingPermissions MajorEditingPermission[]
+  userEmail               String  @unique
+}
+
+model MajorEditingPermission {
+  id                Int         @id @default(autoincrement())
+  major             Major       @relation(fields: [majorId], references: [id])
+  majorId           Int         @unique
+  permissions       Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
+  permissionsId     Int
+  expirationDate    DateTime
 }
 
 model Label {

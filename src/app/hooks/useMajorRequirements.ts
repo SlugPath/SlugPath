@@ -6,7 +6,10 @@ import {
   saveMajorRequirements,
 } from "@/app/actions/actions";
 
-export default function useMajorRequirements(majorId: number | undefined) {
+export default function useMajorRequirements(
+  majorId: number | undefined,
+  userId: string | undefined,
+) {
   const [majorRequirements, setMajorRequirements] = useState<RequirementList>({
     binder: Binder.AND,
     title: "No title",
@@ -23,7 +26,7 @@ export default function useMajorRequirements(majorId: number | undefined) {
 
   async function handleSaveMajorRequirements(majorId: number) {
     setLoadingSave(true);
-    await saveMajorRequirements(majorRequirements, majorId);
+    await saveMajorRequirements(majorRequirements, majorId, userId!);
     setLoadingSave(false);
     setIsSaved(true);
   }

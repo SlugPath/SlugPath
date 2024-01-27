@@ -6,23 +6,18 @@ import {
   Sheet,
   Typography,
   Alert,
-  List,
-  ListItem,
-  ListItemContent,
-  AccordionGroup,
 } from "@mui/joy";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { useContext, useState } from "react";
 import { z } from "zod";
 import ReportIcon from "@mui/icons-material/Report";
-import useMajors from "@/app/hooks/useMajors";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
 import usePermissions from "@/app/hooks/usePermissions";
 import ConfirmAlert from "../ConfirmAlert";
 import { CircularProgress } from "@mui/material";
 import IsSatisfiedMark from "../IsSatisfiedMark";
-import PermissionsAccordion from "./PermissionsAccordion";
+import PermissionsList from "./PermissionsList";
 
 export default function PermissionsModal() {
   const { showPermissionsModal, setShowPermissionsModal } =
@@ -47,7 +42,7 @@ export default function PermissionsModal() {
     if (selectionIsValid()) {
       onSetPermissionsList([
         ...permissionsList,
-        { userEmail: email, majorsAllowedToEdit: [] },
+        { userEmail: email, majorEditingPermissions: [] },
       ]);
       setEmail("");
     } else {
@@ -73,8 +68,14 @@ export default function PermissionsModal() {
     if (isMajorAlreadyAdded(permissions, major)) {
       return;
     }
+
     const permissionsCopy = { ...permissions };
-    permissionsCopy.majorsAllowedToEdit.push(major);
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 14);
+    permissionsCopy.majorEditingPermissions.push({
+      major: major,
+      expirationDate,
+    });
     onSetPermissionsList([
       ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
       permissionsCopy,
@@ -86,8 +87,38 @@ export default function PermissionsModal() {
     major: Major,
   ) {
     const permissionsCopy = { ...permissions };
-    permissionsCopy.majorsAllowedToEdit =
-      permissionsCopy.majorsAllowedToEdit.filter((m) => m.name !== major.name);
+    permissionsCopy.majorEditingPermissions =
+      permissionsCopy.majorEditingPermissions.filter((majorEditPerm) => {
+        const otherMajor = majorEditPerm.major;
+        return (
+          otherMajor.name !== major.name ||
+          otherMajor.catalogYear !== major.catalogYear
+        );
+      });
+    onSetPermissionsList([
+      ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
+      permissionsCopy,
+    ]);
+  }
+
+  function handleUpdateMajorEditPermissionExpirationDate(
+    permissions: Permissions,
+    major: Major,
+    expirationDate: Date,
+  ) {
+    const permissionsCopy = { ...permissions };
+    permissionsCopy.majorEditingPermissions =
+      permissionsCopy.majorEditingPermissions.map((majorEditPerm) => {
+        const otherMajor = majorEditPerm.major;
+        if (otherMajor.name === major.name) {
+          return {
+            major: otherMajor,
+            expirationDate: expirationDate,
+          };
+        } else {
+          return majorEditPerm;
+        }
+      });
     onSetPermissionsList([
       ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
       permissionsCopy,
@@ -99,9 +130,13 @@ export default function PermissionsModal() {
   }
 
   function isMajorAlreadyAdded(permissions: Permissions, major: Major) {
-    return permissions.majorsAllowedToEdit.some(
-      (m) => m.name === major.name && m.catalogYear === major.catalogYear,
-    );
+    return permissions.majorEditingPermissions.some((m) => {
+      const otherMajor = m.major;
+      return (
+        otherMajor.name === major.name &&
+        otherMajor.catalogYear === major.catalogYear
+      );
+    });
   }
 
   function selectionIsValid() {
@@ -190,6 +225,9 @@ export default function PermissionsModal() {
               onAddMajorEditPermission={handleAddMajorEditPermission}
               onRemoveMajorEditPermission={handleRemoveMajorEditPermission}
               onRemovePermissions={handleConfirmRemovePermissions}
+              onUpdateMajorEditPermissionExpirationDate={
+                handleUpdateMajorEditPermissionExpirationDate
+              }
             />
           </div>
         </div>
@@ -202,39 +240,5 @@ export default function PermissionsModal() {
         />
       </Sheet>
     </Modal>
-  );
-}
-
-function PermissionsList({
-  permissionsList,
-  onAddMajorEditPermission,
-  onRemoveMajorEditPermission,
-  onRemovePermissions,
-}: {
-  permissionsList: Permissions[];
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemovePermissions: (permissions: Permissions) => void;
-}) {
-  const { majors } = useMajors();
-
-  return (
-    <AccordionGroup className="w-full h-[70vh] overflow-auto">
-      <List className="flex flex-col gap-1">
-        {permissionsList.map((permissions, index) => (
-          <ListItem key={index}>
-            <ListItemContent>
-              <PermissionsAccordion
-                permissions={permissions}
-                majors={majors}
-                onAddMajorEditPermission={onAddMajorEditPermission}
-                onRemoveMajorEditPermission={onRemoveMajorEditPermission}
-                onRemovePermissions={onRemovePermissions}
-              />
-            </ListItemContent>
-          </ListItem>
-        ))}
-      </List>
-    </AccordionGroup>
   );
 }
