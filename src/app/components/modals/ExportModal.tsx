@@ -20,6 +20,7 @@ import { quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsContext } from "../../contexts/ModalsProvider";
 import { useContext } from "react";
 import { PlannersContext } from "../../contexts/PlannersProvider";
+import { PlannerTitle } from "@/graphql/planner/schema";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -72,11 +73,17 @@ const styles = StyleSheet.create({
   },
 });
 
+function getActivePlanner(planners: PlannerTitle[], activePlanner: string) {
+  return planners.find((p) => p.id === activePlanner)?.title;
+}
+
 export default function CourseSelectionModal() {
   const { setShowExportModal, showExportModal, courseState } =
     useContext(ModalsContext);
 
-  const { activePlanner } = useContext(PlannersContext);
+  const { planners, activePlanner } = useContext(PlannersContext);
+
+  if (activePlanner === undefined) return null;
 
   return (
     <Modal
@@ -108,7 +115,9 @@ export default function CourseSelectionModal() {
           <Document>
             <Page size="A4" style={styles.page}>
               <View style={styles.titleView}>
-                <Text style={styles.plannerTitle}>{activePlanner?.title}</Text>
+                <Text style={styles.plannerTitle}>
+                  {getActivePlanner(planners, activePlanner)}
+                </Text>
                 <Image style={styles.image} src="/images/slug-icon.png" />
               </View>
               <View>

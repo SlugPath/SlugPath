@@ -74,26 +74,23 @@ export default function PlannerTabs() {
     title.length >= 2 && setPlannerBeingEdited(null);
   };
 
-  const handleTabChange = (index: number | string | null) => {
-    if (typeof index === "string" && index !== "add-planner-tab") {
-      const title = planners[index][0];
-      switchPlanners(index, title);
-    }
+  const handleTabChange = (id: string) => {
+    switchPlanners(id);
   };
 
   return (
     <>
       <div className="grid grid-flow-col gap-2 ml-1 overflow-x-auto">
-        {Object.entries(planners).map(([id, [title]]) => (
+        {planners.map(({ id, title }) => (
           <CustomTab
             key={id}
             title={title}
             id={id}
-            selected={activePlanner ? activePlanner.id === id : false}
+            selected={activePlanner ? activePlanner === id : false}
             isEditing={plannerBeingEdited === id}
             setPlannerBeingEdited={setPlannerBeingEdited}
             onEndEditing={(newTitle) => {
-              changePlannerName(newTitle, id);
+              changePlannerName(id, newTitle);
               handleBlur(newTitle);
             }}
             onClick={() => handleTabChange(id)}

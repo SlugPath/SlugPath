@@ -7,11 +7,9 @@ import { DELETE_PLANNER } from "@/graphql/queries";
 export function usePlanners(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners, { loading }] = useLoadAllPlanners(
-    userId,
-    handleLoadedPlanners,
-  );
-  const [deletedPlanner, setDeletedPlanner] = useState<boolean>(false);
+  const [planners, setPlanners, activePlanner, setActivePlanner, { loading }] =
+    useLoadAllPlanners(userId, handleLoadedPlanners);
+  const [deletedPlanner, setDeletedPlanner] = useState(false);
   const [deletePlanner, { loading: loadingDeletePlanner }] = useMutation(
     DELETE_PLANNER,
     {
@@ -37,51 +35,33 @@ export function usePlanners(userId: string | undefined) {
   /**
    * `switchPlanner` switches between planners
    * @param id unique planner id
-   * @param title planner title
    */
-  const switchPlanners = (id: string, title: string) => {
-    setPlanners((prev) =>
-      (() => {
-        // Get id of previously active title if there was one
-        // and deactivate it
-        const prevId = Object.keys(prev).find((uid: string) => prev[uid][1]);
-        if (prevId === undefined) {
-          return { ...prev, [id]: [title, true] };
-        }
-        const prevTitle = prev[prevId][0];
-
-        return {
-          ...prev,
-          [prevId]: [prevTitle, false],
-          [id]: [title, true],
-        };
-      })(),
-    );
-  };
+  function switchPlanners(id: string) {
+    setActivePlanner(id);
+  }
 
   /**
    * `changePlannerName` handles the change event for a planner name
-   * @param event keyboard event
    * @param id unique planner id
+   * @param newTitle new title of the planner
    */
-  const changePlannerName = (newName: string, id: string) => {
-    setPlanners({
-      ...planners,
-      [id]: [newName, planners[id][1]],
+  function changePlannerName(id: string, newTitle: string) {
+    setPlanners((prev) => {
+      return prev.map((p) => {
+        return p.id === id ? { ...p, title: newTitle } : p;
+      });
     });
-  };
+  }
 
   /**
    * `addPlanner` creates a new planner with a default, editable name.
-   * It returns early if the user has too many planners already
    */
   function addPlanner() {
-    const [id, title] = [uuidv4(), `New Planner`];
-    setPlanners({
-      ...planners,
-      [id]: [title, false],
+    const id = uuidv4();
+    setPlanners((prev) => {
+      return [...prev, { id, title: "New Planner" }];
     });
-    switchPlanners(id, title);
+    switchPlanners(id);
   }
 
   /**
@@ -91,42 +71,34 @@ export function usePlanners(userId: string | undefined) {
    * default planner.
    */
   function replaceCurrentPlanner() {
-    const currentPlannerId = Object.keys(planners).find(
-      (plannerId) => planners[plannerId][1],
-    );
-    if (currentPlannerId === undefined) {
+    if (activePlanner === undefined) {
       return;
     }
+    const title = planners.find((p) => p.id === activePlanner)?.title;
+    const currentPlannerIndex = planners.findIndex(
+      (p) => p.id === activePlanner,
+    );
 
+    // Get both halves of the array excluding the current planner
+    const firstHalf = planners.slice(0, currentPlannerIndex);
+    const secondHalf = planners.slice(currentPlannerIndex + 1);
     const numPlanners = Object.keys(planners).length;
-    const currentPlannerIndex = Object.keys(planners).findIndex(
-      (plannerId) => plannerId === currentPlannerId,
-    );
-    const title = planners[currentPlannerId][0];
-
-    const plannersAsArray = Object.entries(planners);
-    const firstHalf = Object.fromEntries(
-      plannersAsArray.slice(0, currentPlannerIndex),
-    );
-    const secondHalf = Object.fromEntries(
-      plannersAsArray.slice(currentPlannerIndex + 1),
-    );
 
     if (numPlanners > 0) {
       deletePlanner({
         variables: {
           userId,
-          plannerId: Object.keys(planners)[0],
+          activePlanner,
         },
       });
 
       const newId = uuidv4();
-      setPlanners({
+      setPlanners([
         ...firstHalf,
-        [newId]: [title, false],
+        { id: newId, title: title ?? "New Planner" },
         ...secondHalf,
-      });
-      switchPlanners(newId, title);
+      ]);
+      switchPlanners(newId);
     } else {
       addPlanner();
     }
@@ -137,8 +109,7 @@ export function usePlanners(userId: string | undefined) {
    * @param id unique planner id
    */
   const removePlanner = (id: string) => {
-    const newPlanners = { ...planners };
-    delete newPlanners[id];
+    const newPlanners = planners.filter((p) => p.id !== id);
     if (userId !== undefined) {
       deletePlanner({
         variables: {
@@ -150,23 +121,11 @@ export function usePlanners(userId: string | undefined) {
     setPlanners(newPlanners);
 
     // Switch to the next planner upon deletion if one exists
-    const newActive =
-      Object.keys(newPlanners)[Object.keys(newPlanners).length - 1];
+    const newActive = newPlanners[newPlanners.length - 1].id;
 
     if (newActive !== undefined) {
-      const title = newPlanners[newActive][0];
-      switchPlanners(newActive, title);
+      switchPlanners(newActive);
     }
-  };
-
-  const getActivePlanner = () => {
-    const activePlanner = Object.keys(planners).find(
-      (id: string) => planners[id][1],
-    );
-    if (activePlanner === undefined) {
-      return undefined;
-    }
-    return { id: activePlanner, title: planners[activePlanner][0] };
   };
 
   return {
@@ -176,7 +135,7 @@ export function usePlanners(userId: string | undefined) {
     addPlanner,
     removePlanner,
     replaceCurrentPlanner,
-    activePlanner: getActivePlanner(),
+    activePlanner,
     plannersLoading: loading,
     loadingDeletePlanner,
     deletedPlanner,

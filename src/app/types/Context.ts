@@ -3,9 +3,9 @@ import { CustomCourseInput, StoredCourse } from "./Course";
 import { PlannerData } from "./PlannerData";
 import { DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
-import { MultiPlanner } from "./MultiPlanner";
 import { Label } from "./Label";
 import { Term } from "./Quarter";
+import { PlannerTitle } from "@/graphql/planner/schema";
 
 type setShow = React.Dispatch<SetStateAction<boolean>>;
 
@@ -49,13 +49,13 @@ export interface PlannerProviderProps {
 }
 
 export interface PlannersContextProps {
-  planners: MultiPlanner;
+  planners: PlannerTitle[];
   removePlanner: (plannerId: string) => void;
   addPlanner: () => void;
-  switchPlanners: (id: string, title: string) => void;
-  changePlannerName: (newName: string, id: string) => void;
+  switchPlanners: (id: string) => void;
+  changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
-  activePlanner: { id: string; title: string } | undefined;
+  activePlanner: string | undefined;
   plannersLoading: boolean;
   loadingDeletePlanner: boolean;
   deletedPlanner: boolean;

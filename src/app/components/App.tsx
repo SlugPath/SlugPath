@@ -43,7 +43,7 @@ export default function App() {
 function PlannerList() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { planners, deletedPlanner, loadingDeletePlanner } =
+  const { planners, deletedPlanner, loadingDeletePlanner, activePlanner } =
     useContext(PlannersContext);
   const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
     useState(false);
@@ -76,17 +76,13 @@ function PlannerList() {
     <>
       {Object.keys(planners).length == 0 && <HelpfulTips status={status} />}
       <List>
-        {Object.keys(planners).map((id, index) => (
+        {planners.map(({ id, title }, index) => (
           <ListItem
-            sx={{ display: planners[id][1] ? "block" : "none" }}
+            sx={{ display: activePlanner === id ? "block" : "none" }}
             key={id}
           >
-            <PlannerProvider
-              plannerId={id}
-              title={planners[id][0]}
-              order={index}
-            >
-              <Planner isActive={planners[id][1]} />
+            <PlannerProvider plannerId={id} title={title} order={index}>
+              <Planner isActive={activePlanner === id} />
             </PlannerProvider>
           </ListItem>
         ))}
