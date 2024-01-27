@@ -79,12 +79,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: pnpm install
-
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+
+      - name: Install dependencies
+        run: pnpm install
       
       - name: Setup Postgres DB
         run: |
