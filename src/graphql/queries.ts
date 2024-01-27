@@ -1,5 +1,13 @@
 import { gql } from "@apollo/client";
 
+export const DELETE_PLANNER = gql`
+  mutation DeletePlanner($userId: String!, $plannerId: String!) {
+    deletePlanner(userId: $userId, plannerId: $plannerId) {
+      plannerId
+    }
+  }
+`;
+
 export const GET_COURSES = gql`
   query getCourses(
     $departmentCode: String!

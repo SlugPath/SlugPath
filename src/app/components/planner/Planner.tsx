@@ -10,8 +10,8 @@ import { GEProgress } from "./graduationProgress/GEProgress";
 import { PlannerContext } from "../../contexts/PlannerProvider";
 import { useContext } from "react";
 import { ModalsProvider } from "../../contexts/ModalsProvider";
-import ExportModal from "../ExportModal";
-import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
+import ExportModal from "../modals/ExportModal";
+import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import {
   Accordion,
   AccordionDetails,

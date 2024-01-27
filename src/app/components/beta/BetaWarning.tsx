@@ -1,7 +1,7 @@
 import { WarningAmberOutlined } from "@mui/icons-material";
 import { Alert } from "@mui/joy";
 import { useEffect, useState } from "react";
-import CloseIconButton from "../CloseIconButton";
+import CloseIconButton from "../buttons/CloseIconButton";
 
 export default function BetaWarning({ show = true }: { show?: boolean }) {
   const [visible, setVisible] = useState(true);

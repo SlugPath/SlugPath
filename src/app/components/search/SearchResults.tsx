@@ -6,15 +6,17 @@ import { List, AutoSizer } from "react-virtualized";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { StoredCourse } from "@/app/types/Course";
 
+export interface SearchResultsProps {
+  courses: StoredCourse[];
+  loading: boolean;
+  loadingUseQuery: boolean;
+}
+
 export default function SearchResults({
   courses,
   loading,
   loadingUseQuery,
-}: {
-  courses: any;
-  loading: boolean;
-  loadingUseQuery: boolean;
-}) {
+}: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
   }
@@ -81,7 +83,6 @@ export default function SearchResults({
             course={course}
             index={index}
             provided={provided}
-            isDragging={snapshot.isDragging}
             isCustom={false}
           />
         );

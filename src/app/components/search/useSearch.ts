@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useBackgroundQuery, useQuery, useReadQuery } from "@apollo/client";
-import useDebounce from "./useDebounce";
+import useDebounce from "../../hooks/useDebounce";
 import { GET_COURSES, GET_DEPARTMENTS } from "@/graphql/queries";
 
 const geOptions = [

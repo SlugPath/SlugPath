@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { useSession } from "next-auth/react";
-import { usePlanners } from "../hooks/usePlanners";
+import { usePlanners } from "../components/planners/usePlanners";
 import { PlannersContextProps } from "../types/Context";
 
 export const PlannersContext = createContext({} as PlannersContextProps);

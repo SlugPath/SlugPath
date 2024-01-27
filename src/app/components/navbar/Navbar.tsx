@@ -1,5 +1,5 @@
 import Image from "next/image";
-import LoginButton from "../LoginButton";
+import LoginButton from "../buttons/LoginButton";
 import { useSession } from "next-auth/react";
 import { Button, IconButton } from "@mui/joy";
 import { GitHub, OpenInNew } from "@mui/icons-material";

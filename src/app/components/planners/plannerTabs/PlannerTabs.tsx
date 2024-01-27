@@ -1,11 +1,11 @@
 import { IconButton, useColorScheme, Input } from "@mui/joy";
 import { Add } from "@mui/icons-material";
 import { useContext, useState } from "react";
-import ConfirmAlert from "../../ConfirmAlert";
+import ConfirmAlert from "../../modals/ConfirmAlert";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 import { PlannersContext } from "../../../contexts/PlannersProvider";
-import TitleSnackbar from "../../TitleSnackbar";
-import CloseIconButton from "../../CloseIconButton";
+import TitleSnackbar from "./TitleSnackbar";
+import CloseIconButton from "../../buttons/CloseIconButton";
 import { truncateTitle } from "@/lib/utils";
 
 const MAX_PLANNERS = 10;
@@ -127,6 +127,17 @@ export default function PlannerTabs() {
   );
 }
 
+interface CustomTabProps {
+  title: string;
+  id: string;
+  isEditing: boolean;
+  selected: boolean;
+  setPlannerBeingEdited: (id: string) => void;
+  onEndEditing: (newTitle: string) => void;
+  onClick: () => void;
+  onOpenDeleteAlert: (id: string, title: string) => void;
+}
+
 function CustomTab({
   title,
   id,
@@ -136,16 +147,7 @@ function CustomTab({
   onEndEditing,
   onClick,
   onOpenDeleteAlert,
-}: {
-  title: string;
-  id: string;
-  isEditing: boolean;
-  selected: boolean;
-  setPlannerBeingEdited: (id: string) => void;
-  onEndEditing: (newTitle: string) => void;
-  onClick: () => void;
-  onOpenDeleteAlert: (id: string, title: string) => void;
-}) {
+}: CustomTabProps) {
   const { mode } = useColorScheme();
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);

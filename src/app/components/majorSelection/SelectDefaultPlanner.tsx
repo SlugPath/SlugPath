@@ -12,6 +12,18 @@ import Info from "@mui/icons-material/Info";
 import MiniPlanner from "./miniPlanner/MiniPlanner";
 import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { SyntheticEvent } from "react";
+import { MajorDefaultPlanner } from "./useDefaultPlanners";
+
+export interface SelectDefaultPlannerProps {
+  selectedDefaultPlanner: string;
+  onChange: (
+    event: SyntheticEvent<Element, Event> | null,
+    value: string | number | null,
+  ) => void;
+  majorDefaultPlanners: MajorDefaultPlanner[] | undefined;
+  loadingMajorDefaultPlanners: boolean;
+  addPlannerCardContainer?: boolean;
+}
 
 export default function SelectDefaultPlanner({
   selectedDefaultPlanner,
@@ -19,18 +31,8 @@ export default function SelectDefaultPlanner({
   majorDefaultPlanners,
   loadingMajorDefaultPlanners,
   addPlannerCardContainer,
-}: {
-  selectedDefaultPlanner: string;
-  onChange: (
-    event: SyntheticEvent<Element, Event> | null,
-    value: string | number | null,
-  ) => void;
-  majorDefaultPlanners: any;
-  loadingMajorDefaultPlanners: boolean;
-  addPlannerCardContainer?: boolean;
-}) {
-  const defaultPlanners: { id: string; title: string }[] =
-    majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
+}: SelectDefaultPlannerProps) {
+  const defaultPlanners: MajorDefaultPlanner[] = majorDefaultPlanners ?? [];
 
   return (
     <>

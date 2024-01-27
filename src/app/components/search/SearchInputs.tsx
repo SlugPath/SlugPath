@@ -1,17 +1,20 @@
 import { Input, Option, Select, Typography } from "@mui/joy";
-import useSearch from "../../hooks/useSearch";
+import useSearch from "./useSearch";
 import { InfoOutlined } from "@mui/icons-material";
 import { useEffect } from "react";
+import { StoredCourse } from "@/app/types/Course";
+
+export interface SearchInputsProps {
+  onUpdateCourses: (courses: StoredCourse[]) => void;
+  onUpdateLoading: (loading: boolean) => void;
+  onUpdateLoadingMoreResults: (loading: boolean) => void;
+}
 
 export default function SearchInputs({
   onUpdateCourses,
   onUpdateLoading,
   onUpdateLoadingMoreResults,
-}: {
-  onUpdateCourses: any;
-  onUpdateLoading: any;
-  onUpdateLoadingMoreResults: any;
-}) {
+}: SearchInputsProps) {
   const {
     courses,
     loading,

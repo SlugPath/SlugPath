@@ -12,10 +12,10 @@ import {
 import { useQuery } from "@apollo/client";
 import { GET_COURSE } from "@/graphql/queries";
 import { useContext, useState } from "react";
-import { ModalsContext } from "../../contexts/ModalsProvider";
-import { StoredCourse } from "../../types/Course";
-import { PlannerContext } from "../../contexts/PlannerProvider";
-import { Label } from "../../types/Label";
+import { ModalsContext } from "../../../contexts/ModalsProvider";
+import { StoredCourse } from "../../../types/Course";
+import { PlannerContext } from "../../../contexts/PlannerProvider";
+import { Label } from "../../../types/Label";
 import LabelsSelectionModal from "./LabelSelectionModal";
 import { WarningAmberRounded } from "@mui/icons-material";
 import CustomCourseModal from "./CustomCourseModal";

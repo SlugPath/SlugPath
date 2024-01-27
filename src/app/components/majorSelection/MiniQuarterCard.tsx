@@ -6,13 +6,15 @@ import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { useContext } from "react";
 
+export interface MiniQuarterCardProps {
+  quarter: Quarter;
+  courses: StoredCourse[];
+}
+
 export default function MiniQuarterCard({
   quarter,
   courses,
-}: {
-  quarter: Quarter;
-  courses: StoredCourse[];
-}) {
+}: MiniQuarterCardProps) {
   return (
     <Card size="sm" className="w-full" variant="plain">
       <div className="space-y-1">

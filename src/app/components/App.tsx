@@ -1,7 +1,7 @@
 "use client";
 import { CssVarsProvider, List, ListItem } from "@mui/joy";
 import Planner from "./planner/Planner";
-import PlannerTabs from "./planner/plannerTabs/PlannerTabs";
+import PlannerTabs from "./planners/plannerTabs/PlannerTabs";
 import Navbar from "./navbar/Navbar";
 import { useContext, useState, useEffect } from "react";
 import {
@@ -10,12 +10,12 @@ import {
 } from "../contexts/PlannersProvider";
 import { PlannerProvider } from "../contexts/PlannerProvider";
 import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
-import UnauthenticatedWarning from "./UnauthenticatedWarning";
+import UnauthenticatedWarning from "./modals/UnauthenticatedWarning";
 import { useSession } from "next-auth/react";
-import useMajorSelection from "../hooks/useMajorSelection";
+import useMajorSelection from "./majorSelection/useMajorSelection";
 import { useRouter } from "next/navigation";
 import BetaWarning from "./beta/BetaWarning";
-import DeletedPlannerSnackbar from "./planner/plannerTabs/DeletedPlannerSnackbar";
+import DeletedPlannerSnackbar from "./planners/plannerTabs/DeletedPlannerSnackbar";
 
 export default function App() {
   return (

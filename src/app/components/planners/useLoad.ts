@@ -5,14 +5,14 @@ import {
   getTotalCredits,
   initialPlanner,
 } from "@/lib/plannerUtils";
-import { MultiPlanner } from "../types/MultiPlanner";
-import { PlannerData } from "../types/PlannerData";
+import { MultiPlanner } from "../../types/MultiPlanner";
+import { PlannerData } from "../../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
 import { convertPlannerTitles } from "@/lib/plannerUtils";
 import { GET_PLANNERS, GET_PLANNER } from "@/graphql/queries";
 import { initialLabels } from "@/lib/labels";
-import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
-import useMajorSelection from "./useMajorSelection";
+import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
+import useMajorSelection from "../majorSelection/useMajorSelection";
 import { v4 as uuidv4 } from "uuid";
 
 /**

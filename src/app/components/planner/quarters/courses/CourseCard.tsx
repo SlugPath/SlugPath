@@ -13,28 +13,27 @@ import { DraggableProvided } from "@hello-pangea/dnd";
 import { PlannerContext } from "../../../../contexts/PlannerProvider";
 import { ModalsContext } from "../../../../contexts/ModalsProvider";
 import { WarningAmberRounded } from "@mui/icons-material";
-import CloseIconButton from "../../../CloseIconButton";
+import CloseIconButton from "../../../buttons/CloseIconButton";
 import CourseLabel from "./CourseLabel";
 import { Label } from "../../../../types/Label";
 import { truncateTitle } from "@/lib/utils";
 import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
+
+export interface CourseCardProps {
+  course: StoredCourse;
+  index: number;
+  quarterId?: string;
+  provided: DraggableProvided;
+  isCustom: boolean;
+}
 
 export default function CourseCard({
   course,
   index,
   quarterId,
   provided,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isDragging,
   isCustom,
-}: {
-  course: StoredCourse;
-  index: number;
-  quarterId?: string;
-  provided: DraggableProvided;
-  isDragging: boolean;
-  isCustom: boolean;
-}) {
+}: CourseCardProps) {
   const {
     deleteCourse,
     setDisplayCourse,
@@ -118,15 +117,12 @@ export default function CourseCard({
   );
 }
 
-const Title = ({
-  course,
-  onShowCourseInfoModal,
-  quarterId,
-}: {
+interface TitleProps {
   course: StoredCourse;
   onShowCourseInfoModal: (course: StoredCourse) => void;
   quarterId?: string;
-}) => {
+}
+const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
   return (
     <Typography
       endDecorator={

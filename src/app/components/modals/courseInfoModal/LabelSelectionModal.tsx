@@ -10,8 +10,8 @@ import {
   Input,
   IconButton,
 } from "@mui/joy";
-import { Label } from "../../types/Label";
-import CourseLabel from "../planner/quarters/courses/CourseLabel";
+import { Label } from "../../../types/Label";
+import CourseLabel from "../../planner/quarters/courses/CourseLabel";
 import { useEffect, useState } from "react";
 import { Edit } from "@mui/icons-material";
 import { truncateTitle } from "@/lib/utils";

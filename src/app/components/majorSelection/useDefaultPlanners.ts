@@ -1,6 +1,11 @@
 import { GET_MAJOR_DEFAULT_PLANNERS } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 
+export interface MajorDefaultPlanner {
+  id: string;
+  title: string;
+}
+
 export default function useDefaultPlanners(
   catalogYear: string,
   majorName: string,
@@ -16,7 +21,7 @@ export default function useDefaultPlanners(
   });
 
   return {
-    majorDefaultPlanners: data?.getMajorDefaults,
+    majorDefaultPlanners: data?.getMajorDefaults as MajorDefaultPlanner[],
     loading,
   };
 }

@@ -4,13 +4,13 @@ import {
   isCustomCourse,
 } from "@/lib/plannerUtils";
 import { useState } from "react";
-import useAutosave from "./useAutosave";
+import useAutosave from "../../hooks/useAutosave";
 import { useEffect } from "react";
-import { findQuarter, Term } from "../types/Quarter";
-import { useLoadUserPlanner } from "./useLoad";
-import { StoredCourse } from "../types/Course";
-import { PlannerData } from "../types/PlannerData";
-import { Label } from "../types/Label";
+import { findQuarter, Term } from "../../types/Quarter";
+import { useLoadUserPlanner } from "../planners/useLoad";
+import { StoredCourse } from "../../types/Course";
+import { PlannerData } from "../../types/PlannerData";
+import { Label } from "../../types/Label";
 
 export default function usePlanner(
   input: {

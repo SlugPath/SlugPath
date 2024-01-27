@@ -11,28 +11,26 @@ export default function AutoFillSnackbar({
   const snackBarTime = 3000;
 
   return (
-    <>
-      <Snackbar
-        variant="soft"
-        color="success"
-        open={openAutoFillSnackbar}
-        autoHideDuration={snackBarTime}
-        onClose={() => setOpenAutoFillSnackbar(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        startDecorator={<PlaylistAddCheckCircleRounded />}
-        endDecorator={
-          <Button
-            onClick={() => setOpenAutoFillSnackbar(false)}
-            size="sm"
-            variant="soft"
-            color="success"
-          >
-            Dismiss
-          </Button>
-        }
-      >
-        Auto Filled
-      </Snackbar>
-    </>
+    <Snackbar
+      variant="soft"
+      color="success"
+      open={openAutoFillSnackbar}
+      autoHideDuration={snackBarTime}
+      onClose={() => setOpenAutoFillSnackbar(false)}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      startDecorator={<PlaylistAddCheckCircleRounded />}
+      endDecorator={
+        <Button
+          onClick={() => setOpenAutoFillSnackbar(false)}
+          size="sm"
+          variant="soft"
+          color="success"
+        >
+          Dismiss
+        </Button>
+      }
+    >
+      Auto Filled
+    </Snackbar>
   );
 }

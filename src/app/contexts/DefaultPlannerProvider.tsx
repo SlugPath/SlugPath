@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { DefaultPlannerContextProps } from "../types/Context";
 import { useSession } from "next-auth/react";
-import { useLoadDefaultPlanner } from "../hooks/useLoad";
+import { useLoadDefaultPlanner } from "../components/planners/useLoad";
 
 export const DefaultPlannerContext = createContext(
   {} as DefaultPlannerContextProps,

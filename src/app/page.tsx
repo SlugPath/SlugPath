@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
 import BetaWarning from "./components/beta/BetaWarning";
 import Navbar from "./components/navbar/Navbar";
-import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
+import UnauthenticatedWarning from "./components/modals/UnauthenticatedWarning";
 
 export default function Page() {
   const { status } = useSession();

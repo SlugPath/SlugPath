@@ -8,14 +8,16 @@ const isScreenTooSmall = () => {
   return window.innerWidth < minWidth || window.innerHeight < minHeight;
 };
 
+export interface MobileWarningModalProps {
+  show: boolean;
+  onClose: () => void;
+}
+
 // MobileWarningModal component
 export const MobileWarningModal = ({
   show,
   onClose,
-}: {
-  show: boolean;
-  onClose: () => void;
-}) => {
+}: MobileWarningModalProps) => {
   if (!show) return null;
 
   return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CustomCourseInput, StoredCourse } from "../types/Course";
+import { CustomCourseInput, StoredCourse } from "../../types/Course";
 import { customCourse } from "@/lib/plannerUtils";
 
 export default function useCustomCourseSelection() {

@@ -1,5 +1,5 @@
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
+import { PlannerData, findCoursesInQuarter } from "../../types/PlannerData";
 import {
   Document,
   Image,
@@ -9,17 +9,17 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
-import { StoredCourse } from "../types/Course";
-import { findQuarter, Quarter } from "../types/Quarter";
+import { StoredCourse } from "../../types/Course";
+import { findQuarter, Quarter } from "../../types/Quarter";
 import {
   getDeptAndNumber,
   getTitle,
   isCustomCourse,
-} from "../../lib/plannerUtils";
+} from "../../../lib/plannerUtils";
 import { quartersPerYear } from "@/lib/plannerUtils";
-import { ModalsContext } from "../contexts/ModalsProvider";
+import { ModalsContext } from "../../contexts/ModalsProvider";
 import { useContext } from "react";
-import { PlannersContext } from "../contexts/PlannersProvider";
+import { PlannersContext } from "../../contexts/PlannersProvider";
 
 // Create styles
 const styles = StyleSheet.create({

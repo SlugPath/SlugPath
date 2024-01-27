@@ -1,28 +1,38 @@
 import { Button, CircularProgress } from "@mui/joy";
 import { useCallback, useContext, useEffect, useState } from "react";
-import useMajorSelection from "../../hooks/useMajorSelection";
+import useMajorSelection from "./useMajorSelection";
 import { useSession } from "next-auth/react";
 import { years } from "@/lib/defaultPlanners";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_MAJORS } from "@/graphql/queries";
-import useDefaultPlanners from "../../hooks/useDefaultPlanners";
+import useDefaultPlanners from "./useDefaultPlanners";
 import { Alert } from "@mui/joy";
 import ReportIcon from "@mui/icons-material/Report";
-import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
+import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import { ModalsProvider } from "@/app/contexts/ModalsProvider";
 import { PlannerProvider } from "@/app/contexts/PlannerProvider";
 import SelectMajorName from "./SelectMajorName";
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
-import { useLoadPlanner } from "@/app/hooks/useLoad";
+import { useLoadPlanner } from "@/app/components/planners/useLoad";
 import { emptyPlanner } from "@/lib/plannerUtils";
-import ConfirmAlert from "../ConfirmAlert";
+import ConfirmAlert from "../modals/ConfirmAlert";
 
 enum ButtonName {
   Save = "Save",
   CreateNew = "Create New",
   ReplaceCurrent = "Replace Current",
+}
+
+export interface MajorSelectionProps {
+  onSaved: () => void;
+  saveButtonName: string;
+  isInPlannerPage?: boolean;
+  onUserMajorAlreadyExists?: () => void;
+  onSkip?: () => void;
+  onCreateNewPlanner?: () => void;
+  onReplaceCurrentPlanner?: () => void;
 }
 
 export default function MajorSelection({
@@ -33,15 +43,7 @@ export default function MajorSelection({
   onSkip,
   onCreateNewPlanner,
   onReplaceCurrentPlanner,
-}: {
-  onSaved: () => void;
-  saveButtonName: string;
-  isInPlannerPage?: boolean;
-  onUserMajorAlreadyExists?: () => void;
-  onSkip?: () => void;
-  onCreateNewPlanner?: () => void;
-  onReplaceCurrentPlanner?: () => void;
-}) {
+}: MajorSelectionProps) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");

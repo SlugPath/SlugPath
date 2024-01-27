@@ -4,15 +4,12 @@ import { StoredCourse } from "../../../types/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { getTotalCredits } from "@/lib/plannerUtils";
 
-export default function QuarterCard({
-  title,
-  id,
-  courses,
-}: {
+export interface QuarterCardProps {
   title: string;
   id: string;
   courses: StoredCourse[];
-}) {
+}
+export default function QuarterCard({ title, id, courses }: QuarterCardProps) {
   const totalCredits = getTotalCredits(courses);
 
   return (

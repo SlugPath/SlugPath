@@ -6,7 +6,7 @@ import { PlannerContext } from "../../contexts/PlannerProvider";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { StoredCourse } from "@/graphql/planner/schema";
-import CustomCourseModal from "../courseInfoModal/CustomCourseModal";
+import CustomCourseModal from "../modals/courseInfoModal/CustomCourseModal";
 
 const MAX_CUSTOM_COURSES = 3;
 

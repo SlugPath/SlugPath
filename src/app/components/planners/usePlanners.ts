@@ -1,15 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import { useLoadAllPlanners } from "./useLoad";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
-
-const DELETE_PLANNER = gql`
-  mutation DeletePlanner($userId: String!, $plannerId: String!) {
-    deletePlanner(userId: $userId, plannerId: $plannerId) {
-      plannerId
-    }
-  }
-`;
+import { DELETE_PLANNER } from "@/graphql/queries";
 
 export function usePlanners(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it

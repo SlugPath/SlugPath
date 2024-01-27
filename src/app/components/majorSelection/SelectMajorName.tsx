@@ -1,18 +1,20 @@
 import { Typography, Select, Option } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
-export default function SelectMajorName({
-  major,
-  majors,
-  onChange,
-}: {
+export interface SelectMajorNameProps {
   major: string;
   majors: string[];
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     newValue: string | null,
   ) => void;
-}) {
+}
+
+export default function SelectMajorName({
+  major,
+  majors,
+  onChange,
+}: SelectMajorNameProps) {
   return (
     <>
       <Typography level="body-lg">Select your major</Typography>
