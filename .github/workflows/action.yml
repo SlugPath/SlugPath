@@ -16,17 +16,19 @@ jobs:
   print-commit:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
     - name: Print Git Commit
-      run: echo ${{ github.sha }}
+      run: echo ${{ env.SHA}}
 
   lint:
     runs-on: ubuntu-latest
     needs: print-commit
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Install dependencies
       run: npm ci
+
     - name: Lint
       run: npm run lint
     
@@ -36,6 +38,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: npm ci
+
     - name: Build
       run: |
         npx prisma generate
@@ -62,9 +68,16 @@ jobs:
       POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
 
     steps:
-      - name: Populate Postgres DB
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Setup Postgres DB
         run: |
-          npx prisma db push
+          npx prisma generate
+          npx prisma migrate deploy
 
       - name: Run Jest Tests
         run: npm run test
