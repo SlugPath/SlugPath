@@ -9,7 +9,7 @@ export function usePlanners(userId: string | undefined) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
   const [planners, setPlanners, activePlanner, setActivePlanner, { loading }] =
-    useLoadAllPlanners(userId, handleLoadedPlanners);
+    useLoadAllPlanners(userId);
   const [deletedPlanner, setDeletedPlanner] = useState(false);
   const [deletePlanner, { loading: loadingDeletePlanner }] = useMutation(
     DELETE_PLANNER,
@@ -22,16 +22,6 @@ export function usePlanners(userId: string | undefined) {
       },
     },
   );
-
-  /**
-   * @param numPlanners number of planners loaded.
-   * If no planners are loaded, add a planner
-   */
-  function handleLoadedPlanners(numPlanners: number) {
-    if (numPlanners === 0) {
-      addPlanner();
-    }
-  }
 
   /**
    * `switchPlanner` switches between planners
@@ -83,26 +73,22 @@ export function usePlanners(userId: string | undefined) {
     // Get both halves of the array excluding the current planner
     const firstHalf = planners.slice(0, currentPlannerIndex);
     const secondHalf = planners.slice(currentPlannerIndex + 1);
-    const numPlanners = Object.keys(planners).length;
 
-    if (numPlanners > 0) {
-      deletePlanner({
-        variables: {
-          userId,
-          activePlanner,
-        },
-      });
+    const newId = uuidv4();
+    setPlanners([
+      ...firstHalf,
+      { id: newId, title: title ?? "New Planner" },
+      ...secondHalf,
+    ]);
 
-      const newId = uuidv4();
-      setPlanners([
-        ...firstHalf,
-        { id: newId, title: title ?? "New Planner" },
-        ...secondHalf,
-      ]);
-      switchPlanners(newId);
-    } else {
-      addPlanner();
-    }
+    deletePlanner({
+      variables: {
+        userId,
+        activePlanner,
+      },
+    });
+
+    switchPlanners(newId);
   }
 
   /**

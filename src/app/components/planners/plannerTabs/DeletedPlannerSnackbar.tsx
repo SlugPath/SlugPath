@@ -14,7 +14,7 @@ export default function DeletedPlannerSnackbar({
     <>
       <Snackbar
         variant="soft"
-        color="success"
+        color="primary"
         open={open}
         autoHideDuration={snackBarTime}
         onClose={() => setOpen(false)}
@@ -25,7 +25,7 @@ export default function DeletedPlannerSnackbar({
             onClick={() => setOpen(false)}
             size="sm"
             variant="soft"
-            color="success"
+            color="primary"
           >
             Dismiss
           </Button>

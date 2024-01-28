@@ -13,7 +13,7 @@ export default function AutoFillSnackbar({
   return (
     <Snackbar
       variant="soft"
-      color="success"
+      color="primary"
       open={openAutoFillSnackbar}
       autoHideDuration={snackBarTime}
       onClose={() => setOpenAutoFillSnackbar(false)}
@@ -24,7 +24,7 @@ export default function AutoFillSnackbar({
           onClick={() => setOpenAutoFillSnackbar(false)}
           size="sm"
           variant="soft"
-          color="success"
+          color="primary"
         >
           Dismiss
         </Button>

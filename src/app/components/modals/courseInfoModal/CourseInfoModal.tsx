@@ -209,7 +209,7 @@ export default function CourseInfoModal() {
               sx={{
                 inlineSize: "100%",
                 overflowWrap: "break-word",
-                height: "12rem",
+                maxHeight: "12rem",
                 overflowY: "auto",
               }}
             >
