@@ -203,7 +203,18 @@ export default function CourseInfoModal() {
             )}
           </div>
           <Skeleton loading={loading} variant="text" width="50%">
-            <Typography level="body-md">{description(data)}</Typography>
+            <Typography
+              className="text-wrap"
+              level="body-md"
+              sx={{
+                inlineSize: "45rem",
+                overflowWrap: "break-word",
+                height: "12rem",
+                overflowY: "auto",
+              }}
+            >
+              {description(data)}
+            </Typography>
           </Skeleton>
           <Skeleton loading={loading} variant="text" width="50%">
             {!isCSE(course) && !isCustomCourse(course) && (

@@ -190,7 +190,7 @@ export default function CustomCourseModal({
             onChange={handleDescriptionChange}
             variant="soft"
             minRows={2}
-            maxRows={4}
+            maxRows={8}
             sx={{
               outline: "none",
             }}
