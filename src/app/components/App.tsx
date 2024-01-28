@@ -95,7 +95,9 @@ function PlannerList() {
   );
 }
 
-const HelpfulTips = (status: any) => {
+type AuthStatus = "authenticated" | "unauthenticated" | "loading";
+
+const HelpfulTips = ({ status }: { status: AuthStatus }) => {
   return (
     <div className="flex flex-col items-center justify-center h-[90vh] text-secondary-900 dark:text-secondary-200">
       <div className="text-lg text-center">

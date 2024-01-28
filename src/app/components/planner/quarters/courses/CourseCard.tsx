@@ -1,5 +1,5 @@
 import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
-import { StoredCourse } from "../../../../types/Course";
+import { CourseTerm, StoredCourse } from "../../../../types/Course";
 import {
   extractTermFromQuarter,
   geLabels,
@@ -51,7 +51,10 @@ export default function CourseCard({
   const isEnrolledCourse = quarterId !== undefined;
 
   function handleShowCourseInfoModal(course: StoredCourse) {
-    const courseTerm = [course, extractTermFromQuarter(quarterId)];
+    const courseTerm = [
+      course,
+      extractTermFromQuarter(quarterId),
+    ] as CourseTerm;
     setDisplayCourse(courseTerm);
     onShowCourseInfoModal();
   }

@@ -124,9 +124,7 @@ export default function MajorSelection({
      */
     function updateSelectedDefaultPlanner() {
       if (majorDefaultPlanners !== undefined) {
-        const plannerIds = majorDefaultPlanners.map(
-          (planner: any) => planner.id,
-        );
+        const plannerIds = majorDefaultPlanners.map((planner) => planner.id);
         if (!plannerIds.includes(selectedDefaultPlanner)) {
           setSelectedDefaultPlanner(majorDefaultPlanners[0]?.id);
         }

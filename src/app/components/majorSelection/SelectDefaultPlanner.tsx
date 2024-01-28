@@ -51,7 +51,7 @@ export default function SelectDefaultPlanner({
         >
           <TabList>
             {defaultPlanners &&
-              defaultPlanners.map((planner: any, index: number) => (
+              defaultPlanners.map((planner, index) => (
                 <Tab key={index} value={planner.id}>
                   {planner.title}
                 </Tab>

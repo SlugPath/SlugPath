@@ -1,5 +1,5 @@
 import { ApolloError, useLazyQuery } from "@apollo/client";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   deserializePlanner,
   getTotalCredits,
@@ -163,7 +163,7 @@ export const useLoadPlanner = ({
   skipLoad?: boolean;
 }): [
   PlannerData,
-  React.Dispatch<React.SetStateAction<PlannerData>>,
+  SetState<PlannerData>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
   const { setHasAutoFilled } = useContext(DefaultPlannerContext);

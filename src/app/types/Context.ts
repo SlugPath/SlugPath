@@ -1,13 +1,12 @@
-import { SetStateAction } from "react";
-import { CustomCourseInput, StoredCourse } from "./Course";
+import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { PlannerData } from "./PlannerData";
 import { DropResult } from "@hello-pangea/dnd";
 import { ApolloError } from "@apollo/client";
 import { Label } from "./Label";
-import { Term } from "./Quarter";
 import { PlannerTitle } from "@/graphql/planner/schema";
+import { SetState } from "./Common";
 
-type setShow = React.Dispatch<SetStateAction<boolean>>;
+type setShow = SetState<boolean>;
 
 export interface ModalsContextProps {
   showExportModal: boolean;
@@ -23,8 +22,8 @@ export interface ModalsContextProps {
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
   editCustomCourse: (course: StoredCourse) => void;
-  displayCourse: [StoredCourse, Term | undefined] | undefined;
-  setDisplayCourse: any;
+  displayCourse: CourseTerm;
+  setDisplayCourse: SetState<CourseTerm>;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
@@ -69,6 +68,6 @@ export interface LabelsContextProps {
 export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
   hasAutoFilled: boolean;
-  setHasAutoFilled: any;
-  setDefaultPlanner: any;
+  setHasAutoFilled: SetState<boolean>;
+  setDefaultPlanner: SetState<PlannerData>;
 }

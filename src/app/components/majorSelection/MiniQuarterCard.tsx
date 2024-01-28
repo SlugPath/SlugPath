@@ -5,6 +5,7 @@ import { isCustomCourse } from "@/lib/plannerUtils";
 import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { useContext } from "react";
+import { CourseTerm } from "@/app/types/Course";
 
 export interface MiniQuarterCardProps {
   quarter: Quarter;
@@ -45,7 +46,7 @@ function MiniCourseCard({
   }
 
   function handleClickedCourse(course: StoredCourse) {
-    const courseTerm = [course, quarter];
+    const courseTerm = [course, quarter.title] as CourseTerm;
     setDisplayCourse(courseTerm);
     onShowCourseInfoModal();
   }

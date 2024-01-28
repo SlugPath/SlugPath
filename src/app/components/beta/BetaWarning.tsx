@@ -8,7 +8,7 @@ export default function BetaWarning({ show = true }: { show?: boolean }) {
   const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
-    let timeoutId: any;
+    let timeoutId: NodeJS.Timeout | null = null;
     if (!visible) {
       timeoutId = setTimeout(() => setShouldRender(false), 500);
     }

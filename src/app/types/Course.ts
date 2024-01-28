@@ -1,3 +1,5 @@
+import { Term } from "./Quarter";
+
 /**
  * `StoredCourse` is a type to represent courses
  */
@@ -12,6 +14,8 @@ export interface StoredCourse {
   description: string;
   labels: string[];
 }
+
+export type CourseTerm = [StoredCourse, Term | undefined] | undefined;
 
 /**
  * `CustomCourseInput` is a type to represent the input for a custom course
