@@ -207,7 +207,7 @@ export default function CourseInfoModal() {
               className="text-wrap"
               level="body-md"
               sx={{
-                inlineSize: "45rem",
+                inlineSize: "100%",
                 overflowWrap: "break-word",
                 height: "12rem",
                 overflowY: "auto",
