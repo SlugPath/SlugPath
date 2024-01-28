@@ -31,7 +31,7 @@ jobs:
           version: 8
 
       - name: Check Format
-        run: pnpx prettier . --check
+        run: pnpm run format:check
 
   lint:
     runs-on: ubuntu-latest

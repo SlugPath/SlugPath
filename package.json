@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier . --write",
-    "check-fmt": "prettier . --check",
+    "format:check": "prettier . --check",
     "test": "jest",
     "test:silent": "jest --runInBand --forceExit --silent",
     "test:watch": "jest --runInBand --forceExit --watchAll",

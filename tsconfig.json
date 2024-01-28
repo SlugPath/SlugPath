@@ -16,15 +16,15 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "next",
-      },
+        "name": "next"
+      }
     ],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": [
     "next-env.d.ts",
@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/env/server.mjs",
+    "src/env/server.mjs"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }
