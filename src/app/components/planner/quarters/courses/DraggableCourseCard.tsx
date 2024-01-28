@@ -1,5 +1,6 @@
+import { StoredCourse } from "@customTypes/Course";
 import { Draggable } from "@hello-pangea/dnd";
-import { StoredCourse } from "../../../../types/Course";
+
 import CourseCard from "./CourseCard";
 
 export interface DraggableCourseCardProps {

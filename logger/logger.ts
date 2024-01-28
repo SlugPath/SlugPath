@@ -1,5 +1,5 @@
-import { env } from "@/env/server.mjs";
 import { SHA } from "@/config";
+import { env } from "@/env/server.mjs";
 import pino from "pino";
 import { logflarePinoVercel } from "pino-logflare";
 

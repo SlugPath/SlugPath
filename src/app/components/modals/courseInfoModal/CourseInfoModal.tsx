@@ -1,4 +1,11 @@
+import { GET_COURSE } from "@/graphql/queries";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { useQuery } from "@apollo/client";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { StoredCourse } from "@customTypes/Course";
+import { Label } from "@customTypes/Label";
+import { WarningAmberRounded } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -9,16 +16,10 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-import { useQuery } from "@apollo/client";
-import { GET_COURSE } from "@/graphql/queries";
 import { useContext, useState } from "react";
-import { ModalsContext } from "../../../contexts/ModalsProvider";
-import { StoredCourse } from "../../../types/Course";
-import { PlannerContext } from "../../../contexts/PlannerProvider";
-import { Label } from "../../../types/Label";
-import LabelsSelectionModal from "./LabelSelectionModal";
-import { WarningAmberRounded } from "@mui/icons-material";
+
 import CustomCourseModal from "./CustomCourseModal";
+import LabelsSelectionModal from "./LabelSelectionModal";
 import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 50;
@@ -152,7 +153,11 @@ export default function CourseInfoModal() {
         setShowModal(false);
         setEditing(false);
       }}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         sx={{

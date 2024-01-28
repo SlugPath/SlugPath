@@ -1,13 +1,12 @@
+import { CourseResolver } from "@/graphql/course/resolver";
+import { MajorResolver } from "@/graphql/major/resolver";
+import { PlannerResolver } from "@/graphql/planner/resolver";
+import prisma from "@/lib/prisma";
 import { createYoga } from "graphql-yoga";
+import { NextRequest, NextResponse } from "next/server";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { NextRequest, NextResponse } from "next/server";
-import { CourseResolver } from "@/graphql/course/resolver";
-import { PlannerResolver } from "@/graphql/planner/resolver";
-import { MajorResolver } from "@/graphql/major/resolver";
-import prisma from "@/lib/prisma";
 
-// TODO: restrict to specific resolver functions we need, and give public users read-only access
 const schema = buildSchema({
   resolvers: [CourseResolver, PlannerResolver, MajorResolver],
   validate: true,

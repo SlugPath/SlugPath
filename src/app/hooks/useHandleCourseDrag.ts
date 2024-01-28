@@ -1,8 +1,8 @@
-import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
-import { PlannerData } from "../types/PlannerData";
-import { Quarter, findQuarter } from "../types/Quarter";
-import { v4 as uuidv4 } from "uuid";
 import { createCourseFromId } from "@/lib/plannerUtils";
+import { PlannerData } from "@customTypes/PlannerData";
+import { Quarter, findQuarter } from "@customTypes/Quarter";
+import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
+import { v4 as uuidv4 } from "uuid";
 
 const CUSTOM_DROPPABLE = "custom-droppable";
 const SEARCH_DROPPABLE = "search-droppable";

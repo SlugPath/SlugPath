@@ -1,8 +1,9 @@
-import { Card, Chip } from "@mui/joy";
-import DraggableCourseCard from "./courses/DraggableCourseCard";
-import { StoredCourse } from "../../../types/Course";
-import { Droppable } from "@hello-pangea/dnd";
 import { getTotalCredits } from "@/lib/plannerUtils";
+import { StoredCourse } from "@customTypes/Course";
+import { Droppable } from "@hello-pangea/dnd";
+import { Card, Chip } from "@mui/joy";
+
+import DraggableCourseCard from "./courses/DraggableCourseCard";
 
 export interface QuarterCardProps {
   title: string;

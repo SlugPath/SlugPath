@@ -1,12 +1,13 @@
-import { IconButton, useColorScheme, Input } from "@mui/joy";
-import { Add } from "@mui/icons-material";
-import { useContext, useState } from "react";
-import ConfirmAlert from "../../modals/ConfirmAlert";
-import TooManyPlannersAlert from "./TooManyPlannersAlert";
-import { PlannersContext } from "../../../contexts/PlannersProvider";
-import TitleSnackbar from "./TitleSnackbar";
-import CloseIconButton from "../../buttons/CloseIconButton";
 import { truncateTitle } from "@/lib/utils";
+import { PlannersContext } from "@contexts/PlannersProvider";
+import { Add } from "@mui/icons-material";
+import { IconButton, Input, useColorScheme } from "@mui/joy";
+import { useContext, useState } from "react";
+
+import CloseIconButton from "../../buttons/CloseIconButton";
+import ConfirmAlert from "../../modals/ConfirmAlert";
+import TitleSnackbar from "./TitleSnackbar";
+import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
 const MAX_PLANNERS = 10;
 

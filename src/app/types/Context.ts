@@ -1,10 +1,11 @@
-import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
-import { PlannerData } from "./PlannerData";
-import { DropResult } from "@hello-pangea/dnd";
-import { ApolloError } from "@apollo/client";
-import { Label } from "./Label";
 import { PlannerTitle } from "@/graphql/planner/schema";
+import { ApolloError } from "@apollo/client";
+import { DropResult } from "@hello-pangea/dnd";
+
 import { SetState } from "./Common";
+import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
+import { Label } from "./Label";
+import { PlannerData } from "./PlannerData";
 
 type setShow = SetState<boolean>;
 

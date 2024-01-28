@@ -1,21 +1,23 @@
 "use client";
+
+import { DefaultPlannerProvider } from "@contexts/DefaultPlannerProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
 import { CssVarsProvider, List, ListItem } from "@mui/joy";
-import Planner from "./planner/Planner";
-import PlannerTabs from "./planners/plannerTabs/PlannerTabs";
-import Navbar from "./navbar/Navbar";
-import { useContext, useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+
 import {
   PlannersContext,
   PlannersProvider,
 } from "../contexts/PlannersProvider";
-import { PlannerProvider } from "../contexts/PlannerProvider";
-import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
-import UnauthenticatedWarning from "./modals/UnauthenticatedWarning";
-import { useSession } from "next-auth/react";
-import useMajorSelection from "./majorSelection/useMajorSelection";
-import { useRouter } from "next/navigation";
 import BetaWarning from "./beta/BetaWarning";
+import useMajorSelection from "./majorSelection/useMajorSelection";
+import UnauthenticatedWarning from "./modals/UnauthenticatedWarning";
+import Navbar from "./navbar/Navbar";
+import Planner from "./planner/Planner";
 import DeletedPlannerSnackbar from "./planners/plannerTabs/DeletedPlannerSnackbar";
+import PlannerTabs from "./planners/plannerTabs/PlannerTabs";
 
 export default function App() {
   return (
@@ -78,7 +80,9 @@ function PlannerList() {
       <List>
         {planners.map(({ id, title }, index) => (
           <ListItem
-            sx={{ display: activePlanner === id ? "block" : "none" }}
+            sx={{
+              display: activePlanner === id ? "block" : "none",
+            }}
             key={id}
           >
             <PlannerProvider plannerId={id} title={title} order={index}>

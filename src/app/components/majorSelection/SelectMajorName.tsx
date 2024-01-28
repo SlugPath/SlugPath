@@ -1,4 +1,4 @@
-import { Typography, Select, Option } from "@mui/joy";
+import { Option, Select, Typography } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
 export interface SelectMajorNameProps {

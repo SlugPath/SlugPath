@@ -1,6 +1,7 @@
-import { Label, LabelInput } from "../label/schema";
 import { IsInt, IsUUID, Length, Matches, Max, Min } from "class-validator";
 import { ArgsType, Field, InputType, Int, ObjectType } from "type-graphql";
+
+import { Label, LabelInput } from "../label/schema";
 
 /**
  * An input type that stores data within a course

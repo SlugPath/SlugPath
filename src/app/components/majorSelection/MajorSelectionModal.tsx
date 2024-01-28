@@ -1,8 +1,9 @@
-import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import MajorSelection from "./MajorSelection";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { useContext } from "react";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { useContext } from "react";
+
+import MajorSelection from "./MajorSelection";
 
 export default function MajorSelectionModal() {
   const { showMajorSelectionModal, setShowMajorSelectionModal } =
@@ -22,7 +23,11 @@ export default function MajorSelectionModal() {
     <Modal
       open={showMajorSelectionModal}
       onClose={() => setShowMajorSelectionModal(false)}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         sx={{

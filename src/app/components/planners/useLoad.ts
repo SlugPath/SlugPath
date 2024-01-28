@@ -1,19 +1,20 @@
-import { ApolloError, useLazyQuery } from "@apollo/client";
-import { useContext, useEffect, useState } from "react";
+import { SetState } from "@/app/types/Common";
+import { PlannerTitle } from "@/graphql/planner/schema";
+import { GET_PLANNER, GET_PLANNERS } from "@/graphql/queries";
+import { initialLabels } from "@/lib/labels";
 import {
   deserializePlanner,
   getTotalCredits,
   initialPlanner,
 } from "@/lib/plannerUtils";
-import { PlannerData } from "../../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
-import { GET_PLANNERS, GET_PLANNER } from "@/graphql/queries";
-import { initialLabels } from "@/lib/labels";
-import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
-import useMajorSelection from "../majorSelection/useMajorSelection";
+import { ApolloError, useLazyQuery } from "@apollo/client";
+import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { PlannerData } from "@customTypes/PlannerData";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { PlannerTitle } from "@/graphql/planner/schema";
-import { SetState } from "@/app/types/Common";
+
+import useMajorSelection from "../majorSelection/useMajorSelection";
 
 /**
  * Custom hook to load all planners for a particular user

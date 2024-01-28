@@ -1,5 +1,5 @@
-import { Snackbar } from "@mui/joy";
 import { Warning } from "@mui/icons-material";
+import { Snackbar } from "@mui/joy";
 
 export default function TitleSnackbar({ error }: { error: boolean }) {
   return (

@@ -1,12 +1,13 @@
-import { PlannerService } from "./service";
+import { Arg, Args, Mutation, Query, Resolver } from "type-graphql";
+
 import {
-  PlannerId,
-  PlannerData,
-  PlannerRetrieveInput,
   PlannerCreateInput,
+  PlannerData,
+  PlannerId,
+  PlannerRetrieveInput,
   PlannerTitle,
 } from "./schema";
-import { Arg, Args, Query, Mutation, Resolver } from "type-graphql";
+import { PlannerService } from "./service";
 
 /**
  * PlannerResolver is a Resolver class that provides custom functionality for

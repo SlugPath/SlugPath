@@ -133,7 +133,11 @@ export default function CustomCourseModal({
     <Modal
       onClose={onClose}
       open={isOpen}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         sx={{

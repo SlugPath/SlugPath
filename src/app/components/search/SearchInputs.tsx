@@ -1,8 +1,9 @@
-import { Input, Option, Select, Typography } from "@mui/joy";
-import useSearch from "./useSearch";
-import { InfoOutlined } from "@mui/icons-material";
-import { useEffect } from "react";
 import { StoredCourse } from "@/app/types/Course";
+import { InfoOutlined } from "@mui/icons-material";
+import { Input, Option, Select, Typography } from "@mui/joy";
+import { useEffect } from "react";
+
+import useSearch from "./useSearch";
 
 export interface SearchInputsProps {
   onUpdateCourses: (courses: StoredCourse[]) => void;

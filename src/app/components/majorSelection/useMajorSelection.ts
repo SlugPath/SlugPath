@@ -1,5 +1,5 @@
-import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { MajorInput } from "@/graphql/major/schema";
+import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 
 /**

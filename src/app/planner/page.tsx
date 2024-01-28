@@ -1,9 +1,10 @@
 "use client";
-import { ApolloProvider } from "@apollo/client";
+
 import apolloClient from "@/lib/apolloClient";
+import { ApolloProvider } from "@apollo/client";
+import App from "@components/App";
+import useConfirmPageLeave from "@hooks/useConfirmPageLeave";
 import { useSession } from "next-auth/react";
-import useConfirmPageLeave from "../hooks/useConfirmPageLeave";
-import App from "../components/App";
 
 export default function Home() {
   const { status } = useSession();

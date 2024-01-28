@@ -1,6 +1,6 @@
 import { StoredCourse } from "./Course";
-import { Quarter, findQuarter } from "./Quarter";
 import { Label } from "./Label";
+import { Quarter, findQuarter } from "./Quarter";
 
 /**
  * `PlannerData` is a placeholder type used to store courses, quarters, and other fields

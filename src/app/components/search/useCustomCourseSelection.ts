@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { CustomCourseInput, StoredCourse } from "../../types/Course";
 import { customCourse } from "@/lib/plannerUtils";
+import { CustomCourseInput, StoredCourse } from "@customTypes/Course";
+import { useState } from "react";
 
 export default function useCustomCourseSelection() {
   const [courses, setCourses] = useState<StoredCourse[]>([]);

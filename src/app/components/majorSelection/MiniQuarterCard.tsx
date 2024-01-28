@@ -1,11 +1,11 @@
-import { StoredCourse } from "@/graphql/planner/schema";
-import { Card, Link, Typography } from "@mui/joy";
-import { Quarter } from "../../types/Quarter";
-import { isCustomCourse } from "@/lib/plannerUtils";
-import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { useContext } from "react";
+import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { CourseTerm } from "@/app/types/Course";
+import { StoredCourse } from "@/graphql/planner/schema";
+import { isCustomCourse } from "@/lib/plannerUtils";
+import { Quarter } from "@customTypes/Quarter";
+import { Card, Link, Typography } from "@mui/joy";
+import { useContext } from "react";
 
 export interface MiniQuarterCardProps {
   quarter: Quarter;

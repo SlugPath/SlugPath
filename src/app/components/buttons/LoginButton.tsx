@@ -1,8 +1,9 @@
 import { Dropdown, Menu, MenuItem } from "@mui/joy";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { Button, MenuButton } from "@mui/joy";
-import UserAvatar from "../UserAvatar";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+import UserAvatar from "../UserAvatar";
 
 export default function LoginButton() {
   const { data: session, status } = useSession();

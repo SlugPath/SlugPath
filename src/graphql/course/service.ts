@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { Course, QueryInput, Department, SingleQueryInput } from "./schema";
 import { isAlpha } from "class-validator";
+
+import { Course, Department, QueryInput, SingleQueryInput } from "./schema";
 
 /**
  * Compares two course instances by number, and returns a

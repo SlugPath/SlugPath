@@ -1,9 +1,10 @@
+import { StoredCourse } from "@/app/types/Course";
 import { Card } from "@mui/joy";
 import { useState } from "react";
+
 import CustomCourseSelection from "./CustomCourseSelection";
 import SearchInputs from "./SearchInputs";
 import SearchResults from "./SearchResults";
-import { StoredCourse } from "@/app/types/Course";
 
 /**
  * Component for searching for courses to add.

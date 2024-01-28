@@ -1,5 +1,6 @@
-import "./src/env/server.mjs";
 import withBundleAnalyzer from "@next/bundle-analyzer";
+
+import "./src/env/server.mjs";
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",

@@ -20,7 +20,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@hooks/*": ["./src/app/hooks/*"],
+      "@contexts/*": ["./src/app/contexts/*"],
+      "@styles/*": ["./src/app/styles/*"],
+      "@customTypes/*": ["./src/app/types/*"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

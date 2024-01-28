@@ -1,17 +1,18 @@
+import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import Info from "@mui/icons-material/Info";
 import {
-  Tab,
-  Tabs,
-  TabList,
-  Tooltip,
-  Typography,
+  Card,
   List,
   ListItem,
-  Card,
+  Tab,
+  TabList,
+  Tabs,
+  Tooltip,
+  Typography,
 } from "@mui/joy";
-import Info from "@mui/icons-material/Info";
-import MiniPlanner from "./miniPlanner/MiniPlanner";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { SyntheticEvent } from "react";
+
+import MiniPlanner from "./miniPlanner/MiniPlanner";
 import { MajorDefaultPlanner } from "./useDefaultPlanners";
 
 export interface SelectDefaultPlannerProps {
@@ -68,7 +69,9 @@ export default function SelectDefaultPlanner({
                 const plannerIsSelected = selectedDefaultPlanner == id;
                 return (
                   <ListItem
-                    sx={{ display: plannerIsSelected ? "block" : "none" }}
+                    sx={{
+                      display: plannerIsSelected ? "block" : "none",
+                    }}
                     key={index}
                   >
                     {addPlannerCardContainer ? (

@@ -1,9 +1,12 @@
-import { createContext } from "react";
-import usePlanner from "../components/planner/usePlanner";
+import usePlanner from "@components/planner/usePlanner";
+import useCustomCourseSelection from "@components/search/useCustomCourseSelection";
+import {
+  PlannerContextProps,
+  PlannerProviderProps,
+} from "@customTypes/Context";
+import useHandleCourseDrag from "@hooks/useHandleCourseDrag";
 import { useSession } from "next-auth/react";
-import { PlannerContextProps, PlannerProviderProps } from "../types/Context";
-import useHandleCourseDrag from "../hooks/useHandleCourseDrag";
-import useCustomCourseSelection from "../components/search/useCustomCourseSelection";
+import { createContext } from "react";
 
 export const PlannerContext = createContext({} as PlannerContextProps);
 

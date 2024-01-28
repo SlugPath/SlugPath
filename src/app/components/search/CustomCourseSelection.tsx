@@ -1,12 +1,13 @@
-import { Button, Card, Typography } from "@mui/joy";
-import { Add } from "@mui/icons-material";
-import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
-import { Droppable } from "@hello-pangea/dnd";
-import { PlannerContext } from "../../contexts/PlannerProvider";
-import { useContext, useEffect, useMemo, useState } from "react";
-import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { StoredCourse } from "@/graphql/planner/schema";
+import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { Droppable } from "@hello-pangea/dnd";
+import { Add } from "@mui/icons-material";
+import { Button, Card, Typography } from "@mui/joy";
+import { useContext, useEffect, useMemo, useState } from "react";
+
 import CustomCourseModal from "../modals/courseInfoModal/CustomCourseModal";
+import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
 
 const MAX_CUSTOM_COURSES = 3;
 

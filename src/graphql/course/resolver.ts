@@ -1,6 +1,7 @@
-import { CourseService } from "./service";
 import { Args, Query, Resolver } from "type-graphql";
-import { Course, QueryInput, Department, SingleQueryInput } from "./schema";
+
+import { Course, Department, QueryInput, SingleQueryInput } from "./schema";
+import { CourseService } from "./service";
 
 /**
  * CourseResolver is a Resolver class that provides custom functionality for

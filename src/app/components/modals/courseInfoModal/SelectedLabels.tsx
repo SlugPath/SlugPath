@@ -1,9 +1,10 @@
-import { List, ListItem, Typography } from "@mui/joy";
-import { Add } from "@mui/icons-material";
-import { IconButton } from "@mui/joy";
-import { Label } from "../../../types/Label";
-import CourseLabel from "../../planner/quarters/courses/CourseLabel";
 import { geLabels } from "@/lib/plannerUtils";
+import { Label } from "@customTypes/Label";
+import { Add } from "@mui/icons-material";
+import { List, ListItem, Typography } from "@mui/joy";
+import { IconButton } from "@mui/joy";
+
+import CourseLabel from "../../planner/quarters/courses/CourseLabel";
 
 export default function SelectedLabels({
   labels,

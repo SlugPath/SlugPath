@@ -1,21 +1,22 @@
+import { MAX_LABEL_NAME } from "@/lib/consts";
+import { truncateTitle } from "@/lib/utils";
+import { Label } from "@customTypes/Label";
+import { Edit } from "@mui/icons-material";
 import {
+  Button,
   Checkbox,
+  DialogActions,
+  IconButton,
+  Input,
   List,
   ListItem,
   Modal,
   Sheet,
   Typography,
-  DialogActions,
-  Button,
-  Input,
-  IconButton,
 } from "@mui/joy";
-import { Label } from "../../../types/Label";
-import CourseLabel from "../../planner/quarters/courses/CourseLabel";
 import { useEffect, useState } from "react";
-import { Edit } from "@mui/icons-material";
-import { truncateTitle } from "@/lib/utils";
-import { MAX_LABEL_NAME } from "@/lib/consts";
+
+import CourseLabel from "../../planner/quarters/courses/CourseLabel";
 
 interface LabelsSelectionModalProps {
   setShowModal: (showModal: boolean) => void;
@@ -80,7 +81,11 @@ export default function LabelsSelectionModal({
     <Modal
       open={showModal}
       onClose={() => setShowModal(false)}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         sx={{

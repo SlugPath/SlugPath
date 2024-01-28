@@ -1,18 +1,19 @@
-import { Quarter } from "../app/types/Quarter";
-import { findCourseById, PlannerData } from "../app/types/PlannerData";
+import { StoredCourse } from "@/app/types/Course";
+import { Label } from "@/app/types/Label";
 import {
-  PlannerData as PlannerDataOutput,
   PlannerDataInput,
+  PlannerData as PlannerDataOutput,
   QuarterInput,
 } from "@/graphql/planner/schema";
-import { Term } from "../app/types/Quarter";
-import { StoredCourse } from "@/app/types/Course";
-import { v4 as uuidv4 } from "uuid";
-import { initialLabels } from "./labels";
+import { PlannerData, findCourseById } from "@customTypes/PlannerData";
+import { Quarter } from "@customTypes/Quarter";
+import { Term } from "@customTypes/Quarter";
 import { LabelColor } from "@prisma/client";
-import { truncateTitle } from "./utils";
+import { v4 as uuidv4 } from "uuid";
+
 import { MAX_STORED_COURSE_TITLE } from "./consts";
-import { Label } from "@/app/types/Label";
+import { initialLabels } from "./labels";
+import { truncateTitle } from "./utils";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 export const years = 4;

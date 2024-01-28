@@ -1,6 +1,6 @@
-import { Chip } from "@mui/joy";
-import { Label } from "../../../../types/Label";
 import { getColor } from "@/lib/labels";
+import { Label } from "@customTypes/Label";
+import { Chip } from "@mui/joy";
 
 export interface CourseLabelProps {
   label: Label;
