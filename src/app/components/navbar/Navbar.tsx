@@ -1,9 +1,10 @@
-import Image from "next/image";
-import LoginButton from "../LoginButton";
-import { useSession } from "next-auth/react";
-import { Button, IconButton } from "@mui/joy";
 import { GitHub, OpenInNew } from "@mui/icons-material";
+import { Button, IconButton } from "@mui/joy";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+
 import BetaChip from "../beta/BetaChip";
+import LoginButton from "../buttons/LoginButton";
 import ToggleDarkModeButton from "./ToggleDarkModeButton";
 
 export default function Navbar() {

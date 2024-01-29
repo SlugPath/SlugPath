@@ -1,5 +1,6 @@
 import { IsUUID, Length, Matches, Max, Min } from "class-validator";
-import { ArgsType, Field, ObjectType, Int } from "type-graphql";
+import "reflect-metadata";
+import { ArgsType, Field, Int, ObjectType } from "type-graphql";
 
 /**
  * `Course` is an `ObjectType` class used as a data transfer object.

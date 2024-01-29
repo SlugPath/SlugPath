@@ -1,20 +1,23 @@
-import { CircularProgress } from "@mui/joy";
-import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
-import CourseCard from "../planner/quarters/courses/CourseCard";
-import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
-import { List, AutoSizer } from "react-virtualized";
-import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { StoredCourse } from "@/app/types/Course";
+import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
+import { CircularProgress } from "@mui/joy";
+import { AutoSizer, List } from "react-virtualized";
+
+import CourseCard from "../planner/quarters/courses/CourseCard";
+import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
+
+export interface SearchResultsProps {
+  courses: StoredCourse[];
+  loading: boolean;
+  loadingUseQuery: boolean;
+}
 
 export default function SearchResults({
   courses,
   loading,
   loadingUseQuery,
-}: {
-  courses: any;
-  loading: boolean;
-  loadingUseQuery: boolean;
-}) {
+}: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
   }
@@ -61,7 +64,10 @@ export default function SearchResults({
           key={index}
           course={course}
           index={index}
-          draggableId={createCourseDraggableId({ ...course, suffix: "search" })}
+          draggableId={createCourseDraggableId({
+            ...course,
+            suffix: "search",
+          })}
           isCustom={false}
         />
       </div>
@@ -81,7 +87,6 @@ export default function SearchResults({
             course={course}
             index={index}
             provided={provided}
-            isDragging={snapshot.isDragging}
             isCustom={false}
           />
         );

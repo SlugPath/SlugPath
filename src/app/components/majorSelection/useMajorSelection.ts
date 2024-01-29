@@ -1,5 +1,5 @@
-import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { MajorInput } from "@/graphql/major/schema";
+import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 
 /**
@@ -8,7 +8,10 @@ import { useMutation, useQuery } from "@apollo/client";
  * @param onCompleted a callback to invoke upon completion of a query
  * @returns
  */
-export default function useMajorSelection(userId?: string, onCompleted?: any) {
+export default function useMajorSelection(
+  userId?: string,
+  onCompleted?: () => void,
+) {
   // Get user major data from backend
   const {
     data: majorData,
@@ -29,7 +32,7 @@ export default function useMajorSelection(userId?: string, onCompleted?: any) {
     { loading: loadingSaveMajor, error: errorSavingMajorData },
   ] = useMutation(SAVE_MAJOR, {
     onCompleted: () => {
-      onCompleted();
+      if (onCompleted !== undefined) onCompleted();
       refetch();
     },
     onError: (err) => {

@@ -1,5 +1,5 @@
-import { Snackbar, Button } from "@mui/joy";
 import { PlaylistAddCheckCircleRounded } from "@mui/icons-material";
+import { Button, Snackbar } from "@mui/joy";
 
 export default function DeletedPlannerSnackbar({
   open,
@@ -14,7 +14,7 @@ export default function DeletedPlannerSnackbar({
     <>
       <Snackbar
         variant="soft"
-        color="success"
+        color="primary"
         open={open}
         autoHideDuration={snackBarTime}
         onClose={() => setOpen(false)}
@@ -25,7 +25,7 @@ export default function DeletedPlannerSnackbar({
             onClick={() => setOpen(false)}
             size="sm"
             variant="soft"
-            color="success"
+            color="primary"
           >
             Dismiss
           </Button>

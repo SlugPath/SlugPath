@@ -1,7 +1,8 @@
-import { useLoadPlanner } from "@/app/hooks/useLoad";
-import MiniQuarters from "./MiniQuarters";
+import { useLoadPlanner } from "@/app/components/planners/useLoad";
 import { EMPTY_PLANNER, emptyPlanner } from "@/lib/plannerUtils";
 import { Card, Skeleton } from "@mui/joy";
+
+import MiniQuarters from "./MiniQuarters";
 
 export default function MiniPlanner({
   plannerId,

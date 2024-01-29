@@ -1,6 +1,6 @@
+import { MajorService } from "@/graphql/major/service";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
-import { MajorService } from "@/graphql/major/service";
 
 beforeAll(async () => {
   await prisma.user.create({

@@ -1,12 +1,12 @@
 import { WarningRounded } from "@mui/icons-material";
 import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   Modal,
   ModalDialog,
-  DialogTitle,
-  DialogContent,
-  Divider,
-  DialogActions,
-  Button,
 } from "@mui/joy";
 
 export interface TooManyPlannersAlertProps {

@@ -1,6 +1,8 @@
+import { env as envClient } from "@/env/client.mjs";
+import { env } from "@/env/server.mjs";
+import prisma from "@/lib/prisma";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import prisma from "@/lib/prisma";
 
 const handler = NextAuth({
   callbacks: {
@@ -53,12 +55,12 @@ const handler = NextAuth({
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
       checks: ["none"],
     }),
   ],
-  secret: process.env.SECRET,
+  secret: envClient.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };

@@ -1,7 +1,8 @@
-import { MajorService } from "./service";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { MajorDefaultsInput, MajorInput, UserMajorOutput } from "./schema";
+
 import { PlannerTitle } from "../planner/schema";
+import { MajorDefaultsInput, MajorInput, UserMajorOutput } from "./schema";
+import { MajorService } from "./service";
 
 /**
  * CourseResolver is a Resolver class that provides custom functionality for

@@ -1,21 +1,23 @@
 "use client";
+
+import { DefaultPlannerProvider } from "@contexts/DefaultPlannerProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
 import { CssVarsProvider, List, ListItem } from "@mui/joy";
-import Planner from "./planner/Planner";
-import PlannerTabs from "./planner/plannerTabs/PlannerTabs";
-import Navbar from "./navbar/Navbar";
-import { useContext, useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+
 import {
   PlannersContext,
   PlannersProvider,
 } from "../contexts/PlannersProvider";
-import { PlannerProvider } from "../contexts/PlannerProvider";
-import { DefaultPlannerProvider } from "../contexts/DefaultPlannerProvider";
-import UnauthenticatedWarning from "./UnauthenticatedWarning";
-import { useSession } from "next-auth/react";
-import useMajorSelection from "../hooks/useMajorSelection";
-import { useRouter } from "next/navigation";
 import BetaWarning from "./beta/BetaWarning";
-import DeletedPlannerSnackbar from "./planner/plannerTabs/DeletedPlannerSnackbar";
+import useMajorSelection from "./majorSelection/useMajorSelection";
+import UnauthenticatedWarning from "./modals/UnauthenticatedWarning";
+import Navbar from "./navbar/Navbar";
+import Planner from "./planner/Planner";
+import DeletedPlannerSnackbar from "./planners/plannerTabs/DeletedPlannerSnackbar";
+import PlannerTabs from "./planners/plannerTabs/PlannerTabs";
 
 export default function App() {
   return (
@@ -43,7 +45,7 @@ export default function App() {
 function PlannerList() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { planners, deletedPlanner, loadingDeletePlanner } =
+  const { planners, deletedPlanner, loadingDeletePlanner, activePlanner } =
     useContext(PlannersContext);
   const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
     useState(false);
@@ -76,17 +78,15 @@ function PlannerList() {
     <>
       {Object.keys(planners).length == 0 && <HelpfulTips status={status} />}
       <List>
-        {Object.keys(planners).map((id, index) => (
+        {planners.map(({ id, title }, index) => (
           <ListItem
-            sx={{ display: planners[id][1] ? "block" : "none" }}
+            sx={{
+              display: activePlanner === id ? "block" : "none",
+            }}
             key={id}
           >
-            <PlannerProvider
-              plannerId={id}
-              title={planners[id][0]}
-              order={index}
-            >
-              <Planner isActive={planners[id][1]} />
+            <PlannerProvider plannerId={id} title={title} order={index}>
+              <Planner isActive={activePlanner === id} />
             </PlannerProvider>
           </ListItem>
         ))}
@@ -99,7 +99,9 @@ function PlannerList() {
   );
 }
 
-const HelpfulTips = (status: any) => {
+type AuthStatus = "authenticated" | "unauthenticated" | "loading";
+
+const HelpfulTips = ({ status }: { status: AuthStatus }) => {
   return (
     <div className="flex flex-col items-center justify-center h-[90vh] text-secondary-900 dark:text-secondary-200">
       <div className="text-lg text-center">

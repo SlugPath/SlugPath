@@ -1,18 +1,21 @@
-import { StoredCourse } from "@/graphql/planner/schema";
-import { Card, Link, Typography } from "@mui/joy";
-import { Quarter } from "../../types/Quarter";
-import { isCustomCourse } from "@/lib/plannerUtils";
-import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import { PlannerContext } from "@/app/contexts/PlannerProvider";
+import { CourseTerm } from "@/app/types/Course";
+import { StoredCourse } from "@/graphql/planner/schema";
+import { isCustomCourse } from "@/lib/plannerUtils";
+import { Quarter } from "@customTypes/Quarter";
+import { Card, Link, Typography } from "@mui/joy";
 import { useContext } from "react";
+
+export interface MiniQuarterCardProps {
+  quarter: Quarter;
+  courses: StoredCourse[];
+}
 
 export default function MiniQuarterCard({
   quarter,
   courses,
-}: {
-  quarter: Quarter;
-  courses: StoredCourse[];
-}) {
+}: MiniQuarterCardProps) {
   return (
     <Card size="sm" className="w-full" variant="plain">
       <div className="space-y-1">
@@ -43,7 +46,7 @@ function MiniCourseCard({
   }
 
   function handleClickedCourse(course: StoredCourse) {
-    const courseTerm = [course, quarter];
+    const courseTerm = [course, quarter.title] as CourseTerm;
     setDisplayCourse(courseTerm);
     onShowCourseInfoModal();
   }

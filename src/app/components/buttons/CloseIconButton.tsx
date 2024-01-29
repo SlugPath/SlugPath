@@ -1,5 +1,6 @@
-import { IconButton } from "@mui/joy";
 import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/joy";
+import { SxProps } from "@mui/material";
 
 export default function CloseIconButton({
   onClick,
@@ -7,7 +8,7 @@ export default function CloseIconButton({
 }: {
   onClick: () => void;
   isLight?: boolean;
-  sx?: any;
+  sx?: SxProps;
 }) {
   return (
     <IconButton

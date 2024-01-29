@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 
 // Function to check if the screen size is too small
@@ -8,14 +9,16 @@ const isScreenTooSmall = () => {
   return window.innerWidth < minWidth || window.innerHeight < minHeight;
 };
 
+export interface MobileWarningModalProps {
+  show: boolean;
+  onClose: () => void;
+}
+
 // MobileWarningModal component
 export const MobileWarningModal = ({
   show,
   onClose,
-}: {
-  show: boolean;
-  onClose: () => void;
-}) => {
+}: MobileWarningModalProps) => {
   if (!show) return null;
 
   return (

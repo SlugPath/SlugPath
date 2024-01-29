@@ -1,13 +1,13 @@
-import { SetStateAction } from "react";
-import { CustomCourseInput, StoredCourse } from "./Course";
-import { PlannerData } from "./PlannerData";
-import { DropResult } from "@hello-pangea/dnd";
+import { PlannerTitle } from "@/graphql/planner/schema";
 import { ApolloError } from "@apollo/client";
-import { MultiPlanner } from "./MultiPlanner";
-import { Label } from "./Label";
-import { Term } from "./Quarter";
+import { DropResult } from "@hello-pangea/dnd";
 
-type setShow = React.Dispatch<SetStateAction<boolean>>;
+import { SetState } from "./Common";
+import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
+import { Label } from "./Label";
+import { PlannerData } from "./PlannerData";
+
+type setShow = SetState<boolean>;
 
 export interface ModalsContextProps {
   showExportModal: boolean;
@@ -23,8 +23,8 @@ export interface ModalsContextProps {
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
   editCustomCourse: (course: StoredCourse) => void;
-  displayCourse: [StoredCourse, Term | undefined] | undefined;
-  setDisplayCourse: any;
+  displayCourse: CourseTerm;
+  setDisplayCourse: SetState<CourseTerm>;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
@@ -49,13 +49,13 @@ export interface PlannerProviderProps {
 }
 
 export interface PlannersContextProps {
-  planners: MultiPlanner;
+  planners: PlannerTitle[];
   removePlanner: (plannerId: string) => void;
   addPlanner: () => void;
-  switchPlanners: (id: string, title: string) => void;
-  changePlannerName: (newName: string, id: string) => void;
+  switchPlanners: (id: string) => void;
+  changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
-  activePlanner: { id: string; title: string } | undefined;
+  activePlanner: string | undefined;
   plannersLoading: boolean;
   loadingDeletePlanner: boolean;
   deletedPlanner: boolean;
@@ -69,6 +69,6 @@ export interface LabelsContextProps {
 export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
   hasAutoFilled: boolean;
-  setHasAutoFilled: any;
-  setDefaultPlanner: any;
+  setHasAutoFilled: SetState<boolean>;
+  setDefaultPlanner: SetState<PlannerData>;
 }

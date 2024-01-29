@@ -1,25 +1,22 @@
+import { PlannerTitle } from "@/graphql/planner/schema";
+import { quartersPerYear } from "@/lib/plannerUtils";
+import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PlannersContext } from "@contexts/PlannersProvider";
+import { StoredCourse } from "@customTypes/Course";
+import { PlannerData, findCoursesInQuarter } from "@customTypes/PlannerData";
+import { Quarter, findQuarter } from "@customTypes/Quarter";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { PlannerData, findCoursesInQuarter } from "../types/PlannerData";
 import {
   Document,
   Image,
-  Page,
   PDFViewer,
+  Page,
   StyleSheet,
   Text,
   View,
 } from "@react-pdf/renderer";
-import { StoredCourse } from "../types/Course";
-import { findQuarter, Quarter } from "../types/Quarter";
-import {
-  getDeptAndNumber,
-  getTitle,
-  isCustomCourse,
-} from "../../lib/plannerUtils";
-import { quartersPerYear } from "@/lib/plannerUtils";
-import { ModalsContext } from "../contexts/ModalsProvider";
 import { useContext } from "react";
-import { PlannersContext } from "../contexts/PlannersProvider";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -72,17 +69,27 @@ const styles = StyleSheet.create({
   },
 });
 
+function getActivePlanner(planners: PlannerTitle[], activePlanner: string) {
+  return planners.find((p) => p.id === activePlanner)?.title;
+}
+
 export default function CourseSelectionModal() {
   const { setShowExportModal, showExportModal, courseState } =
     useContext(ModalsContext);
 
-  const { activePlanner } = useContext(PlannersContext);
+  const { planners, activePlanner } = useContext(PlannersContext);
+
+  if (activePlanner === undefined) return null;
 
   return (
     <Modal
       open={showExportModal}
       onClose={() => setShowExportModal(false)}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         sx={{
@@ -108,7 +115,9 @@ export default function CourseSelectionModal() {
           <Document>
             <Page size="A4" style={styles.page}>
               <View style={styles.titleView}>
-                <Text style={styles.plannerTitle}>{activePlanner?.title}</Text>
+                <Text style={styles.plannerTitle}>
+                  {getActivePlanner(planners, activePlanner)}
+                </Text>
                 <Image style={styles.image} src="/images/slug-icon.png" />
               </View>
               <View>

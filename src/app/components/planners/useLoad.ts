@@ -1,38 +1,50 @@
-import { ApolloError, useLazyQuery } from "@apollo/client";
-import { useContext, useEffect, useState } from "react";
+import { SetState } from "@/app/types/Common";
+import { PlannerTitle } from "@/graphql/planner/schema";
+import { GET_PLANNER, GET_PLANNERS } from "@/graphql/queries";
+import { initialLabels } from "@/lib/labels";
 import {
   deserializePlanner,
   getTotalCredits,
   initialPlanner,
 } from "@/lib/plannerUtils";
-import { MultiPlanner } from "../types/MultiPlanner";
-import { PlannerData } from "../types/PlannerData";
 import { removeTypenames } from "@/lib/utils";
-import { convertPlannerTitles } from "@/lib/plannerUtils";
-import { GET_PLANNERS, GET_PLANNER } from "@/graphql/queries";
-import { initialLabels } from "@/lib/labels";
-import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
-import useMajorSelection from "./useMajorSelection";
+import { ApolloError, useLazyQuery } from "@apollo/client";
+import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { PlannerData } from "@customTypes/PlannerData";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+
+import useMajorSelection from "../majorSelection/useMajorSelection";
 
 /**
  * Custom hook to load all planners for a particular user
  * @param userId id of the user
  * @returns
  */
+
 export const useLoadAllPlanners = (
   userId: string | undefined,
   onLoadedPlanners?: (numPlanners: number) => void,
 ): [
-  MultiPlanner,
-  React.Dispatch<React.SetStateAction<MultiPlanner>>,
+  PlannerTitle[],
+  SetState<PlannerTitle[]>,
+  string | undefined,
+  SetState<string | undefined>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
-  const [state, setState] = useState<MultiPlanner>({});
+  const [planners, setPlanners] = useState<PlannerTitle[]>([]);
+  const [activePlanner, setActivePlanner] = useState<string | undefined>(
+    undefined,
+  );
+
   const [getData, { loading, error }] = useLazyQuery(GET_PLANNERS, {
     onCompleted: (data) => {
       if (data.getAllPlanners.length > 0) {
-        setState(convertPlannerTitles(data.getAllPlanners));
+        const loadedPlanners = data.getAllPlanners;
+        removeTypenames(loadedPlanners);
+        // Set the first planner as active, if it exists
+        setPlanners(loadedPlanners);
+        setActivePlanner(loadedPlanners[0]?.id);
       }
       if (onLoadedPlanners !== undefined) {
         onLoadedPlanners(data.getAllPlanners.length);
@@ -54,7 +66,13 @@ export const useLoadAllPlanners = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  return [state, setState, { loading, error }];
+  return [
+    planners,
+    setPlanners,
+    activePlanner,
+    setActivePlanner,
+    { loading, error },
+  ];
 };
 
 /**
@@ -146,7 +164,7 @@ export const useLoadPlanner = ({
   skipLoad?: boolean;
 }): [
   PlannerData,
-  React.Dispatch<React.SetStateAction<PlannerData>>,
+  SetState<PlannerData>,
   { loading: boolean; error: ApolloError | undefined },
 ] => {
   const { setHasAutoFilled } = useContext(DefaultPlannerContext);

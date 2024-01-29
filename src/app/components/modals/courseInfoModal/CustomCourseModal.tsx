@@ -133,7 +133,11 @@ export default function CustomCourseModal({
     <Modal
       onClose={onClose}
       open={isOpen}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
       <Sheet
         sx={{
@@ -186,7 +190,7 @@ export default function CustomCourseModal({
             onChange={handleDescriptionChange}
             variant="soft"
             minRows={2}
-            maxRows={4}
+            maxRows={8}
             sx={{
               outline: "none",
             }}

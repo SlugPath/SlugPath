@@ -1,7 +1,7 @@
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { Switch, useColorScheme } from "@mui/joy";
 import { useEffect, useMemo } from "react";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 export default function ToggleButton() {
   const { mode, setMode } = useColorScheme();

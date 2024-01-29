@@ -1,12 +1,13 @@
-import { IconButton, useColorScheme, Input } from "@mui/joy";
-import { Add } from "@mui/icons-material";
-import { useContext, useState } from "react";
-import ConfirmAlert from "../../ConfirmAlert";
-import TooManyPlannersAlert from "./TooManyPlannersAlert";
-import { PlannersContext } from "../../../contexts/PlannersProvider";
-import TitleSnackbar from "../../TitleSnackbar";
-import CloseIconButton from "../../CloseIconButton";
 import { truncateTitle } from "@/lib/utils";
+import { PlannersContext } from "@contexts/PlannersProvider";
+import { Add } from "@mui/icons-material";
+import { IconButton, Input, useColorScheme } from "@mui/joy";
+import { useContext, useState } from "react";
+
+import CloseIconButton from "../../buttons/CloseIconButton";
+import ConfirmAlert from "../../modals/ConfirmAlert";
+import TitleSnackbar from "./TitleSnackbar";
+import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
 const MAX_PLANNERS = 10;
 
@@ -74,26 +75,23 @@ export default function PlannerTabs() {
     title.length >= 2 && setPlannerBeingEdited(null);
   };
 
-  const handleTabChange = (index: number | string | null) => {
-    if (typeof index === "string" && index !== "add-planner-tab") {
-      const title = planners[index][0];
-      switchPlanners(index, title);
-    }
+  const handleTabChange = (id: string) => {
+    switchPlanners(id);
   };
 
   return (
     <>
       <div className="grid grid-flow-col gap-2 ml-1 overflow-x-auto">
-        {Object.entries(planners).map(([id, [title]]) => (
+        {planners.map(({ id, title }) => (
           <CustomTab
             key={id}
             title={title}
             id={id}
-            selected={activePlanner ? activePlanner.id === id : false}
+            selected={activePlanner ? activePlanner === id : false}
             isEditing={plannerBeingEdited === id}
             setPlannerBeingEdited={setPlannerBeingEdited}
             onEndEditing={(newTitle) => {
-              changePlannerName(newTitle, id);
+              changePlannerName(id, newTitle);
               handleBlur(newTitle);
             }}
             onClick={() => handleTabChange(id)}
@@ -127,6 +125,17 @@ export default function PlannerTabs() {
   );
 }
 
+interface CustomTabProps {
+  title: string;
+  id: string;
+  isEditing: boolean;
+  selected: boolean;
+  setPlannerBeingEdited: (id: string) => void;
+  onEndEditing: (newTitle: string) => void;
+  onClick: () => void;
+  onOpenDeleteAlert: (id: string, title: string) => void;
+}
+
 function CustomTab({
   title,
   id,
@@ -136,16 +145,7 @@ function CustomTab({
   onEndEditing,
   onClick,
   onOpenDeleteAlert,
-}: {
-  title: string;
-  id: string;
-  isEditing: boolean;
-  selected: boolean;
-  setPlannerBeingEdited: (id: string) => void;
-  onEndEditing: (newTitle: string) => void;
-  onClick: () => void;
-  onOpenDeleteAlert: (id: string, title: string) => void;
-}) {
+}: CustomTabProps) {
   const { mode } = useColorScheme();
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);

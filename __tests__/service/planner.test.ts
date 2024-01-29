@@ -115,7 +115,10 @@ it("should create 1 empty planner for 1 user", async () => {
   // Cleanup
   const deleted = await service.deletePlanner({ userId: user.id, plannerId });
   expect(deleted).toBeTruthy();
-  const deleteCheck = await service.getPlanner({ userId: user.id, plannerId });
+  const deleteCheck = await service.getPlanner({
+    userId: user.id,
+    plannerId,
+  });
   expect(deleteCheck).toBeNull();
 });
 
@@ -207,7 +210,10 @@ it("should update 1 planner for 1 user", async () => {
   // Cleanup
   const deleted = await service.deletePlanner({ userId: user.id, plannerId });
   expect(deleted).toBeTruthy();
-  const deleteCheck = await service.getPlanner({ userId: user.id, plannerId });
+  const deleteCheck = await service.getPlanner({
+    userId: user.id,
+    plannerId,
+  });
   expect(deleteCheck).toBeNull();
 });
 

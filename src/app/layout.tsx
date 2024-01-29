@@ -1,8 +1,9 @@
-import "./globals.css";
+import ScreenSizeWarning from "@components/modals/ScreenSizeWarning";
+import NextAuthProvider from "@contexts/NextAuthProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import ScreenSizeWarning from "./components/ScreenSizeWarning";
-import NextAuthProvider from "./contexts/NextAuthProvider";
+
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

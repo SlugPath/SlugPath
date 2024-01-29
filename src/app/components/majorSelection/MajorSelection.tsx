@@ -1,28 +1,39 @@
-import { Button, CircularProgress } from "@mui/joy";
-import { useCallback, useContext, useEffect, useState } from "react";
-import useMajorSelection from "../../hooks/useMajorSelection";
-import { useSession } from "next-auth/react";
-import { years } from "@/lib/defaultPlanners";
-import { useLazyQuery } from "@apollo/client";
-import { GET_ALL_MAJORS } from "@/graphql/queries";
-import useDefaultPlanners from "../../hooks/useDefaultPlanners";
-import { Alert } from "@mui/joy";
-import ReportIcon from "@mui/icons-material/Report";
-import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
+import { useLoadPlanner } from "@/app/components/planners/useLoad";
+import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@/app/contexts/ModalsProvider";
 import { PlannerProvider } from "@/app/contexts/PlannerProvider";
-import SelectMajorName from "./SelectMajorName";
+import { GET_ALL_MAJORS } from "@/graphql/queries";
+import { years } from "@/lib/defaultPlanners";
+import { emptyPlanner } from "@/lib/plannerUtils";
+import { useLazyQuery } from "@apollo/client";
+import ReportIcon from "@mui/icons-material/Report";
+import { Button, CircularProgress } from "@mui/joy";
+import { Alert } from "@mui/joy";
+import { useSession } from "next-auth/react";
+import { useCallback, useContext, useEffect, useState } from "react";
+
+import ConfirmAlert from "../modals/ConfirmAlert";
+import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
-import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
-import { useLoadPlanner } from "@/app/hooks/useLoad";
-import { emptyPlanner } from "@/lib/plannerUtils";
-import ConfirmAlert from "../ConfirmAlert";
+import SelectMajorName from "./SelectMajorName";
+import useDefaultPlanners from "./useDefaultPlanners";
+import useMajorSelection from "./useMajorSelection";
 
 enum ButtonName {
   Save = "Save",
   CreateNew = "Create New",
   ReplaceCurrent = "Replace Current",
+}
+
+export interface MajorSelectionProps {
+  onSaved: () => void;
+  saveButtonName: string;
+  isInPlannerPage?: boolean;
+  onUserMajorAlreadyExists?: () => void;
+  onSkip?: () => void;
+  onCreateNewPlanner?: () => void;
+  onReplaceCurrentPlanner?: () => void;
 }
 
 export default function MajorSelection({
@@ -33,15 +44,7 @@ export default function MajorSelection({
   onSkip,
   onCreateNewPlanner,
   onReplaceCurrentPlanner,
-}: {
-  onSaved: () => void;
-  saveButtonName: string;
-  isInPlannerPage?: boolean;
-  onUserMajorAlreadyExists?: () => void;
-  onSkip?: () => void;
-  onCreateNewPlanner?: () => void;
-  onReplaceCurrentPlanner?: () => void;
-}) {
+}: MajorSelectionProps) {
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
@@ -122,9 +125,7 @@ export default function MajorSelection({
      */
     function updateSelectedDefaultPlanner() {
       if (majorDefaultPlanners !== undefined) {
-        const plannerIds = majorDefaultPlanners.map(
-          (planner: any) => planner.id,
-        );
+        const plannerIds = majorDefaultPlanners.map((planner) => planner.id);
         if (!plannerIds.includes(selectedDefaultPlanner)) {
           setSelectedDefaultPlanner(majorDefaultPlanners[0]?.id);
         }
