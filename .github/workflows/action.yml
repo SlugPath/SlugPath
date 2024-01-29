@@ -11,6 +11,9 @@ env:
   WEBHOOK_SECRET: "github-actions"
   PROJECT_ID: "github-actions"
   TEAM_ID: "github-actions"
+  GOOGLE_CLIENT_ID: "github-actions"
+  GOOGLE_CLIENT_SECRET: "github-actions"
+  NEXTAUTH_SECRET: "github-actions"
 
 jobs:
   print-commit:

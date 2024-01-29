@@ -16,7 +16,7 @@ pnpm install
 pnpx prisma generate
 ```
 
-Make sure to have the `POSTGRES_PRISMA_URL` env variable set, along with any other env variables if you choose to use Docker.
+Make sure to have the `POSTGRES_PRISMA_URL` env variable set, along with any other env variables if you choose to use Docker. Moreover, some additional env variables are required at build time but not necessarily needed for local development. You might want to set some mock values for these.
 
 ```
 docker-compose --env-file=<your-env-file.env> up -d (optional)

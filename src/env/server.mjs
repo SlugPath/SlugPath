@@ -10,6 +10,8 @@ export const env = createEnv({
     PROJECT_ID: z.string().min(1),
     TEAM_ID: z.string().min(1),
     POSTGRES_PRISMA_URL: z.string().url(),
+    GOOGLE_CLIENT_ID: z.string().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().min(1),
   },
   runtimeEnv: {
     LOGFLARE_API_KEY: process.env.LOGFLARE_API_KEY,
@@ -19,5 +21,7 @@ export const env = createEnv({
     PROJECT_ID: process.env.PROJECT_ID,
     TEAM_ID: process.env.TEAM_ID,
     POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },
 });
