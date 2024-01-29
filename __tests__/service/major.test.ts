@@ -90,10 +90,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prisma.user.deleteMany();
-  await prisma.major.deleteMany();
-  await prisma.course.deleteMany();
-  await prisma.planner.deleteMany();
+  await prisma.$transaction([
+    prisma.user.deleteMany(),
+    prisma.major.deleteMany(),
+    prisma.course.deleteMany(),
+    prisma.planner.deleteMany(),
+  ]);
+
+  await prisma.$disconnect();
 });
 
 it("should add major information for 1 user", async () => {

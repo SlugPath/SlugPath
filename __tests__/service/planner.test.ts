@@ -1,9 +1,9 @@
-import { PlannerData } from "@/app/types/PlannerData";
 import { CourseService } from "@/graphql/course/service";
 import { MajorService } from "@/graphql/major/service";
 import { PlannerService } from "@/graphql/planner/service";
 import { initialPlanner, serializePlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
+import { PlannerData } from "@customTypes/PlannerData";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 
@@ -87,25 +87,19 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  const deleteUsers = prisma.user.deleteMany();
-  const deleteQuarters = prisma.quarter.deleteMany();
-  const deleteCourses = prisma.course.deleteMany();
-  const deleteLabels = prisma.label.deleteMany();
-  const deleteMajors = prisma.major.deleteMany();
-
   await prisma.$transaction([
-    deleteUsers,
-    deleteQuarters,
-    deleteCourses,
-    deleteLabels,
-    deleteMajors,
+    prisma.user.deleteMany(),
+    prisma.quarter.deleteMany(),
+    prisma.course.deleteMany(),
+    prisma.label.deleteMany(),
+    prisma.major.deleteMany(),
   ]);
 
   await prisma.$disconnect();
 });
 
 it("should create 1 empty planner for 1 user", async () => {
-  const user = await createUser();
+  const user = await getUser();
   const service = new PlannerService();
   const planners = await service.allPlanners(user.id);
   expect(planners).toHaveLength(0);
@@ -123,7 +117,7 @@ it("should create 1 empty planner for 1 user", async () => {
 });
 
 it("should update 1 planner for 1 user", async () => {
-  const user = await createUser();
+  const user = await getUser();
   const service = new PlannerService();
   const planners = await service.allPlanners(user.id);
   expect(planners).toHaveLength(0);
@@ -218,7 +212,7 @@ it("should update 1 planner for 1 user", async () => {
 });
 
 it("should return null to delete missing planner", async () => {
-  const user = await createUser();
+  const user = await getUser();
   const service = new PlannerService();
   const res = await service.deletePlanner({
     plannerId: uuidv4(),
@@ -265,7 +259,7 @@ it("should filter courses by GE requirement", async () => {
 });
 
 it("should return the correct labels for each course", async () => {
-  const user = await createUser();
+  const user = await getUser();
   const service = new PlannerService();
   const planners = await service.allPlanners(user.id);
   expect(planners).toHaveLength(0);
@@ -348,10 +342,13 @@ it("should return the correct labels for each course", async () => {
   courses?.forEach((c, idx) => {
     expect(c).toStrictEqual(cseCourses[idx]);
   });
+
+  // Cleanup
+  await prisma.planner.deleteMany();
 });
 
 it("should add major information for 1 user", async () => {
-  const user = await createUser();
+  const user = await getUser();
 
   // create major
   const name = "Computer Science B.S";
@@ -401,7 +398,7 @@ it("should add major information for 1 user", async () => {
 });
 
 it("should fail since major doesn't exist", async () => {
-  const user = await createUser();
+  const user = await getUser();
   const service = new MajorService();
   const userMajor = await service.getUserMajor(user.id);
   expect(userMajor).toBeNull();
@@ -465,7 +462,7 @@ it("should return correct number of majors", async () => {
   expect(res2).toHaveLength(1);
 });
 
-async function createUser() {
+async function getUser() {
   const user = await prisma.user.findFirst({
     where: {
       name: "Sammy Slug",
