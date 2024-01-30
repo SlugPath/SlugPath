@@ -1,7 +1,7 @@
 import { geOptions } from "@/lib/consts";
 import { searchParamsSchema, storedCoursesSchema } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function useSearch() {
@@ -20,7 +20,6 @@ export default function useSearch() {
   });
 
   // Query details for course search
-  const [error, setError] = useState(false);
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
@@ -33,6 +32,7 @@ export default function useSearch() {
   // Query to get the courses based on the query details
   const { data: courses, isLoading: loading } = useQuery({
     queryKey: ["courses", queryDetails],
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       try {
         const res = await fetch("/api/courses", {
@@ -42,14 +42,13 @@ export default function useSearch() {
         return await storedCoursesSchema.parse(await res.json());
       } catch (e) {
         console.error(e);
-        setError(true);
       }
     },
   });
 
   useDebounce({
     callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
-    delay: 250,
+    delay: 100,
     dependencies: [departmentCode, number, ge],
   });
 
@@ -77,24 +76,18 @@ export default function useSearch() {
     textInput: string,
     geInput: string,
   ) => {
-    const inputIsValid = searchInputIsValid(textInput);
-    setError(!inputIsValid);
-
-    if (inputIsValid) {
-      const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
-        textInput,
-        departmentCode,
-      );
-      setQueryDetails({
-        departmentCode: departmentCodeParsed,
-        number: numberParsed,
-        ge: geInput,
-      });
-    }
+    const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
+      textInput,
+      departmentCode,
+    );
+    setQueryDetails({
+      departmentCode: departmentCodeParsed,
+      number: numberParsed,
+      ge: geInput,
+    });
   };
 
   return {
-    error,
     courses: courses ?? [],
     loading,
     params: {
@@ -142,8 +135,4 @@ function getDeptCodeAndCourseNum(
     parsedDepartmentCode ? parsedDepartmentCode.toUpperCase() : departmentCode,
     parsedCourseNumber ? parsedCourseNumber.toUpperCase() : "",
   ];
-}
-
-function searchInputIsValid(searchInput: string): boolean {
-  return searchInput === "" || /([a-z]+)?\s*(\d+[a-z]*)?/i.test(searchInput);
 }

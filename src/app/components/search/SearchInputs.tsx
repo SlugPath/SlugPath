@@ -1,6 +1,5 @@
 import { SearchParams } from "@customTypes/Course";
-import { InfoOutlined } from "@mui/icons-material";
-import { Input, Option, Select, Typography } from "@mui/joy";
+import { Input, Option, Select } from "@mui/joy";
 import React from "react";
 
 type selectChangeHandler = (
@@ -9,7 +8,6 @@ type selectChangeHandler = (
 ) => void;
 
 export interface SearchInputsProps {
-  error: boolean;
   params: {
     departmentCode: string | null;
     departments: SearchParams;
@@ -25,11 +23,7 @@ export interface SearchInputsProps {
   };
 }
 
-export default function SearchInputs({
-  error,
-  params,
-  handlers,
-}: SearchInputsProps) {
+export default function SearchInputs({ params, handlers }: SearchInputsProps) {
   const { departmentCode, number, ge, departments, geOptions } = params;
   const {
     handleSearch,
@@ -67,7 +61,6 @@ export default function SearchInputs({
           ))}
         </Select>
         <Input
-          error={error}
           className="w-full col-span-4"
           color="neutral"
           placeholder="Number"
@@ -91,12 +84,6 @@ export default function SearchInputs({
             </Option>
           ))}
         </Select>
-        {error && (
-          <Typography className="col-span-4" color="danger">
-            <InfoOutlined />
-            Invalid course number
-          </Typography>
-        )}
       </div>
     </form>
   );

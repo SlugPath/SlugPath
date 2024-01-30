@@ -8,9 +8,13 @@ import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard
 
 export interface SearchResultsProps {
   courses: StoredCourse[];
+  loading: boolean;
 }
 
-export default function SearchResults({ courses }: SearchResultsProps) {
+export default function SearchResults({
+  courses,
+  loading,
+}: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
   }
@@ -98,7 +102,7 @@ export default function SearchResults({ courses }: SearchResultsProps) {
               </div>
             ) : (
               <div className="flex justify-center items-center h-96">
-                {!hasResults() ? (
+                {!hasResults() && !loading ? (
                   <p className="text-gray-400 text-center">
                     No results. Try changing the search parameters.
                   </p>
