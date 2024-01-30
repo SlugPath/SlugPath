@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { QueryDetails, SearchParams, StoredCourse } from "@customTypes/Course";
 import { isAlpha } from "class-validator";
+import { v4 as uuidv4 } from "uuid";
 
-import { Course, Department, QueryInput, SingleQueryInput } from "./schema";
+import { Course, SingleQueryInput } from "./schema";
 
 /**
  * Compares two course instances by number, and returns a
@@ -48,7 +50,7 @@ export class CourseService {
    * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
    * @returns a list of `Course`
    */
-  public async coursesBy(pred: QueryInput): Promise<Course[]> {
+  public async coursesBy(pred: QueryDetails): Promise<StoredCourse[]> {
     const departmentCodeParam = () => {
       if (pred.departmentCode?.length != 0) {
         return {
@@ -98,7 +100,14 @@ export class CourseService {
     });
 
     res.sort(compareCoursesByNum);
-    return res;
+    // Convert to a stored course
+    return res.map((r) => {
+      return {
+        ...r,
+        id: uuidv4(),
+        labels: [],
+      };
+    });
   }
   /**
    * `courseBy` returns a course that satisfies a predicate `pred`
@@ -118,20 +127,25 @@ export class CourseService {
 
   /**
    * Fetches all unique department names and their codes from the database.
+   * Also sorts them.
    * @returns an array of Department instances
    */
-  public async getAllDepartments(): Promise<Department[]> {
-    const departments = await prisma.course.findMany({
-      distinct: ["department", "departmentCode"],
-      select: {
-        department: true,
-        departmentCode: true,
-      },
-    });
-    // Map the result to match the Department type
-    return departments.map((dep) => ({
-      name: dep.department,
-      code: dep.departmentCode,
-    }));
+  public async getAllDepartments(): Promise<SearchParams> {
+    const departments = (
+      await prisma.course.findMany({
+        distinct: ["department", "departmentCode"],
+        select: {
+          department: true,
+          departmentCode: true,
+        },
+      })
+    ).map((dep) => {
+      return {
+        label: dep.department,
+        value: dep.departmentCode,
+      };
+    }) as SearchParams;
+    departments.sort((a, b) => a.label.localeCompare(b.label));
+    return departments;
   }
 }

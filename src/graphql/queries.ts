@@ -8,25 +8,6 @@ export const DELETE_PLANNER = gql`
   }
 `;
 
-export const GET_COURSES = gql`
-  query getCourses(
-    $departmentCode: String!
-    $number: String = null
-    $ge: String
-  ) {
-    coursesBy(departmentCode: $departmentCode, number: $number, ge: $ge) {
-      title
-      department
-      departmentCode
-      number
-      credits
-      ge
-      description
-      quartersOffered
-    }
-  }
-`;
-
 export const GET_COURSE = gql`
   query getCourse($departmentCode: String!, $number: String!) {
     courseBy(departmentCode: $departmentCode, number: $number) {
@@ -39,15 +20,6 @@ export const GET_COURSE = gql`
       description
       quartersOffered
       prerequisites
-    }
-  }
-`;
-
-export const GET_DEPARTMENTS = gql`
-  query GetDepartments {
-    departments {
-      name
-      code
     }
   }
 `;

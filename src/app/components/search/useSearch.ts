@@ -1,37 +1,26 @@
-import { GET_COURSES, GET_DEPARTMENTS } from "@/graphql/queries";
-import { useBackgroundQuery, useQuery, useReadQuery } from "@apollo/client";
+import { geOptions } from "@/lib/consts";
+import { searchParamsSchema, storedCoursesSchema } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
-import { useEffect, useState } from "react";
-
-const geOptions = [
-  { label: "--", value: null },
-  { label: "C", value: "c" },
-  { label: "CC", value: "cc" },
-  { label: "ER", value: "er" },
-  { label: "IM", value: "im" },
-  { label: "MF", value: "mf" },
-  { label: "SI", value: "si" },
-  { label: "SR", value: "sr" },
-  { label: "TA", value: "ta" },
-  /* Include options for PE subcategories */
-  { label: "PE-T", value: "peT" },
-  { label: "PE-H", value: "peH" },
-  { label: "PE-E", value: "peE" },
-  /* Include options for PR subcategories */
-  { label: "PR-C", value: "prC" },
-  { label: "PR-E", value: "prE" },
-  { label: "PR-S", value: "prS" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function useSearch() {
-  const [courses, setCourses] = useState<any>([]);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [departments, setDepartments] = useState<
-    { label: string; value: string }[]
-  >([]);
+  // Query to get the list of departments
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/departments");
+        const departments = await searchParamsSchema.parse(await res.json());
+        return [{ label: "--", value: null }, ...departments];
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  });
 
   // Query details for course search
+  const [error, setError] = useState(false);
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
@@ -41,63 +30,35 @@ export default function useSearch() {
     ge: "",
   });
 
-  // useBackgroundQuery gives the queryRef to use in useReadQuery
-  const variables = {
-    departmentCode: queryDetails.departmentCode,
-    number: nullIfEmpty(queryDetails.number),
-    ge: nullIfEmpty(queryDetails.ge),
-  };
-  const [queryRef] = useBackgroundQuery(GET_COURSES, {
-    variables: variables,
-  });
-  const { data: cacheQueryData } = useReadQuery(queryRef);
-  const { data: useQueryData, loading: loadingMoreResults } = useQuery(
-    GET_COURSES,
-    {
-      variables: variables,
+  // Query to get the courses based on the query details
+  const { data: courses, isLoading: loading } = useQuery({
+    queryKey: ["courses", queryDetails],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/courses", {
+          method: "POST",
+          body: JSON.stringify(queryDetails),
+        });
+        return await storedCoursesSchema.parse(await res.json());
+      } catch (e) {
+        console.error(e);
+        setError(true);
+      }
     },
-  );
-  const { data: departmentsData } = useQuery(GET_DEPARTMENTS);
-
-  useEffect(() => {
-    if (!departmentsData || !departmentsData.departments) return;
-    // Sort departments data
-    const sortedDepartments = departmentsData.departments
-      .map((dep: { name: string; code: string }) => ({
-        label: dep.name,
-        value: dep.code,
-      }))
-      .sort((a: { label: string }, b: { label: string }) =>
-        a.label.localeCompare(b.label),
-      );
-    // Set departments data
-    setDepartments([{ label: "--", value: null }, ...sortedDepartments]);
-  }, [departmentsData]);
-
-  useEffect(() => {
-    setLoading(loadingMoreResults);
-    if (useQueryData) {
-      setCourses(
-        useQueryData && useQueryData.coursesBy ? useQueryData.coursesBy : [],
-      );
-    } else if (cacheQueryData) {
-      setCourses(cacheQueryData ? cacheQueryData : []);
-    } else {
-      setLoading(true);
-    }
-  }, [cacheQueryData, useQueryData, loadingMoreResults]);
+  });
 
   useDebounce({
     callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
-    delay: 0,
+    delay: 250,
     dependencies: [departmentCode, number, ge],
   });
 
+  // Handlers
   const handleChangeDepartment = (
     event: React.SyntheticEvent | null,
-    newValue: string | null,
+    value: string | null,
   ) => {
-    setDepartmentCode(newValue);
+    setDepartmentCode(value);
   };
 
   const handleChangeNumber = (number: string) => {
@@ -106,47 +67,10 @@ export default function useSearch() {
 
   const handleChangeGE = (
     event: React.SyntheticEvent | null,
-    newValue: string | null,
+    value: string | null,
   ) => {
-    setGE(newValue === "" ? null : newValue);
+    setGE(value === "" ? null : value);
   };
-
-  /**
-   * try to parse department code and course number from the courseNumber string
-   */
-  function parseCourseNumber(
-    courseNumber: string,
-  ): [string | null, string | null] {
-    const pattern = /([a-z]+)?\s*(\d+[a-z]*)?/i;
-    const match = courseNumber.match(pattern);
-
-    if (match) {
-      const departmentCode = match[1] || null;
-      const courseNumber = match[2] || null;
-      return [departmentCode, courseNumber];
-    } else {
-      return [null, null];
-    }
-  }
-
-  function getDepartmentCodeAndCourseNumber(
-    courseNumber: string,
-    departmentCode: string,
-  ): [string, string] {
-    const [parsedDepartmentCode, parsedCourseNumber] =
-      parseCourseNumber(courseNumber);
-
-    return [
-      parsedDepartmentCode
-        ? parsedDepartmentCode.toUpperCase()
-        : departmentCode,
-      parsedCourseNumber ? parsedCourseNumber.toUpperCase() : "",
-    ];
-  }
-
-  function searchInputIsValid(searchInput: string): boolean {
-    return searchInput === "" || /([a-z]+)?\s*(\d+[a-z]*)?/i.test(searchInput);
-  }
 
   const handleSearch = (
     departmentCode: string,
@@ -157,8 +81,10 @@ export default function useSearch() {
     setError(!inputIsValid);
 
     if (inputIsValid) {
-      const [departmentCodeParsed, numberParsed] =
-        getDepartmentCodeAndCourseNumber(textInput, departmentCode);
+      const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
+        textInput,
+        departmentCode,
+      );
       setQueryDetails({
         departmentCode: departmentCodeParsed,
         number: numberParsed,
@@ -167,23 +93,57 @@ export default function useSearch() {
     }
   };
 
-  function nullIfEmpty(input: string): string | null {
-    return input.length > 0 ? input : null;
-  }
-
   return {
     error,
-    courses,
+    courses: courses ?? [],
     loading,
-    loadingMoreResults,
-    departments,
-    departmentCode,
-    number,
-    ge,
-    geOptions,
-    handleChangeDepartment,
-    handleChangeNumber,
-    handleChangeGE,
-    handleSearch,
+    params: {
+      departments: departments ?? [],
+      departmentCode,
+      number,
+      ge,
+      geOptions,
+    },
+    handlers: {
+      handleChangeDepartment,
+      handleChangeNumber,
+      handleChangeGE,
+      handleSearch,
+    },
   };
+}
+
+/**
+ * Try to parse department code and course number from the courseNumber string
+ */
+function parseCourseNumber(
+  courseNumber: string,
+): [string | null, string | null] {
+  const pattern = /([a-z]+)?\s*(\d+[a-z]*)?/i;
+  const match = courseNumber.match(pattern);
+
+  if (match) {
+    const departmentCode = match[1] || null;
+    const courseNumber = match[2] || null;
+    return [departmentCode, courseNumber];
+  } else {
+    return [null, null];
+  }
+}
+
+function getDeptCodeAndCourseNum(
+  courseNumber: string,
+  departmentCode: string,
+): [string, string] {
+  const [parsedDepartmentCode, parsedCourseNumber] =
+    parseCourseNumber(courseNumber);
+
+  return [
+    parsedDepartmentCode ? parsedDepartmentCode.toUpperCase() : departmentCode,
+    parsedCourseNumber ? parsedCourseNumber.toUpperCase() : "",
+  ];
+}
+
+function searchInputIsValid(searchInput: string): boolean {
+  return searchInput === "" || /([a-z]+)?\s*(\d+[a-z]*)?/i.test(searchInput);
 }

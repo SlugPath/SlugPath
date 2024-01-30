@@ -1,48 +1,42 @@
-import { StoredCourse } from "@/app/types/Course";
+import { SearchParams } from "@customTypes/Course";
 import { InfoOutlined } from "@mui/icons-material";
 import { Input, Option, Select, Typography } from "@mui/joy";
-import { useEffect } from "react";
+import React from "react";
 
-import useSearch from "./useSearch";
+type selectChangeHandler = (
+  event: React.SyntheticEvent | null,
+  value: string | null,
+) => void;
 
 export interface SearchInputsProps {
-  onUpdateCourses: (courses: StoredCourse[]) => void;
-  onUpdateLoading: (loading: boolean) => void;
-  onUpdateLoadingMoreResults: (loading: boolean) => void;
+  error: boolean;
+  params: {
+    departmentCode: string | null;
+    departments: SearchParams;
+    number: string;
+    ge: string | null;
+    geOptions: SearchParams;
+  };
+  handlers: {
+    handleSearch: (department: string, number: string, ge: string) => void;
+    handleChangeNumber: (number: string) => void;
+    handleChangeGE: selectChangeHandler;
+    handleChangeDepartment: selectChangeHandler;
+  };
 }
 
 export default function SearchInputs({
-  onUpdateCourses,
-  onUpdateLoading,
-  onUpdateLoadingMoreResults,
+  error,
+  params,
+  handlers,
 }: SearchInputsProps) {
+  const { departmentCode, number, ge, departments, geOptions } = params;
   const {
-    courses,
-    loading,
-    loadingMoreResults,
-    departments,
-    handleChangeDepartment,
-    handleChangeNumber,
-    handleChangeGE,
     handleSearch,
-    departmentCode,
-    number,
-    ge,
-    error,
-    geOptions,
-  } = useSearch();
-
-  useEffect(() => {
-    onUpdateCourses(courses);
-  }, [courses, onUpdateCourses]);
-
-  useEffect(() => {
-    onUpdateLoading(loading);
-  }, [loading, onUpdateLoading]);
-
-  useEffect(() => {
-    onUpdateLoadingMoreResults(loadingMoreResults);
-  }, [loadingMoreResults, onUpdateLoadingMoreResults]);
+    handleChangeDepartment,
+    handleChangeGE,
+    handleChangeNumber,
+  } = handlers;
 
   return (
     <form

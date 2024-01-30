@@ -1,6 +1,6 @@
 import { Args, Query, Resolver } from "type-graphql";
 
-import { Course, Department, QueryInput, SingleQueryInput } from "./schema";
+import { Course, SingleQueryInput } from "./schema";
 import { CourseService } from "./service";
 
 /**
@@ -10,16 +10,6 @@ import { CourseService } from "./service";
 @Resolver()
 export class CourseResolver {
   /**
-   * Returns a list of `Course` that satisfy the conditions in `input`
-   * @param input a QueryInput instance
-   * @returns a list of `Course` instances
-   */
-  @Query(() => [Course])
-  async coursesBy(@Args() input: QueryInput): Promise<Course[]> {
-    return await new CourseService().coursesBy(input);
-  }
-
-  /**
    * Return a `Course` instance that matches the `department` and `number` in `input`
    * @param input a QueryInput instance
    * @returns a `Course` instance
@@ -27,14 +17,5 @@ export class CourseResolver {
   @Query(() => Course)
   async courseBy(@Args() input: SingleQueryInput): Promise<Course | null> {
     return await new CourseService().courseBy(input);
-  }
-
-  /**
-   * A custom query that asynchronously retrieves a list of unique `Department` names.
-   * @returns a list of `Department` instances with unique department names
-   */
-  @Query(() => [Department])
-  async departments(): Promise<Department[]> {
-    return await new CourseService().getAllDepartments();
   }
 }
