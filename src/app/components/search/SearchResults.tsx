@@ -1,5 +1,5 @@
-import { StoredCourse } from "@/app/types/Course";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { StoredCourse } from "@customTypes/Course";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
 import { AutoSizer, List } from "react-virtualized";
 
@@ -45,7 +45,7 @@ export default function SearchResults({
       return null;
     }
 
-    const course = courses[index] as StoredCourse;
+    const course = courses[index];
 
     return (
       <div key={key} style={style}>
@@ -68,7 +68,7 @@ export default function SearchResults({
       droppableId={"search-droppable"}
       isDropDisabled={true}
       mode="virtual"
-      renderClone={(provided, snapshot, rubric) => {
+      renderClone={(provided, _, rubric) => {
         const index = rubric.source.index;
         const course = courses[index];
         return (

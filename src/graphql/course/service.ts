@@ -1,9 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { QueryDetails, SearchParams, StoredCourse } from "@customTypes/Course";
+import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
-
-import { Course, SingleQueryInput } from "./schema";
 
 /**
  * Compares two course instances by number, and returns a
@@ -12,7 +11,7 @@ import { Course, SingleQueryInput } from "./schema";
  * @param b another Course instance
  * @returns
  */
-export const compareCoursesByNum = function (a: Course, b: Course): number {
+export function compareCoursesByNum(a: StoredCourse, b: StoredCourse): number {
   // Check departments first
   if (a.departmentCode !== b.departmentCode)
     return a.departmentCode.localeCompare(b.departmentCode);
@@ -39,7 +38,16 @@ export const compareCoursesByNum = function (a: Course, b: Course): number {
   if (bLet > aLet) return -1;
 
   return 0;
-};
+}
+
+export function toStoredCourse(course: Course): StoredCourse {
+  return {
+    ...course,
+    description: course.description ?? "",
+    labels: [],
+    id: uuidv4(),
+  };
+}
 
 /**
  * CourseService is a service class used to execute custom functions
@@ -96,25 +104,21 @@ export class CourseService {
       return {
         ...r,
         description: r.description ?? "",
+        labels: [],
+        id: uuidv4(),
       };
     });
 
     res.sort(compareCoursesByNum);
     // Convert to a stored course
-    return res.map((r) => {
-      return {
-        ...r,
-        id: uuidv4(),
-        labels: [],
-      };
-    });
+    return res.map(toStoredCourse);
   }
   /**
    * `courseBy` returns a course that satisfies a predicate `pred`
    * or null if no such course exists
    * @returns a `Course` instance
    */
-  public async courseBy(pred: SingleQueryInput): Promise<Course | null> {
+  public async courseBy(pred: QueryDetails): Promise<StoredCourse | null> {
     const course = await prisma.course.findFirst({
       where: {
         departmentCode: pred.departmentCode,
@@ -122,7 +126,7 @@ export class CourseService {
       },
     });
     if (!course) return null;
-    return { ...course, description: course.description ?? "" };
+    return toStoredCourse(course);
   }
 
   /**

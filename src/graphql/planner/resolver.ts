@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Arg, Args, Mutation, Query, Resolver } from "type-graphql";
 
 import {

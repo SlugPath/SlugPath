@@ -10,27 +10,15 @@ export const storedCourseSchema = z.object({
   credits: z.number(),
   title: z.string(),
   ge: z.array(z.string()),
+  prerequisites: z.string().optional(),
   quartersOffered: z.array(z.string()),
   description: z.string(),
   labels: z.array(z.string()),
 });
 
-export const storedCoursesSchema = z.array(storedCourseSchema);
+export type StoredCourse = z.infer<typeof storedCourseSchema>;
 
-/**
- * `StoredCourse` is a type to represent courses
- */
-export interface StoredCourse {
-  id: string;
-  departmentCode: string;
-  number: string; // because some course numbers are 12L, 115A etc.
-  credits: number;
-  title: string;
-  ge: string[];
-  quartersOffered: string[];
-  description: string;
-  labels: string[];
-}
+export const storedCoursesSchema = z.array(storedCourseSchema);
 
 export type CourseTerm = [StoredCourse, Term | undefined] | undefined;
 
@@ -63,3 +51,10 @@ export const queryDetailsSchema = z.object({
 });
 
 export type QueryDetails = z.infer<typeof queryDetailsSchema>;
+
+export const courseQuerySchema = z.object({
+  departmentCode: z.string(),
+  number: z.string(),
+});
+
+export type CourseQuery = z.infer<typeof courseQuerySchema>;

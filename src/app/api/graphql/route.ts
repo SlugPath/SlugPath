@@ -1,4 +1,3 @@
-import { CourseResolver } from "@/graphql/course/resolver";
 import { MajorResolver } from "@/graphql/major/resolver";
 import { PlannerResolver } from "@/graphql/planner/resolver";
 import prisma from "@/lib/prisma";
@@ -8,7 +7,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 
 const schema = buildSchema({
-  resolvers: [CourseResolver, PlannerResolver, MajorResolver],
+  resolvers: [PlannerResolver, MajorResolver],
   validate: true,
 });
 
