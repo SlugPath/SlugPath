@@ -254,60 +254,62 @@ export default function MajorSelection({
   );
 
   return (
-    <div className="space-y-4 w-full">
-      <SelectionErrorAlert />
-      <LoadingMajorDataErrorAlert />
-      <SavingMajorDataErrorAlert />
-      <ConfirmAlert
-        open={replaceAlertOpen}
-        onClose={() => setReplaceAlertOpen(false)}
-        onConfirm={handleConfirmReplaceCurrent}
-        dialogText="Are you sure you want to replace your current planner?"
-      />
-      <div className="grid grid-cols-4 gap-2">
-        <div className="col-span-2">
-          <SelectCatalogYear
-            catalogYear={catalogYear}
-            years={years}
-            onChange={handleChangeCatalogYear}
-          />
-        </div>
-        <div className="col-span-2">
-          <SelectMajorName
-            major={major}
-            majors={majors}
-            onChange={handleChangeMajor}
-          />
-        </div>
-      </div>
-      <div>
-        <PlannerProvider plannerId={""} title={""} order={0}>
-          <ModalsProvider>
-            <SelectDefaultPlanner
-              selectedDefaultPlanner={selectedDefaultPlanner}
-              onChange={handleChangeDefaultPlanner}
-              majorDefaultPlanners={majorDefaultPlanners}
-              loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-              addPlannerCardContainer={isInPlannerPage}
+    <div className="grid place-items-center my-3 justify-center h-auto w-[66vw] mx-auto overflow-auto">
+      <div className="space-y-4 w-full">
+        <SelectionErrorAlert />
+        <LoadingMajorDataErrorAlert />
+        <SavingMajorDataErrorAlert />
+        <ConfirmAlert
+          open={replaceAlertOpen}
+          onClose={() => setReplaceAlertOpen(false)}
+          onConfirm={handleConfirmReplaceCurrent}
+          dialogText="Are you sure you want to replace your current planner?"
+        />
+        <div className="grid grid-cols-4 gap-2">
+          <div className="col-span-2">
+            <SelectCatalogYear
+              catalogYear={catalogYear}
+              years={years}
+              onChange={handleChangeCatalogYear}
             />
-            <CourseInfoModal />
-          </ModalsProvider>
-        </PlannerProvider>
-      </div>
-      <div className="flex justify-end w-full">
-        {loadingSaveMajor ? (
-          <CircularProgress variant="plain" color="primary" />
-        ) : (
-          <SaveButtons
-            saveButtonName={saveButtonName}
-            isInPlannerPage={isInPlannerPage}
-            onSkip={onSkip}
-            onClickSave={handleClickSave}
-            onClickReplaceCurrent={handleClickReplaceCurrent}
-            onClickCreateNew={handleClickCreateNew}
-            majorSelectionIsValid={majorSelectionIsValid}
-          />
-        )}
+          </div>
+          <div className="col-span-2">
+            <SelectMajorName
+              major={major}
+              majors={majors}
+              onChange={handleChangeMajor}
+            />
+          </div>
+        </div>
+        <div>
+          <PlannerProvider plannerId={""} title={""} order={0}>
+            <ModalsProvider>
+              <SelectDefaultPlanner
+                selectedDefaultPlanner={selectedDefaultPlanner}
+                onChange={handleChangeDefaultPlanner}
+                majorDefaultPlanners={majorDefaultPlanners}
+                loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+                addPlannerCardContainer={isInPlannerPage}
+              />
+              <CourseInfoModal />
+            </ModalsProvider>
+          </PlannerProvider>
+        </div>
+        <div className="flex justify-end w-full">
+          {loadingSaveMajor ? (
+            <CircularProgress variant="plain" color="primary" />
+          ) : (
+            <SaveButtons
+              saveButtonName={saveButtonName}
+              isInPlannerPage={isInPlannerPage}
+              onSkip={onSkip}
+              onClickSave={handleClickSave}
+              onClickReplaceCurrent={handleClickReplaceCurrent}
+              onClickCreateNew={handleClickCreateNew}
+              majorSelectionIsValid={majorSelectionIsValid}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

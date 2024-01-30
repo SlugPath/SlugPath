@@ -1,4 +1,6 @@
-import { WarningAmberOutlined } from "@mui/icons-material";
+"use client";
+
+import { WarningAmberRounded } from "@mui/icons-material";
 import { Alert } from "@mui/joy";
 import { useEffect, useState } from "react";
 
@@ -27,7 +29,7 @@ export default function BetaWarning({ show = true }: { show?: boolean }) {
         size="lg"
         color="warning"
         variant="soft"
-        startDecorator={<WarningAmberOutlined color="warning" />}
+        startDecorator={<WarningAmberRounded color="warning" />}
         sx={{
           cursor: "pointer",
           opacity: visible ? 1 : 0,
