@@ -1,17 +1,12 @@
+import { getAllPlanners, getPlanner } from "@/app/actions/planner";
 import { SetState } from "@/app/types/Common";
 import { PlannerData } from "@/app/types/Planner";
 import { PlannerTitle } from "@/graphql/planner/schema";
-import { GET_PLANNER, GET_PLANNERS } from "@/graphql/queries";
 import { initialLabels } from "@/lib/labels";
-import {
-  deserializePlanner,
-  getTotalCredits,
-  initialPlanner,
-} from "@/lib/plannerUtils";
-import { removeTypenames } from "@/lib/utils";
-import { ApolloError, useLazyQuery } from "@apollo/client";
+import { getTotalCredits, initialPlanner } from "@/lib/plannerUtils";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { useContext, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import useMajorSelection from "../majorSelection/useMajorSelection";
@@ -30,41 +25,24 @@ export const useLoadAllPlanners = (
   SetState<PlannerTitle[]>,
   string | undefined,
   SetState<string | undefined>,
-  { loading: boolean; error: ApolloError | undefined },
+  { loading: boolean; error: Error | null },
 ] => {
   const [planners, setPlanners] = useState<PlannerTitle[]>([]);
   const [activePlanner, setActivePlanner] = useState<string | undefined>(
     undefined,
   );
-
-  const [getData, { loading, error }] = useLazyQuery(GET_PLANNERS, {
-    onCompleted: (data) => {
-      if (data.getAllPlanners.length > 0) {
-        const loadedPlanners = data.getAllPlanners;
-        removeTypenames(loadedPlanners);
-        // Set the first planner as active, if it exists
-        setPlanners(loadedPlanners);
-        setActivePlanner(loadedPlanners[0]?.id);
-      }
-      if (onLoadedPlanners !== undefined) {
-        onLoadedPlanners(data.getAllPlanners.length);
+  const { isLoading: loading, error } = useQuery({
+    queryKey: ["getAllPlanners", userId],
+    queryFn: async () => {
+      const res = await getAllPlanners(userId ?? "");
+      setPlanners(res);
+      setActivePlanner(res[0]?.id);
+      if (onLoadedPlanners) {
+        onLoadedPlanners(res.length);
       }
     },
-    onError: (err) => {
-      console.error(err);
-    },
+    enabled: !!userId,
   });
-
-  useEffect(() => {
-    if (userId !== undefined) {
-      getData({
-        variables: {
-          userId,
-        },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
 
   return [
     planners,
@@ -75,6 +53,58 @@ export const useLoadAllPlanners = (
   ];
 };
 
+/**
+ * Hook to load a planner
+ * @param plannerId id of the planner to load
+ * @param userId id of the user
+ * @returns
+ */
+export const useLoadPlanner = ({
+  plannerId,
+  userId,
+  defaultPlanner,
+  skipLoad,
+}: {
+  plannerId: string | undefined;
+  userId: string | undefined;
+  defaultPlanner: PlannerData;
+  skipLoad?: boolean;
+}): [
+  PlannerData,
+  SetState<PlannerData>,
+  { loading: boolean; error: Error | null },
+] => {
+  const { setHasAutoFilled } = useContext(DefaultPlannerContext);
+  const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
+  const { isLoading: loading, error } = useQuery({
+    queryKey: ["getPlanner", userId, plannerId, defaultPlanner],
+    queryFn: async () => {
+      if (skipLoad) return undefined;
+      const res = await getPlanner({
+        userId: userId ?? "",
+        plannerId: plannerId ?? "",
+      });
+      if (res) {
+        setPlanner(res);
+      } else {
+        autofillWithDefaultPlanner();
+      }
+    },
+    enabled: !skipLoad,
+  });
+
+  function autofillWithDefaultPlanner() {
+    setPlanner({
+      ...defaultPlanner,
+      labels: initialLabels(),
+    });
+    if (getTotalCredits(defaultPlanner.courses) > 0) {
+      setHasAutoFilled(true);
+    }
+  }
+
+  return [planner, setPlanner, { loading, error }];
+};
 /**
  * Hook that loads the default planner of a particular user.
  * @param userId id of a user
@@ -89,6 +119,28 @@ export const useLoadDefaultPlanner = (userId?: string) => {
     plannerId,
     userId: undefined,
     defaultPlanner: initialPlanner(),
+    skipLoad,
+  });
+};
+
+/**
+ * Hook to load a user planner
+ */
+export const useLoadUserPlanner = ({
+  userId,
+  plannerId,
+  skipLoad,
+}: {
+  userId: string | undefined;
+  plannerId: string;
+  skipLoad?: boolean;
+}) => {
+  const { defaultPlanner } = useContext(DefaultPlannerContext);
+  const clonedPlanner = cloneDefaultPlanner(defaultPlanner);
+  return useLoadPlanner({
+    plannerId,
+    userId,
+    defaultPlanner: clonedPlanner,
     skipLoad,
   });
 };
@@ -122,90 +174,4 @@ const cloneDefaultPlanner = (defaultPlanner: PlannerData): PlannerData => {
     };
   });
   return clone;
-};
-
-/**
- * Hook to load a user planner
- */
-export const useLoadUserPlanner = ({
-  userId,
-  plannerId,
-  skipLoad,
-}: {
-  userId: string | undefined;
-  plannerId: string;
-  skipLoad?: boolean;
-}) => {
-  const { defaultPlanner } = useContext(DefaultPlannerContext);
-  const clonedPlanner = cloneDefaultPlanner(defaultPlanner);
-  return useLoadPlanner({
-    plannerId,
-    userId,
-    defaultPlanner: clonedPlanner,
-    skipLoad,
-  });
-};
-
-/**
- * Hook to load a planner
- * @param plannerId id of the planner to load
- * @param userId id of the user
- * @returns
- */
-export const useLoadPlanner = ({
-  plannerId,
-  userId,
-  defaultPlanner,
-  skipLoad,
-}: {
-  plannerId: string | undefined;
-  userId: string | undefined;
-  defaultPlanner: PlannerData;
-  skipLoad?: boolean;
-}): [
-  PlannerData,
-  SetState<PlannerData>,
-  { loading: boolean; error: ApolloError | undefined },
-] => {
-  const { setHasAutoFilled } = useContext(DefaultPlannerContext);
-  const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
-  const [getData, { loading, error }] = useLazyQuery(GET_PLANNER, {
-    onCompleted: (data) => {
-      const planner = data.getPlanner;
-      if (planner !== null) {
-        removeTypenames(planner);
-        setPlanner(deserializePlanner(planner));
-      }
-
-      if (data.getPlanner === null) {
-        autofillWithDefaultPlanner();
-      }
-    },
-    onError: (err) => {
-      console.error(err);
-    },
-    fetchPolicy: "no-cache",
-  });
-
-  function autofillWithDefaultPlanner() {
-    setPlanner({
-      ...defaultPlanner,
-      labels: initialLabels(),
-    });
-    if (getTotalCredits(defaultPlanner.courses) > 0) {
-      setHasAutoFilled(true);
-    }
-  }
-
-  useEffect(() => {
-    if (skipLoad) return;
-    getData({
-      variables: {
-        userId,
-        plannerId,
-      },
-    });
-  }, [userId, plannerId, getData, skipLoad]);
-
-  return [planner, setPlanner, { loading, error }];
 };

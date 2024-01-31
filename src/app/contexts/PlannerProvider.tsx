@@ -26,7 +26,6 @@ export function PlannerProvider({
     geSatisfied,
     courseState,
     saveStatus,
-    saveError,
     handleCourseUpdate,
     getCourseLabels,
     getAllLabels,
@@ -44,7 +43,7 @@ export function PlannerProvider({
     useCustomCourseSelection();
 
   const { handleDragEnd } = useHandleCourseDrag({
-    courseState,
+    courseState: courseState!,
     handleCourseUpdate,
     handleRemoveCustom,
   });
@@ -58,10 +57,9 @@ export function PlannerProvider({
         setDisplayCourse,
         totalCredits,
         geSatisfied,
-        courseState,
+        courseState: courseState!,
         handleDragEnd,
         saveStatus,
-        saveError,
         getCourseLabels,
         getAllLabels,
         editCourseLabels,

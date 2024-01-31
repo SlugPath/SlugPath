@@ -1,5 +1,5 @@
-import { DELETE_PLANNER } from "@/graphql/queries";
-import { useMutation } from "@apollo/client";
+import { deletePlanner } from "@/app/actions/planner";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,17 +11,16 @@ export function usePlanners(userId: string | undefined) {
   const [planners, setPlanners, activePlanner, setActivePlanner, { loading }] =
     useLoadAllPlanners(userId);
   const [deletedPlanner, setDeletedPlanner] = useState(false);
-  const [deletePlanner, { loading: loadingDeletePlanner }] = useMutation(
-    DELETE_PLANNER,
-    {
-      onCompleted: () => {
-        setDeletedPlanner(true);
+  const { mutate: deleteMutation, isPending: loadingDeletePlanner } =
+    useMutation({
+      mutationFn: async (input: { userId: string; plannerId: string }) => {
+        await deletePlanner(input);
       },
+      onSuccess: () => setDeletedPlanner(true),
       onError: (err) => {
         console.error(err);
       },
-    },
-  );
+    });
 
   /**
    * `switchPlanner` switches between planners
@@ -81,11 +80,9 @@ export function usePlanners(userId: string | undefined) {
       ...secondHalf,
     ]);
 
-    deletePlanner({
-      variables: {
-        userId,
-        activePlanner,
-      },
+    deleteMutation({
+      userId: userId ?? "",
+      plannerId: activePlanner,
     });
 
     switchPlanners(newId);
@@ -98,11 +95,9 @@ export function usePlanners(userId: string | undefined) {
   const removePlanner = (id: string) => {
     const newPlanners = planners.filter((p) => p.id !== id);
     if (userId !== undefined) {
-      deletePlanner({
-        variables: {
-          userId,
-          plannerId: id,
-        },
+      deleteMutation({
+        userId,
+        plannerId: id,
       });
     }
     setPlanners(newPlanners);

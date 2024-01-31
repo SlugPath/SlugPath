@@ -14,7 +14,7 @@
     "test:watch": "jest --runInBand --forceExit --watchAll",
     "analyze": "cross-env ANALYZE=true next build",
     "prepare": "husky install",
-    "init-db": "pnpx prisma migrate deploy && pnpx prisma db seed"
+    "init-db": "npx prisma migrate deploy && npx prisma db seed"
   },
   "dependencies": {
     "@apollo/client": "^3.8.10",
@@ -40,6 +40,7 @@
     "react-dom": "^18.2.0",
     "react-virtualized": "^9.22.5",
     "reflect-metadata": "^0.2.1",
+    "use-react-query-auto-sync": "^0.1.0",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },

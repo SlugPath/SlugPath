@@ -1,4 +1,3 @@
-import { ApolloError } from "@apollo/client";
 import {
   DangerousRounded,
   PlaylistAddCheckCircleRounded,
@@ -11,7 +10,7 @@ export default function SaveSnackbars({
   saveError,
 }: {
   saving: boolean;
-  saveError: ApolloError | undefined;
+  saveError: boolean;
 }) {
   const [saveOpen, setSaveOpen] = useState(false);
   const [errOpen, setErrOpen] = useState(false);

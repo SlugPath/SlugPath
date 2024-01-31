@@ -125,7 +125,7 @@ export default function PlannerTabs() {
   );
 }
 
-interface CustomTabProps {
+type CustomTabProps = {
   title: string;
   id: string;
   isEditing: boolean;
@@ -134,7 +134,7 @@ interface CustomTabProps {
   onEndEditing: (newTitle: string) => void;
   onClick: () => void;
   onOpenDeleteAlert: (id: string, title: string) => void;
-}
+};
 
 function CustomTab({
   title,

@@ -1,19 +1,12 @@
 import { StoredCourse } from "@/app/types/Course";
 import { Label } from "@/app/types/Label";
-import { PlannerData, findCourseById } from "@/app/types/Planner";
-import {
-  PlannerDataInput,
-  PlannerData as PlannerDataOutput,
-  QuarterInput,
-} from "@/graphql/planner/schema";
+import { PlannerData } from "@/app/types/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { Term } from "@customTypes/Quarter";
 import { LabelColor } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
-import { MAX_STORED_COURSE_TITLE } from "./consts";
 import { initialLabels } from "./labels";
-import { truncateTitle } from "./utils";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 export const years = 4;
@@ -54,65 +47,6 @@ export function createQuarters() {
   }
 
   return quarters;
-}
-
-export function serializePlanner(courseState: PlannerData): PlannerDataInput {
-  const result: PlannerDataInput = {
-    years: courseState.years,
-    quarters: [],
-    labels: courseState.labels.map((l) => {
-      return {
-        ...l,
-        color: l.color as string,
-      };
-    }),
-    notes: courseState.notes,
-  };
-
-  courseState.quarters.forEach((q) => {
-    const quarter: QuarterInput = {
-      id: q.id,
-      title: q.title,
-      courses: q.courses.map((cid) => {
-        const course = findCourseById(courseState, cid);
-        course.title = truncateTitle(getTitle(course), MAX_STORED_COURSE_TITLE);
-        return course;
-      }),
-    };
-    result.quarters.push(quarter);
-  });
-
-  return result;
-}
-
-export function deserializePlanner(output: PlannerDataOutput): PlannerData {
-  const result: PlannerData = {
-    years: output.years,
-    quarters: [],
-    courses: [],
-    labels: output.labels.map((l) => {
-      return {
-        ...l,
-        color: l.color as LabelColor,
-      };
-    }),
-    notes: output.notes,
-  };
-
-  output.quarters.forEach((q) => {
-    const quarter: Quarter = {
-      title: q.title,
-      id: q.id,
-      courses: [],
-    };
-    q.courses.forEach((c) => {
-      result.courses.push(c);
-      quarter.courses.push(c.id);
-    });
-    result.quarters.push(quarter);
-  });
-
-  return result;
 }
 
 export const customCourse = (): StoredCourse => {
@@ -190,6 +124,39 @@ export async function getRealEquivalent(
     ge: equivalent.ge,
     quartersOffered: equivalent.quartersOffered,
   };
+}
+
+/**
+ * Finds a quarter with a given id in an array of `Quarter`
+ * @param quarters array of quarters in a `CourseState` instance
+ * @param id quarter id
+ * @returns quarter and index where it was located
+ */
+export function findQuarter(
+  quarters: Quarter[],
+  id: string,
+): { quarter: Quarter; idx: number } {
+  const quarter = quarters.find((q) => q.id == id);
+  const idx = quarters.findIndex((q) => q.id == id);
+  if (quarter === undefined) throw new Error(`invalid quarter id: ${id}`);
+  return { quarter, idx };
+}
+
+export function findCourseById(
+  courseState: PlannerData,
+  id: string,
+): StoredCourse {
+  const course = courseState.courses.find((c) => c.id === id);
+  if (course === undefined) throw new Error("course not found");
+  return course;
+}
+
+export function findCoursesInQuarter(
+  courseState: PlannerData,
+  qid: string,
+): StoredCourse[] {
+  const { quarter } = findQuarter(courseState.quarters, qid);
+  return quarter.courses.map((cid) => findCourseById(courseState, cid));
 }
 
 export function isCustomCourse(c: StoredCourse): boolean {

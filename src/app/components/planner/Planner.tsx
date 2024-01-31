@@ -1,7 +1,7 @@
-import { PlannerData, findCoursesInQuarter } from "@/app/types/Planner";
-import { quartersPerYear } from "@/lib/plannerUtils";
+import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
+import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { Card } from "@mui/joy";
@@ -33,7 +33,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     geSatisfied,
     courseState,
     saveStatus,
-    saveError,
     updateNotes,
   } = useContext(PlannerContext);
   const { hasAutoFilled, setHasAutoFilled } = useContext(DefaultPlannerContext);
@@ -48,7 +47,10 @@ export default function Planner({ isActive }: { isActive: boolean }) {
         openAutoFillSnackbar={hasAutoFilled}
         setOpenAutoFillSnackbar={setHasAutoFilled}
       />
-      <SaveSnackbars saving={saveStatus} saveError={saveError} />
+      <SaveSnackbars
+        saving={saveStatus === "saving"}
+        saveError={saveStatus === "error"}
+      />
       <div>
         <DragDropContext onDragEnd={handleDragEnd}>
           <ModalsProvider>

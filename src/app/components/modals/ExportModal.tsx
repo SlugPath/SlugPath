@@ -1,11 +1,15 @@
-import { PlannerData, findCoursesInQuarter } from "@/app/types/Planner";
 import { PlannerTitle } from "@/graphql/planner/schema";
-import { quartersPerYear } from "@/lib/plannerUtils";
+import {
+  findCoursesInQuarter,
+  findQuarter,
+  quartersPerYear,
+} from "@/lib/plannerUtils";
 import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
-import { Quarter, findQuarter } from "@customTypes/Quarter";
+import { PlannerData } from "@customTypes/Planner";
+import { Quarter } from "@customTypes/Quarter";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import {
   Document,

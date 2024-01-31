@@ -21,19 +21,6 @@ export const debounce = <T extends (...args: any[]) => any>(
   };
 };
 
-export const removeTypenames = (value: any) => {
-  if (value && typeof value === "object") {
-    delete value.__typename; // Remove __typename property if it exists
-
-    Object.values(value).forEach((val) => {
-      // Recursively apply to properties and array elements
-      if (typeof val === "object" || Array.isArray(val)) {
-        removeTypenames(val);
-      }
-    });
-  }
-};
-
 export const zip = (arr1: any[], arr2: any[]) => {
   return arr1.map((elem, index) => [elem, arr2[index]]);
 };

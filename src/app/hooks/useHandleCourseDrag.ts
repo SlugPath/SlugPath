@@ -1,6 +1,6 @@
 import { PlannerData } from "@/app/types/Planner";
-import { createCourseFromId } from "@/lib/plannerUtils";
-import { Quarter, findQuarter } from "@customTypes/Quarter";
+import { createCourseFromId, findQuarter } from "@/lib/plannerUtils";
+import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import { v4 as uuidv4 } from "uuid";
 

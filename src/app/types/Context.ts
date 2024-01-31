@@ -1,6 +1,6 @@
 import { PlannerTitle } from "@/graphql/planner/schema";
-import { ApolloError } from "@apollo/client";
 import { DropResult } from "@hello-pangea/dnd";
+import { ReactQueryAutoSyncSaveStatus } from "use-react-query-auto-sync";
 
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
@@ -29,8 +29,7 @@ export interface PlannerContextProps {
   geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
-  saveStatus: boolean;
-  saveError: ApolloError | undefined;
+  saveStatus: ReactQueryAutoSyncSaveStatus;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
   editCourseLabels: (course: StoredCourse) => void;
@@ -59,11 +58,6 @@ export interface PlannersContextProps {
   plannersLoading: boolean;
   loadingDeletePlanner: boolean;
   deletedPlanner: boolean;
-}
-
-export interface LabelsContextProps {
-  labels: Label[];
-  updateLabels: (label: Label[]) => void;
 }
 
 export interface DefaultPlannerContextProps {
