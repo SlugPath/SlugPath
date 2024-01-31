@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
 import { getMajors } from "@/app/actions/majorActions";
+import { useEffect, useState } from "react";
+
 import { Major } from "../types/Major";
 
 export default function useMajors() {

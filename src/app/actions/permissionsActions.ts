@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+
 import { Major } from "../types/Major";
 import { Permissions } from "../types/Permissions";
 

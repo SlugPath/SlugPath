@@ -1,22 +1,23 @@
+import Search from "@/app/components/search/Search";
+import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
+import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import useUserPermissions from "@/app/hooks/useUserPermissions";
 import {
+  Button,
+  Card,
+  Chip,
   Modal,
   ModalClose,
   Sheet,
   Typography,
-  Button,
-  Card,
-  Chip,
 } from "@mui/joy";
+import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
+
 import {
   RequirementsComponent,
   RequirementsComponentEditing,
 } from "./RequirementsComponent";
-import Search from "@/app/components/search/Search";
-import useUserPermissions from "@/app/hooks/useUserPermissions";
-import { CircularProgress } from "@mui/material";
 
 export default function MajorProgressModal() {
   const {

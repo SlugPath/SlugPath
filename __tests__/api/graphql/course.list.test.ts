@@ -1,8 +1,8 @@
-import { graphql } from "graphql";
-import { buildSchemaSync } from "type-graphql";
-import { describe, expect } from "@jest/globals";
 import { CourseResolver } from "@/graphql/course/resolver";
 import prisma from "@/lib/prisma";
+import { describe, expect } from "@jest/globals";
+import { graphql } from "graphql";
+import { buildSchemaSync } from "type-graphql";
 
 jest.setTimeout(10000);
 

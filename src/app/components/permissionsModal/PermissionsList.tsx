@@ -1,7 +1,8 @@
-import { List, ListItem, ListItemContent, AccordionGroup } from "@mui/joy";
 import useMajors from "@/app/hooks/useMajors";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
+import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
+
 import PermissionsAccordion from "./PermissionsAccordion";
 
 export default function PermissionsList({

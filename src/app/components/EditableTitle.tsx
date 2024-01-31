@@ -1,6 +1,6 @@
 import { Edit } from "@mui/icons-material";
-import { Typography, Input, IconButton } from "@mui/joy";
-import { useState, useEffect } from "react";
+import { IconButton, Input, Typography } from "@mui/joy";
+import { useEffect, useState } from "react";
 
 export default function EditableTitle({
   title,

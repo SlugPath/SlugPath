@@ -1,5 +1,6 @@
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { useContext } from "react";
+
 import IsSatisfiedMark from "../../IsSatisfiedMark";
 
 export default function MajorProgress() {

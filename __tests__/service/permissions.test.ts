@@ -1,13 +1,13 @@
-import prisma from "@/lib/prisma";
-import { v4 as uuidv4 } from "uuid";
-import { Role } from "@prisma/client";
-import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
 import {
   getPermissions,
   savePermissions,
   userHasMajorEditingPermission,
 } from "@/app/actions/permissionsActions";
+import { Major } from "@/app/types/Major";
+import { Permissions } from "@/app/types/Permissions";
+import prisma from "@/lib/prisma";
+import { Role } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * @param name is the name of the major

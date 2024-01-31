@@ -1,8 +1,9 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { Binder, RequirementList } from "../types/Requirements";
 import { v4 as uuid4 } from "uuid";
+
+import { Binder, RequirementList } from "../types/Requirements";
 import { userHasMajorEditingPermission } from "./permissionsActions";
 
 export async function saveMajorRequirements(

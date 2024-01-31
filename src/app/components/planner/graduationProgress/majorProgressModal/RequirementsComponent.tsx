@@ -1,25 +1,26 @@
-import {
-  Card,
-  Select,
-  Typography,
-  Button,
-  Input,
-  IconButton,
-  useColorScheme,
-} from "@mui/joy";
-import { RequirementList, Binder } from "@/app/types/Requirements";
-import FulfillmentMark from "./FulfillmentMark";
-import BinderTitle from "./BinderTitle";
-import { useContext, useState } from "react";
+import { MiniCourseCard } from "@/app/components/majorSelection/MiniCourseCard";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import Option from "@mui/joy/Option";
-import { Delete, Edit } from "@mui/icons-material";
+import { StoredCourse } from "@/app/types/Course";
+import { Binder, RequirementList } from "@/app/types/Requirements";
+import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
 import { Droppable } from "@hello-pangea/dnd";
-import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
+import { Delete, Edit } from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  IconButton,
+  Input,
+  Select,
+  Typography,
+  useColorScheme,
+} from "@mui/joy";
+import Option from "@mui/joy/Option";
+import { useContext, useState } from "react";
+
 import DraggableCourseCard from "../../quarters/courses/DraggableCourseCard";
-import { StoredCourse } from "@/app/types/Course";
-import { MiniCourseCard } from "@/app/components/majorSelection/MiniCourseCard";
+import BinderTitle from "./BinderTitle";
+import FulfillmentMark from "./FulfillmentMark";
 
 export function RequirementsComponent({
   requirements,
