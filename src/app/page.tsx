@@ -1,14 +1,15 @@
 "use client";
-import MajorSelection from "./components/majorSelection/MajorSelection";
-import { useSession } from "next-auth/react";
-import { CssVarsProvider } from "@mui/joy";
-import { ApolloProvider } from "@apollo/client";
+
 import apolloClient from "@/lib/apolloClient";
+import { ApolloProvider } from "@apollo/client";
+import BetaWarning from "@components/beta/BetaWarning";
+import MajorSelection from "@components/majorSelection/MajorSelection";
+import UnauthenticatedWarning from "@components/modals/UnauthenticatedWarning";
+import Navbar from "@components/navbar/Navbar";
+import { DefaultPlannerProvider } from "@contexts/DefaultPlannerProvider";
+import { CssVarsProvider } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { DefaultPlannerProvider } from "./contexts/DefaultPlannerProvider";
-import BetaWarning from "./components/beta/BetaWarning";
-import Navbar from "./components/navbar/Navbar";
-import UnauthenticatedWarning from "./components/UnauthenticatedWarning";
 
 export default function Page() {
   const { status } = useSession();

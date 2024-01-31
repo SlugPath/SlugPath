@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
-import { MajorInput, MajorDefaultsInput, UserMajorOutput } from "./schema";
+
 import { PlannerTitle } from "../planner/schema";
+import { MajorDefaultsInput, MajorInput, UserMajorOutput } from "./schema";
 
 export class MajorService {
   public async getAllMajors(catalogYear: string): Promise<string[]> {

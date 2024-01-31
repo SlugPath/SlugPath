@@ -1,6 +1,7 @@
-import { CourseService } from "./service";
 import { Args, Query, Resolver } from "type-graphql";
-import { Course, QueryInput, Department } from "./schema";
+
+import { Course, Department, QueryInput, SingleQueryInput } from "./schema";
+import { CourseService } from "./service";
 
 /**
  * CourseResolver is a Resolver class that provides custom functionality for
@@ -24,7 +25,7 @@ export class CourseResolver {
    * @returns a `Course` instance
    */
   @Query(() => Course)
-  async courseBy(@Args() input: QueryInput): Promise<Course | null> {
+  async courseBy(@Args() input: SingleQueryInput): Promise<Course | null> {
     return await new CourseService().courseBy(input);
   }
 

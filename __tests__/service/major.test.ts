@@ -1,6 +1,6 @@
+import { MajorService } from "@/graphql/major/service";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
-import { MajorService } from "@/graphql/major/service";
 
 beforeAll(async () => {
   await prisma.user.create({
@@ -27,6 +27,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Computer Systems and Assembly Language and Lab",
+        description:
+          "Introduction to computer organization and systems programming. Study of number representations, assembly language, and machine organization. Includes laboratory.",
         number: "12",
         credits: 7,
         prerequisites: "CSE 20",
@@ -37,6 +39,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Computer Systems and C Programming",
+        description:
+          "Introduction to C programming language and computer programming in a UNIX environment. Topics include program structure, UNIX editors, compiling and linking, debugging tools, fundamentals of C programming, basic algorithms and data structures, and basic UNIX commands.",
         number: "13S",
         credits: 7,
         prerequisites: "None",
@@ -47,6 +51,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Introduction to Data Structures and Algorithms",
+        description:
+          "Introduction to data structures and algorithms. Abstract data types including stacks, queues, priority queues, hash tables, binary trees, search trees, balanced trees and graphs. Sorting; asymptotic analysis; fundamental graph algorithms including graph search, shortest path, and minimum spanning trees; concurrency and synchronization. Credit is not given for both this course and CSE 100.",
         number: "101",
         credits: 5,
         prerequisites: "None",
@@ -57,6 +63,8 @@ beforeAll(async () => {
         department: "Computer Science and Engineering",
         departmentCode: "CSE",
         title: "Introduction to Algorithm Analysis",
+        description:
+          "Introduction to the design and analysis of algorithms. Divide-and-conquer, dynamic programming, greedy algorithms, amortized analysis, randomization, and basic data structures. Credit is not given for both this course and CSE 101.",
         number: "102",
         credits: 5,
         prerequisites: "None",
@@ -69,6 +77,8 @@ beforeAll(async () => {
         title: "Calculus",
         number: "19A",
         credits: 5,
+        description:
+          "Introduction to differential and integral calculus of functions of one variable. Emphasis is on applications and problem solving using the tools of calculus. Topics include limits, the derivative, rules for differentiation, graphing strategy, optimization problems, differentials, implicit differentiation, related rates, exponential and logarithmic functions, antiderivatives, definite integrals, areas, and methods of integration. Further topics may include integration by parts, trigonometric substitution, partial fractions, integration by tables, arc length, and surface area.",
         prerequisites: "None",
         ge: ["None"],
         quartersOffered: ["Fall", "Winter", "Spring"],
@@ -80,10 +90,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prisma.user.deleteMany();
-  await prisma.major.deleteMany();
-  await prisma.course.deleteMany();
-  await prisma.planner.deleteMany();
+  await prisma.$transaction([
+    prisma.user.deleteMany(),
+    prisma.major.deleteMany(),
+    prisma.course.deleteMany(),
+    prisma.planner.deleteMany(),
+  ]);
+
+  await prisma.$disconnect();
 });
 
 it("should add major information for 1 user", async () => {

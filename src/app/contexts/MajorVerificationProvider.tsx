@@ -1,18 +1,19 @@
+import useMajorRequirements from "@/app/hooks/useMajorRequirements";
+import { isRequirementList } from "@/lib/requirementsUtils";
+import { useSession } from "next-auth/react";
 import { createContext } from "react";
+import { v4 as uuid4 } from "uuid";
+
+import useMajorSelection from "../components/majorSelection/useMajorSelection";
+import usePlanner from "../components/planner/usePlanner";
 import { MajorVerificationContextProps } from "../types/Context";
+import { StoredCourse } from "../types/Course";
 import {
   Binder,
   Requirement,
   RequirementList,
   Requirements,
 } from "../types/Requirements";
-import { StoredCourse } from "../types/Course";
-import { isRequirementList } from "@/lib/requirementsUtils";
-import { v4 as uuid4 } from "uuid";
-import useMajorSelection from "../hooks/useMajorSelection";
-import { useSession } from "next-auth/react";
-import useMajorRequirements from "@/app/hooks/useMajorRequirements";
-import usePlanner from "../hooks/usePlanner";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,

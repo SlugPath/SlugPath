@@ -6,6 +6,10 @@
 # testing
 /coverage
 
+# data
+planners_*.json
+courses.csv
+
 # next.js
 /.next/
 /out/

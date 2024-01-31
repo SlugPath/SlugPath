@@ -1,33 +1,34 @@
-import QuarterCard from "./quarters/QuarterCard";
-import { quartersPerYear } from "../../../lib/plannerUtils";
-import { PlannerData, findCoursesInQuarter } from "../../types/PlannerData";
-import Search from "../search/Search";
+import { quartersPerYear } from "@/lib/plannerUtils";
+import { ModalsProvider } from "@contexts/ModalsProvider";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { PlannerData, findCoursesInQuarter } from "@customTypes/PlannerData";
+import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
-import SaveSnackbars from "./SaveSnackbars";
 import { Card } from "@mui/joy";
-import { GradProgress } from "./graduationProgress/GradProgress";
-import { GEProgress } from "./graduationProgress/GEProgress";
-import { PlannerContext } from "../../contexts/PlannerProvider";
-import { useContext } from "react";
-import { ModalsProvider } from "../../contexts/ModalsProvider";
-import ExportModal from "../ExportModal";
-import CourseInfoModal from "../courseInfoModal/CourseInfoModal";
 import {
   Accordion,
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
 } from "@mui/joy";
-import { Quarter } from "../../types/Quarter";
-import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
-import NotesEditor from "./NotesEditor";
-import AutoFillSnackbar from "../AutoFillSnackbar";
+import { useContext } from "react";
+
 import { DefaultPlannerContext } from "../../contexts/DefaultPlannerProvider";
+import AutoFillSnackbar from "../AutoFillSnackbar";
+import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
+import ExportModal from "../modals/ExportModal";
+import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
+import PermissionsModal from "../permissionsModal/PermissionsModal";
+import Search from "../search/Search";
+import NotesEditor from "./NotesEditor";
 import PlannerActionsCard from "./PlannerActionsCard";
+import SaveSnackbars from "./SaveSnackbars";
+import StyledAccordion from "./StyledAccordion";
+import { GEProgress } from "./graduationProgress/GEProgress";
+import { GradProgress } from "./graduationProgress/GradProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
-import PermissionsModal from "../permissionsModal/PermissionsModal";
-import StyledAccordion from "./StyledAccordion";
+import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {

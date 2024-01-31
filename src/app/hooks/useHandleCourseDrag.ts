@@ -1,19 +1,31 @@
-import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
-import { PlannerData } from "../types/PlannerData";
-import { Quarter, findQuarter } from "../types/Quarter";
-import { v4 as uuidv4 } from "uuid";
 import { createCourseFromId } from "@/lib/plannerUtils";
+import { PlannerData } from "@customTypes/PlannerData";
+import { Quarter, findQuarter } from "@customTypes/Quarter";
+import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
+import { v4 as uuidv4 } from "uuid";
+
 import useHandleRequirementListDrag from "./useHandleRequirementListDrag";
 
 const CUSTOM_DROPPABLE = "custom-droppable";
 const SEARCH_DROPPABLE = "search-droppable";
 
+// Helpers
+const draggedFromSearch = (droppableId: string) => {
+  return droppableId.includes(SEARCH_DROPPABLE);
+};
+
+const draggedFromCustom = (droppableId: string) => {
+  return droppableId === CUSTOM_DROPPABLE;
+};
+
 export default function useHandleCourseDrag({
   courseState,
   handleCourseUpdate,
+  handleRemoveCustom,
 }: {
   courseState: PlannerData;
-  handleCourseUpdate: any;
+  handleCourseUpdate: (newState: PlannerData) => void;
+  handleRemoveCustom: (idx: number) => void;
 }) {
   const {
     draggedToRequirementList,
@@ -23,14 +35,6 @@ export default function useHandleCourseDrag({
 
   function handleDragEnd(result: DropResult) {
     const { destination, source, draggableId } = result;
-
-    function draggedFromSearch(droppableId: string) {
-      return droppableId.includes(SEARCH_DROPPABLE);
-    }
-
-    function draggedFromCustom(droppableId: string) {
-      return droppableId === CUSTOM_DROPPABLE;
-    }
 
     // ensure that drag is valid
     if (
@@ -52,6 +56,10 @@ export default function useHandleCourseDrag({
         );
       } else {
         addCourseFromSearch(draggableId, destination);
+        // Remove from the custom course selection
+        if (draggedFromCustom(source.droppableId)) {
+          handleRemoveCustom(source.index);
+        }
       }
       return;
     }

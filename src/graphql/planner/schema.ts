@@ -1,6 +1,7 @@
-import { Label, LabelInput } from "../label/schema";
 import { IsInt, IsUUID, Length, Matches, Max, Min } from "class-validator";
 import { ArgsType, Field, InputType, Int, ObjectType } from "type-graphql";
+
+import { Label, LabelInput } from "../label/schema";
 
 /**
  * An input type that stores data within a course
@@ -38,6 +39,9 @@ export class StoredCourseInput {
   @Field(() => [String])
   @Length(0, 4)
   quartersOffered!: string[];
+
+  @Field()
+  description!: string;
 }
 
 /**
@@ -112,6 +116,9 @@ export class StoredCourse {
   @Field(() => [String])
   @Length(0, 4)
   quartersOffered!: string[];
+
+  @Field()
+  description!: string;
 }
 
 /**

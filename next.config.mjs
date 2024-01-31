@@ -1,5 +1,7 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
+import "./src/env/server.mjs";
+
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
@@ -10,6 +12,7 @@ const nextConfig = bundleAnalyzer({
   output: "standalone",
   experimental: {
     serverMinification: false,
+    serverActions: true,
   },
   async headers() {
     return [

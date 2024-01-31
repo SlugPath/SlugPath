@@ -1,5 +1,4 @@
-import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
-import { StoredCourse } from "../../../../types/Course";
+import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
 import {
   extractTermFromQuarter,
   geLabels,
@@ -8,35 +7,36 @@ import {
   isCustomCourse,
   isOffered,
 } from "@/lib/plannerUtils";
-import { useContext, useState } from "react";
-import { DraggableProvided } from "@hello-pangea/dnd";
-import { PlannerContext } from "../../../../contexts/PlannerProvider";
-import { ModalsContext } from "../../../../contexts/ModalsProvider";
-import { WarningAmberRounded } from "@mui/icons-material";
-import CloseIconButton from "../../../CloseIconButton";
-import CourseLabel from "./CourseLabel";
-import { Label } from "../../../../types/Label";
 import { truncateTitle } from "@/lib/utils";
-import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
+import CloseIconButton from "@components/buttons/CloseIconButton";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { CourseTerm, StoredCourse } from "@customTypes/Course";
+import { Label } from "@customTypes/Label";
+import { DraggableProvided } from "@hello-pangea/dnd";
+import { WarningAmberRounded } from "@mui/icons-material";
+import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
+import { useContext, useState } from "react";
+
+import CourseLabel from "./CourseLabel";
+
+export interface CourseCardProps {
+  course: StoredCourse;
+  index: number;
+  provided: DraggableProvided;
+  isCustom: boolean;
+  quarterId?: string;
+  customDeleteCourse?: () => void;
+}
 
 export default function CourseCard({
   course,
   index,
   quarterId,
   provided,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isDragging,
   isCustom,
   customDeleteCourse,
-}: {
-  course: StoredCourse;
-  index: number;
-  quarterId?: string;
-  provided: DraggableProvided;
-  isDragging: boolean;
-  isCustom: boolean;
-  customDeleteCourse?: () => void;
-}) {
+}: CourseCardProps) {
   const {
     deleteCourse,
     setDisplayCourse,
@@ -54,7 +54,10 @@ export default function CourseCard({
   const isEnrolledCourse = quarterId !== undefined;
 
   function handleShowCourseInfoModal(course: StoredCourse) {
-    const courseTerm = [course, extractTermFromQuarter(quarterId)];
+    const courseTerm = [
+      course,
+      extractTermFromQuarter(quarterId),
+    ] as CourseTerm;
     setDisplayCourse(courseTerm);
     onShowCourseInfoModal();
   }
@@ -128,15 +131,12 @@ export default function CourseCard({
   );
 }
 
-const Title = ({
-  course,
-  onShowCourseInfoModal,
-  quarterId,
-}: {
+interface TitleProps {
   course: StoredCourse;
   onShowCourseInfoModal: (course: StoredCourse) => void;
   quarterId?: string;
-}) => {
+}
+const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
   return (
     <Typography
       endDecorator={

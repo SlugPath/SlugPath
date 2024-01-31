@@ -1,31 +1,31 @@
+import { Major } from "@/app/types/Major";
+import { Permissions } from "@/app/types/Permissions";
 import {
+  AccordionDetails,
+  AccordionSummary,
   Button,
-  Typography,
+  Card,
+  Chip,
   List,
   ListItem,
   ListItemContent,
-  Select,
   Option,
-  Card,
-  AccordionSummary,
-  AccordionDetails,
-  Chip,
+  Select,
+  Typography,
 } from "@mui/joy";
-import { SyntheticEvent, useState } from "react";
-import { Major } from "@/app/types/Major";
-import CloseIconButton from "../CloseIconButton";
-import { Permissions } from "@/app/types/Permissions";
-import StyledAccordion from "../planner/StyledAccordion";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-
+import { CssBaseline } from "@mui/material";
 import {
   Experimental_CssVarsProvider as MaterialCssVarsProvider,
-  experimental_extendTheme as extendMaterialTheme,
   THEME_ID,
+  experimental_extendTheme as extendMaterialTheme,
 } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { SyntheticEvent, useState } from "react";
+
+import CloseIconButton from "../buttons/CloseIconButton";
+import StyledAccordion from "../planner/StyledAccordion";
 
 const materialTheme = extendMaterialTheme();
 

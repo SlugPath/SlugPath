@@ -1,14 +1,15 @@
+import { emptyPlanner } from "@/lib/plannerUtils";
+import prisma from "@/lib/prisma";
+import { LabelColor, Prisma, Term } from "@prisma/client";
+
 import {
-  PlannerId,
-  PlannerData,
-  PlannerRetrieveInput,
   PlannerCreateInput,
+  PlannerData,
+  PlannerId,
+  PlannerRetrieveInput,
   PlannerTitle,
   StoredCourse,
 } from "./schema";
-import prisma from "@/lib/prisma";
-import { emptyPlanner } from "@/lib/plannerUtils";
-import { LabelColor, Prisma, Term } from "@prisma/client";
 
 export class PlannerService {
   /**
@@ -195,6 +196,7 @@ export class PlannerService {
           credits: c.credits,
           ge: [...c.ge],
           quartersOffered: [...c.quartersOffered],
+          description: c.description,
           title: c.title,
           labels: c.labels,
         };

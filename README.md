@@ -1,10 +1,10 @@
-# CSE 115A: UCSC Course Planner
+# Slug Path aka UCSC Degree Planner
 
-> A course planner for UCSC CS/CE students
+> A degree planner for UCSC students
 
 ## About
 
-UCSC currently does not have an interactive and aesthetically pleasing course planner that provides basic validation
+UCSC currently does not have an interactive and aesthetically pleasing degree planner that provides basic validation
 for academic plans. Our aim with this project is to meet that demand in the student body, starting with the CSE
 department.
 
@@ -12,22 +12,22 @@ department.
 
 ```
 git clone https://github.com/fercevik729/UCSC-Course-Planner
-npm clean install
-npx prisma generate
+pnpm install
+pnpx prisma generate
 ```
 
-Make sure to have the `POSTGRES_PRISMA_URL` env variable set, along with any other env variables if you choose to use Docker.
+Make sure to have the `POSTGRES_PRISMA_URL` env variable set, along with any other env variables if you choose to use Docker. Moreover, some additional env variables are required at build time but not necessarily needed for local development. You might want to set some mock values for these.
 
 ```
 docker-compose --env-file=<your-env-file.env> up -d (optional)
-npm run init-db
+pnpm run init-db
 ```
 
 This will initialize the database with the correct schema and initial data.
 Finally run the project with
 
 ```
-npm run dev
+pnpm run dev
 ```
 
 Et Voilà! The app should be running on `localhost:3000`.
@@ -45,7 +45,7 @@ Et Voilà! The app should be running on `localhost:3000`.
 After downloading the project files and the dependencies make sure to install the necessary GitHooks for linting and formatting with
 
 ```
-npm run prepare
+pnpm run prepare
 ```
 
 > To add your own Git Hooks beyond formatting or linting refer [here](https://typicode.github.io/husky/).
@@ -53,13 +53,13 @@ npm run prepare
 Make sure to add relevant tests and run them and view coverage details with
 
 ```
-npm run test
+pnpm run test
 ```
 
 Before running tests make sure that your local instance of the database contains the up-to-date schema with
 
 ```
-npx prisma db push
+pnpx prisma migrate deploy
 ```
 
 Before starting work on an issue make sure that it has not been assigned already or has not been actively worked on recently.

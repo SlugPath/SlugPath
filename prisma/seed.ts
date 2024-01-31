@@ -1,8 +1,9 @@
-import { Term, PrismaClient, Major, PrismaPromise } from "@prisma/client";
-import { getCourses, getPlanners } from "./csvreader";
 import { majors, years } from "@/lib/defaultPlanners";
 import { createQuarters, getRealEquivalent } from "@/lib/plannerUtils";
 import { zip } from "@/lib/utils";
+import { Major, PrismaClient, PrismaPromise, Term } from "@prisma/client";
+
+import { getCourses, getPlanners } from "./csvreader";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,7 @@ async function main() {
         title: course.title,
         credits: course.credits,
         prerequisites: course.prerequisites,
+        description: course.description,
         ge: course.ge,
         quartersOffered: course.quartersOffered,
       },

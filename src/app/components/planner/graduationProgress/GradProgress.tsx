@@ -1,7 +1,7 @@
-import { Tooltip, Typography, useColorScheme } from "@mui/joy";
-import { PieChart } from "@mui/x-charts/PieChart";
 import { Info } from "@mui/icons-material";
+import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { blue } from "@mui/material/colors";
+import { PieChart } from "@mui/x-charts/PieChart";
 
 const TOTAL_CREDITS_NEEDED = 180;
 

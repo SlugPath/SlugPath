@@ -1,22 +1,23 @@
+import usePermissions from "@/app/components/permissionsModal/usePermissions";
+import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import { Major } from "@/app/types/Major";
+import { Permissions } from "@/app/types/Permissions";
+import ReportIcon from "@mui/icons-material/Report";
 import {
+  Alert,
   Button,
   Input,
   Modal,
   ModalClose,
   Sheet,
   Typography,
-  Alert,
 } from "@mui/joy";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
 import { z } from "zod";
-import ReportIcon from "@mui/icons-material/Report";
-import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
-import usePermissions from "@/app/components/permissionsModal/usePermissions";
-import ConfirmAlert from "../ConfirmAlert";
-import { CircularProgress } from "@mui/material";
+
 import IsSatisfiedMark from "../IsSatisfiedMark";
+import ConfirmAlert from "../modals/ConfirmAlert";
 import PermissionsList from "./PermissionsList";
 
 export default function PermissionsModal() {

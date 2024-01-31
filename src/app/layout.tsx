@@ -1,14 +1,15 @@
-import "./globals.css";
+import ScreenSizeWarning from "@components/modals/ScreenSizeWarning";
+import NextAuthProvider from "@contexts/NextAuthProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import ScreenSizeWarning from "./components/ScreenSizeWarning";
-import NextAuthProvider from "./contexts/NextAuthProvider";
+
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "UCSC Course Planner",
-  description: "A simple and easy to use course planner",
+  title: "Slug Path",
+  description: "A simple course planner for UCSC students",
 };
 
 export default function RootLayout({

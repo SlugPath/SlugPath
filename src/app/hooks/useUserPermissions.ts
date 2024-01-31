@@ -1,10 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import useMajorSelection from "./useMajorSelection";
+
 import {
   getUserRole,
   userHasMajorEditingPermission,
 } from "../actions/permissionsActions";
-import { useQuery } from "@tanstack/react-query";
+import useMajorSelection from "../components/majorSelection/useMajorSelection";
 
 export default function useUserPermissions() {
   const { data: session } = useSession();

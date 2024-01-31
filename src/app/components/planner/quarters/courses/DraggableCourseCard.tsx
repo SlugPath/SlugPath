@@ -1,7 +1,16 @@
+import { StoredCourse } from "@customTypes/Course";
 import { Draggable } from "@hello-pangea/dnd";
-import { StoredCourse } from "../../../../types/Course";
+
 import CourseCard from "./CourseCard";
 
+export interface DraggableCourseCardProps {
+  course: StoredCourse;
+  index: number;
+  draggableId: string;
+  isCustom: boolean;
+  quarterId?: string;
+  customDeleteCourse?: () => void;
+}
 export default function DraggableCourseCard({
   course,
   index,
@@ -9,24 +18,16 @@ export default function DraggableCourseCard({
   quarterId,
   isCustom = false,
   customDeleteCourse,
-}: {
-  course: StoredCourse;
-  index: number;
-  draggableId: string;
-  quarterId?: string;
-  isCustom: boolean;
-  customDeleteCourse?: () => void;
-}) {
+}: DraggableCourseCardProps) {
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
-      {(provided, snapshot) => {
+      {(provided) => {
         return (
           <CourseCard
             course={course}
             index={index}
             quarterId={quarterId}
             provided={provided}
-            isDragging={snapshot.isDragging}
             isCustom={isCustom}
             customDeleteCourse={customDeleteCourse}
           />

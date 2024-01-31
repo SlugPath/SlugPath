@@ -1,14 +1,14 @@
-import { SetStateAction } from "react";
-import { StoredCourse } from "./Course";
-import { PlannerData } from "./PlannerData";
-import { DropResult } from "@hello-pangea/dnd";
+import { PlannerTitle } from "@/graphql/planner/schema";
 import { ApolloError } from "@apollo/client";
-import { MultiPlanner } from "./MultiPlanner";
+import { DropResult } from "@hello-pangea/dnd";
+
+import { SetState } from "./Common";
+import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
-import { Term } from "./Quarter";
+import { PlannerData } from "./PlannerData";
 import { RequirementList, Requirements } from "./Requirements";
 
-type setShow = React.Dispatch<SetStateAction<boolean>>;
+type setShow = SetState<boolean>;
 
 export interface ModalsContextProps {
   showExportModal: boolean;
@@ -27,9 +27,9 @@ export interface ModalsContextProps {
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
-  editCustomCourse: (cid: string, newTitle: string) => void;
-  displayCourse: [StoredCourse, Term | undefined] | undefined;
-  setDisplayCourse: any;
+  editCustomCourse: (course: StoredCourse) => void;
+  displayCourse: CourseTerm;
+  setDisplayCourse: SetState<CourseTerm>;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
@@ -41,7 +41,7 @@ export interface PlannerContextProps {
   editCourseLabels: (course: StoredCourse) => void;
   updatePlannerLabels: (labels: Label[]) => void;
   customCourses: StoredCourse[];
-  handleAddCustom: (newTitle: string) => void;
+  handleAddCustom: (input: CustomCourseInput) => void;
   handleRemoveCustom: (idx: number) => void;
   updateNotes: (content: string) => void;
 }
@@ -54,13 +54,13 @@ export interface PlannerProviderProps {
 }
 
 export interface PlannersContextProps {
-  planners: MultiPlanner;
+  planners: PlannerTitle[];
   removePlanner: (plannerId: string) => void;
   addPlanner: () => void;
-  switchPlanners: (id: string, title: string) => void;
-  changePlannerName: (newName: string, id: string) => void;
+  switchPlanners: (id: string) => void;
+  changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
-  activePlanner: { id: string; title: string } | undefined;
+  activePlanner: string | undefined;
   plannersLoading: boolean;
   loadingDeletePlanner: boolean;
   deletedPlanner: boolean;
@@ -74,8 +74,8 @@ export interface LabelsContextProps {
 export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
   hasAutoFilled: boolean;
-  setHasAutoFilled: any;
-  setDefaultPlanner: any;
+  setHasAutoFilled: SetState<boolean>;
+  setDefaultPlanner: SetState<PlannerData>;
 }
 
 export interface MajorVerificationContextProps {

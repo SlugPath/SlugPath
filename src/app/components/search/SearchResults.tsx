@@ -1,21 +1,25 @@
-import { CircularProgress } from "@mui/joy";
-import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
-import CourseCard from "../planner/quarters/courses/CourseCard";
-import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
-import { List, AutoSizer } from "react-virtualized";
+import { StoredCourse } from "@/app/types/Course";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
+import { CircularProgress } from "@mui/joy";
+import { AutoSizer, List } from "react-virtualized";
+
+import CourseCard from "../planner/quarters/courses/CourseCard";
+import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
+
+export interface SearchResultsProps {
+  courses: StoredCourse[];
+  loading: boolean;
+  loadingUseQuery: boolean;
+  searchComponentId: string;
+}
 
 export default function SearchResults({
   courses,
   loading,
   loadingUseQuery,
   searchComponentId,
-}: {
-  courses: any;
-  loading: boolean;
-  loadingUseQuery: boolean;
-  searchComponentId: string;
-}) {
+}: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
   }
@@ -54,7 +58,7 @@ export default function SearchResults({
       return null;
     }
 
-    const course = courses[index];
+    const course = courses[index] as StoredCourse;
 
     return (
       <div key={key} style={style}>
@@ -62,10 +66,10 @@ export default function SearchResults({
           key={index}
           course={course}
           index={index}
-          draggableId={createCourseDraggableId(
-            course,
-            "search" + searchComponentId,
-          )}
+          draggableId={createCourseDraggableId({
+            ...course,
+            suffix: "search" + searchComponentId,
+          })}
           isCustom={false}
         />
       </div>
@@ -85,7 +89,6 @@ export default function SearchResults({
             course={course}
             index={index}
             provided={provided}
-            isDragging={snapshot.isDragging}
             isCustom={false}
           />
         );

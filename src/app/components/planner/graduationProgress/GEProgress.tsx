@@ -1,10 +1,10 @@
-import { Tooltip, Typography, useColorScheme } from "@mui/joy";
-import { useEffect, useState } from "react";
-import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { blue } from "@mui/material/colors";
-import InfoIcon from "@mui/icons-material/Info";
-import { PlannerData } from "../../../types/PlannerData";
 import { GESMappedToCourses } from "@/lib/plannerUtils";
+import { PlannerData } from "@customTypes/PlannerData";
+import InfoIcon from "@mui/icons-material/Info";
+import { Tooltip, Typography, useColorScheme } from "@mui/joy";
+import { blue } from "@mui/material/colors";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import { useEffect, useState } from "react";
 
 const satisfied = blue[200];
 const satisfiedDark = blue[700];

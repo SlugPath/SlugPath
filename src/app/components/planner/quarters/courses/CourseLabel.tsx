@@ -1,18 +1,19 @@
-import { Chip } from "@mui/joy";
-import { Label } from "../../../../types/Label";
 import { getColor } from "@/lib/labels";
+import { Label } from "@customTypes/Label";
+import { Chip } from "@mui/joy";
 
+export interface CourseLabelProps {
+  label: Label;
+  displayText?: boolean;
+  children?: React.ReactNode;
+  inMenu?: boolean;
+}
 export default function CourseLabel({
   label,
   displayText,
   children,
   inMenu = false,
-}: {
-  label: Label;
-  displayText?: boolean;
-  children?: React.ReactNode;
-  inMenu?: boolean;
-}) {
+}: CourseLabelProps) {
   const displayTextDefault = displayText === undefined ? true : displayText;
 
   return (

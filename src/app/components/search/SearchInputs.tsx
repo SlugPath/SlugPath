@@ -1,17 +1,21 @@
-import { Input, Option, Select, Typography } from "@mui/joy";
-import useSearch from "../../hooks/useSearch";
+import { StoredCourse } from "@/app/types/Course";
 import { InfoOutlined } from "@mui/icons-material";
+import { Input, Option, Select, Typography } from "@mui/joy";
 import { useEffect } from "react";
+
+import useSearch from "./useSearch";
+
+export interface SearchInputsProps {
+  onUpdateCourses: (courses: StoredCourse[]) => void;
+  onUpdateLoading: (loading: boolean) => void;
+  onUpdateLoadingMoreResults: (loading: boolean) => void;
+}
 
 export default function SearchInputs({
   onUpdateCourses,
   onUpdateLoading,
   onUpdateLoadingMoreResults,
-}: {
-  onUpdateCourses: any;
-  onUpdateLoading: any;
-  onUpdateLoadingMoreResults: any;
-}) {
+}: SearchInputsProps) {
   const {
     courses,
     loading,
@@ -56,7 +60,6 @@ export default function SearchInputs({
           variant="soft"
           onChange={handleChangeDepartment}
           value={departmentCode ?? ""}
-          size="md"
           slotProps={{
             listbox: {
               sx: { minWidth: 270 },
@@ -78,7 +81,6 @@ export default function SearchInputs({
           name="number"
           aria-label="number"
           onChange={(event) => handleChangeNumber(event.target.value)}
-          size="md"
         />
         <Select
           placeholder="GE"
@@ -88,7 +90,6 @@ export default function SearchInputs({
           variant="soft"
           onChange={handleChangeGE}
           value={ge ?? ""}
-          size="md"
         >
           {geOptions.map((option) => (
             <Option key={option.value} value={option.value}>

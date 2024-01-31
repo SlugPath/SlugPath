@@ -1,98 +1,74 @@
-import {
-  Card,
-  FormControl,
-  FormHelperText,
-  Grid,
-  IconButton,
-  Input,
-} from "@mui/joy";
-import { Add, InfoOutlined } from "@mui/icons-material";
-import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
-import { Droppable } from "@hello-pangea/dnd";
-import { PlannerContext } from "../../contexts/PlannerProvider";
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
+import { StoredCourse } from "@/graphql/planner/schema";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { Droppable } from "@hello-pangea/dnd";
+import { Add } from "@mui/icons-material";
+import { Button, Card, Typography } from "@mui/joy";
+import { useContext, useEffect, useMemo, useState } from "react";
+
+import CustomCourseModal from "../modals/courseInfoModal/CustomCourseModal";
+import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
 
 const MAX_CUSTOM_COURSES = 3;
 
 export default function CustomCourseSelection() {
-  const [courseTitle, setCourseTitle] = useState("");
   const [tooManyError, setTooManyError] = useState(false);
-  const [tooShortError, setTooShortError] = useState(false);
   const { customCourses, handleAddCustom } = useContext(PlannerContext);
+  const numCourses = useMemo(() => customCourses.length, [customCourses]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTooShortError(false);
-    setCourseTitle(e.target.value);
+  const [open, setOpen] = useState(false);
+
+  // Handlers
+  const handleAdd = ({
+    description,
+    title,
+    credits,
+    quartersOffered,
+  }: StoredCourse) => {
+    if (
+      description === undefined ||
+      title === undefined ||
+      credits === undefined ||
+      quartersOffered === undefined
+    ) {
+      setOpen(false);
+      return;
+    }
+    handleAddCustom({ description, title, credits, quartersOffered });
+    setOpen(false);
   };
 
-  const handleAdd = () => {
-    if (customCourses.length == MAX_CUSTOM_COURSES) {
+  const handleOpen = () => {
+    if (numCourses > MAX_CUSTOM_COURSES) {
       setTooManyError(true);
       return;
     }
-    if (courseTitle.length == 0) {
-      setTooShortError(true);
-      return;
-    }
-    setTooShortError(false);
-    setTooManyError(false);
-    handleAddCustom(courseTitle);
-    setCourseTitle("");
+    setOpen(true);
   };
 
-  const memoLength = useMemo(() => {
-    return customCourses.length == MAX_CUSTOM_COURSES;
-  }, [customCourses]);
-
   useEffect(() => {
-    if (!memoLength) setTooManyError(false);
-  }, [memoLength]);
+    if (numCourses <= MAX_CUSTOM_COURSES) setTooManyError(false);
+  }, [numCourses]);
 
   return (
-    <Card className="w-80 mb-2" variant="plain">
-      <FormControl error={tooManyError || tooShortError}>
-        <Grid container alignItems="center" justifyContent="center" spacing={1}>
-          <Grid xs={10}>
-            <Input
-              placeholder="Custom Course"
-              value={courseTitle}
-              variant="soft"
-              sx={{
-                "--Input-focusedInset": "var(--any, )",
-                "--Input-focusedThickness": "0.25rem",
-                "--Input-focusedHighlight": "rgba(13,110,253,.25)",
-                "&::before": {
-                  transition: "box-shadow .15s ease-in-out",
-                },
-                "&:focus-within": {
-                  borderColor: "#86b7fe",
-                },
-              }}
-              onChange={handleChange}
-              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            />
-          </Grid>
-          <Grid xs={2}>
-            <IconButton onClick={() => handleAdd()}>
-              <Add color="primary" />
-            </IconButton>
-          </Grid>
-        </Grid>
-        {tooManyError && (
-          <FormHelperText>
-            <InfoOutlined />
-            Too many custom courses. Remove one.
-          </FormHelperText>
-        )}
-        {tooShortError && (
-          <FormHelperText>
-            <InfoOutlined />
-            Course name cannot be empty.
-          </FormHelperText>
-        )}
-      </FormControl>
-
+    <Card className="w-80 mb-2 mr-2" variant="plain">
+      <Button onClick={handleOpen} startDecorator={<Add />}>
+        <Typography
+          level="body-md"
+          fontWeight="lg"
+          sx={{
+            color: "white",
+          }}
+        >
+          Add Custom Course
+        </Typography>
+      </Button>
+      <CustomCourseModal isOpen={open} onClose={handleAdd} />
+      {tooManyError && (
+        <div className="text-red-500 text-center text-md">
+          Too many courses. Drag or delete one.
+        </div>
+      )}
       {customCourses.length > 0 && (
         <Droppable droppableId="custom-droppable">
           {(provided) => {
@@ -107,7 +83,10 @@ export default function CustomCourseSelection() {
                     key={index}
                     course={course}
                     index={index}
-                    draggableId={createCourseDraggableId(course, "custom")}
+                    draggableId={createCourseDraggableId({
+                      ...course,
+                      suffix: "custom",
+                    })}
                     isCustom
                   />
                 ))}

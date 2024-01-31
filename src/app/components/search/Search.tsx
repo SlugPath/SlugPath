@@ -1,5 +1,7 @@
+import { StoredCourse } from "@/app/types/Course";
 import { Card } from "@mui/joy";
 import { useState } from "react";
+
 import CustomCourseSelection from "./CustomCourseSelection";
 import SearchInputs from "./SearchInputs";
 import SearchResults from "./SearchResults";
@@ -23,9 +25,11 @@ export default function Search({
       {displayCustomCourseSelection && <CustomCourseSelection />}
       <Card className="w-80" variant="plain">
         <SearchInputs
-          onUpdateCourses={setCourses}
-          onUpdateLoading={setLoading}
-          onUpdateLoadingMoreResults={setLoadingMoreResults}
+          onUpdateCourses={(courses: StoredCourse[]) => setCourses(courses)}
+          onUpdateLoading={(loading: boolean) => setLoading(loading)}
+          onUpdateLoadingMoreResults={(loading: boolean) =>
+            setLoadingMoreResults(loading)
+          }
         />
         <SearchResults
           courses={courses}

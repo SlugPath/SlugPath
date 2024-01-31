@@ -1,18 +1,20 @@
-import { Typography, Select, Option } from "@mui/joy";
+import { Option, Select, Typography } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
-export default function SelectCatalogYear({
-  catalogYear,
-  years,
-  onChange,
-}: {
+export interface SelectCatalogYearProps {
   catalogYear: string;
   years: string[];
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     newValue: string | null,
   ) => void;
-}) {
+}
+
+export default function SelectCatalogYear({
+  catalogYear,
+  years,
+  onChange,
+}: SelectCatalogYearProps) {
   return (
     <>
       <Typography level="body-lg">Select your catalog year</Typography>

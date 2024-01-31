@@ -1,17 +1,30 @@
+import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import Info from "@mui/icons-material/Info";
 import {
-  Tab,
-  Tabs,
-  TabList,
-  Tooltip,
-  Typography,
+  Card,
   List,
   ListItem,
-  Card,
+  Tab,
+  TabList,
+  Tabs,
+  Tooltip,
+  Typography,
 } from "@mui/joy";
-import Info from "@mui/icons-material/Info";
-import MiniPlanner from "./miniPlanner/MiniPlanner";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { SyntheticEvent } from "react";
+
+import MiniPlanner from "./miniPlanner/MiniPlanner";
+import { MajorDefaultPlanner } from "./useDefaultPlanners";
+
+export interface SelectDefaultPlannerProps {
+  selectedDefaultPlanner: string;
+  onChange: (
+    event: SyntheticEvent<Element, Event> | null,
+    value: string | number | null,
+  ) => void;
+  majorDefaultPlanners: MajorDefaultPlanner[] | undefined;
+  loadingMajorDefaultPlanners: boolean;
+  addPlannerCardContainer?: boolean;
+}
 
 export default function SelectDefaultPlanner({
   selectedDefaultPlanner,
@@ -19,18 +32,8 @@ export default function SelectDefaultPlanner({
   majorDefaultPlanners,
   loadingMajorDefaultPlanners,
   addPlannerCardContainer,
-}: {
-  selectedDefaultPlanner: string;
-  onChange: (
-    event: SyntheticEvent<Element, Event> | null,
-    value: string | number | null,
-  ) => void;
-  majorDefaultPlanners: any;
-  loadingMajorDefaultPlanners: boolean;
-  addPlannerCardContainer?: boolean;
-}) {
-  const defaultPlanners: { id: string; title: string }[] =
-    majorDefaultPlanners === undefined ? [] : majorDefaultPlanners;
+}: SelectDefaultPlannerProps) {
+  const defaultPlanners: MajorDefaultPlanner[] = majorDefaultPlanners ?? [];
 
   return (
     <>
@@ -49,7 +52,7 @@ export default function SelectDefaultPlanner({
         >
           <TabList>
             {defaultPlanners &&
-              defaultPlanners.map((planner: any, index: number) => (
+              defaultPlanners.map((planner, index) => (
                 <Tab key={index} value={planner.id}>
                   {planner.title}
                 </Tab>
@@ -66,7 +69,9 @@ export default function SelectDefaultPlanner({
                 const plannerIsSelected = selectedDefaultPlanner == id;
                 return (
                   <ListItem
-                    sx={{ display: plannerIsSelected ? "block" : "none" }}
+                    sx={{
+                      display: plannerIsSelected ? "block" : "none",
+                    }}
                     key={index}
                   >
                     {addPlannerCardContainer ? (
