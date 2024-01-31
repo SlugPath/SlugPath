@@ -4,7 +4,7 @@ import { v4 as uuid4 } from "uuid";
 import {
   getMajorRequirements,
   saveMajorRequirements,
-} from "@/app/actions/actions";
+} from "../actions/majorRequirementsActions";
 
 export default function useMajorRequirements(
   majorId: number | undefined,

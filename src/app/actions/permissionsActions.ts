@@ -4,7 +4,13 @@ import prisma from "@/lib/prisma";
 import { Major } from "../types/Major";
 import { Permissions } from "../types/Permissions";
 
-export async function savePermissions(permissions: Permissions[]) {
+export async function savePermissions(
+  userId: string,
+  permissions: Permissions[],
+) {
+  if ((await getUserRole(userId)) !== "ADMIN")
+    return { error: "User is not an admin" };
+
   await prisma.permissions.deleteMany();
 
   const operations: any[] = [];
@@ -131,4 +137,21 @@ export async function userHasMajorEditingPermission(
   }
 
   return false;
+}
+
+export async function getUserRole(userId: string): Promise<string> {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  if (user?.role !== undefined) {
+    return user.role;
+  }
+
+  return "USER";
 }

@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
-import { getPermissions, savePermissions } from "@/app/actions/actions";
 import { Permissions } from "@/app/types/Permissions";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  getPermissions,
+  savePermissions,
+} from "../../actions/permissionsActions";
+import { useSession } from "next-auth/react";
 
 export default function usePermissions() {
   const [permissionsList, setPermissionsList] = useState<Permissions[]>([]);
   const [isSaved, setIsSaved] = useState<boolean>(true);
+  const { data: session } = useSession();
   const { isPending, data } = useQuery({
     queryKey: ["getPermissions"],
     queryFn: () => getPermissions(),
   });
   const mutation = useMutation({
-    mutationFn: () => savePermissions(permissionsList),
+    mutationFn: () => savePermissions(session!.user.id, permissionsList),
   });
 
   useEffect(() => {
     if (data) {
       setPermissionsList(data);
       setIsSaved(true);
-      console.log("data");
-      console.log(data);
     }
   }, [data, isPending]);
 

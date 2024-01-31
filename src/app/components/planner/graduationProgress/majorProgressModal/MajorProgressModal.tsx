@@ -31,11 +31,8 @@ export default function MajorProgressModal() {
   function Title() {
     return (
       <div className="flex flex-col space-y-2">
-        <Typography level="title-lg">Major Progress</Typography>
+        <Typography level="h4">Major Progress</Typography>
         <Typography level="title-lg">{majorRequirements.title}</Typography>
-        <Typography>
-          Edit permission: {hasPermissionToEdit ? "True" : "false"}
-        </Typography>
       </div>
     );
   }

@@ -1,10 +1,11 @@
-import { Button, Card } from "@mui/joy";
+import { Button, Card, Typography } from "@mui/joy";
 import { useContext } from "react";
 import { ModalsContext } from "../../contexts/ModalsProvider";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import EditIcon from "@mui/icons-material/Edit";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
+import useUserPermissions from "@/app/hooks/useUserPermissions";
 
 export default function PlannerActions() {
   const {
@@ -13,6 +14,7 @@ export default function PlannerActions() {
     setShowMajorProgressModal,
     setShowPermissionsModal,
   } = useContext(ModalsContext);
+  const { isAdmin } = useUserPermissions();
 
   const buttons = [
     {
@@ -30,21 +32,26 @@ export default function PlannerActions() {
       icon: <SchoolIcon fontSize="large" />,
       onClick: () => setShowMajorProgressModal(true),
     },
-    {
+  ];
+
+  if (isAdmin) {
+    buttons.push({
       name: "Permissions",
       icon: <LockOpenIcon fontSize="large" />,
       onClick: () => setShowPermissionsModal(true),
-    },
-  ];
+    });
+  }
 
   return (
     <Card variant="plain" className="flex flex-col gap-1">
       {buttons.map((button, index) => (
-        <Button onClick={button.onClick} variant="plain" key={index}>
-          <div className="flex flex-row gap-1 items-center">
-            {button.icon}
-            <div>{button.name}</div>
-          </div>
+        <Button
+          onClick={button.onClick}
+          variant="plain"
+          key={index}
+          startDecorator={button.icon}
+        >
+          <Typography>{button.name}</Typography>
         </Button>
       ))}
     </Card>

@@ -13,7 +13,7 @@ import { z } from "zod";
 import ReportIcon from "@mui/icons-material/Report";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
-import usePermissions from "@/app/hooks/usePermissions";
+import usePermissions from "@/app/components/permissionsModal/usePermissions";
 import ConfirmAlert from "../ConfirmAlert";
 import { CircularProgress } from "@mui/material";
 import IsSatisfiedMark from "../IsSatisfiedMark";

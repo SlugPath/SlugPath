@@ -65,6 +65,20 @@ npx prisma db push
 Before starting work on an issue make sure that it has not been assigned already or has not been actively worked on recently.
 Create PR's onto the `dev` branch upon completion of work, and we will review it and merge it as soon as possible.
 
+## Permissions
+
+To set yourself as an admin in the database, run the following command to open psql. The connect string is in your .env file under `POSTGRES_PRISMA_URL`. This is useful to test permissions and major requirements editing.
+
+```
+psql "<connection string>"
+```
+
+Then run the following command to set yourself as an admin
+
+```
+UPDATE "User" SET role = 'ADMIN' WHERE email = '<your-email>';
+```
+
 ## Deployment
 
 We use Vercel to deploy as it is the most convenient way to deploy a Next.js application.
