@@ -9,8 +9,15 @@ import {
   userHasMajorEditingPermission,
 } from "@/app/actions/permissionsActions";
 
-// returns major object
-async function createAMajor(name: string, catalogYear: string): Promise<Major> {
+/**
+ * @param name is the name of the major
+ * @param catalogYear is the catalog year of the major
+ * @returns the object or the major that was created
+ */
+export async function createAMajor(
+  name: string,
+  catalogYear: string,
+): Promise<Major> {
   const majorData = {
     name,
     catalogYear,
@@ -94,37 +101,6 @@ it("should check that user has major editing permission", async () => {
   expect(hasPermission).toBe(true);
 });
 
-// it("should check that savePermissions works", async () => {
-
-//   // create a different major
-//   const newMajor = await createAMajor("Computer Science B.A", "2020-2021");
-
-//   const permissions = [
-//     {
-//       userEmail: "sammyslug@ucsc.edu",
-//       majorEditingPermissions: [
-//         {
-//           major: newMajor,
-//           expirationDate: createDate(1),
-//         },
-//       ],
-//     }
-//   ]
-
-//   const result = await savePermissions(permissions)
-//   expect(result.title).toBe("OK")
-
-//   const user = await prisma.user.findFirst({
-//     where: {
-//       name: "Sammy Slug",
-//     },
-//   });
-//   expect(user).not.toBeNull();
-
-//   const hasPermission = await userHasMajorEditingPermission(user!.id, newMajor);
-//   expect(hasPermission).toBe(true);
-// });
-
 it("should check that other users do not have major editing permission", async () => {
   const major = await prisma.major.findFirst({});
   expect(major).not.toBeNull();
@@ -156,8 +132,14 @@ it("should check that getPermissions works using savePermissions", async () => {
       ],
     },
   ];
+  const user = await prisma.user.findFirst({
+    where: {
+      name: "Sammy Slug",
+    },
+  });
+  expect(user).not.toBeNull();
 
-  const result = await savePermissions(permissions);
+  const result = await savePermissions(user!.id, permissions);
   expect(result.title).toBe("OK");
 
   const allPermissions: Permissions[] = await getPermissions();

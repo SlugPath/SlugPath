@@ -20,20 +20,25 @@ export async function saveMajorRequirements(
   if (major && !userHasMajorEditingPermission(userId, major)) return;
 
   const requirementsAsJSON = JSON.stringify(requirements);
-  const result = await prisma.majorRequirement.upsert({
-    where: {
-      majorId: majorId,
-    },
-    update: {
-      requirementList: requirementsAsJSON,
-    },
-    create: {
-      majorId: majorId,
-      requirementList: requirementsAsJSON,
-    },
-  });
 
-  return result;
+  try {
+    await prisma.majorRequirement.upsert({
+      where: {
+        majorId: majorId,
+      },
+      update: {
+        requirementList: requirementsAsJSON,
+      },
+      create: {
+        majorId: majorId,
+        requirementList: requirementsAsJSON,
+      },
+    });
+
+    return { title: "OK" };
+  } catch (e) {
+    return { error: e };
+  }
 }
 
 export async function getMajorRequirements(
