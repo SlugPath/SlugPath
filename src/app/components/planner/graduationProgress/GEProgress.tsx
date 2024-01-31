@@ -1,5 +1,5 @@
+import { PlannerData } from "@/app/types/Planner";
 import { GESMappedToCourses } from "@/lib/plannerUtils";
-import { PlannerData } from "@customTypes/PlannerData";
 import InfoIcon from "@mui/icons-material/Info";
 import { Tooltip, Typography, useColorScheme } from "@mui/joy";
 import { blue } from "@mui/material/colors";

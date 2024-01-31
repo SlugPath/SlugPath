@@ -5,7 +5,7 @@ import { DropResult } from "@hello-pangea/dnd";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
-import { PlannerData } from "./PlannerData";
+import { PlannerData } from "./Planner";
 
 type setShow = SetState<boolean>;
 

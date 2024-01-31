@@ -1,16 +1,16 @@
-import { useLoadPlanner } from "@/app/components/planners/useLoad";
-import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
-import { ModalsProvider } from "@/app/contexts/ModalsProvider";
-import { PlannerProvider } from "@/app/contexts/PlannerProvider";
-import { GET_ALL_MAJORS } from "@/graphql/queries";
+import { getAllMajors } from "@/app/actions/major";
 import { years } from "@/lib/defaultPlanners";
 import { emptyPlanner } from "@/lib/plannerUtils";
-import { useLazyQuery } from "@apollo/client";
+import { useLoadPlanner } from "@components/planners/useLoad";
+import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { ModalsProvider } from "@contexts/ModalsProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import { Button, CircularProgress } from "@mui/joy";
 import { Alert } from "@mui/joy";
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
@@ -48,15 +48,27 @@ export default function MajorSelection({
   const [major, setMajor] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
   const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
-  const [majors, setMajors] = useState<string[]>([]);
-  const [majorSelectionIsValid, setMajorSelectionIsValid] = useState(false);
+
+  const { data: majors } = useQuery({
+    queryKey: ["majors", catalogYear],
+    queryFn: async () => {
+      if (catalogYear === "") {
+        return [];
+      }
+      return await getAllMajors(catalogYear);
+    },
+  });
+  const { data: session } = useSession();
+
+  const majorSelectionIsValid = useMemo(() => {
+    const isLoggedIn = session?.user.id !== undefined;
+    return major !== "" && catalogYear !== "" && isLoggedIn;
+  }, [major, catalogYear, session?.user.id]);
+
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
   );
   const [showSelectionError, setShowSelectionError] = useState(false);
-  const { data: session } = useSession();
-  const [lazyGetAllMajors] = useLazyQuery(GET_ALL_MAJORS);
-  const getAllMajors = useCallback(lazyGetAllMajors, [lazyGetAllMajors]);
   const {
     onSaveMajor,
     userMajorData,
@@ -65,47 +77,30 @@ export default function MajorSelection({
     errorLoadingMajorData,
     errorSavingMajorData,
   } = useMajorSelection(session?.user.id, handleSaveCompleted);
+
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
+
   const [plannerData, , { loading: loadingPlannerData }] = useLoadPlanner({
     userId: undefined,
     plannerId: selectedDefaultPlanner,
     defaultPlanner: emptyPlanner(),
   });
+
   const { setDefaultPlanner } = useContext(DefaultPlannerContext);
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
   useEffect(() => {
-    function isMajorSelectionValid() {
-      const isLoggedIn = session?.user.id !== undefined;
-      return major !== "" && catalogYear !== "" && isLoggedIn;
-    }
-
-    setMajorSelectionIsValid(isMajorSelectionValid());
-  }, [major, catalogYear, selectedDefaultPlanner, session?.user.id]);
-
-  useEffect(() => {
-    getAllMajors({
-      variables: {
-        catalogYear,
-      },
-      onCompleted: (data) => {
-        setMajors(data.getAllMajors);
-      },
-    });
-  }, [catalogYear, getAllMajors]);
-
-  useEffect(() => {
     function majorDataAlreadyChosen() {
       return (
-        userMajorData !== null &&
+        userMajorData &&
         userMajorData.name.length > 0 &&
         userMajorData.catalogYear.length > 0
       );
     }
 
     if (userMajorData) {
-      updateMajorUseState(
+      updateUserMajor(
         userMajorData.name,
         userMajorData.catalogYear,
         userMajorData.defaultPlannerId,
@@ -162,7 +157,7 @@ export default function MajorSelection({
     }
   }
 
-  function updateMajorUseState(
+  function updateUserMajor(
     name: string,
     catalogYear: string,
     defaultPlannerId: string,
@@ -172,6 +167,7 @@ export default function MajorSelection({
     setSelectedDefaultPlanner(defaultPlannerId);
   }
 
+  // Handlers
   function handleSaveCompleted() {
     setDefaultPlanner(plannerData);
 
@@ -275,7 +271,7 @@ export default function MajorSelection({
           </div>
           <div className="col-span-2">
             <SelectMajorName
-              major={major}
+              selectedMajor={major}
               majors={majors}
               onChange={handleChangeMajor}
             />

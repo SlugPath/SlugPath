@@ -1,6 +1,6 @@
+import { PlannerData, findCoursesInQuarter } from "@/app/types/Planner";
 import { quartersPerYear } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
-import { PlannerData, findCoursesInQuarter } from "@customTypes/PlannerData";
 import { Quarter } from "@customTypes/Quarter";
 
 import MiniQuarterCard from "../MiniQuarterCard";

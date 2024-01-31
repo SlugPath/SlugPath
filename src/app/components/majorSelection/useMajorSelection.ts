@@ -1,6 +1,5 @@
-import { MajorInput } from "@/graphql/major/schema";
-import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
-import { useMutation, useQuery } from "@apollo/client";
+import { MajorInput, getUserMajor, updateUserMajor } from "@/app/actions/major";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 /**
  *
@@ -10,33 +9,36 @@ import { useMutation, useQuery } from "@apollo/client";
  */
 export default function useMajorSelection(
   userId?: string,
-  onCompleted?: () => void,
+  onSuccess?: () => void,
 ) {
-  // Get user major data from backend
   const {
-    data: majorData,
-    loading: loadingMajorData,
+    data: userMajorData,
+    isLoading: loadingMajorData,
     refetch,
     error: errorLoadingMajorData,
-  } = useQuery(GET_MAJOR, {
-    variables: {
-      userId: userId,
+  } = useQuery({
+    queryKey: ["userMajor", userId],
+    queryFn: async () => {
+      if (userId === undefined) return undefined;
+      return await getUserMajor(userId);
     },
-    skip: userId === undefined,
   });
 
   // Update user major data
-  const userMajorData = majorData ? majorData.getUserMajor : null;
-  const [
-    saveMajor,
-    { loading: loadingSaveMajor, error: errorSavingMajorData },
-  ] = useMutation(SAVE_MAJOR, {
-    onCompleted: () => {
-      if (onCompleted !== undefined) onCompleted();
-      refetch();
+  const {
+    mutate: saveMajor,
+    isPending: loadingSaveMajor,
+    isError: errorSavingMajorData,
+  } = useMutation({
+    mutationFn: async (majorInput: MajorInput) => {
+      return await updateUserMajor(majorInput);
     },
-    onError: (err) => {
-      console.error(err);
+    onSuccess: () => {
+      refetch();
+
+      if (onSuccess) {
+        onSuccess();
+      }
     },
   });
 
@@ -53,11 +55,7 @@ export default function useMajorSelection(
       userId: userId,
     };
 
-    saveMajor({
-      variables: {
-        input: majorInput,
-      },
-    });
+    saveMajor(majorInput);
   }
 
   return {

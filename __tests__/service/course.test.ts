@@ -1,4 +1,4 @@
-import { courseInfo } from "@/app/actions/search";
+import { courseInfo } from "@/app/actions/course";
 import { StoredCourse } from "@/app/types/Course";
 import prisma from "@/lib/prisma";
 import { compareCoursesByNum } from "@/lib/utils";

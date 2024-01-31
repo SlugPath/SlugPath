@@ -1,4 +1,4 @@
-import { courseInfo } from "@/app/actions/search";
+import { courseInfo } from "@/app/actions/course";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";

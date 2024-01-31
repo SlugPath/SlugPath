@@ -1,3 +1,4 @@
+import { PlannerData } from "@/app/types/Planner";
 import {
   getGeSatisfied,
   getTotalCredits,
@@ -5,7 +6,6 @@ import {
 } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
-import { PlannerData } from "@customTypes/PlannerData";
 import { Term, findQuarter } from "@customTypes/Quarter";
 import useAutosave from "@hooks/useAutosave";
 import { useState } from "react";

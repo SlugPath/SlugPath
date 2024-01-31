@@ -1,7 +1,7 @@
+import { PlannerData, findCoursesInQuarter } from "@/app/types/Planner";
 import { quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
-import { PlannerData, findCoursesInQuarter } from "@customTypes/PlannerData";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { Card } from "@mui/joy";

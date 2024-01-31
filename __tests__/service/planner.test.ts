@@ -1,9 +1,9 @@
-import { coursesBy, getAllDepartments } from "@/app/actions/search";
+import { coursesBy, getAllDepartments } from "@/app/actions/course";
+import { PlannerData } from "@/app/types/Planner";
 import { MajorService } from "@/graphql/major/service";
 import { PlannerService } from "@/graphql/planner/service";
 import { initialPlanner, serializePlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
-import { PlannerData } from "@customTypes/PlannerData";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 

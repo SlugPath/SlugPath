@@ -1,11 +1,11 @@
 import { StoredCourse } from "@/app/types/Course";
 import { Label } from "@/app/types/Label";
+import { PlannerData, findCourseById } from "@/app/types/Planner";
 import {
   PlannerDataInput,
   PlannerData as PlannerDataOutput,
   QuarterInput,
 } from "@/graphql/planner/schema";
-import { PlannerData, findCourseById } from "@customTypes/PlannerData";
 import { Quarter } from "@customTypes/Quarter";
 import { Term } from "@customTypes/Quarter";
 import { LabelColor } from "@prisma/client";

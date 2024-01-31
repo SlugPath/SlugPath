@@ -1,4 +1,5 @@
 import { SetState } from "@/app/types/Common";
+import { PlannerData } from "@/app/types/Planner";
 import { PlannerTitle } from "@/graphql/planner/schema";
 import { GET_PLANNER, GET_PLANNERS } from "@/graphql/queries";
 import { initialLabels } from "@/lib/labels";
@@ -10,7 +11,6 @@ import {
 import { removeTypenames } from "@/lib/utils";
 import { ApolloError, useLazyQuery } from "@apollo/client";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { PlannerData } from "@customTypes/PlannerData";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -82,7 +82,7 @@ export const useLoadAllPlanners = (
  */
 export const useLoadDefaultPlanner = (userId?: string) => {
   const { userMajorData } = useMajorSelection(userId);
-  const plannerId = userMajorData?.defaultPlannerId;
+  const plannerId = userMajorData?.defaultPlannerId ?? "";
   const skipLoad = userMajorData === undefined || plannerId === undefined;
 
   return useLoadPlanner({
@@ -158,7 +158,7 @@ export const useLoadPlanner = ({
   defaultPlanner,
   skipLoad,
 }: {
-  plannerId: string;
+  plannerId: string | undefined;
   userId: string | undefined;
   defaultPlanner: PlannerData;
   skipLoad?: boolean;

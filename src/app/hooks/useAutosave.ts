@@ -1,7 +1,7 @@
+import { PlannerData } from "@/app/types/Planner";
 import { serializePlanner } from "@/lib/plannerUtils";
 import { debounce } from "@/lib/utils";
 import { gql, useMutation } from "@apollo/client";
-import { PlannerData } from "@customTypes/PlannerData";
 import { useEffect, useRef } from "react";
 
 const SAVE_PLANNER = gql`
