@@ -45,15 +45,16 @@ export default function CourseInfoModal() {
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ["course", course?.departmentCode, course?.number],
-    enabled: course !== undefined && !isCustomCourse(course),
     queryFn: async () => {
-      const res = await fetch("/api/course", {
-        method: "POST",
-        body: JSON.stringify({
-          departmentCode: course?.departmentCode ?? "",
-          number: course?.number ?? "",
-        }),
-      });
+      // Don't fetch if the course is undefined or a custom course
+      if (course === undefined || isCustomCourse(course)) return undefined;
+      const res = await fetch(
+        "/api/course?" +
+          new URLSearchParams({
+            departmentCode: course.departmentCode,
+            number: course.number,
+          }),
+      );
       return storedCourseSchema.parse(await res.json());
     },
   });

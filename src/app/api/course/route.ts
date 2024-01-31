@@ -1,9 +1,13 @@
-import { queryDetailsSchema } from "@/app/types/Course";
 import { CourseService } from "@/graphql/course/service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
-  const queryParams = queryDetailsSchema.parse(await request.json());
-  const res = new CourseService().coursesBy(queryParams);
+export async function GET(request: NextRequest) {
+  const departmentCode =
+    request.nextUrl.searchParams.get("departmentCode") ?? "";
+  const number = request.nextUrl.searchParams.get("number") ?? "";
+  const res = await new CourseService().courseBy({
+    departmentCode,
+    number,
+  });
   return NextResponse.json(res);
 }

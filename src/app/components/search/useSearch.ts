@@ -35,10 +35,15 @@ export default function useSearch() {
     placeholderData: keepPreviousData,
     queryFn: async () => {
       try {
-        const res = await fetch("/api/courses", {
-          method: "POST",
-          body: JSON.stringify(queryDetails),
-        });
+        const { departmentCode, number, ge } = queryDetails;
+        const res = await fetch(
+          "/api/courses?" +
+            new URLSearchParams({
+              departmentCode,
+              number,
+              ge,
+            }),
+        );
         return await storedCoursesSchema.parse(await res.json());
       } catch (e) {
         console.error(e);

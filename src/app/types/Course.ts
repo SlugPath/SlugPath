@@ -50,7 +50,7 @@ export const queryDetailsSchema = z.object({
   ge: z.string(),
 });
 
-export type QueryDetails = z.infer<typeof queryDetailsSchema>;
+export type SearchQueryDetails = z.infer<typeof queryDetailsSchema>;
 
 export const courseQuerySchema = z.object({
   departmentCode: z.string(),

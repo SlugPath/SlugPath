@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { QueryDetails, SearchParams, StoredCourse } from "@customTypes/Course";
+import {
+  CourseQuery,
+  SearchParams,
+  SearchQueryDetails,
+  StoredCourse,
+} from "@customTypes/Course";
 import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
@@ -58,7 +63,7 @@ export class CourseService {
    * `coursesBy` returns a list of courses that satisfies a predicate `pred`,
    * @returns a list of `Course`
    */
-  public async coursesBy(pred: QueryDetails): Promise<StoredCourse[]> {
+  public async coursesBy(pred: SearchQueryDetails): Promise<StoredCourse[]> {
     const departmentCodeParam = () => {
       if (pred.departmentCode?.length != 0) {
         return {
@@ -118,7 +123,7 @@ export class CourseService {
    * or null if no such course exists
    * @returns a `Course` instance
    */
-  public async courseBy(pred: QueryDetails): Promise<StoredCourse | null> {
+  public async courseBy(pred: CourseQuery): Promise<StoredCourse | null> {
     const course = await prisma.course.findFirst({
       where: {
         departmentCode: pred.departmentCode,
