@@ -45,16 +45,16 @@ export type SearchParams = z.infer<typeof searchParamsSchema>;
 
 // Query Details is a type to represent the query details for the search bar i.e. GE and course number
 export const queryDetailsSchema = z.object({
-  departmentCode: z.string(),
-  number: z.string(),
-  ge: z.string(),
+  departmentCode: z.string().optional(),
+  number: z.string().optional(),
+  ge: z.string().optional(),
 });
 
 export type SearchQueryDetails = z.infer<typeof queryDetailsSchema>;
 
 export const courseQuerySchema = z.object({
-  departmentCode: z.string(),
-  number: z.string(),
+  departmentCode: z.string().optional(),
+  number: z.string().optional(),
 });
 
 export type CourseQuery = z.infer<typeof courseQuerySchema>;

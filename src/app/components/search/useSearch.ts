@@ -1,5 +1,5 @@
+import { coursesBy, getAllDepartments } from "@/app/actions/search";
 import { geOptions } from "@/lib/consts";
-import { searchParamsSchema, storedCoursesSchema } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -10,9 +10,8 @@ export default function useSearch() {
     queryKey: ["departments"],
     queryFn: async () => {
       try {
-        const res = await fetch("/api/departments");
-        const departments = await searchParamsSchema.parse(await res.json());
-        return [{ label: "--", value: null }, ...departments];
+        const depts = await getAllDepartments();
+        return [{ label: "--", value: null }, ...depts];
       } catch (e) {
         console.error(e);
       }
@@ -35,16 +34,8 @@ export default function useSearch() {
     placeholderData: keepPreviousData,
     queryFn: async () => {
       try {
-        const { departmentCode, number, ge } = queryDetails;
-        const res = await fetch(
-          "/api/courses?" +
-            new URLSearchParams({
-              departmentCode,
-              number,
-              ge,
-            }),
-        );
-        return await storedCoursesSchema.parse(await res.json());
+        const res = await coursesBy(queryDetails);
+        return res;
       } catch (e) {
         console.error(e);
       }

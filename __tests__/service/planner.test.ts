@@ -1,4 +1,4 @@
-import { CourseService } from "@/graphql/course/service";
+import { coursesBy, getAllDepartments } from "@/app/actions/search";
 import { MajorService } from "@/graphql/major/service";
 import { PlannerService } from "@/graphql/planner/service";
 import { initialPlanner, serializePlanner } from "@/lib/plannerUtils";
@@ -223,26 +223,22 @@ it("should return null to delete missing planner", async () => {
 });
 
 it("should handle department retrieval correctly", async () => {
-  const service = new CourseService();
-
-  const departments = await service.getAllDepartments();
+  const departments = await getAllDepartments();
 
   expect(departments).toBeDefined();
   expect(Array.isArray(departments)).toBe(true);
   expect(departments).toContainEqual(
-    expect.objectContaining({ name: "Computer Science and Engineering" }),
+    expect.objectContaining({ label: "Computer Science and Engineering" }),
   );
   expect(departments).toContainEqual(
-    expect.objectContaining({ name: "Mathematics" }),
+    expect.objectContaining({ label: "Mathematics" }),
   );
 });
 
 it("should filter courses by GE requirement", async () => {
-  const service = new CourseService();
-
   // Test filtering by a specific GE requirement
   const geFilter = "mf";
-  const filteredCourses = await service.coursesBy({
+  const filteredCourses = await coursesBy({
     departmentCode: "CSE",
     ge: geFilter,
   });

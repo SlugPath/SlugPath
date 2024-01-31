@@ -1,7 +1,7 @@
-import { Course } from "@/graphql/course/schema";
-import { CourseService } from "@/graphql/course/service";
-import { compareCoursesByNum } from "@/graphql/course/service";
+import { courseInfo } from "@/app/actions/search";
+import { StoredCourse } from "@/app/types/Course";
 import prisma from "@/lib/prisma";
+import { compareCoursesByNum } from "@/lib/utils";
 
 beforeAll(async () => {
   await prisma.course.createMany({
@@ -48,15 +48,16 @@ afterAll(async () => {
 
 describe("test courseBy", () => {
   it("should return the specified course", async () => {
-    const service = new CourseService();
-
-    const course = await service.courseBy({
+    const course = await courseInfo({
       departmentCode: "CSE",
       number: "3",
     });
 
     expect(course).toBeDefined();
-    expect(course).toEqual({
+    const { id, labels, ...rest } = course as StoredCourse;
+    expect(id).toBeDefined();
+    expect(labels).toBeDefined();
+    expect(rest).toEqual({
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       title: "Personal Computer Concepts: Software and Hardware",
@@ -70,9 +71,7 @@ describe("test courseBy", () => {
   });
 
   it("should return the first course that matches the query input", async () => {
-    const service = new CourseService();
-
-    const course = await service.courseBy({
+    const course = await courseInfo({
       departmentCode: "CSE",
     });
 
@@ -81,23 +80,24 @@ describe("test courseBy", () => {
   });
 
   it("should return null if no courses match the query input", async () => {
-    const service = new CourseService();
-
-    const course = await service.courseBy({
+    const course = await courseInfo({
       departmentCode: "MATH",
     });
 
-    expect(course).toBeNull();
+    expect(course).toBeUndefined();
   });
 
   it("should set description as an empty string if not defined", async () => {
-    const course = await new CourseService().courseBy({
+    const course = await courseInfo({
       departmentCode: "CSE",
       number: "123",
     });
 
     expect(course).toBeDefined();
-    expect(course).toEqual({
+    const { id, labels, ...rest } = course as StoredCourse;
+    expect(id).toBeDefined();
+    expect(labels).toBeDefined();
+    expect(rest).toEqual({
       departmentCode: "CSE",
       credits: 5,
       department: "Computer Science and Engineering",
@@ -113,8 +113,8 @@ describe("test courseBy", () => {
 
 describe("test compareCoursesByNum", () => {
   it("compare courses by department", () => {
-    const a: Course = {
-      department: "Computer Science and Engineering",
+    const a: StoredCourse = {
+      id: "foo",
       departmentCode: "CSE",
       number: "101",
       title: "Introduction to Data Structures and Algorithms",
@@ -123,9 +123,10 @@ describe("test compareCoursesByNum", () => {
       ge: [],
       credits: 5,
       quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [],
     };
-    const b: Course = {
-      department: "Anthropology",
+    const b: StoredCourse = {
+      id: "bar",
       departmentCode: "ANTH",
       number: "1",
       title: "Introduction to Anthropology",
@@ -134,6 +135,7 @@ describe("test compareCoursesByNum", () => {
       ge: [],
       credits: 5,
       quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [],
     };
 
     expect(compareCoursesByNum(a, b)).toEqual(1);
@@ -141,8 +143,8 @@ describe("test compareCoursesByNum", () => {
   });
 
   it("compare courses by course number and letter suffix", () => {
-    const a: Course = {
-      department: "Computer Science and Engineering",
+    const a: any = {
+      id: "sd",
       departmentCode: "CSE",
       number: "101",
       title: "Introduction to Data Structures and Algorithms",
@@ -151,9 +153,9 @@ describe("test compareCoursesByNum", () => {
       ge: [],
       credits: 5,
       quartersOffered: ["Fall", "Winter", "Spring"],
+      labels: [],
     };
-    const b: Course = {
-      department: "Computer Science and Engineering",
+    const b: any = {
       departmentCode: "CSE",
       number: "101M",
       title: "Introduction to Proof-Writing",
@@ -162,6 +164,7 @@ describe("test compareCoursesByNum", () => {
       ge: [],
       credits: 5,
       quartersOffered: ["Fall", "Winter"],
+      labels: [],
     };
 
     expect(compareCoursesByNum(a, b)).toEqual(-1);
@@ -169,7 +172,7 @@ describe("test compareCoursesByNum", () => {
   });
 
   it("compare courses by number", () => {
-    const a: Course = {
+    const a: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101",
@@ -180,7 +183,7 @@ describe("test compareCoursesByNum", () => {
       credits: 5,
       quartersOffered: ["Fall", "Winter", "Spring"],
     };
-    const b: Course = {
+    const b: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "102",
@@ -197,7 +200,7 @@ describe("test compareCoursesByNum", () => {
   });
 
   it("compare courses by letter suffix", () => {
-    const a: Course = {
+    const a: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101A",
@@ -208,7 +211,7 @@ describe("test compareCoursesByNum", () => {
       credits: 5,
       quartersOffered: ["Fall", "Winter", "Spring"],
     };
-    const b: Course = {
+    const b: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101M",
@@ -225,7 +228,7 @@ describe("test compareCoursesByNum", () => {
   });
 
   it("compare two courses with same number and letter suffix", () => {
-    const a: Course = {
+    const a: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101M",
@@ -237,7 +240,7 @@ describe("test compareCoursesByNum", () => {
       quartersOffered: ["Fall", "Winter"],
     };
 
-    const b: Course = {
+    const b: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101M",
@@ -254,7 +257,7 @@ describe("test compareCoursesByNum", () => {
   });
 
   it("compare two courses with same numbers", () => {
-    const a: Course = {
+    const a: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101",
@@ -266,7 +269,7 @@ describe("test compareCoursesByNum", () => {
       quartersOffered: ["Fall", "Winter"],
     };
 
-    const b: Course = {
+    const b: any = {
       department: "Computer Science and Engineering",
       departmentCode: "CSE",
       number: "101",

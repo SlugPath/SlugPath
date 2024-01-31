@@ -1,7 +1,8 @@
+import { courseInfo } from "@/app/actions/search";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
-import { StoredCourse, storedCourseSchema } from "@customTypes/Course";
+import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { WarningAmberRounded } from "@mui/icons-material";
 import {
@@ -48,14 +49,11 @@ export default function CourseInfoModal() {
     queryFn: async () => {
       // Don't fetch if the course is undefined or a custom course
       if (course === undefined || isCustomCourse(course)) return undefined;
-      const res = await fetch(
-        "/api/course?" +
-          new URLSearchParams({
-            departmentCode: course.departmentCode,
-            number: course.number,
-          }),
-      );
-      return storedCourseSchema.parse(await res.json());
+      const res = await courseInfo({
+        departmentCode: course.departmentCode,
+        number: course.number,
+      });
+      return res;
     },
   });
 

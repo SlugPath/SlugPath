@@ -17,7 +17,7 @@ const customJestConfig = {
   },
 
   // Configure testing environment
-  testEnvironment: "jest-environment-jsdom",
+  testEnvironment: "node",
 
   // Specify files to collect coverage from
   collectCoverageFrom: ["src/**/*.{ts,tsx}", "!**/node_modules/**"],
