@@ -32,6 +32,7 @@ export async function upsertPlanner({
     ...l,
     color: l.color as LabelColor,
   }));
+
   const notes = plannerData.notes;
 
   const newQuarters = plannerData.quarters.map((q) => {
@@ -41,7 +42,6 @@ export async function upsertPlanner({
       if (!c) {
         throw new Error(`Course with id ${cid} not found`);
       }
-
       return {
         ...c,
         ge: [...c.ge],
@@ -147,7 +147,7 @@ export type PlannerInput = {
 export async function getPlanner({
   userId,
   plannerId,
-}: PlannerInput): Promise<PlannerData> {
+}: PlannerInput): Promise<PlannerData | null> {
   const p = await prisma.planner.findUnique({
     where: {
       userId,
@@ -163,9 +163,7 @@ export async function getPlanner({
     },
   });
 
-  if (p === null) throw new Error("Planner not found");
-
-  return toPlannerData(p);
+  return p ? toPlannerData(p) : null;
 }
 
 /**
@@ -208,7 +206,15 @@ function toPlannerData(planner: any): PlannerData {
   planner?.quarters.forEach((q: any) => {
     const quarterId = `quarter-${q.year}-${q.term}`;
     const courseIds: string[] = q.courses.map((c: StoredCourse) => c.id);
-    allCourses.push(...q.courses);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const courses = q.courses.map(({ quarterId: _, ...rest }: any) => {
+      return {
+        ...rest,
+        quartersOffered: rest.quartersOffered.map((q: any) => q as Term),
+        ge: rest.ge.map((g: any) => g as string),
+      };
+    });
+    allCourses.push(...courses);
     newPlanner.quarters.push({
       id: quarterId,
       title: `${q.term}`,
@@ -216,7 +222,10 @@ function toPlannerData(planner: any): PlannerData {
     });
   });
 
-  newPlanner.labels = [...planner.labels];
+  newPlanner.labels = [
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ...planner.labels.map(({ plannerId: _, ...l }: any) => l),
+  ];
   newPlanner.notes = planner.notes ? planner.notes : "";
   newPlanner.courses = allCourses;
 

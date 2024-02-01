@@ -1,7 +1,7 @@
 import { getAllMajors } from "@/app/actions/major";
+import { useLoadPlanner } from "@/app/hooks/useLoad";
 import { years } from "@/lib/defaultPlanners";
 import { emptyPlanner } from "@/lib/plannerUtils";
-import { useLoadPlanner } from "@components/planners/useLoad";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
@@ -52,11 +52,9 @@ export default function MajorSelection({
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear],
     queryFn: async () => {
-      if (catalogYear === "") {
-        return [];
-      }
       return await getAllMajors(catalogYear);
     },
+    enabled: catalogYear !== "",
   });
   const { data: session } = useSession();
 

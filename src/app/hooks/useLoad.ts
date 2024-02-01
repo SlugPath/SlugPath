@@ -1,15 +1,14 @@
 import { getAllPlanners, getPlanner } from "@/app/actions/planner";
-import { SetState } from "@/app/types/Common";
-import { PlannerData } from "@/app/types/Planner";
-import { PlannerTitle } from "@/graphql/planner/schema";
 import { initialLabels } from "@/lib/labels";
 import { getTotalCredits, initialPlanner } from "@/lib/plannerUtils";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { SetState } from "@customTypes/Common";
+import { PlannerData, PlannerTitle } from "@customTypes/Planner";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import useMajorSelection from "../majorSelection/useMajorSelection";
+import useMajorSelection from "../components/majorSelection/useMajorSelection";
 
 /**
  * Custom hook to load all planners for a particular user
@@ -40,6 +39,7 @@ export const useLoadAllPlanners = (
       if (onLoadedPlanners) {
         onLoadedPlanners(res.length);
       }
+      return res;
     },
     enabled: !!userId,
   });
@@ -77,18 +77,18 @@ export const useLoadPlanner = ({
   const { setHasAutoFilled } = useContext(DefaultPlannerContext);
   const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
   const { isLoading: loading, error } = useQuery({
-    queryKey: ["getPlanner", userId, plannerId, defaultPlanner],
+    queryKey: ["getPlanner", userId, plannerId],
     queryFn: async () => {
-      if (skipLoad) return undefined;
       const res = await getPlanner({
-        userId: userId ?? "",
-        plannerId: plannerId ?? "",
+        userId: userId!,
+        plannerId: plannerId!,
       });
       if (res) {
         setPlanner(res);
       } else {
         autofillWithDefaultPlanner();
       }
+      return res;
     },
     enabled: !skipLoad,
   });

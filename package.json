@@ -17,7 +17,6 @@
     "init-db": "npx prisma migrate deploy && npx prisma db seed"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.10",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@hello-pangea/dnd": "^16.5.0",
@@ -39,8 +38,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-virtualized": "^9.22.5",
-    "reflect-metadata": "^0.2.1",
-    "use-react-query-auto-sync": "^0.1.0",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
@@ -69,8 +66,6 @@
     "eslint-config-next": "13.5.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-typescript": "^3.0.0",
-    "graphql": "^15.8.0",
-    "graphql-yoga": "^4.0.5",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -83,9 +78,7 @@
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.2",
     "tsx": "^3.14.0",
-    "type-graphql": "^1.1.1",
-    "typescript": "^5.3.3",
-    "whatwg-fetch": "^3.6.20"
+    "typescript": "^5.3.3"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

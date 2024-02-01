@@ -8,12 +8,12 @@ export default function useDefaultPlanners(
   const { data: majorDefaultPlanners, isLoading: loading } = useQuery({
     queryKey: ["majorDefaults", catalogYear, majorName],
     queryFn: async () => {
-      if (catalogYear === "" || majorName === "") return undefined;
       return await getMajorDefaultPlanners({
         catalogYear,
         name: majorName,
       });
     },
+    enabled: !!catalogYear && !!majorName,
   });
 
   return {

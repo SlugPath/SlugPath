@@ -1,11 +1,9 @@
-import { PlannerTitle } from "@/graphql/planner/schema";
 import { DropResult } from "@hello-pangea/dnd";
-import { ReactQueryAutoSyncSaveStatus } from "use-react-query-auto-sync";
 
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
-import { PlannerData } from "./Planner";
+import { PlannerData, PlannerTitle } from "./Planner";
 
 type setShow = SetState<boolean>;
 
@@ -29,7 +27,9 @@ export interface PlannerContextProps {
   geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
-  saveStatus: ReactQueryAutoSyncSaveStatus;
+  savePlanner: () => void;
+  saveStatus: boolean;
+  saveError: boolean;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
   editCourseLabels: (course: StoredCourse) => void;

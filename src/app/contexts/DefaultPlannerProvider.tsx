@@ -1,4 +1,4 @@
-import { useLoadDefaultPlanner } from "@components/planners/useLoad";
+import { useLoadDefaultPlanner } from "@/app/hooks/useLoad";
 import { DefaultPlannerContextProps } from "@customTypes/Context";
 import { useSession } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";

@@ -22,17 +22,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Provider>
-        <ScreenSizeWarning />
-        <body className={inter.className}>
+      <body className={inter.className}>
+        <Provider>
+          <ScreenSizeWarning />
           <div className="bg-bg-light dark:bg-bg-dark min-h-screen pb-1">
             <Navbar />
             <BetaWarning />
             <UnauthenticatedWarning />
             {children}
           </div>
-        </body>
-      </Provider>
+        </Provider>
+      </body>
     </html>
   );
 }

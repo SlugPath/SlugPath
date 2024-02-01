@@ -1,4 +1,4 @@
-import { useLoadPlanner } from "@/app/components/planners/useLoad";
+import { useLoadPlanner } from "@/app/hooks/useLoad";
 import { EMPTY_PLANNER, emptyPlanner } from "@/lib/plannerUtils";
 import { Card, Skeleton } from "@mui/joy";
 

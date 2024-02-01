@@ -1,7 +1,6 @@
-import { getPlanner, upsertPlanner } from "@/app/actions/planner";
+import { upsertPlanner } from "@/app/actions/planner";
 import { PlannerData } from "@/app/types/Planner";
 import {
-  emptyPlanner,
   findQuarter,
   getGeSatisfied,
   getTotalCredits,
@@ -10,8 +9,10 @@ import {
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { Term } from "@customTypes/Quarter";
-import { useMemo, useState } from "react";
-import { useReactQueryAutoSync } from "use-react-query-auto-sync";
+import { useMutation } from "@tanstack/react-query";
+import { useCallback, useMemo, useState } from "react";
+
+import { useLoadUserPlanner } from "../../hooks/useLoad";
 
 export default function usePlanner(
   input: {
@@ -23,36 +24,50 @@ export default function usePlanner(
   skipLoad?: boolean,
 ) {
   // Auto-saving
+  const [courseState, setCourseState] = useLoadUserPlanner({
+    userId: input.userId,
+    plannerId: input.plannerId,
+    skipLoad,
+  });
+
   const {
-    draft: courseState = emptyPlanner(),
-    setDraft: setCourseState,
-    saveStatus,
-  } = useReactQueryAutoSync<PlannerData>({
-    queryOptions: {
-      queryKey: ["getPlanner", input],
-      queryFn: async () => {
-        return await getPlanner({
-          userId: input.userId!,
-          plannerId: input.plannerId,
-        });
-      },
-      enabled: !skipLoad,
+    mutate,
+    isPending: saveStatus,
+    isError: saveError,
+  } = useMutation({
+    mutationFn: async (input: {
+      userId: string;
+      plannerId: string;
+      plannerData: PlannerData;
+      title: string;
+      order: number;
+    }) => {
+      await upsertPlanner(input);
     },
-    mutationOptions: {
-      mutationKey: ["upsertPlanner", input],
-      mutationFn: async (data: PlannerData) => {
-        if (!input.userId) return;
-        return await upsertPlanner({
-          ...input,
-          userId: input.userId!,
-          plannerData: data,
-        });
-      },
+    onSuccess: () => {
+      console.log("Planner saved");
     },
-    autoSaveOptions: {
-      wait: 1000,
+    onError: (err) => {
+      console.error(err);
     },
   });
+
+  const savePlanner = useCallback(() => {
+    mutate({
+      userId: input.userId!,
+      plannerId: input.plannerId,
+      plannerData: courseState,
+      title: input.title,
+      order: input.order,
+    });
+  }, [
+    courseState,
+    input.order,
+    input.plannerId,
+    input.title,
+    input.userId,
+    mutate,
+  ]);
 
   const handleCourseUpdate = (newState: PlannerData) => {
     setCourseState(newState);
@@ -170,6 +185,8 @@ export default function usePlanner(
     totalCredits,
     geSatisfied,
     saveStatus,
+    saveError,
+    savePlanner,
     deleteCourse,
     editCustomCourse,
     handleCourseUpdate,

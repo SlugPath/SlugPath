@@ -1,14 +1,27 @@
+import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
+import { SaveRounded } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { Button, Card } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useContext } from "react";
 
 export default function PlannerActions() {
   const { setShowExportModal, setShowMajorSelectionModal } =
     useContext(ModalsContext);
+  const session = useSession();
+  const { savePlanner } = useContext(PlannerContext);
   return (
     <Card variant="plain" className="flex flex-col gap-1">
+      {session.status === "authenticated" ? (
+        <Button onClick={savePlanner} variant="plain">
+          <div className="flex flex-row gap-1 items-center">
+            <SaveRounded fontSize="large" />
+            Save Plan
+          </div>
+        </Button>
+      ) : null}
       <Button onClick={() => setShowExportModal(true)} variant="plain">
         <div className="flex flex-row gap-1 items-center">
           <FileDownloadIcon fontSize="large" />

@@ -19,9 +19,9 @@ export default function useMajorSelection(
   } = useQuery({
     queryKey: ["userMajor", userId],
     queryFn: async () => {
-      if (userId === undefined) return undefined;
-      return await getUserMajor(userId);
+      return await getUserMajor(userId!);
     },
+    enabled: !!userId,
   });
 
   // Update user major data

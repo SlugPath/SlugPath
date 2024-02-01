@@ -1,6 +1,6 @@
-import { StoredCourse } from "@/graphql/planner/schema";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { PlannerContext } from "@contexts/PlannerProvider";
+import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { Add } from "@mui/icons-material";
 import { Button, Card, Typography } from "@mui/joy";

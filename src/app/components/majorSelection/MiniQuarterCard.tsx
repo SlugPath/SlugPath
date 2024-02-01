@@ -1,8 +1,7 @@
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PlannerContext } from "@/app/contexts/PlannerProvider";
-import { CourseTerm } from "@/app/types/Course";
-import { StoredCourse } from "@/graphql/planner/schema";
 import { isCustomCourse } from "@/lib/plannerUtils";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { CourseTerm, StoredCourse } from "@customTypes/Course";
 import { Quarter } from "@customTypes/Quarter";
 import { Card, Link, Typography } from "@mui/joy";
 import { useContext } from "react";

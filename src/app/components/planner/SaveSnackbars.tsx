@@ -21,7 +21,7 @@ export default function SaveSnackbars({
   }, [saving]);
 
   useEffect(() => {
-    if (saveError !== undefined) {
+    if (saveError) {
       setSaveOpen(false);
       setErrOpen(true);
     }

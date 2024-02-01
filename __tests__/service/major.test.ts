@@ -1,4 +1,9 @@
-import { MajorService } from "@/graphql/major/service";
+import {
+  getAllMajors,
+  getMajorDefaultPlanners,
+  getUserMajor,
+  updateUserMajor,
+} from "@/app/actions/major";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
 
@@ -123,12 +128,11 @@ it("should add major information for 1 user", async () => {
 
   if (user === null) fail("User was null (this should not happen)");
 
-  const service = new MajorService();
-  const userMajor = await service.getUserMajor(user.id);
+  const userMajor = await getUserMajor(user.id);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
-  const res = await service.updateUserMajor({
+  const res = await updateUserMajor({
     userId: user.id,
     ...majorData,
     defaultPlannerId,
@@ -136,7 +140,7 @@ it("should add major information for 1 user", async () => {
   expect(res.name).toBe(name);
   expect(res.catalogYear).toBe(catalogYear);
 
-  const check = await service.getUserMajor(user.id);
+  const check = await getUserMajor(user.id);
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
@@ -164,8 +168,7 @@ it("should fail since major doesn't exist", async () => {
   expect(user).not.toBeNull();
   if (user === null) fail("User was null (this should not happen)");
 
-  const service = new MajorService();
-  const userMajor = await service.getUserMajor(user.id);
+  const userMajor = await getUserMajor(user.id);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -173,7 +176,7 @@ it("should fail since major doesn't exist", async () => {
   const catalogYear = "2020-2021";
 
   await expect(
-    service.updateUserMajor({
+    updateUserMajor({
       userId: user.id,
       name,
       catalogYear,
@@ -195,7 +198,7 @@ it("should return an empty list", async () => {
     },
   });
 
-  const res = await new MajorService().getMajorDefaultPlanners({
+  const res = await getMajorDefaultPlanners({
     name,
     catalogYear,
   });
@@ -213,7 +216,7 @@ it("should return an empty list", async () => {
 });
 
 it("should return correct number of majors", async () => {
-  const res = await new MajorService().getAllMajors("2020-2021");
+  const res = await getAllMajors("2020-2021");
   expect(res).toHaveLength(0);
 
   await prisma.major.create({
@@ -223,7 +226,7 @@ it("should return correct number of majors", async () => {
     },
   });
 
-  const res2 = await new MajorService().getAllMajors("2020-2021");
+  const res2 = await getAllMajors("2020-2021");
   expect(res2).toHaveLength(1);
 });
 
@@ -255,13 +258,12 @@ it("should correctly add major information for 2 users", async () => {
     },
   });
 
-  const service = new MajorService();
-  const userMajor = await service.getUserMajor(user1?.id ?? "");
+  const userMajor = await getUserMajor(user1?.id ?? "");
   expect(userMajor).toBeNull();
   const defaultPlannerId = uuidv4();
 
   // User 1
-  const res = await service.updateUserMajor({
+  const res = await updateUserMajor({
     userId: user1?.id ?? "",
     ...majorData,
     defaultPlannerId,
@@ -270,7 +272,7 @@ it("should correctly add major information for 2 users", async () => {
   expect(res.catalogYear).toBe(catalogYear);
 
   // User 2
-  const res2 = await service.updateUserMajor({
+  const res2 = await updateUserMajor({
     userId: user2?.id ?? "",
     ...majorData,
     defaultPlannerId,
@@ -278,13 +280,13 @@ it("should correctly add major information for 2 users", async () => {
   expect(res2.name).toBe(name);
   expect(res2.catalogYear).toBe(catalogYear);
 
-  const check = await service.getUserMajor(user1?.id ?? "");
+  const check = await getUserMajor(user1?.id ?? "");
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
   expect(check?.defaultPlannerId).toBe(defaultPlannerId);
 
-  const check2 = await service.getUserMajor(user2?.id ?? "");
+  const check2 = await getUserMajor(user2?.id ?? "");
   expect(check2).not.toBeNull();
   expect(check2?.catalogYear).toBe(catalogYear);
   expect(check2?.name).toBe(name);

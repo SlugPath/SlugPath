@@ -1,4 +1,3 @@
-import { PlannerTitle } from "@/graphql/planner/schema";
 import {
   findCoursesInQuarter,
   findQuarter,
@@ -8,7 +7,7 @@ import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
-import { PlannerData } from "@customTypes/Planner";
+import { PlannerData, PlannerTitle } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import {

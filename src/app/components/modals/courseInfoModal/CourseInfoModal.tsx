@@ -48,13 +48,13 @@ export default function CourseInfoModal() {
     queryKey: ["course", course?.departmentCode, course?.number],
     queryFn: async () => {
       // Don't fetch if the course is undefined or a custom course
-      if (course === undefined || isCustomCourse(course)) return undefined;
       const res = await courseInfo({
-        departmentCode: course.departmentCode,
-        number: course.number,
+        departmentCode: course!.departmentCode,
+        number: course!.number,
       });
       return res;
     },
+    enabled: course && !isCustomCourse(course),
   });
 
   // This is to prevent illegally opening the modal
