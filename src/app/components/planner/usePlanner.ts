@@ -9,10 +9,9 @@ import {
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { Term } from "@customTypes/Quarter";
+import { useLoadUserPlanner } from "@hooks/useLoad";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useMemo, useState } from "react";
-
-import { useLoadUserPlanner } from "../../hooks/useLoad";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function usePlanner(
   input: {
@@ -23,13 +22,14 @@ export default function usePlanner(
   },
   skipLoad?: boolean,
 ) {
-  // Auto-saving
   const [courseState, setCourseState] = useLoadUserPlanner({
     userId: input.userId,
     plannerId: input.plannerId,
     skipLoad,
   });
 
+  // Saving
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const {
     mutate,
     isPending: saveStatus,
@@ -45,7 +45,7 @@ export default function usePlanner(
       await upsertPlanner(input);
     },
     onSuccess: () => {
-      console.log("Planner saved");
+      setUnsavedChanges(false);
     },
     onError: (err) => {
       console.error(err);
@@ -69,8 +69,22 @@ export default function usePlanner(
     mutate,
   ]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (unsavedChanges) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [unsavedChanges]);
+
   const handleCourseUpdate = (newState: PlannerData) => {
     setCourseState(newState);
+    setUnsavedChanges(true);
   };
 
   const totalCredits = useMemo(
@@ -184,6 +198,7 @@ export default function usePlanner(
     courseState,
     totalCredits,
     geSatisfied,
+    unsavedChanges,
     saveStatus,
     saveError,
     savePlanner,

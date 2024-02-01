@@ -30,6 +30,7 @@ export interface PlannerContextProps {
   savePlanner: () => void;
   saveStatus: boolean;
   saveError: boolean;
+  unsavedChanges: boolean;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
   editCourseLabels: (course: StoredCourse) => void;
