@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Migrations
 on:
   push:
     branches:
@@ -11,12 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
-          version: 8
+          node-version: 21
+          cache: "yarn"
 
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install --frozen-lockfile
 
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy

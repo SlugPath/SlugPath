@@ -5,7 +5,7 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { CheckCircleOutlined, SaveOutlined } from "@mui/icons-material";
+import { CheckCircleRounded, WarningRounded } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -24,7 +24,6 @@ import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
 import PlannerActionsCard from "./PlannerActionsCard";
 import SaveSnackbars from "./SaveSnackbars";
-import ShortcutTooltip from "./ShortcutTooltip";
 import { GEProgress } from "./graduationProgress/GEProgress";
 import { GradProgress } from "./graduationProgress/GradProgress";
 import QuarterCard from "./quarters/QuarterCard";
@@ -44,7 +43,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   const { hasAutoFilled, setHasAutoFilled } = useContext(DefaultPlannerContext);
 
   const icon = useMemo(
-    () => (unsavedChanges ? <SaveOutlined /> : <CheckCircleOutlined />),
+    () => (unsavedChanges ? <WarningRounded /> : <CheckCircleRounded />),
     [unsavedChanges],
   );
 
@@ -81,19 +80,17 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <Search />
               </div>
               <div className="flex flex-col w-full">
-                <ShortcutTooltip title="Save planner" shortcut={"S"}>
-                  <Typography
-                    className="mb-2"
-                    level="body-md"
-                    justifyContent="center"
-                    color="primary"
-                    startDecorator={icon}
-                  >
-                    {unsavedChanges
-                      ? "You have unsaved changes..."
-                      : "All changes saved"}
-                  </Typography>
-                </ShortcutTooltip>
+                <Typography
+                  className="mb-2 text-center"
+                  level="body-md"
+                  justifyContent="center"
+                  color="primary"
+                  startDecorator={icon}
+                >
+                  {unsavedChanges
+                    ? "You have unsaved changes..."
+                    : "All changes saved"}
+                </Typography>
                 <h3 className="mb-2 text-center text-cyan-600"></h3>
                 <div className="overflow-auto w-full flex-grow">
                   <AccordionGroup>

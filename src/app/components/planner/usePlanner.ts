@@ -29,7 +29,7 @@ export default function usePlanner(
   });
 
   // Saving
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(true);
   const {
     mutate,
     isPending: saveStatus,
@@ -69,6 +69,7 @@ export default function usePlanner(
     mutate,
   ]);
 
+  // Prevent user from accidentally leaving the page with unsaved changes
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (unsavedChanges) {
@@ -86,6 +87,10 @@ export default function usePlanner(
     setCourseState(newState);
     setUnsavedChanges(true);
   };
+
+  useEffect(() => {
+    setUnsavedChanges(true);
+  }, [input.title]);
 
   const totalCredits = useMemo(
     () => getTotalCredits(courseState.courses!),
