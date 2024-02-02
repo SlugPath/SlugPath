@@ -16,53 +16,38 @@ env:
   NEXTAUTH_SECRET: "github-actions"
 
 jobs:
-  print-commit:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Print Git Commit
         run: echo ${{ github.sha}}
 
-  format:
-    runs-on: ubuntu-latest
-    needs: print-commit
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: "21"
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Check Format
         run: yarn format:check
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: format
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "21"
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Lint
         run: yarn lint
 
-  build-and-test:
-    runs-on: ubuntu-latest
-    needs: lint
+      - name: Setup Postgres DB
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Run Jest Tests
+        run: yarn test
+
     services:
       postgres:
         image: postgres:alpine
@@ -79,24 +64,3 @@ jobs:
           --health-retries 5
     env:
       POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "21"
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Setup Postgres DB
-        run: |
-          npx prisma generate
-          npx prisma migrate deploy
-
-      - name: Run Jest Tests
-        run: yarn test

@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable CorePack
+        run: corepack enable
+
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -18,7 +21,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
