@@ -84,7 +84,7 @@ export interface MajorVerificationContextProps {
     courses: StoredCourse[],
   ) => boolean;
   majorRequirements: RequirementList;
-  majorIsVerified: boolean;
+  majorProgressPercentage: number;
   errors: string;
   loadingSave: boolean;
   isSaved: boolean;

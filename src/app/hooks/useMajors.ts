@@ -1,25 +1,13 @@
 import { getMajors } from "@/app/actions/majorActions";
-import { useEffect, useState } from "react";
-
-import { Major } from "../types/Major";
+import { useQuery } from "@tanstack/react-query";
 
 export default function useMajors() {
-  const [majors, setMajors] = useState<Major[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getMajors();
-        setMajors(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data: majors } = useQuery({
+    queryKey: ["getMajors"],
+    queryFn: () => getMajors(),
+  });
 
   return {
-    majors,
+    majors: majors ?? [],
   };
 }

@@ -153,16 +153,28 @@ export function MajorVerificationProvider({
     onSaveMajorRequirements(userMajorData.id);
   }
 
-  const majorIsVerified = courseState
-    ? isMajorRequirementsSatisfied(majorRequirements, courseState.courses)
-    : false;
+  function majorProgressPercentage(): number {
+    const requirementsTotal = majorRequirements.requirements.length;
+
+    const requirementsSatisfied = majorRequirements.requirements.reduce(
+      (acc, requirement) =>
+        isMajorRequirementsSatisfied(requirement, courseState.courses)
+          ? acc + 1
+          : acc,
+      0,
+    );
+
+    const percentage: number =
+      (requirementsSatisfied / requirementsTotal) * 100;
+    return isNaN(percentage) ? 0 : percentage;
+  }
 
   return (
     <MajorVerificationContext.Provider
       value={{
         isMajorRequirementsSatisfied: isMajorRequirementsSatisfied,
         majorRequirements: majorRequirements,
-        majorIsVerified,
+        majorProgressPercentage: majorProgressPercentage(),
         errors: "",
         loadingSave,
         isSaved,

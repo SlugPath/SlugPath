@@ -1,19 +1,19 @@
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { useContext } from "react";
+import { Typography } from "@mui/material";
 
-import IsSatisfiedMark from "../../IsSatisfiedMark";
+import ProgressBar from "./ProgressBar";
 
-export default function MajorProgress() {
-  const { majorIsVerified } = useContext(MajorVerificationContext);
-
+export default function MajorProgress({
+  majorProgressPercentage,
+}: {
+  majorProgressPercentage: number;
+}) {
   return (
     <div className="flex justify-between">
-      <div className="flex-initial">
-        <h2 className="text-2xl font-medium">Major Progress</h2>
-      </div>
-      <div className="flex flex-row items-center gap-1">
-        <IsSatisfiedMark isSatisfied={majorIsVerified} />
-        {majorIsVerified ? "Verified" : "Incomplete"}
+      <div className="flex flex-col place-items-center w-full">
+        <div className="flex flex-col w-full">
+          <Typography>Major</Typography>
+        </div>
+        <ProgressBar percentage={majorProgressPercentage} />
       </div>
     </div>
   );

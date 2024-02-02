@@ -1,3 +1,6 @@
+// import { Typography } from "@mui/material";
+// import ProgressBar from "./ProgressBar";
+import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -24,8 +27,9 @@ import NotesEditor from "./NotesEditor";
 import PlannerActionsCard from "./PlannerActionsCard";
 import SaveSnackbars from "./SaveSnackbars";
 import StyledAccordion from "./StyledAccordion";
+import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import { GEProgress } from "./graduationProgress/GEProgress";
-import { GradProgress } from "./graduationProgress/GradProgress";
+import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
 import QuarterCard from "./quarters/QuarterCard";
@@ -109,6 +113,8 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 }
 
+// import { useContext } from "react";
+
 function GraduationProgressCard({
   totalCredits,
   geSatisfied,
@@ -118,17 +124,23 @@ function GraduationProgressCard({
   geSatisfied: string[];
   courseState: PlannerData;
 }) {
+  const { majorProgressPercentage } = useContext(MajorVerificationContext);
+
   return (
     <Card variant="plain">
+      <GraduationProgress
+        credits={totalCredits}
+        courseState={courseState}
+        majorProgressPercentage={majorProgressPercentage}
+      />
+
       <div>
-        <MajorProgress />
+        <MajorProgress majorProgressPercentage={majorProgressPercentage} />
       </div>
 
       <div className="flex place-items-center">
-        <GradProgress credits={totalCredits} />
+        <CreditsProgress credits={totalCredits} />
       </div>
-
-      <hr className="rounded border-t border-slate-300" />
 
       <div className="flex place-items-center">
         <GEProgress ge={geSatisfied} courseState={courseState} />
