@@ -40,3 +40,6 @@ next-env.d.ts
 yarn.lock
 .pnp*
 
+# pnpm
+pnpm-lock.yaml
+

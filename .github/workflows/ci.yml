@@ -25,20 +25,24 @@ jobs:
       - name: Print Git Commit
         run: echo ${{ github.sha}}
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "21"
-          cache: "npm"
+
+      - name: Set up Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Check Format
-        run: npm run format:check
+        run: pnpm run format:check
 
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Setup Postgres DB
         run: |
@@ -46,7 +50,7 @@ jobs:
           npx prisma migrate deploy
 
       - name: Run Jest Tests
-        run: npm run test
+        run: pnpm run test
 
     services:
       postgres:
