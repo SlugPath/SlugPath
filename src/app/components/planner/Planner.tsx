@@ -62,10 +62,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           <ModalsProvider>
             <div className="flex justify-between space-x-4">
               <div className="flex-initial pr-2">
-                <Search
-                  displayCustomCourseSelection={true}
-                  searchComponentId="planner"
-                />
+                <Search displayCustomCourseSelection={true} />
               </div>
               <div className="overflow-auto w-full flex-grow">
                 <AccordionGroup>

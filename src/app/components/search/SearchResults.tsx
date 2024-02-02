@@ -12,14 +12,12 @@ export interface SearchResultsProps {
   courses: StoredCourse[];
   loading: boolean;
   loadingUseQuery: boolean;
-  searchComponentId: string;
 }
 
 export default function SearchResults({
   courses,
   loading,
   loadingUseQuery,
-  searchComponentId,
 }: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
@@ -69,7 +67,7 @@ export default function SearchResults({
           index={index}
           draggableId={createCourseDraggableId({
             ...course,
-            suffix: "search" + searchComponentId,
+            suffix: "search",
           })}
           isCustom={false}
         />
@@ -79,7 +77,7 @@ export default function SearchResults({
 
   return (
     <Droppable
-      droppableId={SEARCH_DROPPABLE + searchComponentId}
+      droppableId={SEARCH_DROPPABLE}
       isDropDisabled={true}
       mode="virtual"
       renderClone={(provided, snapshot, rubric) => {

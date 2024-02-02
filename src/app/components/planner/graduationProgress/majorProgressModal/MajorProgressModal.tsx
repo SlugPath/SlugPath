@@ -65,14 +65,11 @@ export default function MajorProgressModal() {
         <div className="mb-4">
           <Title />
         </div>
-        <div className="flex flex-row">
-          {showModal && hasPermissionToEdit && (
+        <div className="flex flex-row mb-3">
+          {editing && showModal && hasPermissionToEdit && (
             <div className="flex-initial pr-2">
               <Card variant="soft" size="sm">
-                <Search
-                  displayCustomCourseSelection={false}
-                  searchComponentId="majorprogress"
-                />
+                <Search displayCustomCourseSelection={false} />
               </Card>
             </div>
           )}
