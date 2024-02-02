@@ -1,4 +1,5 @@
 import { upsertPlanner } from "@/app/actions/planner";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { PlannerData } from "@/app/types/Planner";
 import {
   findQuarter,
@@ -9,27 +10,28 @@ import {
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { Term } from "@customTypes/Quarter";
-import { useLoadUserPlanner } from "@hooks/useLoad";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-export default function usePlanner(
-  input: {
-    userId: string | undefined;
-    plannerId: string;
-    title: string;
-    order: number;
-  },
-  skipLoad?: boolean,
-) {
-  const [courseState, setCourseState] = useLoadUserPlanner({
-    userId: input.userId,
-    plannerId: input.plannerId,
-    skipLoad,
-  });
+export default function usePlanner(input: {
+  userId: string | undefined;
+  plannerId: string;
+  title: string;
+  order: number;
+}) {
+  const { getPlanner, setPlanner } = useContext(PlannersContext);
+  const courseState = useMemo(
+    () => getPlanner(input.plannerId),
+    [getPlanner, input.plannerId],
+  );
 
   // Saving
   const [unsavedChanges, setUnsavedChanges] = useState(true);
+  const handleCourseUpdate = (newState: PlannerData) => {
+    setPlanner(input.plannerId, input.title, newState);
+    setUnsavedChanges(true);
+  };
+
   const {
     mutate,
     isPending: saveStatus,
@@ -83,11 +85,6 @@ export default function usePlanner(
     };
   }, [unsavedChanges]);
 
-  const handleCourseUpdate = (newState: PlannerData) => {
-    setCourseState(newState);
-    setUnsavedChanges(true);
-  };
-
   useEffect(() => {
     setUnsavedChanges(true);
   }, [input.title]);
@@ -116,7 +113,7 @@ export default function usePlanner(
         ...quarterCourses.slice(0, deleteIdx),
         ...quarterCourses.slice(deleteIdx + 1),
       ];
-      setCourseState({
+      handleCourseUpdate({
         ...courseState,
         courses: courseState.courses.filter((c) => c.id !== deleteCid),
         quarters: [
@@ -140,10 +137,9 @@ export default function usePlanner(
    */
   const editCustomCourse = (course: StoredCourse) => {
     const cid = course.id;
-    if (!courseState) return;
-    setCourseState({
-      ...courseState!,
-      courses: courseState!.courses.map((c) => {
+    handleCourseUpdate({
+      ...courseState,
+      courses: courseState.courses.map((c) => {
         if (c.id === cid && isCustomCourse(c)) {
           return {
             ...c,
@@ -160,17 +156,15 @@ export default function usePlanner(
   };
 
   const getCourseLabels = (course: StoredCourse): Label[] => {
-    if (course.labels === undefined) return [];
     return course.labels.map((lid) => {
-      const label = courseState?.labels.find((l) => l.id === lid);
+      const label = courseState.labels.find((l) => l.id === lid);
       if (label === undefined) throw new Error("label not found");
       return label;
     });
   };
 
   const updatePlannerLabels = (newLabels: Label[]) => {
-    if (!courseState) return;
-    setCourseState({
+    handleCourseUpdate({
       ...courseState!,
       labels: courseState!.labels.map((old) => {
         // Update only the labels that got updated (their names changed)
@@ -182,8 +176,7 @@ export default function usePlanner(
   };
 
   const editCourseLabels = (newCourse: StoredCourse) => {
-    if (!courseState) return;
-    setCourseState({
+    handleCourseUpdate({
       ...courseState,
       courses: courseState.courses.map((c) => {
         return c.id === newCourse.id ? newCourse : c;
@@ -192,8 +185,7 @@ export default function usePlanner(
   };
 
   const updateNotes = (content: string) => {
-    if (!courseState) return;
-    setCourseState({
+    handleCourseUpdate({
       ...courseState,
       notes: content,
     });

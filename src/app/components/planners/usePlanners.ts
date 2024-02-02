@@ -1,14 +1,23 @@
 import { deletePlanner } from "@/app/actions/planner";
-import { useLoadAllPlanners } from "@hooks/useLoad";
+import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import { PlannerData } from "@/app/types/Planner";
+import { cloneDefaultPlanner } from "@/lib/plannerUtils";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export function usePlanners(userId: string | undefined) {
+export function usePlanners(
+  userId: string | undefined,
+  allPlanners: PlannerData[],
+) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners, activePlanner, setActivePlanner, { loading }] =
-    useLoadAllPlanners(userId);
+  const [planners, setPlanners] = useState(allPlanners);
+  const [activePlanner, setActivePlanner] = useState<string | undefined>(
+    planners[0].id,
+  );
+  const { defaultPlanner } = useContext(DefaultPlannerContext);
+
   const [deletedPlanner, setDeletedPlanner] = useState(false);
   const { mutate: deleteMutation, isPending: loadingDeletePlanner } =
     useMutation({
@@ -20,13 +29,27 @@ export function usePlanners(userId: string | undefined) {
         console.error(err);
       },
     });
-
   /**
    * `switchPlanner` switches between planners
    * @param id unique planner id
    */
   function switchPlanners(id: string) {
     setActivePlanner(id);
+  }
+
+  function getPlanner(id: string) {
+    const p = planners.find((p) => p.id === id);
+    if (!p) throw new Error("Planner not found");
+    return p;
+  }
+
+  function setPlanner(id: string, title: string, courseState: PlannerData) {
+    setPlanners((prev) => {
+      const idx = prev.findIndex((p) => p.id === id);
+      const before = prev.slice(0, idx);
+      const after = prev.slice(idx + 1);
+      return [...before, { ...courseState, id, title }, ...after];
+    });
   }
 
   /**
@@ -48,7 +71,10 @@ export function usePlanners(userId: string | undefined) {
   function addPlanner() {
     const id = uuidv4();
     setPlanners((prev) => {
-      return [...prev, { id, title: "New Planner" }];
+      return [
+        ...prev,
+        { ...cloneDefaultPlanner(defaultPlanner), id, title: "New Planner" },
+      ];
     });
     switchPlanners(id);
   }
@@ -63,28 +89,17 @@ export function usePlanners(userId: string | undefined) {
     if (activePlanner === undefined) {
       return;
     }
-    const title = planners.find((p) => p.id === activePlanner)?.title;
-    const currentPlannerIndex = planners.findIndex(
-      (p) => p.id === activePlanner,
-    );
-
-    // Get both halves of the array excluding the current planner
-    const firstHalf = planners.slice(0, currentPlannerIndex);
-    const secondHalf = planners.slice(currentPlannerIndex + 1);
-
-    const newId = uuidv4();
-    setPlanners([
-      ...firstHalf,
-      { id: newId, title: title ?? "New Planner" },
-      ...secondHalf,
-    ]);
-
-    deleteMutation({
-      userId: userId ?? "",
-      plannerId: activePlanner,
+    setPlanners((prev) => {
+      const title = prev.find((p) => p.id === activePlanner)?.title ?? "";
+      const idx = prev.findIndex((p) => p.id === activePlanner);
+      const before = prev.slice(0, idx);
+      const after = prev.slice(idx + 1);
+      return [
+        ...before,
+        { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },
+        ...after,
+      ];
     });
-
-    switchPlanners(newId);
   }
 
   /**
@@ -113,11 +128,12 @@ export function usePlanners(userId: string | undefined) {
     planners,
     switchPlanners,
     changePlannerName,
+    getPlanner,
+    setPlanner,
     addPlanner,
     removePlanner,
     replaceCurrentPlanner,
     activePlanner,
-    plannersLoading: loading,
     loadingDeletePlanner,
     deletedPlanner,
   };

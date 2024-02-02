@@ -4,7 +4,6 @@ import { years } from "@/lib/defaultPlanners";
 import { emptyPlanner } from "@/lib/plannerUtils";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@contexts/ModalsProvider";
-import { PlannerProvider } from "@contexts/PlannerProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import { Button, CircularProgress } from "@mui/joy";
 import { Alert } from "@mui/joy";
@@ -30,7 +29,6 @@ export interface MajorSelectionProps {
   onSaved: () => void;
   saveButtonName: string;
   isInPlannerPage?: boolean;
-  onUserMajorAlreadyExists?: () => void;
   onSkip?: () => void;
   onCreateNewPlanner?: () => void;
   onReplaceCurrentPlanner?: () => void;
@@ -40,7 +38,6 @@ export default function MajorSelection({
   saveButtonName,
   onSaved,
   isInPlannerPage,
-  onUserMajorAlreadyExists,
   onSkip,
   onCreateNewPlanner,
   onReplaceCurrentPlanner,
@@ -89,26 +86,14 @@ export default function MajorSelection({
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
   useEffect(() => {
-    function majorDataAlreadyChosen() {
-      return (
-        userMajorData &&
-        userMajorData.name.length > 0 &&
-        userMajorData.catalogYear.length > 0
-      );
-    }
-
     if (userMajorData) {
       updateUserMajor(
         userMajorData.name,
         userMajorData.catalogYear,
         userMajorData.defaultPlannerId,
       );
-
-      if (majorDataAlreadyChosen() && onUserMajorAlreadyExists) {
-        onUserMajorAlreadyExists();
-      }
     }
-  }, [onUserMajorAlreadyExists, userMajorData]);
+  }, [userMajorData]);
 
   useEffect(() => {
     /**
@@ -276,18 +261,16 @@ export default function MajorSelection({
           </div>
         </div>
         <div>
-          <PlannerProvider plannerId={""} title={""} order={0}>
-            <ModalsProvider>
-              <SelectDefaultPlanner
-                selectedDefaultPlanner={selectedDefaultPlanner}
-                onChange={handleChangeDefaultPlanner}
-                majorDefaultPlanners={majorDefaultPlanners}
-                loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-                addPlannerCardContainer={isInPlannerPage}
-              />
-              <CourseInfoModal />
-            </ModalsProvider>
-          </PlannerProvider>
+          <ModalsProvider>
+            <SelectDefaultPlanner
+              selectedDefaultPlanner={selectedDefaultPlanner}
+              onChange={handleChangeDefaultPlanner}
+              majorDefaultPlanners={majorDefaultPlanners}
+              loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+              addPlannerCardContainer={isInPlannerPage}
+            />
+            <CourseInfoModal />
+          </ModalsProvider>
         </div>
         <div className="flex justify-end w-full">
           {loadingSaveMajor ? (

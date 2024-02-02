@@ -30,7 +30,6 @@ export default function PlannerTabs() {
     changePlannerName,
     addPlanner,
     activePlanner,
-    plannersLoading,
   } = useContext(PlannersContext);
 
   // State-ful variables for managing the editing of planner names
@@ -99,7 +98,6 @@ export default function PlannerTabs() {
           />
         ))}
         <IconButton
-          disabled={plannersLoading}
           aria-label="Add"
           onClick={() => handleAddPlanner()}
           size="sm"

@@ -31,11 +31,11 @@ export type UserMajorOutput = {
 };
 
 export async function getUserMajor(
-  userId: string,
+  email: string,
 ): Promise<UserMajorOutput | null> {
   const userData = await prisma.user.findUnique({
     where: {
-      id: userId,
+      email,
     },
     select: {
       major: {

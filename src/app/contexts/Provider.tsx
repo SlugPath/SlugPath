@@ -6,7 +6,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { DefaultPlannerProvider } from "./DefaultPlannerProvider";
 import NextAuthProvider from "./NextAuthProvider";
-import { PlannersProvider } from "./PlannersProvider";
 
 export default function Provider({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
@@ -14,9 +13,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     <NextAuthProvider>
       <CssVarsProvider defaultMode="system">
         <QueryClientProvider client={queryClient}>
-          <DefaultPlannerProvider>
-            <PlannersProvider>{children}</PlannersProvider>
-          </DefaultPlannerProvider>
+          <DefaultPlannerProvider>{children}</DefaultPlannerProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </CssVarsProvider>

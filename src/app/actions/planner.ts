@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { LabelColor, Prisma, Term } from "@prisma/client";
 
 import { StoredCourse } from "../types/Course";
-import { PlannerData, PlannerTitle } from "../types/Planner";
+import { PlannerData } from "../types/Planner";
 
 type PlannerCreateInput = {
   userId: string;
@@ -117,19 +117,33 @@ export async function upsertPlanner({
  * @param userId user id
  * @returns a list of planner titles and ids belonging to a user
  */
-export async function getAllPlanners(userId: string): Promise<PlannerTitle[]> {
-  return await prisma.planner.findMany({
+export async function getAllPlanners(email: string): Promise<PlannerData[]> {
+  const user = await prisma.user.findFirst({
     where: {
-      userId,
+      email,
+    },
+  });
+
+  if (!user) throw new Error(`User with email ${email} not found`);
+
+  const plans = await prisma.planner.findMany({
+    where: {
+      userId: user.id,
     },
     orderBy: {
       order: "asc",
     },
-    select: {
-      id: true,
-      title: true,
+    include: {
+      labels: true,
+      quarters: {
+        include: {
+          courses: true,
+        },
+      },
     },
   });
+
+  return plans.map(toPlannerData);
 }
 
 /**
@@ -228,6 +242,8 @@ function toPlannerData(planner: any): PlannerData {
   ];
   newPlanner.notes = planner.notes ? planner.notes : "";
   newPlanner.courses = allCourses;
+  newPlanner.title = planner.title;
+  newPlanner.id = planner.id;
 
   // Return new modified planner
   return newPlanner;

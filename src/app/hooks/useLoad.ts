@@ -1,57 +1,11 @@
-import { getAllPlanners, getPlanner } from "@/app/actions/planner";
-import { initialLabels } from "@/lib/labels";
-import { getTotalCredits, initialPlanner } from "@/lib/plannerUtils";
-import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { getPlanner } from "@/app/actions/planner";
+import { emptyPlanner, initialPlanner } from "@/lib/plannerUtils";
 import { SetState } from "@customTypes/Common";
-import { PlannerData, PlannerTitle } from "@customTypes/Planner";
+import { PlannerData } from "@customTypes/Planner";
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 import useMajorSelection from "../components/majorSelection/useMajorSelection";
-
-/**
- * Custom hook to load all planners for a particular user
- * @param userId id of the user
- * @returns
- */
-
-export const useLoadAllPlanners = (
-  userId: string | undefined,
-  onLoadedPlanners?: (numPlanners: number) => void,
-): [
-  PlannerTitle[],
-  SetState<PlannerTitle[]>,
-  string | undefined,
-  SetState<string | undefined>,
-  { loading: boolean; error: Error | null },
-] => {
-  const [planners, setPlanners] = useState<PlannerTitle[]>([]);
-  const [activePlanner, setActivePlanner] = useState<string | undefined>(
-    undefined,
-  );
-  const { isLoading: loading, error } = useQuery({
-    queryKey: ["getAllPlanners", userId],
-    queryFn: async () => {
-      const res = await getAllPlanners(userId ?? "");
-      setPlanners(res);
-      setActivePlanner(res[0]?.id);
-      if (onLoadedPlanners) {
-        onLoadedPlanners(res.length);
-      }
-      return res;
-    },
-    enabled: !!userId,
-  });
-
-  return [
-    planners,
-    setPlanners,
-    activePlanner,
-    setActivePlanner,
-    { loading, error },
-  ];
-};
 
 /**
  * Hook to load a planner
@@ -74,7 +28,6 @@ export const useLoadPlanner = ({
   SetState<PlannerData>,
   { loading: boolean; error: Error | null },
 ] => {
-  const { setHasAutoFilled } = useContext(DefaultPlannerContext);
   const [planner, setPlanner] = useState<PlannerData>(defaultPlanner);
   const { isLoading: loading, error } = useQuery({
     queryKey: ["getPlanner", userId, plannerId],
@@ -83,25 +36,13 @@ export const useLoadPlanner = ({
         userId: userId!,
         plannerId: plannerId!,
       });
-      if (res) {
-        setPlanner(res);
-      } else {
-        autofillWithDefaultPlanner();
-      }
+      if (!res) return emptyPlanner();
+
+      setPlanner(res);
       return res;
     },
     enabled: !skipLoad,
   });
-
-  function autofillWithDefaultPlanner() {
-    setPlanner({
-      ...defaultPlanner,
-      labels: initialLabels(),
-    });
-    if (getTotalCredits(defaultPlanner.courses) > 0) {
-      setHasAutoFilled(true);
-    }
-  }
 
   return [planner, setPlanner, { loading, error }];
 };
@@ -121,57 +62,4 @@ export const useLoadDefaultPlanner = (userId?: string) => {
     defaultPlanner: initialPlanner(),
     skipLoad,
   });
-};
-
-/**
- * Hook to load a user planner
- */
-export const useLoadUserPlanner = ({
-  userId,
-  plannerId,
-  skipLoad,
-}: {
-  userId: string | undefined;
-  plannerId: string;
-  skipLoad?: boolean;
-}) => {
-  const { defaultPlanner } = useContext(DefaultPlannerContext);
-  const clonedPlanner = cloneDefaultPlanner(defaultPlanner);
-  return useLoadPlanner({
-    plannerId,
-    userId,
-    defaultPlanner: clonedPlanner,
-    skipLoad,
-  });
-};
-
-/**
- * Copies a PlannerData, but changes the id's of the courses within the planner
- * to prevent data inconsistencies
- * Also adds a value for notes
- * @param defaultPlanner a defaultPlanner
- * @returns a unique PlannerData instance
- */
-const cloneDefaultPlanner = (defaultPlanner: PlannerData): PlannerData => {
-  const clone = { ...defaultPlanner };
-  // Create a lookup table between old ids and newStoredCourse
-  const lookup = {} as any;
-  defaultPlanner.courses.forEach((c) => {
-    lookup[c.id] = { ...c, id: uuidv4() };
-  });
-  // Pass the new Stored courses to the clone
-  clone.courses = Object.values(lookup);
-
-  // Replace all the references in the quarters to course ids with their new
-  // counterparts
-  clone.quarters = defaultPlanner.quarters.map((q) => {
-    return {
-      ...q,
-      courses: q.courses.map((crs) => {
-        return lookup[crs].id;
-      }),
-      notes: "",
-    };
-  });
-  return clone;
 };

@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id               String    @id
-  email            String?
+  email            String    @unique
   name             String?
   majorId          Int?
   role             Role      @default(USER)

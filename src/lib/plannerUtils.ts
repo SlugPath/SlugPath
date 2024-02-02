@@ -20,6 +20,8 @@ export const initialPlanner = (): PlannerData => {
     courses: [],
     labels: initialLabels(),
     notes: "",
+    title: "New Planner",
+    id: uuidv4(),
   };
 };
 
@@ -30,6 +32,8 @@ export const emptyPlanner = (): PlannerData => {
     courses: [],
     labels: [],
     notes: "",
+    id: uuidv4(),
+    title: "",
   };
 };
 
@@ -302,4 +306,34 @@ export function isOffered(
 ): boolean {
   if (term === undefined) return true;
   return quartersOffered.find((t) => (t as Term) == term) !== undefined;
+}
+/**
+ * Copies a PlannerData, but changes the id's of the courses within the planner
+ * to prevent data inconsistencies
+ * Also adds a value for notes
+ * @param defaultPlanner a defaultPlanner
+ * @returns a unique PlannerData instance
+ */
+export function cloneDefaultPlanner(defaultPlanner: PlannerData): PlannerData {
+  const clone = { ...defaultPlanner };
+  // Create a lookup table between old ids and newStoredCourse
+  const lookup = {} as any;
+  defaultPlanner.courses.forEach((c) => {
+    lookup[c.id] = { ...c, id: uuidv4() };
+  });
+  // Pass the new Stored courses to the clone
+  clone.courses = Object.values(lookup);
+
+  // Replace all the references in the quarters to course ids with their new
+  // counterparts
+  clone.quarters = defaultPlanner.quarters.map((q) => {
+    return {
+      ...q,
+      courses: q.courses.map((crs) => {
+        return lookup[crs].id;
+      }),
+      notes: "",
+    };
+  });
+  return clone;
 }

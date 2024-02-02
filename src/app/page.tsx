@@ -1,18 +1,18 @@
-"use client";
+import MajorSelectionPage from "@components/majorSelection/MajorSelectionPage";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-import { useRouter } from "next/navigation";
+import { getUserMajor } from "./actions/major";
 
-import MajorSelection from "./components/majorSelection/MajorSelection";
+export default async function Page() {
+  const redirectToPlanner = () => redirect("/planner");
 
-export default function Page() {
-  const router = useRouter();
-  const redirectToPlanner = () => router.push("/planner");
-  return (
-    <MajorSelection
-      saveButtonName="Next"
-      onSaved={redirectToPlanner}
-      onUserMajorAlreadyExists={redirectToPlanner}
-      onSkip={redirectToPlanner}
-    />
-  );
+  const session = await getServerSession();
+  const userMajor = await getUserMajor(session?.user.email ?? "");
+
+  if (userMajor) {
+    return redirectToPlanner();
+  }
+
+  return <MajorSelectionPage />;
 }

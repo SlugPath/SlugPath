@@ -3,7 +3,7 @@ import { DropResult } from "@hello-pangea/dnd";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
-import { PlannerData, PlannerTitle } from "./Planner";
+import { PlannerData } from "./Planner";
 
 type setShow = SetState<boolean>;
 
@@ -49,14 +49,15 @@ export interface PlannerProviderProps {
 }
 
 export interface PlannersContextProps {
-  planners: PlannerTitle[];
+  planners: PlannerData[];
   removePlanner: (plannerId: string) => void;
   addPlanner: () => void;
+  getPlanner: (id: string) => PlannerData;
+  setPlanner: (id: string, title: string, courseState: PlannerData) => void;
   switchPlanners: (id: string) => void;
   changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
   activePlanner: string | undefined;
-  plannersLoading: boolean;
   loadingDeletePlanner: boolean;
   deletedPlanner: boolean;
 }

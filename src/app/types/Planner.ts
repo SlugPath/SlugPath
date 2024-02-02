@@ -11,8 +11,11 @@ export type PlannerData = {
   courses: StoredCourse[];
   labels: Label[];
   notes: string;
+  title: string;
+  id: string;
 };
 
+// Deprecated: Use PlannerData instead
 export type PlannerTitle = {
   title: string;
   id: string;
