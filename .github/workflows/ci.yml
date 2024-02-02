@@ -25,23 +25,20 @@ jobs:
       - name: Print Git Commit
         run: echo ${{ github.sha}}
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: "21"
-          cache: "yarn"
+          cache: "npm"
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: npm ci
 
       - name: Check Format
-        run: yarn format:check
+        run: npm run format:check
 
       - name: Lint
-        run: yarn lint
+        run: npm run lint
 
       - name: Setup Postgres DB
         run: |
@@ -49,7 +46,7 @@ jobs:
           npx prisma migrate deploy
 
       - name: Run Jest Tests
-        run: yarn test
+        run: npm run test
 
     services:
       postgres:

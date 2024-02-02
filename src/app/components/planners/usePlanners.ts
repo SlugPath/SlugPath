@@ -14,7 +14,7 @@ export function usePlanners(
   // this will allow users to edit their planner names
   const [planners, setPlanners] = useState(allPlanners);
   const [activePlanner, setActivePlanner] = useState<string | undefined>(
-    planners[0].id,
+    planners[0]?.id,
   );
   const { defaultPlanner } = useContext(DefaultPlannerContext);
 

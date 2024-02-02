@@ -50,7 +50,7 @@ const HelpfulTips = () => {
   return (
     <div className="flex flex-col items-center justify-center h-[90vh] text-secondary-900 dark:text-secondary-200">
       <div className="text-lg text-center">
-        Click the <b>+</b> button above to create a new planner ✏️.
+        Click the <b>+</b> button above to create a new planner ✏️
       </div>
     </div>
   );

@@ -24,7 +24,7 @@
     "@mui/joy": "5.0.0-beta.24",
     "@mui/material": "^5.15.6",
     "@mui/x-charts": "^6.19.1",
-    "@prisma/client": "^5.9.0",
+    "@prisma/client": "^5.9.1",
     "@react-pdf/renderer": "^3.3.4",
     "@t3-oss/env-nextjs": "^0.8.0",
     "@tanstack/react-query": "^5.18.0",
@@ -39,6 +39,7 @@
     "react-dom": "^18.2.0",
     "react-virtualized": "^9.22.5",
     "reflect-metadata": "^0.2.1",
+    "ts-node": "^10.9.2",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
