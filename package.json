@@ -38,6 +38,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-virtualized": "^9.22.5",
+    "reflect-metadata": "^0.2.1",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
@@ -88,5 +89,6 @@
       "prettier --write",
       "eslint --fix"
     ]
-  }
+  },
+  "packageManager": "yarn@4.1.0"
 }

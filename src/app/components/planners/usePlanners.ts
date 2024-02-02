@@ -44,6 +44,7 @@ export function usePlanners(
   }
 
   function setPlanner(id: string, title: string, courseState: PlannerData) {
+    console.log(`Updating planner...`);
     setPlanners((prev) => {
       const idx = prev.findIndex((p) => p.id === id);
       const before = prev.slice(0, idx);
@@ -94,6 +95,7 @@ export function usePlanners(
       const idx = prev.findIndex((p) => p.id === activePlanner);
       const before = prev.slice(0, idx);
       const after = prev.slice(idx + 1);
+      console.log(`${JSON.stringify(defaultPlanner, null, 2)}`);
       return [
         ...before,
         { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },

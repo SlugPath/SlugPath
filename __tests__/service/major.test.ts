@@ -128,7 +128,7 @@ it("should add major information for 1 user", async () => {
 
   if (user === null) fail("User was null (this should not happen)");
 
-  const userMajor = await getUserMajor(user.id);
+  const userMajor = await getUserMajor(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -140,7 +140,7 @@ it("should add major information for 1 user", async () => {
   expect(res.name).toBe(name);
   expect(res.catalogYear).toBe(catalogYear);
 
-  const check = await getUserMajor(user.id);
+  const check = await getUserMajor(user.email);
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
@@ -168,7 +168,7 @@ it("should fail since major doesn't exist", async () => {
   expect(user).not.toBeNull();
   if (user === null) fail("User was null (this should not happen)");
 
-  const userMajor = await getUserMajor(user.id);
+  const userMajor = await getUserMajor(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -258,7 +258,7 @@ it("should correctly add major information for 2 users", async () => {
     },
   });
 
-  const userMajor = await getUserMajor(user1?.id ?? "");
+  const userMajor = await getUserMajor(user1?.email ?? "");
   expect(userMajor).toBeNull();
   const defaultPlannerId = uuidv4();
 
@@ -280,13 +280,13 @@ it("should correctly add major information for 2 users", async () => {
   expect(res2.name).toBe(name);
   expect(res2.catalogYear).toBe(catalogYear);
 
-  const check = await getUserMajor(user1?.id ?? "");
+  const check = await getUserMajor(user1?.email ?? "");
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
   expect(check?.defaultPlannerId).toBe(defaultPlannerId);
 
-  const check2 = await getUserMajor(user2?.id ?? "");
+  const check2 = await getUserMajor(user2?.email ?? "");
   expect(check2).not.toBeNull();
   expect(check2?.catalogYear).toBe(catalogYear);
   expect(check2?.name).toBe(name);

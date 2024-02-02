@@ -110,7 +110,7 @@ afterAll(async () => {
 
 it("should create 1 empty planner for 1 user", async () => {
   const user = await getUser();
-  const planners = await getAllPlanners(user.id);
+  const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
   const plannerId = await createPlanner(initialPlanner(), user);
@@ -127,7 +127,7 @@ it("should create 1 empty planner for 1 user", async () => {
 
 it("should update 1 planner for 1 user", async () => {
   const user = await getUser();
-  const planners = await getAllPlanners(user.id);
+  const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
   const plannerId = await createPlanner(initialPlanner(), user);
@@ -198,7 +198,7 @@ it("should update 1 planner for 1 user", async () => {
   expect(res2).toBe(plannerId);
 
   // Ensure there is only 1 planner for that user
-  const allPlanners = await getAllPlanners(user.id);
+  const allPlanners = await getAllPlanners(user.email);
   expect(allPlanners).toHaveLength(1);
   // Ensure the content of that planner is updated
   const check2 = await getPlanner({ userId: user.id, plannerId });
@@ -207,7 +207,7 @@ it("should update 1 planner for 1 user", async () => {
   expect(courses).toBeDefined();
   expect(courses).toHaveLength(cseCourses.length);
   courses?.forEach((c, idx) => {
-    expect(c).toStrictEqual(cseCourses[idx]);
+    expect(c).toStrictEqual(cseCourses[idx].id);
   });
   // Cleanup
   const deleted = await deletePlanner({ userId: user.id, plannerId });
@@ -263,7 +263,7 @@ it("should filter courses by GE requirement", async () => {
 
 it("should return the correct labels for each course", async () => {
   const user = await getUser();
-  const planners = await getAllPlanners(user.id);
+  const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
   const plannerId = uuidv4();
@@ -333,7 +333,7 @@ it("should return the correct labels for each course", async () => {
   expect(res).toBe(plannerId);
 
   // Ensure there is only 1 planner for that user
-  const allPlanners = await getAllPlanners(user.id);
+  const allPlanners = await getAllPlanners(user.email);
   expect(allPlanners).toHaveLength(1);
   // Ensure the content of that planner is updated
   const check2 = await getPlanner({ userId: user.id, plannerId });
@@ -342,7 +342,7 @@ it("should return the correct labels for each course", async () => {
   expect(courses).toBeDefined();
   expect(courses).toHaveLength(cseCourses.length);
   courses?.forEach((c, idx) => {
-    expect(c).toStrictEqual(cseCourses[idx]);
+    expect(c).toStrictEqual(cseCourses[idx].id);
   });
 
   // Cleanup
@@ -367,7 +367,7 @@ it("should add major information for 1 user", async () => {
 
   if (user === null) fail("User was null (this should not happen)");
 
-  const userMajor = await getUserMajor(user.id);
+  const userMajor = await getUserMajor(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -379,7 +379,7 @@ it("should add major information for 1 user", async () => {
   expect(res.name).toBe(name);
   expect(res.catalogYear).toBe(catalogYear);
 
-  const check = await getUserMajor(user.id);
+  const check = await getUserMajor(user.email);
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
@@ -400,7 +400,7 @@ it("should add major information for 1 user", async () => {
 
 it("should fail since major doesn't exist", async () => {
   const user = await getUser();
-  const userMajor = await getUserMajor(user.id);
+  const userMajor = await getUserMajor(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
