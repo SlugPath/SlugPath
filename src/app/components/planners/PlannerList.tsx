@@ -9,7 +9,7 @@ import Planner from "../planner/Planner";
 import DeletedPlannerSnackbar from "./plannerTabs/DeletedPlannerSnackbar";
 
 export default function PlannerList() {
-  const { planners, deletedPlanner, loadingDeletePlanner, activePlanner } =
+  const { planners, deletedPlanner, activePlanner } =
     useContext(PlannersContext);
   const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
     useState(false);
@@ -18,7 +18,7 @@ export default function PlannerList() {
     if (deletedPlanner) {
       setOpenDeletedPlannerSnackbar(true);
     }
-  }, [deletedPlanner, loadingDeletePlanner]);
+  }, [deletedPlanner]);
 
   if (planners.length == 0) return <HelpfulTips />;
 

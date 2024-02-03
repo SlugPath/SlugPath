@@ -1,9 +1,10 @@
-import { deletePlanner } from "@/app/actions/planner";
+import { saveAllPlanners } from "@/app/actions/planner";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import useLocalStorage from "@/app/hooks/useLocalStorage";
 import { PlannerData } from "@/app/types/Planner";
 import { cloneDefaultPlanner } from "@/lib/plannerUtils";
 import { useMutation } from "@tanstack/react-query";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export function usePlanners(
@@ -12,23 +13,59 @@ export function usePlanners(
 ) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners] = useState(allPlanners);
-  const [activePlanner, setActivePlanner] = useState<string | undefined>(
+  const [planners, setPlanners] = useLocalStorage<PlannerData[]>(
+    "planners",
+    allPlanners,
+  );
+  const [activePlanner, setActivePlanner] = useLocalStorage<string | undefined>(
+    "activePlanner",
     planners[0]?.id,
   );
+
   const { defaultPlanner } = useContext(DefaultPlannerContext);
 
   const [deletedPlanner, setDeletedPlanner] = useState(false);
-  const { mutate: deleteMutation, isPending: loadingDeletePlanner } =
-    useMutation({
-      mutationFn: async (input: { userId: string; plannerId: string }) => {
-        await deletePlanner(input);
-      },
-      onSuccess: () => setDeletedPlanner(true),
-      onError: (err) => {
-        console.error(err);
-      },
-    });
+
+  const { mutate: saveAll } = useMutation({
+    mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
+      await saveAllPlanners(input);
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  // Save changes to the planners every 30 seconds in the database
+  useEffect(() => {
+    const saveChanges = () => {
+      if (userId) {
+        saveAll({ userId, planners });
+      }
+    };
+    const interval = setInterval(saveChanges, 30000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [saveAll, userId, planners]);
+
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (userId) {
+        try {
+          await saveAll({ userId, planners });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [userId, planners, saveAll]);
+
   /**
    * `switchPlanner` switches between planners
    * @param id unique planner id
@@ -109,12 +146,7 @@ export function usePlanners(
    */
   const removePlanner = (id: string) => {
     const newPlanners = planners.filter((p) => p.id !== id);
-    if (userId !== undefined) {
-      deleteMutation({
-        userId,
-        plannerId: id,
-      });
-    }
+    setDeletedPlanner(true);
     setPlanners(newPlanners);
 
     // Switch to the next planner upon deletion if one exists
@@ -135,7 +167,6 @@ export function usePlanners(
     removePlanner,
     replaceCurrentPlanner,
     activePlanner,
-    loadingDeletePlanner,
     deletedPlanner,
   };
 }

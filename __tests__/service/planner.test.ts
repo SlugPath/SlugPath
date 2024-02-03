@@ -2,7 +2,7 @@ import { coursesBy, getAllDepartments } from "@/app/actions/course";
 import {
   getAllMajors,
   getMajorDefaultPlanners,
-  getUserMajor,
+  getUserMajorByEmail,
   updateUserMajor,
 } from "@/app/actions/major";
 import {
@@ -367,7 +367,7 @@ it("should add major information for 1 user", async () => {
 
   if (user === null) fail("User was null (this should not happen)");
 
-  const userMajor = await getUserMajor(user.email);
+  const userMajor = await getUserMajorByEmail(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -376,10 +376,11 @@ it("should add major information for 1 user", async () => {
     ...majorData,
     defaultPlannerId,
   });
-  expect(res.name).toBe(name);
-  expect(res.catalogYear).toBe(catalogYear);
+  expect(res).not.toBeNull();
+  expect(res?.name).toBe(name);
+  expect(res?.catalogYear).toBe(catalogYear);
 
-  const check = await getUserMajor(user.email);
+  const check = await getUserMajorByEmail(user.email);
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
@@ -400,7 +401,7 @@ it("should add major information for 1 user", async () => {
 
 it("should fail since major doesn't exist", async () => {
   const user = await getUser();
-  const userMajor = await getUserMajor(user.email);
+  const userMajor = await getUserMajorByEmail(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();

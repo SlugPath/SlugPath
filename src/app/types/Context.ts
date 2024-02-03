@@ -28,10 +28,6 @@ export interface PlannerContextProps {
   geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
-  savePlanner: () => void;
-  saveStatus: boolean;
-  saveError: boolean;
-  unsavedChanges: boolean;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
   editCourseLabels: (course: StoredCourse) => void;
@@ -59,7 +55,6 @@ export interface PlannersContextProps {
   changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
   activePlanner: string | undefined;
-  loadingDeletePlanner: boolean;
   deletedPlanner: boolean;
 }
 

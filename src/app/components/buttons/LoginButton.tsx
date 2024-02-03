@@ -30,7 +30,7 @@ export default function LoginButton() {
             <MenuItem
               onClick={() => {
                 signOut();
-                replace("/");
+                replace("/planner");
               }}
             >
               Sign out

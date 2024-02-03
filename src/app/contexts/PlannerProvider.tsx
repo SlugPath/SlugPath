@@ -18,15 +18,11 @@ export function PlannerProvider({
 }: PlannerProviderProps) {
   const { data: session } = useSession();
   const {
-    unsavedChanges,
     deleteCourse,
     editCustomCourse,
     totalCredits,
     geSatisfied,
     courseState,
-    saveStatus,
-    saveError,
-    savePlanner,
     handleCourseUpdate,
     getCourseLabels,
     getAllLabels,
@@ -58,10 +54,6 @@ export function PlannerProvider({
         geSatisfied,
         courseState: courseState!,
         handleDragEnd,
-        saveStatus,
-        unsavedChanges,
-        saveError,
-        savePlanner,
         getCourseLabels,
         getAllLabels,
         editCourseLabels,

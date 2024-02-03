@@ -1,4 +1,3 @@
-import { upsertPlanner } from "@/app/actions/planner";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { PlannerData } from "@/app/types/Planner";
 import {
@@ -10,8 +9,7 @@ import {
 } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
-import { useMutation } from "@tanstack/react-query";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 
 export default function usePlanner(input: {
   userId: string | undefined;
@@ -24,69 +22,9 @@ export default function usePlanner(input: {
     ? getPlanner(input.plannerId)
     : initialPlanner();
 
-  // Saving
-  const [unsavedChanges, setUnsavedChanges] = useState(true);
   const handleCourseUpdate = (newState: PlannerData) => {
     setPlanner(input.plannerId, input.title, newState);
-    setUnsavedChanges(true);
   };
-
-  const {
-    mutate,
-    isPending: saveStatus,
-    isError: saveError,
-  } = useMutation({
-    mutationFn: async (input: {
-      userId: string;
-      plannerId: string;
-      plannerData: PlannerData;
-      title: string;
-      order: number;
-    }) => {
-      await upsertPlanner(input);
-    },
-    onSuccess: () => {
-      setUnsavedChanges(false);
-    },
-    onError: (err) => {
-      console.error(err);
-    },
-  });
-
-  const savePlanner = useCallback(() => {
-    mutate({
-      userId: input.userId!,
-      plannerId: input.plannerId,
-      plannerData: courseState,
-      title: input.title,
-      order: input.order,
-    });
-  }, [
-    courseState,
-    input.order,
-    input.plannerId,
-    input.title,
-    input.userId,
-    mutate,
-  ]);
-
-  // Prevent user from accidentally leaving the page with unsaved changes
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (unsavedChanges) {
-        event.preventDefault();
-        event.returnValue = "";
-      }
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [unsavedChanges]);
-
-  useEffect(() => {
-    setUnsavedChanges(true);
-  }, [input.title]);
 
   const totalCredits = useMemo(
     () => getTotalCredits(courseState.courses!),
@@ -190,10 +128,6 @@ export default function usePlanner(input: {
     courseState,
     totalCredits,
     geSatisfied,
-    unsavedChanges,
-    saveStatus,
-    saveError,
-    savePlanner,
     deleteCourse,
     editCustomCourse,
     handleCourseUpdate,

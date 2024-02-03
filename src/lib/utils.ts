@@ -3,24 +3,6 @@ import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
 
-/**
- * Delays execution of a function `callback` by `wait` ms.
- * @param callback a callback to invoke after a delay
- * @param wait delay in milliseconds
- * @returns
- */
-export const debounce = <T extends (...args: any[]) => any>(
-  callback: T,
-  wait: number,
-): ((...args: Parameters<T>) => any) => {
-  let timeoutId: NodeJS.Timeout | null;
-
-  return (...args: Parameters<T>) => {
-    if (timeoutId !== null) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback(...args), wait);
-  };
-};
-
 export const zip = (arr1: any[], arr2: any[]) => {
   return arr1.map((elem, index) => [elem, arr2[index]]);
 };

@@ -1,8 +1,7 @@
 import { coursesBy, getAllDepartments } from "@/app/actions/course";
 import { geOptions } from "@/lib/consts";
-import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useSearch() {
   // Query to get the list of departments
@@ -30,7 +29,7 @@ export default function useSearch() {
 
   // Query to get the courses based on the query details
   const { data: courses, isLoading: loading } = useQuery({
-    queryKey: ["courses", queryDetails],
+    queryKey: ["courses", ge, departmentCode, number],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       try {
@@ -42,11 +41,10 @@ export default function useSearch() {
     },
   });
 
-  useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
-    delay: 100,
-    dependencies: [departmentCode, number, ge],
-  });
+  useEffect(
+    () => handleSearch(departmentCode ?? "", number, ge ?? ""),
+    [departmentCode, number, ge],
+  );
 
   // Handlers
   const handleChangeDepartment = (

@@ -111,6 +111,32 @@ export async function upsertPlanner({
   return result[0].id;
 }
 
+export async function saveAllPlanners({
+  userId,
+  planners,
+}: {
+  userId: string;
+  planners: PlannerData[];
+}): Promise<void> {
+  await prisma.$transaction([
+    prisma.planner.deleteMany({
+      where: {
+        userId,
+      },
+    }),
+
+    prisma.planner.createMany({
+      data: planners.map((p, i) => ({
+        userId,
+        id: p.id,
+        order: i,
+        title: p.title,
+        notes: p.notes,
+      })),
+    }),
+  ]);
+}
+
 /**
  * Retrieves all planners for a user, sorted by `order` field in asc order.
  * @param userId user id
@@ -123,7 +149,7 @@ export async function getAllPlanners(email: string): Promise<PlannerData[]> {
     },
   });
 
-  if (!user) throw new Error(`User with email ${email} not found`);
+  if (!user) return [];
 
   const plans = await prisma.planner.findMany({
     where: {
