@@ -1,5 +1,6 @@
 "use client";
 
+import { PlannerProvider } from "@/app/contexts/PlannerProvider";
 import { useRouter } from "next/navigation";
 
 import MajorSelection from "./MajorSelection";
@@ -9,10 +10,12 @@ export default function MajorSelectionPage() {
   const redirectToPlanner = () => router.push("/planner");
 
   return (
-    <MajorSelection
-      saveButtonName="Next"
-      onSaved={redirectToPlanner}
-      onSkip={redirectToPlanner}
-    />
+    <PlannerProvider plannerId="" order={0} title="">
+      <MajorSelection
+        saveButtonName="Next"
+        onSaved={redirectToPlanner}
+        onSkip={redirectToPlanner}
+      />
+    </PlannerProvider>
   );
 }

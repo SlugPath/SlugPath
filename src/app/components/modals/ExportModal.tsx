@@ -7,7 +7,7 @@ import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
-import { PlannerData, PlannerTitle } from "@customTypes/Planner";
+import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import {
@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
   },
 });
 
-function getActivePlanner(planners: PlannerTitle[], activePlanner: string) {
+function getActivePlanner(planners: PlannerData[], activePlanner: string) {
   return planners.find((p) => p.id === activePlanner)?.title;
 }
 
-export default function CourseSelectionModal() {
+export default function ExportModal() {
   const { setShowExportModal, showExportModal, courseState } =
     useContext(ModalsContext);
 

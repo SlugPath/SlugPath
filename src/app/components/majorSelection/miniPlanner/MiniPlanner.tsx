@@ -1,5 +1,5 @@
 import { useLoadPlanner } from "@/app/hooks/useLoad";
-import { EMPTY_PLANNER, emptyPlanner } from "@/lib/plannerUtils";
+import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { Card, Skeleton } from "@mui/joy";
 
 import MiniQuarters from "./MiniQuarters";
@@ -14,11 +14,10 @@ export default function MiniPlanner({
   addCardContainer?: boolean;
 }) {
   const skipLoad = plannerId === EMPTY_PLANNER;
-  const [courseState, , { loading }] = useLoadPlanner({
+  const [courseState, { loading }] = useLoadPlanner({
     userId: undefined,
     plannerId: plannerId,
     skipLoad,
-    defaultPlanner: emptyPlanner(),
   });
 
   if (!active || plannerId === EMPTY_PLANNER) {

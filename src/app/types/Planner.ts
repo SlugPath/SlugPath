@@ -15,7 +15,10 @@ export type PlannerData = {
   id: string;
 };
 
-// Deprecated: Use PlannerData instead
+/**
+ * `PlannerTitle` is a type used to store the title and id of a planner. Used when loading
+ * major default planners
+ */
 export type PlannerTitle = {
   title: string;
   id: string;

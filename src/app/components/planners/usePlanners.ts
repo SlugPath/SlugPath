@@ -39,12 +39,11 @@ export function usePlanners(
 
   function getPlanner(id: string) {
     const p = planners.find((p) => p.id === id);
-    if (!p) throw new Error("Planner not found");
+    if (!p) throw new Error(`Planner not found with id '${id}'`);
     return p;
   }
 
   function setPlanner(id: string, title: string, courseState: PlannerData) {
-    console.log(`Updating planner...`);
     setPlanners((prev) => {
       const idx = prev.findIndex((p) => p.id === id);
       const before = prev.slice(0, idx);
@@ -87,6 +86,7 @@ export function usePlanners(
    * default planner.
    */
   function replaceCurrentPlanner() {
+    console.log(`In replaceCurrentPlanner activePlanner ${activePlanner}`);
     if (activePlanner === undefined) {
       return;
     }
@@ -95,12 +95,13 @@ export function usePlanners(
       const idx = prev.findIndex((p) => p.id === activePlanner);
       const before = prev.slice(0, idx);
       const after = prev.slice(idx + 1);
-      console.log(`${JSON.stringify(defaultPlanner, null, 2)}`);
-      return [
+      const res = [
         ...before,
         { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },
         ...after,
       ];
+      console.log(`In replaceCurrentPlanner res ${JSON.stringify(res)}`);
+      return res;
     });
   }
 
@@ -119,7 +120,7 @@ export function usePlanners(
     setPlanners(newPlanners);
 
     // Switch to the next planner upon deletion if one exists
-    const newActive = newPlanners[newPlanners.length - 1].id;
+    const newActive = newPlanners[newPlanners.length - 1]?.id;
 
     if (newActive !== undefined) {
       switchPlanners(newActive);

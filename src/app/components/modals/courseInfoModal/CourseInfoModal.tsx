@@ -41,7 +41,7 @@ export default function CourseInfoModal() {
 
   const [editing, setEditing] = useState(false);
   const { displayCourse: courseTerm, setDisplayCourse } =
-    useContext(PlannerContext);
+    useContext(ModalsContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
   const { data, isLoading: loading } = useQuery({

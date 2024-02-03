@@ -1,5 +1,6 @@
 import { DropResult } from "@hello-pangea/dnd";
 
+import { UserMajorOutput } from "../actions/major";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
@@ -16,13 +17,13 @@ export interface ModalsContextProps {
   showMajorSelectionModal: boolean;
   setShowMajorSelectionModal: setShow;
   courseState: PlannerData;
+  displayCourse: CourseTerm;
+  setDisplayCourse: SetState<CourseTerm>;
 }
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
   editCustomCourse: (course: StoredCourse) => void;
-  displayCourse: CourseTerm;
-  setDisplayCourse: SetState<CourseTerm>;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
@@ -67,4 +68,7 @@ export interface DefaultPlannerContextProps {
   hasAutoFilled: boolean;
   setHasAutoFilled: SetState<boolean>;
   setDefaultPlanner: SetState<PlannerData>;
+  userMajorData: UserMajorOutput | null;
+  loadingMajorData: boolean;
+  errorMajorData: Error | null;
 }

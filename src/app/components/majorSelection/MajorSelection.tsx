@@ -1,11 +1,10 @@
 import { getAllMajors } from "@/app/actions/major";
 import { useLoadPlanner } from "@/app/hooks/useLoad";
 import { years } from "@/lib/defaultPlanners";
-import { emptyPlanner } from "@/lib/plannerUtils";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@contexts/ModalsProvider";
 import ReportIcon from "@mui/icons-material/Report";
-import { Button, CircularProgress } from "@mui/joy";
+import { CircularProgress } from "@mui/joy";
 import { Alert } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -13,6 +12,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
+import SaveButtons from "./SaveButtons";
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
 import SelectMajorName from "./SelectMajorName";
@@ -64,25 +64,20 @@ export default function MajorSelection({
     ButtonName.Save,
   );
   const [showSelectionError, setShowSelectionError] = useState(false);
-  const {
-    onSaveMajor,
-    userMajorData,
-    loadingSaveMajor,
-    loadingMajorData,
-    errorLoadingMajorData,
-    errorSavingMajorData,
-  } = useMajorSelection(session?.user.id, handleSaveCompleted);
+  const { onSaveMajor, loadingSaveMajor, errorSavingMajorData } =
+    useMajorSelection(session?.user.id, handleSaveCompleted);
+
+  const { userMajorData, loadingMajorData, errorMajorData, setDefaultPlanner } =
+    useContext(DefaultPlannerContext);
 
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
 
-  const [plannerData, , { loading: loadingPlannerData }] = useLoadPlanner({
+  const [plannerData, { loading: loadingPlannerData }] = useLoadPlanner({
     userId: undefined,
     plannerId: selectedDefaultPlanner,
-    defaultPlanner: emptyPlanner(),
   });
 
-  const { setDefaultPlanner } = useContext(DefaultPlannerContext);
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
   useEffect(() => {
@@ -90,7 +85,7 @@ export default function MajorSelection({
       updateUserMajor(
         userMajorData.name,
         userMajorData.catalogYear,
-        userMajorData.defaultPlannerId,
+        userMajorData.defaultPlanner.id,
       );
     }
   }, [userMajorData]);
@@ -183,6 +178,7 @@ export default function MajorSelection({
 
   function handleConfirmReplaceCurrent() {
     handleSave(ButtonName.ReplaceCurrent);
+    setReplaceAlertOpen(false);
   }
 
   function handleClickSave() {
@@ -214,7 +210,7 @@ export default function MajorSelection({
 
   const LoadingMajorDataErrorAlert = () => (
     <div>
-      {errorLoadingMajorData && (
+      {errorMajorData && (
         <Alert color="danger" startDecorator={<ReportIcon />}>
           Error loading major data. Please log out and try again.
         </Alert>
@@ -287,54 +283,6 @@ export default function MajorSelection({
             />
           )}
         </div>
-      </div>
-    </div>
-  );
-}
-
-function SaveButtons({
-  saveButtonName,
-  isInPlannerPage,
-  onSkip,
-  onClickSave,
-  onClickReplaceCurrent,
-  onClickCreateNew,
-  majorSelectionIsValid,
-}: {
-  saveButtonName: string;
-  isInPlannerPage?: boolean;
-  onSkip?: () => void;
-  onClickSave: () => void;
-  onClickReplaceCurrent: () => void;
-  onClickCreateNew: () => void;
-  majorSelectionIsValid: boolean;
-}) {
-  return (
-    <div>
-      {onSkip && (
-        <Button onClick={onSkip} variant="plain">
-          Skip
-        </Button>
-      )}
-      <div>
-        <Button onClick={onClickSave}>{saveButtonName}</Button>
-        {isInPlannerPage && (
-          <>
-            <Button
-              disabled={!majorSelectionIsValid}
-              color="warning"
-              onClick={onClickReplaceCurrent}
-            >
-              Replace Current
-            </Button>
-            <Button
-              disabled={!majorSelectionIsValid}
-              onClick={onClickCreateNew}
-            >
-              Create New
-            </Button>
-          </>
-        )}
       </div>
     </div>
   );

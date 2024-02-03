@@ -21,8 +21,6 @@ export function PlannerProvider({
     unsavedChanges,
     deleteCourse,
     editCustomCourse,
-    displayCourse,
-    setDisplayCourse,
     totalCredits,
     geSatisfied,
     courseState,
@@ -56,8 +54,6 @@ export function PlannerProvider({
       value={{
         deleteCourse,
         editCustomCourse,
-        displayCourse,
-        setDisplayCourse,
         totalCredits,
         geSatisfied,
         courseState: courseState!,

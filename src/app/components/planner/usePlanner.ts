@@ -5,11 +5,11 @@ import {
   findQuarter,
   getGeSatisfied,
   getTotalCredits,
+  initialPlanner,
   isCustomCourse,
 } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
-import { Term } from "@customTypes/Quarter";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
@@ -20,10 +20,9 @@ export default function usePlanner(input: {
   order: number;
 }) {
   const { getPlanner, setPlanner } = useContext(PlannersContext);
-  const courseState = useMemo(
-    () => getPlanner(input.plannerId),
-    [getPlanner, input.plannerId],
-  );
+  const courseState = getPlanner
+    ? getPlanner(input.plannerId)
+    : initialPlanner();
 
   // Saving
   const [unsavedChanges, setUnsavedChanges] = useState(true);
@@ -94,10 +93,6 @@ export default function usePlanner(input: {
     [courseState],
   );
   const geSatisfied = useMemo(() => getGeSatisfied(courseState), [courseState]);
-
-  const [displayCourse, setDisplayCourse] = useState<
-    [StoredCourse, Term | undefined] | undefined
-  >();
 
   /**
    * A curried function that returns a callback to be invoked upon deleting a course
@@ -202,8 +197,6 @@ export default function usePlanner(input: {
     deleteCourse,
     editCustomCourse,
     handleCourseUpdate,
-    displayCourse,
-    setDisplayCourse,
     getCourseLabels,
     getAllLabels,
     updatePlannerLabels,

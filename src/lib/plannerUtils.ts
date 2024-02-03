@@ -337,3 +337,44 @@ export function cloneDefaultPlanner(defaultPlanner: PlannerData): PlannerData {
   });
   return clone;
 }
+
+/**
+ * Converts a Planner from the database to a PlannerData type
+ * @param planner planner from the database
+ * @returns a PlannerData instance
+ */
+export function toPlannerData(planner: any): PlannerData {
+  // Set all the courses for each quarter
+  const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner()));
+  const allCourses: StoredCourse[] = [];
+  planner?.quarters.forEach((q: any) => {
+    const quarterId = `quarter-${q.year}-${q.term}`;
+    const courseIds: string[] = q.courses.map((c: StoredCourse) => c.id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const courses = q.courses.map(({ quarterId: _, ...rest }: any) => {
+      return {
+        ...rest,
+        quartersOffered: rest.quartersOffered.map((q: any) => q as Term),
+        ge: rest.ge.map((g: any) => g as string),
+      };
+    });
+    allCourses.push(...courses);
+    newPlanner.quarters.push({
+      id: quarterId,
+      title: `${q.term}`,
+      courses: courseIds,
+    });
+  });
+
+  newPlanner.labels = [
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ...planner.labels.map(({ plannerId: _, ...l }: any) => l),
+  ];
+  newPlanner.notes = planner.notes ? planner.notes : "";
+  newPlanner.courses = allCourses;
+  newPlanner.title = planner.title;
+  newPlanner.id = planner.id;
+
+  // Return new modified planner
+  return newPlanner;
+}

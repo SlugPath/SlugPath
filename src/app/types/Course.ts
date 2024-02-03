@@ -18,8 +18,6 @@ export const storedCourseSchema = z.object({
 
 export type StoredCourse = z.infer<typeof storedCourseSchema>;
 
-export const storedCoursesSchema = z.array(storedCourseSchema);
-
 export type CourseTerm = [StoredCourse, Term | undefined] | undefined;
 
 /**

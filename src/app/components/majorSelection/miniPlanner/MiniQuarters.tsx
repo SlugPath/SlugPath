@@ -3,7 +3,7 @@ import { StoredCourse } from "@customTypes/Course";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 
-import MiniQuarterCard from "../MiniQuarterCard";
+import MiniQuarterCard from "./MiniQuarterCard";
 
 export default function MiniQuarters({
   courseState,

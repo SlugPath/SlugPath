@@ -1,5 +1,5 @@
-import { MajorInput, getUserMajor, updateUserMajor } from "@/app/actions/major";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { MajorInput, updateUserMajor } from "@/app/actions/major";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
  *
@@ -11,20 +11,8 @@ export default function useMajorSelection(
   userId?: string,
   onSuccess?: () => void,
 ) {
-  const {
-    data: userMajorData,
-    isLoading: loadingMajorData,
-    refetch,
-    error: errorLoadingMajorData,
-  } = useQuery({
-    queryKey: ["userMajor", userId],
-    queryFn: async () => {
-      return await getUserMajor(userId!);
-    },
-    enabled: !!userId,
-  });
-
   // Update user major data
+  const queryClient = useQueryClient();
   const {
     mutate: saveMajor,
     isPending: loadingSaveMajor,
@@ -34,8 +22,7 @@ export default function useMajorSelection(
       return await updateUserMajor(majorInput);
     },
     onSuccess: () => {
-      refetch();
-
+      queryClient.invalidateQueries({ queryKey: ["userMajorData"] });
       if (onSuccess) {
         onSuccess();
       }
@@ -60,10 +47,7 @@ export default function useMajorSelection(
 
   return {
     onSaveMajor: handleSaveMajor,
-    userMajorData,
-    loadingMajorData,
     loadingSaveMajor,
-    errorLoadingMajorData,
     errorSavingMajorData,
   };
 }
