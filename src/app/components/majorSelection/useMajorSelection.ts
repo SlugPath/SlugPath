@@ -18,14 +18,14 @@ export default function useMajorSelection(
     isPending: loadingSaveMajor,
     isError: errorSavingMajorData,
   } = useMutation({
+    mutationKey: ["updaterUserMajor", userId],
     mutationFn: async (majorInput: MajorInput) => {
+      await queryClient.cancelQueries({ queryKey: ["userMajorData", userId] });
       return await updateUserMajor(majorInput);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userMajorData"] });
-      if (onSuccess) {
-        onSuccess();
-      }
+      if (onSuccess) onSuccess();
+      queryClient.refetchQueries({ queryKey: ["userMajorData", userId] });
     },
   });
 

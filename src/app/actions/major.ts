@@ -1,10 +1,8 @@
 "use server";
 
-import { initialPlanner } from "@/lib/plannerUtils";
-import { toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 
-import { PlannerData, PlannerTitle } from "../types/Planner";
+import { PlannerTitle } from "../types/Planner";
 
 export async function getAllMajors(catalogYear: string): Promise<string[]> {
   const res = await prisma.major.findMany({
@@ -29,7 +27,7 @@ export async function getAllMajors(catalogYear: string): Promise<string[]> {
 export type UserMajorOutput = {
   name: string;
   catalogYear: string;
-  defaultPlanner: PlannerData;
+  defaultPlannerId: string;
 };
 
 export async function getUserMajorByEmail(
@@ -54,27 +52,10 @@ export async function getUserMajorByEmail(
     return null;
   }
 
-  let defaultPlanner: PlannerData = initialPlanner();
-  if (userData?.defaultPlannerId) {
-    defaultPlanner = toPlannerData(
-      await prisma.planner.findFirst({
-        where: { id: userData?.defaultPlannerId },
-        include: {
-          quarters: {
-            include: {
-              courses: true,
-            },
-          },
-          labels: true,
-        },
-      }),
-    );
-  }
-
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlanner,
+    defaultPlannerId: userData?.defaultPlannerId || "",
   };
 }
 
@@ -100,27 +81,10 @@ export async function getUserMajorById(
     return null;
   }
 
-  let defaultPlanner: PlannerData = initialPlanner();
-  if (userData?.defaultPlannerId) {
-    defaultPlanner = toPlannerData(
-      await prisma.planner.findFirst({
-        where: { id: userData?.defaultPlannerId },
-        include: {
-          quarters: {
-            include: {
-              courses: true,
-            },
-          },
-          labels: true,
-        },
-      }),
-    );
-  }
-
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlanner,
+    defaultPlannerId: userData?.defaultPlannerId ?? "",
   };
 }
 
@@ -136,7 +100,7 @@ export async function updateUserMajor({
   name,
   catalogYear,
   defaultPlannerId,
-}: MajorInput): Promise<string> {
+}: MajorInput): Promise<UserMajorOutput | null> {
   const major = await prisma.major.findFirst({
     where: {
       name,
@@ -150,7 +114,7 @@ export async function updateUserMajor({
       `could not find major with name ${name} and catalog year ${catalogYear}`,
     );
 
-  const user = await prisma.user.update({
+  await prisma.user.update({
     where: {
       id: userId,
     },
@@ -160,7 +124,11 @@ export async function updateUserMajor({
     },
   });
 
-  return user.id;
+  return {
+    name,
+    catalogYear,
+    defaultPlannerId,
+  };
 }
 
 export type MajorDefaultsInput = {

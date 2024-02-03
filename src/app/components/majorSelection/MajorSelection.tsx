@@ -1,5 +1,4 @@
 import { getAllMajors } from "@/app/actions/major";
-import { useLoadPlanner } from "@/app/hooks/useLoad";
 import { years } from "@/lib/defaultPlanners";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@contexts/ModalsProvider";
@@ -67,25 +66,28 @@ export default function MajorSelection({
   const { onSaveMajor, loadingSaveMajor, errorSavingMajorData } =
     useMajorSelection(session?.user.id, handleSaveCompleted);
 
-  const { userMajorData, loadingMajorData, errorMajorData, setDefaultPlanner } =
-    useContext(DefaultPlannerContext);
+  const {
+    userMajorData,
+    loadingMajorData,
+    errorMajorData,
+    setDefaultPlannerId,
+    loadingDefaultPlanner,
+  } = useContext(DefaultPlannerContext);
 
   const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
     useDefaultPlanners(catalogYear, major);
-
-  const [plannerData, { loading: loadingPlannerData }] = useLoadPlanner({
-    userId: undefined,
-    plannerId: selectedDefaultPlanner,
-  });
 
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
   useEffect(() => {
     if (userMajorData) {
+      console.log(
+        `Updating userMajor data ${JSON.stringify(userMajorData, null, 2)}`,
+      );
       updateUserMajor(
         userMajorData.name,
         userMajorData.catalogYear,
-        userMajorData.defaultPlanner.id,
+        userMajorData.defaultPlannerId,
       );
     }
   }, [userMajorData]);
@@ -147,20 +149,24 @@ export default function MajorSelection({
 
   // Handlers
   function handleSaveCompleted() {
-    setDefaultPlanner(plannerData);
-
     switch (saveButtonClicked) {
       case ButtonName.Save:
         onSaved();
         break;
+      // These are slightly delayed to allow the save to complete
+      // before the new planner is created or replaced
       case ButtonName.CreateNew:
-        if (onCreateNewPlanner && !loadingPlannerData) {
-          onCreateNewPlanner();
+        if (onCreateNewPlanner && !loadingDefaultPlanner) {
+          setTimeout(() => {
+            onCreateNewPlanner();
+          }, 200);
         }
         break;
       case ButtonName.ReplaceCurrent:
-        if (onReplaceCurrentPlanner && !loadingPlannerData) {
-          onReplaceCurrentPlanner();
+        if (onReplaceCurrentPlanner && !loadingDefaultPlanner) {
+          setTimeout(() => {
+            onReplaceCurrentPlanner();
+          }, 200);
         }
         break;
     }
@@ -169,6 +175,7 @@ export default function MajorSelection({
   function handleSave(buttonName: ButtonName) {
     if (majorSelectionIsValid) {
       setSaveButtonClicked(buttonName);
+      setDefaultPlannerId(selectedDefaultPlanner);
       onSaveMajor(major, catalogYear, selectedDefaultPlanner);
       setShowSelectionError(false);
     } else {

@@ -179,6 +179,26 @@ export async function getPlanner({
   return p ? toPlannerData(p) : null;
 }
 
+export async function getPlannerById(plannerId: string) {
+  const p = await prisma.planner.findUnique({
+    where: {
+      id: plannerId,
+    },
+    include: {
+      quarters: {
+        include: {
+          courses: true,
+        },
+      },
+      labels: true,
+    },
+  });
+
+  if (!p) throw new Error(`Planner with id ${plannerId} not found`);
+
+  return toPlannerData(p);
+}
+
 /**
  * Deletes a planner belonging to a particular user
  * @param userId user id

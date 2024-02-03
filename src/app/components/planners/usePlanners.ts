@@ -86,7 +86,6 @@ export function usePlanners(
    * default planner.
    */
   function replaceCurrentPlanner() {
-    console.log(`In replaceCurrentPlanner activePlanner ${activePlanner}`);
     if (activePlanner === undefined) {
       return;
     }
@@ -100,7 +99,6 @@ export function usePlanners(
         { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },
         ...after,
       ];
-      console.log(`In replaceCurrentPlanner res ${JSON.stringify(res)}`);
       return res;
     });
   }

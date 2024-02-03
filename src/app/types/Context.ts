@@ -67,7 +67,8 @@ export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
   hasAutoFilled: boolean;
   setHasAutoFilled: SetState<boolean>;
-  setDefaultPlanner: SetState<PlannerData>;
+  setDefaultPlannerId: SetState<string>;
+  loadingDefaultPlanner: boolean;
   userMajorData: UserMajorOutput | null;
   loadingMajorData: boolean;
   errorMajorData: Error | null;
