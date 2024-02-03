@@ -9,14 +9,18 @@ import SearchResults from "./SearchResults";
 /**
  * Component for searching for courses to add.
  */
-export default function Search() {
-  const [courses, setCourses] = useState<StoredCourse[]>([]);
+export default function Search({
+  displayCustomCourseSelection,
+}: {
+  displayCustomCourseSelection: boolean;
+}) {
+  const [courses, setCourses] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMoreResults, setLoadingMoreResults] = useState<boolean>(false);
 
   return (
     <>
-      <CustomCourseSelection />
+      {displayCustomCourseSelection && <CustomCourseSelection />}
       <Card className="w-80" variant="plain">
         <SearchInputs
           onUpdateCourses={(courses: StoredCourse[]) => setCourses(courses)}

@@ -7,8 +7,9 @@ export interface DraggableCourseCardProps {
   course: StoredCourse;
   index: number;
   draggableId: string;
-  quarterId?: string;
   isCustom: boolean;
+  quarterId?: string;
+  customDeleteCourse?: () => void;
 }
 export default function DraggableCourseCard({
   course,
@@ -16,6 +17,7 @@ export default function DraggableCourseCard({
   draggableId,
   quarterId,
   isCustom = false,
+  customDeleteCourse,
 }: DraggableCourseCardProps) {
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
@@ -27,6 +29,7 @@ export default function DraggableCourseCard({
             quarterId={quarterId}
             provided={provided}
             isCustom={isCustom}
+            customDeleteCourse={customDeleteCourse}
           />
         );
       }}

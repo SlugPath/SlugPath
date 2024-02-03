@@ -34,9 +34,8 @@ export default function BetaWarning({ show = true }: { show?: boolean }) {
           transition: "opacity 350ms ease-in-out",
         }}
       >
-        The UCSC Course Planner is currently in active development, and breaking
-        changes are to be expected. Be sure to export any planners you have
-        created to ensure that they are not lost.
+        SlugPath is currently in development. Breaking changes are to be
+        expected.
         <CloseIconButton onClick={() => setVisible(false)} />
       </Alert>
     )

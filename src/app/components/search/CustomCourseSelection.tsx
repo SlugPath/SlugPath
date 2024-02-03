@@ -1,4 +1,5 @@
 import { StoredCourse } from "@/graphql/planner/schema";
+import { CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { Droppable } from "@hello-pangea/dnd";
@@ -70,7 +71,7 @@ export default function CustomCourseSelection() {
         </div>
       )}
       {customCourses.length > 0 && (
-        <Droppable droppableId="custom-droppable">
+        <Droppable droppableId={CUSTOM_DROPPABLE}>
           {(provided) => {
             return (
               <div

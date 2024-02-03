@@ -6,7 +6,7 @@ export default function Footer() {
         accurate information.
       </p>
       <p className="text-center text-xs pb-2">
-        © 2023 UCSC Course Planner. All rights reserved.
+        © 2023 SlugPath. All rights reserved.
       </p>
     </footer>
   );

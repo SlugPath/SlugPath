@@ -1,3 +1,6 @@
+// import { Typography } from "@mui/material";
+// import ProgressBar from "./ProgressBar";
+import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -18,12 +21,17 @@ import AutoFillSnackbar from "../AutoFillSnackbar";
 import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
 import ExportModal from "../modals/ExportModal";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
+import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
 import PlannerActionsCard from "./PlannerActionsCard";
 import SaveSnackbars from "./SaveSnackbars";
+import StyledAccordion from "./StyledAccordion";
+import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import { GEProgress } from "./graduationProgress/GEProgress";
-import { GradProgress } from "./graduationProgress/GradProgress";
+import GraduationProgress from "./graduationProgress/GraduationProgress";
+import MajorProgress from "./graduationProgress/MajorProgress";
+import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -54,7 +62,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           <ModalsProvider>
             <div className="flex justify-between space-x-4">
               <div className="flex-initial pr-2">
-                <Search />
+                <Search displayCustomCourseSelection={true} />
               </div>
               <div className="overflow-auto w-full flex-grow">
                 <AccordionGroup>
@@ -102,6 +110,8 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 }
 
+// import { useContext } from "react";
+
 function GraduationProgressCard({
   totalCredits,
   geSatisfied,
@@ -111,13 +121,23 @@ function GraduationProgressCard({
   geSatisfied: string[];
   courseState: PlannerData;
 }) {
+  const { majorProgressPercentage } = useContext(MajorVerificationContext);
+
   return (
     <Card variant="plain">
-      <div className="flex place-items-center">
-        <GradProgress credits={totalCredits} />
+      <GraduationProgress
+        credits={totalCredits}
+        courseState={courseState}
+        majorProgressPercentage={majorProgressPercentage}
+      />
+
+      <div>
+        <MajorProgress majorProgressPercentage={majorProgressPercentage} />
       </div>
 
-      <hr className="rounded border-t border-slate-300" />
+      <div className="flex place-items-center">
+        <CreditsProgress credits={totalCredits} />
+      </div>
 
       <div className="flex place-items-center">
         <GEProgress ge={geSatisfied} courseState={courseState} />
@@ -132,6 +152,8 @@ function Modals() {
       <CourseInfoModal />
       <ExportModal />
       <MajorSelectionModal />
+      <MajorProgressModal />
+      <PermissionsModal />
     </>
   );
 }
@@ -156,26 +178,6 @@ function Years({ courseState }: { courseState: PlannerData }) {
         );
       })}
     </div>
-  );
-}
-
-function StyledAccordion({ children }: { children: React.ReactNode }) {
-  return (
-    <Accordion
-      variant="soft"
-      sx={{
-        borderRadius: "0.5rem",
-        "&.MuiAccordion-root": {
-          "& .MuiAccordionSummary-root": {
-            padding: "0.5rem 0",
-            paddingX: "0.5rem",
-          },
-        },
-      }}
-      defaultExpanded={true}
-    >
-      {children}
-    </Accordion>
   );
 }
 

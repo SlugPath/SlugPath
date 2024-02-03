@@ -73,6 +73,7 @@ export const GET_MAJOR = gql`
       name
       catalogYear
       defaultPlannerId
+      id
     }
   }
 `;
