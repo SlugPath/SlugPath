@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
+import { MajorVerificationProvider } from "../contexts/MajorVerificationProvider";
 import {
   PlannersContext,
   PlannersProvider,
@@ -85,9 +86,11 @@ function PlannerList() {
             }}
             key={id}
           >
-            <PlannerProvider plannerId={id} title={title} order={index}>
-              <Planner isActive={activePlanner === id} />
-            </PlannerProvider>
+            <MajorVerificationProvider plannerId={id}>
+              <PlannerProvider plannerId={id} title={title} order={index}>
+                <Planner isActive={activePlanner === id} />
+              </PlannerProvider>
+            </MajorVerificationProvider>
           </ListItem>
         ))}
       </List>

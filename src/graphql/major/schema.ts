@@ -12,6 +12,9 @@ export class UserMajorOutput {
 
   @Field()
   defaultPlannerId!: string;
+
+  @Field()
+  id!: number;
 }
 
 @InputType()

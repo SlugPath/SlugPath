@@ -12,6 +12,7 @@ const nextConfig = bundleAnalyzer({
   output: "standalone",
   experimental: {
     serverMinification: false,
+    serverActions: true,
   },
   async headers() {
     return [

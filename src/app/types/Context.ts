@@ -6,6 +6,7 @@ import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
 import { PlannerData } from "./PlannerData";
+import { RequirementList, Requirements } from "./Requirements";
 
 type setShow = SetState<boolean>;
 
@@ -17,6 +18,10 @@ export interface ModalsContextProps {
   onShowCourseInfoModal: () => void;
   showMajorSelectionModal: boolean;
   setShowMajorSelectionModal: setShow;
+  showMajorProgressModal: boolean;
+  setShowMajorProgressModal: setShow;
+  showPermissionsModal: boolean;
+  setShowPermissionsModal: setShow;
   courseState: PlannerData;
 }
 
@@ -71,4 +76,27 @@ export interface DefaultPlannerContextProps {
   hasAutoFilled: boolean;
   setHasAutoFilled: SetState<boolean>;
   setDefaultPlanner: SetState<PlannerData>;
+}
+
+export interface MajorVerificationContextProps {
+  isMajorRequirementsSatisfied: (
+    requirements: Requirements,
+    courses: StoredCourse[],
+  ) => boolean;
+  majorRequirements: RequirementList;
+  majorProgressPercentage: number;
+  errors: string;
+  loadingSave: boolean;
+  isSaved: boolean;
+  findRequirementList: (
+    id: string,
+    requirements: RequirementList,
+  ) => RequirementList | null;
+  addRequirementList: (parentRequirementListId: string) => void;
+  removeRequirementList: (requirementListId: string) => void;
+  updateRequirementList: (
+    requirementListId: string,
+    newRequirementList: RequirementList,
+  ) => void;
+  onSaveMajorRequirements: () => void;
 }

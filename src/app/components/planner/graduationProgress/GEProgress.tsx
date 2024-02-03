@@ -1,7 +1,6 @@
 import { GESMappedToCourses } from "@/lib/plannerUtils";
 import { PlannerData } from "@customTypes/PlannerData";
-import InfoIcon from "@mui/icons-material/Info";
-import { Tooltip, Typography, useColorScheme } from "@mui/joy";
+import { Typography, useColorScheme } from "@mui/joy";
 import { blue } from "@mui/material/colors";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { useEffect, useState } from "react";
@@ -61,13 +60,7 @@ const GEProgressModal = ({
     <>
       <div className="flex flex-col place-items-center pt-2 w-full">
         <div className="flex flex-row py-1 justify-between w-full pb-4">
-          <Typography>GE Progress</Typography>
-          <Tooltip
-            title="You must satisfy all general education requirements to graduate"
-            size="sm"
-          >
-            <InfoIcon sx={{ color: "gray" }} />
-          </Tooltip>
+          <Typography>General Education</Typography>
         </div>
         <PieChart
           tooltip={{

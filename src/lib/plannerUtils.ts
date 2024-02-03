@@ -228,12 +228,13 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
 export function getUniqueCourses(courses: StoredCourse[]): StoredCourse[] {
   const uniqueCourses = new Map();
 
-  for (const { departmentCode, number, title, credits } of courses) {
-    const key = `${departmentCode}|${number}|${title}|${credits}`;
+  for (const course of courses) {
+    const key = `${course.departmentCode}|${course.number}|${course.title}|${course.credits}`;
     if (!uniqueCourses.has(key)) {
-      uniqueCourses.set(key, { credits });
+      uniqueCourses.set(key, course);
     }
   }
+
   return Array.from(uniqueCourses.values());
 }
 

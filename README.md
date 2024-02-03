@@ -1,13 +1,11 @@
-# Slug Path aka UCSC Course Planner
+# Slug Path aka UCSC Degree Planner
 
-> A course planner for UCSC students
+> A degree planner for UCSC students
 
 ## About
 
-UCSC currently does not have an interactive and aesthetically pleasing course
-planner that provides basic validation for academic plans. Our aim with this
-project is to meet that demand in the student body, starting with the CSE
-department.
+UCSC currently does not have an interactive and aesthetically pleasing degree planner that provides basic validation
+for academic plans. Our aim with this project is to meet that demand in the student body, starting with the CSE department.
 
 ## Getting started
 
@@ -85,6 +83,20 @@ use the credentials:
 2. `vlt login`
 3. `vlt config init`
 4. `vlt secrets get -plaintext {secret name}`
+
+## Permissions
+
+To set yourself as an admin in the database, run the following command to open psql. The connect string is in your .env file under `POSTGRES_PRISMA_URL`. This is useful to test permissions and major requirements editing.
+
+```
+psql "<connection string>"
+```
+
+Then run the following command to set yourself as an admin
+
+```
+UPDATE "User" SET role = 'ADMIN' WHERE email = '<your-email>';
+```
 
 ## Deployment
 
