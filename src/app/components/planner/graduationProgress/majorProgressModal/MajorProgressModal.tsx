@@ -73,39 +73,88 @@ export default function MajorProgressModal() {
               </Card>
             </div>
           )}
-          <div
-            className="overflow-y-scroll w-full"
-            style={{ maxHeight: "80vh" }}
-          >
-            {editing ? (
-              <RequirementsComponentEditing
-                requirements={majorRequirements}
-                parents={0}
-              />
-            ) : (
-              <RequirementsComponent
-                requirements={majorRequirements}
-                parents={0}
-              />
-            )}
-          </div>
+          <Requirements
+            majorRequirements={majorRequirements}
+            editing={editing}
+          />
         </div>
-        {hasPermissionToEdit && (
-          <div className="flex flex-row justify-end space-x-2">
-            <Chip color="success" variant="solid">
-              You have edit permission
-            </Chip>
-            {loadingSave ? (
-              <CircularProgress />
-            ) : (
-              <Button onClick={handleToggleEditButton}>
-                {editing ? "Done" : "Edit"}
-              </Button>
-            )}
-          </div>
-        )}
+        <EditPermissionLabelAndButton
+          editing={editing}
+          loadingSave={loadingSave}
+          hasPermissionToEdit={hasPermissionToEdit}
+          handleToggleEditButton={handleToggleEditButton}
+        />
         <ModalClose variant="plain" />
       </Sheet>
     </Modal>
+  );
+}
+
+// this component decides which RequirementsComponent to render based on the editing prop
+// will also display if there are no requirements
+function Requirements({
+  majorRequirements,
+  editing,
+}: {
+  majorRequirements: any;
+  editing: boolean;
+}) {
+  const noRequirements = majorRequirements.requirements.length === 0;
+
+  if (noRequirements && !editing) {
+    return (
+      <Card
+        variant="soft"
+        className="flex flex-row justify-center items-center w-full"
+      >
+        <Typography>
+          There are no requirements for this degree program yet
+        </Typography>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="overflow-y-scroll w-full" style={{ maxHeight: "80vh" }}>
+      {editing ? (
+        <RequirementsComponentEditing
+          requirements={majorRequirements}
+          parents={0}
+        />
+      ) : (
+        <RequirementsComponent requirements={majorRequirements} parents={0} />
+      )}
+    </div>
+  );
+}
+
+function EditPermissionLabelAndButton({
+  editing,
+  loadingSave,
+  hasPermissionToEdit,
+  handleToggleEditButton,
+}: {
+  editing: boolean;
+  loadingSave: boolean;
+  hasPermissionToEdit: boolean;
+  handleToggleEditButton: () => void;
+}) {
+  return (
+    <>
+      {hasPermissionToEdit && (
+        <div className="flex flex-row justify-end space-x-2">
+          <Chip color="success" variant="solid">
+            You have edit permission
+          </Chip>
+          {loadingSave ? (
+            <CircularProgress />
+          ) : (
+            <Button onClick={handleToggleEditButton}>
+              {editing ? "Done" : "Edit Requirement List"}
+            </Button>
+          )}
+        </div>
+      )}
+    </>
   );
 }

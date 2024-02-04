@@ -127,6 +127,10 @@ export function RequirementsComponentEditing({
     );
   }
 
+  function shouldHaveClasses(parents: number) {
+    return parents > 0;
+  }
+
   return (
     <Card variant="soft" style={cardStyleProps(parents, mode)}>
       <div className="flex flex-row justify-between items-center">
@@ -144,9 +148,11 @@ export function RequirementsComponentEditing({
           )}
           <EditIconButton onClick={handleToggleEditingTitle} />
         </div>
-        <DeleteIconButton
-          onClick={() => removeRequirementList(requirements.id)}
-        />
+        {parents > 0 && (
+          <DeleteIconButton
+            onClick={() => removeRequirementList(requirements.id)}
+          />
+        )}
       </div>
       <div className="flex flex-row items-center space-x-1">
         <Select
@@ -167,7 +173,7 @@ export function RequirementsComponentEditing({
         </Select>
         <Typography>of the following</Typography>
       </div>
-      {hasRequirementLists() ? null : (
+      {shouldHaveClasses(parents) && !hasRequirementLists() && (
         <Classes
           requirements={requirements}
           deleteCourse={deleteCourse}
