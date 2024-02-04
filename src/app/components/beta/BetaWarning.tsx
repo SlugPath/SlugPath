@@ -4,8 +4,6 @@ import { WarningAmberOutlined } from "@mui/icons-material";
 import { Alert } from "@mui/joy";
 import { useEffect, useState } from "react";
 
-import CloseIconButton from "../buttons/CloseIconButton";
-
 export default function BetaWarning({ show = true }: { show?: boolean }) {
   const [visible, setVisible] = useState(true);
   const [shouldRender, setShouldRender] = useState(true);
@@ -41,7 +39,6 @@ export default function BetaWarning({ show = true }: { show?: boolean }) {
           SlugPath is currently in development. Breaking changes are to be
           expected.
         </p>
-        <CloseIconButton onClick={() => setVisible(false)} />
       </Alert>
     )
   );

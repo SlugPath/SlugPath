@@ -26,7 +26,6 @@ export function PlannerProvider({
     handleCourseUpdate,
     getCourseLabels,
     getAllLabels,
-    editCourseLabels,
     updatePlannerLabels,
     updateNotes,
   } = usePlanner({
@@ -56,7 +55,6 @@ export function PlannerProvider({
         handleDragEnd,
         getCourseLabels,
         getAllLabels,
-        editCourseLabels,
         updatePlannerLabels,
         customCourses,
         handleAddCustom,

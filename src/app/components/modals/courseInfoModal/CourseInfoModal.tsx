@@ -35,7 +35,6 @@ export default function CourseInfoModal() {
     editCustomCourse,
     getCourseLabels,
     getAllLabels,
-    editCourseLabels,
     updatePlannerLabels,
   } = useContext(PlannerContext);
 
@@ -126,8 +125,10 @@ export default function CourseInfoModal() {
   const handleUpdateLabels = (labels: Label[]) => {
     const newLabels = labels.map((label) => label.id);
     const newCourse: StoredCourse = { ...course, labels: newLabels };
-    editCourseLabels(newCourse);
-    updatePlannerLabels(labels);
+    updatePlannerLabels({
+      labels,
+      newCourse,
+    });
     setDisplayCourse([newCourse, term]);
   };
 

@@ -2,29 +2,39 @@ import { useEffect, useRef, useState } from "react";
 
 import { SetState } from "../types/Common";
 
-function isArray<T>(value: T | T[]): value is T[] {
-  return Array.isArray(value);
+function isEmpty(value: any) {
+  if (!value) return true;
+  if (value.length === 0) return true;
+  return false;
 }
 
 export default function useLocalStorage<T>(
   key: string,
   remoteValue: T,
+  defaultValue: T,
 ): [T, SetState<T>] {
   const isMounted = useRef(false);
-  const initial = isArray(remoteValue) ? ([] as T) : ({} as T);
-  const [value, setValue] = useState<T>(initial);
+  const [value, setValue] = useState<T>(defaultValue);
 
   useEffect(() => {
+    const setRemoteValue = () => {
+      if (!isEmpty(remoteValue)) setValue(remoteValue);
+    };
     const initialize = () => {
       const item = window.localStorage.getItem(key);
       if (item) {
         try {
-          setValue(JSON.parse(item));
+          const val = JSON.parse(item);
+          if (!isEmpty(val)) {
+            setValue(val);
+          } else {
+            setRemoteValue();
+          }
         } catch (e) {
           console.error(e);
         }
       } else {
-        setValue(remoteValue);
+        setRemoteValue();
       }
     };
     initialize();

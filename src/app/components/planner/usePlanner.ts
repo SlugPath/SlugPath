@@ -85,7 +85,7 @@ export default function usePlanner(input: {
   };
 
   const getAllLabels = () => {
-    return courseState?.labels ?? [];
+    return courseState.labels;
   };
 
   const getCourseLabels = (course: StoredCourse): Label[] => {
@@ -96,23 +96,25 @@ export default function usePlanner(input: {
     });
   };
 
-  const updatePlannerLabels = (newLabels: Label[]) => {
+  // Updates the planner state with new labels as well as any course
+  // that may have been updated with new labels
+  const updatePlannerLabels = ({
+    labels,
+    newCourse,
+  }: {
+    labels: Label[];
+    newCourse?: StoredCourse;
+  }) => {
     handleCourseUpdate({
-      ...courseState!,
-      labels: courseState!.labels.map((old) => {
+      ...courseState,
+      labels: courseState.labels.map((old) => {
         // Update only the labels that got updated (their names changed)
-        const updated = newLabels.find((l) => l.id === old.id);
+        const updated = labels.find((l) => l.id === old.id);
         if (updated === undefined) return old;
         return updated;
       }),
-    });
-  };
-
-  const editCourseLabels = (newCourse: StoredCourse) => {
-    handleCourseUpdate({
-      ...courseState,
       courses: courseState.courses.map((c) => {
-        return c.id === newCourse.id ? newCourse : c;
+        return c.id === newCourse?.id ? newCourse : c;
       }),
     });
   };
@@ -134,7 +136,6 @@ export default function usePlanner(input: {
     getCourseLabels,
     getAllLabels,
     updatePlannerLabels,
-    editCourseLabels,
     updateNotes,
   };
 }

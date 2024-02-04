@@ -90,8 +90,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 }
 
-// import { useContext } from "react";
-
 function GraduationProgressCard({
   totalCredits,
   geSatisfied,

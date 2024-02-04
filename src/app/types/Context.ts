@@ -35,8 +35,13 @@ export interface PlannerContextProps {
   handleDragEnd: (result: DropResult) => void;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
-  editCourseLabels: (course: StoredCourse) => void;
-  updatePlannerLabels: (labels: Label[]) => void;
+  updatePlannerLabels: ({
+    labels,
+    newCourse,
+  }: {
+    labels: Label[];
+    newCourse?: StoredCourse;
+  }) => void;
   customCourses: StoredCourse[];
   handleAddCustom: (input: CustomCourseInput) => void;
   handleRemoveCustom: (idx: number) => void;
