@@ -336,6 +336,7 @@ export function cloneDefaultPlanner(defaultPlanner: PlannerData): PlannerData {
       notes: "",
     };
   });
+  clone.labels = initialLabels();
   return clone;
 }
 
