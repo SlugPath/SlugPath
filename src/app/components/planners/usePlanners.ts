@@ -50,13 +50,12 @@ export function usePlanners(
   }, [saveAll, userId, planners]);
 
   useEffect(() => {
-    const handleBeforeUnload = async () => {
+    const handleBeforeUnload = () => {
       if (userId) {
-        try {
-          await saveAll({ userId, planners });
-        } catch (error) {
-          console.error(error);
-        }
+        navigator.sendBeacon(
+          "/api/planners",
+          JSON.stringify({ userId, planners }),
+        );
       }
     };
     window.addEventListener("beforeunload", handleBeforeUnload);

@@ -118,23 +118,18 @@ export async function saveAllPlanners({
   userId: string;
   planners: PlannerData[];
 }): Promise<void> {
-  await prisma.$transaction([
-    prisma.planner.deleteMany({
-      where: {
+  await prisma.planner.deleteMany({});
+  await Promise.all(
+    planners.map((p, i) => {
+      return upsertPlanner({
         userId,
-      },
-    }),
-
-    prisma.planner.createMany({
-      data: planners.map((p, i) => ({
-        userId,
-        id: p.id,
-        order: i,
+        plannerId: p.id,
+        plannerData: p,
         title: p.title,
-        notes: p.notes,
-      })),
+        order: i,
+      });
     }),
-  ]);
+  );
 }
 
 /**
