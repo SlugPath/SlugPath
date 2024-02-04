@@ -1,3 +1,5 @@
+import { StoredCourse } from "@/app/types/Course";
+import { Term } from "@/app/types/Quarter";
 import { useState } from "react";
 
 export default function useModals() {
@@ -11,11 +13,17 @@ export default function useModals() {
     setShowCourseInfoModal(true);
   }
 
+  const [displayCourse, setDisplayCourse] = useState<
+    [StoredCourse, Term | undefined] | undefined
+  >();
+
   return {
     showExportModal,
     setShowExportModal,
     showCourseInfoModal,
     setShowCourseInfoModal,
+    displayCourse,
+    setDisplayCourse,
     onShowCourseInfoModal: handleShowCourseInfoModal,
     showMajorSelectionModal,
     setShowMajorSelectionModal,

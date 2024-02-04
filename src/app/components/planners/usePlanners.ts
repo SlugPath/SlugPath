@@ -1,27 +1,75 @@
-import { DELETE_PLANNER } from "@/graphql/queries";
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
+import { saveAllPlanners } from "@/app/actions/planner";
+import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import useLocalStorage from "@/app/hooks/useLocalStorage";
+import { PlannerData } from "@/app/types/Planner";
+import { cloneDefaultPlanner } from "@/lib/plannerUtils";
+import { useMutation } from "@tanstack/react-query";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { useLoadAllPlanners } from "./useLoad";
-
-export function usePlanners(userId: string | undefined) {
+export function usePlanners(
+  userId: string | undefined,
+  allPlanners: PlannerData[],
+) {
   // Each planner has an immutable uuid associated with it
   // this will allow users to edit their planner names
-  const [planners, setPlanners, activePlanner, setActivePlanner, { loading }] =
-    useLoadAllPlanners(userId);
-  const [deletedPlanner, setDeletedPlanner] = useState(false);
-  const [deletePlanner, { loading: loadingDeletePlanner }] = useMutation(
-    DELETE_PLANNER,
-    {
-      onCompleted: () => {
-        setDeletedPlanner(true);
-      },
-      onError: (err) => {
-        console.error(err);
-      },
-    },
+  const [planners, setPlanners] = useLocalStorage<PlannerData[]>(
+    "planners",
+    allPlanners,
   );
+  const [activePlanner, setActivePlanner] = useLocalStorage<string | undefined>(
+    "activePlanner",
+    planners[0]?.id,
+  );
+
+  useEffect(() => {
+    if (planners.length === 1) {
+      setActivePlanner(planners[0].id);
+    }
+  }, [planners, setActivePlanner]);
+
+  const { defaultPlanner } = useContext(DefaultPlannerContext);
+
+  const [deletedPlanner, setDeletedPlanner] = useState(false);
+
+  const { mutate: saveAll } = useMutation({
+    mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
+      await saveAllPlanners(input);
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  // Save changes to the planners every 30 seconds in the database
+  useEffect(() => {
+    const saveChanges = () => {
+      if (userId) {
+        saveAll({ userId, planners });
+      }
+    };
+    const interval = setInterval(saveChanges, 30000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [saveAll, userId, planners]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (userId) {
+        navigator.sendBeacon(
+          "/api/planners",
+          JSON.stringify({ userId, planners }),
+        );
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [userId, planners, saveAll]);
 
   /**
    * `switchPlanner` switches between planners
@@ -29,6 +77,21 @@ export function usePlanners(userId: string | undefined) {
    */
   function switchPlanners(id: string) {
     setActivePlanner(id);
+  }
+
+  function getPlanner(id: string) {
+    const p = planners.find((p) => p.id === id);
+    if (!p) throw new Error(`Planner not found with id '${id}'`);
+    return p;
+  }
+
+  function setPlanner(id: string, title: string, courseState: PlannerData) {
+    setPlanners((prev) => {
+      const idx = prev.findIndex((p) => p.id === id);
+      const before = prev.slice(0, idx);
+      const after = prev.slice(idx + 1);
+      return [...before, { ...courseState, id, title }, ...after];
+    });
   }
 
   /**
@@ -50,7 +113,10 @@ export function usePlanners(userId: string | undefined) {
   function addPlanner() {
     const id = uuidv4();
     setPlanners((prev) => {
-      return [...prev, { id, title: "New Planner" }];
+      return [
+        ...prev,
+        { ...cloneDefaultPlanner(defaultPlanner), id, title: "New Planner" },
+      ];
     });
     switchPlanners(id);
   }
@@ -65,30 +131,18 @@ export function usePlanners(userId: string | undefined) {
     if (activePlanner === undefined) {
       return;
     }
-    const title = planners.find((p) => p.id === activePlanner)?.title;
-    const currentPlannerIndex = planners.findIndex(
-      (p) => p.id === activePlanner,
-    );
-
-    // Get both halves of the array excluding the current planner
-    const firstHalf = planners.slice(0, currentPlannerIndex);
-    const secondHalf = planners.slice(currentPlannerIndex + 1);
-
-    const newId = uuidv4();
-    setPlanners([
-      ...firstHalf,
-      { id: newId, title: title ?? "New Planner" },
-      ...secondHalf,
-    ]);
-
-    deletePlanner({
-      variables: {
-        userId,
-        activePlanner,
-      },
+    setPlanners((prev) => {
+      const title = prev.find((p) => p.id === activePlanner)?.title ?? "";
+      const idx = prev.findIndex((p) => p.id === activePlanner);
+      const before = prev.slice(0, idx);
+      const after = prev.slice(idx + 1);
+      const res = [
+        ...before,
+        { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },
+        ...after,
+      ];
+      return res;
     });
-
-    switchPlanners(newId);
   }
 
   /**
@@ -97,18 +151,11 @@ export function usePlanners(userId: string | undefined) {
    */
   const removePlanner = (id: string) => {
     const newPlanners = planners.filter((p) => p.id !== id);
-    if (userId !== undefined) {
-      deletePlanner({
-        variables: {
-          userId,
-          plannerId: id,
-        },
-      });
-    }
+    setDeletedPlanner(true);
     setPlanners(newPlanners);
 
     // Switch to the next planner upon deletion if one exists
-    const newActive = newPlanners[newPlanners.length - 1].id;
+    const newActive = newPlanners[newPlanners.length - 1]?.id;
 
     if (newActive !== undefined) {
       switchPlanners(newActive);
@@ -119,12 +166,12 @@ export function usePlanners(userId: string | undefined) {
     planners,
     switchPlanners,
     changePlannerName,
+    getPlanner,
+    setPlanner,
     addPlanner,
     removePlanner,
     replaceCurrentPlanner,
     activePlanner,
-    plannersLoading: loading,
-    loadingDeletePlanner,
     deletedPlanner,
   };
 }

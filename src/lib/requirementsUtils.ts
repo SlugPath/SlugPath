@@ -1,3 +1,4 @@
+import { storedCourseSchema } from "@/app/types/Course";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 
 export const isRequirementList = (obj: any): obj is RequirementList => {
@@ -15,16 +16,8 @@ export const isAtLeastRequirement = (obj: any): obj is RequirementList => {
 };
 
 export const isStoredCourse = (obj: any): boolean => {
-  return (
-    "id" in obj &&
-    "departmentCode" in obj &&
-    "number" in obj &&
-    "credits" in obj &&
-    "title" in obj &&
-    "ge" in obj &&
-    "quartersOffered" in obj &&
-    "labels" in obj
-  );
+  const { success } = storedCourseSchema.safeParse(obj);
+  return success;
 };
 
 /**

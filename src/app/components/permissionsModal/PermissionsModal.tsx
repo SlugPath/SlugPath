@@ -16,7 +16,7 @@ import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
 import { z } from "zod";
 
-import IsSatisfiedMark from "../IsSatisfiedMark";
+import IsSatisfiedMark from "../miscellaneous/IsSatisfiedMark";
 import ConfirmAlert from "../modals/ConfirmAlert";
 import PermissionsList from "./PermissionsList";
 

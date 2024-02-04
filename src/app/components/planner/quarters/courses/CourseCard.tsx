@@ -37,12 +37,9 @@ export default function CourseCard({
   isCustom,
   customDeleteCourse,
 }: CourseCardProps) {
-  const {
-    deleteCourse,
-    setDisplayCourse,
-    getCourseLabels,
-    handleRemoveCustom,
-  } = useContext(PlannerContext);
+  const { deleteCourse, getCourseLabels, handleRemoveCustom } =
+    useContext(PlannerContext);
+  const { setDisplayCourse } = useContext(ModalsContext);
   const { onShowCourseInfoModal } = useContext(ModalsContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;

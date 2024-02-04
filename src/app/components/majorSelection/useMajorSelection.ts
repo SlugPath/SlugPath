@@ -1,6 +1,5 @@
-import { MajorInput } from "@/graphql/major/schema";
-import { GET_MAJOR, SAVE_MAJOR } from "@/graphql/queries";
-import { useMutation, useQuery } from "@apollo/client";
+import { MajorInput, updateUserMajor } from "@/app/actions/major";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
  *
@@ -10,33 +9,23 @@ import { useMutation, useQuery } from "@apollo/client";
  */
 export default function useMajorSelection(
   userId?: string,
-  onCompleted?: () => void,
+  onSuccess?: () => void,
 ) {
-  // Get user major data from backend
-  const {
-    data: majorData,
-    loading: loadingMajorData,
-    refetch,
-    error: errorLoadingMajorData,
-  } = useQuery(GET_MAJOR, {
-    variables: {
-      userId: userId,
-    },
-    skip: userId === undefined,
-  });
-
   // Update user major data
-  const userMajorData = majorData ? majorData.getUserMajor : null;
-  const [
-    saveMajor,
-    { loading: loadingSaveMajor, error: errorSavingMajorData },
-  ] = useMutation(SAVE_MAJOR, {
-    onCompleted: () => {
-      if (onCompleted !== undefined) onCompleted();
-      refetch();
+  const queryClient = useQueryClient();
+  const {
+    mutate: saveMajor,
+    isPending: loadingSaveMajor,
+    isError: errorSavingMajorData,
+  } = useMutation({
+    mutationKey: ["updaterUserMajor", userId],
+    mutationFn: async (majorInput: MajorInput) => {
+      await queryClient.cancelQueries({ queryKey: ["userMajorData", userId] });
+      return await updateUserMajor(majorInput);
     },
-    onError: (err) => {
-      console.error(err);
+    onSuccess: () => {
+      if (onSuccess) onSuccess();
+      queryClient.refetchQueries({ queryKey: ["userMajorData", userId] });
     },
   });
 
@@ -53,19 +42,12 @@ export default function useMajorSelection(
       userId: userId,
     };
 
-    saveMajor({
-      variables: {
-        input: majorInput,
-      },
-    });
+    saveMajor(majorInput);
   }
 
   return {
     onSaveMajor: handleSaveMajor,
-    userMajorData,
-    loadingMajorData,
     loadingSaveMajor,
-    errorLoadingMajorData,
     errorSavingMajorData,
   };
 }

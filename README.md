@@ -1,4 +1,4 @@
-# Slug Path aka UCSC Degree Planner
+# Slug Path aka UCSC Course Planner
 
 > A degree planner for UCSC students
 
@@ -12,7 +12,7 @@ for academic plans. Our aim with this project is to meet that demand in the stud
 ```
 git clone https://github.com/fercevik729/UCSC-Course-Planner
 pnpm install
-pnpx prisma generate
+npx prisma generate
 ```
 
 Make sure to have the `POSTGRES_PRISMA_URL` env variable set, along with any
@@ -22,14 +22,14 @@ development. You might want to set some mock values for these.
 
 ```
 docker-compose --env-file=<your-env-file.env> up -d (optional)
-pnpm run init-db
+pnpm init-db
 ```
 
 This will initialize the database with the correct schema and initial data.
 Finally run the project with
 
 ```
-pnpm run dev
+pnpm dev
 ```
 
 Et Voilà! The app should be running on `localhost:3000`.
@@ -48,7 +48,7 @@ After downloading the project files and the dependencies make sure to install
 the necessary GitHooks for linting and formatting with
 
 ```
-pnpm run prepare
+pnpm prepare
 ```
 
 > To add your own Git Hooks beyond formatting or linting refer
@@ -64,7 +64,7 @@ pnpx prisma migrate deploy
 Make sure to add relevant tests and run them and view coverage details with
 
 ```
-pnpm run test
+pnpm test
 ```
 
 Before starting work on an issue make sure that it has not been assigned already

@@ -1,4 +1,4 @@
-import { debounce } from "@/lib/utils";
+import { debounce } from "lodash";
 import { useEffect } from "react";
 
 export default function useDebounce({

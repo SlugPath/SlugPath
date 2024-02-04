@@ -1,20 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { useContext } from "react";
 
 import {
   getUserRole,
   userHasMajorEditingPermission,
-} from "../actions/permissionsActions";
-import useMajorSelection from "../components/majorSelection/useMajorSelection";
+} from "../actions/permissions";
+import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
 
 export default function useUserPermissions() {
   const { data: session } = useSession();
-  const { userMajorData } = useMajorSelection(session?.user.id);
+  const { userMajorData } = useContext(DefaultPlannerContext);
 
   const { data: hasPermissionToEdit } = useQuery({
     queryKey: ["userHasMajorEditingPermission"],
     queryFn: () =>
-      userHasMajorEditingPermission(session!.user.id, userMajorData),
+      userHasMajorEditingPermission(session!.user.id, userMajorData!),
   });
 
   const { data: userRole } = useQuery({

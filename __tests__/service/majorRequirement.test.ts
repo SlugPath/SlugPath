@@ -1,7 +1,7 @@
 import {
   getMajorRequirements,
   saveMajorRequirements,
-} from "@/app/actions/majorRequirementsActions";
+} from "@/app/actions/majorRequirements";
 import { Major } from "@/app/types/Major";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import prisma from "@/lib/prisma";

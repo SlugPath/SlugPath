@@ -1,8 +1,10 @@
 import ScreenSizeWarning from "@components/modals/ScreenSizeWarning";
-import NextAuthProvider from "@contexts/NextAuthProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import BetaWarning from "./components/beta/BetaWarning";
+import Navbar from "./components/navbar/Navbar";
+import Provider from "./contexts/Provider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,10 +21,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <NextAuthProvider>
-        <ScreenSizeWarning />
-        <body className={inter.className}>{children}</body>
-      </NextAuthProvider>
+      <body className={inter.className}>
+        <Provider>
+          <ScreenSizeWarning />
+          <div className="bg-bg-light dark:bg-bg-dark min-h-screen pb-1">
+            <Navbar />
+            <BetaWarning />
+            {children}
+          </div>
+        </Provider>
+      </body>
     </html>
   );
 }

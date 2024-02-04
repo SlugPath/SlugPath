@@ -1,8 +1,7 @@
-import { StoredCourse } from "@/app/types/Course";
 import { SEARCH_DROPPABLE } from "@/lib/consts";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
+import { StoredCourse } from "@customTypes/Course";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
-import { CircularProgress } from "@mui/joy";
 import { AutoSizer, List } from "react-virtualized";
 
 import CourseCard from "../planner/quarters/courses/CourseCard";
@@ -11,13 +10,11 @@ import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard
 export interface SearchResultsProps {
   courses: StoredCourse[];
   loading: boolean;
-  loadingUseQuery: boolean;
 }
 
 export default function SearchResults({
   courses,
   loading,
-  loadingUseQuery,
 }: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
@@ -31,14 +28,6 @@ export default function SearchResults({
     } else {
       return 0;
     }
-  }
-
-  function getResultsString() {
-    const itemCount = getItemCount();
-    const loadingMoreResultsString = loadingUseQuery
-      ? "     Loading more results"
-      : "";
-    return itemCount.toString() + " results" + loadingMoreResultsString;
   }
 
   function getRowRender({
@@ -57,7 +46,7 @@ export default function SearchResults({
       return null;
     }
 
-    const course = courses[index] as StoredCourse;
+    const course = courses[index];
 
     return (
       <div key={key} style={style}>
@@ -80,7 +69,7 @@ export default function SearchResults({
       droppableId={SEARCH_DROPPABLE}
       isDropDisabled={true}
       mode="virtual"
-      renderClone={(provided, snapshot, rubric) => {
+      renderClone={(provided, _, rubric) => {
         const index = rubric.source.index;
         const course = courses[index];
         return (
@@ -98,7 +87,6 @@ export default function SearchResults({
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {hasResults() ? (
               <div>
-                <div className="mb-1">{getResultsString()}</div>
                 <div className="overflow-y-auto h-[62vh]">
                   <AutoSizer>
                     {({ height, width }) => (
@@ -115,13 +103,10 @@ export default function SearchResults({
               </div>
             ) : (
               <div className="flex justify-center items-center h-96">
-                {!hasResults() ? (
+                {!hasResults() && !loading ? (
                   <p className="text-gray-400 text-center">
                     No results. Try changing the search parameters.
                   </p>
-                ) : null}
-                {loading ? (
-                  <CircularProgress variant="plain" color="primary" />
                 ) : null}
               </div>
             )}

@@ -1,6 +1,6 @@
-import { StoredCourse } from "@/graphql/planner/schema";
 import { customCourse } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
+import { StoredCourse } from "@customTypes/Course";
 import { InfoOutlined } from "@mui/icons-material";
 import {
   Button,

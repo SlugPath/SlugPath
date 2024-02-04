@@ -20,17 +20,12 @@ export function PlannerProvider({
   const {
     deleteCourse,
     editCustomCourse,
-    displayCourse,
-    setDisplayCourse,
     totalCredits,
     geSatisfied,
     courseState,
-    saveStatus,
-    saveError,
     handleCourseUpdate,
     getCourseLabels,
     getAllLabels,
-    editCourseLabels,
     updatePlannerLabels,
     updateNotes,
   } = usePlanner({
@@ -44,7 +39,7 @@ export function PlannerProvider({
     useCustomCourseSelection();
 
   const { handleDragEnd } = useHandleCourseDrag({
-    courseState,
+    courseState: courseState!,
     handleCourseUpdate,
     handleRemoveCustom,
   });
@@ -54,17 +49,12 @@ export function PlannerProvider({
       value={{
         deleteCourse,
         editCustomCourse,
-        displayCourse,
-        setDisplayCourse,
         totalCredits,
         geSatisfied,
-        courseState,
+        courseState: courseState!,
         handleDragEnd,
-        saveStatus,
-        saveError,
         getCourseLabels,
         getAllLabels,
-        editCourseLabels,
         updatePlannerLabels,
         customCourses,
         handleAddCustom,
