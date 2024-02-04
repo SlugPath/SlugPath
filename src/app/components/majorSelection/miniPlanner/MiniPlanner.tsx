@@ -1,6 +1,7 @@
-import { useLoadPlanner } from "@/app/hooks/useLoad";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import { getPlannerById } from "@/app/actions/planner";
+import { EMPTY_PLANNER, initialPlanner } from "@/lib/plannerUtils";
 import { Card, Skeleton } from "@mui/joy";
+import { useQuery } from "@tanstack/react-query";
 
 import MiniQuarters from "./MiniQuarters";
 
@@ -13,11 +14,13 @@ export default function MiniPlanner({
   active?: boolean;
   addCardContainer?: boolean;
 }) {
-  const skipLoad = plannerId === EMPTY_PLANNER;
-  const [courseState, { loading }] = useLoadPlanner({
-    userId: undefined,
-    plannerId: plannerId,
-    skipLoad,
+  const { data: courseState, isLoading: loading } = useQuery({
+    queryKey: ["getPlanner", plannerId],
+    queryFn: async () => {
+      return await getPlannerById(plannerId);
+    },
+    initialData: initialPlanner(),
+    enabled: plannerId !== EMPTY_PLANNER,
   });
 
   if (!active || plannerId === EMPTY_PLANNER) {

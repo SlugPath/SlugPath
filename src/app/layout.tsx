@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import BetaWarning from "./components/beta/BetaWarning";
-import UnauthenticatedWarning from "./components/modals/UnauthenticatedWarning";
 import Navbar from "./components/navbar/Navbar";
 import Provider from "./contexts/Provider";
 import "./globals.css";
@@ -28,7 +27,6 @@ export default function RootLayout({
           <div className="bg-bg-light dark:bg-bg-dark min-h-screen pb-1">
             <Navbar />
             <BetaWarning />
-            <UnauthenticatedWarning />
             {children}
           </div>
         </Provider>

@@ -1,15 +1,15 @@
 import { PlannerData } from "@/app/types/Planner";
+import { CUSTOM_DROPPABLE, SEARCH_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId, findQuarter } from "@/lib/plannerUtils";
 import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import { v4 as uuidv4 } from "uuid";
 
-const CUSTOM_DROPPABLE = "custom-droppable";
-const SEARCH_DROPPABLE = "search-droppable";
+import useHandleRequirementListDrag from "./useHandleRequirementListDrag";
 
 // Helpers
 const draggedFromSearch = (droppableId: string) => {
-  return droppableId === SEARCH_DROPPABLE;
+  return droppableId.includes(SEARCH_DROPPABLE);
 };
 
 const draggedFromCustom = (droppableId: string) => {
@@ -25,8 +25,15 @@ export default function useHandleCourseDrag({
   handleCourseUpdate: (newState: PlannerData) => void;
   handleRemoveCustom: (idx: number) => void;
 }) {
+  const {
+    draggedToRequirementList,
+    addCourseToRequirementList,
+    moveCourseRequirementList,
+  } = useHandleRequirementListDrag();
+
   function handleDragEnd(result: DropResult) {
     const { destination, source, draggableId } = result;
+
     // ensure that drag is valid
     if (
       !destination ||
@@ -39,15 +46,27 @@ export default function useHandleCourseDrag({
       draggedFromSearch(source.droppableId) ||
       draggedFromCustom(source.droppableId)
     ) {
-      addCourseFromSearch(draggableId, destination);
-      // Remove from the custom course selection
-      if (draggedFromCustom(source.droppableId)) {
-        handleRemoveCustom(source.index);
+      if (draggedToRequirementList(destination.droppableId)) {
+        addCourseToRequirementList(
+          destination.droppableId,
+          draggableId,
+          destination,
+        );
+      } else {
+        addCourseFromSearch(draggableId, destination);
+        // Remove from the custom course selection
+        if (draggedFromCustom(source.droppableId)) {
+          handleRemoveCustom(source.index);
+        }
       }
       return;
     }
 
-    moveCourse(source, destination);
+    if (draggedToRequirementList(source.droppableId)) {
+      moveCourseRequirementList(source, destination);
+    } else {
+      moveCourse(source, destination);
+    }
   }
 
   function addCourseFromSearch(

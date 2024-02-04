@@ -22,3 +22,7 @@ export const geOptions = [
   { label: "PR-E", value: "prE" },
   { label: "PR-S", value: "prS" },
 ] as SearchParams;
+
+export const REQUIREMENT_LIST_DROPPABLE_PREFIX = "requirement-list-";
+export const SEARCH_DROPPABLE = "search-droppable";
+export const CUSTOM_DROPPABLE = "custom-droppable";

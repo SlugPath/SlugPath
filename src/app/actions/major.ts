@@ -4,13 +4,28 @@ import prisma from "@/lib/prisma";
 
 import { PlannerTitle } from "../types/Planner";
 
-export async function getAllMajors(catalogYear: string): Promise<string[]> {
+export async function getMajors() {
+  return await prisma.major.findMany({
+    orderBy: {
+      name: "asc",
+    },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
+  });
+}
+
+export async function getAllMajorsByCatalogYear(catalogYear: string) {
   const res = await prisma.major.findMany({
     where: {
       catalogYear,
     },
     select: {
       name: true,
+      id: true,
+      catalogYear: true,
     },
     orderBy: [
       {
@@ -28,6 +43,7 @@ export type UserMajorOutput = {
   name: string;
   catalogYear: string;
   defaultPlannerId: string;
+  id: number;
 };
 
 export async function getUserMajorByEmail(
@@ -42,6 +58,7 @@ export async function getUserMajorByEmail(
         select: {
           name: true,
           catalogYear: true,
+          id: true,
         },
       },
       defaultPlannerId: true,
@@ -56,6 +73,7 @@ export async function getUserMajorByEmail(
     name: major.name,
     catalogYear: major.catalogYear,
     defaultPlannerId: userData?.defaultPlannerId || "",
+    id: major.id,
   };
 }
 
@@ -71,6 +89,7 @@ export async function getUserMajorById(
         select: {
           name: true,
           catalogYear: true,
+          id: true,
         },
       },
       defaultPlannerId: true,
@@ -85,6 +104,7 @@ export async function getUserMajorById(
     name: major.name,
     catalogYear: major.catalogYear,
     defaultPlannerId: userData?.defaultPlannerId ?? "",
+    id: major.id,
   };
 }
 
@@ -128,6 +148,7 @@ export async function updateUserMajor({
     name,
     catalogYear,
     defaultPlannerId,
+    id: major!.id,
   };
 }
 

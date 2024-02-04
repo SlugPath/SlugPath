@@ -1,3 +1,4 @@
+import { SEARCH_DROPPABLE } from "@/lib/consts";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable, DroppableStateSnapshot } from "@hello-pangea/dnd";
@@ -65,7 +66,7 @@ export default function SearchResults({
 
   return (
     <Droppable
-      droppableId={"search-droppable"}
+      droppableId={SEARCH_DROPPABLE}
       isDropDisabled={true}
       mode="virtual"
       renderClone={(provided, _, rubric) => {

@@ -1,4 +1,4 @@
-import { getAllMajors } from "@/app/actions/major";
+import { getAllMajorsByCatalogYear } from "@/app/actions/major";
 import { years } from "@/lib/defaultPlanners";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@contexts/ModalsProvider";
@@ -48,7 +48,7 @@ export default function MajorSelection({
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear],
     queryFn: async () => {
-      return await getAllMajors(catalogYear);
+      return await getAllMajorsByCatalogYear(catalogYear);
     },
     enabled: catalogYear !== "",
   });

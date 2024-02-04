@@ -23,9 +23,10 @@ import CourseLabel from "./CourseLabel";
 export interface CourseCardProps {
   course: StoredCourse;
   index: number;
-  quarterId?: string;
   provided: DraggableProvided;
   isCustom: boolean;
+  quarterId?: string;
+  customDeleteCourse?: () => void;
 }
 
 export default function CourseCard({
@@ -34,6 +35,7 @@ export default function CourseCard({
   quarterId,
   provided,
   isCustom,
+  customDeleteCourse,
 }: CourseCardProps) {
   const { deleteCourse, getCourseLabels, handleRemoveCustom } =
     useContext(PlannerContext);
@@ -67,6 +69,14 @@ export default function CourseCard({
     }
   }
 
+  function handleDeleteCourse(quarterId: string, index: number) {
+    if (customDeleteCourse) {
+      customDeleteCourse();
+    } else {
+      deleteCourse(quarterId)(index);
+    }
+  }
+
   return (
     <Card
       ref={provided.innerRef}
@@ -97,7 +107,7 @@ export default function CourseCard({
           <Grid xs={1}>
             {quarterId !== undefined && (
               <CloseIconButton
-                onClick={() => deleteCourse(quarterId)(index)}
+                onClick={() => handleDeleteCourse(quarterId, index)}
                 sx={{
                   visibility: highlighted ? "visible" : "hidden",
                 }}

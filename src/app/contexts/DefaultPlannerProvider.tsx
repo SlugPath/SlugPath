@@ -46,9 +46,6 @@ export function DefaultPlannerProvider({
     enabled: !!defaultPlannerId,
   });
 
-  // setDefaultPlanner is to instantly set the default planner in the context for MajorSelectionModal
-  const [hasAutoFilled, setHasAutoFilled] = useState(false);
-
   return (
     <DefaultPlannerContext.Provider
       value={{
@@ -58,8 +55,6 @@ export function DefaultPlannerProvider({
         defaultPlanner,
         setDefaultPlannerId,
         loadingDefaultPlanner,
-        hasAutoFilled,
-        setHasAutoFilled,
       }}
     >
       {children}
