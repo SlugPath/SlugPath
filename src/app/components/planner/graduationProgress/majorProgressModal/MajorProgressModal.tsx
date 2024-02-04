@@ -9,6 +9,7 @@ import {
   Modal,
   ModalClose,
   Sheet,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import { CircularProgress } from "@mui/material";
@@ -23,6 +24,7 @@ export default function MajorProgressModal() {
   const {
     setShowMajorProgressModal: setShowModal,
     showMajorProgressModal: showModal,
+    setShowReplaceRLModal,
   } = useContext(ModalsContext);
   const { loadingSave, majorRequirements, onSaveMajorRequirements } =
     useContext(MajorVerificationContext);
@@ -32,8 +34,14 @@ export default function MajorProgressModal() {
   function Title() {
     return (
       <div className="flex flex-col space-y-2">
-        <Typography level="h4">Major Progress</Typography>
-        <Typography level="title-lg">{majorRequirements.title}</Typography>
+        <div className="flex flex-row justify-between">
+          <Typography level="h4">Major Progress</Typography>
+          {hasPermissionToEdit && (
+            <Chip color="success" variant="solid" className="mr-4">
+              You have edit permission
+            </Chip>
+          )}
+        </div>
       </div>
     );
   }
@@ -78,11 +86,12 @@ export default function MajorProgressModal() {
             editing={editing}
           />
         </div>
-        <EditPermissionLabelAndButton
+        <EditButtons
           editing={editing}
           loadingSave={loadingSave}
           hasPermissionToEdit={hasPermissionToEdit}
           handleToggleEditButton={handleToggleEditButton}
+          handleClickReplaceButton={() => setShowReplaceRLModal(true)}
         />
         <ModalClose variant="plain" />
       </Sheet>
@@ -99,21 +108,6 @@ function Requirements({
   majorRequirements: any;
   editing: boolean;
 }) {
-  const noRequirements = majorRequirements.requirements.length === 0;
-
-  if (noRequirements && !editing) {
-    return (
-      <Card
-        variant="soft"
-        className="flex flex-row justify-center items-center w-full"
-      >
-        <Typography>
-          There are no requirements for this degree program yet
-        </Typography>
-      </Card>
-    );
-  }
-
   return (
     <div className="overflow-y-scroll w-full" style={{ maxHeight: "80vh" }}>
       {editing ? (
@@ -122,39 +116,51 @@ function Requirements({
           parents={0}
         />
       ) : (
-        <RequirementsComponent requirements={majorRequirements} parents={0} />
+        <RequirementsComponent
+          requirements={majorRequirements}
+          parents={0}
+          hideTitle={false}
+        />
       )}
     </div>
   );
 }
 
-function EditPermissionLabelAndButton({
+function EditButtons({
   editing,
   loadingSave,
   hasPermissionToEdit,
   handleToggleEditButton,
+  handleClickReplaceButton,
 }: {
   editing: boolean;
   loadingSave: boolean;
   hasPermissionToEdit: boolean;
   handleToggleEditButton: () => void;
+  handleClickReplaceButton: () => void;
 }) {
+  if (!hasPermissionToEdit) {
+    return null;
+  }
+
   return (
-    <>
-      {hasPermissionToEdit && (
-        <div className="flex flex-row justify-end space-x-2">
-          <Chip color="success" variant="solid">
-            You have edit permission
-          </Chip>
-          {loadingSave ? (
-            <CircularProgress />
-          ) : (
-            <Button onClick={handleToggleEditButton}>
-              {editing ? "Done" : "Edit Requirement List"}
-            </Button>
+    <div className="flex flex-row justify-end">
+      {loadingSave ? (
+        <CircularProgress />
+      ) : (
+        <div className="space-x-2">
+          {editing && (
+            <Tooltip title="Replace with a Requirement List from a different program">
+              <Button color="warning" onClick={handleClickReplaceButton}>
+                Replace
+              </Button>
+            </Tooltip>
           )}
+          <Button onClick={handleToggleEditButton}>
+            {editing ? "Done" : "Edit Requirement List"}
+          </Button>
         </div>
       )}
-    </>
+    </div>
   );
 }

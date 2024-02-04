@@ -25,11 +25,17 @@ import FulfillmentMark from "./FulfillmentMark";
 export function RequirementsComponent({
   requirements,
   parents,
+  hideTitle,
 }: {
   requirements: RequirementList;
   parents: number;
+  hideTitle: boolean;
 }) {
   const { mode } = useColorScheme();
+
+  function isProgramEmpty() {
+    return requirements.requirements.length === 0 && parents === 0;
+  }
 
   const Classes = (requirement: any) => (
     <div className="flex flex-row items-center space-x-1">
@@ -49,27 +55,41 @@ export function RequirementsComponent({
 
   return (
     <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
-      <Title requirements={requirements} fulfillmentMark={true} />
-      <div className="flex flex-row items-center space-x-1">
-        <Typography>{BinderTitle(requirements)}</Typography>
-        {/* if there is no title, display the FulfillmentMark next to the Binder Title */}
-        {requirements.title!.length == 0 && (
-          <FulfillmentMark {...requirements} />
-        )}
-      </div>
-      {requirements.requirements.map((requirement, index) => {
-        if ("requirements" in requirement) {
-          return (
-            <RequirementsComponent
-              key={index}
-              requirements={requirement}
-              parents={parents + 1}
-            />
-          );
-        } else {
-          return <Classes key={index} {...requirement} />;
-        }
-      })}
+      {!hideTitle && (
+        <Title requirements={requirements} fulfillmentMark={true} />
+      )}
+      {isProgramEmpty() ? (
+        <Typography className="text-gray-400">
+          There is no data for this degree program yet
+        </Typography>
+      ) : (
+        <>
+          {/* Binder title */}
+          <div className="flex flex-row items-center space-x-1">
+            <Typography>{BinderTitle(requirements)}</Typography>
+            {/* if there is no title, display the FulfillmentMark next to the Binder Title */}
+            {requirements.title!.length == 0 && (
+              <FulfillmentMark {...requirements} />
+            )}
+          </div>
+
+          {/* Either a list of Requirement Lists or classes */}
+          {requirements.requirements.map((requirement, index) => {
+            if ("requirements" in requirement) {
+              return (
+                <RequirementsComponent
+                  key={index}
+                  requirements={requirement}
+                  parents={parents + 1}
+                  hideTitle={false}
+                />
+              );
+            } else {
+              return <Classes key={index} {...requirement} />;
+            }
+          })}
+        </>
+      )}
     </Card>
   );
 }

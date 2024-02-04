@@ -22,6 +22,8 @@ export interface ModalsContextProps {
   setShowMajorProgressModal: setShow;
   showPermissionsModal: boolean;
   setShowPermissionsModal: setShow;
+  showReplaceRLModal: boolean;
+  setShowReplaceRLModal: setShow;
   courseState: PlannerData;
 }
 

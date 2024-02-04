@@ -81,10 +81,21 @@ export async function getMajorRequirements(
     return createEmptyRequirementList(majorId);
   }
 
-  // parse the requirement list from the database into a RequirementList object
-  const requirementList = JSON.parse(
+  const requirementList: RequirementList = parseRequirementList(
     majorRequirement.requirementList as string,
-  ) as RequirementList;
+  );
 
   return requirementList;
+}
+
+export async function getAllRequirementLists(): Promise<RequirementList[]> {
+  const requirementLists = await prisma.majorRequirement.findMany();
+
+  return requirementLists.map((reqList) => {
+    return parseRequirementList(reqList.requirementList as string);
+  });
+}
+
+function parseRequirementList(requirementList: string): RequirementList {
+  return JSON.parse(requirementList) as RequirementList;
 }
