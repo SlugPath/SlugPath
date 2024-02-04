@@ -9,7 +9,7 @@ import {
   deletePlanner,
   getAllPlanners,
   getPlanner,
-  upsertPlanner,
+  saveAllPlanners,
 } from "@/app/actions/planner";
 import { PlannerData } from "@/app/types/Planner";
 import { initialPlanner } from "@/lib/plannerUtils";
@@ -183,20 +183,16 @@ it("should update 1 planner for 1 user", async () => {
     },
   ];
   const plannerData = initialPlanner();
+  plannerData.id = plannerId;
   cseCourses.forEach((c) => {
     plannerData.quarters[0].courses.push(c.id);
     plannerData.courses.push(c);
   });
 
-  const res2 = await upsertPlanner({
+  await saveAllPlanners({
     userId: user.id,
-    plannerId: plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData,
+    planners: [plannerData],
   });
-  expect(res2).toBe(plannerId);
-
   // Ensure there is only 1 planner for that user
   const allPlanners = await getAllPlanners(user.email);
   expect(allPlanners).toHaveLength(1);
@@ -266,7 +262,6 @@ it("should return the correct labels for each course", async () => {
   const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
-  const plannerId = uuidv4();
   const plannerData = initialPlanner();
   plannerData.labels[0].name = "Elective";
   plannerData.labels[1].name = "Capstone";
@@ -323,20 +318,18 @@ it("should return the correct labels for each course", async () => {
   plannerData.courses = cseCourses;
   plannerData.quarters[0].courses = plannerData.courses.map((c) => c.id);
 
-  const res = await upsertPlanner({
+  await saveAllPlanners({
     userId: user.id,
-    plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData,
+    planners: [plannerData],
   });
-  expect(res).toBe(plannerId);
-
   // Ensure there is only 1 planner for that user
   const allPlanners = await getAllPlanners(user.email);
   expect(allPlanners).toHaveLength(1);
   // Ensure the content of that planner is updated
-  const check2 = await getPlanner({ userId: user.id, plannerId });
+  const check2 = await getPlanner({
+    userId: user.id,
+    plannerId: plannerData.id,
+  });
   expect(check2).not.toBeNull();
   const courses = check2?.quarters[0].courses;
   expect(courses).toBeDefined();
@@ -477,18 +470,13 @@ async function getUser() {
 }
 
 async function createPlanner(planner: PlannerData, user: any): Promise<string> {
-  const plannerId = uuidv4();
-  const res = await upsertPlanner({
+  await saveAllPlanners({
     userId: user.id,
-    plannerId: plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData: planner,
+    planners: [planner],
   });
-  expect(res).toBe(plannerId);
 
-  const check = await getPlanner({ userId: user.id, plannerId });
+  const check = await getPlanner({ userId: user.id, plannerId: planner.id });
   expect(check).not.toBeNull();
 
-  return plannerId;
+  return planner.id;
 }

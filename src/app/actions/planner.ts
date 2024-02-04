@@ -2,7 +2,7 @@
 
 import { toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
-import { LabelColor, Prisma, Term } from "@prisma/client";
+import { LabelColor, Term } from "@prisma/client";
 
 import { PlannerData } from "../types/Planner";
 
@@ -14,18 +14,10 @@ type PlannerCreateInput = {
   order: number;
 };
 
-/**
- * Creates and/or updates a planner for a user
- * @param input PlannerCreateInput
- * @returns planner id of the updated planner
- */
-export async function upsertPlanner({
-  userId,
-  plannerId,
-  plannerData,
-  title,
-  order,
-}: PlannerCreateInput): Promise<string> {
+async function createPlanner(
+  tx: any,
+  { userId, plannerId, plannerData, title, order }: PlannerCreateInput,
+) {
   // Process labels and quarters outside the transaction
   const labels = plannerData.labels.map((l) => ({
     ...l,
@@ -57,59 +49,30 @@ export async function upsertPlanner({
     };
   });
 
-  const result = await prisma.$transaction(
-    [
-      // Delete existing quarters and labels (if necessary)
-      // Perform the upsert
-      prisma.planner.upsert({
-        where: {
-          userId,
-          id: plannerId,
+  return tx.planner.create({
+    data: {
+      title,
+      notes,
+      userId,
+      order,
+      id: plannerId,
+      quarters: {
+        create: newQuarters,
+      },
+      labels: {
+        createMany: {
+          data: labels,
         },
-        create: {
-          title,
-          notes,
-          userId,
-          order,
-          id: plannerId,
-          quarters: {
-            create: newQuarters,
-          },
-          labels: {
-            createMany: {
-              data: labels,
-            },
-          },
-        },
-        update: {
-          title,
-          notes,
-          order,
-          // Logic to replace quarters and labels
-          quarters: {
-            deleteMany: {}, // Deletes all quarters
-            create: newQuarters,
-          },
-          labels: {
-            deleteMany: {}, // Deletes all labels
-            createMany: {
-              data: labels,
-            },
-          },
-        },
-        select: {
-          id: true,
-        },
-      }),
-    ],
-    {
-      isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
+      },
     },
-  );
-
-  // Return the result
-  return result[0].id;
+  });
 }
+
+/**
+ * Creates a planner for a user
+ * @param input PlannerCreateInput
+ * @returns planner id of the updated planner
+ */
 
 export async function saveAllPlanners({
   userId,
@@ -118,18 +81,25 @@ export async function saveAllPlanners({
   userId: string;
   planners: PlannerData[];
 }): Promise<void> {
-  await prisma.planner.deleteMany({});
-  await Promise.all(
-    planners.map((p, i) => {
-      return upsertPlanner({
+  await prisma.$transaction(async (tx) => {
+    await tx.planner.deleteMany({
+      where: {
         userId,
-        plannerId: p.id,
-        plannerData: p,
-        title: p.title,
-        order: i,
-      });
-    }),
-  );
+      },
+    });
+
+    await Promise.all(
+      planners.map((p, i) =>
+        createPlanner(tx, {
+          userId,
+          plannerId: p.id,
+          plannerData: p,
+          title: p.title,
+          order: i,
+        }),
+      ),
+    );
+  });
 }
 
 /**

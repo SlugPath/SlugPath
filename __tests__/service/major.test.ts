@@ -1,7 +1,7 @@
 import {
   getAllMajors,
   getMajorDefaultPlanners,
-  getUserMajor,
+  getUserMajorByEmail,
   updateUserMajor,
 } from "@/app/actions/major";
 import prisma from "@/lib/prisma";
@@ -128,7 +128,7 @@ it("should add major information for 1 user", async () => {
 
   if (user === null) fail("User was null (this should not happen)");
 
-  const userMajor = await getUserMajor(user.email);
+  const userMajor = await getUserMajorByEmail(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -137,10 +137,11 @@ it("should add major information for 1 user", async () => {
     ...majorData,
     defaultPlannerId,
   });
-  expect(res.name).toBe(name);
-  expect(res.catalogYear).toBe(catalogYear);
+  expect(res).not.toBeNull();
+  expect(res?.name).toBe(name);
+  expect(res?.catalogYear).toBe(catalogYear);
 
-  const check = await getUserMajor(user.email);
+  const check = await getUserMajorByEmail(user.email);
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
@@ -168,7 +169,7 @@ it("should fail since major doesn't exist", async () => {
   expect(user).not.toBeNull();
   if (user === null) fail("User was null (this should not happen)");
 
-  const userMajor = await getUserMajor(user.email);
+  const userMajor = await getUserMajorByEmail(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -258,7 +259,7 @@ it("should correctly add major information for 2 users", async () => {
     },
   });
 
-  const userMajor = await getUserMajor(user1?.email ?? "");
+  const userMajor = await getUserMajorByEmail(user1?.email ?? "");
   expect(userMajor).toBeNull();
   const defaultPlannerId = uuidv4();
 
@@ -268,8 +269,9 @@ it("should correctly add major information for 2 users", async () => {
     ...majorData,
     defaultPlannerId,
   });
-  expect(res.name).toBe(name);
-  expect(res.catalogYear).toBe(catalogYear);
+  expect(res).not.toBeNull();
+  expect(res?.name).toBe(name);
+  expect(res?.catalogYear).toBe(catalogYear);
 
   // User 2
   const res2 = await updateUserMajor({
@@ -277,16 +279,17 @@ it("should correctly add major information for 2 users", async () => {
     ...majorData,
     defaultPlannerId,
   });
-  expect(res2.name).toBe(name);
-  expect(res2.catalogYear).toBe(catalogYear);
+  expect(res2).not.toBeNull();
+  expect(res2?.name).toBe(name);
+  expect(res2?.catalogYear).toBe(catalogYear);
 
-  const check = await getUserMajor(user1?.email ?? "");
+  const check = await getUserMajorByEmail(user1?.email ?? "");
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
   expect(check?.defaultPlannerId).toBe(defaultPlannerId);
 
-  const check2 = await getUserMajor(user2?.email ?? "");
+  const check2 = await getUserMajorByEmail(user2?.email ?? "");
   expect(check2).not.toBeNull();
   expect(check2?.catalogYear).toBe(catalogYear);
   expect(check2?.name).toBe(name);
