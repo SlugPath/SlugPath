@@ -50,7 +50,13 @@ export function RequirementsComponent({
   return (
     <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
       <Title requirements={requirements} fulfillmentMark={true} />
-      <Typography>{BinderTitle(requirements)}</Typography>
+      <div className="flex flex-row items-center space-x-1">
+        <Typography>{BinderTitle(requirements)}</Typography>
+        {/* if there is no title, display the FulfillmentMark next to the Binder Title */}
+        {requirements.title!.length == 0 && (
+          <FulfillmentMark {...requirements} />
+        )}
+      </div>
       {requirements.requirements.map((requirement, index) => {
         if ("requirements" in requirement) {
           return (
@@ -131,8 +137,13 @@ export function RequirementsComponentEditing({
     return parents > 0;
   }
 
+  function shouldDisplayDeleteButton(parents: number) {
+    return shouldHaveClasses(parents);
+  }
+
   return (
     <Card variant="soft" style={cardStyleProps(parents, mode)}>
+      {/* Title begin */}
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row">
           {editingTitle ? (
@@ -148,12 +159,15 @@ export function RequirementsComponentEditing({
           )}
           <EditIconButton onClick={handleToggleEditingTitle} />
         </div>
-        {parents > 0 && (
+        {shouldDisplayDeleteButton(parents) && (
           <DeleteIconButton
             onClick={() => removeRequirementList(requirements.id)}
           />
         )}
       </div>
+      {/* Title end */}
+
+      {/* Binder begin */}
       <div className="flex flex-row items-center space-x-1">
         <Select
           variant="soft"
@@ -173,6 +187,8 @@ export function RequirementsComponentEditing({
         </Select>
         <Typography>of the following</Typography>
       </div>
+      {/* Binder end */}
+
       {shouldHaveClasses(parents) && !hasRequirementLists() && (
         <Classes
           requirements={requirements}
