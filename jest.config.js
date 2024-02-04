@@ -8,6 +8,8 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
+  modulePathIgnorePatterns: ["<rootDir>/build"],
+
   // Setup files to run before each test file in the suite is executed
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 
