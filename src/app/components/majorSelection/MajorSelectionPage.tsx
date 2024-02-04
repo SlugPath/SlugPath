@@ -11,11 +11,13 @@ export default function MajorSelectionPage() {
 
   return (
     <PlannerProvider plannerId="" order={0} title="">
-      <MajorSelection
-        saveButtonName="Next"
-        onSaved={redirectToPlanner}
-        onSkip={redirectToPlanner}
-      />
+      <div className="grid place-items-center my-3 justify-center h-auto w-[66vw] mx-auto overflow-auto">
+        <MajorSelection
+          saveButtonName="Next"
+          onSaved={redirectToPlanner}
+          onSkip={redirectToPlanner}
+        />
+      </div>
     </PlannerProvider>
   );
 }

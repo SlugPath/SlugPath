@@ -2,7 +2,7 @@ import { saveAllPlanners } from "@/app/actions/planner";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import useLocalStorage from "@/app/hooks/useLocalStorage";
 import { PlannerData } from "@/app/types/Planner";
-import { cloneDefaultPlanner, initialPlanner } from "@/lib/plannerUtils";
+import { cloneDefaultPlanner } from "@/lib/plannerUtils";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -16,12 +16,10 @@ export function usePlanners(
   const [planners, setPlanners] = useLocalStorage<PlannerData[]>(
     "planners",
     allPlanners,
-    [initialPlanner()],
   );
   const [activePlanner, setActivePlanner] = useLocalStorage<string | undefined>(
     "activePlanner",
     planners[0]?.id,
-    undefined,
   );
 
   useEffect(() => {
