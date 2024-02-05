@@ -1,6 +1,6 @@
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
-import { ModalsProvider } from "@contexts/ModalsProvider";
+import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
@@ -44,7 +44,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
         <ModalsProvider>
           <div className="flex justify-between space-x-4">
             <div className="flex-initial pr-2">
-              <Search displayCustomCourseSelection={true} />
+              <SearchContainer />
             </div>
             <div className="overflow-auto w-full flex-grow">
               <AccordionGroup>
@@ -88,6 +88,22 @@ export default function Planner({ isActive }: { isActive: boolean }) {
         </ModalsProvider>
       </DragDropContext>
     </div>
+  );
+}
+
+// this solves the bug of <Search /> not working after another <Search /> is interacted with in MajorProgressModal
+// multiple <Search /> components existing at the same time is problematic
+function SearchContainer() {
+  const { showMajorProgressModal } = useContext(ModalsContext);
+
+  return (
+    <>
+      {!showMajorProgressModal ? (
+        <Search displayCustomCourseSelection={true} />
+      ) : (
+        <Card className="w-80 h-full" />
+      )}
+    </>
   );
 }
 

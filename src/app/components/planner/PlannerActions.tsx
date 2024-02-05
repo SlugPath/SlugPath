@@ -18,8 +18,6 @@ export default function PlannerActions() {
   const { isAdmin } = useUserPermissions();
   const { status } = useSession();
 
-  console.log("isAdmin", isAdmin);
-
   const buttons = [
     {
       name: "Export Plan",
