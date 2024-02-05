@@ -111,8 +111,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 }
 
-// import { useContext } from "react";
-
 function GraduationProgressCard({
   totalCredits,
   geSatisfied,
@@ -122,18 +120,24 @@ function GraduationProgressCard({
   geSatisfied: string[];
   courseState: PlannerData;
 }) {
-  const { majorProgressPercentage } = useContext(MajorVerificationContext);
+  const { calculateMajorProgressPercentage } = useContext(
+    MajorVerificationContext,
+  );
 
   return (
     <Card variant="plain">
       <GraduationProgress
         credits={totalCredits}
         courseState={courseState}
-        majorProgressPercentage={majorProgressPercentage}
+        majorProgressPercentage={calculateMajorProgressPercentage(courseState)}
       />
 
       <div>
-        <MajorProgress majorProgressPercentage={majorProgressPercentage} />
+        <MajorProgress
+          majorProgressPercentage={calculateMajorProgressPercentage(
+            courseState,
+          )}
+        />
       </div>
 
       <div className="flex place-items-center">

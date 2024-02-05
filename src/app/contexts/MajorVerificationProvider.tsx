@@ -5,9 +5,9 @@ import { createContext } from "react";
 import { v4 as uuid4 } from "uuid";
 
 import useMajorSelection from "../components/majorSelection/useMajorSelection";
-import usePlanner from "../components/planner/usePlanner";
 import { MajorVerificationContextProps } from "../types/Context";
 import { StoredCourse } from "../types/Course";
+import { PlannerData } from "../types/PlannerData";
 import {
   Binder,
   Requirement,
@@ -21,18 +21,10 @@ export const MajorVerificationContext = createContext(
 
 export function MajorVerificationProvider({
   children,
-  plannerId,
 }: {
   children: React.ReactNode;
-  plannerId: string;
 }) {
   const { data: session } = useSession();
-  const { courseState } = usePlanner({
-    userId: session?.user.id,
-    plannerId: plannerId,
-    title: "Title",
-    order: 0,
-  });
   const { userMajorData } = useMajorSelection(session?.user.id);
   const {
     loadingSave,
@@ -153,7 +145,7 @@ export function MajorVerificationProvider({
     onSaveMajorRequirements(userMajorData.id);
   }
 
-  function majorProgressPercentage(): number {
+  function calculateMajorProgressPercentage(courseState: PlannerData): number {
     const requirementsTotal = majorRequirements.requirements.length;
 
     const requirementsSatisfied = majorRequirements.requirements.reduce(
@@ -174,7 +166,7 @@ export function MajorVerificationProvider({
       value={{
         isMajorRequirementsSatisfied: isMajorRequirementsSatisfied,
         majorRequirements: majorRequirements,
-        majorProgressPercentage: majorProgressPercentage(),
+        calculateMajorProgressPercentage: calculateMajorProgressPercentage,
         errors: "",
         loadingSave,
         isSaved,

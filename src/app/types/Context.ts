@@ -86,7 +86,7 @@ export interface MajorVerificationContextProps {
     courses: StoredCourse[],
   ) => boolean;
   majorRequirements: RequirementList;
-  majorProgressPercentage: number;
+  calculateMajorProgressPercentage: (courseState: PlannerData) => number;
   errors: string;
   loadingSave: boolean;
   isSaved: boolean;

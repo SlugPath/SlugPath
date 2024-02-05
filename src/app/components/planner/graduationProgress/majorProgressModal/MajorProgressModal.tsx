@@ -37,7 +37,7 @@ export default function MajorProgressModal() {
         <div className="flex flex-row justify-between">
           <Typography level="h4">Major Progress</Typography>
           {hasPermissionToEdit && (
-            <Chip color="success" variant="solid" className="mr-4">
+            <Chip color="success" variant="solid" className="mr-6">
               You have edit permission
             </Chip>
           )}

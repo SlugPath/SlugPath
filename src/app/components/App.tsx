@@ -86,7 +86,7 @@ function PlannerList() {
             }}
             key={id}
           >
-            <MajorVerificationProvider plannerId={id}>
+            <MajorVerificationProvider>
               <PlannerProvider plannerId={id} title={title} order={index}>
                 <Planner isActive={activePlanner === id} />
               </PlannerProvider>
