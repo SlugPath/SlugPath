@@ -5,23 +5,24 @@ on:
       - main
 
 jobs:
-  deploy:
+  migrate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Enable CorePack
-        run: corepack enable
-
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 21
-          cache: "yarn"
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install
 
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
