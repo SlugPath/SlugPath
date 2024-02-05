@@ -2,8 +2,9 @@ import useMajors from "@/app/hooks/useMajors";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
+import { lazy } from "react";
 
-import PermissionsAccordion from "./PermissionsAccordion";
+const PermissionsAccordion = lazy(() => import("./PermissionsAccordion"));
 
 export default function PermissionsList({
   permissionsList,

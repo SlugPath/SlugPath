@@ -23,7 +23,7 @@ import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
 import StyledAccordion from "./StyledAccordion";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
-import { GEProgress } from "./graduationProgress/GEProgress";
+import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
