@@ -15,8 +15,8 @@ import {
 import { useContext } from "react";
 
 import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
-import ExportModal from "../modals/ExportModal";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
+import ExportModal from "../modals/exportModal/ExportModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
