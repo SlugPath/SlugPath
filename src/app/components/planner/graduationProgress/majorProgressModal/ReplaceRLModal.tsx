@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import StyledAccordion from "../../StyledAccordion";
 import { RequirementsComponent } from "./RequirementsComponent";
@@ -25,10 +25,12 @@ export default function ReplaceRLModal() {
     MajorVerificationContext,
   );
 
-  const { data: requirementLists } = useQuery({
-    queryKey: ["getAllRequirementLists"],
-    queryFn: () => getAllRequirementLists(),
-  });
+  const { data: requirementLists, refetch: refetchRequirementLists } = useQuery(
+    {
+      queryKey: ["getAllRequirementLists"],
+      queryFn: () => getAllRequirementLists(),
+    },
+  );
 
   // keeps the same id, title, and binder, but replaces the requirements
   function handleReplaceRL(requirementList: RequirementList) {
@@ -38,6 +40,14 @@ export default function ReplaceRLModal() {
     });
     setShowModal(false);
   }
+
+  // refetch the requirement lists when the modal is shown
+  // which ensures that recently added requirement lists are shown
+  useEffect(() => {
+    if (showModal) {
+      refetchRequirementLists();
+    }
+  }, [refetchRequirementLists, showModal]);
 
   return (
     <Modal
@@ -63,45 +73,59 @@ export default function ReplaceRLModal() {
             Choose a requirement list to replace the current one for `
             {majorRequirements.title}`
           </Typography>
-          <Typography>
-            If you added other requirement list, you should refresh the page to
-            see it here.
-          </Typography>
         </div>
         <div
           className="overflow-y-scroll w-full space-y-2"
           style={{ maxHeight: "80vh" }}
         >
-          {requirementLists?.map((requirementList, index) => (
-            <StyledAccordion key={index} defaultExpanded={false}>
-              <AccordionSummary>
-                <div className="flex flex-row gap-1 items-center justify-between w-full">
-                  <Typography level="title-lg">
-                    {requirementList.title}
-                  </Typography>
-                  <Button
-                    color="warning"
-                    onClick={() => {
-                      handleReplaceRL(requirementList);
-                      setShowModal(false);
-                    }}
-                  >
-                    Replace
-                  </Button>
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <RequirementsComponent
-                  requirements={requirementList}
-                  parents={0}
-                  hideTitle={true}
-                />
-              </AccordionDetails>
-            </StyledAccordion>
-          ))}
+          <RequirementLists
+            requirementLists={requirementLists}
+            handleReplaceRL={handleReplaceRL}
+            setShowModal={setShowModal}
+          />
         </div>
         <ModalClose variant="plain" />
       </Sheet>
     </Modal>
+  );
+}
+
+function RequirementLists({
+  requirementLists,
+  handleReplaceRL,
+  setShowModal,
+}: {
+  requirementLists: RequirementList[] | undefined;
+  handleReplaceRL: (requirementList: RequirementList) => void;
+  setShowModal: (show: boolean) => void;
+}) {
+  return (
+    <>
+      {requirementLists?.map((requirementList, index) => (
+        <StyledAccordion key={index} defaultExpanded={false}>
+          <AccordionSummary>
+            <div className="flex flex-row gap-1 items-center justify-between w-full">
+              <Typography level="title-lg">{requirementList.title}</Typography>
+              <Button
+                color="warning"
+                onClick={() => {
+                  handleReplaceRL(requirementList);
+                  setShowModal(false);
+                }}
+              >
+                Replace
+              </Button>
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <RequirementsComponent
+              requirements={requirementList}
+              parents={0}
+              hideTitle={true}
+            />
+          </AccordionDetails>
+        </StyledAccordion>
+      ))}
+    </>
   );
 }
