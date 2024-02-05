@@ -1,12 +1,9 @@
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PlannerContext } from "@/app/contexts/PlannerProvider";
-import { CourseTerm } from "@/app/types/Course";
-import { StoredCourse } from "@/graphql/planner/schema";
 import { isCustomCourse } from "@/lib/plannerUtils";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { CourseTerm, StoredCourse } from "@customTypes/Course";
+import { Quarter } from "@customTypes/Quarter";
 import { Card, Link } from "@mui/joy";
 import { useContext } from "react";
-
-import { Quarter } from "../../types/Quarter";
 
 export function MiniCourseCard({
   course,
@@ -15,8 +12,7 @@ export function MiniCourseCard({
   course: StoredCourse;
   quarter: Quarter;
 }) {
-  const { setDisplayCourse } = useContext(PlannerContext);
-  const { onShowCourseInfoModal } = useContext(ModalsContext);
+  const { onShowCourseInfoModal, setDisplayCourse } = useContext(ModalsContext);
 
   function courseTitle(course: StoredCourse) {
     if (course.departmentCode && course.number) {

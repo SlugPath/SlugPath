@@ -1,11 +1,14 @@
-import { PlannerTitle } from "@/graphql/planner/schema";
-import { quartersPerYear } from "@/lib/plannerUtils";
+import {
+  findCoursesInQuarter,
+  findQuarter,
+  quartersPerYear,
+} from "@/lib/plannerUtils";
 import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
-import { PlannerData, findCoursesInQuarter } from "@customTypes/PlannerData";
-import { Quarter, findQuarter } from "@customTypes/Quarter";
+import { PlannerData } from "@customTypes/Planner";
+import { Quarter } from "@customTypes/Quarter";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import {
   Document,
@@ -69,11 +72,11 @@ const styles = StyleSheet.create({
   },
 });
 
-function getActivePlanner(planners: PlannerTitle[], activePlanner: string) {
+function getActivePlanner(planners: PlannerData[], activePlanner: string) {
   return planners.find((p) => p.id === activePlanner)?.title;
 }
 
-export default function CourseSelectionModal() {
+export default function ExportModal() {
   const { setShowExportModal, showExportModal, courseState } =
     useContext(ModalsContext);
 

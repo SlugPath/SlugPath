@@ -1,23 +1,11 @@
-"use client";
+import Planners from "@components/planners/Planners";
+import { getServerSession } from "next-auth";
 
-import apolloClient from "@/lib/apolloClient";
-import { ApolloProvider } from "@apollo/client";
-import App from "@components/App";
-import useConfirmPageLeave from "@hooks/useConfirmPageLeave";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { getAllPlanners } from "../actions/planner";
 
-const queryClient = new QueryClient();
+export default async function Home() {
+  const session = await getServerSession();
 
-export default function Home() {
-  const { status } = useSession();
-
-  useConfirmPageLeave(status === "unauthenticated");
-  return (
-    <ApolloProvider client={apolloClient}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </ApolloProvider>
-  );
+  const planners = await getAllPlanners(session?.user.email ?? "");
+  return <Planners planners={planners} />;
 }

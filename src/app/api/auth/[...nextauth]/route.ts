@@ -7,6 +7,7 @@ import GoogleProvider from "next-auth/providers/google";
 const handler = NextAuth({
   callbacks: {
     async signIn({ user }) {
+      if (!user.email) throw new Error("user must have an email");
       await prisma.user.upsert({
         where: {
           id: user.id,

@@ -5,6 +5,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
 import { Button, Card, Typography } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useContext } from "react";
 
 export default function PlannerActions() {
@@ -15,6 +16,9 @@ export default function PlannerActions() {
     setShowPermissionsModal,
   } = useContext(ModalsContext);
   const { isAdmin } = useUserPermissions();
+  const { status } = useSession();
+
+  console.log("isAdmin", isAdmin);
 
   const buttons = [
     {
@@ -26,11 +30,13 @@ export default function PlannerActions() {
       name: "Edit Major",
       icon: <EditIcon fontSize="large" />,
       onClick: () => setShowMajorSelectionModal(true),
+      disabled: status !== "authenticated",
     },
     {
       name: "Major Progress",
       icon: <SchoolIcon fontSize="large" />,
       onClick: () => setShowMajorProgressModal(true),
+      disabled: status !== "authenticated",
     },
   ];
 
@@ -50,6 +56,7 @@ export default function PlannerActions() {
           variant="plain"
           key={index}
           startDecorator={button.icon}
+          disabled={button.disabled}
         >
           <Typography>{button.name}</Typography>
         </Button>

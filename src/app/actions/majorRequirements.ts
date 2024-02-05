@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { v4 as uuid4 } from "uuid";
 
 import { Binder, RequirementList } from "../types/Requirements";
-import { userHasMajorEditingPermission } from "./permissionsActions";
+import { userHasMajorEditingPermission } from "./permissions";
 
 export async function saveMajorRequirements(
   requirements: RequirementList,

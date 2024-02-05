@@ -1,19 +1,19 @@
 import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 import { isRequirementList } from "@/lib/requirementsUtils";
 import { useSession } from "next-auth/react";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { v4 as uuid4 } from "uuid";
 
-import useMajorSelection from "../components/majorSelection/useMajorSelection";
 import { MajorVerificationContextProps } from "../types/Context";
 import { StoredCourse } from "../types/Course";
-import { PlannerData } from "../types/PlannerData";
+import { PlannerData } from "../types/Planner";
 import {
   Binder,
   Requirement,
   RequirementList,
   Requirements,
 } from "../types/Requirements";
+import { DefaultPlannerContext } from "./DefaultPlannerProvider";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
@@ -25,7 +25,7 @@ export function MajorVerificationProvider({
   children: React.ReactNode;
 }) {
   const { data: session } = useSession();
-  const { userMajorData } = useMajorSelection(session?.user.id);
+  const { userMajorData } = useContext(DefaultPlannerContext);
   const {
     loadingSave,
     isSaved,
@@ -142,7 +142,7 @@ export function MajorVerificationProvider({
   }
 
   function handleSaveMajorRequirements() {
-    onSaveMajorRequirements(userMajorData.id);
+    onSaveMajorRequirements(userMajorData!.id);
   }
 
   function calculateMajorProgressPercentage(courseState: PlannerData): number {
@@ -182,6 +182,7 @@ export function MajorVerificationProvider({
   );
 }
 
+// Helper functions
 function isMajorRequirementsSatisfied(
   requirements: Requirements,
   courses: StoredCourse[],

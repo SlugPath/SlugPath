@@ -1,4 +1,4 @@
-import { getAllRequirementLists } from "@/app/actions/majorRequirementsActions";
+import { getAllRequirementLists } from "@/app/actions/majorRequirements";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { RequirementList } from "@/app/types/Requirements";

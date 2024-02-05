@@ -2,7 +2,7 @@ import {
   getPermissions,
   savePermissions,
   userHasMajorEditingPermission,
-} from "@/app/actions/permissionsActions";
+} from "@/app/actions/permissions";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
 import prisma from "@/lib/prisma";

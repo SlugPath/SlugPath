@@ -1,4 +1,4 @@
-import IsSatisfiedMark from "@/app/components/IsSatisfiedMark";
+import IsSatisfiedMark from "@/app/components/miscellaneous/IsSatisfiedMark";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { Requirements } from "@/app/types/Requirements";

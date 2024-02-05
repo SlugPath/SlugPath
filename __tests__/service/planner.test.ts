@@ -1,9 +1,19 @@
-import { CourseService } from "@/graphql/course/service";
-import { MajorService } from "@/graphql/major/service";
-import { PlannerService } from "@/graphql/planner/service";
-import { initialPlanner, serializePlanner } from "@/lib/plannerUtils";
+import { coursesBy, getAllDepartments } from "@/app/actions/course";
+import {
+  getAllMajorsByCatalogYear,
+  getMajorDefaultPlanners,
+  getUserMajorByEmail,
+  updateUserMajor,
+} from "@/app/actions/major";
+import {
+  deletePlanner,
+  getAllPlanners,
+  getPlanner,
+  saveAllPlanners,
+} from "@/app/actions/planner";
+import { PlannerData } from "@/app/types/Planner";
+import { initialPlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
-import { PlannerData } from "@customTypes/PlannerData";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 
@@ -100,16 +110,15 @@ afterAll(async () => {
 
 it("should create 1 empty planner for 1 user", async () => {
   const user = await getUser();
-  const service = new PlannerService();
-  const planners = await service.allPlanners(user.id);
+  const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
-  const plannerId = await createPlanner(initialPlanner(), service, user);
+  const plannerId = await createPlanner(initialPlanner(), user);
 
   // Cleanup
-  const deleted = await service.deletePlanner({ userId: user.id, plannerId });
+  const deleted = await deletePlanner({ userId: user.id, plannerId });
   expect(deleted).toBeTruthy();
-  const deleteCheck = await service.getPlanner({
+  const deleteCheck = await getPlanner({
     userId: user.id,
     plannerId,
   });
@@ -118,11 +127,10 @@ it("should create 1 empty planner for 1 user", async () => {
 
 it("should update 1 planner for 1 user", async () => {
   const user = await getUser();
-  const service = new PlannerService();
-  const planners = await service.allPlanners(user.id);
+  const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
-  const plannerId = await createPlanner(initialPlanner(), service, user);
+  const plannerId = await createPlanner(initialPlanner(), user);
 
   // Update planner with some courses
   const cseCourses = [
@@ -175,36 +183,32 @@ it("should update 1 planner for 1 user", async () => {
     },
   ];
   const plannerData = initialPlanner();
+  plannerData.id = plannerId;
   cseCourses.forEach((c) => {
     plannerData.quarters[0].courses.push(c.id);
     plannerData.courses.push(c);
   });
 
-  const res2 = await service.upsertPlanner({
+  await saveAllPlanners({
     userId: user.id,
-    plannerId: plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData: serializePlanner(plannerData),
+    planners: [plannerData],
   });
-  expect(res2.plannerId).toBe(plannerId);
-
   // Ensure there is only 1 planner for that user
-  const allPlanners = await service.allPlanners(user.id);
+  const allPlanners = await getAllPlanners(user.email);
   expect(allPlanners).toHaveLength(1);
   // Ensure the content of that planner is updated
-  const check2 = await service.getPlanner({ userId: user.id, plannerId });
+  const check2 = await getPlanner({ userId: user.id, plannerId });
   expect(check2).not.toBeNull();
   const courses = check2?.quarters[0].courses;
   expect(courses).toBeDefined();
   expect(courses).toHaveLength(cseCourses.length);
   courses?.forEach((c, idx) => {
-    expect(c).toStrictEqual(cseCourses[idx]);
+    expect(c).toStrictEqual(cseCourses[idx].id);
   });
   // Cleanup
-  const deleted = await service.deletePlanner({ userId: user.id, plannerId });
+  const deleted = await deletePlanner({ userId: user.id, plannerId });
   expect(deleted).toBeTruthy();
-  const deleteCheck = await service.getPlanner({
+  const deleteCheck = await getPlanner({
     userId: user.id,
     plannerId,
   });
@@ -213,8 +217,7 @@ it("should update 1 planner for 1 user", async () => {
 
 it("should return null to delete missing planner", async () => {
   const user = await getUser();
-  const service = new PlannerService();
-  const res = await service.deletePlanner({
+  const res = await deletePlanner({
     plannerId: uuidv4(),
     userId: user.id,
   });
@@ -223,26 +226,22 @@ it("should return null to delete missing planner", async () => {
 });
 
 it("should handle department retrieval correctly", async () => {
-  const service = new CourseService();
-
-  const departments = await service.getAllDepartments();
+  const departments = await getAllDepartments();
 
   expect(departments).toBeDefined();
   expect(Array.isArray(departments)).toBe(true);
   expect(departments).toContainEqual(
-    expect.objectContaining({ name: "Computer Science and Engineering" }),
+    expect.objectContaining({ label: "Computer Science and Engineering" }),
   );
   expect(departments).toContainEqual(
-    expect.objectContaining({ name: "Mathematics" }),
+    expect.objectContaining({ label: "Mathematics" }),
   );
 });
 
 it("should filter courses by GE requirement", async () => {
-  const service = new CourseService();
-
   // Test filtering by a specific GE requirement
   const geFilter = "mf";
-  const filteredCourses = await service.coursesBy({
+  const filteredCourses = await coursesBy({
     departmentCode: "CSE",
     ge: geFilter,
   });
@@ -260,11 +259,9 @@ it("should filter courses by GE requirement", async () => {
 
 it("should return the correct labels for each course", async () => {
   const user = await getUser();
-  const service = new PlannerService();
-  const planners = await service.allPlanners(user.id);
+  const planners = await getAllPlanners(user.email);
   expect(planners).toHaveLength(0);
 
-  const plannerId = uuidv4();
   const plannerData = initialPlanner();
   plannerData.labels[0].name = "Elective";
   plannerData.labels[1].name = "Capstone";
@@ -321,26 +318,24 @@ it("should return the correct labels for each course", async () => {
   plannerData.courses = cseCourses;
   plannerData.quarters[0].courses = plannerData.courses.map((c) => c.id);
 
-  const res = await service.upsertPlanner({
+  await saveAllPlanners({
     userId: user.id,
-    plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData: serializePlanner(plannerData),
+    planners: [plannerData],
   });
-  expect(res.plannerId).toBe(plannerId);
-
   // Ensure there is only 1 planner for that user
-  const allPlanners = await service.allPlanners(user.id);
+  const allPlanners = await getAllPlanners(user.email);
   expect(allPlanners).toHaveLength(1);
   // Ensure the content of that planner is updated
-  const check2 = await service.getPlanner({ userId: user.id, plannerId });
+  const check2 = await getPlanner({
+    userId: user.id,
+    plannerId: plannerData.id,
+  });
   expect(check2).not.toBeNull();
   const courses = check2?.quarters[0].courses;
   expect(courses).toBeDefined();
   expect(courses).toHaveLength(cseCourses.length);
   courses?.forEach((c, idx) => {
-    expect(c).toStrictEqual(cseCourses[idx]);
+    expect(c).toStrictEqual(cseCourses[idx].id);
   });
 
   // Cleanup
@@ -365,20 +360,20 @@ it("should add major information for 1 user", async () => {
 
   if (user === null) fail("User was null (this should not happen)");
 
-  const service = new MajorService();
-  const userMajor = await service.getUserMajor(user.id);
+  const userMajor = await getUserMajorByEmail(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
-  const res = await service.updateUserMajor({
+  const res = await updateUserMajor({
     userId: user.id,
     ...majorData,
     defaultPlannerId,
   });
-  expect(res.name).toBe(name);
-  expect(res.catalogYear).toBe(catalogYear);
+  expect(res).not.toBeNull();
+  expect(res?.name).toBe(name);
+  expect(res?.catalogYear).toBe(catalogYear);
 
-  const check = await service.getUserMajor(user.id);
+  const check = await getUserMajorByEmail(user.email);
   expect(check).not.toBeNull();
   expect(check?.catalogYear).toBe(catalogYear);
   expect(check?.name).toBe(name);
@@ -399,8 +394,7 @@ it("should add major information for 1 user", async () => {
 
 it("should fail since major doesn't exist", async () => {
   const user = await getUser();
-  const service = new MajorService();
-  const userMajor = await service.getUserMajor(user.id);
+  const userMajor = await getUserMajorByEmail(user.email);
   expect(userMajor).toBeNull();
 
   const defaultPlannerId = uuidv4();
@@ -408,7 +402,7 @@ it("should fail since major doesn't exist", async () => {
   const catalogYear = "2020-2021";
 
   await expect(
-    service.updateUserMajor({
+    updateUserMajor({
       userId: user.id,
       name,
       catalogYear,
@@ -430,7 +424,7 @@ it("should return an empty list", async () => {
     },
   });
 
-  const res = await new MajorService().getMajorDefaultPlanners({
+  const res = await getMajorDefaultPlanners({
     name,
     catalogYear,
   });
@@ -448,7 +442,7 @@ it("should return an empty list", async () => {
 });
 
 it("should return correct number of majors", async () => {
-  const res = await new MajorService().getAllMajors("2020-2021");
+  const res = await getAllMajorsByCatalogYear("2020-2021");
   expect(res).toHaveLength(0);
 
   await prisma.major.create({
@@ -458,7 +452,7 @@ it("should return correct number of majors", async () => {
     },
   });
 
-  const res2 = await new MajorService().getAllMajors("2020-2021");
+  const res2 = await getAllMajorsByCatalogYear("2020-2021");
   expect(res2).toHaveLength(1);
 });
 
@@ -475,23 +469,14 @@ async function getUser() {
   return user;
 }
 
-async function createPlanner(
-  planner: PlannerData,
-  service: PlannerService,
-  user: any,
-): Promise<string> {
-  const plannerId = uuidv4();
-  const res = await service.upsertPlanner({
+async function createPlanner(planner: PlannerData, user: any): Promise<string> {
+  await saveAllPlanners({
     userId: user.id,
-    plannerId: plannerId,
-    title: "Planner 1",
-    order: 0,
-    plannerData: serializePlanner(planner),
+    planners: [planner],
   });
-  expect(res.plannerId).toBe(plannerId);
 
-  const check = await service.getPlanner({ userId: user.id, plannerId });
+  const check = await getPlanner({ userId: user.id, plannerId: planner.id });
   expect(check).not.toBeNull();
 
-  return plannerId;
+  return planner.id;
 }
