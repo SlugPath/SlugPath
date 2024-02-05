@@ -4,6 +4,7 @@ import { UserMajorOutput } from "../actions/major";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
+import { Permissions } from "./Permissions";
 import { PlannerData } from "./Planner";
 import { RequirementList, Requirements } from "./Requirements";
 
@@ -100,4 +101,14 @@ export interface MajorVerificationContextProps {
     newRequirementList: RequirementList,
   ) => void;
   onSaveMajorRequirements: () => void;
+}
+
+export interface PermissionsContextProps {
+  loadingPermissions: boolean;
+  isSaved: boolean;
+  permissionsList: Permissions[];
+  onSetPermissionsList: (permissions: Permissions[]) => void;
+  onSavePermissions: () => void;
+  isAdmin: boolean;
+  hasPermissionToEdit: boolean;
 }

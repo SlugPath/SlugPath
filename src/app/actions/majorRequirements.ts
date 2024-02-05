@@ -11,14 +11,8 @@ export async function saveMajorRequirements(
   majorId: number,
   userId: string,
 ) {
-  const major = await prisma.major.findUnique({
-    where: {
-      id: majorId,
-    },
-  });
-
   // check if user is allowed to edit this major
-  if (major && !userHasMajorEditingPermission(userId, major)) return;
+  if (!userHasMajorEditingPermission(userId)) return;
 
   const requirementsAsJSON = JSON.stringify(requirements);
 

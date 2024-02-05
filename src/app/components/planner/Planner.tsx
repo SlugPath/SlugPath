@@ -1,4 +1,5 @@
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
+import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -41,51 +42,53 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   return (
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <ModalsProvider>
-          <div className="flex justify-between space-x-4">
-            <div className="flex-initial pr-2">
-              <SearchContainer />
-            </div>
-            <div className="overflow-auto w-full flex-grow">
-              <AccordionGroup>
-                <div className="space-y-2 h-[75vh] overflow-auto">
-                  <Years courseState={courseState} />
-                  <Accordion
-                    variant="soft"
-                    sx={{
-                      borderRadius: "0.5rem",
-                      "&.MuiAccordion-root": {
-                        "& .MuiAccordionSummary-root": {
-                          padding: "0.5rem 0",
-                          paddingX: "0.5rem",
+        <PermissionsProvider>
+          <ModalsProvider>
+            <div className="flex justify-between space-x-4">
+              <div className="flex-initial pr-2">
+                <SearchContainer />
+              </div>
+              <div className="overflow-auto w-full flex-grow">
+                <AccordionGroup>
+                  <div className="space-y-2 h-[75vh] overflow-auto">
+                    <Years courseState={courseState} />
+                    <Accordion
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
+                          },
                         },
-                      },
-                    }}
-                    defaultExpanded={true}
-                  >
-                    <AccordionSummary>Notes</AccordionSummary>
-                    <AccordionDetails>
-                      <NotesEditor
-                        content={courseState.notes}
-                        onUpdateNotes={updateNotes}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
-              </AccordionGroup>
-            </div>
+                      }}
+                      defaultExpanded={true}
+                    >
+                      <AccordionSummary>Notes</AccordionSummary>
+                      <AccordionDetails>
+                        <NotesEditor
+                          content={courseState.notes}
+                          onUpdateNotes={updateNotes}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                </AccordionGroup>
+              </div>
 
-            <div className="flex flex-col self-start gap-3">
-              <PlannerActions />
-              <GraduationProgressCard
-                totalCredits={totalCredits}
-                geSatisfied={geSatisfied}
-                courseState={courseState}
-              />
+              <div className="flex flex-col self-start gap-3">
+                <PlannerActions />
+                <GraduationProgressCard
+                  totalCredits={totalCredits}
+                  geSatisfied={geSatisfied}
+                  courseState={courseState}
+                />
+              </div>
             </div>
-          </div>
-          <Modals />
-        </ModalsProvider>
+            <Modals />
+          </ModalsProvider>
+        </PermissionsProvider>
       </DragDropContext>
     </div>
   );

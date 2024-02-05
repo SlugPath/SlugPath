@@ -1,7 +1,7 @@
 import Search from "@/app/components/search/Search";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import useUserPermissions from "@/app/hooks/useUserPermissions";
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import {
   Button,
   Card,
@@ -28,7 +28,8 @@ export default function MajorProgressModal() {
   } = useContext(ModalsContext);
   const { loadingSave, majorRequirements, onSaveMajorRequirements } =
     useContext(MajorVerificationContext);
-  const { hasPermissionToEdit } = useUserPermissions();
+  const { hasPermissionToEdit } = useContext(PermissionsContext);
+
   const [editing, setEditing] = useState(false);
 
   function Title() {
@@ -57,6 +58,9 @@ export default function MajorProgressModal() {
     <Modal
       open={showModal}
       onClose={() => {
+        if (editing) {
+          handleToggleEditButton();
+        }
         setShowModal(false);
       }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}

@@ -63,6 +63,10 @@ export default function ReplaceRLModal() {
             Choose a requirement list to replace the current one for `
             {majorRequirements.title}`
           </Typography>
+          <Typography>
+            If you added other requirement list, you should refresh the page to
+            see it here.
+          </Typography>
         </div>
         <div
           className="overflow-y-scroll w-full space-y-2"

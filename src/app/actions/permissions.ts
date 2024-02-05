@@ -2,8 +2,8 @@
 
 import prisma from "@/lib/prisma";
 
-import { Major } from "../types/Major";
 import { Permissions } from "../types/Permissions";
+import { getUserMajorById } from "./major";
 
 export async function savePermissions(
   userId: string,
@@ -98,7 +98,6 @@ export async function getPermissions(): Promise<Permissions[]> {
 
 export async function userHasMajorEditingPermission(
   userId: string,
-  major: Major,
 ): Promise<boolean> {
   const user = await prisma.user.findUnique({
     where: {
@@ -109,7 +108,9 @@ export async function userHasMajorEditingPermission(
     },
   });
 
-  if (user?.email !== undefined) {
+  const major = await getUserMajorById(userId);
+
+  if (major?.id !== undefined && user?.email !== undefined) {
     const permissions = await prisma.permissions.findUnique({
       where: {
         userEmail: user.email ? user.email : "",

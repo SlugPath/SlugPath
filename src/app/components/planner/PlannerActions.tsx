@@ -1,4 +1,4 @@
-import useUserPermissions from "@/app/hooks/useUserPermissions";
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import EditIcon from "@mui/icons-material/Edit";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -15,7 +15,7 @@ export default function PlannerActions() {
     setShowMajorProgressModal,
     setShowPermissionsModal,
   } = useContext(ModalsContext);
-  const { isAdmin } = useUserPermissions();
+  const { isAdmin } = useContext(PermissionsContext);
   const { status } = useSession();
 
   const buttons = [
