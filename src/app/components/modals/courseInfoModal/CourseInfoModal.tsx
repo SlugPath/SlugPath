@@ -1,6 +1,5 @@
-import { GET_COURSE } from "@/graphql/queries";
+import { courseInfo } from "@/app/actions/course";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-import { useQuery } from "@apollo/client";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
@@ -16,6 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
+import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
@@ -35,20 +35,25 @@ export default function CourseInfoModal() {
     editCustomCourse,
     getCourseLabels,
     getAllLabels,
-    editCourseLabels,
     updatePlannerLabels,
   } = useContext(PlannerContext);
 
   const [editing, setEditing] = useState(false);
   const { displayCourse: courseTerm, setDisplayCourse } =
-    useContext(PlannerContext);
+    useContext(ModalsContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
-  const { data, loading } = useQuery(GET_COURSE, {
-    variables: {
-      departmentCode: course?.departmentCode,
-      number: course?.number,
+
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["course", course?.departmentCode, course?.number],
+    queryFn: async () => {
+      // Don't fetch if the course is undefined or a custom course
+      const res = await courseInfo({
+        departmentCode: course!.departmentCode,
+        number: course!.number,
+      });
+      return res;
     },
-    skip: course === undefined || isCustomCourse(course),
+    enabled: course && !isCustomCourse(course),
   });
 
   // This is to prevent illegally opening the modal
@@ -57,41 +62,39 @@ export default function CourseInfoModal() {
   }
 
   // Accessors
-  function title(data: any) {
+  function title(c: StoredCourse | undefined) {
     if (loading) return "";
-    if (!data) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
-    const c = data.courseBy as StoredCourse;
+    if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
     return `${c.departmentCode} ${c.number} ${getTitle(c)}`.slice(
       0,
       MAX_MODAL_TITLE,
     );
   }
 
-  function description(data: any) {
+  function description(c: StoredCourse | undefined) {
     // If it is a custom course with a description, display it
-    if (loading) return "";
     if (course && isCustomCourse(course)) {
       return `Description: ${course.description}`;
     }
-    return `${data.courseBy.description}`;
+    if (loading || !c) return "";
+    return `${c.description}`;
   }
 
-  function quartersOffered(data: any) {
+  function quartersOffered(c: StoredCourse | undefined) {
     if (loading) return "";
-    if (!data) return `Quarters Offered: ${course?.quartersOffered.join(", ")}`;
-    const c = data.courseBy as StoredCourse;
+    if (!c) return `Quarters Offered: ${course?.quartersOffered.join(", ")}`;
     if (c.quartersOffered.length == 0) return "Quarters Offered: None";
     return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
   }
 
-  function credits(data: any) {
+  function credits(c: StoredCourse | undefined) {
     if (loading) return "";
-    if (!data) return course?.credits;
-    return data.courseBy.credits;
+    if (!c) return course?.credits;
+    return c.credits;
   }
 
-  function ge(data: any) {
-    if (loading) return "";
+  function ge(c: StoredCourse | undefined) {
+    if (loading || !c) return "";
     const capitalize: { [key: string]: string } = {
       peT: "PE-T",
       peH: "PE-H",
@@ -100,17 +103,17 @@ export default function CourseInfoModal() {
       prS: "PR-S",
       prE: "PR-E",
     };
-    return data.courseBy.ge.map((code: string) => {
+    return c.ge.map((code: string) => {
       if (code === "None") return code;
       if (Object.keys(capitalize).includes(code)) return capitalize[code];
       return code.toLocaleUpperCase();
     });
   }
 
-  function prerequisites(data: any) {
+  function prerequisites(c: StoredCourse | undefined) {
     const start = "Prerequisite(s):";
-    if (loading) return `${start} None`;
-    const preqs: string = data.courseBy.prerequisites;
+    if (loading || !c || !c.prerequisites) return `${start} None`;
+    const preqs: string = c.prerequisites;
     return preqs.includes(start) ? preqs : `${start} ${preqs}`;
   }
 
@@ -122,8 +125,10 @@ export default function CourseInfoModal() {
   const handleUpdateLabels = (labels: Label[]) => {
     const newLabels = labels.map((label) => label.id);
     const newCourse: StoredCourse = { ...course, labels: newLabels };
-    editCourseLabels(newCourse);
-    updatePlannerLabels(labels);
+    updatePlannerLabels({
+      labels,
+      newCourse,
+    });
     setDisplayCourse([newCourse, term]);
   };
 

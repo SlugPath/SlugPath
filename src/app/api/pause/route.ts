@@ -2,10 +2,6 @@ import { env } from "@/env/server.mjs";
 import crypto from "crypto";
 
 export async function POST(request: Request) {
-  if (env.WEBHOOK_SECRET === "undefined vercel webhook secret") {
-    throw new Error("No web hook secret found");
-  }
-
   const rawBody = await request.text();
   const rawBodyBuffer = Buffer.from(rawBody, "utf-8");
   const bodySignature = sha1(rawBodyBuffer, env.WEBHOOK_SECRET);

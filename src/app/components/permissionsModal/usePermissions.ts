@@ -3,10 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-import {
-  getPermissions,
-  savePermissions,
-} from "../../actions/permissionsActions";
+import { getPermissions, savePermissions } from "../../actions/permissions";
 
 export default function usePermissions() {
   const [permissionsList, setPermissionsList] = useState<Permissions[]>([]);

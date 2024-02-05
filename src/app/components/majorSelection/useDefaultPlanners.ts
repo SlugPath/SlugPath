@@ -1,27 +1,23 @@
-import { GET_MAJOR_DEFAULT_PLANNERS } from "@/graphql/queries";
-import { useQuery } from "@apollo/client";
-
-export interface MajorDefaultPlanner {
-  id: string;
-  title: string;
-}
+import { getMajorDefaultPlanners } from "@/app/actions/major";
+import { useQuery } from "@tanstack/react-query";
 
 export default function useDefaultPlanners(
   catalogYear: string,
   majorName: string,
 ) {
-  const { data, loading } = useQuery(GET_MAJOR_DEFAULT_PLANNERS, {
-    variables: {
-      input: {
-        catalogYear: catalogYear,
+  const { data: majorDefaultPlanners, isLoading: loading } = useQuery({
+    queryKey: ["majorDefaults", catalogYear, majorName],
+    queryFn: async () => {
+      return await getMajorDefaultPlanners({
+        catalogYear,
         name: majorName,
-      },
+      });
     },
-    skip: catalogYear === "" || majorName === "",
+    enabled: !!catalogYear && !!majorName,
   });
 
   return {
-    majorDefaultPlanners: data?.getMajorDefaults as MajorDefaultPlanner[],
+    majorDefaultPlanners,
     loading,
   };
 }

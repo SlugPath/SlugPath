@@ -1,5 +1,5 @@
 import { GESMappedToCourses } from "@/lib/plannerUtils";
-import { PlannerData } from "@customTypes/PlannerData";
+import { PlannerData } from "@customTypes/Planner";
 import { Typography, useColorScheme } from "@mui/joy";
 import { blue } from "@mui/material/colors";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";

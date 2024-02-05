@@ -1,8 +1,7 @@
-import { PlannerData } from "@/app/types/PlannerData";
+import IsSatisfiedMark from "@/app/components/miscellaneous/IsSatisfiedMark";
 import { GESMappedToCourses } from "@/lib/plannerUtils";
+import { PlannerData } from "@customTypes/Planner";
 import { Typography } from "@mui/joy";
-
-import IsSatisfiedMark from "../../IsSatisfiedMark";
 
 export default function GraduationProgress({
   credits,

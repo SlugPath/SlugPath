@@ -1,0 +1,29 @@
+name: Deploy Migrations
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Enable CorePack
+        run: corepack enable
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Apply all pending migrations to the database
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.POSTGRES_PRISMA_URL }}

@@ -37,7 +37,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/env/server.mjs"
+    "src/env/server.mjs",
+    "jest.config.js"
   ],
   "exclude": ["node_modules"]
 }

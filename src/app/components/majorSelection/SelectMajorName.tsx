@@ -2,8 +2,8 @@ import { Option, Select, Typography } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
 export interface SelectMajorNameProps {
-  major: string;
-  majors: string[];
+  selectedMajor: string;
+  majors: string[] | undefined;
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     newValue: string | null,
@@ -11,7 +11,7 @@ export interface SelectMajorNameProps {
 }
 
 export default function SelectMajorName({
-  major,
+  selectedMajor,
   majors,
   onChange,
 }: SelectMajorNameProps) {
@@ -19,13 +19,13 @@ export default function SelectMajorName({
     <>
       <Typography level="body-lg">Select your major</Typography>
       <Select
-        value={major}
+        value={selectedMajor}
         placeholder="Choose one…"
         variant="soft"
         onChange={onChange}
-        disabled={majors.length == 0}
+        disabled={majors?.length == 0}
       >
-        {majors.map((major, index) => (
+        {majors?.map((major, index) => (
           <Option key={index} value={major}>
             {major}
           </Option>

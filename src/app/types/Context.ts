@@ -1,11 +1,10 @@
-import { PlannerTitle } from "@/graphql/planner/schema";
-import { ApolloError } from "@apollo/client";
 import { DropResult } from "@hello-pangea/dnd";
 
+import { UserMajorOutput } from "../actions/major";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
-import { PlannerData } from "./PlannerData";
+import { PlannerData } from "./Planner";
 import { RequirementList, Requirements } from "./Requirements";
 
 type setShow = SetState<boolean>;
@@ -23,23 +22,26 @@ export interface ModalsContextProps {
   showPermissionsModal: boolean;
   setShowPermissionsModal: setShow;
   courseState: PlannerData;
+  displayCourse: CourseTerm;
+  setDisplayCourse: SetState<CourseTerm>;
 }
 
 export interface PlannerContextProps {
   deleteCourse: (quarterId: string) => (deleteIdx: number) => void;
   editCustomCourse: (course: StoredCourse) => void;
-  displayCourse: CourseTerm;
-  setDisplayCourse: SetState<CourseTerm>;
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
   handleDragEnd: (result: DropResult) => void;
-  saveStatus: boolean;
-  saveError: ApolloError | undefined;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
-  editCourseLabels: (course: StoredCourse) => void;
-  updatePlannerLabels: (labels: Label[]) => void;
+  updatePlannerLabels: ({
+    labels,
+    newCourse,
+  }: {
+    labels: Label[];
+    newCourse?: StoredCourse;
+  }) => void;
   customCourses: StoredCourse[];
   handleAddCustom: (input: CustomCourseInput) => void;
   handleRemoveCustom: (idx: number) => void;
@@ -54,28 +56,25 @@ export interface PlannerProviderProps {
 }
 
 export interface PlannersContextProps {
-  planners: PlannerTitle[];
+  planners: PlannerData[];
   removePlanner: (plannerId: string) => void;
   addPlanner: () => void;
+  getPlanner: (id: string) => PlannerData;
+  setPlanner: (id: string, title: string, courseState: PlannerData) => void;
   switchPlanners: (id: string) => void;
   changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
   activePlanner: string | undefined;
-  plannersLoading: boolean;
-  loadingDeletePlanner: boolean;
   deletedPlanner: boolean;
-}
-
-export interface LabelsContextProps {
-  labels: Label[];
-  updateLabels: (label: Label[]) => void;
 }
 
 export interface DefaultPlannerContextProps {
   defaultPlanner: PlannerData;
-  hasAutoFilled: boolean;
-  setHasAutoFilled: SetState<boolean>;
-  setDefaultPlanner: SetState<PlannerData>;
+  setDefaultPlannerId: SetState<string>;
+  loadingDefaultPlanner: boolean;
+  userMajorData: UserMajorOutput | null;
+  loadingMajorData: boolean;
+  errorMajorData: Error | null;
 }
 
 export interface MajorVerificationContextProps {

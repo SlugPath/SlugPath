@@ -1,7 +1,7 @@
+import { PlannerData } from "@/app/types/Planner";
 import { CUSTOM_DROPPABLE, SEARCH_DROPPABLE } from "@/lib/consts";
-import { createCourseFromId } from "@/lib/plannerUtils";
-import { PlannerData } from "@customTypes/PlannerData";
-import { Quarter, findQuarter } from "@customTypes/Quarter";
+import { createCourseFromId, findQuarter } from "@/lib/plannerUtils";
+import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import { v4 as uuidv4 } from "uuid";
 

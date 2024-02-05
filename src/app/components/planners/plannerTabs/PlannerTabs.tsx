@@ -30,7 +30,6 @@ export default function PlannerTabs() {
     changePlannerName,
     addPlanner,
     activePlanner,
-    plannersLoading,
   } = useContext(PlannersContext);
 
   // State-ful variables for managing the editing of planner names
@@ -99,7 +98,6 @@ export default function PlannerTabs() {
           />
         ))}
         <IconButton
-          disabled={plannersLoading}
           aria-label="Add"
           onClick={() => handleAddPlanner()}
           size="sm"
@@ -125,7 +123,7 @@ export default function PlannerTabs() {
   );
 }
 
-interface CustomTabProps {
+type CustomTabProps = {
   title: string;
   id: string;
   isEditing: boolean;
@@ -134,7 +132,7 @@ interface CustomTabProps {
   onEndEditing: (newTitle: string) => void;
   onClick: () => void;
   onOpenDeleteAlert: (id: string, title: string) => void;
-}
+};
 
 function CustomTab({
   title,

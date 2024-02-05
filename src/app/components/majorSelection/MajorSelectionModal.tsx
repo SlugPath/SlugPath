@@ -17,6 +17,7 @@ export default function MajorSelectionModal() {
 
   function handleReplaceCurrentPlanner() {
     replaceCurrentPlanner();
+    setShowMajorSelectionModal(false);
   }
 
   return (

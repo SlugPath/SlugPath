@@ -1,3 +1,5 @@
+"use client";
+
 import { GitHub, OpenInNew } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/joy";
 import { useSession } from "next-auth/react";
