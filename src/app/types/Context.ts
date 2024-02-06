@@ -4,6 +4,7 @@ import { UserMajorOutput } from "../actions/major";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
+import { Permissions } from "./Permissions";
 import { PlannerData } from "./Planner";
 import { RequirementList, Requirements } from "./Requirements";
 
@@ -21,6 +22,8 @@ export interface ModalsContextProps {
   setShowMajorProgressModal: setShow;
   showPermissionsModal: boolean;
   setShowPermissionsModal: setShow;
+  showReplaceRLModal: boolean;
+  setShowReplaceRLModal: setShow;
   courseState: PlannerData;
   displayCourse: CourseTerm;
   setDisplayCourse: SetState<CourseTerm>;
@@ -83,7 +86,7 @@ export interface MajorVerificationContextProps {
     courses: StoredCourse[],
   ) => boolean;
   majorRequirements: RequirementList;
-  majorProgressPercentage: number;
+  calculateMajorProgressPercentage: (courseState: PlannerData) => number;
   errors: string;
   loadingSave: boolean;
   isSaved: boolean;
@@ -98,4 +101,14 @@ export interface MajorVerificationContextProps {
     newRequirementList: RequirementList,
   ) => void;
   onSaveMajorRequirements: () => void;
+}
+
+export interface PermissionsContextProps {
+  loadingPermissions: boolean;
+  isSaved: boolean;
+  permissionsList: Permissions[];
+  onSetPermissionsList: (permissions: Permissions[]) => void;
+  onSavePermissions: () => void;
+  isAdmin: boolean;
+  hasPermissionToEdit: boolean;
 }

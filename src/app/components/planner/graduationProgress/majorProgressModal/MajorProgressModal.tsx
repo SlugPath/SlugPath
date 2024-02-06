@@ -1,7 +1,7 @@
 import Search from "@/app/components/search/Search";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import useUserPermissions from "@/app/hooks/useUserPermissions";
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import {
   Button,
   Card,
@@ -9,6 +9,7 @@ import {
   Modal,
   ModalClose,
   Sheet,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import { CircularProgress } from "@mui/material";
@@ -23,17 +24,25 @@ export default function MajorProgressModal() {
   const {
     setShowMajorProgressModal: setShowModal,
     showMajorProgressModal: showModal,
+    setShowReplaceRLModal,
   } = useContext(ModalsContext);
   const { loadingSave, majorRequirements, onSaveMajorRequirements } =
     useContext(MajorVerificationContext);
-  const { hasPermissionToEdit } = useUserPermissions();
+  const { hasPermissionToEdit } = useContext(PermissionsContext);
+
   const [editing, setEditing] = useState(false);
 
   function Title() {
     return (
       <div className="flex flex-col space-y-2">
-        <Typography level="h4">Major Progress</Typography>
-        <Typography level="title-lg">{majorRequirements.title}</Typography>
+        <div className="flex flex-row justify-between">
+          <Typography level="h4">Major Progress</Typography>
+          {hasPermissionToEdit && (
+            <Chip color="success" variant="solid" className="mr-6">
+              You have edit permission
+            </Chip>
+          )}
+        </div>
       </div>
     );
   }
@@ -49,6 +58,9 @@ export default function MajorProgressModal() {
     <Modal
       open={showModal}
       onClose={() => {
+        if (editing) {
+          handleToggleEditButton();
+        }
         setShowModal(false);
       }}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
@@ -73,39 +85,86 @@ export default function MajorProgressModal() {
               </Card>
             </div>
           )}
-          <div
-            className="overflow-y-scroll w-full"
-            style={{ maxHeight: "80vh" }}
-          >
-            {editing ? (
-              <RequirementsComponentEditing
-                requirements={majorRequirements}
-                parents={0}
-              />
-            ) : (
-              <RequirementsComponent
-                requirements={majorRequirements}
-                parents={0}
-              />
-            )}
-          </div>
+          <Requirements
+            majorRequirements={majorRequirements}
+            editing={editing}
+          />
         </div>
-        {hasPermissionToEdit && (
-          <div className="flex flex-row justify-end space-x-2">
-            <Chip color="success" variant="solid">
-              You have edit permission
-            </Chip>
-            {loadingSave ? (
-              <CircularProgress />
-            ) : (
-              <Button onClick={handleToggleEditButton}>
-                {editing ? "Done" : "Edit"}
-              </Button>
-            )}
-          </div>
-        )}
+        <EditButtons
+          editing={editing}
+          loadingSave={loadingSave}
+          hasPermissionToEdit={hasPermissionToEdit}
+          handleToggleEditButton={handleToggleEditButton}
+          handleClickReplaceButton={() => setShowReplaceRLModal(true)}
+        />
         <ModalClose variant="plain" />
       </Sheet>
     </Modal>
+  );
+}
+
+// this component decides which RequirementsComponent to render based on the editing prop
+// will also display if there are no requirements
+function Requirements({
+  majorRequirements,
+  editing,
+}: {
+  majorRequirements: any;
+  editing: boolean;
+}) {
+  return (
+    <div className="overflow-y-scroll w-full" style={{ maxHeight: "80vh" }}>
+      {editing ? (
+        <RequirementsComponentEditing
+          requirements={majorRequirements}
+          parents={0}
+        />
+      ) : (
+        <RequirementsComponent
+          requirements={majorRequirements}
+          parents={0}
+          hideTitle={false}
+        />
+      )}
+    </div>
+  );
+}
+
+function EditButtons({
+  editing,
+  loadingSave,
+  hasPermissionToEdit,
+  handleToggleEditButton,
+  handleClickReplaceButton,
+}: {
+  editing: boolean;
+  loadingSave: boolean;
+  hasPermissionToEdit: boolean;
+  handleToggleEditButton: () => void;
+  handleClickReplaceButton: () => void;
+}) {
+  if (!hasPermissionToEdit) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-row justify-end">
+      {loadingSave ? (
+        <CircularProgress />
+      ) : (
+        <div className="space-x-2">
+          {editing && (
+            <Tooltip title="Replace with a Requirement List from a different program">
+              <Button color="warning" onClick={handleClickReplaceButton}>
+                Replace
+              </Button>
+            </Tooltip>
+          )}
+          <Button onClick={handleToggleEditButton}>
+            {editing ? "Done" : "Edit Requirement List"}
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }

@@ -8,6 +8,7 @@ export default function useModals() {
   const [showMajorSelectionModal, setShowMajorSelectionModal] = useState(false);
   const [showMajorProgressModal, setShowMajorProgressModal] = useState(false);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
+  const [showReplaceRLModal, setShowReplaceRLModal] = useState(false); // RL = Requirement List
 
   function handleShowCourseInfoModal() {
     setShowCourseInfoModal(true);
@@ -31,5 +32,7 @@ export default function useModals() {
     setShowMajorProgressModal,
     showPermissionsModal,
     setShowPermissionsModal,
+    showReplaceRLModal,
+    setShowReplaceRLModal,
   };
 }

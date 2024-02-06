@@ -1,6 +1,7 @@
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
+import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
-import { ModalsProvider } from "@contexts/ModalsProvider";
+import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
@@ -27,6 +28,7 @@ import { GEProgress } from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
+import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -40,53 +42,71 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   return (
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <ModalsProvider>
-          <div className="flex justify-between space-x-4">
-            <div className="flex-initial pr-2">
-              <Search displayCustomCourseSelection={true} />
-            </div>
-            <div className="overflow-auto w-full flex-grow">
-              <AccordionGroup>
-                <div className="space-y-2 h-[75vh] overflow-auto">
-                  <Years courseState={courseState} />
-                  <Accordion
-                    variant="soft"
-                    sx={{
-                      borderRadius: "0.5rem",
-                      "&.MuiAccordion-root": {
-                        "& .MuiAccordionSummary-root": {
-                          padding: "0.5rem 0",
-                          paddingX: "0.5rem",
+        <PermissionsProvider>
+          <ModalsProvider>
+            <div className="flex justify-between space-x-4">
+              <div className="flex-initial pr-2">
+                <SearchContainer />
+              </div>
+              <div className="overflow-auto w-full flex-grow">
+                <AccordionGroup>
+                  <div className="space-y-2 h-[75vh] overflow-auto">
+                    <Years courseState={courseState} />
+                    <Accordion
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
+                          },
                         },
-                      },
-                    }}
-                    defaultExpanded={true}
-                  >
-                    <AccordionSummary>Notes</AccordionSummary>
-                    <AccordionDetails>
-                      <NotesEditor
-                        content={courseState.notes}
-                        onUpdateNotes={updateNotes}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
-              </AccordionGroup>
-            </div>
+                      }}
+                      defaultExpanded={true}
+                    >
+                      <AccordionSummary>Notes</AccordionSummary>
+                      <AccordionDetails>
+                        <NotesEditor
+                          content={courseState.notes}
+                          onUpdateNotes={updateNotes}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                </AccordionGroup>
+              </div>
 
-            <div className="flex flex-col self-start gap-3">
-              <PlannerActions />
-              <GraduationProgressCard
-                totalCredits={totalCredits}
-                geSatisfied={geSatisfied}
-                courseState={courseState}
-              />
+              <div className="flex flex-col self-start gap-3">
+                <PlannerActions />
+                <GraduationProgressCard
+                  totalCredits={totalCredits}
+                  geSatisfied={geSatisfied}
+                  courseState={courseState}
+                />
+              </div>
             </div>
-          </div>
-          <Modals />
-        </ModalsProvider>
+            <Modals />
+          </ModalsProvider>
+        </PermissionsProvider>
       </DragDropContext>
     </div>
+  );
+}
+
+// this solves the bug of <Search /> not working after another <Search /> is interacted with in MajorProgressModal
+// multiple <Search /> components existing at the same time is problematic
+function SearchContainer() {
+  const { showMajorProgressModal } = useContext(ModalsContext);
+
+  return (
+    <>
+      {!showMajorProgressModal ? (
+        <Search displayCustomCourseSelection={true} />
+      ) : (
+        <Card className="w-80 h-full" />
+      )}
+    </>
   );
 }
 
@@ -99,18 +119,24 @@ function GraduationProgressCard({
   geSatisfied: string[];
   courseState: PlannerData;
 }) {
-  const { majorProgressPercentage } = useContext(MajorVerificationContext);
+  const { calculateMajorProgressPercentage } = useContext(
+    MajorVerificationContext,
+  );
 
   return (
     <Card variant="plain">
       <GraduationProgress
         credits={totalCredits}
         courseState={courseState}
-        majorProgressPercentage={majorProgressPercentage}
+        majorProgressPercentage={calculateMajorProgressPercentage(courseState)}
       />
 
       <div>
-        <MajorProgress majorProgressPercentage={majorProgressPercentage} />
+        <MajorProgress
+          majorProgressPercentage={calculateMajorProgressPercentage(
+            courseState,
+          )}
+        />
       </div>
 
       <div className="flex place-items-center">
@@ -131,6 +157,7 @@ function Modals() {
       <ExportModal />
       <MajorSelectionModal />
       <MajorProgressModal />
+      <ReplaceRLModal />
       <PermissionsModal />
     </>
   );

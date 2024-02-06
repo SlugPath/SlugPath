@@ -11,14 +11,8 @@ export async function saveMajorRequirements(
   majorId: number,
   userId: string,
 ) {
-  const major = await prisma.major.findUnique({
-    where: {
-      id: majorId,
-    },
-  });
-
   // check if user is allowed to edit this major
-  if (major && !userHasMajorEditingPermission(userId, major)) return;
+  if (!userHasMajorEditingPermission(userId)) return;
 
   const requirementsAsJSON = JSON.stringify(requirements);
 
@@ -42,15 +36,12 @@ export async function saveMajorRequirements(
   }
 }
 
-export async function getMajorRequirements(
+/**
+ * @returns an empty requirement list with a title using the major's name and catalog year
+ */
+async function createEmptyRequirementList(
   majorId: number,
 ): Promise<RequirementList> {
-  const majorRequirement = await prisma.majorRequirement.findUnique({
-    where: {
-      majorId: majorId,
-    },
-  });
-
   const major = await prisma.major.findUnique({
     where: {
       id: majorId,
@@ -60,20 +51,45 @@ export async function getMajorRequirements(
   const catalogYear = major?.catalogYear ?? "No catalog year";
   const title = `${majorName} ${catalogYear}`;
 
-  if (majorRequirement === null) {
-    const emptyReqList = {
-      binder: Binder.AND,
-      title: title,
-      id: uuid4(),
-      requirements: [],
-    };
+  const emptyReqList: RequirementList = {
+    binder: Binder.AND,
+    title: title,
+    id: uuid4(),
+    requirements: [],
+  };
 
-    return emptyReqList;
+  return emptyReqList;
+}
+
+export async function getMajorRequirements(
+  majorId: number,
+): Promise<RequirementList> {
+  const majorRequirement = await prisma.majorRequirement.findUnique({
+    where: {
+      majorId: majorId,
+    },
+  });
+
+  // if no requirements are found, return an empty requirement list
+  if (majorRequirement === null) {
+    return createEmptyRequirementList(majorId);
   }
 
-  const requirementList = JSON.parse(
+  const requirementList: RequirementList = parseRequirementList(
     majorRequirement.requirementList as string,
-  ) as RequirementList;
+  );
 
   return requirementList;
+}
+
+export async function getAllRequirementLists(): Promise<RequirementList[]> {
+  const requirementLists = await prisma.majorRequirement.findMany();
+
+  return requirementLists.map((reqList) => {
+    return parseRequirementList(reqList.requirementList as string);
+  });
+}
+
+function parseRequirementList(requirementList: string): RequirementList {
+  return JSON.parse(requirementList) as RequirementList;
 }

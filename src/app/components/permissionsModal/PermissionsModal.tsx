@@ -1,5 +1,5 @@
-import usePermissions from "@/app/components/permissionsModal/usePermissions";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
 import ReportIcon from "@mui/icons-material/Report";
@@ -27,12 +27,12 @@ export default function PermissionsModal() {
   const [email, setEmail] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const {
-    isPending: loadingPermissions,
-    isSaved,
     permissionsList,
+    loadingPermissions,
+    isSaved,
     onSetPermissionsList,
     onSavePermissions,
-  } = usePermissions();
+  } = useContext(PermissionsContext);
 
   const [permissionsAlertOpen, setPermissionsAlertOpen] =
     useState<boolean>(false);
@@ -111,7 +111,10 @@ export default function PermissionsModal() {
     permissionsCopy.majorEditingPermissions =
       permissionsCopy.majorEditingPermissions.map((majorEditPerm) => {
         const otherMajor = majorEditPerm.major;
-        if (otherMajor.name === major.name) {
+        if (
+          otherMajor.name === major.name &&
+          otherMajor.catalogYear === major.catalogYear
+        ) {
           return {
             major: otherMajor,
             expirationDate: expirationDate,

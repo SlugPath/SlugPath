@@ -1,8 +1,10 @@
 import { Accordion } from "@mui/joy";
 
 export default function StyledAccordion({
+  defaultExpanded,
   children,
 }: {
+  defaultExpanded?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -17,7 +19,7 @@ export default function StyledAccordion({
           },
         },
       }}
-      defaultExpanded={true}
+      defaultExpanded={defaultExpanded ?? true}
     >
       {children}
     </Accordion>
