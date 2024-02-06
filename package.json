@@ -17,6 +17,7 @@
     "init-db": "npx prisma migrate deploy && npx prisma db seed"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.507.0",
     "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
@@ -31,6 +32,7 @@
     "@t3-oss/env-nextjs": "^0.8.0",
     "@tanstack/react-query": "^5.18.0",
     "@tanstack/react-query-devtools": "^5.18.0",
+    "child_process": "^1.0.2",
     "class-validator": "^0.14.1",
     "lodash": "^4.17.21",
     "next": "14.1.0",
