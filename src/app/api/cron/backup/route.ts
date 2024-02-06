@@ -4,21 +4,16 @@ import { exec } from "child_process";
 import { createReadStream } from "fs";
 import { NextRequest, NextResponse } from "next/server";
 
-const backupFilePath = "/tmp/backup";
-
 export async function GET(req: NextRequest) {
   if (req.headers.get("Authorization") !== `Bearer ${env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   // Create unique backup name
+
   const currentDate = new Date();
-  const formattedMonth = (currentDate.getMonth() + 1)
-    .toString()
-    .padStart(2, "0");
-  const formattedDay = currentDate.getDate().toString().padStart(2, "0");
-  const formattedDate = `${formattedMonth}${formattedDay}${currentDate.getFullYear()}`;
-  const backupFileName = `${backupFilePath}${formattedDate}.sql`;
+  const formattedDate = currentDate.toISOString();
+  const backupFileName = `/tmp/backup.sql`;
   // Create destination
   const s3Dest = `backup${formattedDate}.sql`;
 
