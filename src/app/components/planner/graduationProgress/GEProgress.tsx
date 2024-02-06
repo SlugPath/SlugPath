@@ -10,6 +10,16 @@ const satisfiedDark = blue[700];
 const notSatisfied = blue[50];
 const notSatisfiedDark = "#172554";
 
+export default function GEProgress({
+  ge,
+  courseState,
+}: {
+  ge: string[];
+  courseState: PlannerData;
+}) {
+  return <GEProgressModal ge={ge} courseState={courseState} />;
+}
+
 const GEProgressModal = ({
   ge,
   courseState,
@@ -116,14 +126,4 @@ const GEProgressModal = ({
       </div>
     </>
   );
-};
-
-export const GEProgress = ({
-  ge,
-  courseState,
-}: {
-  ge: string[];
-  courseState: PlannerData;
-}) => {
-  return <GEProgressModal ge={ge} courseState={courseState} />;
 };
