@@ -17,6 +17,7 @@ model User {
   planners         Planner[]
   majorId          Int?
   major            Major?        @relation(fields: [majorId], references: [id])
+  upvotes          Upvote[]
 }
 
 model Planner {
@@ -78,7 +79,8 @@ model Major {
   updatedAt        DateTime          @updatedAt
   defaultPlanners  Planner[]
   users            User[]
-  majorRequirement MajorRequirement?
+  majorRequirements MajorRequirement[] @relation("MajorRequirements")
+  approvedRequirement MajorRequirement? @relation("ApprovedMajorRequirement")
   permissions      MajorEditingPermission[]
 
   @@unique([name, catalogYear])
@@ -87,8 +89,20 @@ model Major {
 model MajorRequirement {
   id              Int   @id @default(autoincrement())
   requirementList Json
-  major           Major @relation(fields: [majorId], references: [id])
   majorId         Int   @unique
+  major           Major @relation("MajorRequirements", fields: [majorId], references: [id])
+  approvedMajorId Int?   @unique
+  approvedMajor   Major? @relation("ApprovedMajorRequirement", fields: [approvedMajorId], references: [id])
+  upvotes         Upvote[]
+  
+}
+
+model Upvote {
+  id                            Int                         @id @default(autoincrement())
+  userId                        String                      @unique
+  user                          User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  majorRequirementId            Int
+  majorRequirement              MajorRequirement            @relation(fields: [majorRequirementId], references: [id])
 }
 
 model Permissions {

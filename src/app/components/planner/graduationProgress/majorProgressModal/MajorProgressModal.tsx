@@ -1,7 +1,10 @@
+import useMajorSelection from "@/app/components/majorSelection/useMajorSelection";
 import Search from "@/app/components/search/Search";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import useMajorRequirementLists from "@/app/hooks/useMajorRequirementLists";
 import useUserPermissions from "@/app/hooks/useUserPermissions";
+import { Binder } from "@/app/types/Requirements";
 import {
   Button,
   Card,
@@ -12,7 +15,9 @@ import {
   Typography,
 } from "@mui/joy";
 import { CircularProgress } from "@mui/material";
+import { useSession } from "next-auth/react";
 import { useContext, useState } from "react";
+import { v4 as uuid4 } from "uuid";
 
 import {
   RequirementsComponent,
@@ -28,6 +33,13 @@ export default function MajorProgressModal() {
     useContext(MajorVerificationContext);
   const { hasPermissionToEdit } = useUserPermissions();
   const [editing, setEditing] = useState(false);
+  const { data: session } = useSession();
+  const { userMajorData } = useMajorSelection(session?.user.id);
+
+  const { majorRequirementLists, onAddMajorRequirementList } =
+    useMajorRequirementLists(userMajorData?.id);
+
+  console.log(majorRequirementLists);
 
   function Title() {
     return (
@@ -104,6 +116,19 @@ export default function MajorProgressModal() {
             )}
           </div>
         )}
+        <Button
+          onClick={() => {
+            const requirementList = {
+              binder: Binder.AND,
+              requirements: [],
+              id: uuid4(),
+              title: "sick new list",
+            };
+            onAddMajorRequirementList(220, requirementList);
+          }}
+        >
+          Add Requirement Suggestion
+        </Button>
         <ModalClose variant="plain" />
       </Sheet>
     </Modal>
