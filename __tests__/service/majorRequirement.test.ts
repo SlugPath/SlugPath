@@ -8,6 +8,8 @@ import prisma from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
+import { createUser } from "./testUtils";
+
 async function createAMajor(name: string, catalogYear: string): Promise<Major> {
   const majorData = {
     name,
@@ -22,21 +24,10 @@ async function createAMajor(name: string, catalogYear: string): Promise<Major> {
 
 beforeAll(async () => {
   const sammyEmail = "sammyslug@ucsc.edu";
-  const user = await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: sammyEmail,
-      name: "Sammy Slug",
-      role: Role.ADMIN,
-    },
-  });
-  await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: "sslug@ucsc.edu",
-      name: "Samuel Slug",
-    },
-  });
+
+  const user = await createUser(sammyEmail, "Sammy Slug", Role.ADMIN);
+
+  createUser("sslug@ucsc.edu", "Samuel Slug");
 
   console.log("✨ 2 users successfully created!");
 

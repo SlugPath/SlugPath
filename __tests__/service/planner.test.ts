@@ -17,14 +17,10 @@ import prisma from "@/lib/prisma";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 
+import { createUser } from "./testUtils";
+
 beforeAll(async () => {
-  await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: "sammyslug@ucsc.edu",
-      name: "Sammy Slug",
-    },
-  });
+  createUser("sammyslug@ucsc.edu", "Sammy Slug");
 
   console.log("✨ 1 user successfully created!");
 

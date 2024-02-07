@@ -7,7 +7,8 @@ import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
 import prisma from "@/lib/prisma";
 import { Role } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
+
+import { createUser } from "./testUtils";
 
 /**
  * @param name is the name of the major
@@ -38,22 +39,10 @@ function createDate(days: number): Date {
 
 beforeAll(async () => {
   const sammyEmail = "sammyslug@ucsc.edu";
-  await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: sammyEmail,
-      name: "Sammy Slug",
-      role: Role.ADMIN,
-    },
-  });
 
-  await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: "samuelslug@ucsc.edu",
-      name: "Samuel Slug",
-    },
-  });
+  createUser(sammyEmail, "Sammy Slug", Role.ADMIN);
+
+  createUser("samuelslug@ucsc.edu", "Samuel Slug");
 
   console.log("✨ 2 users successfully created!");
 
@@ -97,7 +86,7 @@ it("should check that user has major editing permission", async () => {
   });
   expect(user).not.toBeNull();
 
-  const hasPermission = await userHasMajorEditingPermission(user!.id, major!);
+  const hasPermission = await userHasMajorEditingPermission(user!.id);
   expect(hasPermission).toBe(true);
 });
 
@@ -111,7 +100,7 @@ it("should check that other users do not have major editing permission", async (
   });
   expect(user).not.toBeNull();
 
-  const hasPermission = await userHasMajorEditingPermission(user!.id, major!);
+  const hasPermission = await userHasMajorEditingPermission(user!.id);
   expect(hasPermission).toBe(false);
 });
 

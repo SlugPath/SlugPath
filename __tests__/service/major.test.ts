@@ -7,22 +7,12 @@ import {
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
 
-beforeAll(async () => {
-  await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: "sammyslug@ucsc.edu",
-      name: "Sammy Slug",
-    },
-  });
+import { createUser } from "./testUtils";
 
-  await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email: "samuelslug@ucsc.edu",
-      name: "Samuel Slug",
-    },
-  });
+beforeAll(async () => {
+  createUser("sammyslug@ucsc.edu", "Sammy Slug");
+
+  createUser("samuelslug@ucsc.edu", "Samuel Slug");
 
   console.log("✨ 2 users successfully created!");
 
