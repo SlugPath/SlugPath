@@ -2,25 +2,12 @@ import {
   getMajorRequirements,
   saveMajorRequirements,
 } from "@/app/actions/majorRequirements";
-import { Major } from "@/app/types/Major";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import prisma from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
-import { createUser } from "./testUtils";
-
-async function createAMajor(name: string, catalogYear: string): Promise<Major> {
-  const majorData = {
-    name,
-    catalogYear,
-  };
-  return prisma.major.create({
-    data: {
-      ...majorData,
-    },
-  });
-}
+import { createAMajor, createUser } from "./testUtils";
 
 beforeAll(async () => {
   const sammyEmail = "sammyslug@ucsc.edu";
