@@ -4,7 +4,8 @@ import { Add } from "@mui/icons-material";
 import { IconButton, Input, useColorScheme } from "@mui/joy";
 import { useContext, useState } from "react";
 
-import CloseIconButton from "../../buttons/CloseIconButton";
+/* import CloseIconButton from "../../buttons/CloseIconButton"; */
+import DropDownButton from "../../buttons/DropDownButton";
 import ConfirmAlert from "../../modals/ConfirmAlert";
 import TitleSnackbar from "./TitleSnackbar";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
@@ -62,13 +63,13 @@ export default function PlannerTabs() {
     removePlanner(id);
   };
 
-  const handleOpenDeleteAlert = (id: string, title: string) => {
+  /*   const handleOpenDeleteAlert = (id: string, title: string) => {
     setDeleteAlert({
       id,
       title: "Are you sure you want to delete your planner: " + title + "?",
       alertOpen: true,
     });
-  };
+  }; */
 
   const handleBlur = (title: string) => {
     title.length >= 2 && setPlannerBeingEdited(null);
@@ -94,7 +95,7 @@ export default function PlannerTabs() {
               handleBlur(newTitle);
             }}
             onClick={() => handleTabChange(id)}
-            onOpenDeleteAlert={handleOpenDeleteAlert}
+            /* onOpenDeleteAlert={handleOpenDeleteAlert} */
           />
         ))}
         <IconButton
@@ -131,7 +132,7 @@ type CustomTabProps = {
   setPlannerBeingEdited: (id: string) => void;
   onEndEditing: (newTitle: string) => void;
   onClick: () => void;
-  onOpenDeleteAlert: (id: string, title: string) => void;
+  /* onOpenDeleteAlert: (id: string, title: string) => void; */
 };
 
 function CustomTab({
@@ -142,11 +143,12 @@ function CustomTab({
   setPlannerBeingEdited,
   onEndEditing,
   onClick,
-  onOpenDeleteAlert,
-}: CustomTabProps) {
+} /* onOpenDeleteAlert, */
+: CustomTabProps) {
   const { mode } = useColorScheme();
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
+  /*   const [dropDownOpen, setDropdownOpen] = useState(false); */
 
   function backgroundColor() {
     if (mode === "light") {
@@ -183,12 +185,21 @@ function CustomTab({
   }
 
   function handleClick() {
+    onClick();
+  }
+
+  function handleDoubleClick() {
     if (selected) {
       setPlannerBeingEdited(id);
     } else {
       onClick();
     }
   }
+
+  /*   const handleContextMenu = (e) => {
+    e.preventDefault(); // Prevent the default right-click context menu
+    setDropdownOpen(true); // Open the dropdown
+  }; */
 
   const cursorStyle = hovering ? { cursor: "pointer" } : {};
 
@@ -204,6 +215,8 @@ function CustomTab({
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
+      /* onContextMenu={handleContextMenu} */
     >
       {isEditing ? (
         <>
@@ -237,7 +250,8 @@ function CustomTab({
       ) : (
         <span className="truncate px-2">{truncateTitle(text)}</span>
       )}
-      <CloseIconButton onClick={() => onOpenDeleteAlert(id, title)} />
+      {/* <CloseIconButton onClick={() => onOpenDeleteAlert(id, title)} /> */}
+      <DropDownButton />
     </div>
   );
 }
