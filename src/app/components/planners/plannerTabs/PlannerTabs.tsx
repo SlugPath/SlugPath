@@ -63,13 +63,13 @@ export default function PlannerTabs() {
     removePlanner(id);
   };
 
-  /*   const handleOpenDeleteAlert = (id: string, title: string) => {
+  const handleOpenDeleteAlert = (id: string, title: string) => {
     setDeleteAlert({
       id,
       title: "Are you sure you want to delete your planner: " + title + "?",
       alertOpen: true,
     });
-  }; */
+  };
 
   const handleBlur = (title: string) => {
     title.length >= 2 && setPlannerBeingEdited(null);
@@ -95,7 +95,7 @@ export default function PlannerTabs() {
               handleBlur(newTitle);
             }}
             onClick={() => handleTabChange(id)}
-            /* onOpenDeleteAlert={handleOpenDeleteAlert} */
+            onOpenDeleteAlert={handleOpenDeleteAlert}
           />
         ))}
         <IconButton
@@ -132,7 +132,7 @@ type CustomTabProps = {
   setPlannerBeingEdited: (id: string) => void;
   onEndEditing: (newTitle: string) => void;
   onClick: () => void;
-  /* onOpenDeleteAlert: (id: string, title: string) => void; */
+  onOpenDeleteAlert: (id: string, title: string) => void;
 };
 
 function CustomTab({
@@ -143,8 +143,8 @@ function CustomTab({
   setPlannerBeingEdited,
   onEndEditing,
   onClick,
-} /* onOpenDeleteAlert, */
-: CustomTabProps) {
+  onOpenDeleteAlert,
+}: CustomTabProps) {
   const { mode } = useColorScheme();
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
@@ -251,7 +251,12 @@ function CustomTab({
         <span className="truncate px-2">{truncateTitle(text)}</span>
       )}
       {/* <CloseIconButton onClick={() => onOpenDeleteAlert(id, title)} /> */}
-      <DropDownButton />
+      <DropDownButton
+        id={id}
+        title={title}
+        onDeleteButtonClick={onOpenDeleteAlert}
+      />
+      {/* <DropDownButton /> */}
     </div>
   );
 }

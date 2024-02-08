@@ -13,7 +13,17 @@ import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
 import * as React from "react";
 
-export default function DropDownIconButton() {
+interface DropDownButtonProps {
+  id: string;
+  title: string;
+  onDeleteButtonClick: (id: string, title: string) => void;
+}
+
+export default function DropDownButton({
+  id,
+  title,
+  onDeleteButtonClick,
+}: DropDownButtonProps) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpenChange = React.useCallback(
@@ -67,7 +77,7 @@ export default function DropDownIconButton() {
         <MenuItem
           variant="soft"
           color="danger"
-          onClick={() => alert("Delete Button Pressed")}
+          onClick={() => onDeleteButtonClick(id, title)} // Call onDeleteButtonClick with id and title
         >
           <ListItemDecorator sx={{ color: "inherit" }}>
             <DeleteForever />
