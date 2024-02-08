@@ -17,11 +17,11 @@ export default function SelectMajorName({
 }: SelectMajorNameProps) {
   return (
     <>
-      <Typography level="body-lg">Select your major</Typography>
+      <Typography level="body-lg">Name</Typography>
       <Select
         value={selectedMajor}
         placeholder="Choose one…"
-        variant="soft"
+        variant="plain"
         onChange={onChange}
         disabled={majors?.length == 0}
       >

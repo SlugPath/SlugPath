@@ -1,6 +1,6 @@
 import { DropResult } from "@hello-pangea/dnd";
 
-import { UserMajorOutput } from "../actions/major";
+import { MajorOutput } from "../actions/major";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
@@ -72,12 +72,17 @@ export interface PlannersContextProps {
 }
 
 export interface DefaultPlannerContextProps {
+  userMajors: MajorOutput[];
   defaultPlanner: PlannerData;
   setDefaultPlannerId: SetState<string>;
   loadingDefaultPlanner: boolean;
-  userMajorData: UserMajorOutput | null;
-  loadingMajorData: boolean;
-  errorMajorData: Error | null;
+  userMajorsIsLoading: boolean;
+  onAddMajor: any;
+  loadingAddMajor: boolean;
+  errorAddingMajor: boolean;
+  onRemoveMajor: any;
+  loadingRemoveMajor: boolean;
+  errorRemovingMajor: boolean;
 }
 
 export interface MajorVerificationContextProps {

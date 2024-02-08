@@ -13,7 +13,7 @@ import {
 } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
-import MiniPlanner from "./miniPlanner/MiniPlanner";
+import MiniPlanner from "../miniPlanner/MiniPlanner";
 
 export interface SelectDefaultPlannerProps {
   selectedDefaultPlanner: string;

@@ -1,28 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getAllMajorsByCatalogYear } from "@/app/actions/major";
+import { Major } from "@/app/types/Major";
 import { years } from "@/lib/defaultPlanners";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { ModalsProvider } from "@contexts/ModalsProvider";
+import { Delete } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
-import { CircularProgress } from "@mui/joy";
+import {
+  Button,
+  Card,
+  Chip,
+  CircularProgress,
+  IconButton,
+  Option,
+  Select,
+  Typography,
+} from "@mui/joy";
 import { Alert } from "@mui/joy";
+import { ProgramType } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useContext, useEffect, useMemo, useState } from "react";
 
-import ConfirmAlert from "../modals/ConfirmAlert";
-import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import SaveButtons from "./SaveButtons";
 import SelectCatalogYear from "./SelectCatalogYear";
-import SelectDefaultPlanner from "./SelectDefaultPlanner";
 import SelectMajorName from "./SelectMajorName";
-import useDefaultPlanners from "./useDefaultPlanners";
+import DefaultPlannerSelection from "./defaultPlannerSelection/DefaultPlannerSelection";
+// import useDefaultPlanners from "./defaultPlannerSelection/useDefaultPlanners";
 import useMajorSelection from "./useMajorSelection";
-
-enum ButtonName {
-  Save = "Save",
-  CreateNew = "Create New",
-  ReplaceCurrent = "Replace Current",
-}
 
 export interface MajorSelectionProps {
   onSaved: () => void;
@@ -41,9 +44,13 @@ export default function MajorSelection({
   onCreateNewPlanner,
   onReplaceCurrentPlanner,
 }: MajorSelectionProps) {
-  const [major, setMajor] = useState("");
+  const { data: session } = useSession();
+
+  const [programType, setProgramType] = useState(ProgramType.Major);
+  const [majorName, setMajorName] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
-  const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
+
+  const [error, setError] = useState("");
 
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear],
@@ -52,70 +59,35 @@ export default function MajorSelection({
     },
     enabled: catalogYear !== "",
   });
-  const { data: session } = useSession();
 
-  const majorSelectionIsValid = useMemo(() => {
-    const isLoggedIn = session?.user.id !== undefined;
-    return major !== "" && catalogYear !== "" && isLoggedIn;
-  }, [major, catalogYear, session?.user.id]);
-
-  const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
-    ButtonName.Save,
-  );
-  const [showSelectionError, setShowSelectionError] = useState(false);
-  const { onSaveMajor, loadingSaveMajor, errorSavingMajorData } =
-    useMajorSelection(session?.user.id, handleSaveCompleted);
-
+  // getting userMajors from a context so that they load properly
   const {
-    userMajorData,
-    loadingMajorData,
-    errorMajorData,
-    setDefaultPlannerId,
-    loadingDefaultPlanner,
+    userMajors,
+    userMajorsIsLoading,
+    onAddMajor,
+    loadingAddMajor,
+    errorAddingMajor,
+    onRemoveMajor,
+    loadingRemoveMajor,
+    errorRemovingMajor,
   } = useContext(DefaultPlannerContext);
 
-  const { majorDefaultPlanners, loading: loadingMajorDefaultPlanners } =
-    useDefaultPlanners(catalogYear, major);
+  // const {
+  // userMajorsIsLoading,
+  // onAddMajor,
+  // loadingAddMajor,
+  // errorAddingMajor,
+  // onRemoveMajor,
+  // loadingRemoveMajor,
+  // errorRemovingMajor,
+  // } = useMajorSelection(session?.user.id);
 
-  const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
-
-  useEffect(() => {
-    if (userMajorData) {
-      console.log(
-        `Updating userMajor data ${JSON.stringify(userMajorData, null, 2)}`,
-      );
-      updateUserMajor(
-        userMajorData.name,
-        userMajorData.catalogYear,
-        userMajorData.defaultPlannerId,
-      );
-    }
-  }, [userMajorData]);
-
-  useEffect(() => {
-    /**
-     * Set selectedDefaultPlanner to first majorDefaultPlanner when majorDefaultPlanners changes
-     * if selectedDefaultPlanner is not present in new majorDefaultPlanners
-     * so that default planner tabs work correctly
-     */
-    function updateSelectedDefaultPlanner() {
-      if (majorDefaultPlanners !== undefined) {
-        const plannerIds = majorDefaultPlanners.map((planner) => planner.id);
-        if (!plannerIds.includes(selectedDefaultPlanner)) {
-          setSelectedDefaultPlanner(majorDefaultPlanners[0]?.id);
-        }
-      }
-    }
-
-    updateSelectedDefaultPlanner();
-  }, [majorDefaultPlanners, selectedDefaultPlanner]);
-
-  function handleChangeMajor(
+  function handleChangeMajorName(
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) {
     if (newValue != null) {
-      setMajor(newValue);
+      setMajorName(newValue);
     }
   }
 
@@ -128,108 +100,39 @@ export default function MajorSelection({
     }
   }
 
-  function handleChangeDefaultPlanner(
-    event: React.SyntheticEvent | null,
-    plannerId: string | number | null,
-  ) {
-    if (typeof plannerId === "string") {
-      setSelectedDefaultPlanner(plannerId);
-    }
+  function alreadyAddedMajor(major: Major): boolean {
+    return userMajors.some((userMajor) => {
+      if (
+        userMajor.name === major.name &&
+        userMajor.catalogYear === major.catalogYear
+      ) {
+        return true;
+      }
+    });
   }
 
-  function updateUserMajor(
-    name: string,
-    catalogYear: string,
-    defaultPlannerId: string,
-  ) {
-    setMajor(name);
-    setCatalogYear(catalogYear);
-    setSelectedDefaultPlanner(defaultPlannerId);
-  }
+  function handleAddMajor() {
+    const majorToAdd: Major = {
+      name: majorName,
+      catalogYear,
+      programType,
+      id: 0,
+    };
 
-  // Handlers
-  function handleSaveCompleted() {
-    switch (saveButtonClicked) {
-      case ButtonName.Save:
-        onSaved();
-        break;
-      // These are slightly delayed to allow the save to complete
-      // before the new planner is created or replaced
-      case ButtonName.CreateNew:
-        if (onCreateNewPlanner && !loadingDefaultPlanner) {
-          setTimeout(() => {
-            onCreateNewPlanner();
-          }, 200);
-        }
-        break;
-      case ButtonName.ReplaceCurrent:
-        if (onReplaceCurrentPlanner && !loadingDefaultPlanner) {
-          setTimeout(() => {
-            onReplaceCurrentPlanner();
-          }, 200);
-        }
-        break;
-    }
-  }
-
-  function handleSave(buttonName: ButtonName) {
-    if (majorSelectionIsValid) {
-      setSaveButtonClicked(buttonName);
-      setDefaultPlannerId(selectedDefaultPlanner);
-      onSaveMajor(major, catalogYear, selectedDefaultPlanner);
-      setShowSelectionError(false);
+    if (!alreadyAddedMajor(majorToAdd)) {
+      onAddMajor(programType, majorName, catalogYear);
     } else {
-      setShowSelectionError(true);
+      setError(
+        "You have already added this major: " + majorName + " " + catalogYear,
+      );
     }
   }
 
-  function handleConfirmReplaceCurrent() {
-    handleSave(ButtonName.ReplaceCurrent);
-    setReplaceAlertOpen(false);
-  }
-
-  function handleClickSave() {
-    handleSave(ButtonName.Save);
-  }
-
-  function handleClickReplaceCurrent() {
-    setReplaceAlertOpen(true);
-  }
-
-  function handleClickCreateNew() {
-    handleSave(ButtonName.CreateNew);
-  }
-
-  if (loadingMajorData) {
-    return <CircularProgress variant="plain" color="primary" />;
-  }
-
-  const SelectionErrorAlert = () => (
+  const ErrorAlert = () => (
     <div>
-      {showSelectionError && (
+      {error.length > 0 && (
         <Alert color="danger" startDecorator={<ReportIcon />}>
-          You must select a major and catalog year, and be logged into your UCSC
-          email to save your major.
-        </Alert>
-      )}
-    </div>
-  );
-
-  const LoadingMajorDataErrorAlert = () => (
-    <div>
-      {errorMajorData && (
-        <Alert color="danger" startDecorator={<ReportIcon />}>
-          Error loading major data. Please log out and try again.
-        </Alert>
-      )}
-    </div>
-  );
-
-  const SavingMajorDataErrorAlert = () => (
-    <div>
-      {errorSavingMajorData && (
-        <Alert color="danger" startDecorator={<ReportIcon />}>
-          Error saving major data. Please log out and try again.
+          {error}
         </Alert>
       )}
     </div>
@@ -237,16 +140,137 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4 w-full">
-      <SelectionErrorAlert />
-      <LoadingMajorDataErrorAlert />
-      <SavingMajorDataErrorAlert />
-      <ConfirmAlert
-        open={replaceAlertOpen}
-        onClose={() => setReplaceAlertOpen(false)}
-        onConfirm={handleConfirmReplaceCurrent}
-        dialogText="Are you sure you want to replace your current planner?"
-      />
-      <div className="grid grid-cols-4 gap-2">
+      <ErrorAlert />
+
+      <Card variant="soft" size="sm">
+        {userMajorsIsLoading ||
+          (loadingAddMajor && (
+            <CircularProgress variant="plain" color="primary" />
+          ))}
+        <MajorsList
+          selectedMajors={userMajors}
+          majors={majors}
+          major={majorName}
+          catalogYear={catalogYear}
+          handleChangeCatalogYear={handleChangeCatalogYear}
+          handleChangeMajorName={handleChangeMajorName}
+          handleAddMajor={handleAddMajor}
+          loadingAddMajor={loadingAddMajor}
+          errorAddingMajor={errorAddingMajor}
+          onRemoveMajor={onRemoveMajor}
+          loadingRemoveMajor={loadingRemoveMajor}
+        />
+      </Card>
+
+      {/* <DefaultPlannerSelection
+        onSaved={onSaved}
+        saveButtonName={saveButtonName}
+        isInPlannerPage={isInPlannerPage}
+        onSkip={onSkip}
+        onCreateNewPlanner={onCreateNewPlanner}
+        onReplaceCurrentPlanner={onReplaceCurrentPlanner}
+        major={{
+          name: majorName,
+          catalogYear: catalogYear,
+          id: 0,
+          programType: ProgramType.Major,
+        }}
+      /> */}
+    </div>
+  );
+}
+
+function MajorsList({
+  selectedMajors,
+  major,
+  catalogYear,
+  majors,
+  handleChangeCatalogYear,
+  handleChangeMajorName,
+  handleAddMajor,
+  loadingAddMajor,
+  errorAddingMajor,
+  onRemoveMajor,
+  loadingRemoveMajor,
+}: {
+  selectedMajors: Major[];
+  major: string;
+  catalogYear: string;
+  majors: any;
+  handleChangeCatalogYear: any;
+  handleChangeMajorName: any;
+  handleAddMajor: any;
+  loadingAddMajor: boolean;
+  errorAddingMajor: any;
+  onRemoveMajor: any;
+  loadingRemoveMajor: boolean;
+}) {
+  return (
+    <>
+      <Typography level="h4" textColor="inherit" fontWeight="lg" mb={1}>
+        Your Majors
+      </Typography>
+
+      {loadingAddMajor && <CircularProgress variant="plain" color="primary" />}
+      {errorAddingMajor && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          Error saving major data. Please log out and try again.
+        </Alert>
+      )}
+
+      {selectedMajors.length === 0 && (
+        <Typography level="body-lg" color="neutral">
+          You have not added any majors yet.
+        </Typography>
+      )}
+
+      <div className="space-y-2">
+        {selectedMajors.map((major, index) => {
+          const isMajor = major.programType === ProgramType.Major;
+
+          return (
+            <Card key={index} size="sm" variant="plain">
+              <div className="flex justify-between items-center">
+                <Typography>
+                  {major.name} {major.catalogYear}
+                </Typography>
+                <div className="flex space-x-2">
+                  <Chip color={isMajor ? "success" : "primary"}>
+                    {isMajor ? "Major" : "Minor"}
+                  </Chip>
+                  {loadingRemoveMajor ? (
+                    <CircularProgress variant="plain" color="primary" />
+                  ) : (
+                    <IconButton
+                      color="danger"
+                      onClick={() => onRemoveMajor(major.id)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  )}
+                </div>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-7 gap-2 items-end">
+        <div className="col-span-2">
+          <Typography level="body-lg">Program</Typography>
+          <Select
+            // value={catalogYear}
+            placeholder="Choose one…"
+            variant="plain"
+            // onChange={onChange}
+          >
+            {["Major", "Minor"].map((major, index) => (
+              <Option key={index} value={major}>
+                {major}
+              </Option>
+            ))}
+          </Select>
+        </div>
         <div className="col-span-2">
           <SelectCatalogYear
             catalogYear={catalogYear}
@@ -258,37 +282,15 @@ export default function MajorSelection({
           <SelectMajorName
             selectedMajor={major}
             majors={majors}
-            onChange={handleChangeMajor}
+            onChange={handleChangeMajorName}
           />
         </div>
+        <div className="col-span-1">
+          <Button variant="soft" onClick={handleAddMajor}>
+            Add Major
+          </Button>
+        </div>
       </div>
-      <div>
-        <ModalsProvider>
-          <SelectDefaultPlanner
-            selectedDefaultPlanner={selectedDefaultPlanner}
-            onChange={handleChangeDefaultPlanner}
-            majorDefaultPlanners={majorDefaultPlanners}
-            loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-            addPlannerCardContainer={isInPlannerPage}
-          />
-          <CourseInfoModal />
-        </ModalsProvider>
-      </div>
-      <div className="flex justify-end w-full">
-        {loadingSaveMajor ? (
-          <CircularProgress variant="plain" color="primary" />
-        ) : (
-          <SaveButtons
-            saveButtonName={saveButtonName}
-            isInPlannerPage={isInPlannerPage}
-            onSkip={onSkip}
-            onClickSave={handleClickSave}
-            onClickReplaceCurrent={handleClickReplaceCurrent}
-            onClickCreateNew={handleClickCreateNew}
-            majorSelectionIsValid={majorSelectionIsValid}
-          />
-        )}
-      </div>
-    </div>
+    </>
   );
 }

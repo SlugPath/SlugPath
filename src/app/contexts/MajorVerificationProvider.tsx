@@ -25,14 +25,15 @@ export function MajorVerificationProvider({
   children: React.ReactNode;
 }) {
   const { data: session } = useSession();
-  const { userMajorData } = useContext(DefaultPlannerContext);
+  const { userMajors } = useContext(DefaultPlannerContext);
+  const major = userMajors.length > 0 ? userMajors[0] : undefined;
   const {
     loadingSave,
     isSaved,
     majorRequirements,
     onSetMajorRequirements,
     onSaveMajorRequirements,
-  } = useMajorRequirements(userMajorData?.id, session?.user.id);
+  } = useMajorRequirements(major?.id, session?.user.id);
 
   function updateRequirementList(id: string, requirementList: RequirementList) {
     const majorRequirementsCopy = { ...majorRequirements };
@@ -142,7 +143,7 @@ export function MajorVerificationProvider({
   }
 
   function handleSaveMajorRequirements() {
-    onSaveMajorRequirements(userMajorData!.id);
+    onSaveMajorRequirements(major!.id);
   }
 
   function calculateMajorProgressPercentage(courseState: PlannerData): number {

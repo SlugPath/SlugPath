@@ -1,7 +1,13 @@
 import { majors, years } from "@/lib/defaultPlanners";
 import { createQuarters, getRealEquivalent } from "@/lib/plannerUtils";
 import { zip } from "@/lib/utils";
-import { Major, PrismaClient, PrismaPromise, Term } from "@prisma/client";
+import {
+  Major,
+  PrismaClient,
+  PrismaPromise,
+  ProgramType,
+  Term,
+} from "@prisma/client";
 
 import { getCourses, getPlanners } from "./csvreader";
 
@@ -50,6 +56,7 @@ async function main() {
           data: {
             name: m,
             catalogYear: y,
+            programType: ProgramType.Major,
           },
         }),
       );

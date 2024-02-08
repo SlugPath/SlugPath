@@ -15,8 +15,7 @@ model User {
   role             Role          @default(USER)
   defaultPlannerId String?
   planners         Planner[]
-  majorId          Int?
-  major            Major?        @relation(fields: [majorId], references: [id])
+  majors           Major[]
 }
 
 model Planner {
@@ -72,10 +71,11 @@ model Course {
 
 model Major {
   id               Int               @id @default(autoincrement())
-  name             String
-  catalogYear      String
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
+  name             String
+  catalogYear      String
+  programType      ProgramType
   defaultPlanners  Planner[]
   users            User[]
   majorRequirement MajorRequirement?
@@ -136,4 +136,9 @@ enum Term {
   Winter
   Spring
   Summer
+}
+
+enum ProgramType {
+  Major
+  Minor
 }

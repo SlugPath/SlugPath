@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { ProgramType } from "@prisma/client";
 
 import { PlannerTitle } from "../types/Planner";
 
@@ -39,117 +40,142 @@ export async function getAllMajorsByCatalogYear(catalogYear: string) {
   return res.map((major) => major.name);
 }
 
-export type UserMajorOutput = {
+export type MajorOutput = {
   name: string;
   catalogYear: string;
-  defaultPlannerId: string;
+  programType: ProgramType;
   id: number;
 };
 
-export async function getUserMajorByEmail(
+export async function getUserMajorsByEmail(
   email: string,
-): Promise<UserMajorOutput | null> {
+): Promise<MajorOutput[] | null> {
   const userData = await prisma.user.findUnique({
     where: {
       email,
     },
     select: {
-      major: {
+      majors: {
         select: {
           name: true,
           catalogYear: true,
           id: true,
+          programType: true,
         },
       },
-      defaultPlannerId: true,
     },
   });
-  const major = userData?.major;
-  if (major === undefined || major === null) {
+
+  if (userData === null) {
     return null;
   }
 
-  return {
-    name: major.name,
-    catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId || "",
-    id: major.id,
-  };
+  return userData?.majors;
 }
 
-export async function getUserMajorById(
+export async function getUserMajorsById(
   id: string,
-): Promise<UserMajorOutput | null> {
+): Promise<MajorOutput[] | null> {
   const userData = await prisma.user.findUnique({
     where: {
       id,
     },
     select: {
-      major: {
+      majors: {
         select: {
           name: true,
           catalogYear: true,
           id: true,
+          programType: true,
         },
       },
       defaultPlannerId: true,
     },
   });
-  const major = userData?.major;
-  if (major === undefined || major === null) {
+
+  if (userData === null) {
     return null;
   }
 
-  return {
-    name: major.name,
-    catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId ?? "",
-    id: major.id,
-  };
+  return userData?.majors;
 }
 
 export type MajorInput = {
   userId: string;
   name: string;
   catalogYear: string;
-  defaultPlannerId: string;
+  programType: ProgramType;
 };
 
-export async function updateUserMajor({
+export async function addUserMajor({
   userId,
   name,
   catalogYear,
-  defaultPlannerId,
-}: MajorInput): Promise<UserMajorOutput | null> {
+  programType,
+}: MajorInput): Promise<MajorOutput[] | null> {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
   const major = await prisma.major.findFirst({
     where: {
       name,
       catalogYear,
+      programType,
     },
   });
   const majorId = major?.id;
+
+  if (user === undefined) {
+    throw new Error(`could not find user with id ${userId}`);
+  }
 
   if (majorId === undefined)
     throw new Error(
       `could not find major with name ${name} and catalog year ${catalogYear}`,
     );
+  console.log("majorId", majorId);
 
+  const userData = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      majors: {
+        connect: {
+          id: majorId,
+        },
+      },
+    },
+    select: {
+      majors: {
+        select: {
+          name: true,
+          catalogYear: true,
+          programType: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return userData.majors;
+}
+
+export async function removeUserMajor(userId: string, majorId: number) {
   await prisma.user.update({
     where: {
       id: userId,
     },
     data: {
-      majorId,
-      defaultPlannerId,
+      majors: {
+        disconnect: {
+          id: majorId,
+        },
+      },
     },
   });
-
-  return {
-    name,
-    catalogYear,
-    defaultPlannerId,
-    id: major!.id,
-  };
 }
 
 export type MajorDefaultsInput = {
@@ -176,4 +202,38 @@ export async function getMajorDefaultPlanners({
       order: "asc",
     },
   });
+}
+
+export async function getUserDefaultPlannerId(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      defaultPlannerId: true,
+    },
+  });
+
+  return user?.defaultPlannerId;
+}
+
+export async function updateUserDefaultPlanner({
+  userId,
+  defaultPlannerId,
+}: {
+  userId: string;
+  defaultPlannerId: string;
+}) {
+  const user = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      defaultPlannerId,
+    },
+  });
+
+  return {
+    defaultPlannerId: user.defaultPlannerId,
+  };
 }

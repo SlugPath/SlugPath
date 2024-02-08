@@ -3,7 +3,8 @@
 import prisma from "@/lib/prisma";
 
 import { Permissions } from "../types/Permissions";
-import { getUserMajorById } from "./major";
+
+// import { getUserMajorById } from "./major";
 
 export async function savePermissions(
   userId: string,
