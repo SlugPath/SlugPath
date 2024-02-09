@@ -24,6 +24,7 @@ export function PlannersProvider({
     switchPlanners,
     changePlannerName,
     replaceCurrentPlanner,
+    duplicatePlanner,
     activePlanner,
     deletedPlanner,
   } = usePlanners(session?.user.id, allPlanners);
@@ -39,6 +40,7 @@ export function PlannersProvider({
         switchPlanners,
         changePlannerName,
         replaceCurrentPlanner,
+        duplicatePlanner,
         activePlanner,
         deletedPlanner,
       }}

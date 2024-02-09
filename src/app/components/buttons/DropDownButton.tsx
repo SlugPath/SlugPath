@@ -11,27 +11,42 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
-import * as React from "react";
+import React, { useEffect } from "react";
 
 interface DropDownButtonProps {
   id: string;
   title: string;
   onDeleteButtonClick: (id: string, title: string) => void;
+  onDuplicateButtonClick: () => void;
+  onRenameButtonClick: () => void;
+  onRightClick: boolean;
 }
 
 export default function DropDownButton({
   id,
   title,
   onDeleteButtonClick,
+  onDuplicateButtonClick,
+  onRenameButtonClick,
+  onRightClick,
 }: DropDownButtonProps) {
   const [open, setOpen] = React.useState(false);
+  //console.log("open: ", open);
+  //console.log("onRightClick: ", onRightClick);
 
   const handleOpenChange = React.useCallback(
     (event: React.SyntheticEvent | null, isOpen: boolean) => {
+      //console.log("isOpen:", isOpen);
       setOpen(isOpen);
     },
     [],
   );
+
+  useEffect(() => {
+    if (onRightClick) {
+      setOpen(true);
+    }
+  }, [onRightClick]);
 
   return (
     <Dropdown open={open} onOpenChange={handleOpenChange}>
@@ -49,13 +64,13 @@ export default function DropDownButton({
         <MoreVert />
       </MenuButton>
       <Menu placement="bottom-end">
-        <MenuItem onClick={() => alert("Rename Button Pressed")}>
+        <MenuItem onClick={onRenameButtonClick}>
           <ListItemDecorator>
             <DriveFileRenameOutlineIcon />
           </ListItemDecorator>{" "}
           Rename
         </MenuItem>
-        <MenuItem onClick={() => alert("Duplicate Button Pressed")}>
+        <MenuItem onClick={onDuplicateButtonClick}>
           <ListItemDecorator>
             <ContentCopyIcon />
           </ListItemDecorator>{" "}

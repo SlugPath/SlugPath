@@ -67,6 +67,7 @@ export interface PlannersContextProps {
   switchPlanners: (id: string) => void;
   changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
+  duplicatePlanner: (id: string) => void;
   activePlanner: string | undefined;
   deletedPlanner: boolean;
 }

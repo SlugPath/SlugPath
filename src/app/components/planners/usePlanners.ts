@@ -162,6 +162,28 @@ export function usePlanners(
     }
   };
 
+  /**
+   * `addPlanner` creates a new planner from the inputted planner id
+   * @param id unique planner id
+   */
+  // title needs to be "Current Planer Name Copy"
+  function duplicatePlanner(id: string) {
+    console.log("defaultPlanner:", defaultPlanner);
+    console.log("id: ", id);
+    const new_id = uuidv4();
+    setPlanners((prev) => {
+      return [
+        ...prev,
+        {
+          ...cloneDefaultPlanner(defaultPlanner),
+          new_id,
+          title: "New Planner",
+        },
+      ];
+    });
+    switchPlanners(new_id);
+  }
+
   return {
     planners,
     switchPlanners,
@@ -171,6 +193,7 @@ export function usePlanners(
     addPlanner,
     removePlanner,
     replaceCurrentPlanner,
+    duplicatePlanner,
     activePlanner,
     deletedPlanner,
   };

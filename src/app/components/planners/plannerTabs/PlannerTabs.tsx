@@ -4,7 +4,6 @@ import { Add } from "@mui/icons-material";
 import { IconButton, Input, useColorScheme } from "@mui/joy";
 import { useContext, useState } from "react";
 
-/* import CloseIconButton from "../../buttons/CloseIconButton"; */
 import DropDownButton from "../../buttons/DropDownButton";
 import ConfirmAlert from "../../modals/ConfirmAlert";
 import TitleSnackbar from "./TitleSnackbar";
@@ -30,6 +29,7 @@ export default function PlannerTabs() {
     switchPlanners,
     changePlannerName,
     addPlanner,
+    duplicatePlanner,
     activePlanner,
   } = useContext(PlannersContext);
 
@@ -38,6 +38,7 @@ export default function PlannerTabs() {
   const [plannerBeingEdited, setPlannerBeingEdited] = useState<string | null>(
     null,
   );
+  console.log("plannerBeingEdited: ", plannerBeingEdited);
   const [deleteAlert, setDeleteAlert] =
     useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
   const [tooManyAlertIsOpen, setTooManyAlertIsOpen] = useState(false);
@@ -72,11 +73,24 @@ export default function PlannerTabs() {
   };
 
   const handleBlur = (title: string) => {
+    console.log("handleBlur");
     title.length >= 2 && setPlannerBeingEdited(null);
   };
 
   const handleTabChange = (id: string) => {
     switchPlanners(id);
+  };
+
+  /**
+   * Event listener that runs when user clicks the add button
+   */
+  const handleDuplicatePlanner = (id: string) => {
+    // Check if user has too many planners open
+    if (Object.keys(planners).length == MAX_PLANNERS) {
+      setTooManyAlertIsOpen(true);
+      return;
+    }
+    duplicatePlanner(id);
   };
 
   return (
@@ -96,6 +110,7 @@ export default function PlannerTabs() {
             }}
             onClick={() => handleTabChange(id)}
             onOpenDeleteAlert={handleOpenDeleteAlert}
+            onDuplicate={() => handleDuplicatePlanner(id)}
           />
         ))}
         <IconButton
@@ -133,6 +148,7 @@ type CustomTabProps = {
   onEndEditing: (newTitle: string) => void;
   onClick: () => void;
   onOpenDeleteAlert: (id: string, title: string) => void;
+  onDuplicate: () => void;
 };
 
 function CustomTab({
@@ -144,11 +160,16 @@ function CustomTab({
   onEndEditing,
   onClick,
   onOpenDeleteAlert,
+  onDuplicate,
 }: CustomTabProps) {
   const { mode } = useColorScheme();
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
-  /*   const [dropDownOpen, setDropdownOpen] = useState(false); */
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [renameFromDropDown, setRenameFromDropDown] = useState(false);
+  console.log("renameFromDropDown: ", renameFromDropDown);
+  console.log("DropDownOpen: ", dropDownOpen);
+  console.log("isEditing:", isEditing);
 
   function backgroundColor() {
     if (mode === "light") {
@@ -189,6 +210,7 @@ function CustomTab({
   }
 
   function handleDoubleClick() {
+    console.log("handleDoubleClick");
     if (selected) {
       setPlannerBeingEdited(id);
     } else {
@@ -196,10 +218,28 @@ function CustomTab({
     }
   }
 
-  /*   const handleContextMenu = (e) => {
+  function handleRename() {
+    console.log("handleRename");
+    setRenameFromDropDown(true);
+    if (selected) {
+      setPlannerBeingEdited(id);
+    }
+  }
+
+  const handleContextMenu = (e: any) => {
+    console.log("handleContextMenu");
     e.preventDefault(); // Prevent the default right-click context menu
-    setDropdownOpen(true); // Open the dropdown
-  }; */
+    setDropDownOpen(true); // Open the dropdown
+  };
+
+  // Needed to edit the blur event so that it was ignored on the transition from
+  // the dropdown to the editing page
+  const handleBlurEditing = (text: string) => {
+    if (!renameFromDropDown) {
+      onEndEditing(text);
+    }
+    setRenameFromDropDown(false);
+  };
 
   const cursorStyle = hovering ? { cursor: "pointer" } : {};
 
@@ -216,7 +256,7 @@ function CustomTab({
       onMouseLeave={() => setHovering(false)}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
-      /* onContextMenu={handleContextMenu} */
+      onContextMenu={handleContextMenu}
     >
       {isEditing ? (
         <>
@@ -225,6 +265,7 @@ function CustomTab({
             variant="soft"
             value={text}
             autoFocus
+            onFocus={(e) => e.currentTarget.select()}
             error={text.length < 2}
             size="sm"
             sx={{
@@ -239,7 +280,8 @@ function CustomTab({
               maxWidth: "20ch",
             }}
             onChange={(e) => setText(e.target.value)}
-            onBlur={() => onEndEditing(text)}
+            onBlur={() => handleBlurEditing(text)}
+            /* onBlur={() => onEndEditing(text)} */
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 onEndEditing(text);
@@ -250,13 +292,14 @@ function CustomTab({
       ) : (
         <span className="truncate px-2">{truncateTitle(text)}</span>
       )}
-      {/* <CloseIconButton onClick={() => onOpenDeleteAlert(id, title)} /> */}
       <DropDownButton
         id={id}
         title={title}
         onDeleteButtonClick={onOpenDeleteAlert}
+        onDuplicateButtonClick={onDuplicate}
+        onRenameButtonClick={handleRename}
+        onRightClick={dropDownOpen}
       />
-      {/* <DropDownButton /> */}
     </div>
   );
 }
