@@ -38,7 +38,7 @@ resource "aws_instance" "app_server" {
     sudo dnf install postgresql15 cronie -y
     sudo systemctl enable crond.service
     sudo systemctl start crond.service
-    mkdir -p ~/backup
+    sudo mkdir -p ~/backup
     cat <<EOF_CAT > backup-task.sh
     #!/bin/bash
     pg_dump "${var.postgres-url}" > ~/backup/\$(date +\%y\%m\%d\%H)_backup.sql
