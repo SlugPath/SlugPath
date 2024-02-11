@@ -14,11 +14,6 @@ env:
   GOOGLE_CLIENT_ID: "github-actions"
   GOOGLE_CLIENT_SECRET: "github-actions"
   NEXTAUTH_SECRET: "github-actions"
-  CRON_SECRET: "github-actions"
-  AWS_ACCESS_KEY_ID: "github-actions"
-  AWS_SECRET_ACCESS_KEY: "github-actions"
-  AWS_REGION: "github-actions"
-  AWS_BUCKET_NAME: "github-actions"
 
 jobs:
   ci:
