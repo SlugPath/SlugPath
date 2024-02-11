@@ -20,6 +20,7 @@ interface DropDownButtonProps {
   onDuplicateButtonClick: () => void;
   onRenameButtonClick: () => void;
   onRightClick: boolean;
+  dropDownClosed: (isClosed: boolean) => void;
 }
 
 export default function DropDownButton({
@@ -29,6 +30,7 @@ export default function DropDownButton({
   onDuplicateButtonClick,
   onRenameButtonClick,
   onRightClick,
+  dropDownClosed,
 }: DropDownButtonProps) {
   const [open, setOpen] = React.useState(false);
   //console.log("open: ", open);
@@ -38,6 +40,9 @@ export default function DropDownButton({
     (event: React.SyntheticEvent | null, isOpen: boolean) => {
       //console.log("isOpen:", isOpen);
       setOpen(isOpen);
+      if (isOpen == false) {
+        dropDownClosed(false);
+      }
     },
     [],
   );

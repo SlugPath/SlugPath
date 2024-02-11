@@ -2,7 +2,7 @@ import { saveAllPlanners } from "@/app/actions/planner";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import useLocalStorage from "@/app/hooks/useLocalStorage";
 import { PlannerData } from "@/app/types/Planner";
-import { cloneDefaultPlanner } from "@/lib/plannerUtils";
+import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -163,25 +163,39 @@ export function usePlanners(
   };
 
   /**
-   * `addPlanner` creates a new planner from the inputted planner id
+   * `findPlannerById` returns a plannerData of given id
+   * @param id unique planner id
+   */
+  function findPlannerById(id: string) {
+    const plannerWithId = planners.find((dictionary) => dictionary.id === id);
+
+    if (plannerWithId) {
+      return plannerWithId;
+    } else {
+      throw new Error(`Planner with id ${id} not found`);
+    }
+  }
+
+  /**
+   * `duplicatePlanner` creates a new planner from the inputted planner id
    * @param id unique planner id
    */
   // title needs to be "Current Planer Name Copy"
-  function duplicatePlanner(id: string) {
-    console.log("defaultPlanner:", defaultPlanner);
-    console.log("id: ", id);
-    const new_id = uuidv4();
+  function duplicatePlanner(sourceID: string) {
+    const sourcePlannerData = findPlannerById(sourceID);
+    //console.log("source title: ",sourcePlannerData.title );
+    const id = uuidv4();
     setPlanners((prev) => {
       return [
         ...prev,
         {
-          ...cloneDefaultPlanner(defaultPlanner),
-          new_id,
-          title: "New Planner",
+          ...clonePlanner(sourcePlannerData),
+          id,
+          title: sourcePlannerData.title,
         },
       ];
     });
-    switchPlanners(new_id);
+    switchPlanners(id);
   }
 
   return {

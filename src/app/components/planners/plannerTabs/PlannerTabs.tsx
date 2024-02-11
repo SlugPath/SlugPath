@@ -38,7 +38,10 @@ export default function PlannerTabs() {
   const [plannerBeingEdited, setPlannerBeingEdited] = useState<string | null>(
     null,
   );
+  console.log("planners: ", planners);
   console.log("plannerBeingEdited: ", plannerBeingEdited);
+  console.log("activePlanner: ", activePlanner);
+
   const [deleteAlert, setDeleteAlert] =
     useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
   const [tooManyAlertIsOpen, setTooManyAlertIsOpen] = useState(false);
@@ -78,11 +81,12 @@ export default function PlannerTabs() {
   };
 
   const handleTabChange = (id: string) => {
+    console.log("handleTabChange");
     switchPlanners(id);
   };
 
   /**
-   * Event listener that runs when user clicks the add button
+   * Event listener that runs when user clicks the duplicate button
    */
   const handleDuplicatePlanner = (id: string) => {
     // Check if user has too many planners open
@@ -167,9 +171,10 @@ function CustomTab({
   const [hovering, setHovering] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [renameFromDropDown, setRenameFromDropDown] = useState(false);
-  console.log("renameFromDropDown: ", renameFromDropDown);
+  //console.log("renameFromDropDown: ", renameFromDropDown);
   console.log("DropDownOpen: ", dropDownOpen);
-  console.log("isEditing:", isEditing);
+  //console.log("isEditing:", isEditing);
+  console.log("id:", id);
 
   function backgroundColor() {
     if (mode === "light") {
@@ -206,6 +211,7 @@ function CustomTab({
   }
 
   function handleClick() {
+    console.log("handleClick");
     onClick();
   }
 
@@ -235,14 +241,20 @@ function CustomTab({
   // Needed to edit the blur event so that it was ignored on the transition from
   // the dropdown to the editing page
   const handleBlurEditing = (text: string) => {
+    console.log("handleBlurEditing");
     if (!renameFromDropDown) {
       onEndEditing(text);
     }
     setRenameFromDropDown(false);
   };
 
-  const cursorStyle = hovering ? { cursor: "pointer" } : {};
+  const handleDropDownClosed = (isClosed: boolean) => {
+    setDropDownOpen(isClosed);
+  };
 
+  const cursorStyle = hovering ? { cursor: "pointer" } : {};
+  // input ref set to null -> when you click input rename change input ref
+  // dynamic map number of input references -> pass a refernce to each
   return (
     <div
       className="p-2 rounded-3xl flex items-center justify-between"
@@ -299,6 +311,7 @@ function CustomTab({
         onDuplicateButtonClick={onDuplicate}
         onRenameButtonClick={handleRename}
         onRightClick={dropDownOpen}
+        dropDownClosed={handleDropDownClosed}
       />
     </div>
   );
