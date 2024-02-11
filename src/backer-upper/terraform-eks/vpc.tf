@@ -1,5 +1,5 @@
 locals {
-  name   = "backer-upper"
+  name     = "backer-upper"
   vpc_cidr = "10.123.0.0/16"
   azs      = ["us-west-1b", "us-west-1c"]
 
@@ -20,10 +20,10 @@ module "vpc" {
   name = local.name
   cidr = local.vpc_cidr
 
-  azs                = local.azs
-  private_subnets    = local.private_subnets
-  public_subnets     = local.public_subnets
-  intra_subnets      = local.intra_subnets
+  azs             = local.azs
+  private_subnets = local.private_subnets
+  public_subnets  = local.public_subnets
+  intra_subnets   = local.intra_subnets
 
   enable_nat_gateway = true
 

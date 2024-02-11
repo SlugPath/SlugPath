@@ -1,12 +1,12 @@
-variable "region" {
-  description = "The AWS region to deploy to"
-  default     = "us-west-1"
+variable "key" {
+  description = "The key to use for the EC2 instance"
 }
 
-variable "secret_key" {
-  description = "The secret key for the AWS account" 
+variable "s3-bucket" {
+  description = "The name of the S3 bucket to use for backups"
+  default     = "slugpath-backups"
 }
 
-variable "access_key" {
-  description = "The access key for the AWS account" 
+variable "postgres-url" {
+  description = "The URL of the Postgres database to backup"
 }
