@@ -24,7 +24,7 @@ export default function LoginButton() {
       ) : (
         <Dropdown>
           <MenuButton color="neutral" variant="plain" size="sm">
-            <UserAvatar name={session.user?.name} />
+            <UserAvatar image={session.user?.image} />
           </MenuButton>
           <Menu variant="soft">
             <MenuItem
