@@ -1,6 +1,6 @@
 {
   "extends": ["typescript", "next/core-web-vitals", "prettier"],
-  "ignorePatterns": ["docker-compose.yml"],
+  "ignorePatterns": ["*.yml"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off"
   }
