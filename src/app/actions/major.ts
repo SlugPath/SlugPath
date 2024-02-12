@@ -14,6 +14,7 @@ export async function getMajors() {
       name: true,
       id: true,
       catalogYear: true,
+      programType: true,
     },
   });
 }
@@ -101,51 +102,69 @@ export async function getUserMajorsById(
 }
 
 export type MajorInput = {
-  userId: string;
   name: string;
   catalogYear: string;
   programType: ProgramType;
 };
 
-export async function addUserMajor({
+export async function saveUserMajors({
   userId,
-  name,
-  catalogYear,
-  programType,
-}: MajorInput): Promise<MajorOutput[] | null> {
+  majors,
+}: {
+  userId: string;
+  majors: MajorInput[];
+}): Promise<MajorOutput[]> {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
   });
-  const major = await prisma.major.findFirst({
-    where: {
-      name,
-      catalogYear,
-      programType,
-    },
-  });
-  const majorId = major?.id;
 
   if (user === undefined) {
     throw new Error(`could not find user with id ${userId}`);
   }
 
-  if (majorId === undefined)
-    throw new Error(
-      `could not find major with name ${name} and catalog year ${catalogYear}`,
-    );
-  console.log("majorId", majorId);
+  // disconnect any old majors
+  const oldMajors = await getUserMajorsById(userId);
+  if (oldMajors !== null) {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        majors: {
+          disconnect: oldMajors,
+        },
+      },
+    });
+  }
 
+  // find major ids from the input
+  const majorIds = await Promise.all(
+    majors.map(async (major) => {
+      const majorFound = await prisma.major.findFirst({
+        where: {
+          name: major.name,
+          catalogYear: major.catalogYear,
+          programType: major.programType,
+        },
+      });
+      return majorFound?.id;
+    }),
+  );
+
+  // connect the new majors
   const userData = await prisma.user.update({
     where: {
       id: userId,
     },
     data: {
       majors: {
-        connect: {
-          id: majorId,
-        },
+        connect: majorIds.map((id) => {
+          return {
+            id,
+          };
+        }),
       },
     },
     select: {
@@ -161,21 +180,6 @@ export async function addUserMajor({
   });
 
   return userData.majors;
-}
-
-export async function removeUserMajor(userId: string, majorId: number) {
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      majors: {
-        disconnect: {
-          id: majorId,
-        },
-      },
-    },
-  });
 }
 
 export type MajorDefaultsInput = {

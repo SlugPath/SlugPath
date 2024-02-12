@@ -6,26 +6,27 @@ import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { Delete } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
 import {
+  Alert,
   Button,
   Card,
   Chip,
   CircularProgress,
   IconButton,
+  LinearProgress,
   Option,
   Select,
   Typography,
 } from "@mui/joy";
-import { Alert } from "@mui/joy";
 import { ProgramType } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectMajorName from "./SelectMajorName";
 import DefaultPlannerSelection from "./defaultPlannerSelection/DefaultPlannerSelection";
+
 // import useDefaultPlanners from "./defaultPlannerSelection/useDefaultPlanners";
-import useMajorSelection from "./useMajorSelection";
 
 export interface MajorSelectionProps {
   onSaved: () => void;
@@ -46,6 +47,7 @@ export default function MajorSelection({
 }: MajorSelectionProps) {
   const { data: session } = useSession();
 
+  const [selectedMajors, setSelectedMajors] = useState<Major[]>([]);
   const [programType, setProgramType] = useState(ProgramType.Major);
   const [majorName, setMajorName] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
@@ -64,23 +66,14 @@ export default function MajorSelection({
   const {
     userMajors,
     userMajorsIsLoading,
-    onAddMajor,
-    loadingAddMajor,
-    errorAddingMajor,
-    onRemoveMajor,
-    loadingRemoveMajor,
-    errorRemovingMajor,
+    saveMajors,
+    loadingSaveMajor,
+    errorSavingMajor,
   } = useContext(DefaultPlannerContext);
 
-  // const {
-  // userMajorsIsLoading,
-  // onAddMajor,
-  // loadingAddMajor,
-  // errorAddingMajor,
-  // onRemoveMajor,
-  // loadingRemoveMajor,
-  // errorRemovingMajor,
-  // } = useMajorSelection(session?.user.id);
+  useEffect(() => {
+    setSelectedMajors(userMajors);
+  }, [userMajors]);
 
   function handleChangeMajorName(
     event: React.SyntheticEvent | null,
@@ -100,8 +93,16 @@ export default function MajorSelection({
     }
   }
 
+  function selectionIsValid(): boolean {
+    return (
+      majorName.length > 0 &&
+      catalogYear.length > 0 &&
+      programType in ProgramType
+    );
+  }
+
   function alreadyAddedMajor(major: Major): boolean {
-    return userMajors.some((userMajor) => {
+    const alreadyAdded = selectedMajors.some((userMajor) => {
       if (
         userMajor.name === major.name &&
         userMajor.catalogYear === major.catalogYear
@@ -109,6 +110,8 @@ export default function MajorSelection({
         return true;
       }
     });
+
+    return alreadyAdded;
   }
 
   function handleAddMajor() {
@@ -119,13 +122,33 @@ export default function MajorSelection({
       id: 0,
     };
 
-    if (!alreadyAddedMajor(majorToAdd)) {
-      onAddMajor(programType, majorName, catalogYear);
-    } else {
+    if (!selectionIsValid()) {
+      setError("Please select a major and catalog year");
+      return;
+    } else if (alreadyAddedMajor(majorToAdd)) {
       setError(
         "You have already added this major: " + majorName + " " + catalogYear,
       );
+    } else {
+      // actually add the major here
+      const newMajors = [...selectedMajors, majorToAdd];
+      setSelectedMajors(newMajors);
+      setMajorName("");
+      setCatalogYear("");
+      setError("");
+
+      // every time a major is added, save all majors to the database
+      saveMajors(newMajors);
     }
+  }
+
+  function handleRemoveMajor(majorId: number) {
+    const newMajors = selectedMajors.filter((major) => major.id !== majorId);
+    setSelectedMajors(newMajors);
+    setError("");
+
+    // save the new list of majors to the database
+    saveMajors(newMajors);
   }
 
   const ErrorAlert = () => (
@@ -143,23 +166,19 @@ export default function MajorSelection({
       <ErrorAlert />
 
       <Card variant="soft" size="sm">
-        {userMajorsIsLoading ||
-          (loadingAddMajor && (
-            <CircularProgress variant="plain" color="primary" />
-          ))}
         <MajorsList
-          selectedMajors={userMajors}
+          selectedMajors={selectedMajors}
           majors={majors}
           major={majorName}
           catalogYear={catalogYear}
           handleChangeCatalogYear={handleChangeCatalogYear}
           handleChangeMajorName={handleChangeMajorName}
-          handleAddMajor={handleAddMajor}
-          loadingAddMajor={loadingAddMajor}
-          errorAddingMajor={errorAddingMajor}
-          onRemoveMajor={onRemoveMajor}
-          loadingRemoveMajor={loadingRemoveMajor}
+          errorSavingMajor={errorSavingMajor}
+          onRemoveMajor={handleRemoveMajor}
+          onAddMajor={handleAddMajor}
         />
+        {userMajorsIsLoading && <CircularProgress />}
+        {loadingSaveMajor && <LinearProgress />}
       </Card>
 
       {/* <DefaultPlannerSelection
@@ -187,11 +206,9 @@ function MajorsList({
   majors,
   handleChangeCatalogYear,
   handleChangeMajorName,
-  handleAddMajor,
-  loadingAddMajor,
-  errorAddingMajor,
+  errorSavingMajor,
   onRemoveMajor,
-  loadingRemoveMajor,
+  onAddMajor,
 }: {
   selectedMajors: Major[];
   major: string;
@@ -199,11 +216,9 @@ function MajorsList({
   majors: any;
   handleChangeCatalogYear: any;
   handleChangeMajorName: any;
-  handleAddMajor: any;
-  loadingAddMajor: boolean;
-  errorAddingMajor: any;
+  errorSavingMajor: any;
   onRemoveMajor: any;
-  loadingRemoveMajor: boolean;
+  onAddMajor: any;
 }) {
   return (
     <>
@@ -211,8 +226,7 @@ function MajorsList({
         Your Majors
       </Typography>
 
-      {loadingAddMajor && <CircularProgress variant="plain" color="primary" />}
-      {errorAddingMajor && (
+      {errorSavingMajor && (
         <Alert color="danger" startDecorator={<ReportIcon />}>
           Error saving major data. Please log out and try again.
         </Alert>
@@ -238,16 +252,12 @@ function MajorsList({
                   <Chip color={isMajor ? "success" : "primary"}>
                     {isMajor ? "Major" : "Minor"}
                   </Chip>
-                  {loadingRemoveMajor ? (
-                    <CircularProgress variant="plain" color="primary" />
-                  ) : (
-                    <IconButton
-                      color="danger"
-                      onClick={() => onRemoveMajor(major.id)}
-                    >
-                      <Delete />
-                    </IconButton>
-                  )}
+                  <IconButton
+                    color="danger"
+                    onClick={() => onRemoveMajor(major.id)}
+                  >
+                    <Delete />
+                  </IconButton>
                 </div>
               </div>
             </Card>
@@ -286,7 +296,7 @@ function MajorsList({
           />
         </div>
         <div className="col-span-1">
-          <Button variant="soft" onClick={handleAddMajor}>
+          <Button variant="soft" onClick={onAddMajor}>
             Add Major
           </Button>
         </div>

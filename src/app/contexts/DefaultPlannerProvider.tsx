@@ -19,14 +19,11 @@ export function DefaultPlannerProvider({
   const { data: session } = useSession();
 
   const {
+    saveMajors,
     userMajors,
     userMajorsIsLoading,
-    onAddMajor,
-    loadingAddMajor,
-    errorAddingMajor,
-    onRemoveMajor,
-    loadingRemoveMajor,
-    errorRemovingMajor,
+    loadingSaveMajor,
+    errorSavingMajor,
   } = useMajorSelection(session?.user.id);
 
   const [defaultPlannerId, setDefaultPlannerId] = useState<string>("");
@@ -67,12 +64,9 @@ export function DefaultPlannerProvider({
         loadingDefaultPlanner,
         userMajors,
         userMajorsIsLoading,
-        onAddMajor,
-        loadingAddMajor,
-        errorAddingMajor,
-        onRemoveMajor,
-        loadingRemoveMajor,
-        errorRemovingMajor,
+        saveMajors,
+        loadingSaveMajor,
+        errorSavingMajor,
       }}
     >
       {children}

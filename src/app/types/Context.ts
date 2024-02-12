@@ -77,12 +77,9 @@ export interface DefaultPlannerContextProps {
   setDefaultPlannerId: SetState<string>;
   loadingDefaultPlanner: boolean;
   userMajorsIsLoading: boolean;
-  onAddMajor: any;
-  loadingAddMajor: boolean;
-  errorAddingMajor: boolean;
-  onRemoveMajor: any;
-  loadingRemoveMajor: boolean;
-  errorRemovingMajor: boolean;
+  saveMajors: (majors: MajorOutput[]) => void;
+  loadingSaveMajor: boolean;
+  errorSavingMajor: boolean;
 }
 
 export interface MajorVerificationContextProps {

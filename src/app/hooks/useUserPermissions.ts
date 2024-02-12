@@ -2,19 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 import {
-  getUserRole,
-  userHasMajorEditingPermission,
+  getUserRole, // userHasMajorEditingPermission,
 } from "../actions/permissions";
 
 export default function useUserPermissions() {
   const { data: session } = useSession();
 
-  const { data: hasPermissionToEdit, refetch: refetchHasPermissionToEdit } =
-    useQuery({
-      queryKey: ["userHasMajorEditingPermission"],
-      queryFn: () => userHasMajorEditingPermission(session!.user.id),
-      enabled: !!session,
-    });
+  // const { data: hasPermissionToEdit, refetch: refetchHasPermissionToEdit } =
+  //   useQuery({
+  //     queryKey: ["userHasMajorEditingPermission"],
+  //     queryFn: () => userHasMajorEditingPermission(session!.user.id),
+  //     enabled: !!session,
+  //   });
 
   const { data: userRole } = useQuery({
     queryKey: ["getUserRole"],
@@ -23,8 +22,9 @@ export default function useUserPermissions() {
   });
 
   return {
-    hasPermissionToEdit: hasPermissionToEdit ?? false,
+    // hasPermissionToEdit: hasPermissionToEdit ?? false,
+    hasPermissionToEdit: false,
     isAdmin: userRole === "ADMIN",
-    refetchHasPermissionToEdit,
+    refetchHasPermissionToEdit: () => {},
   };
 }

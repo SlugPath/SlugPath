@@ -40,8 +40,9 @@ export default function DefaultPlannerSelection({
     ButtonName.Save,
   );
 
-  const { loadingMajorData, setDefaultPlannerId, loadingDefaultPlanner } =
-    useContext(DefaultPlannerContext);
+  const { setDefaultPlannerId, loadingDefaultPlanner } = useContext(
+    DefaultPlannerContext,
+  );
 
   const {
     majorDefaultPlanners,
@@ -124,10 +125,6 @@ export default function DefaultPlannerSelection({
 
   function handleClickCreateNew() {
     handleSave(ButtonName.CreateNew);
-  }
-
-  if (loadingMajorData) {
-    return <CircularProgress variant="plain" color="primary" />;
   }
 
   return (

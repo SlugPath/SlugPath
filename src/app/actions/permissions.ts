@@ -81,6 +81,7 @@ export async function getPermissions(): Promise<Permissions[]> {
               id: true,
               name: true,
               catalogYear: true,
+              programType: true,
             },
           },
           expirationDate: true,
@@ -97,9 +98,9 @@ export async function getPermissions(): Promise<Permissions[]> {
   return usersPermissions;
 }
 
-export async function userHasMajorEditingPermission(
+export async function getUserPermissions(
   userId: string,
-): Promise<boolean> {
+): Promise<Permissions | null> {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -109,37 +110,33 @@ export async function userHasMajorEditingPermission(
     },
   });
 
-  const major = await getUserMajorById(userId);
-
-  if (major?.id !== undefined && user?.email !== undefined) {
-    const permissions = await prisma.permissions.findUnique({
-      where: {
-        userEmail: user.email ? user.email : "",
-      },
-      select: {
-        majorEditingPermissions: {
-          select: {
-            major: {
-              select: {
-                id: true,
-              },
-            },
-            expirationDate: true,
-          },
-        },
-      },
-    });
-
-    if (permissions?.majorEditingPermissions !== undefined) {
-      for (const majorEditPerm of permissions.majorEditingPermissions) {
-        if (majorEditPerm.major.id == major.id) {
-          return majorEditPerm.expirationDate > new Date();
-        }
-      }
-    }
+  if (user?.email !== undefined) {
+    throw new Error("User not found");
   }
 
-  return false;
+  const permissions = await prisma.permissions.findUnique({
+    where: {
+      userEmail: user?.email,
+    },
+    select: {
+      majorEditingPermissions: {
+        select: {
+          major: {
+            select: {
+              id: true,
+              name: true,
+              catalogYear: true,
+              programType: true,
+            },
+          },
+          expirationDate: true,
+        },
+      },
+      userEmail: true,
+    },
+  });
+
+  return permissions;
 }
 
 export async function getUserRole(userId: string): Promise<string> {
