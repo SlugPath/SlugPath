@@ -84,6 +84,12 @@ export default function usePlanner(input: {
     });
   };
 
+  const addYear = () => {
+    console.log("hi");
+    handleCourseUpdate({ ...courseState });
+    return;
+  };
+
   const getAllLabels = () => {
     return courseState.labels;
   };
@@ -137,5 +143,6 @@ export default function usePlanner(input: {
     getAllLabels,
     updatePlannerLabels,
     updateNotes,
+    addYear,
   };
 }

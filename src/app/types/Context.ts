@@ -49,6 +49,7 @@ export interface PlannerContextProps {
   handleAddCustom: (input: CustomCourseInput) => void;
   handleRemoveCustom: (idx: number) => void;
   updateNotes: (content: string) => void;
+  addYear: () => void;
 }
 
 export interface PlannerProviderProps {

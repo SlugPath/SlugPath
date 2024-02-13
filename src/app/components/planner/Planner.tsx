@@ -11,6 +11,7 @@ import {
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
+  Button,
   Card,
 } from "@mui/joy";
 import { useContext } from "react";
@@ -52,6 +53,9 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <AccordionGroup>
                   <div className="space-y-2 h-[75vh] overflow-auto">
                     <Years courseState={courseState} />
+                    <Button fullWidth={true} size="lg">
+                      Add Year
+                    </Button>
                     <Accordion
                       variant="soft"
                       sx={{
