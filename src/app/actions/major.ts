@@ -19,15 +19,20 @@ export async function getMajors() {
   });
 }
 
-export async function getAllMajorsByCatalogYear(catalogYear: string) {
+export async function getAllMajorsBy(
+  programType: ProgramType,
+  catalogYear: string,
+) {
   const res = await prisma.major.findMany({
     where: {
       catalogYear,
+      programType,
     },
     select: {
       name: true,
       id: true,
       catalogYear: true,
+      programType: true,
     },
     orderBy: [
       {

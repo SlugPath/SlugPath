@@ -81,7 +81,7 @@ model Major {
   majorRequirement MajorRequirement?
   permissions      MajorEditingPermission[]
 
-  @@unique([name, catalogYear])
+  @@unique([name, catalogYear, programType])
 }
 
 model MajorRequirement {

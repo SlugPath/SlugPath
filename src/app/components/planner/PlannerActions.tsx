@@ -1,6 +1,5 @@
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
-import EditIcon from "@mui/icons-material/Edit";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
@@ -9,12 +8,8 @@ import { useSession } from "next-auth/react";
 import { useContext } from "react";
 
 export default function PlannerActions() {
-  const {
-    setShowExportModal,
-    setShowMajorSelectionModal,
-    setShowMajorProgressModal,
-    setShowPermissionsModal,
-  } = useContext(ModalsContext);
+  const { setShowExportModal, setShowMajorsModal, setShowPermissionsModal } =
+    useContext(ModalsContext);
   const { isAdmin } = useContext(PermissionsContext);
   const { status } = useSession();
 
@@ -25,15 +20,9 @@ export default function PlannerActions() {
       onClick: () => setShowExportModal(true),
     },
     {
-      name: "Edit Major",
-      icon: <EditIcon fontSize="large" />,
-      onClick: () => setShowMajorSelectionModal(true),
-      disabled: status !== "authenticated",
-    },
-    {
-      name: "Major Progress",
+      name: "My Majors",
       icon: <SchoolIcon fontSize="large" />,
-      onClick: () => setShowMajorProgressModal(true),
+      onClick: () => setShowMajorsModal(true),
       disabled: status !== "authenticated",
     },
   ];

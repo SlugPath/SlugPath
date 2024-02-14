@@ -6,8 +6,7 @@ import { useState } from "react";
 export default function useModals() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
-  const [showMajorSelectionModal, setShowMajorSelectionModal] = useState(false);
-  const [showMajorProgressModal, setShowMajorProgressModal] = useState(false);
+  const [showMajorsModal, setShowMajorsModal] = useState(false);
   const [showMajorRequirementsEditModal, setShowMajorRequirementsEditModal] =
     useState(false);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
@@ -32,10 +31,8 @@ export default function useModals() {
     majorToEdit,
     setMajorToEdit,
     onShowCourseInfoModal: handleShowCourseInfoModal,
-    showMajorSelectionModal,
-    setShowMajorSelectionModal,
-    showMajorProgressModal,
-    setShowMajorProgressModal,
+    showMajorsModal,
+    setShowMajorsModal,
     showMajorRequirementsEditModal,
     setShowMajorRequirementsEditModal,
     showPermissionsModal,

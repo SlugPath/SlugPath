@@ -36,12 +36,13 @@ export default function useMajorSelection(
   } = useMutation({
     mutationKey: ["saveMajors", userId],
     mutationFn: async (majors: MajorInput[]) => {
-      // await queryClient.cancelQueries({ queryKey: ["userMajors", userId] });
+      await queryClient.cancelQueries({ queryKey: ["userMajors", userId] });
       return await saveUserMajors({ userId: userId!, majors: majors });
     },
     onSuccess: () => {
       if (onSuccess) onSuccess();
       queryClient.refetchQueries({ queryKey: ["userMajors", userId] });
+      queryClient.invalidateQueries({ queryKey: ["userMajors", userId] });
     },
   });
 

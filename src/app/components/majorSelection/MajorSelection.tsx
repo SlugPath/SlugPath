@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { getAllMajorsByCatalogYear } from "@/app/actions/major";
+import { getAllMajorsBy } from "@/app/actions/major";
 import { Major } from "@/app/types/Major";
 import { years } from "@/lib/defaultPlanners";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { ProgramType } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 
@@ -45,21 +45,24 @@ export default function MajorSelection({
   onCreateNewPlanner,
   onReplaceCurrentPlanner,
 }: MajorSelectionProps) {
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
 
   const [selectedMajors, setSelectedMajors] = useState<Major[]>([]);
-  const [programType, setProgramType] = useState(ProgramType.Major);
+  const [programType, setProgramType] = useState<ProgramType>(
+    ProgramType.Major,
+  );
   const [majorName, setMajorName] = useState("");
   const [catalogYear, setCatalogYear] = useState("");
 
   const [error, setError] = useState("");
 
   const { data: majors } = useQuery({
-    queryKey: ["majors", catalogYear],
+    queryKey: ["majors", catalogYear, programType],
     queryFn: async () => {
-      return await getAllMajorsByCatalogYear(catalogYear);
+      return await getAllMajorsBy(programType, catalogYear);
     },
-    enabled: catalogYear !== "",
+    enabled: catalogYear !== "" && programType in ProgramType,
   });
 
   // getting userMajors from a context so that they load properly
@@ -74,6 +77,20 @@ export default function MajorSelection({
   useEffect(() => {
     setSelectedMajors(userMajors);
   }, [userMajors]);
+
+  function handleChangeProgramType(
+    event: React.SyntheticEvent | null,
+    newValue: ProgramType,
+  ) {
+    if (newValue != null) {
+      queryClient.invalidateQueries({
+        queryKey: ["majors", catalogYear, programType],
+      });
+      setProgramType(newValue);
+      // queryClient.invalidateQueries(["majors", catalogYear, newValue]);
+      // queryClient.refetchQueries({ queryKey: ["majors", catalogYear, newValue] });
+    }
+  }
 
   function handleChangeMajorName(
     event: React.SyntheticEvent | null,
@@ -104,6 +121,7 @@ export default function MajorSelection({
   function alreadyAddedMajor(major: Major): boolean {
     const alreadyAdded = selectedMajors.some((userMajor) => {
       if (
+        userMajor.programType === major.programType &&
         userMajor.name === major.name &&
         userMajor.catalogYear === major.catalogYear
       ) {
@@ -163,14 +181,14 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4 w-full">
-      <ErrorAlert />
-
       <Card variant="soft" size="sm">
         <MajorsList
           selectedMajors={selectedMajors}
           majors={majors}
           major={majorName}
           catalogYear={catalogYear}
+          programType={programType}
+          handleChangeProgramType={handleChangeProgramType}
           handleChangeCatalogYear={handleChangeCatalogYear}
           handleChangeMajorName={handleChangeMajorName}
           errorSavingMajor={errorSavingMajor}
@@ -181,6 +199,7 @@ export default function MajorSelection({
         {loadingSaveMajor && <LinearProgress />}
       </Card>
 
+      <ErrorAlert />
       {/* <DefaultPlannerSelection
         onSaved={onSaved}
         saveButtonName={saveButtonName}
@@ -203,7 +222,9 @@ function MajorsList({
   selectedMajors,
   major,
   catalogYear,
+  programType,
   majors,
+  handleChangeProgramType,
   handleChangeCatalogYear,
   handleChangeMajorName,
   errorSavingMajor,
@@ -213,7 +234,9 @@ function MajorsList({
   selectedMajors: Major[];
   major: string;
   catalogYear: string;
+  programType: ProgramType;
   majors: any;
+  handleChangeProgramType: any;
   handleChangeCatalogYear: any;
   handleChangeMajorName: any;
   errorSavingMajor: any;
@@ -269,11 +292,11 @@ function MajorsList({
         <div className="col-span-2">
           <Typography level="body-lg">Program</Typography>
           <Select
-            // value={catalogYear}
+            value={programType}
             placeholder="Choose one…"
             variant="plain"
             defaultValue={ProgramType.Major}
-            // onChange={onChange}
+            onChange={handleChangeProgramType}
           >
             {["Major", "Minor"].map((major, index) => (
               <Option key={index} value={major}>
@@ -298,7 +321,7 @@ function MajorsList({
         </div>
         <div className="col-span-1">
           <Button variant="soft" onClick={onAddMajor}>
-            Add Major
+            Add
           </Button>
         </div>
       </div>

@@ -17,10 +17,8 @@ export interface ModalsContextProps {
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: setShow;
   onShowCourseInfoModal: () => void;
-  showMajorSelectionModal: boolean;
-  setShowMajorSelectionModal: setShow;
-  showMajorProgressModal: boolean;
-  setShowMajorProgressModal: setShow;
+  showMajorsModal: boolean;
+  setShowMajorsModal: setShow;
   showMajorRequirementsEditModal: boolean;
   setShowMajorRequirementsEditModal: setShow;
   showPermissionsModal: boolean;

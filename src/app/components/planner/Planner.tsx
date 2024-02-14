@@ -15,7 +15,6 @@ import {
 } from "@mui/joy";
 import { useContext } from "react";
 
-import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import ExportModal from "../modals/exportModal/ExportModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
@@ -27,9 +26,9 @@ import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
-import EditMajorRequirementsModal from "./graduationProgress/majorProgressModal/EditMajorRequirementsModal";
-import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
-import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLModal";
+import EditMajorRequirementsModal from "./graduationProgress/majorsModal/EditMajorRequirementsModal";
+import MajorsModal from "./graduationProgress/majorsModal/MajorsModal";
+import ReplaceRLModal from "./graduationProgress/majorsModal/ReplaceRLModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -96,11 +95,11 @@ export default function Planner({ isActive }: { isActive: boolean }) {
 // this solves the bug of <Search /> not working after another <Search /> is interacted with in MajorProgressModal
 // multiple <Search /> components existing at the same time is problematic
 function SearchContainer() {
-  const { showMajorProgressModal } = useContext(ModalsContext);
+  const { showMajorsModal } = useContext(ModalsContext);
 
   return (
     <>
-      {!showMajorProgressModal ? (
+      {!showMajorsModal ? (
         <Search displayCustomCourseSelection={true} />
       ) : (
         <Card className="w-80 h-full" />
@@ -154,8 +153,7 @@ function Modals() {
     <>
       <CourseInfoModal />
       <ExportModal />
-      <MajorSelectionModal />
-      <MajorProgressModal />
+      <MajorsModal />
       <EditMajorRequirementsModal />
       <ReplaceRLModal />
       <PermissionsModal />
