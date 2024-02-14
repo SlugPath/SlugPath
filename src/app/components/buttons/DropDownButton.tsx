@@ -1,3 +1,4 @@
+import { PlannersContext } from "@contexts/PlannersProvider";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForever from "@mui/icons-material/DeleteForever";
@@ -11,7 +12,7 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 interface DropDownButtonProps {
   id: string;
@@ -33,18 +34,17 @@ export default function DropDownButton({
   dropDownClosed,
 }: DropDownButtonProps) {
   const [open, setOpen] = useState(false);
-  //console.log("open: ", open);
-  //console.log("onRightClick: ", onRightClick);
+  const { setShowExportModal } = useContext(PlannersContext);
 
   const handleOpenChange = useCallback(
-    (event: React.SyntheticEvent | null, isOpen: boolean) => {
+    (_: React.SyntheticEvent | null, isOpen: boolean) => {
       //console.log("isOpen:", isOpen);
       setOpen(isOpen);
       if (isOpen == false) {
         dropDownClosed(false);
       }
     },
-    [],
+    [dropDownClosed],
   );
 
   useEffect(() => {
@@ -88,7 +88,12 @@ export default function DropDownButton({
           </ListItemDecorator>{" "}
           Duplicate
         </MenuItem>
-        <MenuItem onClick={() => alert("Download Button Pressed")}>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowExportModal(true);
+          }}
+        >
           <ListItemDecorator>
             <DownloadIcon />
           </ListItemDecorator>{" "}

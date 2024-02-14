@@ -32,6 +32,8 @@ export function usePlanners(
 
   const [deletedPlanner, setDeletedPlanner] = useState(false);
 
+  const [showExportModal, setShowExportModal] = useState(false);
+
   const { mutate: saveAll } = useMutation({
     mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
       await saveAllPlanners(input);
@@ -76,6 +78,7 @@ export function usePlanners(
    * @param id unique planner id
    */
   function switchPlanners(id: string) {
+    console.log(`switchPlanners: ${id}`);
     setActivePlanner(id);
   }
 
@@ -163,26 +166,12 @@ export function usePlanners(
   };
 
   /**
-   * `findPlannerById` returns a plannerData of given id
-   * @param id unique planner id
-   */
-  function findPlannerById(id: string) {
-    const plannerWithId = planners.find((dictionary) => dictionary.id === id);
-
-    if (plannerWithId) {
-      return plannerWithId;
-    } else {
-      throw new Error(`Planner with id ${id} not found`);
-    }
-  }
-
-  /**
    * `duplicatePlanner` creates a new planner from the inputted planner id
    * @param id unique planner id
    */
   // title needs to be "Current Planer Name Copy"
   function duplicatePlanner(sourceID: string) {
-    const sourcePlannerData = findPlannerById(sourceID);
+    const sourcePlannerData = getPlanner(sourceID);
     //console.log("source title: ",sourcePlannerData.title );
     const id = uuidv4();
     setPlanners((prev) => {
@@ -210,5 +199,7 @@ export function usePlanners(
     duplicatePlanner,
     activePlanner,
     deletedPlanner,
+    showExportModal,
+    setShowExportModal,
   };
 }

@@ -3,7 +3,6 @@ import { Term } from "@/app/types/Quarter";
 import { useState } from "react";
 
 export default function useModals() {
-  const [showExportModal, setShowExportModal] = useState(false);
   const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
   const [showMajorSelectionModal, setShowMajorSelectionModal] = useState(false);
   const [showMajorProgressModal, setShowMajorProgressModal] = useState(false);
@@ -19,8 +18,6 @@ export default function useModals() {
   >();
 
   return {
-    showExportModal,
-    setShowExportModal,
     showCourseInfoModal,
     setShowCourseInfoModal,
     displayCourse,
