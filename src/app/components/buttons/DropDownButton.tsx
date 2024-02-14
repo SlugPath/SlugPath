@@ -11,7 +11,7 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface DropDownButtonProps {
   id: string;
@@ -32,11 +32,11 @@ export default function DropDownButton({
   onRightClick,
   dropDownClosed,
 }: DropDownButtonProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   //console.log("open: ", open);
   //console.log("onRightClick: ", onRightClick);
 
-  const handleOpenChange = React.useCallback(
+  const handleOpenChange = useCallback(
     (event: React.SyntheticEvent | null, isOpen: boolean) => {
       //console.log("isOpen:", isOpen);
       setOpen(isOpen);
@@ -75,7 +75,14 @@ export default function DropDownButton({
           </ListItemDecorator>{" "}
           Rename
         </MenuItem>
-        <MenuItem onClick={onDuplicateButtonClick}>
+        <MenuItem
+          onClick={(e) => {
+            // Stop the event from bubbling up to the parent to prevent the tab changing
+            // back to the original tab after the duplicate button is clicked
+            e.stopPropagation();
+            onDuplicateButtonClick();
+          }}
+        >
           <ListItemDecorator>
             <ContentCopyIcon />
           </ListItemDecorator>{" "}

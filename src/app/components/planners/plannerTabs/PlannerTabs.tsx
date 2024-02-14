@@ -38,9 +38,9 @@ export default function PlannerTabs() {
   const [plannerBeingEdited, setPlannerBeingEdited] = useState<string | null>(
     null,
   );
-  console.log("planners: ", planners);
-  console.log("plannerBeingEdited: ", plannerBeingEdited);
-  console.log("activePlanner: ", activePlanner);
+  // console.log("planners: ", planners);
+  // console.log("plannerBeingEdited: ", plannerBeingEdited);
+  // console.log("activePlanner: ", activePlanner);
 
   const [deleteAlert, setDeleteAlert] =
     useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
@@ -76,7 +76,7 @@ export default function PlannerTabs() {
   };
 
   const handleBlur = (title: string) => {
-    console.log("handleBlur");
+    // console.log("handleBlur");
     title.length >= 2 && setPlannerBeingEdited(null);
   };
 
@@ -172,9 +172,7 @@ function CustomTab({
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [renameFromDropDown, setRenameFromDropDown] = useState(false);
   //console.log("renameFromDropDown: ", renameFromDropDown);
-  console.log("DropDownOpen: ", dropDownOpen);
   //console.log("isEditing:", isEditing);
-  console.log("id:", id);
 
   function backgroundColor() {
     if (mode === "light") {
@@ -211,12 +209,10 @@ function CustomTab({
   }
 
   function handleClick() {
-    console.log("handleClick");
     onClick();
   }
 
   function handleDoubleClick() {
-    console.log("handleDoubleClick");
     if (selected) {
       setPlannerBeingEdited(id);
     } else {
@@ -225,7 +221,6 @@ function CustomTab({
   }
 
   function handleRename() {
-    console.log("handleRename");
     setRenameFromDropDown(true);
     if (selected) {
       setPlannerBeingEdited(id);
@@ -233,7 +228,6 @@ function CustomTab({
   }
 
   const handleContextMenu = (e: any) => {
-    console.log("handleContextMenu");
     e.preventDefault(); // Prevent the default right-click context menu
     setDropDownOpen(true); // Open the dropdown
   };
@@ -241,7 +235,6 @@ function CustomTab({
   // Needed to edit the blur event so that it was ignored on the transition from
   // the dropdown to the editing page
   const handleBlurEditing = (text: string) => {
-    console.log("handleBlurEditing");
     if (!renameFromDropDown) {
       onEndEditing(text);
     }

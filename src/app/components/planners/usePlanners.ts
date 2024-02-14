@@ -1,8 +1,8 @@
 import { saveAllPlanners } from "@/app/actions/planner";
-import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
-import useLocalStorage from "@/app/hooks/useLocalStorage";
-import { PlannerData } from "@/app/types/Planner";
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
+import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { PlannerData } from "@customTypes/Planner";
+import useLocalStorage from "@hooks/useLocalStorage";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -191,7 +191,7 @@ export function usePlanners(
         {
           ...clonePlanner(sourcePlannerData),
           id,
-          title: sourcePlannerData.title,
+          title: `Copy of ${sourcePlannerData.title}`,
         },
       ];
     });
