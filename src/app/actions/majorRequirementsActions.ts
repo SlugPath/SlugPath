@@ -26,12 +26,14 @@ export async function saveMajorRequirements(
     await prisma.majorRequirement.upsert({
       where: {
         majorId: majorId,
+        userId: userId,
       },
       update: {
         requirementList: requirementsAsJSON,
       },
       create: {
         majorId: majorId,
+        userId: userId,
         requirementList: requirementsAsJSON,
       },
     });
@@ -45,6 +47,43 @@ export async function saveMajorRequirements(
 export async function getMajorRequirements(
   majorId: number,
 ): Promise<RequirementList> {
+  //converted this into getApprovedMajorRequirement
+  const major = await prisma.major.findUnique({
+    where: {
+      id: majorId,
+    },
+    select: {
+      name: true,
+      catalogYear: true,
+      approvedRequirement: {
+        select: {
+          requirementList: true,
+        },
+      },
+    },
+  });
+
+  const majorName = major?.name ?? "No major name";
+  const catalogYear = major?.catalogYear ?? "No catalog year";
+  const title = `${majorName} ${catalogYear}`;
+
+  if (major === null) {
+    const emptyReqList = {
+      binder: Binder.AND,
+      title: title,
+      id: uuid4(),
+      requirements: [],
+    };
+
+    return emptyReqList;
+  }
+
+  const requirementList = JSON.parse(
+    major.approvedRequirement as string,
+  ) as RequirementList;
+
+  return requirementList;
+  /*
   const majorRequirement = await prisma.majorRequirement.findUnique({
     where: {
       majorId: majorId,
@@ -76,6 +115,7 @@ export async function getMajorRequirements(
   ) as RequirementList;
 
   return requirementList;
+  */
 }
 
 export async function getMajorRequirementLists(
@@ -110,149 +150,27 @@ export async function addMajorRequirementList(
   requirementList: RequirementList,
 ) {
   try {
-    //  const requirementsAsJSON = JSON.stringify(requirementList);
-
-    // //get the entire requirement list
-    // var majorRequirementList = await prisma.major.findUnique({
-    //   where: {
-    //     id: majorId,
-    //   },
-    //   select: {
-    //     majorRequirements: true
-    //   }
-    // });
-    // //append to the list manually - this one doesn't make sense
-    // if(majorRequirementList == undefined){
-    //   return
-    // }
-    // const majorRequirement = {
-    //   majorId: majorId,
-    //   requirementList: requirementsAsJSON
-    // }
-    // majorRequirementList.majorRequirements.push(majorRequirement)
-
-    // //put it back into the database
-    // await prisma.major.update({
-    //   where: {
-    //     id: majorId,
-    //   },
-    //   data: {
-    //     majorRequirements: majorRequirementList,
-    //   },
-    // });
-
-    // await prisma.majorRequirement.upsert({
-    //   where: {
-    //     majorId: majorId,
-    //   },
-    //   update: {
-    //     requirementList: requirementsAsJSON,
-    //   },
-    //   create: {
-    //     majorId: majorId,
-    //     requirementList: requirementsAsJSON,
-    //   },
-    // });
-
-    //get the entire requirement list
-
-    //append to the list manually
-    //put it back into the database
-    //create in major requirement list
-
     const requirementsAsJSON = JSON.stringify(requirementList);
-
-    // const major = await prisma.major.findUnique({
-    //   where: {
-    //     id: majorId,
-    //   },
-    //   include: {
-    //     majorRequirements: true,
-    //   }
-    // })
-
-    // if (major === undefined) {
-    //   throw new Error("Major could not be found")
-    // }
 
     const newMajorRequirement = await prisma.majorRequirement.create({
       data: {
+        majorId: majorId,
         requirementList: requirementsAsJSON,
-        major: {
+      },
+    });
+
+    await prisma.major.update({
+      where: {
+        id: majorId,
+      },
+      data: {
+        majorRequirements: {
           connect: {
-            id: majorId,
+            id: newMajorRequirement.id,
           },
         },
       },
     });
-
-    console.log("newMajorRequirement");
-    console.log(newMajorRequirement);
-
-    // const result = await prisma.major.update({
-    //   where: {
-    //     id: majorId,
-    //   },
-    //   data: {
-    //     majorRequirements: {
-    //       connect: {
-    //         id: newMajorRequirement.id,
-    //       }
-    //     }
-    //   },
-    //   include: {
-    //     majorRequirements: true,
-    //   }
-    // })
-
-    // console.log("result")
-    // console.log(result)
-
-    // await prisma.major.upsert({
-    //   where: { id: majorId },
-    //   create: {
-    //     where: {
-    //       id: majorId,
-    //     },
-    //     majorRequirements: {
-    //       connectOrCreate: {
-    //         where: {
-
-    //         }
-    //       },
-    //     },
-    //   }
-    //   data: {
-    //     majorRequirements: {
-    //       connectOrCreate: {
-    //         where: {
-    //           majorId: majorId,
-    //         },
-    //         create: {
-    //           // majorId: majorId,
-    //           requirementList: requirementsAsJSON,
-    //         }
-    //       }
-    //     },
-    //   },
-    // })
-
-    // const res = await prisma.major.create({
-    //   data: {
-    //     id: majorId,
-    //     majorRequirements: {
-    //       connectOrCreate: {
-    //         where:{
-    //           majorId: majorId
-    //         },
-    //         create: {
-    //           majorId: majorId,
-    //           requirementList: requirementsAsJSON,
-    //         }
-    //       }
-    //     }
-    //   }
-    // })
 
     return { title: "OK" };
   } catch (e) {

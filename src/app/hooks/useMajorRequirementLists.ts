@@ -25,9 +25,7 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
     requirementList: RequirementList,
   ) {
     setLoadingSave(true);
-    const result = await addMajorRequirementList(majorId, requirementList);
-    console.log("result");
-    console.log(result);
+    await addMajorRequirementList(majorId, requirementList);
     setLoadingSave(false);
     setIsSaved(true);
   }

@@ -36,7 +36,10 @@ export default function MajorProgressModal() {
   const { data: session } = useSession();
   const { userMajorData } = useMajorSelection(session?.user.id);
 
-  const { majorRequirementLists, onAddMajorRequirementList } =
+  const {
+    majorRequirementLists,
+    onAddMajorRequirementList,
+  } = //we need majorRequirementLists no matter what
     useMajorRequirementLists(userMajorData?.id);
 
   console.log(majorRequirementLists);
