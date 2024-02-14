@@ -20,6 +20,7 @@ import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
+import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 50;
@@ -39,6 +40,8 @@ export default function CourseInfoModal() {
   } = useContext(PlannerContext);
 
   const [editing, setEditing] = useState(false);
+  const [replacing, setReplacing] = useState(false);
+
   const { displayCourse: courseTerm, setDisplayCourse } =
     useContext(ModalsContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
@@ -147,6 +150,18 @@ export default function CourseInfoModal() {
         onClose={handleClose}
         defaultCourse={course}
         isOpen={editing}
+      />
+    );
+  }
+
+  // Only show this modal if it is a custom course,
+  // in the planner, and the course is being replaced
+  if (replacing && customCourseInPlanner) {
+    return (
+      <ReplaceCustomModal
+        onClose={() => setReplacing(false)}
+        isOpen={replacing}
+        customCourseId={course.id}
       />
     );
   }
@@ -262,16 +277,32 @@ export default function CourseInfoModal() {
           </Skeleton>
           <ModalClose variant="plain" />
           {customCourseInPlanner && (
-            <Button onClick={() => setEditing(true)} className="w-full">
-              <Typography
-                level="body-lg"
-                sx={{
-                  color: "white",
-                }}
+            <div>
+              <Button onClick={() => setEditing(true)} className="w-1/2">
+                <Typography
+                  level="body-lg"
+                  sx={{
+                    color: "white",
+                  }}
+                >
+                  Edit
+                </Typography>
+              </Button>
+              <Button
+                onClick={() => setReplacing(true)}
+                className="w-1/2"
+                color="success"
               >
-                Edit
-              </Typography>
-            </Button>
+                <Typography
+                  level="body-lg"
+                  sx={{
+                    color: "white",
+                  }}
+                >
+                  Replace
+                </Typography>
+              </Button>
+            </div>
           )}
         </div>
       </Sheet>

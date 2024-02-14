@@ -28,7 +28,7 @@ import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
-import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLModal";
+import ReplaceRequirementsModal from "./graduationProgress/majorProgressModal/ReplaceRequirementsModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -157,7 +157,7 @@ function Modals() {
       <ExportModal />
       <MajorSelectionModal />
       <MajorProgressModal />
-      <ReplaceRLModal />
+      <ReplaceRequirementsModal />
       <PermissionsModal />
     </>
   );

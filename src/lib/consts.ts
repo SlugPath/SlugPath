@@ -26,3 +26,4 @@ export const geOptions = [
 export const REQUIREMENT_LIST_DROPPABLE_PREFIX = "requirement-list-";
 export const SEARCH_DROPPABLE = "search-droppable";
 export const CUSTOM_DROPPABLE = "custom-droppable";
+export const REPLACE_CUSTOM_DROPPABLE = "replace-custom-droppable";

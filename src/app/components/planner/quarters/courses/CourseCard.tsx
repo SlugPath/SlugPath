@@ -23,8 +23,8 @@ import CourseLabel from "./CourseLabel";
 export interface CourseCardProps {
   course: StoredCourse;
   index: number;
-  provided: DraggableProvided;
-  isCustom: boolean;
+  isCustom?: boolean;
+  provided?: DraggableProvided;
   quarterId?: string;
   customDeleteCourse?: () => void;
 }
@@ -34,7 +34,7 @@ export default function CourseCard({
   index,
   quarterId,
   provided,
-  isCustom,
+  isCustom = false,
   customDeleteCourse,
 }: CourseCardProps) {
   const { deleteCourse, getCourseLabels, handleRemoveCustom } =
@@ -79,15 +79,15 @@ export default function CourseCard({
 
   return (
     <Card
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
+      ref={provided?.innerRef}
+      {...provided?.draggableProps}
+      {...provided?.dragHandleProps}
       size="sm"
       variant="soft"
       color={cardColor()}
       className="hover:opacity-50"
       style={{
-        ...getItemStyle(provided.draggableProps.style),
+        ...getItemStyle(provided?.draggableProps.style),
         height: "35px",
         justifyContent: "center",
       }}
