@@ -26,17 +26,24 @@ export function MajorVerificationProvider({
 }) {
   const { data: session } = useSession();
   const { userMajors } = useContext(DefaultPlannerContext);
-  const major = userMajors.length > 0 ? userMajors[0] : undefined;
   const {
-    loadingSave,
-    isSaved,
-    majorRequirements,
     onSetMajorRequirements,
     onSaveMajorRequirements,
-  } = useMajorRequirements(major?.id, session?.user.id);
+    getRequirementsForMajor,
+    getIsSaved,
+    getLoadingSave,
+  } = useMajorRequirements(userMajors, session?.user.id);
 
-  function updateRequirementList(id: string, requirementList: RequirementList) {
-    const majorRequirementsCopy = { ...majorRequirements };
+  function updateRequirementList(
+    majorId: number,
+    id: string,
+    requirementList: RequirementList,
+  ) {
+    const majorRequirementsCopy = getRequirementsForMajor(majorId);
+    if (!majorRequirementsCopy) {
+      return;
+    }
+
     const requirementListToUpdate = findRequirementList(
       id,
       majorRequirementsCopy,
@@ -51,10 +58,18 @@ export function MajorVerificationProvider({
       }
     }
 
-    onSetMajorRequirements(majorRequirementsCopy);
+    onSetMajorRequirements(majorId, majorRequirementsCopy);
   }
 
-  function addRequirementList(parentRequirementListId: string) {
+  function addRequirementList(
+    majorId: number,
+    parentRequirementListId: string,
+  ) {
+    const majorRequirementsCopy = getRequirementsForMajor(majorId);
+    if (!majorRequirementsCopy) {
+      return;
+    }
+
     const newRequirementList: RequirementList = {
       binder: Binder.AND,
       title: "New Requirement List",
@@ -62,7 +77,6 @@ export function MajorVerificationProvider({
       requirements: [],
     };
 
-    const majorRequirementsCopy = { ...majorRequirements };
     const parentRequirementList = findRequirementList(
       parentRequirementListId,
       majorRequirementsCopy,
@@ -72,11 +86,15 @@ export function MajorVerificationProvider({
       parentRequirementList.requirements.push(newRequirementList);
     }
 
-    onSetMajorRequirements(majorRequirementsCopy);
+    onSetMajorRequirements(majorId, majorRequirementsCopy);
   }
 
-  function removeRequirementList(id: string) {
-    const majorRequirementsCopy = { ...majorRequirements };
+  function removeRequirementList(majorId: number, id: string) {
+    const majorRequirementsCopy = getRequirementsForMajor(majorId);
+    if (!majorRequirementsCopy) {
+      return;
+    }
+
     const requirementList = findRequirementList(id, majorRequirementsCopy);
 
     if (requirementList) {
@@ -95,7 +113,7 @@ export function MajorVerificationProvider({
       }
     }
 
-    onSetMajorRequirements(majorRequirementsCopy);
+    onSetMajorRequirements(majorId, majorRequirementsCopy);
   }
 
   function findRequirementList(
@@ -142,35 +160,48 @@ export function MajorVerificationProvider({
     return null;
   }
 
-  function handleSaveMajorRequirements() {
-    onSaveMajorRequirements(major!.id);
+  function handleSaveMajorRequirements(majorId: number) {
+    onSaveMajorRequirements(majorId);
   }
 
   function calculateMajorProgressPercentage(courseState: PlannerData): number {
-    const requirementsTotal = majorRequirements.requirements.length;
+    const percentages = userMajors.map((major) => {
+      const majorRequirements = getRequirementsForMajor(major.id);
+      if (!majorRequirements) {
+        return 0;
+      }
 
-    const requirementsSatisfied = majorRequirements.requirements.reduce(
-      (acc, requirement) =>
-        isMajorRequirementsSatisfied(requirement, courseState.courses)
-          ? acc + 1
-          : acc,
-      0,
+      const requirementsTotal = majorRequirements.requirements.length;
+
+      const requirementsSatisfied = majorRequirements.requirements.reduce(
+        (acc, requirement) =>
+          isMajorRequirementsSatisfied(requirement, courseState.courses)
+            ? acc + 1
+            : acc,
+        0,
+      );
+
+      const percentage: number =
+        (requirementsSatisfied / requirementsTotal) * 100;
+      return isNaN(percentage) ? 0 : percentage;
+    });
+
+    // average the percentages
+    return (
+      percentages.reduce((acc, percentage) => acc + percentage, 0) /
+      percentages.length
     );
-
-    const percentage: number =
-      (requirementsSatisfied / requirementsTotal) * 100;
-    return isNaN(percentage) ? 0 : percentage;
   }
 
   return (
     <MajorVerificationContext.Provider
       value={{
         isMajorRequirementsSatisfied: isMajorRequirementsSatisfied,
-        majorRequirements: majorRequirements,
+        getRequirementsForMajor,
+        getLoadingSave,
+        getIsSaved,
         calculateMajorProgressPercentage: calculateMajorProgressPercentage,
         errors: "",
-        loadingSave,
-        isSaved,
         findRequirementList,
         addRequirementList,
         removeRequirementList,

@@ -5,12 +5,24 @@ import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { MajorVerificationContext } from "../contexts/MajorVerificationProvider";
+import { ModalsContext } from "../contexts/ModalsProvider";
 import { StoredCourse } from "../types/Course";
 import { RequirementList } from "../types/Requirements";
 
 export default function useHandleRequirementListDrag() {
-  const { majorRequirements, findRequirementList, updateRequirementList } =
-    useContext(MajorVerificationContext);
+  const {
+    getRequirementsForMajor,
+    findRequirementList,
+    updateRequirementList,
+  } = useContext(MajorVerificationContext);
+  const { majorToEdit } = useContext(ModalsContext);
+  const majorRequirements =
+    majorToEdit !== undefined
+      ? getRequirementsForMajor(majorToEdit!.id)
+      : undefined;
+
+  console.log(majorRequirements);
+  console.log(majorToEdit);
 
   function draggedToRequirementList(droppableId: string) {
     return droppableId.includes(REQUIREMENT_LIST_DROPPABLE_PREFIX);
@@ -21,6 +33,8 @@ export default function useHandleRequirementListDrag() {
     draggableId: string,
     destination: DraggableLocation,
   ) {
+    if (majorRequirements === undefined) return;
+
     const len = REQUIREMENT_LIST_DROPPABLE_PREFIX.length;
     const id = droppableId.slice(len);
     const course: StoredCourse = {
@@ -32,7 +46,7 @@ export default function useHandleRequirementListDrag() {
 
     if (requirementList) {
       requirementList.requirements.splice(index, 0, course);
-      updateRequirementList(id, requirementList);
+      updateRequirementList(majorToEdit!.id, id, requirementList);
     }
   }
 
@@ -40,6 +54,8 @@ export default function useHandleRequirementListDrag() {
     source: DraggableLocation,
     destination: DraggableLocation,
   ) {
+    if (majorRequirements === undefined) return;
+
     const len = REQUIREMENT_LIST_DROPPABLE_PREFIX.length;
     const sourceId = source.droppableId.slice(len);
     const destinationId = destination.droppableId.slice(len);
@@ -61,6 +77,8 @@ export default function useHandleRequirementListDrag() {
       source: DraggableLocation,
       destination: DraggableLocation,
     ) {
+      if (majorToEdit === undefined) return;
+
       const newRequirements = Array.from(requirementList.requirements);
       newRequirements.splice(source.index, 1);
       newRequirements.splice(
@@ -72,7 +90,7 @@ export default function useHandleRequirementListDrag() {
         ...requirementList,
         requirements: newRequirements,
       };
-      updateRequirementList(sourceId, newRequirementList);
+      updateRequirementList(majorToEdit.id, sourceId, newRequirementList);
     }
 
     function moveCourseToNewRequirementList(
@@ -81,6 +99,8 @@ export default function useHandleRequirementListDrag() {
       source: DraggableLocation,
       destination: DraggableLocation,
     ) {
+      if (majorToEdit === undefined) return;
+
       const newSourceRequirements = Array.from(
         sourceRequirementList.requirements,
       );
@@ -101,8 +121,12 @@ export default function useHandleRequirementListDrag() {
         ...destinationRequirementList,
         requirements: newDestinationRequirements,
       };
-      updateRequirementList(sourceId, newSourceRequirementList);
-      updateRequirementList(destinationId, newDestinationRequirementList);
+      updateRequirementList(majorToEdit.id, sourceId, newSourceRequirementList);
+      updateRequirementList(
+        majorToEdit.id,
+        destinationId,
+        newDestinationRequirementList,
+      );
     }
 
     if (sourceRequirementList) {

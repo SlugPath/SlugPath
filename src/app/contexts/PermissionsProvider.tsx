@@ -17,7 +17,7 @@ export function PermissionsProvider({
     onSetPermissionsList,
     onSavePermissions,
     isAdmin,
-    hasPermissionToEdit,
+    majorsAllowedToEdit,
   } = usePermissions();
 
   return (
@@ -29,7 +29,7 @@ export function PermissionsProvider({
         onSetPermissionsList,
         onSavePermissions,
         isAdmin,
-        hasPermissionToEdit,
+        majorsAllowedToEdit,
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import { MiniCourseCard } from "@/app/components/majorSelection/MiniCourseCard";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { StoredCourse } from "@/app/types/Course";
+import { Major } from "@/app/types/Major";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
@@ -9,6 +10,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import {
   Button,
   Card,
+  Chip,
   IconButton,
   Input,
   Select,
@@ -23,13 +25,19 @@ import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
 
 export function RequirementsComponent({
+  major,
   requirements,
   parents,
   hideTitle,
+  hasEditPermission,
+  onClickEdit,
 }: {
+  major: Major;
   requirements: RequirementList;
   parents: number;
   hideTitle: boolean;
+  hasEditPermission?: boolean;
+  onClickEdit?: (major: Major) => void;
 }) {
   const { mode } = useColorScheme();
 
@@ -56,7 +64,19 @@ export function RequirementsComponent({
   return (
     <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
       {!hideTitle && (
-        <Title requirements={requirements} fulfillmentMark={true} />
+        <div className="flex flex-row justify-between items-center">
+          <Title requirements={requirements} fulfillmentMark={true} />
+          {hasEditPermission && parents == 0 && (
+            <div className="flex flex-row items-center">
+              <Chip color="success" variant="solid" className="mr-6">
+                You have edit permission
+              </Chip>
+              {onClickEdit && (
+                <Button onClick={() => onClickEdit(major)}>Edit</Button>
+              )}
+            </div>
+          )}
+        </div>
       )}
       {isProgramEmpty() ? (
         <Typography className="text-gray-400">
@@ -79,6 +99,7 @@ export function RequirementsComponent({
               return (
                 <RequirementsComponent
                   key={index}
+                  major={major}
                   requirements={requirement}
                   parents={parents + 1}
                   hideTitle={false}
@@ -95,9 +116,11 @@ export function RequirementsComponent({
 }
 
 export function RequirementsComponentEditing({
+  major,
   requirements,
   parents,
 }: {
+  major: Major;
   requirements: RequirementList;
   parents: number;
 }) {
@@ -109,7 +132,10 @@ export function RequirementsComponentEditing({
 
   function handleToggleEditingTitle() {
     if (editingTitle) {
-      updateRequirementList(requirements.id, { ...requirements, title });
+      updateRequirementList(major.id, requirements.id, {
+        ...requirements,
+        title,
+      });
     }
     setEditingTitle(!editingTitle);
   }
@@ -119,12 +145,12 @@ export function RequirementsComponentEditing({
     newValue: string | null,
   ) {
     if (newValue === "0") {
-      updateRequirementList(requirements.id, {
+      updateRequirementList(major.id, requirements.id, {
         ...requirements,
         binder: Binder.AND,
       });
     } else if (newValue !== null) {
-      updateRequirementList(requirements.id, {
+      updateRequirementList(major.id, requirements.id, {
         ...requirements,
         binder: Binder.AT_LEAST,
         atLeast: parseInt(newValue),
@@ -133,7 +159,7 @@ export function RequirementsComponentEditing({
   }
 
   function deleteCourse(course: StoredCourse) {
-    updateRequirementList(requirements.id, {
+    updateRequirementList(major.id, requirements.id, {
       ...requirements,
       requirements: requirements.requirements.filter(
         (requirement) => requirement !== course,
@@ -181,7 +207,7 @@ export function RequirementsComponentEditing({
         </div>
         {shouldDisplayDeleteButton(parents) && (
           <DeleteIconButton
-            onClick={() => removeRequirementList(requirements.id)}
+            onClick={() => removeRequirementList(major.id, requirements.id)}
           />
         )}
       </div>
@@ -217,9 +243,13 @@ export function RequirementsComponentEditing({
           mode={mode}
         />
       )}
-      <RequirementLists requirements={requirements} parents={parents} />
+      <RequirementLists
+        major={major}
+        requirements={requirements}
+        parents={parents}
+      />
       {hasClasses() ? null : (
-        <Button onClick={() => addRequirementList(requirements.id)}>
+        <Button onClick={() => addRequirementList(major.id, requirements.id)}>
           + Add Requirement List
         </Button>
       )}
@@ -312,9 +342,11 @@ function Classes({
 }
 
 function RequirementLists({
+  major,
   requirements,
   parents,
 }: {
+  major: Major;
   requirements: RequirementList;
   parents: number;
 }) {
@@ -329,6 +361,7 @@ function RequirementLists({
           return (
             <RequirementsComponentEditing
               key={index}
+              major={major}
               requirements={requirement}
               parents={parents + 1}
             />

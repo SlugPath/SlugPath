@@ -4,7 +4,19 @@ import prisma from "@/lib/prisma";
 import { v4 as uuid4 } from "uuid";
 
 import { Binder, RequirementList } from "../types/Requirements";
-import { userHasMajorEditingPermission } from "./permissions";
+import { getUserPermissions } from "./permissions";
+
+async function userHasMajorEditingPermission(userId: string, majorId: number) {
+  const permissions = await getUserPermissions(userId);
+
+  if (permissions?.majorEditingPermissions) {
+    return permissions?.majorEditingPermissions.some((majorEditPerm) => {
+      return majorEditPerm.major.id == majorId;
+    });
+  }
+
+  return false;
+}
 
 export async function saveMajorRequirements(
   requirements: RequirementList,
@@ -12,7 +24,7 @@ export async function saveMajorRequirements(
   userId: string,
 ) {
   // check if user is allowed to edit this major
-  if (!userHasMajorEditingPermission(userId)) return;
+  if (!userHasMajorEditingPermission(userId, majorId)) return;
 
   const requirementsAsJSON = JSON.stringify(requirements);
 

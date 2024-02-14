@@ -11,7 +11,7 @@ export default function usePermissions() {
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
   const { data: session } = useSession();
-  const { isAdmin, hasPermissionToEdit, refetchHasPermissionToEdit } =
+  const { isAdmin, majorsAllowedToEdit, refetchGetUserPermissions } =
     useUserPermissions();
   const { isPending } = useQuery({
     queryKey: ["getPermissions"],
@@ -27,7 +27,7 @@ export default function usePermissions() {
     mutationFn: () => savePermissions(session!.user.id, permissionsList),
     onSuccess: () => {
       setIsSaved(true);
-      refetchHasPermissionToEdit();
+      refetchGetUserPermissions();
     },
   });
 
@@ -43,6 +43,6 @@ export default function usePermissions() {
     onSetPermissionsList: handleSetPermissionsList,
     onSavePermissions: mutate,
     isAdmin,
-    hasPermissionToEdit,
+    majorsAllowedToEdit,
   };
 }

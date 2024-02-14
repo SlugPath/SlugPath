@@ -19,9 +19,12 @@ import { RequirementsComponent } from "./RequirementsComponent";
 
 // RL = Requirement List
 export default function ReplaceRLModal() {
-  const { setShowReplaceRLModal: setShowModal, showReplaceRLModal: showModal } =
-    useContext(ModalsContext);
-  const { majorRequirements, updateRequirementList } = useContext(
+  const {
+    setShowReplaceRLModal: setShowModal,
+    showReplaceRLModal: showModal,
+    majorToEdit: major,
+  } = useContext(ModalsContext);
+  const { getRequirementsForMajor, updateRequirementList } = useContext(
     MajorVerificationContext,
   );
 
@@ -32,9 +35,14 @@ export default function ReplaceRLModal() {
     },
   );
 
+  const majorRequirements =
+    major !== undefined ? getRequirementsForMajor(major.id) : undefined;
+
   // keeps the same id, title, and binder, but replaces the requirements
   function handleReplaceRL(requirementList: RequirementList) {
-    updateRequirementList(majorRequirements.id, {
+    if (major === undefined || majorRequirements === undefined) return;
+
+    updateRequirementList(major.id, majorRequirements.id, {
       ...majorRequirements,
       requirements: requirementList.requirements,
     });
@@ -71,7 +79,7 @@ export default function ReplaceRLModal() {
           <Typography level="h4">Replace Current Requirement List</Typography>
           <Typography>
             Choose a requirement list to replace the current one for `
-            {majorRequirements.title}`
+            {majorRequirements?.title}`
           </Typography>
         </div>
         <div
@@ -99,6 +107,10 @@ function RequirementLists({
   handleReplaceRL: (requirementList: RequirementList) => void;
   setShowModal: (show: boolean) => void;
 }) {
+  const { majorToEdit: major } = useContext(ModalsContext);
+
+  if (major === undefined) return <div>Could not load major.</div>;
+
   return (
     <>
       {requirementLists?.map((requirementList, index) => (
@@ -122,6 +134,7 @@ function RequirementLists({
               requirements={requirementList}
               parents={0}
               hideTitle={true}
+              major={major}
             />
           </AccordionDetails>
         </StyledAccordion>

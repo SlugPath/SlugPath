@@ -110,7 +110,7 @@ export async function getUserPermissions(
     },
   });
 
-  if (user?.email !== undefined) {
+  if (user?.email === undefined) {
     throw new Error("User not found");
   }
 

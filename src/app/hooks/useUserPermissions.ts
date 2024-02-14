@@ -1,19 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
-import {
-  getUserRole, // userHasMajorEditingPermission,
-} from "../actions/permissions";
+import { getUserPermissions, getUserRole } from "../actions/permissions";
+import { Major } from "../types/Major";
 
 export default function useUserPermissions() {
   const { data: session } = useSession();
 
-  // const { data: hasPermissionToEdit, refetch: refetchHasPermissionToEdit } =
-  //   useQuery({
-  //     queryKey: ["userHasMajorEditingPermission"],
-  //     queryFn: () => userHasMajorEditingPermission(session!.user.id),
-  //     enabled: !!session,
-  //   });
+  const { data: permissions, refetch: refetchGetUserPermissions } = useQuery({
+    queryKey: ["userHasMajorEditingPermission"],
+    queryFn: () => getUserPermissions(session!.user.id),
+    enabled: !!session,
+  });
 
   const { data: userRole } = useQuery({
     queryKey: ["getUserRole"],
@@ -21,10 +19,25 @@ export default function useUserPermissions() {
     enabled: !!session,
   });
 
+  function getMajorsAllowedToEdit(): Major[] {
+    // filter out expires major editing permissions
+    const majorEditingPermissions =
+      permissions?.majorEditingPermissions.filter((majorEditPerm) => {
+        if (majorEditPerm.expirationDate > new Date()) {
+          return majorEditPerm;
+        }
+      }) ?? [];
+
+    const majors = majorEditingPermissions.map((permission) => {
+      return permission.major;
+    });
+
+    return majors;
+  }
+
   return {
-    // hasPermissionToEdit: hasPermissionToEdit ?? false,
-    hasPermissionToEdit: false,
+    majorsAllowedToEdit: getMajorsAllowedToEdit(),
     isAdmin: userRole === "ADMIN",
-    refetchHasPermissionToEdit: () => {},
+    refetchGetUserPermissions: refetchGetUserPermissions,
   };
 }

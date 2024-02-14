@@ -272,6 +272,7 @@ function MajorsList({
             // value={catalogYear}
             placeholder="Choose one…"
             variant="plain"
+            defaultValue={ProgramType.Major}
             // onChange={onChange}
           >
             {["Major", "Minor"].map((major, index) => (

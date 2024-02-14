@@ -4,6 +4,7 @@ import { MajorOutput } from "../actions/major";
 import { SetState } from "./Common";
 import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
+import { Major } from "./Major";
 import { Permissions } from "./Permissions";
 import { PlannerData } from "./Planner";
 import { RequirementList, Requirements } from "./Requirements";
@@ -20,6 +21,8 @@ export interface ModalsContextProps {
   setShowMajorSelectionModal: setShow;
   showMajorProgressModal: boolean;
   setShowMajorProgressModal: setShow;
+  showMajorRequirementsEditModal: boolean;
+  setShowMajorRequirementsEditModal: setShow;
   showPermissionsModal: boolean;
   setShowPermissionsModal: setShow;
   showReplaceRLModal: boolean;
@@ -27,6 +30,8 @@ export interface ModalsContextProps {
   courseState: PlannerData;
   displayCourse: CourseTerm;
   setDisplayCourse: SetState<CourseTerm>;
+  majorToEdit: Major | undefined;
+  setMajorToEdit: SetState<Major | undefined>;
 }
 
 export interface PlannerContextProps {
@@ -87,22 +92,26 @@ export interface MajorVerificationContextProps {
     requirements: Requirements,
     courses: StoredCourse[],
   ) => boolean;
-  majorRequirements: RequirementList;
+  getRequirementsForMajor: (majorId: number) => RequirementList | undefined;
+  getLoadingSave: (majorId: number) => boolean;
+  getIsSaved: (majorId: number) => boolean;
   calculateMajorProgressPercentage: (courseState: PlannerData) => number;
   errors: string;
-  loadingSave: boolean;
-  isSaved: boolean;
   findRequirementList: (
     id: string,
     requirements: RequirementList,
   ) => RequirementList | null;
-  addRequirementList: (parentRequirementListId: string) => void;
-  removeRequirementList: (requirementListId: string) => void;
+  addRequirementList: (
+    majorId: number,
+    parentRequirementListId: string,
+  ) => void;
+  removeRequirementList: (majorId: number, requirementListId: string) => void;
   updateRequirementList: (
+    majorId: number,
     requirementListId: string,
     newRequirementList: RequirementList,
   ) => void;
-  onSaveMajorRequirements: () => void;
+  onSaveMajorRequirements: (majorId: number) => void;
 }
 
 export interface PermissionsContextProps {
@@ -112,5 +121,5 @@ export interface PermissionsContextProps {
   onSetPermissionsList: (permissions: Permissions[]) => void;
   onSavePermissions: () => void;
   isAdmin: boolean;
-  hasPermissionToEdit: boolean;
+  majorsAllowedToEdit: Major[];
 }
