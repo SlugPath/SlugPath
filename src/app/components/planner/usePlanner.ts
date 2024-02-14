@@ -85,9 +85,29 @@ export default function usePlanner(input: {
   };
 
   const addYear = () => {
-    console.log("hi");
-    handleCourseUpdate({ ...courseState });
-    return;
+    courseState.quarters.push(
+      {
+        id: "quarter-" + courseState.years + "-Fall",
+        title: "Fall",
+        courses: [],
+      },
+      {
+        id: "quarter-" + courseState.years + "-Winter",
+        title: "Winter",
+        courses: [],
+      },
+      {
+        id: "quarter-" + courseState.years + "-Spring",
+        title: "Spring",
+        courses: [],
+      },
+      {
+        id: "quarter-" + courseState.years + "-Summer",
+        title: "Summer",
+        courses: [],
+      },
+    );
+    handleCourseUpdate({ ...courseState, years: courseState.years + 1 });
   };
 
   const getAllLabels = () => {

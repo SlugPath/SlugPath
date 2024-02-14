@@ -33,8 +33,14 @@ import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLMod
 import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
-  const { handleDragEnd, totalCredits, geSatisfied, courseState, updateNotes } =
-    useContext(PlannerContext);
+  const {
+    handleDragEnd,
+    totalCredits,
+    geSatisfied,
+    courseState,
+    updateNotes,
+    addYear,
+  } = useContext(PlannerContext);
 
   if (!isActive) {
     return <></>;
@@ -53,7 +59,11 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <AccordionGroup>
                   <div className="space-y-2 h-[75vh] overflow-auto">
                     <Years courseState={courseState} />
-                    <Button fullWidth={true} size="lg">
+                    <Button
+                      onClick={() => addYear()}
+                      fullWidth={true}
+                      size="lg"
+                    >
                       Add Year
                     </Button>
                     <Accordion
@@ -170,22 +180,24 @@ function Modals() {
 function Years({ courseState }: { courseState: PlannerData }) {
   return (
     <div className="space-y-2">
-      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
-        const slice_val = quartersPerYear * i;
-        const quarters = courseState.quarters.slice(
-          slice_val,
-          slice_val + quartersPerYear,
-        );
+      {Array.from({ length: courseState.years }, (_, index) => index).map(
+        (i) => {
+          const slice_val = quartersPerYear * i;
+          const quarters = courseState.quarters.slice(
+            slice_val,
+            slice_val + quartersPerYear,
+          );
 
-        return (
-          <Quarters
-            key={i}
-            year={i + 1}
-            quarters={quarters}
-            courseState={courseState}
-          />
-        );
-      })}
+          return (
+            <Quarters
+              key={i}
+              year={i + 1}
+              quarters={quarters}
+              courseState={courseState}
+            />
+          );
+        },
+      )}
     </div>
   );
 }
