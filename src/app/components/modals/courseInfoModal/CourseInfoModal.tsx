@@ -20,6 +20,7 @@ import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
+// Lazy import because ReplaceCustomModal uses a separate DND Context
 import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
@@ -159,10 +160,11 @@ export default function CourseInfoModal() {
   if (replacing && customCourseInPlanner) {
     return (
       <ReplaceCustomModal
-        onClose={() => {
+        onSave={() => {
           setReplacing(false);
           setShowModal(false);
         }}
+        onClose={() => setReplacing(false)}
         isOpen={replacing}
         customCourse={course}
       />

@@ -1,5 +1,6 @@
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
+import { truncateTitle } from "@/lib/utils";
 import DraggableCourseCard from "@components/planner/quarters/courses/DraggableCourseCard";
 import Search from "@components/search/Search";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -16,6 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;
+  onSave: () => void;
   isOpen: boolean;
   customCourse: StoredCourse;
 }
@@ -23,6 +25,7 @@ export interface ReplaceCustomModalProps {
 export default function ReplaceCustomModal({
   onClose,
   isOpen,
+  onSave,
   customCourse,
 }: ReplaceCustomModalProps) {
   const [classes, setClasses] = useState<StoredCourse[]>([]);
@@ -59,9 +62,12 @@ export default function ReplaceCustomModal({
     });
   }
 
-  function onSave() {
+  function handleSave() {
+    if (classes.length === 0) {
+      return;
+    }
     replaceCustomCourse(customCourse.id, classes);
-    onClose();
+    onSave();
   }
 
   return (
@@ -84,15 +90,15 @@ export default function ReplaceCustomModal({
         }}
       >
         <Typography level="title-lg">
-          Replacing &quot;{customCourse.title}&quot;
+          Replacing &quot;{truncateTitle(customCourse.title)}&quot;
         </Typography>
-        <div className="flex flex-row items-start">
+        <div className="flex flex-row items-start gap-2">
           <DragDropContext onDragEnd={handleDragEnd}>
             <Search displayCustomCourseSelection={false} />
             <Droppable droppableId={droppableId}>
               {(provided) => {
                 return (
-                  <div className="flex flex-col w-1/2 gap-2">
+                  <div className="flex flex-col w-1/2 gap-2 h-48">
                     <Card
                       {...provided.droppableProps}
                       ref={provided.innerRef}
@@ -115,12 +121,26 @@ export default function ReplaceCustomModal({
                       })}
                       {classes.length === 0 && (
                         <Typography className="text-gray-400">
-                          Drag classes here
+                          Drag official courses here
                         </Typography>
                       )}
                       {provided.placeholder}
                     </Card>
-                    <Button onClick={onSave}>
+                    <Button
+                      onClick={onClose}
+                      sx={{
+                        color: "white",
+                      }}
+                    >
+                      <Typography level="body-md">Go Back</Typography>
+                    </Button>
+                    <Button
+                      onClick={handleSave}
+                      color="success"
+                      sx={{
+                        color: "white",
+                      }}
+                    >
                       <Typography level="body-md">
                         Confirm Replacement
                       </Typography>
