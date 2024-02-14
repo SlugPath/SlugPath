@@ -150,6 +150,7 @@ export function findCourseById(
   courseState: PlannerData,
   id: string,
 ): StoredCourse {
+  console.log(`findCourseById ${id}`);
   const course = courseState.courses.find((c) => c.id === id);
   if (course === undefined) throw new Error("course not found");
   return course;

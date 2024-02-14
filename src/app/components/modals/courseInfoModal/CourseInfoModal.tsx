@@ -159,9 +159,12 @@ export default function CourseInfoModal() {
   if (replacing && customCourseInPlanner) {
     return (
       <ReplaceCustomModal
-        onClose={() => setReplacing(false)}
+        onClose={() => {
+          setReplacing(false);
+          setShowModal(false);
+        }}
         isOpen={replacing}
-        customCourseId={course.id}
+        customCourse={course}
       />
     );
   }

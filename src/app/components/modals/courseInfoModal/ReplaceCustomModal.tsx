@@ -1,32 +1,33 @@
-import { StoredCourse } from "@/app/types/Course";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import DraggableCourseCard from "@components/planner/quarters/courses/DraggableCourseCard";
 import Search from "@components/search/Search";
+import { PlannerContext } from "@contexts/PlannerProvider";
+import { StoredCourse } from "@customTypes/Course";
 import {
   DragDropContext,
   DraggableLocation,
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Card, Modal, Sheet, Typography } from "@mui/joy";
-import { useState } from "react";
+import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;
   isOpen: boolean;
-  customCourseId: string;
+  customCourse: StoredCourse;
 }
 
 export default function ReplaceCustomModal({
   onClose,
   isOpen,
-  customCourseId,
+  customCourse,
 }: ReplaceCustomModalProps) {
   const [classes, setClasses] = useState<StoredCourse[]>([]);
-
-  const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourseId;
+  const { replaceCustomCourse } = useContext(PlannerContext);
+  const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourse.id;
 
   function handleDragEnd(result: DropResult) {
     const { draggableId, destination } = result;
@@ -34,10 +35,10 @@ export default function ReplaceCustomModal({
     addCourseFromSearch(draggableId, destination);
   }
 
-  const addCourseFromSearch = (
+  function addCourseFromSearch(
     draggableId: string,
     destination: DraggableLocation,
-  ) => {
+  ) {
     const course = createCourseFromId(draggableId);
     if (destination.droppableId === droppableId) {
       setClasses((prev) => [
@@ -48,15 +49,21 @@ export default function ReplaceCustomModal({
         },
       ]);
     }
-  };
+  }
 
-  const removeCourse = (index: number) => {
+  function removeCourse(index: number) {
     setClasses((prev) => {
       const newClasses = [...prev];
       newClasses.splice(index, 1);
       return newClasses;
     });
-  };
+  }
+
+  function onSave() {
+    replaceCustomCourse(customCourse.id, classes);
+    onClose();
+  }
+
   return (
     <Modal
       onClose={onClose}
@@ -76,45 +83,55 @@ export default function ReplaceCustomModal({
           boxShadow: "lg",
         }}
       >
-        <Typography level="title-lg">Replace Custom Course</Typography>
+        <Typography level="title-lg">
+          Replacing &quot;{customCourse.title}&quot;
+        </Typography>
         <div className="flex flex-row items-start">
           <DragDropContext onDragEnd={handleDragEnd}>
             <Search displayCustomCourseSelection={false} />
             <Droppable droppableId={droppableId}>
               {(provided) => {
                 return (
-                  <Card
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    variant="soft"
-                    size="sm"
-                    className="rounded-md w-1/2 mt-5 min-h-48"
-                  >
-                    {classes.map((course, index) => {
-                      return (
-                        <DraggableCourseCard
-                          key={index}
-                          course={course}
-                          index={index}
-                          draggableId={course.id}
-                          quarterId={droppableId}
-                          isCustom={false}
-                          customDeleteCourse={() => removeCourse(index)}
-                        />
-                      );
-                    })}
-                    {classes.length === 0 && (
-                      <Typography className="text-gray-400">
-                        Drag classes here
+                  <div className="flex flex-col w-1/2 gap-2">
+                    <Card
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      variant="soft"
+                      size="sm"
+                      className="rounded-md mt-5 min-h-48"
+                    >
+                      {classes.map((course, index) => {
+                        return (
+                          <DraggableCourseCard
+                            key={index}
+                            course={course}
+                            index={index}
+                            draggableId={course.id}
+                            quarterId={droppableId}
+                            isCustom={false}
+                            customDeleteCourse={() => removeCourse(index)}
+                          />
+                        );
+                      })}
+                      {classes.length === 0 && (
+                        <Typography className="text-gray-400">
+                          Drag classes here
+                        </Typography>
+                      )}
+                      {provided.placeholder}
+                    </Card>
+                    <Button onClick={onSave}>
+                      <Typography level="body-md">
+                        Confirm Replacement
                       </Typography>
-                    )}
-                    {provided.placeholder}
-                  </Card>
+                    </Button>
+                  </div>
                 );
               }}
             </Droppable>
           </DragDropContext>
         </div>
+        <ModalClose variant="plain" />
       </Sheet>
     </Modal>
   );

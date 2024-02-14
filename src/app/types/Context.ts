@@ -35,6 +35,7 @@ export interface PlannerContextProps {
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
+  replaceCustomCourse: (customId: string, courses: StoredCourse[]) => void;
   handleDragEnd: (result: DropResult) => void;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];

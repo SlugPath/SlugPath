@@ -28,6 +28,7 @@ export function PlannerProvider({
     getAllLabels,
     updatePlannerLabels,
     updateNotes,
+    replaceCustomCourse,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -47,6 +48,7 @@ export function PlannerProvider({
   return (
     <PlannerContext.Provider
       value={{
+        replaceCustomCourse,
         deleteCourse,
         editCustomCourse,
         totalCredits,

@@ -126,7 +126,34 @@ export default function usePlanner(input: {
     });
   };
 
+  const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
+    const newCids = courses.map((c) => c.id);
+    const newCourses = courseState.courses.filter((c) => c.id != customId);
+    newCourses.push(...courses);
+
+    console.log(
+      `replaceCustomCourse newCourses: ${JSON.stringify(newCourses, null, 2)}`,
+    );
+    handleCourseUpdate({
+      ...courseState,
+      courses: newCourses,
+      quarters: courseState.quarters.map((q) => {
+        const idx = q.courses.indexOf(customId);
+        if (idx !== -1) {
+          const quarterCourses = [...q.courses];
+          quarterCourses.splice(idx, 1, ...newCids);
+          return {
+            ...q,
+            courses: quarterCourses,
+          };
+        }
+        return q;
+      }),
+    });
+  };
+
   return {
+    replaceCustomCourse,
     courseState,
     totalCredits,
     geSatisfied,
