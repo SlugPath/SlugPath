@@ -44,13 +44,16 @@ export default function ReplaceCustomModal({
   ) {
     const course = createCourseFromId(draggableId);
     if (destination.droppableId === droppableId) {
-      setClasses((prev) => [
-        ...prev,
-        {
-          ...course,
-          id: uuidv4(),
-        },
-      ]);
+      // Prevent duplicates
+      if (!classes.find((c) => c.number === course.number)) {
+        setClasses((prev) => [
+          ...prev,
+          {
+            ...course,
+            id: uuidv4(),
+          },
+        ]);
+      }
     }
   }
 
@@ -120,31 +123,34 @@ export default function ReplaceCustomModal({
                         );
                       })}
                       {classes.length === 0 && (
-                        <Typography className="text-gray-400">
+                        <Typography className="text-gray-400 text-center">
                           Drag official courses here
                         </Typography>
                       )}
                       {provided.placeholder}
                     </Card>
-                    <Button
-                      onClick={onClose}
-                      sx={{
-                        color: "white",
-                      }}
-                    >
-                      <Typography level="body-md">Go Back</Typography>
-                    </Button>
-                    <Button
-                      onClick={handleSave}
-                      color="success"
-                      sx={{
-                        color: "white",
-                      }}
-                    >
-                      <Typography level="body-md">
-                        Confirm Replacement
-                      </Typography>
-                    </Button>
+                    <div className="flex flex-row justify-center gap-2">
+                      <Button onClick={onClose} variant="plain">
+                        <Typography
+                          level="body-lg"
+                          sx={{
+                            color: "white",
+                          }}
+                        >
+                          Cancel
+                        </Typography>
+                      </Button>
+                      <Button onClick={handleSave} color="success">
+                        <Typography
+                          level="body-md"
+                          sx={{
+                            color: "white",
+                          }}
+                        >
+                          Confirm
+                        </Typography>
+                      </Button>
+                    </div>
                   </div>
                 );
               }}

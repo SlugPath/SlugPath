@@ -20,7 +20,6 @@ import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
-// Lazy import because ReplaceCustomModal uses a separate DND Context
 import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
@@ -282,7 +281,7 @@ export default function CourseInfoModal() {
           </Skeleton>
           <ModalClose variant="plain" />
           {customCourseInPlanner && (
-            <div>
+            <div className="flex gap-2">
               <Button onClick={() => setEditing(true)} className="w-1/2">
                 <Typography
                   level="body-lg"
