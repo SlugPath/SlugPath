@@ -21,12 +21,13 @@ variables are required at build time but not necessarily needed for local
 development. You might want to set some mock values for these.
 
 ```
-docker-compose --env-file=<your-env-file.env> up -d (optional)
+docker-compose --env-file=<your-env-file.env> up
 pnpm init-db
 ```
 
 This will initialize the database with the correct schema and initial data.
-Finally run the project with
+To run the database in detached mode, run the above `docker-compose` command with the `-d` flag
+Finally run the project in dev-mode with
 
 ```
 pnpm dev
@@ -35,9 +36,10 @@ pnpm dev
 Et Voilà! The app should be running on `localhost:3000`.
 
 ## Authors
-
 - **Furkan Ercevik** - [fercevik729](https://github.com/fercevik729)
 - **Oskar Luthje** - [oluthje](https://github.com/oluthje)
+
+## Contributors
 - **Teresa Wu** - [tqwu](https://github.com/tqwu)
 - **Ahmad Joseph** - [aajoseph-dev](https://github.com/aajoseph-dev)
 - **Lily Knab** - [lilyknab](https://github.com/lilyknab)
