@@ -1,9 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { v4 as uuid4 } from "uuid";
 
-import { Binder, RequirementList } from "../types/Requirements";
+import { RequirementList } from "../types/Requirements";
 import { userHasMajorEditingPermission } from "./permissionsActions";
 
 export async function saveMajorRequirements(
@@ -25,8 +24,10 @@ export async function saveMajorRequirements(
   try {
     await prisma.majorRequirement.upsert({
       where: {
-        majorId: majorId,
-        userId: userId,
+        majorId_userId: {
+          majorId: majorId,
+          userId: userId,
+        },
       },
       update: {
         requirementList: requirementsAsJSON,
@@ -44,78 +45,27 @@ export async function saveMajorRequirements(
   }
 }
 
-export async function getMajorRequirements(
+export async function getApprovedMajorRequirement(
   majorId: number,
-): Promise<RequirementList> {
-  //converted this into getApprovedMajorRequirement
-  const major = await prisma.major.findUnique({
+): Promise<RequirementList | null> {
+  const approvedMajorRequirement = await prisma.major.findFirst({
     where: {
       id: majorId,
     },
     select: {
-      name: true,
-      catalogYear: true,
-      approvedRequirement: {
-        select: {
-          requirementList: true,
-        },
-      },
+      approvedRequirement: true,
     },
   });
 
-  const majorName = major?.name ?? "No major name";
-  const catalogYear = major?.catalogYear ?? "No catalog year";
-  const title = `${majorName} ${catalogYear}`;
-
-  if (major === null) {
-    const emptyReqList = {
-      binder: Binder.AND,
-      title: title,
-      id: uuid4(),
-      requirements: [],
-    };
-
-    return emptyReqList;
+  const approvedRequirement = approvedMajorRequirement?.approvedRequirement;
+  if (approvedRequirement !== null) {
+    const parseRequirementsList = JSON.parse(
+      approvedRequirement?.requirementList as string,
+    ) as RequirementList;
+    return parseRequirementsList;
   }
 
-  const requirementList = JSON.parse(
-    major.approvedRequirement as string,
-  ) as RequirementList;
-
-  return requirementList;
-  /*
-  const majorRequirement = await prisma.majorRequirement.findUnique({
-    where: {
-      majorId: majorId,
-    },
-  });
-
-  const major = await prisma.major.findUnique({
-    where: {
-      id: majorId,
-    },
-  });
-  const majorName = major?.name ?? "No major name";
-  const catalogYear = major?.catalogYear ?? "No catalog year";
-  const title = `${majorName} ${catalogYear}`;
-
-  if (majorRequirement === null) {
-    const emptyReqList = {
-      binder: Binder.AND,
-      title: title,
-      id: uuid4(),
-      requirements: [],
-    };
-
-    return emptyReqList;
-  }
-
-  const requirementList = JSON.parse(
-    majorRequirement.requirementList as string,
-  ) as RequirementList;
-
-  return requirementList;
-  */
+  return null;
 }
 
 export async function getMajorRequirementLists(
@@ -135,17 +85,16 @@ export async function getMajorRequirementLists(
     const parseRequirementsList = JSON.parse(
       majorRequirement.requirementList as string,
     ) as RequirementList;
-    // const newMajorRequirement = {
-    //   ...majorRequirement,
-    //  requirementList: parseRequirementsList
-    // }
     return parseRequirementsList;
   });
 
   return majorRequirementsList;
 }
 
+// ADDITION: I added userId, because we want all majorRequirements to always be connected to the user that created
+// them
 export async function addMajorRequirementList(
+  userId: string,
   majorId: number,
   requirementList: RequirementList,
 ) {
@@ -154,6 +103,7 @@ export async function addMajorRequirementList(
 
     const newMajorRequirement = await prisma.majorRequirement.create({
       data: {
+        userId: userId,
         majorId: majorId,
         requirementList: requirementsAsJSON,
       },

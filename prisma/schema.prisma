@@ -73,14 +73,14 @@ model Course {
 }
 
 model Major {
-  id                  Int                     @id @default(autoincrement())
+  id                  Int                       @id @default(autoincrement())
   name                String
   catalogYear         String
-  createdAt           DateTime                @default(now())
-  updatedAt           DateTime                @updatedAt
-  permissions         MajorEditingPermission?
-  // approvedRequirement MajorRequirement?       @relation("ApprovedMajorRequirement")
-  majorRequirements   MajorRequirement[]      @relation("MajorRequirements")
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+  permissions         MajorEditingPermission[]
+  approvedRequirement MajorRequirement?         @relation("ApprovedMajorRequirement")
+  majorRequirements   MajorRequirement[]
   defaultPlanners     Planner[]
   users               User[]
 
@@ -88,18 +88,21 @@ model Major {
 }
 
 model MajorRequirement {
-  id              Int      @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   requirementList Json
-  // approvedMajorId Int?     @unique
-  // approvedMajor   Major?   @relation("ApprovedMajorRequirement", fields: [approvedMajorId], references: [id])
-  major           Major    @relation("MajorRequirements", fields: [majorId], references: [id])
+  approvedMajorId Int?        @unique
+  approvedMajor   Major?      @relation("ApprovedMajorRequirement", fields: [approvedMajorId], references: [id])
+  major           Major       @relation(fields: [majorId], references: [id], onDelete: Cascade)
   majorId         Int
-  userId          String? 
-  user            User?    @relation(fields: [userId], references: [id])
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
   upvotes         Upvote[]
 
   @@unique([majorId, userId])
 }
+
+// each major has many major requirements
+// but each user can only have one major requirement per major.
 
 model Upvote {
   id                 Int              @id @default(autoincrement())
