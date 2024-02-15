@@ -1,19 +1,15 @@
-import { usePlanners } from "@components/planners/usePlanners";
-import { PlannersContextProps } from "@customTypes/Context";
 import { useSession } from "next-auth/react";
 import { createContext } from "react";
 
-import { PlannerData } from "../types/Planner";
+import { PlannersContextProps, PlannersProviderProps } from "./Types";
+import { usePlanners } from "./usePlanners";
 
 export const PlannersContext = createContext({} as PlannersContextProps);
 
 export function PlannersProvider({
   allPlanners,
   children,
-}: {
-  allPlanners: PlannerData[];
-  children: React.ReactNode;
-}) {
+}: PlannersProviderProps) {
   const { data: session } = useSession();
   const {
     planners,

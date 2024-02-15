@@ -1,11 +1,10 @@
-import { PlannerData } from "@/app/types/Planner";
 import { CUSTOM_DROPPABLE, SEARCH_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId, findQuarter } from "@/lib/plannerUtils";
+import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
+import useHandleRequirementListDrag from "@hooks/useHandleRequirementListDrag";
 import { v4 as uuidv4 } from "uuid";
-
-import useHandleRequirementListDrag from "./useHandleRequirementListDrag";
 
 // Helpers
 const draggedFromSearch = (droppableId: string) => {

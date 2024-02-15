@@ -1,5 +1,5 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import EditIcon from "@mui/icons-material/Edit";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import LockOpenIcon from "@mui/icons-material/LockOpen";

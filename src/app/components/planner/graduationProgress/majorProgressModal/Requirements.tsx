@@ -1,9 +1,9 @@
-import { MiniCourseCard } from "@/app/components/majorSelection/MiniCourseCard";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { StoredCourse } from "@/app/types/Course";
-import { Binder, RequirementList } from "@/app/types/Requirements";
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
+import { MiniCourseCard } from "@components/majorSelection/MiniCourseCard";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { StoredCourse } from "@customTypes/Course";
+import { Binder, RequirementList } from "@customTypes/Requirements";
 import { Droppable } from "@hello-pangea/dnd";
 import { Delete, Edit } from "@mui/icons-material";
 import {

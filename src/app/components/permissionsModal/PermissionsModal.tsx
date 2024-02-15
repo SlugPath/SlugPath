@@ -1,7 +1,7 @@
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,

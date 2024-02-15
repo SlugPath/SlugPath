@@ -1,8 +1,8 @@
 "use client";
 
-import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
-import { PlannerProvider } from "@/app/contexts/PlannerProvider";
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
+import { PlannersContext } from "@contexts/PlannersProvider";
 import { List, ListItem } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 

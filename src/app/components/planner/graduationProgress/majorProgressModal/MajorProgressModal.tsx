@@ -1,7 +1,7 @@
-import Search from "@/app/components/search/Search";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
+import Search from "@components/search/Search";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import {
   Button,
   Card,

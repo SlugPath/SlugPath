@@ -1,7 +1,7 @@
 import { getAllMajorsByCatalogYear } from "@/app/actions/major";
 import { years } from "@/lib/defaultPlanners";
+import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { ModalsProvider } from "@contexts/ModalsProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import { CircularProgress } from "@mui/joy";
 import { Alert } from "@mui/joy";
@@ -263,7 +263,7 @@ export default function MajorSelection({
         </div>
       </div>
       <div>
-        <ModalsProvider>
+        <CourseInfoProvider>
           <SelectDefaultPlanner
             selectedDefaultPlanner={selectedDefaultPlanner}
             onChange={handleChangeDefaultPlanner}
@@ -271,8 +271,8 @@ export default function MajorSelection({
             loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
             addPlannerCardContainer={isInPlannerPage}
           />
-          <CourseInfoModal />
-        </ModalsProvider>
+          <CourseInfoModal viewOnly />
+        </CourseInfoProvider>
       </div>
       <div className="flex justify-end w-full">
         {loadingSaveMajor ? (

@@ -1,7 +1,7 @@
 import { getAllRequirementLists } from "@/app/actions/majorRequirements";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { RequirementList } from "@/app/types/Requirements";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { RequirementList } from "@customTypes/Requirements";
 import {
   AccordionDetails,
   AccordionSummary,

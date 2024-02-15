@@ -4,6 +4,7 @@ import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import DraggableCourseCard from "@components/planner/quarters/courses/DraggableCourseCard";
 import Search from "@components/search/Search";
+import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import {
@@ -16,6 +17,8 @@ import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+
+import CourseInfoModal from "./CourseInfoModal";
 
 const courseNumberRegex = /[A-Z]{2,6} [0-9]{1,3}[A-Z]*/g;
 
@@ -92,94 +95,97 @@ export default function ReplaceCustomModal({
   }
 
   return (
-    <Modal
-      onClose={onClose}
-      open={isOpen}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Sheet
+    <CourseInfoProvider>
+      <CourseInfoModal viewOnly />
+      <Modal
+        onClose={onClose}
+        open={isOpen}
         sx={{
-          width: "50%",
-          margin: 10,
-          borderRadius: "md",
-          p: 3,
-          boxShadow: "lg",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Typography level="title-lg">
-          Replacing &quot;{truncateTitle(customCourse.title)}&quot;
-        </Typography>
-        <div className="flex flex-row items-start gap-2">
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Search displayCustomCourseSelection={false} />
-            <Droppable
-              droppableId={droppableId}
-              isDropDisabled={suggestedLoading}
-            >
-              {(provided) => {
-                return (
-                  <div className="flex flex-col w-1/2 gap-2 h-48">
-                    <Card
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      variant="soft"
-                      size="sm"
-                      className="rounded-md mt-5 min-h-48"
-                    >
-                      {classes.map((course, index) => {
-                        return (
-                          <DraggableCourseCard
-                            key={index}
-                            course={course}
-                            index={index}
-                            draggableId={course.id}
-                            quarterId={droppableId}
-                            isCustom={false}
-                            customDeleteCourse={() => removeCourse(index)}
-                          />
-                        );
-                      })}
-                      {classes.length === 0 && (
-                        <Typography className="text-gray-400 text-center">
-                          Drag official courses here
-                        </Typography>
-                      )}
-                      {provided.placeholder}
-                    </Card>
-                    <div className="flex flex-row justify-center gap-2">
-                      <Button onClick={onClose} variant="plain">
-                        <Typography
-                          level="body-lg"
-                          sx={{
-                            color: "white",
-                          }}
-                        >
-                          Cancel
-                        </Typography>
-                      </Button>
-                      <Button onClick={handleSave} color="success">
-                        <Typography
-                          level="body-md"
-                          sx={{
-                            color: "white",
-                          }}
-                        >
-                          Confirm
-                        </Typography>
-                      </Button>
+        <Sheet
+          sx={{
+            width: "50%",
+            margin: 10,
+            borderRadius: "md",
+            p: 3,
+            boxShadow: "lg",
+          }}
+        >
+          <Typography level="title-lg">
+            Replacing &quot;{truncateTitle(customCourse.title)}&quot;
+          </Typography>
+          <div className="flex flex-row items-start gap-2">
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Search displayCustomCourseSelection={false} />
+              <Droppable
+                droppableId={droppableId}
+                isDropDisabled={suggestedLoading}
+              >
+                {(provided) => {
+                  return (
+                    <div className="flex flex-col w-1/2 gap-2 h-48">
+                      <Card
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        variant="soft"
+                        size="sm"
+                        className="rounded-md mt-5 min-h-48"
+                      >
+                        {classes.map((course, index) => {
+                          return (
+                            <DraggableCourseCard
+                              key={index}
+                              course={course}
+                              index={index}
+                              draggableId={course.id}
+                              quarterId={droppableId}
+                              isCustom={false}
+                              customDeleteCourse={() => removeCourse(index)}
+                            />
+                          );
+                        })}
+                        {classes.length === 0 && (
+                          <Typography className="text-gray-400 text-center">
+                            Drag official courses here
+                          </Typography>
+                        )}
+                        {provided.placeholder}
+                      </Card>
+                      <div className="flex flex-row justify-center gap-2">
+                        <Button onClick={onClose} variant="plain">
+                          <Typography
+                            level="body-lg"
+                            sx={{
+                              color: "white",
+                            }}
+                          >
+                            Cancel
+                          </Typography>
+                        </Button>
+                        <Button onClick={handleSave} color="success">
+                          <Typography
+                            level="body-md"
+                            sx={{
+                              color: "white",
+                            }}
+                          >
+                            Confirm
+                          </Typography>
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                );
-              }}
-            </Droppable>
-          </DragDropContext>
-        </div>
-        <ModalClose variant="plain" />
-      </Sheet>
-    </Modal>
+                  );
+                }}
+              </Droppable>
+            </DragDropContext>
+          </div>
+          <ModalClose variant="plain" />
+        </Sheet>
+      </Modal>
+    </CourseInfoProvider>
   );
 }

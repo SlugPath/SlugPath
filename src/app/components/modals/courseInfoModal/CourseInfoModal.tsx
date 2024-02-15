@@ -1,6 +1,6 @@
 import { courseInfo } from "@/app/actions/course";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-import { ModalsContext } from "@contexts/ModalsProvider";
+import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
@@ -25,12 +25,18 @@ import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 50;
 
-export default function CourseInfoModal() {
+export default function CourseInfoModal({
+  viewOnly = false,
+}: {
+  viewOnly?: boolean;
+}) {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
   const {
     setShowCourseInfoModal: setShowModal,
     showCourseInfoModal: showModal,
-  } = useContext(ModalsContext);
+    displayCourse: courseTerm,
+    setDisplayCourse,
+  } = useContext(CourseInfoContext);
 
   const {
     editCustomCourse,
@@ -42,8 +48,6 @@ export default function CourseInfoModal() {
   const [editing, setEditing] = useState(false);
   const [replacing, setReplacing] = useState(false);
 
-  const { displayCourse: courseTerm, setDisplayCourse } =
-    useContext(ModalsContext);
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
   const { data, isLoading: loading } = useQuery({
@@ -271,7 +275,7 @@ export default function CourseInfoModal() {
                 <Typography component="p">GE: {ge(data)}</Typography>
               </>
             )}
-            {course.labels && (
+            {!viewOnly && course.labels && (
               <SelectedLabels
                 labels={getCourseLabels(course)}
                 handleOpenLabels={handleOpenLabels}
@@ -280,7 +284,7 @@ export default function CourseInfoModal() {
             )}
           </Skeleton>
           <ModalClose variant="plain" />
-          {customCourseInPlanner && (
+          {!viewOnly && customCourseInPlanner && (
             <div className="flex gap-2">
               <Button onClick={() => setEditing(true)} className="w-1/2">
                 <Typography

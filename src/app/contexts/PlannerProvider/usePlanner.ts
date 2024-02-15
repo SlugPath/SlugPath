@@ -1,5 +1,3 @@
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
-import { PlannerData } from "@/app/types/Planner";
 import {
   findQuarter,
   getGeSatisfied,
@@ -7,8 +5,10 @@ import {
   initialPlanner,
   isCustomCourse,
 } from "@/lib/plannerUtils";
+import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
+import { PlannerData } from "@customTypes/Planner";
 import { useContext, useMemo } from "react";
 
 export default function usePlanner(input: {

@@ -9,7 +9,7 @@ import {
 } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import CloseIconButton from "@components/buttons/CloseIconButton";
-import { ModalsContext } from "@contexts/ModalsProvider";
+import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { CourseTerm, StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
@@ -39,8 +39,8 @@ export default function CourseCard({
 }: CourseCardProps) {
   const { deleteCourse, getCourseLabels, handleRemoveCustom } =
     useContext(PlannerContext);
-  const { setDisplayCourse } = useContext(ModalsContext);
-  const { onShowCourseInfoModal } = useContext(ModalsContext);
+  const { setDisplayCourse, onShowCourseInfoModal } =
+    useContext(CourseInfoContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
