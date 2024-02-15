@@ -134,11 +134,11 @@ interface TitleProps {
   quarterId?: string;
 }
 const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
+  const checkOffered = course && (isCSE(course) || isCustomCourse(course));
   return (
     <Typography
       endDecorator={
-        course &&
-        isCSE(course) &&
+        checkOffered &&
         !isOffered(
           course.quartersOffered,
           extractTermFromQuarter(quarterId),
