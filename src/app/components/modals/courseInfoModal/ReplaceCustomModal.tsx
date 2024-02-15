@@ -1,3 +1,4 @@
+import { getSuggestedClasses } from "@/app/actions/course";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
@@ -12,8 +13,11 @@ import {
   Droppable,
 } from "@hello-pangea/dnd";
 import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+
+const courseNumberRegex = /[A-Z]{2,6} [0-9]{1,3}[A-Z]*/g;
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;
@@ -28,7 +32,21 @@ export default function ReplaceCustomModal({
   onSave,
   customCourse,
 }: ReplaceCustomModalProps) {
+  const suggestedClasses = Array.from(
+    customCourse.title.toUpperCase().matchAll(courseNumberRegex),
+  ).map((m) => m[0]);
   const [classes, setClasses] = useState<StoredCourse[]>([]);
+
+  const { isLoading: suggestedLoading } = useQuery({
+    queryKey: ["suggestedClasses", suggestedClasses],
+    queryFn: async () => {
+      const suggested = await getSuggestedClasses(suggestedClasses);
+      setClasses(suggested);
+      return suggested;
+    },
+    enabled: isOpen && suggestedClasses.length > 0,
+  });
+
   const { replaceCustomCourse } = useContext(PlannerContext);
   const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourse.id;
 
@@ -98,7 +116,10 @@ export default function ReplaceCustomModal({
         <div className="flex flex-row items-start gap-2">
           <DragDropContext onDragEnd={handleDragEnd}>
             <Search displayCustomCourseSelection={false} />
-            <Droppable droppableId={droppableId}>
+            <Droppable
+              droppableId={droppableId}
+              isDropDisabled={suggestedLoading}
+            >
               {(provided) => {
                 return (
                   <div className="flex flex-col w-1/2 gap-2 h-48">
