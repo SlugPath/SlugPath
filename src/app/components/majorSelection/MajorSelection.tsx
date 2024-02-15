@@ -1,5 +1,5 @@
-import { getAllMajorsByCatalogYear } from "@/app/actions/major";
 import { years } from "@/lib/defaultPlanners";
+import { getAllMajorsByCatalogYear } from "@actions/major";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import ReportIcon from "@mui/icons-material/Report";

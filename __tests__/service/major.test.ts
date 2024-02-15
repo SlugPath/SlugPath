@@ -1,10 +1,10 @@
+import prisma from "@/lib/prisma";
 import {
   getAllMajorsByCatalogYear,
   getMajorDefaultPlanners,
   getUserMajorByEmail,
   updateUserMajor,
-} from "@/app/actions/major";
-import prisma from "@/lib/prisma";
+} from "@actions/major";
 import { v4 as uuidv4 } from "uuid";
 
 beforeAll(async () => {

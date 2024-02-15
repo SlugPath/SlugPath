@@ -1,7 +1,7 @@
-import { courseInfo } from "@/app/actions/course";
-import { StoredCourse } from "@/app/types/Course";
 import prisma from "@/lib/prisma";
 import { compareCoursesByNum } from "@/lib/utils";
+import { courseInfo } from "@actions/course";
+import { StoredCourse } from "@customTypes/Course";
 
 beforeAll(async () => {
   await prisma.course.createMany({

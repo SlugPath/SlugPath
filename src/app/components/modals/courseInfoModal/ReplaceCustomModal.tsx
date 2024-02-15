@@ -1,7 +1,7 @@
-import { getSuggestedClasses } from "@/app/actions/course";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
+import { getSuggestedClasses } from "@actions/course";
 import DraggableCourseCard from "@components/planner/quarters/courses/DraggableCourseCard";
 import Search from "@components/search/Search";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";

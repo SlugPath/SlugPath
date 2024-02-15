@@ -1,5 +1,5 @@
-import { courseInfo } from "@/app/actions/course";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { courseInfo } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";

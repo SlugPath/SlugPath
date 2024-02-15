@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { v4 as uuid4 } from "uuid";
-
 import {
   getMajorRequirements,
   saveMajorRequirements,
-} from "../actions/majorRequirements";
-import { Binder, RequirementList } from "../types/Requirements";
+} from "@actions/majorRequirements";
+import { Binder, RequirementList } from "@customTypes/Requirements";
+import { useEffect, useState } from "react";
+import { v4 as uuid4 } from "uuid";
 
 export default function useMajorRequirements(
   majorId: number | undefined,

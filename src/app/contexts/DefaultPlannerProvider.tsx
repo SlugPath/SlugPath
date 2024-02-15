@@ -1,10 +1,10 @@
 import { initialPlanner } from "@/lib/plannerUtils";
+import { UserMajorOutput, getUserMajorById } from "@actions/major";
+import { getPlannerById } from "@actions/planner";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { createContext, useState } from "react";
 
-import { UserMajorOutput, getUserMajorById } from "../actions/major";
-import { getPlannerById } from "../actions/planner";
 import { SetState } from "../types/Common";
 import { PlannerData } from "../types/Planner";
 

@@ -7,13 +7,13 @@ import {
   RequirementList,
   Requirements,
 } from "@customTypes/Requirements";
-import useMajorRequirements from "@hooks/useMajorRequirements";
 import { useSession } from "next-auth/react";
 import { createContext, useContext } from "react";
 import { v4 as uuid4 } from "uuid";
 
 import { DefaultPlannerContext } from "../DefaultPlannerProvider";
 import { MajorVerificationContextProps } from "./Types";
+import useMajorRequirements from "./useMajorRequirements";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,

@@ -1,4 +1,4 @@
-import { getMajorDefaultPlanners } from "@/app/actions/major";
+import { getMajorDefaultPlanners } from "@actions/major";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useDefaultPlanners(

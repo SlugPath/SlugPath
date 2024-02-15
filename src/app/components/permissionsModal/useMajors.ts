@@ -1,4 +1,4 @@
-import { getMajors } from "@/app/actions/major";
+import { getMajors } from "@actions/major";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useMajors() {
