@@ -1,7 +1,6 @@
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { getSuggestedClasses } from "@actions/course";
 import DraggableCourseCard from "@components/planner/quarters/courses/DraggableCourseCard";
 import Search from "@components/search/Search";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
@@ -14,13 +13,11 @@ import {
   Droppable,
 } from "@hello-pangea/dnd";
 import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useQuery } from "@tanstack/react-query";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import CourseInfoModal from "./CourseInfoModal";
-
-const courseNumberRegex = /[A-Z]{2,6} [0-9]{1,3}[A-Z]*/g;
+import useClassSuggestions from "./useClassSuggestions";
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;
@@ -35,21 +32,10 @@ export default function ReplaceCustomModal({
   onSave,
   customCourse,
 }: ReplaceCustomModalProps) {
-  const suggestedClasses = Array.from(
-    customCourse.title.toUpperCase().matchAll(courseNumberRegex),
-  ).map((m) => m[0]);
-  const [classes, setClasses] = useState<StoredCourse[]>([]);
-
-  const { isLoading: suggestedLoading } = useQuery({
-    queryKey: ["suggestedClasses", suggestedClasses],
-    queryFn: async () => {
-      const suggested = await getSuggestedClasses(suggestedClasses);
-      setClasses(suggested);
-      return suggested;
-    },
-    enabled: isOpen && suggestedClasses.length > 0,
+  const { classes, setClasses, suggestedLoading } = useClassSuggestions({
+    isOpen,
+    title: customCourse.title,
   });
-
   const { replaceCustomCourse } = useContext(PlannerContext);
   const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourse.id;
 
