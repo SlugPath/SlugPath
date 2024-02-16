@@ -29,6 +29,7 @@ export function PlannerProvider({
     updatePlannerLabels,
     updateNotes,
     addYear,
+    deleteYear,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -62,6 +63,7 @@ export function PlannerProvider({
         handleRemoveCustom,
         updateNotes,
         addYear,
+        deleteYear,
       }}
     >
       {children}

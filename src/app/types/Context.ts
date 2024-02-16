@@ -50,6 +50,7 @@ export interface PlannerContextProps {
   handleRemoveCustom: (idx: number) => void;
   updateNotes: (content: string) => void;
   addYear: () => void;
+  deleteYear: (year: number) => void;
 }
 
 export interface PlannerProviderProps {

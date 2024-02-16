@@ -6,13 +6,16 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
+import { Clear } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
+  Box,
   Button,
   Card,
+  IconButton,
 } from "@mui/joy";
 import { useContext } from "react";
 
@@ -211,9 +214,18 @@ function Quarters({
   quarters: Quarter[];
   courseState: PlannerData;
 }) {
+  const { deleteYear } = useContext(PlannerContext);
+
   return (
     <StyledAccordion>
-      <AccordionSummary>Year {year}</AccordionSummary>
+      <Box>
+        <AccordionSummary>Year {year}</AccordionSummary>
+        <Box>
+          <IconButton>
+            <Clear onClick={() => deleteYear(year - 1)} />
+          </IconButton>
+        </Box>
+      </Box>
       <AccordionDetails>
         <div className="flex flex-row space-x-2">
           {quarters.map((quarter) => {
