@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getAllMajorsBy } from "@/app/actions/major";
 import { Major } from "@/app/types/Major";
 import { years } from "@/lib/defaultPlanners";
@@ -18,35 +17,16 @@ import {
   Typography,
 } from "@mui/joy";
 import { ProgramType } from "@prisma/client";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectMajorName from "./SelectMajorName";
-import DefaultPlannerSelection from "./defaultPlannerSelection/DefaultPlannerSelection";
 
-// import useDefaultPlanners from "./defaultPlannerSelection/useDefaultPlanners";
-
-export interface MajorSelectionProps {
-  onSaved: () => void;
-  saveButtonName: string;
-  isInPlannerPage?: boolean;
-  onSkip?: () => void;
-  onCreateNewPlanner?: () => void;
-  onReplaceCurrentPlanner?: () => void;
-}
-
-export default function MajorSelection({
-  saveButtonName,
-  onSaved,
-  isInPlannerPage,
-  onSkip,
-  onCreateNewPlanner,
-  onReplaceCurrentPlanner,
-}: MajorSelectionProps) {
+export default function MajorSelection() {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
+  const { setMajorToAdd } = useContext(DefaultPlannerContext);
 
   const [selectedMajors, setSelectedMajors] = useState<Major[]>([]);
   const [programType, setProgramType] = useState<ProgramType>(
@@ -78,6 +58,19 @@ export default function MajorSelection({
     setSelectedMajors(userMajors);
   }, [userMajors]);
 
+  // when searching for a major, setMajorToAdd so defaultPlannerSelection can display
+  // default planners for this major
+  useEffect(() => {
+    if (programType in ProgramType && catalogYear.length > 0 && majorName.length > 0) {
+      setMajorToAdd({
+        name: majorName,
+        catalogYear,
+        programType,
+        id: 0,
+      });
+    }
+  }, [programType, catalogYear, majorName]);
+
   function handleChangeProgramType(
     event: React.SyntheticEvent | null,
     newValue: ProgramType,
@@ -87,8 +80,6 @@ export default function MajorSelection({
         queryKey: ["majors", catalogYear, programType],
       });
       setProgramType(newValue);
-      // queryClient.invalidateQueries(["majors", catalogYear, newValue]);
-      // queryClient.refetchQueries({ queryKey: ["majors", catalogYear, newValue] });
     }
   }
 
@@ -200,20 +191,6 @@ export default function MajorSelection({
       </Card>
 
       <ErrorAlert />
-      {/* <DefaultPlannerSelection
-        onSaved={onSaved}
-        saveButtonName={saveButtonName}
-        isInPlannerPage={isInPlannerPage}
-        onSkip={onSkip}
-        onCreateNewPlanner={onCreateNewPlanner}
-        onReplaceCurrentPlanner={onReplaceCurrentPlanner}
-        major={{
-          name: majorName,
-          catalogYear: catalogYear,
-          id: 0,
-          programType: ProgramType.Major,
-        }}
-      /> */}
     </div>
   );
 }

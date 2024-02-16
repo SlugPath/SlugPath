@@ -1,14 +1,13 @@
 import { Major } from "@/app/types/Major";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { ModalsProvider } from "@contexts/ModalsProvider";
-import { CircularProgress } from "@mui/joy";
+import { CircularProgress, Select, Option, Typography, Button } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
-
 import ConfirmAlert from "../../modals/ConfirmAlert";
 import CourseInfoModal from "../../modals/courseInfoModal/CourseInfoModal";
-import SaveButtons from "./../SaveButtons";
 import useDefaultPlanners from "./../defaultPlannerSelection/useDefaultPlanners";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
 
 enum ButtonName {
   Save = "Save",
@@ -17,41 +16,58 @@ enum ButtonName {
 }
 
 export interface DefaultPlannerSelectionProps {
+  userMajors: Major[];
   onSaved: () => void;
   saveButtonName: string;
   isInPlannerPage?: boolean;
   onSkip?: () => void;
-  onCreateNewPlanner?: () => void;
-  onReplaceCurrentPlanner?: () => void;
-  major: Major;
+  major?: Major;
 }
 
 export default function DefaultPlannerSelection({
+  userMajors,
   saveButtonName,
   onSaved,
   isInPlannerPage,
   onSkip,
-  onCreateNewPlanner,
-  onReplaceCurrentPlanner,
   major,
 }: DefaultPlannerSelectionProps) {
-  const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState("");
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
   );
+  const [isSaved, setIsSaved] = useState(false);
 
-  const { setDefaultPlannerId, loadingDefaultPlanner } = useContext(
+  // selected major which is used to fetch majorDefaultPlanners
+  const [selectedMajor, setSelectedMajor] = useState<Major>({} as Major);
+
+  const { loadingDefaultPlanner, majorToAdd } = useContext(
     DefaultPlannerContext,
   );
+  const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
 
   const {
+    primaryMajor,
     majorDefaultPlanners,
     loadingMajorDefaultPlanners,
+    updateDefaultPlanner,
     updateDefaultPlannerIsPending,
     defaultPlannerId,
-  } = useDefaultPlanners(major.catalogYear, major.name, handleSaveCompleted);
+  } = useDefaultPlanners(selectedMajor, handleSaveCompleted);
+  const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState(defaultPlannerId || "");
 
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
+
+  // if primaryMajor is present, set selectedMajor to primaryMajor
+  useEffect(() => {
+    if (primaryMajor) {
+      for (const major of userMajors) {
+        if (major.id === primaryMajor.id) {
+          setSelectedMajor(major);
+          break;
+        }
+      }
+    }
+  }, [primaryMajor]);
 
   useEffect(() => {
     /**
@@ -69,7 +85,25 @@ export default function DefaultPlannerSelection({
     }
 
     updateSelectedDefaultPlanner();
-  }, [majorDefaultPlanners, selectedDefaultPlanner, defaultPlannerId]);
+  }, [majorDefaultPlanners, selectedDefaultPlanner]);
+
+  // whenever userMajors changes, set selectedMajor to first major
+  useEffect(() => {
+    if (userMajors.length > 0) {
+      setSelectedMajor(userMajors[0]);
+    } else {
+      setSelectedMajor(majorToAdd);
+    }
+  }, [userMajors, majorToAdd]);
+
+  function handleChangeSelectedMajor(
+    event: React.SyntheticEvent | null,
+    newValue: Major | null,
+  ) {
+    if (newValue != null) {
+      setSelectedMajor(newValue);
+    }
+  }
 
   function handleChangeDefaultPlanner(
     event: React.SyntheticEvent | null,
@@ -77,6 +111,7 @@ export default function DefaultPlannerSelection({
   ) {
     if (typeof plannerId === "string") {
       setSelectedDefaultPlanner(plannerId);
+      setIsSaved(false);
     }
   }
 
@@ -84,21 +119,24 @@ export default function DefaultPlannerSelection({
   function handleSaveCompleted() {
     switch (saveButtonClicked) {
       case ButtonName.Save:
+        setIsSaved(true);
         onSaved();
         break;
       // These are slightly delayed to allow the save to complete
       // before the new planner is created or replaced
       case ButtonName.CreateNew:
-        if (onCreateNewPlanner && !loadingDefaultPlanner) {
+        if (!loadingDefaultPlanner) {
           setTimeout(() => {
-            onCreateNewPlanner();
+            console.log("add planner")
+            addPlanner();
           }, 200);
         }
         break;
       case ButtonName.ReplaceCurrent:
-        if (onReplaceCurrentPlanner && !loadingDefaultPlanner) {
+        if (!loadingDefaultPlanner) {
           setTimeout(() => {
-            onReplaceCurrentPlanner();
+            replaceCurrentPlanner();
+            console.log("replace planner")
           }, 200);
         }
         break;
@@ -106,8 +144,8 @@ export default function DefaultPlannerSelection({
   }
 
   function handleSave(buttonName: ButtonName) {
+    updateDefaultPlanner(selectedDefaultPlanner);
     setSaveButtonClicked(buttonName);
-    setDefaultPlannerId(selectedDefaultPlanner);
   }
 
   function handleConfirmReplaceCurrent() {
@@ -137,6 +175,19 @@ export default function DefaultPlannerSelection({
       />
       <div>
         <ModalsProvider>
+          <Typography level="body-lg">Primary Major</Typography>
+          <Select
+            value={selectedMajor}
+            placeholder="Choose one…"
+            variant="plain"
+            onChange={handleChangeSelectedMajor}
+          >
+            {userMajors.map((major, index) => (
+              <Option key={index} value={major}>
+                {major.name} {major.catalogYear}
+              </Option>
+            ))}
+          </Select>
           <SelectDefaultPlanner
             selectedDefaultPlanner={selectedDefaultPlanner}
             onChange={handleChangeDefaultPlanner}
@@ -151,15 +202,31 @@ export default function DefaultPlannerSelection({
         {updateDefaultPlannerIsPending ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
-          <SaveButtons
-            saveButtonName={saveButtonName}
-            isInPlannerPage={isInPlannerPage}
-            onSkip={onSkip}
-            onClickSave={handleClickSave}
-            onClickReplaceCurrent={handleClickReplaceCurrent}
-            onClickCreateNew={handleClickCreateNew}
-            majorSelectionIsValid={true}
-          />
+          <div>
+            {onSkip && (
+              <Button onClick={onSkip} variant="plain">
+                Skip
+              </Button>
+            )}
+            <div>
+              <Button disabled={isSaved} onClick={handleClickSave}>{saveButtonName}</Button>
+              {isInPlannerPage && (
+                <>
+                  <Button
+                    color="warning"
+                    onClick={handleClickReplaceCurrent}
+                  >
+                    Replace Current
+                  </Button>
+                  <Button
+                    onClick={handleClickCreateNew}
+                  >
+                    Create New
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>

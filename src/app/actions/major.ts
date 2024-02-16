@@ -188,29 +188,69 @@ export async function saveUserMajors({
 }
 
 export type MajorDefaultsInput = {
-  name: string;
-  catalogYear: string;
+  userId: string,
+  major?: MajorInput,
 };
 
 export async function getMajorDefaultPlanners({
-  name,
-  catalogYear,
+  userId,
+  major,
 }: MajorDefaultsInput): Promise<PlannerTitle[]> {
-  return await prisma.planner.findMany({
-    where: {
-      major: {
-        name,
-        catalogYear,
+
+  async function getMajorToUse() {
+    if (major) {
+      return major;
+    } else {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          defaultPlannerId: true,
+        }
+      });
+      if (user !== null) {
+        const result = await prisma.planner.findUnique({
+          where: {
+            id: user?.defaultPlannerId!,
+          },
+          select: {
+            major: true,
+          }
+        });
+
+        if (result !== null) {
+          return {
+            name: result?.major?.name as string,
+            catalogYear: result?.major?.catalogYear as string,
+            programType: result?.major?.programType as ProgramType,
+          };
+        }
+        return null;
+      }
+      return null;
+    }
+  }
+
+  const majorToUse = await getMajorToUse();
+
+  // get the default planners for majorToUse
+  if (majorToUse) {
+    return await prisma.planner.findMany({
+      where: {
+        major: majorToUse,
       },
-    },
-    select: {
-      id: true,
-      title: true,
-    },
-    orderBy: {
-      order: "asc",
-    },
-  });
+      select: {
+        id: true,
+        title: true,
+      },
+      orderBy: {
+        order: "asc",
+      },
+    });
+  }
+
+  return [];
 }
 
 export async function getUserDefaultPlannerId(userId: string) {
@@ -224,6 +264,36 @@ export async function getUserDefaultPlannerId(userId: string) {
   });
 
   return user?.defaultPlannerId;
+}
+
+export async function getUserPrimaryMajor(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      defaultPlannerId: true,
+    },
+  });
+
+  if (user === null || user.defaultPlannerId === null) {
+    return null;
+  }
+
+  const planner = await prisma.planner.findUnique({
+    where: {
+      id: user.defaultPlannerId,
+    },
+    select: {
+      major: true,
+    },
+  });
+
+  if (planner !== null) {
+    return planner.major;
+  }
+
+  return null;
 }
 
 export async function updateUserDefaultPlanner({

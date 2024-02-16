@@ -1,33 +1,41 @@
 import {
   getMajorDefaultPlanners,
   getUserDefaultPlannerId,
+  getUserPrimaryMajor,
   updateUserDefaultPlanner,
 } from "@/app/actions/major";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Major } from "@/app/types/Major";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
 export default function useDefaultPlanners(
-  catalogYear: string,
-  majorName: string,
+  major?: Major,
   onUpdated?: () => void,
 ) {
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
   const { data: majorDefaultPlanners, isLoading: loadingMajorDefaultPlanners } =
     useQuery({
-      queryKey: ["majorDefaults", catalogYear, majorName],
+      queryKey: ["majorDefaults", major],
       queryFn: async () => {
         return await getMajorDefaultPlanners({
-          catalogYear,
-          name: majorName,
+          userId: session!.user.id,
+          major,
         });
       },
-      enabled: !!catalogYear && !!majorName,
     });
 
   const { data: defaultPlannerId } = useQuery({
     queryKey: ["userDefaultPlanner", session!.user.id],
     queryFn: async () => {
       return await getUserDefaultPlannerId(session!.user.id);
+    },
+  });
+
+  const { data: primaryMajor } = useQuery({
+    queryKey: ["userPrimaryMajor", session!.user.id],
+    queryFn: async () => {
+      return await getUserPrimaryMajor(session!.user.id);
     },
   });
 
@@ -38,6 +46,7 @@ export default function useDefaultPlanners(
   } = useMutation({
     mutationKey: ["updateUserDefaultPlanner"],
     mutationFn: async (defaultPlannerId: string) => {
+      queryClient.invalidateQueries({ queryKey: ["userDefaultPlanner", session?.user.id] });
       return await updateUserDefaultPlanner({
         userId: session!.user.id,
         defaultPlannerId: defaultPlannerId,
@@ -45,10 +54,12 @@ export default function useDefaultPlanners(
     },
     onSuccess: () => {
       if (onUpdated) onUpdated();
+      console.log("successfully updated default planner");
     },
   });
 
   return {
+    primaryMajor,
     defaultPlannerId,
     majorDefaultPlanners,
     loadingMajorDefaultPlanners,

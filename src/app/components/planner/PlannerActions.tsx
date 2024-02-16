@@ -20,7 +20,7 @@ export default function PlannerActions() {
       onClick: () => setShowExportModal(true),
     },
     {
-      name: "My Majors",
+      name: "Majors",
       icon: <SchoolIcon fontSize="large" />,
       onClick: () => setShowMajorsModal(true),
       disabled: status !== "authenticated",

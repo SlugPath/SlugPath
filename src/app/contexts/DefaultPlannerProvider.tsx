@@ -6,6 +6,8 @@ import { createContext, useState } from "react";
 
 import { getPlannerById } from "../actions/planner";
 import useMajorSelection from "../components/majorSelection/useMajorSelection";
+import { Major } from "../types/Major";
+import { getUserDefaultPlannerId } from "../actions/major";
 
 export const DefaultPlannerContext = createContext(
   {} as DefaultPlannerContextProps,
@@ -26,31 +28,25 @@ export function DefaultPlannerProvider({
     errorSavingMajor,
   } = useMajorSelection(session?.user.id);
 
-  const [defaultPlannerId, setDefaultPlannerId] = useState<string>("");
+  // majorToAdd is the major the user may be about to add to their list of majors,
+  // so that the defaultPlannerSelection component can display default planners for this major
+  // as users search for a major to add.
+  const [majorToAdd, setMajorToAdd] = useState<Major>({} as Major);
 
-  // TODO - figure out how to get and set user default planner
-
-  // Get user major data
-  // const {
-  //   data: userMajorData,
-  //   isLoading: loadingMajorData,
-  //   error: errorMajorData,
-  // } = useQuery({
-  //   queryKey: ["userMajorData", session?.user.id],
-  //   queryFn: async () => {
-  //     const data = await getUserMajorById(session?.user.id ?? "");
-  //     setDefaultPlannerId(data?.defaultPlannerId ?? "");
-  //     return data;
-  //   },
-  //   initialData: null,
-  //   enabled: !!session?.user.id,
-  // });
+  const { data: defaultPlannerId } = useQuery({
+    queryKey: ["userDefaultPlanner", session?.user.id],
+    queryFn: async () => {
+      return await getUserDefaultPlannerId(session?.user.id!);
+    },
+    initialData: "",
+    enabled: !!session?.user.id
+  })
 
   // Get the default planner data
   const { data: defaultPlanner, isLoading: loadingDefaultPlanner } = useQuery({
     queryKey: ["defaultPlanner", defaultPlannerId],
     queryFn: async () => {
-      return await getPlannerById(defaultPlannerId);
+      return await getPlannerById(defaultPlannerId!);
     },
     initialData: initialPlanner(),
     enabled: !!defaultPlannerId,
@@ -60,10 +56,11 @@ export function DefaultPlannerProvider({
     <DefaultPlannerContext.Provider
       value={{
         defaultPlanner,
-        setDefaultPlannerId,
         loadingDefaultPlanner,
         userMajors,
         userMajorsIsLoading,
+        majorToAdd,
+        setMajorToAdd,
         saveMajors,
         loadingSaveMajor,
         errorSavingMajor,

@@ -76,8 +76,9 @@ export interface PlannersContextProps {
 
 export interface DefaultPlannerContextProps {
   userMajors: MajorOutput[];
+  majorToAdd: Major;
+  setMajorToAdd: SetState<Major>;
   defaultPlanner: PlannerData;
-  setDefaultPlannerId: SetState<string>;
   loadingDefaultPlanner: boolean;
   userMajorsIsLoading: boolean;
   saveMajors: (majors: MajorOutput[]) => void;

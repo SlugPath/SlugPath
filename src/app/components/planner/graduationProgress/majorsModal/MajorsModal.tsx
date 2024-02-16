@@ -5,10 +5,11 @@ import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { Major } from "@/app/types/Major";
-import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useContext } from "react";
 
 import { RequirementsComponent } from "./RequirementsComponent";
+import DefaultPlannerSelection from "@/app/components/majorSelection/defaultPlannerSelection/DefaultPlannerSelection";
 
 export default function MajorsModal() {
   const {
@@ -20,7 +21,7 @@ export default function MajorsModal() {
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
   const { majorsAllowedToEdit } = useContext(PermissionsContext);
   const { userMajors } = useContext(DefaultPlannerContext);
-  const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
+  // const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
 
   function hasPermissionToEdit(major: Major) {
     return majorsAllowedToEdit.some(
@@ -33,15 +34,15 @@ export default function MajorsModal() {
     setShowMajorRequirementsEditModal(true);
   }
 
-  function handleCreateNewPlanner() {
-    addPlanner();
-    setShowModal(false);
-  }
+  // function handleCreateNewPlanner() {
+  //   addPlanner();
+  //   setShowModal(false);
+  // }
 
-  function handleReplaceCurrentPlanner() {
-    replaceCurrentPlanner();
-    setShowModal(false);
-  }
+  // function handleReplaceCurrentPlanner() {
+  //   replaceCurrentPlanner();
+  //   setShowModal(false);
+  // }
 
   return (
     <Modal
@@ -53,54 +54,59 @@ export default function MajorsModal() {
     >
       <Sheet
         sx={{
-          width: "60%",
+          width: "100%",
           margin: 10,
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
         }}
       >
-        <Typography
-          level="h4"
-          className="flex flex-col space-y-2 justify-between mb-4"
-        >
-          My Majors
-        </Typography>
-        <div className="flex flex-row space-x-2 grid grid-cols-2 w-full">
-          <div className="flex overflow-y-scroll h-[80vh] cols-span-1">
-            <MajorSelection
-              saveButtonName="Save"
-              onSaved={() => setShowModal(false)}
-              isInPlannerPage={true}
-              onCreateNewPlanner={handleCreateNewPlanner}
-              onReplaceCurrentPlanner={handleReplaceCurrentPlanner}
-            />
-          </div>
-          <div className="space-y-2 overflow-y-scroll w-full h-[80vh] cols-span-1">
-            {userMajors.map((major, index) => {
-              const majorRequirements = getRequirementsForMajor(major.id);
+        <div className="flex flex-row space-x-3 grid grid-cols-4 w-full">
+          <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-2">
+            <MajorSelection />
+            <div className="space-y-2 w-full">
+              {userMajors.map((major, index) => {
+                const majorRequirements = getRequirementsForMajor(major.id);
 
-              if (majorRequirements === undefined) {
+                if (majorRequirements === undefined) {
+                  return (
+                    <div key={index}>
+                      Missing requirements for {major.name} {major.catalogYear}
+                    </div>
+                  );
+                }
+
                 return (
-                  <div key={index}>
-                    Missing requirements for {major.name} {major.catalogYear}
-                  </div>
+                  <RequirementsComponent
+                    key={index}
+                    major={major}
+                    requirements={majorRequirements}
+                    parents={0}
+                    hideTitle={false}
+                    hasEditPermission={hasPermissionToEdit(major)}
+                    onClickEdit={handleClickEditRequirements}
+                  />
                 );
-              }
-
-              return (
-                <RequirementsComponent
-                  key={index}
-                  major={major}
-                  requirements={majorRequirements}
-                  parents={0}
-                  hideTitle={false}
-                  hasEditPermission={hasPermissionToEdit(major)}
-                  onClickEdit={handleClickEditRequirements}
-                />
-              );
-            })}
+              })}
+            </div>
           </div>
+          <Card variant="soft" className="col-span-2 overflow-y-scroll h-[80vh]">
+            <Typography
+              level="h4"
+              className="flex flex-col space-y-2 justify-between mb-2"
+            >
+              My Default Planner
+            </Typography>
+            <DefaultPlannerSelection
+              userMajors={userMajors}
+              onSaved={() => {}}
+              saveButtonName={"Save"}
+              isInPlannerPage={true}
+              
+              // onCreateNewPlanner={handleCreateNewPlanner}
+              // onReplaceCurrentPlanner={handleReplaceCurrentPlanner}
+            />
+          </Card>
         </div>
         <ModalClose variant="plain" />
       </Sheet>
