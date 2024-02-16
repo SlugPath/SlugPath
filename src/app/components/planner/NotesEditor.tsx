@@ -1,8 +1,12 @@
+// Core CSS
+import "primeicons/primeicons.css";
+import { Editor } from "primereact/editor";
+// Theme
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { useState } from "react";
-import { Editor } from 'primereact/editor';
-import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Theme
-import 'primereact/resources/primereact.min.css'; // Core CSS
-import 'primeicons/primeicons.css'; // Icons
+
+// Icons
 
 export interface NotesEditorProps {
   content: string;
@@ -22,12 +26,10 @@ export default function NotesEditor({
   };
 
   return (
-    <>
-      <Editor
-        style={{ height: '320px' }}
-        value={text}
-        onTextChange={handleTextChange}
-      />
-    </>
+    <Editor
+      style={{ height: "320px" }}
+      value={text}
+      onTextChange={handleTextChange}
+    />
   );
 }
