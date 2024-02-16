@@ -21,7 +21,7 @@ import {
 } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { SyntheticEvent, useState } from "react";
 
 import CloseIconButton from "../buttons/CloseIconButton";
