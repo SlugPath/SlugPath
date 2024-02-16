@@ -29,14 +29,7 @@ import StyledAccordion from "../planner/StyledAccordion";
 
 const materialTheme = extendMaterialTheme();
 
-export default function PermissionsAccordion({
-  permissions,
-  majors,
-  onAddMajorEditPermission,
-  onRemoveMajorEditPermission,
-  onRemovePermissions,
-  onUpdateMajorEditPermissionExpirationDate,
-}: {
+export interface PermissionsAccordionProps {
   permissions: Permissions;
   majors: Major[];
   onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
@@ -47,7 +40,15 @@ export default function PermissionsAccordion({
     major: Major,
     expirationDate: Date,
   ) => void;
-}) {
+}
+export default function PermissionsAccordion({
+  permissions,
+  majors,
+  onAddMajorEditPermission,
+  onRemoveMajorEditPermission,
+  onRemovePermissions,
+  onUpdateMajorEditPermissionExpirationDate,
+}: PermissionsAccordionProps) {
   return (
     <StyledAccordion>
       <AccordionSummary>

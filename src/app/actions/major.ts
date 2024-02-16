@@ -4,39 +4,28 @@ import prisma from "@/lib/prisma";
 
 import { PlannerTitle } from "../types/Planner";
 
-export async function getMajors() {
-  return await prisma.major.findMany({
-    orderBy: {
-      name: "asc",
-    },
-    select: {
-      name: true,
-      id: true,
-      catalogYear: true,
-    },
-  });
-}
-
-export async function getAllMajorsByCatalogYear(catalogYear: string) {
-  const res = await prisma.major.findMany({
-    where: {
-      catalogYear,
-    },
-    select: {
-      name: true,
-      id: true,
-      catalogYear: true,
-    },
+export async function getMajors(catalogYear?: string) {
+  const query: any = {
     orderBy: [
-      {
-        name: "asc",
-      },
       {
         catalogYear: "desc",
       },
+      {
+        name: "asc",
+      },
     ],
-  });
-  return res.map((major) => major.name);
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
 }
 
 export type UserMajorOutput = {

@@ -7,13 +7,7 @@ import useMajors from "./useMajors";
 
 const PermissionsAccordion = lazy(() => import("./PermissionsAccordion"));
 
-export default function PermissionsList({
-  permissionsList,
-  onAddMajorEditPermission,
-  onRemoveMajorEditPermission,
-  onRemovePermissions,
-  onUpdateMajorEditPermissionExpirationDate,
-}: {
+export interface PermissionsListProps {
   permissionsList: Permissions[];
   onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
   onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
@@ -23,7 +17,15 @@ export default function PermissionsList({
     major: Major,
     expirationDate: Date,
   ) => void;
-}) {
+}
+
+export default function PermissionsList({
+  permissionsList,
+  onAddMajorEditPermission,
+  onRemoveMajorEditPermission,
+  onRemovePermissions,
+  onUpdateMajorEditPermissionExpirationDate,
+}: PermissionsListProps) {
   const { majors } = useMajors();
 
   return (

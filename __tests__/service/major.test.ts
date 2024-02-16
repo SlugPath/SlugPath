@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import {
-  getAllMajorsByCatalogYear,
   getMajorDefaultPlanners,
+  getMajors,
   getUserMajorByEmail,
   updateUserMajor,
 } from "@actions/major";
@@ -217,7 +217,7 @@ it("should return an empty list", async () => {
 });
 
 it("should return correct number of majors", async () => {
-  const res = await getAllMajorsByCatalogYear("2020-2021");
+  const res = await getMajors("2020-2021");
   expect(res).toHaveLength(0);
 
   await prisma.major.create({
@@ -227,7 +227,7 @@ it("should return correct number of majors", async () => {
     },
   });
 
-  const res2 = await getAllMajorsByCatalogYear("2020-2021");
+  const res2 = await getMajors("2020-2021");
   expect(res2).toHaveLength(1);
 });
 

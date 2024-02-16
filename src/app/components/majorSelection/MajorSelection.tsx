@@ -1,5 +1,5 @@
 import { years } from "@/lib/defaultPlanners";
-import { getAllMajorsByCatalogYear } from "@actions/major";
+import { getMajors } from "@actions/major";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import ReportIcon from "@mui/icons-material/Report";
@@ -48,7 +48,8 @@ export default function MajorSelection({
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear],
     queryFn: async () => {
-      return await getAllMajorsByCatalogYear(catalogYear);
+      const res = await getMajors(catalogYear);
+      return res.map((m) => m.name);
     },
     enabled: catalogYear !== "",
   });
@@ -59,9 +60,7 @@ export default function MajorSelection({
     return major !== "" && catalogYear !== "" && isLoggedIn;
   }, [major, catalogYear, session?.user.id]);
 
-  const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
-    ButtonName.Save,
-  );
+  const [saveButtonClicked, setSaveButtonClicked] = useState(ButtonName.Save);
   const [showSelectionError, setShowSelectionError] = useState(false);
   const { onSaveMajor, loadingSaveMajor, errorSavingMajorData } =
     useMajorSelection(session?.user.id, handleSaveCompleted);
@@ -81,9 +80,6 @@ export default function MajorSelection({
 
   useEffect(() => {
     if (userMajorData) {
-      console.log(
-        `Updating userMajor data ${JSON.stringify(userMajorData, null, 2)}`,
-      );
       updateUserMajor(
         userMajorData.name,
         userMajorData.catalogYear,
@@ -204,6 +200,7 @@ export default function MajorSelection({
     return <CircularProgress variant="plain" color="primary" />;
   }
 
+  // Alerts
   const SelectionErrorAlert = () => (
     <div>
       {showSelectionError && (
@@ -237,6 +234,7 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4 w-full">
+      {/* Begin Alerts and Inputs */}
       <SelectionErrorAlert />
       <LoadingMajorDataErrorAlert />
       <SavingMajorDataErrorAlert />
@@ -263,6 +261,8 @@ export default function MajorSelection({
         </div>
       </div>
       <div>
+        {/* End Alerts and Inputs */}
+        {/* Begin Default Planner and Save Buttons */}
         <CourseInfoProvider>
           <SelectDefaultPlanner
             selectedDefaultPlanner={selectedDefaultPlanner}

@@ -27,7 +27,7 @@ export default function ReplaceRequirementsModal() {
   const { data: requirementLists, refetch: refetchRequirementLists } = useQuery(
     {
       queryKey: ["getAllRequirementLists"],
-      queryFn: () => getAllRequirementLists(),
+      queryFn: async () => await getAllRequirementLists(),
     },
   );
 

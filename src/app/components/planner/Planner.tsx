@@ -1,5 +1,8 @@
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
-import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
+import {
+  CourseInfoContext,
+  CourseInfoProvider,
+} from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
 import { PermissionsProvider } from "@contexts/PermissionsProvider";
@@ -97,14 +100,15 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 }
 
-// this solves the bug of <Search /> not working after another <Search /> is interacted with in MajorProgressModal
-// multiple <Search /> components existing at the same time is problematic
+// SearchContainer is used to hide the main Search component when another modal that uses the Search component is open,
+// such as the CourseInfoModal or MajorProgressModal.
 function SearchContainer() {
+  const { showCourseInfoModal } = useContext(CourseInfoContext);
   const { showMajorProgressModal } = useContext(ModalsContext);
 
   return (
     <>
-      {!showMajorProgressModal ? (
+      {!showMajorProgressModal && !showCourseInfoModal ? (
         <Search displayCustomCourseSelection={true} />
       ) : (
         <Card className="w-80 h-full" />
