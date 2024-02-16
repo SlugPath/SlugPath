@@ -38,9 +38,6 @@ export default function PlannerTabs() {
   const [plannerBeingEdited, setPlannerBeingEdited] = useState<string | null>(
     null,
   );
-  // console.log("planners: ", planners);
-  // console.log("plannerBeingEdited: ", plannerBeingEdited);
-  // console.log("activePlanner: ", activePlanner);
 
   const [deleteAlert, setDeleteAlert] =
     useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
@@ -76,12 +73,10 @@ export default function PlannerTabs() {
   };
 
   const handleBlur = (title: string) => {
-    // console.log("handleBlur");
     title.length >= 2 && setPlannerBeingEdited(null);
   };
 
   const handleTabChange = (id: string) => {
-    console.log("handleTabChange");
     switchPlanners(id);
   };
 
@@ -171,8 +166,6 @@ function CustomTab({
   const [hovering, setHovering] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [renameFromDropDown, setRenameFromDropDown] = useState(false);
-  //console.log("renameFromDropDown: ", renameFromDropDown);
-  //console.log("isEditing:", isEditing);
 
   function backgroundColor() {
     if (mode === "light") {
@@ -206,10 +199,6 @@ function CustomTab({
     } else {
       return "#F1F5F9";
     }
-  }
-
-  function handleClick() {
-    onClick();
   }
 
   function handleDoubleClick() {
@@ -246,8 +235,7 @@ function CustomTab({
   };
 
   const cursorStyle = hovering ? { cursor: "pointer" } : {};
-  // input ref set to null -> when you click input rename change input ref
-  // dynamic map number of input references -> pass a refernce to each
+
   return (
     <div
       className="p-2 rounded-3xl flex items-center justify-between"
@@ -259,7 +247,7 @@ function CustomTab({
       }}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
-      onClick={handleClick}
+      onClick={onClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
     >
@@ -269,7 +257,7 @@ function CustomTab({
           <Input
             variant="soft"
             value={text}
-            autoFocus
+            autoFocus={isEditing}
             onFocus={(e) => e.currentTarget.select()}
             error={text.length < 2}
             size="sm"
@@ -286,7 +274,6 @@ function CustomTab({
             }}
             onChange={(e) => setText(e.target.value)}
             onBlur={() => handleBlurEditing(text)}
-            /* onBlur={() => onEndEditing(text)} */
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 onEndEditing(text);
@@ -300,10 +287,10 @@ function CustomTab({
       <DropDownButton
         id={id}
         title={title}
+        onRightClick={dropDownOpen}
         onDeleteButtonClick={onOpenDeleteAlert}
         onDuplicateButtonClick={onDuplicate}
         onRenameButtonClick={handleRename}
-        onRightClick={dropDownOpen}
         dropDownClosed={handleDropDownClosed}
       />
     </div>

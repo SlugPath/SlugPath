@@ -78,7 +78,6 @@ export function usePlanners(
    * @param id unique planner id
    */
   function switchPlanners(id: string) {
-    console.log(`switchPlanners: ${id}`);
     setActivePlanner(id);
   }
 
@@ -169,10 +168,8 @@ export function usePlanners(
    * `duplicatePlanner` creates a new planner from the inputted planner id
    * @param id unique planner id
    */
-  // title needs to be "Current Planer Name Copy"
   function duplicatePlanner(sourceID: string) {
     const sourcePlannerData = getPlanner(sourceID);
-    //console.log("source title: ",sourcePlannerData.title );
     const id = uuidv4();
     setPlanners((prev) => {
       return [

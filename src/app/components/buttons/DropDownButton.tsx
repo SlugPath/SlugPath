@@ -17,20 +17,20 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 interface DropDownButtonProps {
   id: string;
   title: string;
+  onRightClick: boolean;
   onDeleteButtonClick: (id: string, title: string) => void;
   onDuplicateButtonClick: () => void;
   onRenameButtonClick: () => void;
-  onRightClick: boolean;
   dropDownClosed: (isClosed: boolean) => void;
 }
 
 export default function DropDownButton({
   id,
   title,
+  onRightClick,
   onDeleteButtonClick,
   onDuplicateButtonClick,
   onRenameButtonClick,
-  onRightClick,
   dropDownClosed,
 }: DropDownButtonProps) {
   const [open, setOpen] = useState(false);
@@ -38,7 +38,6 @@ export default function DropDownButton({
 
   const handleOpenChange = useCallback(
     (_: React.SyntheticEvent | null, isOpen: boolean) => {
-      //console.log("isOpen:", isOpen);
       setOpen(isOpen);
       if (isOpen == false) {
         dropDownClosed(false);
