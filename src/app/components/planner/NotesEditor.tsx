@@ -1,5 +1,8 @@
-import { Textarea } from "@mui/joy";
 import { useState } from "react";
+import { Editor } from 'primereact/editor';
+import 'primereact/resources/themes/lara-light-indigo/theme.css'; // Theme
+import 'primereact/resources/primereact.min.css'; // Core CSS
+import 'primeicons/primeicons.css'; // Icons
 
 export interface NotesEditorProps {
   content: string;
@@ -12,18 +15,19 @@ export default function NotesEditor({
 }: NotesEditorProps) {
   const [text, setText] = useState(content);
 
+  const handleTextChange = (e: any) => {
+    // The value is in e.htmlValue for PrimeReact Editor
+    setText(e.htmlValue);
+    onUpdateNotes(e.htmlValue);
+  };
+
   return (
-    <Textarea
-      minRows={7}
-      onBlur={() => onUpdateNotes(text)}
-      value={text}
-      onChange={(e) => {
-        setText(e.target.value);
-      }}
-      sx={{
-        outline: "none",
-      }}
-      className="border-0"
-    />
+    <>
+      <Editor
+        style={{ height: '320px' }}
+        value={text}
+        onTextChange={handleTextChange}
+      />
+    </>
   );
 }
