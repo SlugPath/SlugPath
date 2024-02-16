@@ -40,7 +40,6 @@
     "npm": "^10.4.0",
     "pino": "^8.17.2",
     "pino-logflare": "^0.4.2",
-    "primeicons": "^6.0.1",
     "quill": "^1.3.7",
     "react": "^18.2.0",
     "react-datepicker": "^5.0.0",
