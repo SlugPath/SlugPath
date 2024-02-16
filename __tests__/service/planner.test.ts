@@ -1,19 +1,19 @@
-import { coursesBy, getAllDepartments } from "@/app/actions/course";
+import { PlannerData } from "@/app/types/Planner";
+import { initialPlanner } from "@/lib/plannerUtils";
+import prisma from "@/lib/prisma";
+import { coursesBy, getAllDepartments } from "@actions/course";
 import {
   getAllMajorsByCatalogYear,
   getMajorDefaultPlanners,
   getUserMajorByEmail,
   updateUserMajor,
-} from "@/app/actions/major";
+} from "@actions/major";
 import {
   deletePlanner,
   getAllPlanners,
   getPlanner,
   saveAllPlanners,
-} from "@/app/actions/planner";
-import { PlannerData } from "@/app/types/Planner";
-import { initialPlanner } from "@/lib/plannerUtils";
-import prisma from "@/lib/prisma";
+} from "@actions/planner";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 

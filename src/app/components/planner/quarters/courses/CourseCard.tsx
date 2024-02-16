@@ -9,7 +9,7 @@ import {
 } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import CloseIconButton from "@components/buttons/CloseIconButton";
-import { ModalsContext } from "@contexts/ModalsProvider";
+import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { CourseTerm, StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
@@ -23,8 +23,8 @@ import CourseLabel from "./CourseLabel";
 export interface CourseCardProps {
   course: StoredCourse;
   index: number;
-  provided: DraggableProvided;
-  isCustom: boolean;
+  isCustom?: boolean;
+  provided?: DraggableProvided;
   quarterId?: string;
   customDeleteCourse?: () => void;
 }
@@ -34,13 +34,13 @@ export default function CourseCard({
   index,
   quarterId,
   provided,
-  isCustom,
+  isCustom = false,
   customDeleteCourse,
 }: CourseCardProps) {
   const { deleteCourse, getCourseLabels, handleRemoveCustom } =
     useContext(PlannerContext);
-  const { setDisplayCourse } = useContext(ModalsContext);
-  const { onShowCourseInfoModal } = useContext(ModalsContext);
+  const { setDisplayCourse, onShowCourseInfoModal } =
+    useContext(CourseInfoContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
@@ -79,15 +79,15 @@ export default function CourseCard({
 
   return (
     <Card
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
+      ref={provided?.innerRef}
+      {...provided?.draggableProps}
+      {...provided?.dragHandleProps}
       size="sm"
       variant="soft"
       color={cardColor()}
       className="hover:opacity-50"
       style={{
-        ...getItemStyle(provided.draggableProps.style),
+        ...getItemStyle(provided?.draggableProps.style),
         height: "35px",
         justifyContent: "center",
       }}
@@ -134,11 +134,11 @@ interface TitleProps {
   quarterId?: string;
 }
 const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
+  const checkOffered = course && (isCSE(course) || isCustomCourse(course));
   return (
     <Typography
       endDecorator={
-        course &&
-        isCSE(course) &&
+        checkOffered &&
         !isOffered(
           course.quartersOffered,
           extractTermFromQuarter(quarterId),

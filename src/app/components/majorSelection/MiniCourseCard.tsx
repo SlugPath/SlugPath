@@ -1,5 +1,5 @@
 import { isCustomCourse } from "@/lib/plannerUtils";
-import { ModalsContext } from "@contexts/ModalsProvider";
+import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { CourseTerm, StoredCourse } from "@customTypes/Course";
 import { Quarter } from "@customTypes/Quarter";
 import { Card, Link } from "@mui/joy";
@@ -12,7 +12,8 @@ export function MiniCourseCard({
   course: StoredCourse;
   quarter: Quarter;
 }) {
-  const { onShowCourseInfoModal, setDisplayCourse } = useContext(ModalsContext);
+  const { onShowCourseInfoModal, setDisplayCourse } =
+    useContext(CourseInfoContext);
 
   function courseTitle(course: StoredCourse) {
     if (course.departmentCode && course.number) {

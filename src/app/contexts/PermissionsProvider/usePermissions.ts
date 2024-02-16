@@ -1,10 +1,10 @@
-import useUserPermissions from "@/app/hooks/useUserPermissions";
-import { Permissions } from "@/app/types/Permissions";
+import { getPermissions, savePermissions } from "@actions/permissions";
+import { Permissions } from "@customTypes/Permissions";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-import { getPermissions, savePermissions } from "../../actions/permissions";
+import useUserPermissions from "./useUserPermissions";
 
 export default function usePermissions() {
   const [permissionsList, setPermissionsList] = useState<Permissions[]>([]);

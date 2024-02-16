@@ -1,7 +1,7 @@
-import { PermissionsContextProps } from "@customTypes/Context";
 import { createContext } from "react";
 
-import usePermissions from "../components/permissionsModal/usePermissions";
+import { PermissionsContextProps } from "./Types";
+import usePermissions from "./usePermissions";
 
 export const PermissionsContext = createContext({} as PermissionsContextProps);
 

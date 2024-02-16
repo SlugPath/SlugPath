@@ -1,7 +1,7 @@
-import { getAllRequirementLists } from "@/app/actions/majorRequirements";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { RequirementList } from "@/app/types/Requirements";
+import { getAllRequirementLists } from "@actions/majorRequirements";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { RequirementList } from "@customTypes/Requirements";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -15,10 +15,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 
 import StyledAccordion from "../../StyledAccordion";
-import { RequirementsComponent } from "./RequirementsComponent";
+import { Requirements } from "./Requirements";
 
-// RL = Requirement List
-export default function ReplaceRLModal() {
+export default function ReplaceRequirementsModal() {
   const { setShowReplaceRLModal: setShowModal, showReplaceRLModal: showModal } =
     useContext(ModalsContext);
   const { majorRequirements, updateRequirementList } = useContext(
@@ -28,7 +27,7 @@ export default function ReplaceRLModal() {
   const { data: requirementLists, refetch: refetchRequirementLists } = useQuery(
     {
       queryKey: ["getAllRequirementLists"],
-      queryFn: () => getAllRequirementLists(),
+      queryFn: async () => await getAllRequirementLists(),
     },
   );
 
@@ -118,7 +117,7 @@ function RequirementLists({
             </div>
           </AccordionSummary>
           <AccordionDetails>
-            <RequirementsComponent
+            <Requirements
               requirements={requirementList}
               parents={0}
               hideTitle={true}

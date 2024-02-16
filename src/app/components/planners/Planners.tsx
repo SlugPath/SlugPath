@@ -1,6 +1,6 @@
 "use client";
 
-import { PlannersProvider } from "@/app/contexts/PlannersProvider";
+import { PlannersProvider } from "@contexts/PlannersProvider";
 import { PlannerData } from "@customTypes/Planner";
 
 import PlannerList from "./PlannerList";

@@ -150,6 +150,7 @@ export function findCourseById(
   courseState: PlannerData,
   id: string,
 ): StoredCourse {
+  console.log(`findCourseById ${id}`);
   const course = courseState.courses.find((c) => c.id === id);
   if (course === undefined) throw new Error("course not found");
   return course;
@@ -298,7 +299,16 @@ export function extractTermFromQuarter(
   if (qid === undefined) return undefined;
 
   const tokens = qid.split("-");
-  return tokens[tokens.length - 1] as Term;
+  const term = tokens[tokens.length - 1];
+  if (
+    term !== "Fall" &&
+    term !== "Winter" &&
+    term !== "Spring" &&
+    term !== "Summer"
+  ) {
+    return undefined;
+  }
+  return term as Term;
 }
 
 export function isOffered(

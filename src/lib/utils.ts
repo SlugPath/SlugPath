@@ -50,10 +50,16 @@ export function compareCoursesByNum(a: StoredCourse, b: StoredCourse): number {
   return 0;
 }
 
-export function toStoredCourse(course: Course): StoredCourse {
+export function toStoredCourse({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  department: _,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  prerequisites: __,
+  ...rest
+}: Course): StoredCourse {
   return {
-    ...course,
-    description: course.description ?? "",
+    ...rest,
+    description: rest.description ?? "",
     labels: [],
     id: uuidv4(),
   };

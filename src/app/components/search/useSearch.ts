@@ -1,5 +1,5 @@
-import { coursesBy, getAllDepartments } from "@/app/actions/course";
 import { geOptions } from "@/lib/consts";
+import { coursesBy, getAllDepartments } from "@actions/course";
 import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
