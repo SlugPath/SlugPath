@@ -7,7 +7,7 @@
 /coverage
 
 # data
-planners_*.json
+# planners_*.json
 courses.csv
 
 # next.js

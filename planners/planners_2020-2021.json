@@ -142,13 +142,16 @@
       ["AM 112", "STAT 131"],
       ["Upper-div elective"]
     ],
-    "Year 4": [["AM 129", "Upper-div elective"], ["AM 147", "AM 170A"], ["AM 170B"]],
+    "Year 4": [
+      ["AM 129", "Upper-div elective"],
+      ["AM 147", "AM 170A"],
+      ["AM 170B"]
+    ],
     "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/applied-mathematics/applied-mathematics-bs/",
     "major": "Applied Mathematics B.S.",
     "planner_name": "Plan 2 for Frosh"
   },
   {
-
     "Year 1": [
       ["CSE 20", "AM 100", "Lower-div elective"],
       ["AM 112", "STAT 131", "Lower-div elective"],
@@ -428,7 +431,11 @@
       ["BIOC 100B", "BME 160", "STAT 131"],
       ["AM 115", "BME 163"]
     ],
-    "Year 4": [["BME 129A", "BME 80G"], ["BME 129B", "STAT 132"], ["BME 129C", "Elective"]],
+    "Year 4": [
+      ["BME 129A", "BME 80G"],
+      ["BME 129B", "STAT 132"],
+      ["BME 129C", "Elective"]
+    ],
     "major": "Biomolecular Engineering and Bioinformatics B.S.",
     "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/biomolecular-engineering/biomolecular-engineering-and-bioinformatics-bs/",
     "planner_name": "Biomolecular Engineering Concentration Plan 1"
@@ -557,7 +564,11 @@
     ],
     "Year 4": [
       ["Business Management elective", "Computer course"],
-      ["ECON 197 or ECON 104", "ECON 101, ECON 133 or ECON 135 Business Management elective", "Field Study internship (optional)"],
+      [
+        "ECON 197 or ECON 104",
+        "ECON 101, ECON 133 or ECON 135 Business Management elective",
+        "Field Study internship (optional)"
+      ],
       ["Field Study optional"]
     ],
     "major": "Business Management Economics B.A.",
@@ -574,7 +585,11 @@
     ],
     "Year 4": [
       ["ECON 113", "Business Management elective"],
-      ["Business Management elective", "ECON 101, ECON 133 or ECON 135 Business Management elective", "ECON 197 or ECON 104"],
+      [
+        "Business Management elective",
+        "ECON 101, ECON 133 or ECON 135 Business Management elective",
+        "ECON 197 or ECON 104"
+      ],
       ["Field Study (optional)", "Computer Course"]
     ],
     "major": "Business Management Economics B.A.",
@@ -783,7 +798,11 @@
       ["Cognitive core"]
     ],
     "Year 4": [
-      ["Cognitive elective", "Cognitive elective seminar", "Interdisciplinary elective"],
+      [
+        "Cognitive elective",
+        "Cognitive elective seminar",
+        "Interdisciplinary elective"
+      ],
       ["Interdisciplinary elective UD", "Interdisciplinary elective"],
       ["Interdisciplinary elective"]
     ],
@@ -1382,7 +1401,11 @@
     ],
     "Year 4": [
       ["ECON 113", "ECON elective"],
-      ["ECON elective", "ECON 197 or ECON 104 DC", "Field Study (Internship) optional"],
+      [
+        "ECON elective",
+        "ECON 197 or ECON 104 DC",
+        "Field Study (Internship) optional"
+      ],
       ["Field Study optional", "ECON elective"]
     ],
     "major": "Economics B.A.",
@@ -1403,7 +1426,11 @@
     ],
     "Year 4": [
       ["Econ elective"],
-      ["Math elective", "ECON 197 or  ECON 104", "Field Study internship (optional)"],
+      [
+        "Math elective",
+        "ECON 197 or  ECON 104",
+        "Field Study internship (optional)"
+      ],
       ["Field Study optional"]
     ],
     "major": "Mathematics Combined B.A.",
@@ -1911,7 +1938,11 @@
       ["FMST 100"],
       ["FMST elective", "FMST elective"]
     ],
-    "Year 4": [["FMST elective", "FMST elective"], ["FMST elective", "FMST elective"], ["FMST 194 or 195"]],
+    "Year 4": [
+      ["FMST elective", "FMST elective"],
+      ["FMST elective", "FMST elective"],
+      ["FMST 194 or 195"]
+    ],
     "major": "Feminist Studies B.A.",
     "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/feminist-studies/feminist-studies-ba/",
     "planner_name": "2 Year Transfer Plan"
@@ -2191,7 +2222,11 @@
         "FILM upper-division production",
         "FILM 194"
       ],
-      ["FILM upper-division elective", "FILM upper-division production", "FILM 199"],
+      [
+        "FILM upper-division elective",
+        "FILM upper-division production",
+        "FILM 199"
+      ],
       ["FILM upper-division elective", "FILM 195/ FILM 196/ FILM 197"]
     ],
     "major": "Film and Digital Media B.A.",
@@ -2218,7 +2253,11 @@
     ],
     "Year 4": [
       ["ECON elective", "ECON elective", "Area Study"],
-      ["ECON 197 or ECON 104", "ECON elective", "Field Study Internship (optional)"],
+      [
+        "ECON 197 or ECON 104",
+        "ECON elective",
+        "Field Study Internship (optional)"
+      ],
       ["ECON elective", "Field Study optional", "Area Study"]
     ],
     "major": "Global Economics B.A.",
@@ -2238,7 +2277,11 @@
     ],
     "Year 4": [
       ["ECON 113", "ECON elective"],
-      ["ECON elective", "ECON 197 or ECON 104", "Field Study Internship (optional)"],
+      [
+        "ECON elective",
+        "ECON 197 or ECON 104",
+        "Field Study Internship (optional)"
+      ],
       ["Field Study optional"],
       []
     ],
@@ -2471,7 +2514,9 @@
       ["PHYS 6B or  PHYS 6C", "SPAN 5M"],
       ["BIOL 189", "BIOL 189W"]
     ],
-    "planner_name": "Human Biology B.S. Planner 1"
+    "major": "Human Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/human-biology-bs/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2482,11 +2527,13 @@
       ["BIOL 101", "SPAN 3"]
     ],
     "Year 4": [
-      ["BIOL 110", "Upper-division elective"],
+      ["BIOL 110", "Upper-division elective", "SPAN 4"],
       ["BIOL 130 & BIOL 130L", "SPAN 5M"],
-      ["Upper-division elective", "BIOL 189"]
+      ["Upper-division elective", "BIOL 189", "BIOL 189W"]
     ],
-    "planner_name": "Human Biology B.S. Planner 2"
+    "major": "Human Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/human-biology-bs/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [["ITAL 1"], ["ITAL 2"], ["ITAL 3"]],
@@ -2508,7 +2555,9 @@
       ["LIT 185Z and Italian-related DC seminar course"],
       ["Upper-division Italian LIT course"]
     ],
-    "planner_name": "Italian Studies B.A. Planner 1"
+    "major": "Italian Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/italian-studies-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2534,7 +2583,9 @@
       ],
       ["ITAL 106", "Italian-related upper-division elective"]
     ],
-    "planner_name": "Italian Studies B.A. Planner 2"
+    "major": "Italian Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/italian-studies-ba/",
+    "planner_name": "Transfer Plan (First-year Italian Completed)"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2558,7 +2609,9 @@
       ],
       ["ITAL 106"]
     ],
-    "planner_name": "Italian Studies B.A. Planner 3"
+    "major": "Italian Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/italian-studies-ba/",
+    "planner_name": "Transfer Plan (2 Years Italian Completed)"
   },
   {
     "Year 1": [
@@ -2581,7 +2634,9 @@
       ["Upper division additional core or elective 4"],
       ["Exit seminar or thesis DC"]
     ],
-    "planner_name": "Jewish Studies B.A. Planner 1"
+    "major": "Jewish Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/jewish-studies-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -2609,7 +2664,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Jewish Studies B.A. Planner 2"
+    "major": "Jewish Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/jewish-studies-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2637,7 +2694,9 @@
       ],
       ["LING 1XX upper-division elective", "LING 190"]
     ],
-    "planner_name": "Language Studies B.A. Planner 1"
+    "major": "Language Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/linguistics/language-studies-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -2656,14 +2715,20 @@
     "Year 2": [
       [
         "LING 1XX upper-division elective",
-        "Context 1XX upper-division elective"
+        "Context 1XX upper-division elective",
+        "Foreign language 1XX upper-division language"
       ],
-      ["Context 1XX upper-division elective"],
+      [
+        "Context 1XX upper-division elective",
+        "Context 1XX upper-division elective or Foreign language 1XX upper-division language"
+      ],
       ["LING 1XX upper-division elective", "LING 190"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Language Studies B.A. Planner 2"
+    "major": "Language Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/linguistics/language-studies-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -2682,11 +2747,13 @@
       ["LALS upper-division elective", "LALS 194"]
     ],
     "Year 4": [
-      ["Study abroad"],
-      ["research"],
-      ["or additional major or minor"]
+      ["Study abroad, research, or additional major or minor"],
+      [],
+      []
     ],
-    "planner_name": "Latin American and Latino Studies B.A. Planner 1"
+    "major": "Latin American and Latino Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studies-ba/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [
@@ -2701,7 +2768,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Latin American and Latino Studies B.A. Planner 2"
+    "major": "Latin American and Latino Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studies-ba/",
+    "planner_name": "Transfer Plan 1"
   },
   {
     "Year 1": [
@@ -2716,7 +2785,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Latin American and Latino Studies B.A. Planner 3"
+    "major": "Latin American and Latino Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studies-ba/",
+    "planner_name": "Transfer Plan for Students Planning to Study Abroad"
   },
   {
     "Year 1": [
@@ -2725,8 +2796,8 @@
       ["SPAN 3 PORT 3"]
     ],
     "Year 2": [
-      ["LALS 100 ER", "SPAN 4PORT 65A"],
-      ["LALS 100A", "SPAN 5PORT 65B"],
+      ["LALS 100 ER", "SPAN 4 PORT 65A"],
+      ["LALS 100A", "SPAN 5 PORT 65B"],
       ["LALS 100B", "SPAN 6"]
     ],
     "Year 3": [
@@ -2739,7 +2810,9 @@
       ["Study abroad or research"],
       ["Study abroad or research"]
     ],
-    "planner_name": "Politics Combined B.A. Planner 1"
+    "major": "Politics Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studiespolitics-combined-ba/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [
@@ -2754,7 +2827,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Politics Combined B.A. Planner 2"
+    "major": "Politics Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studiespolitics-combined-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -2773,11 +2848,13 @@
       ["SOCY elective", "LALS 194"]
     ],
     "Year 4": [
-      ["Study abroad"],
-      ["research"],
-      ["or additional major or minor"]
+      ["Study abroad, research, or additional major or minor"],
+      [],
+      []
     ],
-    "planner_name": "Sociology Combined B.A. Planner 1"
+    "major": "Sociology Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studiessociology-combined-ba/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [
@@ -2792,7 +2869,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Sociology Combined B.A. Planner 2"
+    "major": "Sociology Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studiessociology-combined-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -2807,7 +2886,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Sociology Combined B.A. Planner 3"
+    "major": "Sociology Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/latin-american-and-latino-studies/latin-american-and-latino-studiessociology-combined-ba/",
+    "planner_name": "2 Year Transfer Plan for Students Planning to Study Abroad"
   },
   {
     "Year 1": [[], ["LGST 10"], ["Phil 9 or 22"]],
@@ -2822,18 +2903,30 @@
       []
     ],
     "Year 4": [["LGST 196 Capstone"], [], []],
-    "planner_name": "Legal Studies B.A. Planner 1"
+    "major": "Legal Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/politics/legal-studies-ba/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
-    "Year 1": [["LGST Theory Core"], ["POLI 111A/LGST 111A Required"], []],
+    "Year 1": [
+      ["LGST 10", "PHIL 9"],
+      ["LGST (Law & Society Core)", "LGST (Theory Core)"],
+      [
+        "POLI 160B/LGST-160B (Required)",
+        "LGST (Public Law & Institutions)",
+        "LGST (Law & Society Core)"
+      ]
+    ],
     "Year 2": [
-      ["LGST Public Law & Institutions"],
-      ["LGST 196 Senior Capstone"],
+      ["LGST Public Law & Institutions", "LGST (Theory Core)"],
+      ["LGST 196 Senior Capstone", "POLI 111A/LGST 111A (Required)"],
       []
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Legal Studies B.A. Planner 2"
+    "major": "Legal Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/politics/legal-studies-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2844,11 +2937,13 @@
       ["LING 113", "LING 1XX upper-div elective", "Foreign language level 3"]
     ],
     "Year 4": [
-      ["LING 102", "LING 1XX upper-div elective"],
-      ["LING 1XX upper div elective"],
+      ["LING 102", "LING 1XX upper-div elective", "Foreign language level 4"],
+      ["LING 1XX upper div elective", "Foreign language level 5"],
       ["LING 190", "LING 1XX upper-div elective"]
     ],
-    "planner_name": "Linguistics B.A. Planner 1"
+    "major": "Linguistics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/linguistics/linguistics-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2863,14 +2958,20 @@
       ["LING 101", "LING 113", "Foreign language level 3"]
     ],
     "Year 4": [
-      ["LING 102", "LING 1XX upper-div elective"],
-      ["LING 116", "LING 1XX upper-div elective"],
-      ["LING 1XX upper-div elective", "LING 1XX upper-div elective"]
+      ["LING 102", "LING 1XX upper-div elective", "Foreign language level 4"],
+      ["LING 116", "LING 1XX upper-div elective", "Foreign language level 5"],
+      ["LING 1XX upper-div elective", "LING 1XX upper-div elective", "LING 190"]
     ],
-    "planner_name": "Linguistics B.A. Planner 2"
+    "major": "Linguistics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/linguistics/linguistics-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
-    "Year 1": [[], [], []],
+    "Year 1": [
+      ["LIT 60/LLIT 61 or LIT 80/81"],
+      ["LIT 60/61 or LIT 80/81 (optional)"],
+      ["LIT 1"]
+    ],
     "Year 2": [
       ["Upper-division LIT course Media critical approach", "Language Level 1"],
       ["LIT 101", "Language Level 2"],
@@ -2880,77 +2981,101 @@
       ]
     ],
     "Year 3": [
-      ["Upper-division LIT course Geographies critical approach"],
-      ["global distribution requirement"],
-      ["LIT 102", "Upper-division LIT course Canons critical approach"]
+      [
+        "Upper-division LIT course Geographies critical approach, global distribution requirement"
+      ],
+      ["LIT 102"],
+      [
+        "Upper-divison LIT course (Genres critical approach poetry/poetics distribution requirement)",
+        "Upper-division LIT course (Canons critical approach, pre-1750 distribution requirement)"
+      ]
     ],
     "Year 4": [
-      ["Upper-division LIT course Histories critical approach"],
-      ["pre-1750 distribution requirement"],
+      [
+        "Upper-division LIT course (Histories critical approach, pre-1750 distribution requirement"
+      ],
       ["LIT 190 senior seminar"],
       ["Upper-division LIT course"]
     ],
-    "planner_name": "Literature B.A. Planner 1"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "General Literature Concentration 4 Year Planner"
   },
   {
-    "Year 1": [
-      ["Upper-division LIT course Power and Subjectivities critical approach"],
-      [],
-      []
-    ],
+    "Year 1": [[], [], []],
     "Year 2": [[], [], [], []],
     "Year 3": [
       [
-        "Upper-division LIT course Canons critical approach",
-        "Upper-division LIT course Genres critical approach"
+        "Upper-division LIT course Canons critical approach, pre-1750 distribution requirement",
+        "Upper-division LIT course Genres critical approach, poetry distribution requirement"
       ],
-      ["pre-1750 distribution requirement", "poetry distribution requirement"],
-      ["LIT 102", "Upper-division LIT course Geographies critical approach"]
+      [
+        "LIT 102",
+        "Upper-division LIT course Geographies critical approach, global distribution requirement"
+      ],
+      [
+        "Upper-division LIT course Histories critical approach, pre-1750 distribution requirement"
+      ]
     ],
     "Year 4": [
-      ["Upper-division LIT course Media critical approach"],
+      [
+        "Upper-division LIT course Media critical approach",
+        "Upper-division LIT course (Power and Subjectivities critical appraoch)"
+      ],
       ["LIT 190 senior seminar"],
       ["Upper-division LIT course"]
     ],
-    "planner_name": "Literature B.A. Planner 2"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "General Literature Concentration Transfer Plan 1"
   },
   {
-    "Year 1": [
-      ["Upper-division LIT course Media critical approach"],
-      ["Upper-division LIT course Power and Subjectivities critical approach"],
-      ["Upper-division LIT course"]
-    ],
+    "Year 1": [[], [], []],
     "Year 2": [[], [], [], []],
     "Year 3": [
       ["LIT 1", "LIT 60/LIT 61 or LIT 80/LIT 81", "Language Level 1"],
       [
         "LIT 101",
-        "Upper-division LIT course Canons critical approach",
+        "Upper-division LIT course Canons critical approach, poetry distribution requirement",
         "Language Level 2"
       ],
       [
         "Upper-division LIT course Genres critical approach",
-        "pre-1750 distribution requirement",
+        "Upper-division LIT course Geographies critical approach, global distribution requirement",
         "Language Level 3"
       ]
     ],
     "Year 4": [
-      ["Upper-division LIT course Histories critical approach"],
-      ["pre-1750 distribution requirement"],
-      ["LIT 102"],
-      ["LIT 190 senior seminar"]
+      [
+        "Upper-division LIT course Histories critical approach",
+        "Upper-division LIT course (Media critical approach)"
+      ],
+      [
+        "LIT 102",
+        "Upper-division LIT course (Power and Subjectivities critical approach)"
+      ],
+      ["LIT 190 senior seminar", "Upper-division LIT course"]
     ],
-    "planner_name": "Literature B.A. Planner 3"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "General Literature Concentration Transfer Plan 2"
   },
   {
-    "Year 1": [[], [], []],
+    "Year 1": [
+      ["LIT 60/61 or LIT 80/81", "Language Level 1"],
+      ["LIT 60/LIT 61 or LIT 80/81 (optional)"],
+      ["LIT 1"]
+    ],
     "Year 2": [
       [
         "Upper-division LIT course Canons critical approach",
         "Language Level 4"
       ],
-      ["pre-1750 and poetry distribution requirements", "Language Level 5"],
-      ["LIT 101", "Language Level 6"]
+      ["LIT 101", "Language Level 5"],
+      [
+        "Upper-division LIT course Power and Subjectivities approach",
+        "Language Level 6"
+      ]
     ],
     "Year 3": [
       ["Upper-division LIT Language course Genres critical approach"],
@@ -2965,7 +3090,9 @@
       ["Upper-division LIT Language course"],
       ["LIT 190 senior seminar"]
     ],
-    "planner_name": "Literature B.A. Planner 4"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "Language Literature Concentration 4 Year Planner"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2976,24 +3103,27 @@
         "Language Level 4"
       ],
       [
-        "pre-1750 and poetry distribution requirements",
+        "LIT 102",
         "Upper-division LIT course Geographies critical approach",
         "Language Level 5"
       ],
-      ["LIT 102", "global distribution requirement", "Language Level 6"]
+      [
+        "LIT 101",
+        "Upper-division LIT Language course Power and Subjectivities critical approach",
+        "Language Level 6"
+      ]
     ],
     "Year 4": [
       [
         "Upper-division LIT Language course Media critical approach",
         "Upper-division LIT Language course Histories critical approach"
       ],
-      [
-        "Upper-division LIT Language course Genres critical approach",
-        "pre-1750 distribution requirement"
-      ],
-      ["Upper-division LIT Language course"]
+      ["Upper-division LIT Language course Genres critical approach"],
+      ["Upper-division LIT Language course", "LIT 190 (senior seminar)"]
     ],
-    "planner_name": "Literature B.A. Planner 5"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "Language Literature Concentration Transfer Plan 1"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3014,10 +3144,17 @@
         "Upper-division LIT Language course Histories critical approach",
         "Upper-division LIT course Power and Subjectivities critical approach"
       ],
-      ["pre-1750 distribution requirement", "LIT 190 senior seminar"],
-      ["Upper-division LIT Language course Genres critical approach"]
+      [
+        "Upper-division LIT Language course Genres critical approach",
+        "LIT 190 senior seminar"
+      ],
+      [
+        "Upper-division LIT Language course pre-1750 and global distribution requirements"
+      ]
     ],
-    "planner_name": "Literature B.A. Planner 6"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "Language Literature Concentration Transfer Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3030,21 +3167,22 @@
     "Year 4": [
       [
         "Upper-division LIT course Histories critical approach",
-        "Upper-division LIT course Power and Subjectivities critical approach"
+        "Upper-division LIT course Power and Subjectivities critical approach",
+        "LIT 179A, LIT 179B, or LIT 179C"
       ],
       [
-        "pre-1750 distribution requirement",
-        "Upper-division LIT course Canons critical approach"
+        "LIT 102",
+        "Upper-division LIT course Canons critical approach",
+        "LIT 179A, LIT 179B, or LIT 179C"
       ],
-      ["LIT 102", "pre-1750 and poetry distribution requirements"],
       [
         "Upper-division LIT course Geographies critical approach",
-        "LIT 190V or LIT 190W Media critical approach",
-        "global distribution requirement",
-        "senior seminar"
+        "LIT 190V or LIT 190W Media critical approach"
       ]
     ],
-    "planner_name": "Literature B.A. Planner 9"
+    "major": "Literature B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/literature/literature-ba/",
+    "planner_name": "Creative Writing Concentration Transfer Plan 2"
   },
   {
     "Year 1": [
@@ -3067,7 +3205,9 @@
       ["Marine environment core", "MABI topical elective"],
       ["EEB general elective", "EEB general elective"]
     ],
-    "planner_name": "Marine Biology B.S. Planner 1"
+    "major": "Marine Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/marine-biology-bs/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3082,7 +3222,9 @@
       ["Marine environment core", "EEB general elective"],
       ["EEB general elective"]
     ],
-    "planner_name": "Marine Biology B.S. Planner 2"
+    "major": "Marine Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/marine-biology-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -3097,7 +3239,9 @@
       ["Elective"],
       ["MATH 194 or MATH 195", "Elective"]
     ],
-    "planner_name": "Mathematics B.A. Planner 1"
+    "major": "Mathematics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-ba/",
+    "planner_name": "Pure Mathematics 4 Year Plan"
   },
   {
     "Year 1": [
@@ -3112,7 +3256,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Mathematics B.A. Planner 2"
+    "major": "Mathematics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-ba/",
+    "planner_name": "Pure Mathematics Transfer Plan"
   },
   {
     "Year 1": [
@@ -3131,7 +3277,9 @@
       ["MATH 103A or MATH 105A"],
       ["MATH 194 or MATH 195", "Elective"]
     ],
-    "planner_name": "Mathematics B.A. Planner 3"
+    "major": "Mathematics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-ba/",
+    "planner_name": "Computational Mathematics 4 Year Plan"
   },
   {
     "Year 1": [
@@ -3146,7 +3294,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Mathematics B.A. Planner 4"
+    "major": "Mathematics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-ba/",
+    "planner_name": "Computational Mathematics Transfer Plan"
   },
   {
     "Year 1": [
@@ -3161,7 +3311,9 @@
       ["MATH 111A"],
       ["MATH 194 or MATH 195", "Elective"]
     ],
-    "planner_name": "Mathematics B.S. Planner 1"
+    "major": "Mathematics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-b-s/",
+    "planner_name": "Frosh Planner"
   },
   {
     "Year 1": [
@@ -3169,10 +3321,16 @@
       ["MATH 103A", "Elective"],
       ["MATH 121A", "Elective"]
     ],
-    "Year 2": [["MATH 24"], ["MATH 105A"], ["MATH 194 or MATH 195"]],
+    "Year 2": [
+      ["MATH 24", "MATH 111A"],
+      ["MATH 105A", "Elective"],
+      ["MATH 194 or MATH 195", "MATH 117"]
+    ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Mathematics B.S. Planner 2"
+    "major": "Mathematics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-b-s/",
+    "planner_name": "Transfer Planner"
   },
   {
     "Year 1": [
@@ -3187,7 +3345,9 @@
       ["MATH 111T"]
     ],
     "Year 4": [["STAT 131"], ["MATH 103A or MATH 105A"], ["MATH 194"]],
-    "planner_name": "Mathematics Education B.A. Planner 1"
+    "major": "Mathematics Education B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-education-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [
@@ -3202,7 +3362,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Mathematics Education B.A. Planner 2"
+    "major": "Mathematics Education B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/mathematics/mathematics-education-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -3220,8 +3382,10 @@
       ["Upper-division elective", "PHYS 6A & PHYS 6L"],
       ["Upper-division elective", "PHYS 6B or PHYS 6C"]
     ],
-    "Year 4": [["Upper-division elective", "BIOE 20C"], ["Lab"], [""]],
-    "planner_name": "Molecular, Cell, and Developmental Biology B.S. Planner 1\""
+    "Year 4": [["Upper-division elective", "BIOE 20C"], ["Lab"], []],
+    "major": "Molecular, Cell, and Developmental Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/molecular-cell-and-developmental-biology-bs/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3236,7 +3400,9 @@
       ["Upper-division elective", "Lab"],
       ["Upper-division elective"]
     ],
-    "planner_name": "Molecular, Cell, and Developmental Biology B.S. Planner 2\""
+    "major": "Molecular, Cell, and Developmental Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/molecular-cell-and-developmental-biology-bs/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -3254,8 +3420,14 @@
       ["MUSC 120", "Elective", "Module Ensemble 2"],
       ["Module Upper-div 2", "Module Ensemble 3"]
     ],
-    "Year 4": [["Elective"], ["MUSC 120", "Module Upper-div 3"], ["MUSC 196A"]],
-    "planner_name": "Music B.A. Planner 1"
+    "Year 4": [
+      ["Elective", "Module: Ensemble 3"],
+      ["MUSC 120", "Module Upper-div 3", "Ensemble"],
+      ["MUSC 196A", "Ensemble"]
+    ],
+    "major": "Music B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-ba/",
+    "planner_name": "Contemporary Practices Concentration Frosh Plan"
   },
   {
     "Year 1": [
@@ -3269,13 +3441,27 @@
       ["Module Lower-div 3", "Module Upper-div 1", "Module Ensemble 2"]
     ],
     "Year 2": [
-      ["MUSC 121", "MUSC 101C", "Module Upper-div 3", "Module Ensemble 2"],
-      ["MUSC 120", "Module Upper-div 2", "Elective", "Module Ensemble 3"],
-      ["MUSC 120", "MUSC 196A", "Module Ensemble 3"]
+      [
+        "MUSC 121",
+        "MUSC 101C",
+        "Module Upper-div 3",
+        "Module Ensemble 2",
+        "Ensemble"
+      ],
+      [
+        "MUSC 120",
+        "Module Upper-div 2",
+        "Elective",
+        "Module Ensemble 3",
+        "Ensemble"
+      ],
+      ["MUSC 120", "MUSC 196A", "Module Ensemble 3", "Ensemble"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Music B.A. Planner 2"
+    "major": "Music B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-ba/",
+    "planner_name": "Contemporary Practices Concentration Transfer Plan"
   },
   {
     "Year 1": [
@@ -3298,7 +3484,9 @@
       ["Capstone", "MUSC 195A/MUSC 196A"],
       ["Elective"]
     ],
-    "planner_name": "Music B.A. Planner 3"
+    "major": "Music B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-ba/",
+    "planner_name": "Global Musics Concentration Frosh Plan"
   },
   {
     "Year 1": [
@@ -3307,49 +3495,55 @@
       ["Module Upper-div 1", "Module Upper-div 2", "Ensemble", "Ensemble 2"]
     ],
     "Year 2": [
-      ["MUSC 30A", "Module Lower-div 3", "Research Foundations"],
-      ["Elective", "Elective", "Module Upper-div 3"],
-      ["MUSC 195A/MUSC 196A", "Capstone", "Elective"]
+      ["MUSC 30A", "Module Lower-div 3", "Research Foundations", "Ensemble 3"],
+      ["Elective", "Elective", "Module Upper-div 3", "Ensemble 3"],
+      ["MUSC 195A/MUSC 196A", "Capstone", "Elective", "Ensemble"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Music B.A. Planner 4"
+    "major": "Music B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-ba/",
+    "planner_name": "Global Musics Concentration Transfer Plan"
   },
   {
     "Year 1": [["MUSC 11A recommended"], ["MUSC 14"], []],
     "Year 2": [
-      ["MUSC 30A &  MUSC 60", "Individual Lessons1", "Ensemble2"],
-      ["MUSC 30B & MUSC 60", "MUSC 101A", "Individual Lessons", "Ensemble2"],
-      ["MUSC 30C & MUSC 60", "MUSC 101B", "Individual Lessons", "Ensemble2"]
+      ["MUSC 30A &  MUSC 60", "Individual Lessons", "Ensemble"],
+      ["MUSC 30B & MUSC 60", "MUSC 101A", "Individual Lessons", "Ensemble"],
+      ["MUSC 30C & MUSC 60", "MUSC 101B", "Individual Lessons", "Ensemble"]
     ],
     "Year 3": [
-      ["MUSC 130", "MUSC 101C", "Individual Lessons", "Ensemble2"],
-      ["MUSC 105", "Individual Lessons", "Ensemble2"],
-      ["MUSC 150", "Individual Lessons", "Ensemble2"]
+      ["MUSC 130", "MUSC 101C", "Individual Lessons", "Ensemble"],
+      ["MUSC 105", "Individual Lessons", "Ensemble"],
+      ["MUSC 150", "Individual Lessons", "Ensemble"]
     ],
     "Year 4": [["MUSC 121"], ["MUSC 120"], ["MUSC 180"]],
-    "planner_name": "Music B.A. Planner 5"
+    "major": "Music B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-ba/",
+    "planner_name": "Western Art Music Concentration Frosh Plan"
   },
   {
     "Year 1": [
-      ["MUSC 30A & MUSC 60", "Individual Lessons1", "Ensemble2"],
-      ["MUSC 30B & MUSC 60", "MUSC 101A", "Individual Lessons1", "Ensemble2"],
-      ["MUSC 30C & MUSC 60", "MUSC 101B", "Individual Lessons1", "Ensemble2"]
+      ["MUSC 30A & MUSC 60", "Individual Lessons", "Ensemble"],
+      ["MUSC 30B & MUSC 60", "MUSC 101A", "Individual Lessons", "Ensemble"],
+      ["MUSC 30C & MUSC 60", "MUSC 101B", "Individual Lessons", "Ensemble"]
     ],
     "Year 2": [
-      ["MUSC 130", "MUSC 101C", "MUSC 121", "Individual Lessons1"],
-      ["MUSC 105", "MUSC 120", "Individual Lessons1"],
-      ["MUSC 150", "MUSC 180", "Individual Lessons1"]
+      ["MUSC 130", "MUSC 101C", "MUSC 121", "Individual Lessons", "Ensemble"],
+      ["MUSC 105", "MUSC 120", "Individual Lessons", "Ensemble"],
+      ["MUSC 150", "MUSC 180", "Individual Lessons", "Ensemble"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Music B.A. Planner 6"
+    "major": "Music B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-ba/",
+    "planner_name": "Western Art Music Concentration Transfer Plan"
   },
   {
     "Year 1": [
-      ["MUSC 11A recommended", "Individual Lessons2", "Ensemble"],
+      ["MUSC 11A recommended", "Individual Lessons", "Ensemble"],
       ["MUSC 15", "Individual Lessons", "Ensemble"],
-      ["Language1", "Individual Lessons", "Ensemble"]
+      ["Language", "Individual Lessons", "Ensemble"]
     ],
     "Year 2": [
       ["MUSC 30A", "Individual Lessons", "Ensemble"],
@@ -3362,26 +3556,30 @@
       ["MUSC 150", "Individual Lessons", "Ensemble"]
     ],
     "Year 4": [
-      ["Language", "Individual Lessons"],
-      ["Language", "Individual Lessons"],
-      ["MUSC 180", "MUSC 196B"]
+      ["Language", "Individual Lessons", "Ensemble"],
+      ["Language", "Individual Lessons", "Ensemble"],
+      ["MUSC 180", "MUSC 196B", "Ensemble"]
     ],
-    "planner_name": "Music B.M. Planner 1"
+    "major": "Music B.M.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-bm/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [
-      ["MUSC 30A", "Individual Lessons1", "Ensemble2"],
+      ["MUSC 30A", "Individual Lessons", "Ensemble"],
       ["MUSC 30B", "MUSC 101A", "Individual Lessons", "Ensemble"],
       ["MUSC 30C", "MUSIC 101B", "Individual Lessons", "Ensemble"]
     ],
     "Year 2": [
-      ["MUSC 130", "MUSC 101C", "Individual Lessons"],
-      ["MUSC 105", "MUSC 150", "Individual Lessons"],
-      ["MUSC196B", "MUSC 180", "Individual Lessons"]
+      ["MUSC 130", "MUSC 101C", "Individual Lessons", "Ensemble"],
+      ["MUSC 105", "MUSC 150", "Individual Lessons", "Ensemble"],
+      ["MUSC 196B", "MUSC 180", "Individual Lessons", "Ensemble"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Music B.M. Planner 2"
+    "major": "Music B.M.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/music/music-bm/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -3400,7 +3598,9 @@
       ["CSE 150 & CSE 150L", "Elective"]
     ],
     "Year 4": [["CSE 185E", "Elective"], ["Elective"], ["Capstone course"]],
-    "planner_name": "Network and Digital Technology B.A. Planner 1"
+    "major": "Network and Digital Technology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/network-and-digital-technology-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -3411,7 +3611,9 @@
     "Year 2": [["CSE 185E", "Elective"], ["Elective"], ["Capstone course"]],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Network and Digital Technology B.A. Planner 2"
+    "major": "Network and Digital Technology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/network-and-digital-technology-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -3430,7 +3632,9 @@
       ["BIOL 125", "PHYS 6C"]
     ],
     "Year 4": [["Upper-division elective", "BIOE 20C"], ["Lab"], ["BIOL 126"]],
-    "planner_name": "Neuroscience B.S. Planner 1"
+    "major": "Neuroscience B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/neuroscience-bs/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3445,14 +3649,18 @@
       ["Upper-division elective", "Lab"],
       ["Upper-division elective", "BIOL 126"]
     ],
-    "planner_name": "Neuroscience B.S. Planner 2"
+    "major": "Neuroscience B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/neuroscience-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [["PHIL 11"], ["PHIL 9"], ["PHIL 100C"]],
     "Year 2": [["PHIL 100A"], ["PHIL 100B elective"], ["PHIL 1XX M&E"]],
     "Year 3": [["PHIL 1XX Value"], ["PHIL 1XX elective"], ["PHIL 1XX M&E"]],
     "Year 4": [["PHIL 1XX elective"], [], ["PHIL 190"]],
-    "planner_name": "Philosophy B.A. Planner 1"
+    "major": "Philosophy B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/philosophy/philosophy-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -3467,7 +3675,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Philosophy B.A. Planner 2"
+    "major": "Philosophy B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/philosophy/philosophy-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -3486,11 +3696,13 @@
       ["PHYS 133", "Elective"]
     ],
     "Year 4": [
-      ["PHYS 135A", "PHYS 139A"],
+      ["PHYS 135A", "PHYS 139A", "Elective"],
       ["PHYS 135B", "Elective"],
       ["PHYS 182"]
     ],
-    "planner_name": "Physics (Astrophysics) B.S. Planner 1"
+    "major": "Physics (Astrophysics) B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/physics-astrophysics-bs/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [
@@ -3499,13 +3711,15 @@
       ["PHYS 105", "PHYS 116C", "Elective"]
     ],
     "Year 2": [
-      ["PHYS 110A", "PHYS 139A", "PHYS 135A"],
+      ["PHYS 110A", "PHYS 139A", "PHYS 135A", "Elective"],
       ["PHYS 110B", "PHYS 112", "PHYS 135B"],
       ["PHYS 182", "Elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Physics (Astrophysics) B.S. Planner 2"
+    "major": "Physics (Astrophysics) B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/physics-astrophysics-bs/",
+    "planner_name": "2 Year Transfer Plan 1"
   },
   {
     "Year 1": [
@@ -3514,13 +3728,15 @@
       ["PHYS 105", "PHYS 116C", "PHYS 133"]
     ],
     "Year 2": [
-      ["PHYS 110A", "PHYS 139A"],
-      ["PHYS 110B", "PHYS 112"],
-      ["ASTR 136 or PHYS 135", "Elective"]
+      ["PHYS 110A", "PHYS 139A", "PHYS 182"],
+      ["PHYS 110B", "PHYS 112", "Elective"],
+      ["ASTR 136 or PHYS 135", "Elective", "Elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Physics (Astrophysics) B.S. Planner 3"
+    "major": "Physics (Astrophysics) B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/physics-astrophysics-bs/",
+    "planner_name": "2 Year Transfer Plan 2"
   },
   {
     "Year 1": [
@@ -3543,7 +3759,9 @@
       ["PHYS 182", "PHYS 134"],
       ["Elective"]
     ],
-    "planner_name": "Physics B.S. Planner 1"
+    "major": "Physics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/physics-bs/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [
@@ -3552,13 +3770,15 @@
       ["PHYS 116C", "PHYS 105", "PHYS 134"]
     ],
     "Year 2": [
-      ["PHYS 110A", "PHYS 139A"],
-      ["PHYS 110B", "PHYS 112"],
+      ["PHYS 110A", "PHYS 139A", "Elective"],
+      ["PHYS 110B", "PHYS 112", "PHYS 182"],
       ["Elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Physics B.S. Planner 2"
+    "major": "Physics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/physics-bs/",
+    "planner_name": "Transfer Plan 1"
   },
   {
     "Year 1": [
@@ -3567,13 +3787,15 @@
       ["PHYS 105", "PHYS 133", "PHYS 116C"]
     ],
     "Year 2": [
-      ["PHYS 110A", "PHYS 139A"],
-      ["PHYS 110B", "PHYS 112"],
+      ["PHYS 110A", "PHYS 139A", "Elective"],
+      ["PHYS 110B", "PHYS 112", "PHYS 182"],
       ["PHYS 134", "Elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Physics B.S. Planner 3"
+    "major": "Physics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/physics-bs/",
+    "planner_name": "Transfer Plan 2"
   },
   {
     "Year 1": [
@@ -3596,7 +3818,9 @@
       ["PLNT topical elective", "PLNT topical elective"],
       ["EEB general elective"]
     ],
-    "planner_name": "Plant Sciences B.S. Planner 1"
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/plant-sciences-bs/",
+    "major": "Plant Sciences B.S.",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3611,10 +3835,12 @@
       ["Botany & lab", "EEB general elective"],
       ["EEB general elective"]
     ],
-    "planner_name": "Plant Sciences B.S. Planner 2"
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/plant-sciences-bs/",
+    "major": "Plant Sciences B.S.",
+    "planner_name": "Transfer Plan"
   },
   {
-    "Year 1": [[], [], []],
+    "Year 1": [["POLI (Lower-division)"], ["POLI (Lower-divsion)"], []],
     "Year 2": [
       ["POLI Upper-division elective"],
       ["POLI Upper-division elective"],
@@ -3626,18 +3852,30 @@
       ["POLI Upper-division core"]
     ],
     "Year 4": [["POLI 190 Senior Seminar"], [], []],
-    "planner_name": "Politics B.A. Planner 1"
+    "major": "Politics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/politics/politics-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [
-      ["POLI Upper-division elective"],
-      ["POLI Upper-division core"],
+      [
+        "POLI (Lower-division)",
+        "POLI (Lower-division)",
+        "POLI Upper-division elective"
+      ],
+      ["POLI Upper-division elective", "POLI (Upper-division core)"],
+      ["POLI Upper-division elective", "POLI (Upper-division core)"]
+    ],
+    "Year 2": [
+      ["POLI Upper-division elective", "POLI (Upper-division core)"],
+      ["POLI 190 Senior Seminar", "POLI (Upper-division core)"],
       []
     ],
-    "Year 2": [["POLI Upper-division core"], ["POLI 190 Senior Seminar"], []],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Politics B.A. Planner 2"
+    "major": "Politics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/politics/politics-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [["AM 3", "PSYC 1"], ["PSYC 2"], ["PSYC 10"]],
@@ -3652,7 +3890,9 @@
       ["upper-division PSYC elective seminar", "out of dept course"],
       ["upper-division PSYC elective"]
     ],
-    "planner_name": "Psychology B.A. Planner 1"
+    "major": "Psychology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/psychology-ba/",
+    "planner_name": "General Psychology Frosh Plan 1"
   },
   {
     "Year 1": [["MATH 2"], ["PSYC 20"], ["PSYC 1"]],
@@ -3667,7 +3907,9 @@
       ["out of dept course", "upper-division PSYC elective"],
       ["upper-division PSYC elective"]
     ],
-    "planner_name": "Psychology B.A. Planner 2"
+    "major": "Psychology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/psychology-ba/",
+    "planner_name": "General Psychology Frosh Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3685,7 +3927,9 @@
       ],
       ["upper-division PSYC elective seminar"]
     ],
-    "planner_name": "Psychology B.A. Planner 3"
+    "major": "Psychology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/psychology-ba/",
+    "planner_name": "General Psychology Transfer Plan"
   },
   {
     "Year 1": [["AM 3", "PSYC 1"], ["PSYC 2"], ["PSYC 10"]],
@@ -3700,7 +3944,9 @@
       ["PSYC 193/ PSYC 194/ PSYC 195", "Upper-division PSYC elective seminar"],
       ["Upper-division PSYC elective", "PSYC 181/ PSYC 182"]
     ],
-    "planner_name": "Psychology B.A. Planner 4"
+    "major": "Psychology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/psychology-ba/",
+    "planner_name": "Intensive Psychology Frosh Plan 1"
   },
   {
     "Year 1": [["MATH 2"], ["PSYC 20"], ["PSYC 1"]],
@@ -3715,7 +3961,9 @@
       ["PSYC 193/ PSYC 194/ PSYC 195", "Upper-division PSYC elective"],
       ["Upper-division PSYC elective", "PSYC 181/ PSYC 182"]
     ],
-    "planner_name": "Psychology B.A. Planner 5"
+    "major": "Psychology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/psychology-ba/",
+    "planner_name": "Intensive Psychology Frosh Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3730,7 +3978,9 @@
       ["PSYC 193/ PSYC 194/ PSYC 195", "Upper-division PSYC elective"],
       ["Upper-division PSYC elective seminar", "PSYC 181/ PSYC 182"]
     ],
-    "planner_name": "Psychology B.A. Planner 6"
+    "major": "Psychology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/psychology-ba/",
+    "planner_name": "Intensive Psychology Transfer Plan" 
   },
   {
     "Year 1": [
@@ -3753,7 +4003,9 @@
       ["ECE 129B", "Advanced robotics elective"],
       ["ECE 129C", "Upper-division elective"]
     ],
-    "planner_name": "Robotics Engineering B.S. Planner 1"
+    "major": "Robotics Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/electrical-and-computer-engineering/robotics-engineering-bs/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -3764,11 +4016,13 @@
       ["ECE 118 & ECE 118L", "ECE 10", "ECE 103 & ECE 103L"]
     ],
     "Year 4": [
-      ["ECE 129A", "ECE 141"],
+      ["ECE 129A", "ECE 141", "Elective"],
       ["ECE 129B", "Advanced robotics elective"],
       ["ECE 129C", "ECE 167 and ECE 167L"]
     ],
-    "planner_name": "Robotics Engineering B.S. Planner 2"
+    "major": "Robotics Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/electrical-and-computer-engineering/robotics-engineering-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -3791,7 +4045,9 @@
       ["Field B course"],
       ["Field B course", "EDUC 185L"]
     ],
-    "planner_name": "Science Education B.S. Planner 1"
+    "major": "Science Education B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/science-education-bs/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -3800,13 +4056,15 @@
       ["EDUC 100C", "Field A course", "EDUC 185C"]
     ],
     "Year 2": [
-      ["Breadth course 1", "EART 110A & EART 110L"],
-      ["Breadth course 2", "EDUC diversity course"],
-      ["Breadth course 3", "EDUC 185L"]
+      ["Breadth course 1", "EART 110A & EART 110L", "Field B course"],
+      ["Breadth course 2", "EDUC diversity course", "Field B course"],
+      ["Breadth course 3", "EDUC 185L", "Field B course"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Science Education B.S. Planner 2"
+    "major": "Science Education B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/science-education-bs/",
+    "planner_name": "Transfer 2 Year Plan"
   },
   {
     "Year 1": [["SOCY 1"], ["SOCY 10"], []],
@@ -3823,7 +4081,9 @@
         "SOCY 196S or SOCY graduate course or in fall or winter or thesis fall-winter-spring"
       ]
     ],
-    "planner_name": "Sociology B.A. Planner 1"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name": "General Sociology Frosh Plan 1"
   },
   {
     "Year 1": [[], [], ["SOCY 1"]],
@@ -3835,12 +4095,14 @@
     ],
     "Year 4": [
       ["SOCY 105A", "SOCY upper-division elective"],
-      ["SOCY 105B", "SOCYupper-division elective"],
+      ["SOCY 105B", "SOCY upper-division elective"],
       [
         "SOCY 196S or SOCY graduate course or in fall or winter or thesis fall-winter-spring"
       ]
     ],
-    "planner_name": "Sociology B.A. Planner 2"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name": "General Sociology Frosh Plan 2"
   },
   {
     "Year 1": [
@@ -3849,7 +4111,7 @@
       ["SOCY 105B", "SOCY upper-division elective"]
     ],
     "Year 2": [
-      ["SOCY upper-division elective", "SOCYupper-division elective"],
+      ["SOCY upper-division elective", "SOCY upper-division elective"],
       ["SOCY upper-division elective"],
       [
         "SOCY 196S or SOCY graduate course or in fall or winter or thesis fall-winter-spring"
@@ -3857,7 +4119,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Sociology B.A. Planner 3"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name": "General Sociology Transfer Plan 1"
   },
   {
     "Year 1": [
@@ -3872,7 +4136,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Sociology B.A. Planner 4"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name": "General Sociology Transfer Plan 2"
   },
   {
     "Year 1": [["SOCY 1"], ["SOCY 10"], []],
@@ -3893,7 +4159,9 @@
         "SOCY 196S or SOCY Graduate Course or in fall or winter or thesis fall-winter-spring"
       ]
     ],
-    "planner_name": "Sociology B.A. Planner 5"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name":  "Sociology with Concentration in GISES Frosh Plan 1"
   },
   {
     "Year 1": [[], [], ["SOCY 1"]],
@@ -3911,7 +4179,9 @@
         "Upper-division elective"
       ]
     ],
-    "planner_name": "Sociology B.A. Planner 6"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name":  "Sociology with Concentration in GISES Frosh Plan 1"
   },
   {
     "Year 1": [
@@ -3929,7 +4199,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Sociology B.A. Planner 7"
+    "major": "Sociology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/sociology/sociology-ba/",
+    "planner_name":  "Sociology with Concentration in GISES Transfer Plan"
   },
   {
     "Year 1": [["SPAN 1"], ["SPAN 2"], ["SPAN 3"]],
@@ -3944,7 +4216,9 @@
       ["Concentration 3", "Capstone"],
       []
     ],
-    "planner_name": "Spanish Studies B.A. Planner 1"
+    "major": "Spanish Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/languages-and-applied-linguistics/spanish-studies-ba/",
+    "planner_name": "4 Year for Non-Spanish Heritage Speakers"
   },
   {
     "Year 1": [["SPHS 4"], ["SPHS 5"], ["SPHS 6"]],
@@ -3955,7 +4229,9 @@
       ["Concentration 3", "Capstone"],
       []
     ],
-    "planner_name": "Spanish Studies B.A. Planner 2"
+    "major": "Spanish Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/languages-and-applied-linguistics/spanish-studies-ba/",
+    "planner_name": "4 Year for Spanish Heritage Speakers"
   },
   {
     "Year 1": [
@@ -3964,13 +4240,15 @@
       ["SPHS 6/SPAN 6"]
     ],
     "Year 2": [
-      ["SPAN 105/LIT 189C", "SPAN 114"],
-      ["LIT 189A", "Concentration 1"],
-      ["Elective", "Concentration 3"]
+      ["SPAN 105/LIT 189C", "SPAN 114", "SPAN 150"],
+      ["LIT 189A", "Concentration 1", "Concentration 2"],
+      ["Elective", "Concentration 3", "Capstone"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Spanish Studies B.A. Planner 3"
+    "major": "Spanish Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/languages-and-applied-linguistics/spanish-studies-ba/",
+    "planner_name": "Transfer Planner"
   },
   {
     "Year 1": [
@@ -3990,10 +4268,12 @@
     ],
     "Year 4": [
       ["CSE 171A", "ECON 113"],
-      ["CSE 171B", "BSOE elective"],
+      ["CSE 171B", "BSOE elective", "ECON elective"],
       ["CSE 175", "BSOE elective"]
     ],
-    "planner_name": "Technology and Information Management B.S. Planner 1"
+    "major": "Technology and Information Management B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/technology-and-information-management-bs/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -4008,7 +4288,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Technology and Information Management B.S. Planner 2"
+    "major": "Technology and Information Management B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/technology-and-information-management-bs/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -4035,7 +4317,9 @@
       [],
       []
     ],
-    "planner_name": "Theater Arts B.A. Planner 1"
+    "major": "Theater Arts B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/theater-arts/theater-arts-ba/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [
@@ -4056,7 +4340,8 @@
     "Year 2": [
       [
         "THEA 185 offered fall qtr only prerequisite is THEA 160",
-        "THEA upper-division studio"
+        "THEA upper-division studio",
+        "THEA 50"
       ],
       [
         "THEA upper-division History/Theory/Crit Studies",
@@ -4069,6 +4354,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Theater Arts B.A. Planner 2"
+    "major": "Theater Arts B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/theater-arts/theater-arts-ba/",
+    "planner_name":"2 Year Transfer Plan"
   }
 ]
