@@ -8,7 +8,7 @@ import {
   ModalClose,
   ModalDialog,
 } from "@mui/joy";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 //import TitleSnackbar from "../planners/plannerTabs/TitleSnackbar";
 
@@ -24,13 +24,21 @@ export interface RenameModalProps {
 export default function RenameModal(props: RenameModalProps) {
   const { onClose, open, onConfirm, title } = props;
   const [text, setText] = useState(title);
-
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const isConfirmDisabled = text.length < 2; // Disable confirm button if text length is less than 2
 
-  // Updates text everytime title is changed
+  // Focus when the modal is opened
   useEffect(() => {
-    setText(title);
-  }, [title]);
+    const timeout = setTimeout(() => {
+      if (open) {
+        inputRef.current?.focus();
+      }
+    }, 10);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [open]);
 
   function handleConfirm() {
     onConfirm(text);
@@ -71,10 +79,14 @@ export default function RenameModal(props: RenameModalProps) {
             <Input
               variant="soft"
               value={text}
-              autoFocus={open}
-              onFocus={(e) => e.currentTarget.select()}
+              autoFocus
               error={text.length < 2}
               size="sm"
+              slotProps={{
+                input: {
+                  ref: inputRef,
+                },
+              }}
               sx={{
                 border: "1px solid #B8C1C5", // Set border color before focus
                 "--Input-focusedInset": "var(--any, )",
