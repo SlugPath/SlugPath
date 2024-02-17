@@ -8,10 +8,10 @@ export async function getMajors(catalogYear?: string) {
   const query: any = {
     orderBy: [
       {
-        catalogYear: "desc",
+        name: "asc",
       },
       {
-        name: "asc",
+        catalogYear: "asc",
       },
     ],
     select: {
