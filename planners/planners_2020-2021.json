@@ -20,6 +20,7 @@
       ["Upper-division elective"],
       ["Upper-division elective", "Comprehensive requirement"]
     ],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/agroecology-ba/",
     "major": "Agroecology B.A.",
     "planner_name": "Plan 1 for Incoming Frosh"
   },
@@ -34,8 +35,9 @@
     "Year 4": [
       ["ENVS 130A & ENVS 130L", "Upper-division elective"],
       ["ENVS 133 or ENVS 135", "Upper-division elective"],
-      ["ENVS 130C", "Upper-division elective"]
+      ["ENVS 130C", "Upper-division elective", "Comprehensive requirement"]
     ],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/agroecology-ba/",
     "major": "Agroecology B.A.",
     "planner_name": "Plan 2 for Incoming Transfer"
   },
@@ -52,6 +54,7 @@
       ["Upper-division elective"],
       ["Senior Seminar"]
     ],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/anthropology/anthropology-ba/",
     "major": "Anthropology B.A.",
     "planner_name": "4 Year Plan"
   },
@@ -64,10 +67,11 @@
       ["Archaeology", "Bio/Med/Env"]
     ],
     "Year 4": [
-      ["Upper-division elective"],
+      ["Upper-division elective", "Upper-division elective"],
       ["Upper-division elective"],
       ["Senior Seminar"]
     ],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/anthropology/anthropology-ba/",
     "major": "Anthropology B.A.",
     "planner_name": "2 Year Plan"
   },
@@ -84,6 +88,7 @@
       ["Adv Language course", "APLX elective"],
       ["APLX 190-capstone", "Non-APLX elective"]
     ],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/languages-and-applied-linguistics/applied-linguistics-and-multilingualism-ba/",
     "major": "Applied Linguistics and Multilingualism B.A.",
     "planner_name": "4 Year Plan"
   },
@@ -100,6 +105,7 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/languages-and-applied-linguistics/applied-linguistics-and-multilingualism-ba/",
     "major": "Applied Linguistics and Multilingualism B.A.",
     "planner_name": "Transfer Plan"
   },
@@ -115,7 +121,8 @@
       ["AM 170A", "AM 112"],
       ["Upper-div elective"]
     ],
-    "Year 4": [["AM 129"], ["AM 147"], ["AM 170B"]],
+    "Year 4": [["AM 129", "Upper-div elective"], ["AM 147"], ["AM 170B"]],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/applied-mathematics/applied-mathematics-bs/",
     "major": "Applied Mathematics B.S.",
     "planner_name": "Plan 1 for Prepared Frosh"
   },
@@ -135,9 +142,26 @@
       ["AM 112", "STAT 131"],
       ["Upper-div elective"]
     ],
-    "Year 4": [["AM 129"], ["AM 147"], ["AM 170B"]],
+    "Year 4": [["AM 129", "Upper-div elective"], ["AM 147", "AM 170A"], ["AM 170B"]],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/applied-mathematics/applied-mathematics-bs/",
     "major": "Applied Mathematics B.S.",
     "planner_name": "Plan 2 for Frosh"
+  },
+  {
+
+    "Year 1": [
+      ["CSE 20", "AM 100", "Lower-div elective"],
+      ["AM 112", "STAT 131", "Lower-div elective"],
+      ["Upper-div elective"]
+    ],
+    "Year 2": [
+      ["AM 114", "AM 129", "Upper-div elective"],
+      ["AM 170A", "AM 147", "Upper-div elective"],
+      ["AM 170B"]
+    ],
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/applied-mathematics/applied-mathematics-bs/",
+    "major": "Applied Mathematics B.S.",
+    "planner_name": "Plan for Transfer"
   },
   {
     "Year 1": [
@@ -157,6 +181,7 @@
     ],
     "Year 4": [["Elective"], ["PHYS 182"], ["Elective"]],
     "major": "Applied Physics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/applied-physics-bs/",
     "planner_name": "Plan 1 for Frosh"
   },
   {
@@ -166,13 +191,14 @@
       ["PHYS 105", "PHYS 116C", "PHYS 133"]
     ],
     "Year 2": [
-      ["PHYS 110A", "CHEM 1A or CHEM 1B"],
-      ["PHYS 110B", "PHYS 112"],
+      ["PHYS 110A", "CHEM 1A or CHEM 1B", "Elective"],
+      ["PHYS 110B", "PHYS 112", "PHYS 182"],
       ["PHYS 134", "Elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
     "major": "Applied Physics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/applied-physics-bs/",
     "planner_name": "Plan 1 for Transfer"
   },
   {
@@ -182,54 +208,52 @@
       ["PHYS 105", "PHYS 133", "PHYS 116C"]
     ],
     "Year 2": [
-      ["PHYS 110A", "CHEM 1A or CHEM 1B"],
-      ["PHYS 110B", "PHYS 112"],
-      ["Elective", "PHYS 182"]
+      ["PHYS 110A", "CHEM 1A or CHEM 1B", "Elective"],
+      ["PHYS 110B", "PHYS 112", "PHYS 134"],
+      ["Elective", "PHYS 182", "Elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
     "major": "Applied Physics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/physics/applied-physics-bs/",
     "planner_name": "Plan 2 for Transfer (no PHYS 5D)"
   },
   {
     "Year 1": [
-      ["ARTG 80I", "MATH 3"],
-      ["CMPM 80K", "Precalculus"],
-      ["CSE 20", "ARTG 80H"],
-      ["HAVC elective"]
+      ["ARTG 80I", "MATH 3, Precalculus"],
+      ["CMPM 80K", "ARTG 80H"],
+      ["CSE 20", "HAVC elective"]
     ],
     "Year 2": [
       ["CSE 30", "Lower-division arts elective"],
       ["CMPM 35", "FILM 80V"],
-      ["CMPM 120", "ARTG 120"],
-      []
+      ["CMPM 120", "ARTG 120"]
     ],
     "Year 3": [
       ["Media Creation elective 1", "GD/HCI elective 1"],
       ["Media Creation elective 2", "GD/HCI elective 2"],
-      ["Media Creation elective 3", "Media Creation elective 4"],
-      []
+      ["Media Creation elective 3", "Media Creation elective 4"]
     ],
-    "Year 4": [["ARTG 170"], ["ARTG 171"], ["ARTG 172"], []],
-    "major": "Art and Design: Games and Playable Media B.A. ",
+    "Year 4": [["ARTG 170"], ["ARTG 171"], ["ARTG 172"]],
+    "major": "Art and Design: Games and Playable Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/art-and-design-games-and-playable-media/art-and-design-games-and-playable-media-ba/",
     "planner_name": "Planner 1"
   },
   {
     "Year 1": [
       ["Lower-division arts elective", "CMPM 35", "ARTG 80I"],
       ["ARTG 80H", "CMPM 80K", "FILM 80V"],
-      ["CMPM 120", "ARTG 120", "Media Creation elective 1"],
-      []
+      ["CMPM 120", "ARTG 120", "Media Creation elective 1"]
     ],
     "Year 2": [
-      ["ARTG 170", "GD & HCI elective 1"],
-      ["ARTG 171", "GD & HCI elective 2"],
-      ["ARTG 172", "Media Creation elective 3"],
-      []
+      ["ARTG 170", "GD & HCI elective 1", "HAVC elective"],
+      ["ARTG 171", "GD & HCI elective 2", "Media Creation elective 2"],
+      ["ARTG 172", "Media Creation elective 3", "Media Creation elective 4"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "major": "Art and Design: Games and Playable Media B.A. ",
+    "major": "Art and Design: Games and Playable Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/art-and-design-games-and-playable-media/art-and-design-games-and-playable-media-ba/",
     "planner_name": "Transfer Students Planner"
   },
   {
@@ -245,7 +269,8 @@
       ["UD studio"],
       ["UD studio or ART 190B"]
     ],
-    "Major": "Art B.A.",
+    "major": "Art B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/art/art-ba/",
     "planner_name": "Incoming Frosh Planner"
   },
   {
@@ -262,6 +287,7 @@
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
     "major": "Art B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/art/art-ba/",
     "planner_name": "Junior Transfers Planner"
   },
   {
@@ -281,11 +307,12 @@
       ["BIOC 100C", "PHYS 6B & PHYS 6M"]
     ],
     "Year 4": [
-      ["BIOC 163A or CHEM 163A"],
-      ["BIOC 163B or CHEM 163B"],
-      ["Senior exit lab"]
+      ["BIOC 163A or CHEM 163A", "PHYS 6C & PHYS 6N"],
+      ["BIOC 163B or CHEM 163B", "BIOL 115"],
+      ["Senior exit lab", "BIOL 110"]
     ],
     "major": "Biochemistry and Molecular Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/chemistry-and-biochemistry/biochemistry-and-molecular-biology-bs/",
     "planner_name": "4 Year Plan"
   },
   {
@@ -295,13 +322,14 @@
       ["BIOC 100C", "PHYS 6B & PHYS 6M", "BIOL 105"]
     ],
     "Year 2": [
-      ["BIOC 163A or CHEM 163A"],
-      ["BIOC 163B or CHEM 163B"],
-      ["Senior exit lab"]
+      ["BIOC 163A or CHEM 163A", "PHYS 6C & PHYS 6N"],
+      ["BIOC 163B or CHEM 163B", "BIOL 115"],
+      ["Senior exit lab", "BIOL 110"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
     "major": "Biochemistry and Molecular Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/chemistry-and-biochemistry/biochemistry-and-molecular-biology-bs/",
     "planner_name": "Transfer 2 Year Plan"
   },
   {
@@ -322,6 +350,7 @@
       ["Biology elective"]
     ],
     "major": "Biology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/biology-ba/",
     "planner_name": "Frosh Planner"
   },
   {
@@ -338,6 +367,7 @@
       ["Biology elective"]
     ],
     "major": "Biology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/biology-ba/",
     "planner_name": "Transfer Planner"
   },
   {
@@ -362,6 +392,7 @@
       ["Laboratory"]
     ],
     "major": "Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/biology-bs/",
     "planner_name": "Frosh Planner"
   },
   {
@@ -378,6 +409,7 @@
       ["UD elective", "UD elective"]
     ],
     "major": "Biology B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/molecular-cell-and-developmental-biology/biology-bs/",
     "planner_name": "Transfer Planner"
   },
   {
@@ -396,23 +428,24 @@
       ["BIOC 100B", "BME 160", "STAT 131"],
       ["AM 115", "BME 163"]
     ],
-    "Year 4": [["BME 129A"], ["BME 129B"], ["BME 129C"]],
+    "Year 4": [["BME 129A", "BME 80G"], ["BME 129B", "STAT 132"], ["BME 129C", "Elective"]],
     "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/biomolecular-engineering/biomolecular-engineering-and-bioinformatics-bs/",
     "planner_name": "Biomolecular Engineering Concentration Plan 1"
   },
   {
     "Year 1": [
       ["CHEM 1A", "MATH 19A"],
       ["MATH 19B", "CHEM 1B & CHEM 1M"],
-      ["AM 10", "CHEM 1C & CHEM 1N", "BME 21L"]
+      ["BIOL 20A", "CHEM 1C & CHEM 1N", "BME 21L"]
     ],
     "Year 2": [
-      ["BME 22L", "CHEM 8A", "BIOL 20A"],
-      ["BME 23L", "CHEM 8B", "PHYS 5A & PHYS 5L"],
+      ["BME 22L", "BIOC 100A", "BME 80G"],
+      ["BME 23L", "BIOC 100B", "PHYS 5A & PHYS 5L"],
       ["BME 105", "PHYS 5B & PHYS 5M"]
     ],
     "Year 3": [
-      ["BME 100A", "BME 110", "BME 185"],
+      ["BME 185", "BME 110", "AM 10"],
       ["AM 20", "BME 160"],
       ["BME 163"]
     ],
@@ -422,6 +455,7 @@
       ["BME 129C", "Elective", "AM 115"]
     ],
     "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/biomolecular-engineering/biomolecular-engineering-and-bioinformatics-bs/",
     "planner_name": "Biomolecular Engineering Concentration Plan 2"
   },
   {
@@ -438,6 +472,7 @@
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
     "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/biomolecular-engineering/biomolecular-engineering-and-bioinformatics-bs/",
     "planner_name": "Biomolecular Engineering Concentration Transfer Plan"
   },
   {
@@ -462,6 +497,7 @@
       ["CSE 144"]
     ],
     "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/biomolecular-engineering/biomolecular-engineering-and-bioinformatics-bs/",
     "planner_name": "Bioinformatics Concentration Plan 1"
   },
   {
@@ -478,6 +514,7 @@
       ["Elective", "CSE 182", "CSE 144"]
     ],
     "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/biomolecular-engineering/biomolecular-engineering-and-bioinformatics-bs/",
     "planner_name": "Bioinformatics Concentration Transfer Plan"
   },
   {
@@ -485,7 +522,9 @@
     "Year 2": [["BME 80H"], ["BME 5", "CSE 20"], ["STAT 7", "STAT 7L"]],
     "Year 3": [["BME 130", "BME 132", "BME 185"], ["BME 105"], ["BME 160"]],
     "Year 4": [["BME 110", "BME 140"], ["BME 175"], []],
-    "planner_name": "Biotechnology B.A. Planner 1"
+    "major": "Biotechnology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/General-Catalog/Academic-Units/Baskin-School-of-Engineering/Biomolecular-Engineering/Biotechnology-BA",
+    "planner_name": "Incoming Frosh Planner"
   },
   {
     "Year 1": [[], [], [], []],
@@ -496,7 +535,9 @@
       ["BME 80H", "BME 160"]
     ],
     "Year 4": [["BME 110", "BME 140"], ["BME 175"], []],
-    "planner_name": "Biotechnology B.A. Planner 2"
+    "major": "Biotechnology B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/General-Catalog/Academic-Units/Baskin-School-of-Engineering/Biomolecular-Engineering/Biotechnology-BA",
+    "planner_name": "Transfer Students Planner"
   },
   {
     "Year 1": [
@@ -516,13 +557,12 @@
     ],
     "Year 4": [
       ["Business Management elective", "Computer course"],
-      ["ECON 197 or ECON 104", "ECON 101"],
-      [
-        "Field Study optional",
-        "ECON 133 or ECON 135 Business Management elective"
-      ]
+      ["ECON 197 or ECON 104", "ECON 101, ECON 133 or ECON 135 Business Management elective", "Field Study internship (optional)"],
+      ["Field Study optional"]
     ],
-    "planner_name": "Business Management Economics B.A. Planner 1"
+    "major": "Business Management Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/business-management-economics-ba/",
+    "planner_name": "General Business Management Plan for Incoming Frosh"
   },
   {
     "Year 1": [[], [], [], []],
@@ -534,13 +574,12 @@
     ],
     "Year 4": [
       ["ECON 113", "Business Management elective"],
-      ["Business Management elective", "ECON 101"],
-      [
-        "Field Study optional",
-        "ECON 133 or ECON 135 Business Management elective"
-      ]
+      ["Business Management elective", "ECON 101, ECON 133 or ECON 135 Business Management elective", "ECON 197 or ECON 104"],
+      ["Field Study (optional)", "Computer Course"]
     ],
-    "planner_name": "Business Management Economics B.A. Planner 2"
+    "major": "Business Management Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/business-management-economics-ba/",
+    "planner_name": "General Business Management Plan for Incoming Transfers"
   },
   {
     "Year 1": [
@@ -560,10 +599,12 @@
     ],
     "Year 4": [
       ["ECON 117B", "Field Study internship optional"],
-      ["ECON 117A", "ECON 197 or ECON 104"],
+      ["ECON 117A", "ECON 197 or ECON 104", "ECON 101, ECON 133, or ECON 135"],
       ["Ethics course", "Field Study optional"]
     ],
-    "planner_name": "Business Management Economics B.A. Planner 3"
+    "major": "Business Management Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/business-management-economics-ba/",
+    "planner_name": "Business Management w/ Accounting Concentration Plan for Incoming Frosh"
   },
   {
     "Year 1": [[], [], [], []],
@@ -574,11 +615,13 @@
       ["ECON 100B", "ECON 111C", "Ethics course"]
     ],
     "Year 4": [
-      ["ECON 113", "ECON 117B"],
-      ["ECON101", "ECON 117A"],
-      ["133 or 135", "ECON 116"]
+      ["ECON 113", "ECON 117B", "ECON UD elective"],
+      ["ECON 101, ECON 133, or ECON 135", "ECON 117A", "ECON 112"],
+      ["ECON 110", "ECON 116", "ECON 197 or ECON 104 (DC)"]
     ],
-    "planner_name": "Business Management Economics B.A. Planner 4"
+    "major": "Business Management Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/business-management-economics-ba/",
+    "planner_name": "Business Management w/ Accounting Concentration Plan for Incoming Transfers"
   },
   {
     "Year 1": [
@@ -597,22 +640,26 @@
       ["CHEM 163C", "CHEM 103"]
     ],
     "Year 4": [["CHEM 146", "CHEM elective"], ["CHEM 164"], ["CHEM elective"]],
-    "planner_name": "Chemistry B.S. Planner 1"
+    "major": "Chemistry B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/chemistry-and-biochemistry/chemistry-bs/",
+    "planner_name": "4 Year General Chemistry Plan"
   },
   {
     "Year 1": [
       ["CHEM 163A", "PHYS 6C & PHYS 6N"],
-      ["CHEM 163B", "CHEM 151A & CHEM 151L", "CHEM 110 & CHEM 110L"],
-      ["CHEM 163C", "1st junior", "1st junior", "2nd senior"]
+      ["CHEM 163B", "CHEM 151A & CHEM 151L"],
+      ["CHEM 163C", "CHEM 110 & CHEM 110L"]
     ],
     "Year 2": [
+      ["CHEM 146", "CHEM elective"],
       ["CHEM 164", "MATH 21"],
-      ["CHEM elective", "CHEM 103"],
-      ["2nd senior", "2nd senior"]
+      ["CHEM elective", "CHEM 103"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Chemistry B.S. Planner 2"
+    "major": "Chemistry B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/chemistry-and-biochemistry/chemistry-bs/",
+    "planner_name": "Transfer General Chemistry Plan"
   },
   {
     "Year 1": [
@@ -635,7 +682,9 @@
       ["CHEM 163B", "CHEM 151A & CHEM 151L"],
       ["CHEM 163C", "BIOC 110L"]
     ],
-    "planner_name": "Chemistry B.S. Planner 3"
+    "major": "Chemistry B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/chemistry-and-biochemistry/chemistry-bs/",
+    "planner_name": "4 Year Biochemistry Concentration Plan"
   },
   {
     "Year 1": [
@@ -650,7 +699,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Chemistry B.S. Planner 4"
+    "major": "Chemistry B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/chemistry-and-biochemistry/chemistry-bs/",
+    "planner_name": "Transfer Biochemistry Concentration Plan"
   },
   {
     "Year 1": [
@@ -673,7 +724,9 @@
       ["Upper-division elective"],
       ["CLST 197F 2 credits"]
     ],
-    "planner_name": "Classical Studies B.A. Planner 1"
+    "major": "Classical Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/classical-studies-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -692,7 +745,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Classical Studies B.A. Planner 2"
+    "major": "Classical Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/classical-studies-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [["MATH 2", "PSYC 20"], ["MATH 3", "Programming"], ["Calculus"]],
@@ -711,7 +766,9 @@
       ["Cognitive elective seminar"],
       ["Cognitive elective"]
     ],
-    "planner_name": "Cognitive Science B.S. Planner 1"
+    "major": "Cognitive Science B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/cognitive-science-bs/",
+    "planner_name": "Frosh Plan 1"
   },
   {
     "Year 1": [["MATH 2", "PSYC 20"], ["MATH 3", "Programming"], ["Calculus"]],
@@ -726,11 +783,13 @@
       ["Cognitive core"]
     ],
     "Year 4": [
-      ["Cognitive elective", "Cognitive elective seminar"],
+      ["Cognitive elective", "Cognitive elective seminar", "Interdisciplinary elective"],
       ["Interdisciplinary elective UD", "Interdisciplinary elective"],
       ["Interdisciplinary elective"]
     ],
-    "planner_name": "Cognitive Science B.S. Planner 2"
+    "major": "Cognitive Science B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/cognitive-science-bs/",
+    "planner_name": "Frosh Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -748,7 +807,9 @@
         "Interdisciplinary elective upper-division"
       ]
     ],
-    "planner_name": "Cognitive Science B.S. Planner 3"
+    "major": "Cognitive Science B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/psychology/cognitive-science-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [["CMMU 10"], [], [], []],
@@ -765,7 +826,9 @@
       ["CMMU 195 optional"],
       []
     ],
-    "planner_name": "Community Studies B.A. Planner 1"
+    "major": "Community Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/community-studies/community-studies-ba/",
+    "planner_name": "Suggested Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -782,7 +845,9 @@
       ["CMMU 195 optional"],
       []
     ],
-    "planner_name": "Community Studies B.A. Planner 2"
+    "major": "Community Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/community-studies/community-studies-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -805,7 +870,9 @@
       ["Capstone course", "Concentration course"],
       ["Capstone course", "Concentration course"]
     ],
-    "planner_name": "Computer Engineering B.S. Planner 1"
+    "major": "Computer Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-engineering-bs/",
+    "planner_name": "Plan 1 for Incoming Frosh"
   },
   {
     "Year 1": [
@@ -824,11 +891,13 @@
       ["CSE 185E", "ECE 103 & ECE 103L", "Concentration course"]
     ],
     "Year 4": [
-      ["CSE 121 & CSE 121L"],
-      ["Capstone course"],
+      ["CSE 121 & CSE 121L", "Concentration course"],
+      ["Capstone course", "Concentration course"],
       ["Concentration course"]
     ],
-    "planner_name": "Computer Engineering B.S. Planner 2"
+    "major": "Computer Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-engineering-bs/",
+    "planner_name": "Incoming Frosh Without Programming Experience)"
   },
   {
     "Year 1": [[], [], [], []],
@@ -839,11 +908,13 @@
       ["CSE 120", "CSE 121 & CSE 121L", "Concentration course"]
     ],
     "Year 4": [
-      ["ECE 103 & ECE 103L"],
-      ["Capstone course"],
-      ["Capstone course"]
+      ["ECE 103 & ECE 103L", "Concentration course"],
+      ["Capstone course", "Concentration course"],
+      ["Capstone course", "Concentration course"]
     ],
-    "planner_name": "Computer Engineering B.S. Planner 3"
+    "major": "Computer Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-engineering-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -858,7 +929,9 @@
       ["Breadth course 3"]
     ],
     "Year 4": [["DC elective"], [], ["Elective list 3 capstone"]],
-    "planner_name": "Computer Science B.A. Planner 1"
+    "major": "Computer Science B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-science-ba/",
+    "planner_name": "4 Year Plan with Programming Experience"
   },
   {
     "Year 1": [
@@ -873,7 +946,9 @@
       ["Breadth course 3"]
     ],
     "Year 4": [["DC elective"], [], ["Elective list 3 capstone"]],
-    "planner_name": "Computer Science B.A. Planner 2"
+    "major": "Computer Science B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-science-ba/",
+    "planner_name": "4 Year Plan with Programming Experience"
   },
   {
     "Year 1": [
@@ -888,7 +963,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Computer Science B.A. Planner 3"
+    "major": "Computer Science B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-science-ba/",
+    "planner_name": "Transfer 2 Year Plan"
   },
   {
     "Year 1": [
@@ -899,7 +976,9 @@
     "Year 2": [["CSE 13S", "AM 10"], ["CSE 101", "CSE 107"], ["CSE 120"]],
     "Year 3": [["CSE 130", "Elective"], ["CSE 102", "Elective"], ["CSE 103"]],
     "Year 4": [["Elective", "DC elective"], ["CSE 114"], ["Capstone elective"]],
-    "planner_name": "Computer Science B.S. Planner 1"
+    "major": "Computer Science B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-science-bs/",
+    "planner_name": "4 Year Plan with Programming Experience"
   },
   {
     "Year 1": [
@@ -918,7 +997,9 @@
       ["CSE 120", "DC-elective"]
     ],
     "Year 4": [["CSE 112", "Elective"], ["CSE 130"], ["Capstone elective"]],
-    "planner_name": "Computer Science B.S. Planner 2"
+    "major": "Computer Science B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-science-bs/",
+    "planner_name": "4 Year Plan without Programming Experience"
   },
   {
     "Year 1": [
@@ -933,7 +1014,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Computer Science B.S. Planner 3"
+    "major": "Computer Science B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computer-science-and-engineering/computer-science-bs/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -952,7 +1035,9 @@
       ["Game Engineering 3", "Game Engineering 4"]
     ],
     "Year 4": [["CMPM 170", "Game Engineering 5"], ["CMPM 171"], ["CMPM 172"]],
-    "planner_name": "Computer Science: Computer Game Design B.S. Planner 1"
+    "major": "Computer Science: Computer Game Design B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computational-media/computer-science-computer-game-design-bs/",
+    "planner_name": "Frosh Plan 1"
   },
   {
     "Year 1": [
@@ -971,7 +1056,9 @@
       ["Game Engineering 3", "Game Engineering 4"]
     ],
     "Year 4": [["CMPM 170", "Game Engineering 5"], ["CMPM 171"], ["CMPM 172"]],
-    "planner_name": "Computer Science: Computer Game Design B.S. Planner 2"
+    "major": "Computer Science: Computer Game Design B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computational-media/computer-science-computer-game-design-bs/",
+    "planner_name": "Frosh Plan 2"
   },
   {
     "Year 1": [
@@ -980,13 +1067,15 @@
       ["CSE 111", "CMPM 120", "ARTG 120"]
     ],
     "Year 2": [
-      ["CMPM 170", "CMPM 176"],
-      ["CMPM 171", "Game Engineering 2"],
-      ["CMPM 172", "Game Engineering 4"]
+      ["CMPM 170", "CMPM 176", "Game Engineering 1"],
+      ["CMPM 171", "Game Engineering 2", "Game Engineering 3"],
+      ["CMPM 172", "Game Engineering 4", "Game Engineering 5"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Computer Science: Computer Game Design B.S. Planner 3"
+    "major": "Computer Science: Computer Game Design B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/computational-media/computer-science-computer-game-design-bs/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [[], [], []],
@@ -997,7 +1086,9 @@
       ["CRES elective"]
     ],
     "Year 4": [["CRES elective"], ["CRES 190"], []],
-    "planner_name": "Critical Race and Ethnic Studies B.A. Planner 1"
+    "major": "Critical Race and Ethnic Studies B.A",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/critical-race-and-ethnic-studies/critical-race-and-ethnic-studies-ba/",
+    "planner_name": "Incoming Frosh Plan"
   },
   {
     "Year 1": [
@@ -1012,13 +1103,15 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Critical Race and Ethnic Studies B.A. Planner 2"
+    "major": "Critical Race and Ethnic Studies B.A",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/critical-race-and-ethnic-studies/critical-race-and-ethnic-studies-ba/",
+    "planner_name": "Incoming Transfer Plan"
   },
   {
     "Year 1": [
-      ["sr thesis only EART 199"],
-      ["sr thesis only EART 199"],
-      ["EART 195"]
+      ["CHEM 1A"],
+      ["MATH 11A or MATH 19A", "CHEM 1B & CHEM 1M"],
+      ["EART 10 & EART 10L", "MATH 11B or MATH 19B", "CHEM 1C & CHEM 1N"]
     ],
     "Year 2": [
       ["EART 110A & EART 110L", "MATH 23A or EART 111"],
@@ -1031,11 +1124,13 @@
       ["EART 110C & EART 110N", "EART elective"]
     ],
     "Year 4": [
-      ["EART elective"],
-      ["EART elective"],
-      ["EART 189A or senior thesis"]
+      ["(sr thesis only) EART 199", "EART elective"],
+      ["(sr thesis only) EART 199", "EART elective"],
+      ["EART 189A or senior thesis", "EART 195"]
     ],
-    "planner_name": "Earth Sciences B.S. Planner 1"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Standard Earth Sciences 4 Year Plan"
   },
   {
     "Year 1": [
@@ -1044,13 +1139,15 @@
       ["PHYS 6B & PHYS 6M", "EART 110C & EART 110N"]
     ],
     "Year 2": [
-      ["EART elective", "EART elective"],
-      ["EART elective", "EART elective"],
-      ["EART elective", "EART elective"]
+      ["EART elective", "EART elective", "(sr thesis only) EART 199"],
+      ["EART elective", "EART elective", "(sr thesis only) EART 199"],
+      ["EART elective", "EART elective", "EART 189A or senior thesis"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Earth Sciences B.S. Planner 2"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Standard Earth Sciences Transfer Plan"
   },
   {
     "Year 1": [
@@ -1073,7 +1170,9 @@
       ["Upper-division elective"],
       ["EART 189A"]
     ],
-    "planner_name": "Earth Sciences B.S. Planner 3"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Geology Concentration 4 Year Plan"
   },
   {
     "Year 1": [
@@ -1084,11 +1183,13 @@
     "Year 2": [
       ["EART 150 & EART 150L"],
       ["Upper-division elective", "Upper-division elective"],
-      ["EART 120 & EART 120L", "EART 110C & EART 110N"]
+      ["EART 120 & EART 120L", "EART 110C & EART 110N", "EART 189A"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Earth Sciences B.S. Planner 4"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Geology Concentration Transfer Plan"
   },
   {
     "Year 1": [
@@ -1107,7 +1208,9 @@
       ["Sr thesis only EART 199", "EART 162"],
       ["Sr thesis EART 195 or EART 189A", "EART elective"]
     ],
-    "planner_name": "Earth Sciences B.S. Planner 5"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Planetary Sciences Concentration 4 Year Plan"
   },
   {
     "Year 1": [
@@ -1116,13 +1219,15 @@
       ["PHYS 6B & PHYS 6M", "EART 110C & EART 110N"]
     ],
     "Year 2": [
-      ["EART 160", "EART elective"],
-      ["EART 162", "EART elective"],
-      ["EART 119", "EART elective"]
+      ["EART 160", "EART elective", "Sr thesis only EART 199"],
+      ["EART 162", "EART elective", "Sr thesis only EART 199"],
+      ["EART 119", "EART elective", "EART 189A or sr thesis EART 195"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Earth Sciences B.S. Planner 6"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Planetary Sciences Concentration Transfer Plan"
   },
   {
     "Year 1": [
@@ -1145,7 +1250,9 @@
       ["EART elective", "Sr thesis only EART 199"],
       ["Senior thesis EART 195 or EART 189A"]
     ],
-    "planner_name": "Earth Sciences B.S. Planner 7"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Ocean Sciences Concentration 4 Year Plan"
   },
   {
     "Year 1": [
@@ -1154,13 +1261,15 @@
       ["PHYS 6B & PHYS 6M", "EART 110C & EART 110N"]
     ],
     "Year 2": [
-      ["EART elective", "EART elective"],
-      ["EART elective", "OCEA 101"],
+      ["EART elective", "EART elective", "Sr thesis only EART 199"],
+      ["EART elective", "OCEA 101", "Sr thesis only EART 199"],
       ["EART elective", "EART 189A or senior thesis EART 195"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Earth Sciences B.S. Planner 8"
+    "major": "Earth Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciences-bs/",
+    "planner_name": "Ocean Sciences Concentration Transfer Plan"
   },
   {
     "Year 1": [["ANTH 1"], ["ANTH 2"], ["ANTH 3", "EART 10 & EART 10L"]],
@@ -1179,7 +1288,9 @@
       ["EART elective", "Sr comp"],
       ["ANTH elective", "Sr comp"]
     ],
-    "planner_name": "Anthropology Combined Major B.A. Planner 1"
+    "major": "Anthropology Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciencesanthropology-combined-major-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -1188,13 +1299,15 @@
       ["EART elective", "ANTH elective"]
     ],
     "Year 2": [
-      ["ANTH elective", "EART 110A & EART 110L"],
-      ["ANTH elective", "EART elective"],
-      ["ANTH 194 or ANTH 196 or EART 189A or sr thesis EART 195"]
+      ["ANTH elective", "EART 110A & EART 110L", "sr thesis only EART 199"],
+      ["ANTH elective", "EART elective", "sr thesis only EART 199"],
+      ["ANTH 194+ or ANTH 196+ or EART 189A or sr thesis EART 195"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Anthropology Combined Major B.A. Planner 2"
+    "major": "Anthropology Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/earth-sciencesanthropology-combined-major-ba/",
+    "planner_name": "Transfer 2 Year Plan"
   },
   {
     "Year 1": [
@@ -1217,7 +1330,9 @@
       ["ECEV topical elective", "EEB general elective"],
       ["EEB general elective", "EEB general elective"]
     ],
-    "planner_name": "Ecology and Evolution B.S. Planner 1"
+    "major": "Ecology and Evolution B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/ecology-and-evolution-bs/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1232,7 +1347,9 @@
       ["ECEV topical elective", "EEB general elective"],
       ["Physiology core"]
     ],
-    "planner_name": "Ecology and Evolution B.S. Planner 2"
+    "major": "Ecology and Evolution B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/ecology-and-evolutionary-biology/ecology-and-evolution-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -1251,7 +1368,9 @@
       ["ECON elective", "Field Study optional"]
     ],
     "Year 4": [["ECON elective"], ["ECON 197 or ECON 104"], ["ECON elective"]],
-    "planner_name": "Economics B.A. Planner 1"
+    "major": "Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/economics-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1263,10 +1382,12 @@
     ],
     "Year 4": [
       ["ECON 113", "ECON elective"],
-      ["ECON elective", "ECON 197 or ECON 104 DC"],
+      ["ECON elective", "ECON 197 or ECON 104 DC", "Field Study (Internship) optional"],
       ["Field Study optional", "ECON elective"]
     ],
-    "planner_name": "Economics B.A. Planner 2"
+    "major": "Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/economics-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [["MATH 19A"], ["MATH 19B", "ECON 1"], ["ECON 2"]],
@@ -1276,13 +1397,13 @@
       ["ECON 100B", "MATH 100"]
     ],
     "Year 3": [
-      ["MATH 105A", "STAT 5 or  STAT 7 & STAT 7L"],
+      ["MATH 105A", "STAT 5 or STAT 7 & STAT 7L"],
       ["ECON 113", "Math elective"],
       ["Econ elective", "Math elective"]
     ],
     "Year 4": [
       ["Econ elective"],
-      ["Math elective", "ECON 197 or  ECON 104"],
+      ["Math elective", "ECON 197 or  ECON 104", "Field Study internship (optional)"],
       ["Field Study optional"]
     ],
     "planner_name": "Mathematics Combined B.A. Planner 1"
