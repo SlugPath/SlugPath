@@ -1406,7 +1406,9 @@
       ["Math elective", "ECON 197 or  ECON 104", "Field Study internship (optional)"],
       ["Field Study optional"]
     ],
-    "planner_name": "Mathematics Combined B.A. Planner 1"
+    "major": "Mathematics Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/economicsmathematics-combined-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1418,10 +1420,12 @@
     ],
     "Year 4": [
       ["ECON 100A", "MATH 105A"],
-      ["ECON 113", "Econ elective"],
-      ["ECON 100B", "Math elective"]
+      ["ECON 113", "Econ elective", "Math elective"],
+      ["ECON 100B", "Math elective", "ECON 197 or ECON 104"]
     ],
-    "planner_name": "Mathematics Combined B.A. Planner 2"
+    "major": "Mathematics Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/economicsmathematics-combined-ba/",
+    "planner_name": "Transfer Plan 1"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1433,10 +1437,12 @@
     ],
     "Year 4": [
       ["MATH 105A", "Math elective"],
-      ["Econ elective", "ECON 197 or  ECON 104"],
-      ["Econ elective", "Math elective"]
+      ["Econ elective", "ECON 197 or  ECON 104", "Math elective"],
+      ["Econ elective", "Math elective", "Field Study (optional)"]
     ],
-    "planner_name": "Mathematics Combined B.A. Planner 3"
+    "major": "Mathematics Combined B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/economicsmathematics-combined-ba/",
+    "planner_name": "Transfer Plan 2"
   },
   {
     "Year 1": [["EDUC 60"], [], ["EDUC 10"]],
@@ -1449,9 +1455,11 @@
     "Year 4": [
       ["EDUC elective", "EDUC elective"],
       ["EDUC elective"],
-      ["EDUC 190", ""]
+      ["EDUC 190"]
     ],
-    "planner_name": "Education, Democracy, and Justice B.A. Planner 1\""
+    "major": "Education, Democracy, and Justice B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/education/education-democracy-and-justice-ba/",
+    "planner_name": "Plan 1 for Incoming Frosh"
   },
   {
     "Year 1": [[], [], ["EDUC 10"]],
@@ -1464,9 +1472,11 @@
     "Year 4": [
       ["EDUC elective", "EDUC elective"],
       ["EDUC elective"],
-      ["EDUC 190", ""]
+      ["EDUC 190"]
     ],
-    "planner_name": "Education, Democracy, and Justice B.A. Planner 2\""
+    "major": "Education, Democracy, and Justice B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/education/education-democracy-and-justice-ba/",
+    "planner_name": "Plan 2 for Incoming Frosh"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1479,9 +1489,11 @@
     "Year 4": [
       ["EDUC elective", "EDUC elective"],
       ["EDUC elective", "EDUC elective"],
-      ["EDUC 190", ""]
+      ["EDUC 190"]
     ],
-    "planner_name": "Education, Democracy, and Justice B.A. Planner 3\""
+    "major": "Education, Democracy, and Justice B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/education/education-democracy-and-justice-ba/",
+    "planner_name": "Plan 1 for Incoming Transfer"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1496,7 +1508,9 @@
       ["EDUC elective", "EDUC elective"],
       ["EDUC 190"]
     ],
-    "planner_name": "Education, Democracy, and Justice B.A. Planner 4\""
+    "major": "Education, Democracy, and Justice B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/education/education-democracy-and-justice-ba/",
+    "planner_name": "Plan 2 for Incoming Transfer"
   },
   {
     "Year 1": [
@@ -1519,7 +1533,9 @@
       ["ECE 129B", "Upper-division elective"],
       ["ECE 129C", "Upper-division elective"]
     ],
-    "planner_name": "Electrical Engineering B.S. Planner 1"
+    "major": "Electrical Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/electrical-and-computer-engineering/electrical-engineering-bs/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [
@@ -1529,12 +1545,14 @@
     ],
     "Year 2": [
       ["ECE 129A", "ECE 102 & ECE 102L"],
-      ["ECE 129B", "ECE 151"],
-      ["ECE 129C", "ECE 135 & ECE 135L"]
+      ["ECE 129B", "ECE 151", "Upper-division elective"],
+      ["ECE 129C", "ECE 135 & ECE 135L", "Upper-division elective"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Electrical Engineering B.S. Planner 2"
+    "major": "Electrical Engineering B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/baskin-school-of-engineering/electrical-and-computer-engineering/electrical-engineering-bs/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -1557,7 +1575,9 @@
       ["Upper-division elective"],
       ["ESCI 191 or ESCI 195"]
     ],
-    "planner_name": "Environmental Sciences B.S. Planner 1"
+    "major": "Environmental Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/environmental-sciences-bs/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1572,7 +1592,9 @@
       ["Upper-division elective", "Upper-division elective"],
       ["ESCI 191 or ESCI 195", "Upper-division elective"]
     ],
-    "planner_name": "Environmental Sciences B.S. Planner 2"
+    "major": "Environmental Sciences B.S.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/physical-and-biological-sciences-division/earth-and-planetary-sciences/environmental-sciences-bs/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -1595,7 +1617,9 @@
       ["Upper-division ENVS"],
       ["Upper-division ENVS", "Comprehensive  requirement"]
     ],
-    "planner_name": "Environmental Studies B.A. Planner 1"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Without Concentration 4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1610,7 +1634,9 @@
       ["Upper-division ENVS", "Upper-division ENVS natural science"],
       ["Comprehensive requirement"]
     ],
-    "planner_name": "Environmental Studies B.A. Planner 2"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Without Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -1629,13 +1655,15 @@
       ["ENVS upper-division natural science"],
       ["ENVS upper-division", "Comprehensive requirement"]
     ],
-    "planner_name": "Environmental Studies B.A. Planner 3"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Geographic Information Systems Concentration 4 Year Plan"
   },
   {
     "Year 1": [
       ["STAT 7 & STAT 7L"],
       ["ENVS 100 & ENVS 100L", "ENVS upper-division social science"],
-      ["ENVSupper-division", "ENVS upper-division natural science"]
+      ["ENVS upper-division", "ENVS upper-division natural science"]
     ],
     "Year 2": [
       ["ENVS 115A & ENVS 115L"],
@@ -1644,7 +1672,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Environmental Studies B.A. Planner 4"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Geographic Information Systems Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -1667,7 +1697,9 @@
       ["ENVS upper-division"],
       ["ENVS upper-division", "Comprehensive requirement"]
     ],
-    "planner_name": "Environmental Studies B.A. Planner 5"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Global Environmental Justice Concentration 4 Year Plan"
   },
   {
     "Year 1": [
@@ -1682,7 +1714,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Environmental Studies B.A. Planner 6"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Global Environmental Justice Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -1705,7 +1739,9 @@
       ["ENVS upper-division field course"],
       ["ENVS upper-division", "Comprehensive requirement"]
     ],
-    "planner_name": "Environmental Studies B.A. Planner 7"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Conservation Science & Policy Concentration 4 Year Plan"
   },
   {
     "Year 1": [
@@ -1720,7 +1756,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Environmental Studies B.A. Planner 8"
+    "major": "Environmental Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studies-ba/",
+    "planner_name": "Conservation Science & Policy Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -1743,7 +1781,9 @@
       ["Upper-division BIOE"],
       ["Comprehensive  requirement"]
     ],
-    "planner_name": "Biology Combined Major B.A. Planner 1"
+    "major": "Biology Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studiesbiology-combined-major-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1755,10 +1795,12 @@
     ],
     "Year 4": [
       ["Upper-division ENVS social sciences", "Upper-division BIOE"],
-      ["Upper-division ENVS", "Upper-division BIOE"],
+      ["Upper-division ENVS", "Upper-division BIOE", "PHYS 1"],
       ["Upper-division BIOE", "Comprehensive requirement"]
     ],
-    "planner_name": "Biology Combined Major B.A. Planner 2"
+    "major": "Biology Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studiesbiology-combined-major-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -1781,7 +1823,9 @@
       ["Upper-division EART"],
       ["Upper-division EART", "Comprehensive requirement"]
     ],
-    "planner_name": "Earth Sciences Combined Major B.A. Planner 1"
+    "major": "Earth Sciences Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studiesearth-sciences-combined-major-ba/",
+    "planner_name": "Incoming Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1796,7 +1840,9 @@
       ["Upper-division ENVS social sciences", "Upper-division EART"],
       ["Comprehensive requirement"]
     ],
-    "planner_name": "Earth Sciences Combined Major B.A. Planner 2"
+    "major": "Earth Sciences Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studiesearth-sciences-combined-major-ba/",
+    "planner_name": "Incoming Transfer Plan"
   },
   {
     "Year 1": [
@@ -1819,7 +1865,9 @@
       ["Upper-division ENVS"],
       ["Comprehensive  requirement"]
     ],
-    "planner_name": "Economics Combined Major B.A. Planner 1"
+    "major": "Economics Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studieseconomics-combined-major-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1834,7 +1882,9 @@
       ["Upper-division ENVS", "Upper-division ECON"],
       ["Comprehensive requirement"]
     ],
-    "planner_name": "Economics Combined Major B.A. Planner 2"
+    "major": "Economics Combined Major B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/environmental-studies/environmental-studieseconomics-combined-major-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [[], [], []],
@@ -1849,7 +1899,9 @@
       ["FMST 194 or FMST 195"],
       []
     ],
-    "planner_name": "Feminist Studies B.A. Planner 1"
+    "major": "Feminist Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/feminist-studies/feminist-studies-ba/",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1859,8 +1911,10 @@
       ["FMST 100"],
       ["FMST elective", "FMST elective"]
     ],
-    "Year 4": [["FMST elective"], ["FMST elective"], ["FMST 194 or 195"]],
-    "planner_name": "Feminist Studies B.A. Planner 2"
+    "Year 4": [["FMST elective", "FMST elective"], ["FMST elective", "FMST elective"], ["FMST 194 or 195"]],
+    "major": "Feminist Studies B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/feminist-studies/feminist-studies-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -1886,7 +1940,9 @@
       ["FILM upper-division elective"],
       ["FILM 194"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 1"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "General Film and Digital Media 4 Year Plan 1"
   },
   {
     "Year 1": [
@@ -1915,7 +1971,9 @@
       ["FILM upper-division elective"],
       ["FILM 194"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 2"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "General Film and Digital Media 4 Year Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1937,7 +1995,9 @@
       ["FILM upper-division elective", "FILM upper-division elective"],
       ["FILM upper-division elective", "FILM 194"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 3"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "General Film and Digital Media 2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -1959,7 +2019,9 @@
       ["FILM 165/ FILM 187/ FILM 189"]
     ],
     "Year 4": [["FILM 194"], ["FILM 199"], ["FILM 192 or FILM 195"]],
-    "planner_name": "Film and Digital Media B.A. Planner 4"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Critical Studies Concentration 4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -1982,7 +2044,9 @@
       ["FILM 165/ FILM 187/ FILM 189", "FILM 199"],
       ["FILM upper-division elective", "FILM 192 or FILM 195"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 5"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Critical Studies Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -2005,7 +2069,9 @@
       ["FILM upper-division elective"],
       ["FILM 194/ FILM 196/ FILM 197"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 6"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Production Concentration 4 Year Plan 1"
   },
   {
     "Year 1": [
@@ -2028,7 +2094,9 @@
       ["FILM upper-division elective"],
       ["FILM 194/ FILM 196/ FILM 197"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 7"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Production Concentration 4 Year Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2051,7 +2119,9 @@
       ["FILM upper-division elective", "FILM upper-division production"],
       ["FILM upper-division elective", "FILM 194/ FILM 196/ FILM 197"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 8"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Production Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -2074,7 +2144,9 @@
       ["FILM 199", "FILM upper-division production"],
       ["FILM 195 or FILM 196 or FILM 197"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 9"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Integrated Critical Practice Concentration 4 Year Plan 1"
   },
   {
     "Year 1": [
@@ -2097,7 +2169,9 @@
       ["FILM upper-division production", "FILM 199"],
       ["FILM 195/ FILM 196/ FILM 197"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 10"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Integrated Critical Practice Concentration 4 Year Plan 2"
   },
   {
     "Year 1": [[], [], [], []],
@@ -2114,12 +2188,15 @@
     "Year 4": [
       [
         "FILM 130/ FILM 132/ FILM 134/ FILM 136",
-        "FILM upper-division production"
+        "FILM upper-division production",
+        "FILM 194"
       ],
-      ["FILM upper-division elective", "FILM upper-division production"],
+      ["FILM upper-division elective", "FILM upper-division production", "FILM 199"],
       ["FILM upper-division elective", "FILM 195/ FILM 196/ FILM 197"]
     ],
-    "planner_name": "Film and Digital Media B.A. Planner 11"
+    "major": "Film and Digital Media B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/film-and-digital-media/film-and-digital-media-ba/",
+    "planner_name": "Integrated Critical Practice Concentration 2 Year Plan"
   },
   {
     "Year 1": [
@@ -2140,35 +2217,38 @@
       []
     ],
     "Year 4": [
-      ["ECON elective", "ECON elective"],
-      ["ECON 197 or ECON 104", "ECON elective"],
-      ["ECON elective", "Field Study optional"]
+      ["ECON elective", "ECON elective", "Area Study"],
+      ["ECON 197 or ECON 104", "ECON elective", "Field Study Internship (optional)"],
+      ["ECON elective", "Field Study optional", "Area Study"]
     ],
-    "planner_name": "Global Economics B.A. Planner 1"
+    "major": "Global Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/global-economics-ba/",
+    "planner_name": "Frosh Plan"
   },
   {
     "Year 1": [[], [], [], []],
     "Year 2": [[], [], [], []],
     "Year 3": [
-      ["AM 11B/ECON 11B"],
-      ["ECON 100A"],
-      ["ECON 100B"],
+      ["AM 11B/ECON 11B", "ECON elective", "STAT 5"],
+      ["ECON 100A", "Area Study"],
+      ["ECON 100B", "ECON Elective", "Area Study"],
       [
         "Study abroad or fall quarter senior year Students can apply up to two courses from study abroad toward major requirements Could be upper-division ECON electives or Area Studies or a combination of both"
       ]
     ],
     "Year 4": [
-      ["ECON elective", "STAT 5", "ECON 113", "ECON elective"],
-      ["Area Study", "ECON elective", "ECON 197 or ECON 104"],
-      ["ECON elective", "Area Study", "Field Study optional"],
+      ["ECON 113", "ECON elective"],
+      ["ECON elective", "ECON 197 or ECON 104", "Field Study Internship (optional)"],
+      ["Field Study optional"],
       []
     ],
-    "planner_name": "Global Economics B.A. Planner 2"
+    "major": "Global Economics B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/social-sciences-division/economics/global-economics-ba/",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
-      ["Lower-division survey"],
-      ["concentration"],
+      ["Lower-division survey, concentration"],
       ["Lower-division breadth area No 1"]
     ],
     "Year 2": [
@@ -2183,16 +2263,18 @@
     ],
     "Year 4": [
       ["Upper-division concentration"],
-      ["Exit seminar"],
-      ["concentration"]
+      ["Exit seminar, concentration"],
+      ["Upper-division elective (any)"]
     ],
-    "planner_name": "History B.A. Planner 1"
+    "major": "History B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/history-ba/",
+    "planner_name": "General History 4 Year Plan"
   },
   {
     "Year 1": [
-      ["Lower-division survey"],
-      ["concentration"],
-      ["Lower-division breadth area No 1"]
+      ["Lower-division survey, concentration"],
+      ["Lower-division breadth area No 1"],
+      ["Lower-division breadth area No 2"]
     ],
     "Year 2": [
       ["Lower-division concentration"],
@@ -2201,11 +2283,13 @@
     ],
     "Year 3": [
       ["Upper-division concentration"],
-      ["Exit seminar"],
-      ["concentration", "Upper-division elective any"]
+      ["Exit seminar, concentration"],
+      ["Upper-divison breadth area No 2", "Upper-division elective any"]
     ],
     "Year 4": [[], [], [], []],
-    "planner_name": "History B.A. Planner 2"
+    "major": "History B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/history-ba/",
+    "planner_name": "General History 3 Year Plan"
   },
   {
     "Year 1": [
@@ -2215,18 +2299,20 @@
     ],
     "Year 2": [
       ["Upper-division concentration"],
-      ["Exit seminar"],
-      ["concentration"]
+      ["Exit seminar", "concentration"],
+      ["Upper-division elective (any)"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "History B.A. Planner 3"
+    "major": "History B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/history-ba/",
+    "planner_name": "General History Transfer Plan"
   },
   {
     "Year 1": [
-      ["Lower-division survey", "Language 1"],
-      ["concentration", "Language 2"],
-      ["Lower-division breadth area No 1", "Language 3"]
+      ["Lower-division survey, concentration", "Language 1"],
+      ["Lower-division breadth area No 1", "Language 2"],
+      ["Lower-division breadth area No 2", "Language 3"]
     ],
     "Year 2": [
       ["Lower-division concentration"],
@@ -2239,11 +2325,13 @@
       ["Upper-division concentration"]
     ],
     "Year 4": [
-      ["Exit seminar"],
-      ["concentration", "Upper-division elective any"],
+      ["Exit seminar, concentration"],
+      ["Research course", "Upper-division elective any"],
       ["Research course", "Upper-division elective any"]
     ],
-    "planner_name": "History B.A. Planner 4"
+    "major": "History B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/history-ba/",
+    "planner_name": "Intensive History 4 Year Plan"
   },
   {
     "Year 1": [
@@ -2261,12 +2349,14 @@
     ],
     "Year 2": [
       ["Upper-division concentration", "Exit seminar"],
-      ["Research course", "concentration"],
+      ["Research course", "Upper-division elective any"],
       ["Research course", "Upper-division elective any"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "History B.A. Planner 5"
+    "major": "History B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/humanities-division/history/history-ba/",
+    "planner_name": "Intensive History Transfer Plan"
   },
   {
     "Year 1": [
@@ -2289,7 +2379,9 @@
       ["HAVC UD any region"],
       ["HAVC UD any region"]
     ],
-    "planner_name": "History of Art and Visual Culture B.A. Planner 1"
+    "major": "History of Art and Visual Culture B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/history-of-art-and-visual-culture/history-of-art-and-visual-culture-ba/",
+    "planner_name": "4 Year Frosh Plan"
   },
   {
     "Year 1": [
@@ -2308,7 +2400,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "History of Art and Visual Culture B.A. Planner 2"
+    "major": "History of Art and Visual Culture B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/history-of-art-and-visual-culture/history-of-art-and-visual-culture-ba/",
+    "planner_name": "2 Year Transfer Plan"
   },
   {
     "Year 1": [
@@ -2331,7 +2425,9 @@
       ["HAVC UD CHM course"],
       ["HAVC UD any region"]
     ],
-    "planner_name": "History of Art and Visual Culture B.A. Planner 3"
+    "major": "History of Art and Visual Culture B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/history-of-art-and-visual-culture/history-of-art-and-visual-culture-ba/",
+    "planner_name": "Concentration in Curation Heritage and Museums 4 Year Plan"
   },
   {
     "Year 1": [
@@ -2350,7 +2446,9 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "History of Art and Visual Culture B.A. Planner 4"
+    "major": "History of Art and Visual Culture B.A.",
+    "source": "https://catalog.ucsc.edu/en/2020-2021/general-catalog/academic-units/arts-division/history-of-art-and-visual-culture/history-of-art-and-visual-culture-ba/",
+    "planner_name": "Concentration in Curation Heritage and Museums 2 Year Plan"
   },
   {
     "Year 1": [
