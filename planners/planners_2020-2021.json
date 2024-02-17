@@ -20,7 +20,8 @@
       ["Upper-division elective"],
       ["Upper-division elective", "Comprehensive requirement"]
     ],
-    "planner_name": "Agroecology B.A. Planner 1"
+    "major": "Agroecology B.A.",
+    "planner_name": "Plan 1 for Incoming Frosh"
   },
   {
     "Year 1": [[], [], [], []],
@@ -35,7 +36,8 @@
       ["ENVS 133 or ENVS 135", "Upper-division elective"],
       ["ENVS 130C", "Upper-division elective"]
     ],
-    "planner_name": "Agroecology B.A. Planner 2"
+    "major": "Agroecology B.A.",
+    "planner_name": "Plan 2 for Incoming Transfer"
   },
   {
     "Year 1": [["ANTH 1"], ["ANTH 2"], ["ANTH 3"]],
@@ -50,7 +52,8 @@
       ["Upper-division elective"],
       ["Senior Seminar"]
     ],
-    "planner_name": "Anthropology B.A. Planner 1"
+    "major": "Anthropology B.A.",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [[], [], [], []],
@@ -65,7 +68,8 @@
       ["Upper-division elective"],
       ["Senior Seminar"]
     ],
-    "planner_name": "Anthropology B.A. Planner 2"
+    "major": "Anthropology B.A.",
+    "planner_name": "2 Year Plan"
   },
   {
     "Year 1": [["Language 1"], ["Language 2"], ["Language 3"]],
@@ -80,7 +84,8 @@
       ["Adv Language course", "APLX elective"],
       ["APLX 190-capstone", "Non-APLX elective"]
     ],
-    "planner_name": "Applied Linguistics and Multilingualism B.A. Planner 1"
+    "major": "Applied Linguistics and Multilingualism B.A.",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -95,7 +100,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Applied Linguistics and Multilingualism B.A. Planner 2"
+    "major": "Applied Linguistics and Multilingualism B.A.",
+    "planner_name": "Transfer Plan"
   },
   {
     "Year 1": [
@@ -110,7 +116,8 @@
       ["Upper-div elective"]
     ],
     "Year 4": [["AM 129"], ["AM 147"], ["AM 170B"]],
-    "planner_name": "Applied Mathematics B.S. Planner 1"
+    "major": "Applied Mathematics B.S.",
+    "planner_name": "Plan 1 for Prepared Frosh"
   },
   {
     "Year 1": [
@@ -129,7 +136,8 @@
       ["Upper-div elective"]
     ],
     "Year 4": [["AM 129"], ["AM 147"], ["AM 170B"]],
-    "planner_name": "Applied Mathematics B.S. Planner 2"
+    "major": "Applied Mathematics B.S.",
+    "planner_name": "Plan 2 for Frosh"
   },
   {
     "Year 1": [
@@ -148,7 +156,8 @@
       ["PHYS 134", "Elective"]
     ],
     "Year 4": [["Elective"], ["PHYS 182"], ["Elective"]],
-    "planner_name": "Applied Physics B.S. Planner 1"
+    "major": "Applied Physics B.S.",
+    "planner_name": "Plan 1 for Frosh"
   },
   {
     "Year 1": [
@@ -163,7 +172,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Applied Physics B.S. Planner 2"
+    "major": "Applied Physics B.S.",
+    "planner_name": "Plan 1 for Transfer"
   },
   {
     "Year 1": [
@@ -178,7 +188,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Applied Physics B.S. Planner 3"
+    "major": "Applied Physics B.S.",
+    "planner_name": "Plan 2 for Transfer (no PHYS 5D)"
   },
   {
     "Year 1": [
@@ -200,7 +211,8 @@
       []
     ],
     "Year 4": [["ARTG 170"], ["ARTG 171"], ["ARTG 172"], []],
-    "planner_name": "Art and Design: Games and Playable Media B.A. Planner 1"
+    "major": "Art and Design: Games and Playable Media B.A. ",
+    "planner_name": "Planner 1"
   },
   {
     "Year 1": [
@@ -217,7 +229,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Art and Design: Games and Playable Media B.A. Planner 2"
+    "major": "Art and Design: Games and Playable Media B.A. ",
+    "planner_name": "Transfer Students Planner"
   },
   {
     "Year 1": [["ART 10E"], ["ART 10D"], ["ART 10F"]],
@@ -232,7 +245,8 @@
       ["UD studio"],
       ["UD studio or ART 190B"]
     ],
-    "planner_name": "Art B.A. Planner 1"
+    "Major": "Art B.A.",
+    "planner_name": "Incoming Frosh Planner"
   },
   {
     "Year 1": [
@@ -247,7 +261,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Art B.A. Planner 2"
+    "major": "Art B.A.",
+    "planner_name": "Junior Transfers Planner"
   },
   {
     "Year 1": [
@@ -270,7 +285,8 @@
       ["BIOC 163B or CHEM 163B"],
       ["Senior exit lab"]
     ],
-    "planner_name": "Biochemistry and Molecular Biology B.S. Planner 1"
+    "major": "Biochemistry and Molecular Biology B.S.",
+    "planner_name": "4 Year Plan"
   },
   {
     "Year 1": [
@@ -285,7 +301,8 @@
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Biochemistry and Molecular Biology B.S. Planner 2"
+    "major": "Biochemistry and Molecular Biology B.S.",
+    "planner_name": "Transfer 2 Year Plan"
   },
   {
     "Year 1": [
@@ -304,7 +321,8 @@
       ["Biology elective"],
       ["Biology elective"]
     ],
-    "planner_name": "Biology B.A. Planner 1"
+    "major": "Biology B.A.",
+    "planner_name": "Frosh Planner"
   },
   {
     "Year 1": [[], [], [], []],
@@ -319,7 +337,8 @@
       ["Biology elective", "PHYS 1"],
       ["Biology elective"]
     ],
-    "planner_name": "Biology B.A. Planner 2"
+    "major": "Biology B.A.",
+    "planner_name": "Transfer Planner"
   },
   {
     "Year 1": [
@@ -342,7 +361,8 @@
       ["STAT 5 OR STAT 7 & STAT 7L", "PHYS 6B OR PHYS 6C"],
       ["Laboratory"]
     ],
-    "planner_name": "Biology B.S. Planner 1"
+    "major": "Biology B.S.",
+    "planner_name": "Frosh Planner"
   },
   {
     "Year 1": [[], [], [], []],
@@ -357,7 +377,8 @@
       ["UD elective", "Laboratory"],
       ["UD elective", "UD elective"]
     ],
-    "planner_name": "Biology B.S. Planner 2"
+    "major": "Biology B.S.",
+    "planner_name": "Transfer Planner"
   },
   {
     "Year 1": [
@@ -376,30 +397,32 @@
       ["AM 115", "BME 163"]
     ],
     "Year 4": [["BME 129A"], ["BME 129B"], ["BME 129C"]],
-    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 1"
+    "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "planner_name": "Biomolecular Engineering Concentration Plan 1"
   },
   {
     "Year 1": [
       ["CHEM 1A", "MATH 19A"],
       ["MATH 19B", "CHEM 1B & CHEM 1M"],
-      ["BIOL 20A", "CHEM 1C & CHEM 1N", "BME 21L"]
+      ["AM 10", "CHEM 1C & CHEM 1N", "BME 21L"]
     ],
     "Year 2": [
-      ["BME 22L", "BIOC 100A", "BME 80G"],
-      ["BME 23L", "BIOC 100B", "PHYS 5A & PHYS 5L"],
+      ["BME 22L", "CHEM 8A", "BIOL 20A"],
+      ["BME 23L", "CHEM 8B", "PHYS 5A & PHYS 5L"],
       ["BME 105", "PHYS 5B & PHYS 5M"]
     ],
     "Year 3": [
-      ["BME 185", "BME 110", "AM 10"],
+      ["BME 100A", "BME 110", "BME 185"],
       ["AM 20", "BME 160"],
       ["BME 163"]
     ],
     "Year 4": [
       ["BME 129A", "STAT 131"],
       ["BME 129B", "STAT 132"],
-      ["BME 129C", "Elective"]
+      ["BME 129C", "Elective", "AM 115"]
     ],
-    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 2"
+    "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "planner_name": "Biomolecular Engineering Concentration Plan 2"
   },
   {
     "Year 1": [
@@ -408,13 +431,14 @@
       ["BME 105", "BME 160", "PHYS 5B & PHYS 5M"]
     ],
     "Year 2": [
-      ["BME 129A", "STAT 131"],
+      ["BME 129A", "STAT 131", "Elective"],
       ["BME 129B", "STAT 132"],
-      ["BME 129C", "BME 163"]
+      ["BME 129C", "BME 163", "AM 115"]
     ],
     "Year 3": [[], [], [], []],
     "Year 4": [[], [], [], []],
-    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 3"
+    "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "planner_name": "Biomolecular Engineering Concentration Transfer Plan"
   },
   {
     "Year 1": [
@@ -432,8 +456,13 @@
       ["CSE 30", "STAT 132"],
       ["BME 163", "CSE 101", "CSE 182"]
     ],
-    "Year 4": [["BME 205", "BME 110"], ["BME 230A", "CSE 185E"], ["CSE 144"]],
-    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 4"
+    "Year 4": [
+      ["BME 205", "BME 110"],
+      ["BME 230A", "CSE 185E", "Elective"],
+      ["CSE 144"]
+    ],
+    "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "planner_name": "Bioinformatics Concentration Plan 1"
   },
   {
     "Year 1": [[], [], [], []],
@@ -444,11 +473,12 @@
       ["BME 105", "BME 163", "CSE 30"]
     ],
     "Year 4": [
-      ["BME 205", "BME 80G"],
-      ["BME 230A", "CSE 185E"],
-      ["Elective", "CSE 182"]
+      ["BME 205", "BME 80G", "CSE 101"],
+      ["BME 230A", "CSE 185E", "AM 30"],
+      ["Elective", "CSE 182", "CSE 144"]
     ],
-    "planner_name": "Biomolecular Engineering and Bioinformatics B.S. Planner 5"
+    "major": "Biomolecular Engineering and Bioinformatics B.S.",
+    "planner_name": "Bioinformatics Concentration Transfer Plan"
   },
   {
     "Year 1": [["BME 18"], ["CHEM 1A"], ["BIOL 20A"]],
