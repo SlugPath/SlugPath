@@ -13,8 +13,6 @@ export async function saveMajorRequirements(
   majorId: number,
   userId: string,
 ) {
-  const start = Date.now();
-
   // check if user is allowed to edit this major
   if (!userHasMajorEditingPermission(userId)) return;
 
@@ -33,9 +31,6 @@ export async function saveMajorRequirements(
         requirementList: requirementsAsJSON,
       },
     });
-
-    const timeTaken = Date.now() - start;
-    console.log("Total time taken : " + timeTaken + " milliseconds");
 
     return { title: "OK" };
   } catch (e) {
@@ -71,8 +66,6 @@ async function createEmptyRequirementList(
 export async function getMajorRequirements(
   majorId: number,
 ): Promise<RequirementList> {
-  const start = Date.now();
-
   const majorRequirement = await prisma.majorRequirement.findUnique({
     where: {
       majorId: majorId,
@@ -87,9 +80,6 @@ export async function getMajorRequirements(
   const requirementList: RequirementList = await convertJSONToRequirementList(
     majorRequirement.requirementList as string,
   );
-
-  const timeTaken = Date.now() - start;
-  console.log("Total time taken : " + timeTaken + " milliseconds");
 
   return requirementList;
 }

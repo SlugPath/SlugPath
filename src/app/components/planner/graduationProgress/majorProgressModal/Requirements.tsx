@@ -12,6 +12,7 @@ import {
   IconButton,
   Input,
   Select,
+  Textarea,
   Typography,
   useColorScheme,
 } from "@mui/joy";
@@ -55,9 +56,18 @@ export function Requirements({
 
   return (
     <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
+      {/* Title start */}
       {!hideTitle && (
         <Title requirements={requirements} fulfillmentMark={true} />
       )}
+      {/* Title end */}
+
+      {/* Notes start */}
+      {requirements.notes && requirements.notes.length > 0 && (
+        <Typography>{requirements.notes}</Typography>
+      )}
+      {/* Notes end */}
+
       {isProgramEmpty() ? (
         <Typography className="text-gray-400">
           There is no data for this degree program yet
@@ -66,7 +76,7 @@ export function Requirements({
         <>
           {/* Binder title */}
           <div className="flex flex-row items-center space-x-1">
-            <Typography>{BinderTitle(requirements)}</Typography>
+            <Typography fontWeight="md">{BinderTitle(requirements)}</Typography>
             {/* if there is no title, display the FulfillmentMark next to the Binder Title */}
             {requirements.title!.length == 0 && (
               <FulfillmentMark {...requirements} />
@@ -112,6 +122,10 @@ export function RequirementsEditing({
       updateRequirementList(requirements.id, { ...requirements, title });
     }
     setEditingTitle(!editingTitle);
+  }
+
+  function handleUpdateNotes(notes: string) {
+    updateRequirementList(requirements.id, { ...requirements, notes });
   }
 
   function handleNewBinderSelected(
@@ -186,6 +200,19 @@ export function RequirementsEditing({
         )}
       </div>
       {/* Title end */}
+
+      {/* Notes start */}
+      <div>
+        <Textarea
+          minRows={2}
+          variant="soft"
+          placeholder="Write notes here…"
+          style={{ ...cardStyleProps(parents + 1, mode) }}
+          value={requirements.notes}
+          onChange={(e) => handleUpdateNotes(e.target.value)}
+        />
+      </div>
+      {/* Notes start */}
 
       {/* Binder begin */}
       <div className="flex flex-row items-center space-x-1">
