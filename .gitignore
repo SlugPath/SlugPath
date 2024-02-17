@@ -37,3 +37,6 @@ next-env.d.ts
 
 # data backups
 backup.sql
+
+# vs code directory
+.vscode

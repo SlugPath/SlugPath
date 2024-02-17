@@ -18,7 +18,6 @@ import {
 } from "@mui/joy";
 import { ProgramType } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
@@ -26,7 +25,7 @@ import SelectMajorName from "./SelectMajorName";
 
 export default function MajorSelection() {
   const queryClient = useQueryClient();
-  const { setMajorToAdd } = useContext(DefaultPlannerContext);
+  // const { setMajorToAdd } = useContext(DefaultPlannerContext);
 
   const [selectedMajors, setSelectedMajors] = useState<Major[]>([]);
   const [programType, setProgramType] = useState<ProgramType>(
@@ -60,16 +59,16 @@ export default function MajorSelection() {
 
   // when searching for a major, setMajorToAdd so defaultPlannerSelection can display
   // default planners for this major
-  useEffect(() => {
-    if (programType in ProgramType && catalogYear.length > 0 && majorName.length > 0) {
-      setMajorToAdd({
-        name: majorName,
-        catalogYear,
-        programType,
-        id: 0,
-      });
-    }
-  }, [programType, catalogYear, majorName]);
+  // useEffect(() => {
+  //   if (programType in ProgramType && catalogYear.length > 0 && majorName.length > 0) {
+  //     setMajorToAdd({
+  //       name: majorName,
+  //       catalogYear,
+  //       programType,
+  //       id: 0,
+  //     });
+  //   }
+  // }, [programType, catalogYear, majorName]);
 
   function handleChangeProgramType(
     event: React.SyntheticEvent | null,

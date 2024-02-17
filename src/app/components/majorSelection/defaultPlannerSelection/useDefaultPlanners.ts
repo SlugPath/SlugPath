@@ -4,7 +4,9 @@ import {
   getUserPrimaryMajor,
   updateUserDefaultPlanner,
 } from "@/app/actions/major";
+import { getPlannerById } from "@/app/actions/planner";
 import { Major } from "@/app/types/Major";
+import { initialPlanner } from "@/lib/plannerUtils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
@@ -16,7 +18,7 @@ export default function useDefaultPlanners(
   const { data: session } = useSession();
   const { data: majorDefaultPlanners, isLoading: loadingMajorDefaultPlanners } =
     useQuery({
-      queryKey: ["majorDefaults", major],
+      queryKey: ["majorDefaults"],
       queryFn: async () => {
         return await getMajorDefaultPlanners({
           userId: session!.user.id,
@@ -25,28 +27,45 @@ export default function useDefaultPlanners(
       },
     });
 
-  const { data: defaultPlannerId } = useQuery({
-    queryKey: ["userDefaultPlanner", session!.user.id],
+  const { data: defaultPlannerId, isLoading: defaultPlannerIdIsPending } =
+    useQuery({
+      queryKey: ["userDefaultPlannerId", session?.user.id],
+      queryFn: async () => {
+        console.log("fetch default planner id");
+        return await getUserDefaultPlannerId(session!.user.id);
+      },
+      enabled: !!session?.user.id,
+    });
+
+  // get user default planner
+  const { data: userDefaultPlanner } = useQuery({
+    queryKey: ["userDefaultPlanner", defaultPlannerId],
     queryFn: async () => {
-      return await getUserDefaultPlannerId(session!.user.id);
+      if (!defaultPlannerId) return initialPlanner();
+      return await getPlannerById(defaultPlannerId);
     },
+    initialData: initialPlanner(),
+    enabled: !!defaultPlannerId && !!session?.user.id,
   });
 
   const { data: primaryMajor } = useQuery({
-    queryKey: ["userPrimaryMajor", session!.user.id],
+    queryKey: ["userPrimaryMajor", session?.user.id],
     queryFn: async () => {
       return await getUserPrimaryMajor(session!.user.id);
     },
+    enabled: !!session?.user.id,
   });
 
   const {
     mutate: updateDefaultPlanner,
-    isPending,
-    isError,
+    isPending: updateDefaultPlannerIsPending,
+    isError: updateDefaultPlannerIsError,
   } = useMutation({
-    mutationKey: ["updateUserDefaultPlanner"],
+    mutationKey: ["updateUserDefaultPlannerId"],
     mutationFn: async (defaultPlannerId: string) => {
-      queryClient.invalidateQueries({ queryKey: ["userDefaultPlanner", session?.user.id] });
+      queryClient.refetchQueries({
+        queryKey: ["userDefaultPlannerId", session?.user.id],
+      });
       return await updateUserDefaultPlanner({
         userId: session!.user.id,
         defaultPlannerId: defaultPlannerId,
@@ -54,17 +73,18 @@ export default function useDefaultPlanners(
     },
     onSuccess: () => {
       if (onUpdated) onUpdated();
-      console.log("successfully updated default planner");
     },
   });
 
   return {
     primaryMajor,
+    userDefaultPlanner: userDefaultPlanner!,
     defaultPlannerId,
+    defaultPlannerIdIsPending,
     majorDefaultPlanners,
     loadingMajorDefaultPlanners,
     updateDefaultPlanner,
-    updateDefaultPlannerIsPending: isPending,
-    updateDefaultPlannerIsError: isError,
+    updateDefaultPlannerIsPending,
+    updateDefaultPlannerIsError,
   };
 }

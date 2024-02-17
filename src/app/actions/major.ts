@@ -188,15 +188,14 @@ export async function saveUserMajors({
 }
 
 export type MajorDefaultsInput = {
-  userId: string,
-  major?: MajorInput,
+  userId: string;
+  major?: MajorInput;
 };
 
 export async function getMajorDefaultPlanners({
   userId,
   major,
 }: MajorDefaultsInput): Promise<PlannerTitle[]> {
-
   async function getMajorToUse() {
     if (major) {
       return major;
@@ -207,16 +206,16 @@ export async function getMajorDefaultPlanners({
         },
         select: {
           defaultPlannerId: true,
-        }
+        },
       });
       if (user !== null) {
         const result = await prisma.planner.findUnique({
           where: {
-            id: user?.defaultPlannerId!,
+            id: user.defaultPlannerId!,
           },
           select: {
             major: true,
-          }
+          },
         });
 
         if (result !== null) {
@@ -263,10 +262,20 @@ export async function getUserDefaultPlannerId(userId: string) {
     },
   });
 
-  return user?.defaultPlannerId;
+  if (user === null) {
+    return null;
+  }
+  return user.defaultPlannerId;
 }
 
+/**
+ * Get the primary major for a user.
+ * Done by finding major of the default planner for the user,
+ * otherwise returns first major in the user's list of majors,
+ * otherwise returns null.
+ */
 export async function getUserPrimaryMajor(userId: string) {
+  // first find major based on user's default planner
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -291,6 +300,12 @@ export async function getUserPrimaryMajor(userId: string) {
 
   if (planner !== null) {
     return planner.major;
+  }
+
+  // if no default planner, find first major in user's list of majors
+  const userMajors = await getUserMajorsById(userId);
+  if (userMajors !== null && userMajors.length > 0) {
+    return userMajors[0];
   }
 
   return null;

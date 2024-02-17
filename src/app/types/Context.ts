@@ -6,7 +6,7 @@ import { CourseTerm, CustomCourseInput, StoredCourse } from "./Course";
 import { Label } from "./Label";
 import { Major } from "./Major";
 import { Permissions } from "./Permissions";
-import { PlannerData } from "./Planner";
+import { PlannerData, PlannerTitle } from "./Planner";
 import { RequirementList, Requirements } from "./Requirements";
 
 type setShow = SetState<boolean>;
@@ -75,11 +75,16 @@ export interface PlannersContextProps {
 }
 
 export interface DefaultPlannerContextProps {
-  userMajors: MajorOutput[];
-  majorToAdd: Major;
-  setMajorToAdd: SetState<Major>;
-  defaultPlanner: PlannerData;
-  loadingDefaultPlanner: boolean;
+  selectedMajor: Major | undefined;
+  setSelectedMajor: SetState<Major | undefined>;
+  majorDefaultPlanners: PlannerTitle[] | undefined;
+  loadingMajorDefaultPlanners: boolean;
+  updateDefaultPlanner: (plannerId: string) => void;
+  updateDefaultPlannerIsPending: boolean;
+  userDefaultPlanner: PlannerData;
+  defaultPlannerId: string | undefined;
+  primaryMajor: Major | undefined;
+  userMajors: Major[];
   userMajorsIsLoading: boolean;
   saveMajors: (majors: MajorOutput[]) => void;
   loadingSaveMajor: boolean;

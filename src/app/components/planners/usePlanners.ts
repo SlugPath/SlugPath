@@ -28,7 +28,7 @@ export function usePlanners(
     }
   }, [planners, setActivePlanner]);
 
-  const { defaultPlanner } = useContext(DefaultPlannerContext);
+  const { userDefaultPlanner } = useContext(DefaultPlannerContext);
 
   const [deletedPlanner, setDeletedPlanner] = useState(false);
 
@@ -115,7 +115,11 @@ export function usePlanners(
     setPlanners((prev) => {
       return [
         ...prev,
-        { ...cloneDefaultPlanner(defaultPlanner), id, title: "New Planner" },
+        {
+          ...cloneDefaultPlanner(userDefaultPlanner),
+          id,
+          title: "New Planner",
+        },
       ];
     });
     switchPlanners(id);
@@ -138,7 +142,11 @@ export function usePlanners(
       const after = prev.slice(idx + 1);
       const res = [
         ...before,
-        { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },
+        {
+          ...cloneDefaultPlanner(userDefaultPlanner),
+          id: activePlanner,
+          title,
+        },
         ...after,
       ];
       return res;
