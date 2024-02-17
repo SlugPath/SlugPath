@@ -131,9 +131,6 @@ export default function usePlanner(input: {
     const newCourses = courseState.courses.filter((c) => c.id != customId);
     newCourses.push(...courses);
 
-    console.log(
-      `replaceCustomCourse newCourses: ${JSON.stringify(newCourses, null, 2)}`,
-    );
     handleCourseUpdate({
       ...courseState,
       courses: newCourses,
