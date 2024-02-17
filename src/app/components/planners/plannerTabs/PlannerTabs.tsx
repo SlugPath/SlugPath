@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 
 import DropDownButton from "../../buttons/DropDownButton";
 import ConfirmAlert from "../../modals/ConfirmAlert";
+import RenameModal from "../../modals/RenameModal";
 import TitleSnackbar from "./TitleSnackbar";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
@@ -165,7 +166,7 @@ function CustomTab({
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const [renameFromDropDown, setRenameFromDropDown] = useState(false);
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
 
   function backgroundColor() {
     if (mode === "light") {
@@ -209,12 +210,25 @@ function CustomTab({
     }
   }
 
-  function handleRename() {
-    setRenameFromDropDown(true);
+  function handleOpenRenameModal() {
     if (selected) {
       setPlannerBeingEdited(id);
     }
+    setRenameModalOpen(true);
   }
+
+  const handleCloseRenameModal = () => {
+    setRenameModalOpen(false);
+  };
+
+  const handleConfirmRenameModal = (newTitle: string) => {
+    // Perform any necessary actions with the new title
+    // For example, you can call `setPlannerBeingEdited` to set the new title in your parent component's state
+    console.log("newTitle: ", newTitle);
+    setText(newTitle);
+    onEndEditing(newTitle);
+    handleCloseRenameModal();
+  };
 
   const handleContextMenu = (e: any) => {
     e.preventDefault(); // Prevent the default right-click context menu
@@ -224,10 +238,7 @@ function CustomTab({
   // Needed to edit the blur event so that it was ignored on the transition from
   // the dropdown to the editing page
   const handleBlurEditing = (text: string) => {
-    if (!renameFromDropDown) {
-      onEndEditing(text);
-    }
-    setRenameFromDropDown(false);
+    onEndEditing(text);
   };
 
   const handleDropDownClosed = (isClosed: boolean) => {
@@ -290,8 +301,14 @@ function CustomTab({
         onRightClick={dropDownOpen}
         onDeleteButtonClick={onOpenDeleteAlert}
         onDuplicateButtonClick={onDuplicate}
-        onRenameButtonClick={handleRename}
+        onRenameButtonClick={handleOpenRenameModal}
         dropDownClosed={handleDropDownClosed}
+      />
+      <RenameModal
+        open={renameModalOpen}
+        onClose={handleCloseRenameModal}
+        onConfirm={handleConfirmRenameModal}
+        title={title} // Pass the current title to the modal
       />
     </div>
   );
