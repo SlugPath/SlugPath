@@ -14,7 +14,7 @@ import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
-interface DropDownButtonProps {
+interface PlannerDropDownProps {
   id: string;
   title: string;
   onRightClick: boolean;
@@ -24,7 +24,7 @@ interface DropDownButtonProps {
   dropDownClosed: (isClosed: boolean) => void;
 }
 
-export default function DropDownButton({
+export default function PlannerDropDown({
   id,
   title,
   onRightClick,
@@ -32,7 +32,7 @@ export default function DropDownButton({
   onDuplicateButtonClick,
   onRenameButtonClick,
   dropDownClosed,
-}: DropDownButtonProps) {
+}: PlannerDropDownProps) {
   const [open, setOpen] = useState(false);
   const { setShowExportModal } = useContext(PlannersContext);
 
@@ -98,6 +98,7 @@ export default function DropDownButton({
           </ListItemDecorator>{" "}
           Download
         </MenuItem>
+        {/* FIXME: Need to add the share planner functionality to the dropdown */}
         <MenuItem onClick={() => alert("Share Button Pressed")}>
           <ListItemDecorator>
             <IosShareIcon />

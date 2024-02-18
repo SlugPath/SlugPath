@@ -361,7 +361,6 @@ export function clonePlanner(sourcePlanner: PlannerData): PlannerData {
       courses: q.courses.map((crs) => {
         return lookup[crs].id;
       }),
-      notes: "",
     };
   });
 
@@ -394,7 +393,6 @@ export function cloneDefaultPlanner(defaultPlanner: PlannerData): PlannerData {
       courses: q.courses.map((crs) => {
         return lookup[crs].id;
       }),
-      notes: "",
     };
   });
   clone.labels = initialLabels();

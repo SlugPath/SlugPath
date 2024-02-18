@@ -51,6 +51,14 @@ export default function RenameModal(props: RenameModalProps) {
     onClose();
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && text.length < 2) {
+      e.preventDefault();
+    } else if (e.key === "Enter") {
+      handleConfirm();
+    }
+  };
+
   return (
     <Modal open={open} onClose={onClose}>
       <ModalDialog
@@ -99,11 +107,7 @@ export default function RenameModal(props: RenameModalProps) {
                 },
               }}
               onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleConfirm();
-                }
-              }}
+              onKeyDown={handleKeyDown}
             />
           </FormControl>
           {text.length < 2 && (

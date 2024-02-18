@@ -4,7 +4,7 @@ import { Add } from "@mui/icons-material";
 import { IconButton, Input, useColorScheme } from "@mui/joy";
 import { useContext, useState } from "react";
 
-import DropDownButton from "../../buttons/DropDownButton";
+import PlannerDropDown from "../../buttons/PlannerDropDown";
 import ConfirmAlert from "../../modals/ConfirmAlert";
 import RenameModal from "../../modals/RenameModal";
 import TitleSnackbar from "./TitleSnackbar";
@@ -290,7 +290,7 @@ function CustomTab({
       ) : (
         <span className="truncate px-2">{truncateTitle(text)}</span>
       )}
-      <DropDownButton
+      <PlannerDropDown
         id={id}
         title={title}
         onRightClick={dropDownOpen}
