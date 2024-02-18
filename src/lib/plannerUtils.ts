@@ -329,7 +329,7 @@ export function isOffered(
 export function clonePlanner(sourcePlanner: PlannerData): PlannerData {
   const clone = { ...sourcePlanner };
 
-  const oldLabels = clone.labels;
+  const sourceLabels = clone.labels;
 
   // Create a lookup table between old ids and newStoredCourse
   const lookup = {} as any;
@@ -340,16 +340,18 @@ export function clonePlanner(sourcePlanner: PlannerData): PlannerData {
   clone.labels = initialLabels();
 
   // Create a mapping between old and new label IDs
+  // AND Transfer names from sourceLabels to clone.labels
   const labelMapping = {} as any;
-  oldLabels.forEach((oldLabel, index) => {
-    labelMapping[oldLabel.id] = clone.labels[index].id;
+  sourceLabels.forEach((sourceLabel, index) => {
+    labelMapping[sourceLabel.id] = clone.labels[index].id;
+    clone.labels[index].name = sourceLabel.name;
   });
 
   // Pass the new Stored courses to the clone with updated labels
   clone.courses = Object.values(lookup).map((course: any) => ({
     ...course,
     labels: course.labels.map(
-      (oldLabelId: string) => labelMapping[oldLabelId] || oldLabelId,
+      (sourceLabelId: string) => labelMapping[sourceLabelId] || sourceLabelId,
     ),
   }));
 
