@@ -222,9 +222,6 @@ function CustomTab({
   };
 
   const handleConfirmRenameModal = (newTitle: string) => {
-    // Perform any necessary actions with the new title
-    // For example, you can call `setPlannerBeingEdited` to set the new title in your parent component's state
-    console.log("newTitle: ", newTitle);
     setText(newTitle);
     onEndEditing(newTitle);
     handleCloseRenameModal();
@@ -235,8 +232,6 @@ function CustomTab({
     setDropDownOpen(true); // Open the dropdown
   };
 
-  // Needed to edit the blur event so that it was ignored on the transition from
-  // the dropdown to the editing page
   const handleBlurEditing = (text: string) => {
     onEndEditing(text);
   };

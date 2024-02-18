@@ -108,7 +108,7 @@ export default function DropDownButton({
         <MenuItem
           variant="soft"
           color="danger"
-          onClick={() => onDeleteButtonClick(id, title)} // Call onDeleteButtonClick with id and title
+          onClick={() => onDeleteButtonClick(id, title)}
         >
           <ListItemDecorator sx={{ color: "inherit" }}>
             <DeleteForever />

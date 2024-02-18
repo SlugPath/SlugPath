@@ -1,4 +1,6 @@
+import WarningIcon from "@mui/icons-material/Warning";
 import {
+  Alert,
   Button,
   DialogActions,
   DialogTitle,
@@ -9,8 +11,6 @@ import {
   ModalDialog,
 } from "@mui/joy";
 import { useEffect, useRef, useState } from "react";
-
-//import TitleSnackbar from "../planners/plannerTabs/TitleSnackbar";
 
 /** `RenameModalProps` contains the properties for a `RenameModal` component */
 export interface RenameModalProps {
@@ -46,7 +46,7 @@ export default function RenameModal(props: RenameModalProps) {
   }
 
   function handleClose() {
-    // Reset text to the initial title when the modal is closed without confirming
+    // Reset text to the initial title
     setText(title);
     onClose();
   }
@@ -59,7 +59,6 @@ export default function RenameModal(props: RenameModalProps) {
         sx={{ width: "30vw", maxWidth: "400px" }}
       >
         <ModalClose />
-        {/* <TitleSnackbar error={text.length < 2} /> */}
         <DialogTitle sx={{ fontSize: "1.3rem", marginBottom: "0.5rem" }}>
           Rename
         </DialogTitle>
@@ -71,7 +70,7 @@ export default function RenameModal(props: RenameModalProps) {
         >
           <FormControl
             sx={{
-              marginBottom: "0.75rem",
+              marginBottom: text.length < 2 ? "0.5rem" : "2rem",
               display: "flex",
               justifyContent: "center",
             }}
@@ -80,6 +79,7 @@ export default function RenameModal(props: RenameModalProps) {
               variant="soft"
               value={text}
               autoFocus
+              onFocus={(e) => e.currentTarget.select()}
               error={text.length < 2}
               size="sm"
               slotProps={{
@@ -88,7 +88,7 @@ export default function RenameModal(props: RenameModalProps) {
                 },
               }}
               sx={{
-                border: "1px solid #B8C1C5", // Set border color before focus
+                border: "1px solid #B8C1C5",
                 "--Input-focusedInset": "var(--any, )",
                 "--Input-focusedThickness": "0.25rem",
                 "&::before": {
@@ -106,6 +106,20 @@ export default function RenameModal(props: RenameModalProps) {
               }}
             />
           </FormControl>
+          {text.length < 2 && (
+            <Alert
+              startDecorator={<WarningIcon />}
+              color="danger"
+              size="sm"
+              variant="soft"
+              sx={{
+                maxHeight: "25px",
+                marginBottom: "0rem",
+              }}
+            >
+              Title is too short.
+            </Alert>
+          )}
           <DialogActions>
             <Button
               variant="solid"
