@@ -1,9 +1,9 @@
-import { MiniCourseCard } from "@/app/components/majorSelection/MiniCourseCard";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { StoredCourse } from "@/app/types/Course";
-import { Binder, RequirementList } from "@/app/types/Requirements";
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
+import { MiniCourseCard } from "@components/majorSelection/MiniCourseCard";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { StoredCourse } from "@customTypes/Course";
+import { Binder, RequirementList } from "@customTypes/Requirements";
 import { Droppable } from "@hello-pangea/dnd";
 import { Delete, Edit } from "@mui/icons-material";
 import {
@@ -22,7 +22,7 @@ import DraggableCourseCard from "../../quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
 
-export function RequirementsComponent({
+export function Requirements({
   requirements,
   parents,
   hideTitle,
@@ -77,7 +77,7 @@ export function RequirementsComponent({
           {requirements.requirements.map((requirement, index) => {
             if ("requirements" in requirement) {
               return (
-                <RequirementsComponent
+                <Requirements
                   key={index}
                   requirements={requirement}
                   parents={parents + 1}
@@ -94,7 +94,7 @@ export function RequirementsComponent({
   );
 }
 
-export function RequirementsComponentEditing({
+export function RequirementsEditing({
   requirements,
   parents,
 }: {
@@ -327,7 +327,7 @@ function RequirementLists({
       {requirementsWithoutClasses.map((requirement, index) => {
         if ("requirements" in requirement) {
           return (
-            <RequirementsComponentEditing
+            <RequirementsEditing
               key={index}
               requirements={requirement}
               parents={parents + 1}

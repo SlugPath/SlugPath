@@ -60,10 +60,7 @@ export function usePlanners(
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (userId) {
-        navigator.sendBeacon(
-          "/api/planners",
-          JSON.stringify({ userId, planners }),
-        );
+        navigator.sendBeacon("/api/planners", JSON.stringify(planners));
       }
     };
     window.addEventListener("beforeunload", handleBeforeUnload);

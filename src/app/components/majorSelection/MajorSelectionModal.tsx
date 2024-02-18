@@ -1,5 +1,5 @@
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PlannersContext } from "@contexts/PlannersProvider";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useContext } from "react";
 

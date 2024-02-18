@@ -1,7 +1,7 @@
-import { getAllMajorsByCatalogYear } from "@/app/actions/major";
 import { years } from "@/lib/defaultPlanners";
+import { getMajors } from "@actions/major";
+import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { ModalsProvider } from "@contexts/ModalsProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import { CircularProgress } from "@mui/joy";
 import { Alert } from "@mui/joy";
@@ -48,7 +48,8 @@ export default function MajorSelection({
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear],
     queryFn: async () => {
-      return await getAllMajorsByCatalogYear(catalogYear);
+      const res = await getMajors(catalogYear);
+      return res.map((m) => m.name);
     },
     enabled: catalogYear !== "",
   });
@@ -59,9 +60,7 @@ export default function MajorSelection({
     return major !== "" && catalogYear !== "" && isLoggedIn;
   }, [major, catalogYear, session?.user.id]);
 
-  const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
-    ButtonName.Save,
-  );
+  const [saveButtonClicked, setSaveButtonClicked] = useState(ButtonName.Save);
   const [showSelectionError, setShowSelectionError] = useState(false);
   const { onSaveMajor, loadingSaveMajor, errorSavingMajorData } =
     useMajorSelection(session?.user.id, handleSaveCompleted);
@@ -201,6 +200,7 @@ export default function MajorSelection({
     return <CircularProgress variant="plain" color="primary" />;
   }
 
+  // Alerts
   const SelectionErrorAlert = () => (
     <div>
       {showSelectionError && (
@@ -234,6 +234,7 @@ export default function MajorSelection({
 
   return (
     <div className="space-y-4 w-full">
+      {/* Begin Alerts and Inputs */}
       <SelectionErrorAlert />
       <LoadingMajorDataErrorAlert />
       <SavingMajorDataErrorAlert />
@@ -260,7 +261,9 @@ export default function MajorSelection({
         </div>
       </div>
       <div>
-        <ModalsProvider>
+        {/* End Alerts and Inputs */}
+        {/* Begin Default Planner and Save Buttons */}
+        <CourseInfoProvider>
           <SelectDefaultPlanner
             selectedDefaultPlanner={selectedDefaultPlanner}
             onChange={handleChangeDefaultPlanner}
@@ -268,8 +271,8 @@ export default function MajorSelection({
             loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
             addPlannerCardContainer={isInPlannerPage}
           />
-          <CourseInfoModal />
-        </ModalsProvider>
+          <CourseInfoModal viewOnly />
+        </CourseInfoProvider>
       </div>
       <div className="flex justify-end w-full">
         {loadingSaveMajor ? (

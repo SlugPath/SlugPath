@@ -1,19 +1,19 @@
-import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 import { isRequirementList } from "@/lib/requirementsUtils";
-import { useSession } from "next-auth/react";
-import { createContext, useContext } from "react";
-import { v4 as uuid4 } from "uuid";
-
-import { MajorVerificationContextProps } from "../types/Context";
-import { StoredCourse } from "../types/Course";
-import { PlannerData } from "../types/Planner";
+import { StoredCourse } from "@customTypes/Course";
+import { PlannerData } from "@customTypes/Planner";
 import {
   Binder,
   Requirement,
   RequirementList,
   Requirements,
-} from "../types/Requirements";
-import { DefaultPlannerContext } from "./DefaultPlannerProvider";
+} from "@customTypes/Requirements";
+import { useSession } from "next-auth/react";
+import { createContext, useContext } from "react";
+import { v4 as uuid4 } from "uuid";
+
+import { DefaultPlannerContext } from "../DefaultPlannerProvider";
+import { MajorVerificationContextProps } from "./Types";
+import useMajorRequirements from "./useMajorRequirements";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
@@ -164,9 +164,9 @@ export function MajorVerificationProvider({
   return (
     <MajorVerificationContext.Provider
       value={{
-        isMajorRequirementsSatisfied: isMajorRequirementsSatisfied,
-        majorRequirements: majorRequirements,
-        calculateMajorProgressPercentage: calculateMajorProgressPercentage,
+        isMajorRequirementsSatisfied,
+        majorRequirements,
+        calculateMajorProgressPercentage,
         errors: "",
         loadingSave,
         isSaved,

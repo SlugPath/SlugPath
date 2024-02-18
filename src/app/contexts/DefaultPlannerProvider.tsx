@@ -1,11 +1,21 @@
 import { initialPlanner } from "@/lib/plannerUtils";
-import { DefaultPlannerContextProps } from "@customTypes/Context";
+import { UserMajorOutput, getUserMajorById } from "@actions/major";
+import { getPlannerById } from "@actions/planner";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { createContext, useState } from "react";
 
-import { getUserMajorById } from "../actions/major";
-import { getPlannerById } from "../actions/planner";
+import { SetState } from "../types/Common";
+import { PlannerData } from "../types/Planner";
+
+export interface DefaultPlannerContextProps {
+  defaultPlanner: PlannerData;
+  setDefaultPlannerId: SetState<string>;
+  loadingDefaultPlanner: boolean;
+  userMajorData: UserMajorOutput | null;
+  loadingMajorData: boolean;
+  errorMajorData: Error | null;
+}
 
 export const DefaultPlannerContext = createContext(
   {} as DefaultPlannerContextProps,

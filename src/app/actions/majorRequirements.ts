@@ -90,6 +90,7 @@ export async function getAllRequirementLists(): Promise<RequirementList[]> {
   });
 }
 
+// Helper functions
 function parseRequirementList(requirementList: string): RequirementList {
   return JSON.parse(requirementList) as RequirementList;
 }

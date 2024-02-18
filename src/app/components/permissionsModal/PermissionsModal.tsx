@@ -1,7 +1,7 @@
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,
@@ -24,8 +24,8 @@ export default function PermissionsModal() {
   const { showPermissionsModal, setShowPermissionsModal } =
     useContext(ModalsContext);
 
-  const [email, setEmail] = useState<string>("");
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const {
     permissionsList,
     loadingPermissions,
@@ -34,11 +34,11 @@ export default function PermissionsModal() {
     onSavePermissions,
   } = useContext(PermissionsContext);
 
-  const [permissionsAlertOpen, setPermissionsAlertOpen] =
-    useState<boolean>(false);
+  const [permissionsAlertOpen, setPermissionsAlertOpen] = useState(false);
   const [permissionsToRemove, setPermissionsToRemove] =
     useState<Permissions | null>(null);
 
+  // Handlers
   function handleAddUser() {
     if (selectionIsValid()) {
       onSetPermissionsList([
@@ -129,6 +129,7 @@ export default function PermissionsModal() {
     ]);
   }
 
+  // Helpers
   function isUserAlreadyAdded(email: string) {
     return permissionsList.some((p) => p.userEmail === email);
   }

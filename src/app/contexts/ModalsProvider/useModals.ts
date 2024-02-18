@@ -1,28 +1,15 @@
-import { StoredCourse } from "@/app/types/Course";
-import { Term } from "@/app/types/Quarter";
 import { useState } from "react";
 
 export default function useModals() {
-  const [showCourseInfoModal, setShowCourseInfoModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [showMajorSelectionModal, setShowMajorSelectionModal] = useState(false);
   const [showMajorProgressModal, setShowMajorProgressModal] = useState(false);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
   const [showReplaceRLModal, setShowReplaceRLModal] = useState(false); // RL = Requirement List
 
-  function handleShowCourseInfoModal() {
-    setShowCourseInfoModal(true);
-  }
-
-  const [displayCourse, setDisplayCourse] = useState<
-    [StoredCourse, Term | undefined] | undefined
-  >();
-
   return {
-    showCourseInfoModal,
-    setShowCourseInfoModal,
-    displayCourse,
-    setDisplayCourse,
-    onShowCourseInfoModal: handleShowCourseInfoModal,
+    showExportModal,
+    setShowExportModal,
     showMajorSelectionModal,
     setShowMajorSelectionModal,
     showMajorProgressModal,

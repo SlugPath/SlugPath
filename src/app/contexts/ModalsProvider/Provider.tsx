@@ -1,20 +1,17 @@
-import useModals from "@components/modals/useModals";
-import { ModalsContextProps } from "@customTypes/Context";
+import { PlannerContext } from "@contexts/PlannerProvider";
 import { createContext, useContext } from "react";
 
-import { PlannerContext } from "./PlannerProvider";
+import { ModalsContextProps } from "./Types";
+import useModals from "./useModals";
 
 export const ModalsContext = createContext({} as ModalsContextProps);
 
 export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
-    showCourseInfoModal,
-    setShowCourseInfoModal,
-    onShowCourseInfoModal,
+    showExportModal,
+    setShowExportModal,
     showMajorSelectionModal,
     setShowMajorSelectionModal,
-    displayCourse,
-    setDisplayCourse,
     showMajorProgressModal,
     setShowMajorProgressModal,
     showPermissionsModal,
@@ -28,11 +25,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   return (
     <ModalsContext.Provider
       value={{
-        showCourseInfoModal,
-        displayCourse,
-        setDisplayCourse,
-        setShowCourseInfoModal,
-        onShowCourseInfoModal,
+        showExportModal,
+        setShowExportModal,
         showMajorSelectionModal,
         setShowMajorSelectionModal,
         showMajorProgressModal,
