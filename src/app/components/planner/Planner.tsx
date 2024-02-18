@@ -21,7 +21,6 @@ import { useContext } from "react";
 
 import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import ExportModal from "../modals/exportModal/ExportModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
@@ -161,7 +160,6 @@ function Modals() {
   return (
     <>
       <CourseInfoModal />
-      <ExportModal />
       <MajorSelectionModal />
       <MajorProgressModal />
       <ReplaceRequirementsModal />
