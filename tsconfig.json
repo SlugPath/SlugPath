@@ -40,6 +40,6 @@
     ".next/types/**/*.ts",
     "src/env/server.mjs",
     "jest.config.js"
-  ],
+, "src/app/planner/error.tsx"  ],
   "exclude": ["node_modules"]
 }

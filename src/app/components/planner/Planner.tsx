@@ -43,6 +43,8 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     return <></>;
   }
 
+  throw new Error("Planner is not implemented yet");
+
   return (
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
