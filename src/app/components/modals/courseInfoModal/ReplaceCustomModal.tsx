@@ -143,16 +143,9 @@ export default function ReplaceCustomModal({
                       </Card>
                       <div className="flex flex-row justify-center gap-2">
                         <Button onClick={onClose} variant="plain">
-                          <Typography
-                            level="body-lg"
-                            sx={{
-                              color: "white",
-                            }}
-                          >
-                            Cancel
-                          </Typography>
+                          Cancel
                         </Button>
-                        <Button onClick={handleSave} color="success">
+                        <Button onClick={handleSave}>
                           <Typography
                             level="body-md"
                             sx={{

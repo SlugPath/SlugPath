@@ -232,7 +232,6 @@ export default function MajorSelection({
     </div>
   );
 
-  throw new Error("random error");
   return (
     <div className="space-y-4 w-full">
       {/* Begin Alerts and Inputs */}
