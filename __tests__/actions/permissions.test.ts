@@ -123,18 +123,6 @@ describe("Permissions Actions", () => {
     expect(user).not.toBeNull();
   });
 
-  afterEach(async () => {
-    await prisma.major.deleteMany({
-      where: {
-        name: {
-          not: {
-            contains: "Applied Physics B.S.",
-          },
-        },
-      },
-    });
-  });
-
   it("should check that user has major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
