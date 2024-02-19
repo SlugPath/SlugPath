@@ -124,17 +124,17 @@ describe("Major actions", () => {
 
   afterEach(async () => {
     // Clean up
-    await prisma.major.deleteMany();
     await prisma.user.updateMany({
       data: {
         majorId: undefined,
       },
     });
+    await prisma.major.deleteMany();
   });
 
   it("should add major information for 1 user", async () => {
     // Create major
-    const name = "Computer Science B.S";
+    const name = "Anthropology B.A";
     const catalogYear = "2020-2021";
     const majorData = {
       name,
@@ -207,7 +207,7 @@ describe("Major actions", () => {
     await prisma.major.create({
       data: {
         catalogYear: "2020-2021",
-        name: "Computer Engineering B.S.",
+        name: "Robotics Engineering B.S.",
       },
     });
 
@@ -230,7 +230,7 @@ describe("Major actions", () => {
 
     // Create major
     const name = "Computer Science B.S";
-    const catalogYear = "2020-2021";
+    const catalogYear = "2023-2024";
     const majorData = {
       name,
       catalogYear,

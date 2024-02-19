@@ -45,7 +45,7 @@ describe("Permissions Actions", () => {
   const userEmail = `samuelslime@ucsc.edu${hash}`;
 
   beforeAll(async () => {
-    const newMajor = await createMajor("Computer Science B.S", "2020-2021");
+    const newMajor = await createMajor("Applied Physics B.S", "2020-2021");
 
     await prisma.user.create({
       data: {
@@ -123,6 +123,18 @@ describe("Permissions Actions", () => {
     expect(user).not.toBeNull();
   });
 
+  afterEach(async () => {
+    await prisma.major.deleteMany({
+      where: {
+        name: {
+          not: {
+            contains: "Applied Physics B.S.",
+          },
+        },
+      },
+    });
+  });
+
   it("should check that user has major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
@@ -140,7 +152,7 @@ describe("Permissions Actions", () => {
   });
 
   it("should check that getPermissions works using savePermissions", async () => {
-    const newMajor = await createMajor("Computer Science B.A", "2020-2021");
+    const newMajor = await createMajor("Theater B.A", "2020-2021");
 
     const permissions: Permissions[] = [
       {

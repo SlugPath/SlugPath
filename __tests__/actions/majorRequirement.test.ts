@@ -9,7 +9,7 @@ import { Role } from "@prisma/client";
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
-async function createAMajor(name: string, catalogYear: string): Promise<Major> {
+async function createMajor(name: string, catalogYear: string): Promise<Major> {
   const majorData = {
     name,
     catalogYear,
@@ -43,7 +43,7 @@ describe("Major Requirements Actions", () => {
 
     console.log("✨ 2 users successfully created!");
 
-    const major = await createAMajor("Computer Science B.S", "2020-2021");
+    const major = await createMajor("Computer Science B.S", "2019-2020");
     console.log("✨ 1 major successfully created!");
 
     const majorRequirementsData: RequirementList = {
