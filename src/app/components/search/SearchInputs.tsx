@@ -1,6 +1,8 @@
 import { SearchParams } from "@customTypes/Course";
-import { Input, Option, Select } from "@mui/joy";
+import { Divider, Input, Option, Select } from "@mui/joy";
 import React from "react";
+
+import CourseNumberSlider from "./CourseNumberSlider";
 
 type selectChangeHandler = (
   event: React.SyntheticEvent | null,
@@ -84,7 +86,9 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
             </Option>
           ))}
         </Select>
+        <CourseNumberSlider />
       </div>
+      <Divider sx={{ height: 3, marginBottom: "0.75rem" }} />
     </form>
   );
 }
