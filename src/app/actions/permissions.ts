@@ -12,9 +12,8 @@ export async function savePermissions(
   if ((await getUserRole(userId)) !== "ADMIN")
     return { error: "User is not an admin" };
 
-  await prisma.permissions.deleteMany();
-
   const operations: any[] = [];
+  operations.push(prisma.permissions.deleteMany());
 
   permissions.forEach(async (permission) => {
     if (permission.userEmail !== undefined) {
@@ -151,7 +150,7 @@ export async function getUserRole(userId: string): Promise<string> {
     },
   });
 
-  if (user?.role !== undefined) {
+  if (user?.role) {
     return user.role;
   }
 

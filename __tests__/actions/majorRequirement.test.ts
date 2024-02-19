@@ -78,7 +78,7 @@ describe("Major Requirements Actions", () => {
   });
 
   it("should get major requirements for a major", async () => {
-    const major = await prisma.major.findFirst({});
+    const major = await prisma.major.findFirst();
     const majorRequirements = await getMajorRequirements(major!.id);
     expect(majorRequirements.requirements).toHaveLength(1);
   });
