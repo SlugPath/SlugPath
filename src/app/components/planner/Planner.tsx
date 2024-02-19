@@ -219,12 +219,14 @@ function Quarters({
   return (
     <StyledAccordion>
       <Box>
-        <AccordionSummary>Year {year}</AccordionSummary>
-        <Box>
-          <IconButton>
-            <Clear onClick={() => deleteYear(year - 1)} />
-          </IconButton>
-        </Box>
+        <AccordionSummary>
+          <Box>
+            <IconButton>
+              <Clear onClick={() => deleteYear(year - 1)} />
+            </IconButton>
+          </Box>
+          Year {year}
+        </AccordionSummary>
       </Box>
       <AccordionDetails>
         <div className="flex flex-row space-x-2">

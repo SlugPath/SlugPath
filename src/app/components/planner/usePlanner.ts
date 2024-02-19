@@ -111,18 +111,21 @@ export default function usePlanner(input: {
   };
 
   const deleteYear = (year: number) => {
-    console.log(year);
     for (let i = 0; i < courseState.quarters.length; i++) {
       if (year == parseInt(courseState.quarters[i].id[8])) {
-        //console.log(courseState.quarters)
-        //console.log(i)
         courseState.quarters.splice(i, 4);
-        console.log(courseState.quarters);
+        for (let j = i; j < courseState.quarters.length; j++) {
+          const quarterToChange = courseState.quarters[j];
+          const newYear = parseInt(quarterToChange.id[8]) - 1;
+          courseState.quarters[j].id =
+            quarterToChange.id.substring(0, 8) +
+            newYear.toString() +
+            quarterToChange.id.substring(9);
+        }
         break;
       }
     }
     handleCourseUpdate({ ...courseState, years: courseState.years - 1 });
-    //console.log(courseState.quarters)
   };
 
   const getAllLabels = () => {
