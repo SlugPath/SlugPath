@@ -20,7 +20,10 @@ export default function NotesEditor({
 
   useEffect(() => {
     onUpdateNotes(text);
-  }, [text, onUpdateNotes]);
+
+    // Disable the eslint rule to prevent rerendering when onUpdateNotes changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
 
   const toolbarOptions = {
     toolbar: [

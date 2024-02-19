@@ -53,15 +53,16 @@ export async function getUserMajorByEmail(
       defaultPlannerId: true,
     },
   });
-  const major = userData?.major;
-  if (major === undefined || major === null) {
-    return null;
-  }
+  if (!userData) return null;
+
+  const { major, defaultPlannerId } = userData;
+
+  if (!major) return null;
 
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId || "",
+    defaultPlannerId,
     id: major.id,
   };
 }
@@ -92,7 +93,7 @@ export async function getUserMajorById(
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId ?? "",
+    defaultPlannerId: userData!.defaultPlannerId,
     id: major.id,
   };
 }
