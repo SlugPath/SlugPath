@@ -69,6 +69,9 @@ afterAll(async () => {
   await prisma.user.deleteMany();
   await prisma.majorRequirement.deleteMany();
   await prisma.major.deleteMany();
+
+  expect(await prisma.user.count()).toBe(0);
+  await prisma.$disconnect();
 });
 
 it("should get major requirements for a major", async () => {

@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from "uuid";
  * @param catalogYear is the catalog year of the major
  * @returns the object or the major that was created
  */
-export async function createAMajor(
+export async function createMajor(
   name: string,
   catalogYear: string,
 ): Promise<Major> {
@@ -38,12 +38,19 @@ function createDate(days: number): Date {
 
 beforeAll(async () => {
   const sammyEmail = "sammyslug@ucsc.edu";
+  const newMajor = await createMajor("Computer Science B.S", "2020-2021");
+
   await prisma.user.create({
     data: {
       id: uuidv4(),
-      email: sammyEmail,
+      email: "sammyslug@ucsc.edu",
       name: "Sammy Slug",
       role: Role.ADMIN,
+      major: {
+        connect: {
+          id: newMajor.id,
+        },
+      },
     },
   });
 
@@ -56,8 +63,6 @@ beforeAll(async () => {
   });
 
   console.log("✨ 2 users successfully created!");
-
-  const newMajor = await createAMajor("Computer Science B.S", "2020-2021");
 
   // add permissions
   await prisma.permissions.create({
@@ -85,10 +90,13 @@ afterAll(async () => {
   await prisma.user.deleteMany();
   await prisma.permissions.deleteMany();
   await prisma.major.deleteMany();
+
+  expect(await prisma.user.count()).toBe(0);
+  await prisma.$disconnect();
 });
 
 it("should check that user has major editing permission", async () => {
-  const major = await prisma.major.findFirst({});
+  const major = await prisma.major.findFirst();
   expect(major).not.toBeNull();
   const user = await prisma.user.findFirst({
     where: {
@@ -97,12 +105,12 @@ it("should check that user has major editing permission", async () => {
   });
   expect(user).not.toBeNull();
 
-  const hasPermission = await userHasMajorEditingPermission(user!.id, major!);
+  const hasPermission = await userHasMajorEditingPermission(user!.id);
   expect(hasPermission).toBe(true);
 });
 
 it("should check that other users do not have major editing permission", async () => {
-  const major = await prisma.major.findFirst({});
+  const major = await prisma.major.findFirst();
   expect(major).not.toBeNull();
   const user = await prisma.user.findFirst({
     where: {
@@ -111,7 +119,7 @@ it("should check that other users do not have major editing permission", async (
   });
   expect(user).not.toBeNull();
 
-  const hasPermission = await userHasMajorEditingPermission(user!.id, major!);
+  const hasPermission = await userHasMajorEditingPermission(user!.id);
   expect(hasPermission).toBe(false);
 });
 
@@ -119,7 +127,7 @@ it("should check that getPermissions works using savePermissions", async () => {
   // delete permissions
   await prisma.permissions.deleteMany();
 
-  const newMajor = await createAMajor("Computer Science B.A", "2020-2021");
+  const newMajor = await createMajor("Computer Science B.A", "2020-2021");
 
   const permissions: Permissions[] = [
     {

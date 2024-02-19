@@ -57,13 +57,11 @@ it("should return the specified course", async () => {
   expect(id).toBeDefined();
   expect(labels).toBeDefined();
   expect(rest).toEqual({
-    department: "Computer Science and Engineering",
     departmentCode: "CSE",
     title: "Personal Computer Concepts: Software and Hardware",
     description: "Introduction to personal computer hardware and software.",
     number: "3",
     credits: 5,
-    prerequisites: "None",
     ge: ["mf"],
     quartersOffered: ["Fall", "Winter", "Spring"],
   });
@@ -99,10 +97,8 @@ it("should set description as an empty string if not defined", async () => {
   expect(rest).toEqual({
     departmentCode: "CSE",
     credits: 5,
-    department: "Computer Science and Engineering",
     title: "Some random cs class",
     number: "123",
-    prerequisites: "None",
     description: "",
     ge: [],
     quartersOffered: [],

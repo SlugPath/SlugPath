@@ -108,36 +108,36 @@ export async function userHasMajorEditingPermission(
     },
   });
 
-  const major = await getUserMajorById(userId);
+  if (!user) return false;
 
-  if (major?.id !== undefined && user?.email !== undefined) {
-    const permissions = await prisma.permissions.findUnique({
-      where: {
-        userEmail: user.email ? user.email : "",
-      },
-      select: {
-        majorEditingPermissions: {
-          select: {
-            major: {
-              select: {
-                id: true,
-              },
+  const major = await getUserMajorById(userId);
+  if (!major) return false;
+
+  const permissions = await prisma.permissions.findUnique({
+    where: {
+      userEmail: user.email,
+    },
+    select: {
+      majorEditingPermissions: {
+        select: {
+          major: {
+            select: {
+              id: true,
             },
-            expirationDate: true,
           },
+          expirationDate: true,
         },
       },
-    });
+    },
+  });
 
-    if (permissions?.majorEditingPermissions !== undefined) {
-      for (const majorEditPerm of permissions.majorEditingPermissions) {
-        if (majorEditPerm.major.id == major.id) {
-          return majorEditPerm.expirationDate > new Date();
-        }
-      }
+  if (!permissions) return false;
+
+  for (const majorEditPerm of permissions.majorEditingPermissions) {
+    if (majorEditPerm.major.id == major.id) {
+      return majorEditPerm.expirationDate > new Date();
     }
   }
-
   return false;
 }
 

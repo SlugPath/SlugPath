@@ -102,6 +102,7 @@ afterAll(async () => {
     prisma.planner.deleteMany(),
   ]);
 
+  expect(await prisma.user.count()).toBe(0);
   await prisma.$disconnect();
 });
 
