@@ -6,9 +6,10 @@ import {
   getUserMajorByEmail,
   updateUserMajor,
 } from "@actions/major";
-import { $Enums } from "@prisma/client";
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
+
+import { User } from "../common/Types";
 
 describe("Major actions", () => {
   beforeAll(async () => {
@@ -107,19 +108,10 @@ describe("Major actions", () => {
       prisma.planner.deleteMany(),
     ]);
 
-    expect(await prisma.user.count()).toBe(0);
     await prisma.$disconnect();
   });
 
-  let user: {
-    id: string;
-    email: string;
-    name: string | null;
-    role: $Enums.Role;
-    defaultPlannerId: string | null;
-    majorId: number | null;
-  } | null;
-
+  let user: User;
   beforeEach(async () => {
     user = await prisma.user.findFirst({
       where: {

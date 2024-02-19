@@ -189,31 +189,3 @@ export async function getPlannerById(plannerId: string) {
 
   return toPlannerData(p);
 }
-
-/**
- * Deletes a planner belonging to a particular user
- * @param userId user id
- * @param plannerId planner id
- * @returns id of the planner if record was successfully deleted, otherwise null
- */
-export async function deletePlanner({
-  plannerId,
-  userId,
-}: PlannerInput): Promise<string | null> {
-  // Check if it exists first
-  const exists = await prisma.planner.findUnique({
-    where: {
-      id: plannerId,
-      userId,
-    },
-  });
-  if (exists === null) return null;
-  // Then delete it if it does exist
-  await prisma.planner.delete({
-    where: {
-      id: plannerId,
-      userId,
-    },
-  });
-  return plannerId;
-}

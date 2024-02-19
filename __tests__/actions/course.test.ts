@@ -1,6 +1,11 @@
 import prisma from "@/lib/prisma";
 import { compareCoursesByNum } from "@/lib/utils";
-import { courseInfo, coursesBy, getSuggestedClasses } from "@actions/course";
+import {
+  courseInfo,
+  coursesBy,
+  getAllDepartments,
+  getSuggestedClasses,
+} from "@actions/course";
 import { StoredCourse } from "@customTypes/Course";
 import crypto from "crypto";
 
@@ -331,6 +336,18 @@ describe("Course actions", () => {
 
       expect(compareCoursesByNum(a, b)).toEqual(0);
       expect(compareCoursesByNum(b, a)).toEqual(0);
+    });
+  });
+
+  describe("getAllDepartments", () => {
+    it("should handle department retrieval correctly", async () => {
+      const departments = await getAllDepartments();
+
+      expect(departments).toBeDefined();
+      expect(Array.isArray(departments)).toBe(true);
+      expect(departments).toStrictEqual([
+        { label: "Computer Science and Engineering", value: "CSE" },
+      ]);
     });
   });
 });
