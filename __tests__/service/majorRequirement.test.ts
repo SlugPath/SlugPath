@@ -1,10 +1,10 @@
-import {
-  getMajorRequirements,
-  saveMajorRequirements,
-} from "@/app/actions/majorRequirements";
 import { Major } from "@/app/types/Major";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import prisma from "@/lib/prisma";
+import {
+  getMajorRequirements,
+  saveMajorRequirements,
+} from "@actions/majorRequirements";
 import { Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 

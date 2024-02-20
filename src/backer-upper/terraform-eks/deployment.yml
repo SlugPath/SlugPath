@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backer-upper-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backer-upper
+  template:
+    metadata:
+      labels:
+        app: backer-upper
+    spec:
+      containers:
+        - name: backer-upper
+          image: fercevik/backer-upper:latest
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "20m"
+            limits:
+              memory: "64Mi"
+              cpu: "50m"
+          env:
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_BUCKET
+              value: "slugpath-backups"
+            - name: POSTGRES_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_URL

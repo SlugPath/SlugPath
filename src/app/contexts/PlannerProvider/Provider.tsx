@@ -1,12 +1,10 @@
-import usePlanner from "@components/planner/usePlanner";
-import useCustomCourseSelection from "@components/search/useCustomCourseSelection";
-import {
-  PlannerContextProps,
-  PlannerProviderProps,
-} from "@customTypes/Context";
-import useHandleCourseDrag from "@hooks/useHandleCourseDrag";
 import { useSession } from "next-auth/react";
 import { createContext } from "react";
+
+import { PlannerContextProps, PlannerProviderProps } from "./Types";
+import useCustomCourseSelection from "./useCustomCourseSelection";
+import useHandleCourseDrag from "./useHandleCourseDrag";
+import usePlanner from "./usePlanner";
 
 export const PlannerContext = createContext({} as PlannerContextProps);
 
@@ -30,6 +28,7 @@ export function PlannerProvider({
     updateNotes,
     addYear,
     deleteYear,
+    replaceCustomCourse,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -49,6 +48,7 @@ export function PlannerProvider({
   return (
     <PlannerContext.Provider
       value={{
+        replaceCustomCourse,
         deleteCourse,
         editCustomCourse,
         totalCredits,

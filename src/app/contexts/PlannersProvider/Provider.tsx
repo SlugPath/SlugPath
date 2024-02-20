@@ -1,19 +1,15 @@
-import { usePlanners } from "@components/planners/usePlanners";
-import { PlannersContextProps } from "@customTypes/Context";
 import { useSession } from "next-auth/react";
 import { createContext } from "react";
 
-import { PlannerData } from "../types/Planner";
+import { PlannersContextProps, PlannersProviderProps } from "./Types";
+import { usePlanners } from "./usePlanners";
 
 export const PlannersContext = createContext({} as PlannersContextProps);
 
 export function PlannersProvider({
   allPlanners,
   children,
-}: {
-  allPlanners: PlannerData[];
-  children: React.ReactNode;
-}) {
+}: PlannersProviderProps) {
   const { data: session } = useSession();
   const {
     planners,
@@ -24,13 +20,18 @@ export function PlannersProvider({
     switchPlanners,
     changePlannerName,
     replaceCurrentPlanner,
+    duplicatePlanner,
     activePlanner,
     deletedPlanner,
+    showExportModal,
+    setShowExportModal,
   } = usePlanners(session?.user.id, allPlanners);
 
   return (
     <PlannersContext.Provider
       value={{
+        showExportModal,
+        setShowExportModal,
         planners,
         removePlanner,
         getPlanner,
@@ -39,6 +40,7 @@ export function PlannersProvider({
         switchPlanners,
         changePlannerName,
         replaceCurrentPlanner,
+        duplicatePlanner,
         activePlanner,
         deletedPlanner,
       }}

@@ -1,7 +1,6 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import EditIcon from "@mui/icons-material/Edit";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
 import { Button, Card, Typography } from "@mui/joy";
@@ -10,7 +9,6 @@ import { useContext } from "react";
 
 export default function PlannerActions() {
   const {
-    setShowExportModal,
     setShowMajorSelectionModal,
     setShowMajorProgressModal,
     setShowPermissionsModal,
@@ -19,11 +17,6 @@ export default function PlannerActions() {
   const { status } = useSession();
 
   const buttons = [
-    {
-      name: "Export Plan",
-      icon: <FileDownloadIcon fontSize="large" />,
-      onClick: () => setShowExportModal(true),
-    },
     {
       name: "Edit Major",
       icon: <EditIcon fontSize="large" />,
@@ -43,6 +36,7 @@ export default function PlannerActions() {
       name: "Permissions",
       icon: <LockOpenIcon fontSize="large" />,
       onClick: () => setShowPermissionsModal(true),
+      disabled: false,
     });
   }
 

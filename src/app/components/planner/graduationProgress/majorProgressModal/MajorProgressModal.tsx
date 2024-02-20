@@ -1,7 +1,7 @@
-import Search from "@/app/components/search/Search";
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
+import Search from "@components/search/Search";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import {
   Button,
   Card,
@@ -15,10 +15,7 @@ import {
 import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
 
-import {
-  RequirementsComponent,
-  RequirementsComponentEditing,
-} from "./RequirementsComponent";
+import { Requirements, RequirementsEditing } from "./Requirements";
 
 export default function MajorProgressModal() {
   const {
@@ -85,7 +82,7 @@ export default function MajorProgressModal() {
               </Card>
             </div>
           )}
-          <Requirements
+          <MajorRequirements
             majorRequirements={majorRequirements}
             editing={editing}
           />
@@ -105,7 +102,7 @@ export default function MajorProgressModal() {
 
 // this component decides which RequirementsComponent to render based on the editing prop
 // will also display if there are no requirements
-function Requirements({
+function MajorRequirements({
   majorRequirements,
   editing,
 }: {
@@ -115,12 +112,9 @@ function Requirements({
   return (
     <div className="overflow-y-scroll w-full" style={{ maxHeight: "80vh" }}>
       {editing ? (
-        <RequirementsComponentEditing
-          requirements={majorRequirements}
-          parents={0}
-        />
+        <RequirementsEditing requirements={majorRequirements} parents={0} />
       ) : (
-        <RequirementsComponent
+        <Requirements
           requirements={majorRequirements}
           parents={0}
           hideTitle={false}

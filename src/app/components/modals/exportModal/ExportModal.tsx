@@ -1,4 +1,3 @@
-import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { Suspense, lazy, useContext } from "react";
@@ -9,10 +8,16 @@ const PlannerPDF = lazy(() => import("./PlannerPDF"));
 
 // Create styles
 export default function ExportModal() {
-  const { setShowExportModal, showExportModal, courseState } =
-    useContext(ModalsContext);
-  const { planners, activePlanner } = useContext(PlannersContext);
-  if (activePlanner === undefined) return null;
+  const {
+    planners,
+    activePlanner,
+    setShowExportModal,
+    showExportModal,
+    getPlanner,
+  } = useContext(PlannersContext);
+  if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
+
+  const courseState = getPlanner(activePlanner);
 
   return (
     <Modal

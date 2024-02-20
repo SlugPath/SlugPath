@@ -1,11 +1,11 @@
+import { Major } from "@/app/types/Major";
+import { Permissions } from "@/app/types/Permissions";
+import prisma from "@/lib/prisma";
 import {
   getPermissions,
   savePermissions,
   userHasMajorEditingPermission,
-} from "@/app/actions/permissions";
-import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
-import prisma from "@/lib/prisma";
+} from "@actions/permissions";
 import { Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 

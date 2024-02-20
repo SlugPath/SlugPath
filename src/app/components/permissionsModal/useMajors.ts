@@ -1,10 +1,10 @@
-import { getMajors } from "@/app/actions/major";
+import { getMajors } from "@actions/major";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useMajors() {
   const { data: majors } = useQuery({
-    queryKey: ["getMajors"],
-    queryFn: () => getMajors(),
+    queryKey: ["allMajors"],
+    queryFn: async () => await getMajors(),
     initialData: [],
   });
 

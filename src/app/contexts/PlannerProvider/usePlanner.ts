@@ -1,5 +1,3 @@
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
-import { PlannerData } from "@/app/types/Planner";
 import {
   findQuarter,
   getGeSatisfied,
@@ -7,8 +5,10 @@ import {
   initialPlanner,
   isCustomCourse,
 } from "@/lib/plannerUtils";
+import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
+import { PlannerData } from "@customTypes/Planner";
 import { useContext, useMemo } from "react";
 
 export default function usePlanner(input: {
@@ -170,7 +170,31 @@ export default function usePlanner(input: {
     });
   };
 
+  const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
+    const newCids = courses.map((c) => c.id);
+    const newCourses = courseState.courses.filter((c) => c.id != customId);
+    newCourses.push(...courses);
+
+    handleCourseUpdate({
+      ...courseState,
+      courses: newCourses,
+      quarters: courseState.quarters.map((q) => {
+        const idx = q.courses.indexOf(customId);
+        if (idx !== -1) {
+          const quarterCourses = [...q.courses];
+          quarterCourses.splice(idx, 1, ...newCids);
+          return {
+            ...q,
+            courses: quarterCourses,
+          };
+        }
+        return q;
+      }),
+    });
+  };
+
   return {
+    replaceCustomCourse,
     courseState,
     totalCredits,
     geSatisfied,
