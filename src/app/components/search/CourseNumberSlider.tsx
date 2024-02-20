@@ -1,7 +1,8 @@
+import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import {
   Box,
   FormControl,
-  FormLabel,
+  FormHelperText,
   Input,
   Slider,
   Stack,
@@ -65,6 +66,16 @@ export default function CourseNumberSlider() {
     }
   };
 
+  const handleSliderChangeCommitted = (
+    event: Event | React.SyntheticEvent,
+    newValue: number | number[],
+  ) => {
+    const newValues = newValue as number[];
+    setValue(newValues);
+    setMinValue(newValues[0].toString());
+    setMaxValue(newValues[1].toString());
+  };
+
   return (
     <div
       style={{
@@ -72,13 +83,13 @@ export default function CourseNumberSlider() {
         marginBottom: "0.5rem",
         textAlign: "center",
         backgroundColor,
-        borderRadius: 4,
-        paddingBottom: "1rem",
+        borderRadius: 8,
+        paddingBottom: "0.5rem",
       }}
     >
       <Box sx={{ width: 235, margin: "auto" }}>
         <Typography
-          sx={{ borderRadius: 4, padding: 0.75, marginBottom: "0.75rem" }}
+          sx={{ borderRadius: 4, padding: 0.75, marginBottom: "1rem" }}
           gutterBottom
         >
           Course Number Range
@@ -87,19 +98,17 @@ export default function CourseNumberSlider() {
           getAriaLabel={() => "Temperature range"}
           value={value}
           onChange={handleChange}
+          onChangeCommitted={handleSliderChangeCommitted}
           valueLabelDisplay="auto"
           getAriaValueText={valueText}
           min={0}
           max={299}
           marks={marks}
-          //variant="soft"
           sx={{
             "--Slider-trackSize": "10px",
             "--Slider-markSize": "5px",
             "& .MuiSlider-valueLabel": {
-              // Target the value label component
               padding: "3px",
-              //color: 'red', // Set the color
             },
             marginBottom: "0.75rem",
           }}
@@ -108,36 +117,47 @@ export default function CourseNumberSlider() {
       <Stack
         direction="row"
         justifyContent="center"
-        alignItems="center"
         spacing={3}
         sx={{ padding: 1, margin: "auto" }}
       >
-        <FormControl>
-          <FormLabel>Min</FormLabel>
+        <FormControl
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <Input
             value={minValue}
-            //type="number"
+            type="number"
             placeholder="0"
             size="sm"
-            //onChange={(e) => setMinValue(e.target.value)}
             onChange={handleMinInputChange}
             onKeyPress={handleInputKeyPress}
-            sx={{ width: 100 }}
+            sx={{ width: 70, "--Input-radius": "15px" }}
           />
+          <FormHelperText>Min</FormHelperText>
         </FormControl>
-        <Typography>-</Typography>
-        <FormControl>
-          <FormLabel>Max</FormLabel>
+        <div style={{ marginTop: "0.2rem" }}>
+          <HorizontalRuleIcon />
+        </div>
+        <FormControl
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <Input
             value={maxValue}
-            //type="number"
+            type="number"
             placeholder="299"
             size="sm"
-            //onChange={(e) => setMaxValue(e.target.value)}
             onChange={handleMaxInputChange}
             onKeyPress={handleInputKeyPress}
-            sx={{ width: 100 }}
+            sx={{ width: 70, "--Input-radius": "15px" }}
           />
+          <FormHelperText sx={{ magrinTop: "0rem" }}>Max</FormHelperText>
         </FormControl>
       </Stack>
     </div>
