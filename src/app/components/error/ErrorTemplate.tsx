@@ -29,9 +29,7 @@ export default function ErrorTemplate({
           <div className="text-center text-5xl text-bold dark:text-white">
             Uh oh...
           </div>
-          <div className="text-center dark:text-white">
-            {title} Reason: {error.message}
-          </div>
+          <div className="text-center dark:text-white">{title}</div>
           <Button
             variant="soft"
             color="neutral"

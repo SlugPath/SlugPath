@@ -8,10 +8,9 @@ import {
   userHasMajorEditingPermission,
 } from "@actions/permissions";
 import { Role } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
-import { createDate, createMajor } from "../common/utils";
+import { createDate, createMajor, createUser } from "../common/utils";
 
 describe("Permissions Actions", () => {
   const adminEmail = `sammyslug@ucsc.edu`;
@@ -21,26 +20,16 @@ describe("Permissions Actions", () => {
 
   beforeAll(async () => {
     newMajor = await createMajor("Applied Physics B.S", "2020-2021");
-    await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: adminEmail,
-        name: "Sammy Slug",
-        role: Role.ADMIN,
-        major: {
-          connect: {
-            id: newMajor.id,
-          },
-        },
-      },
+    await createUser({
+      email: adminEmail,
+      name: "Sammy Slug",
+      role: Role.ADMIN,
+      majorId: newMajor.id,
     });
 
-    await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: userEmail,
-        name: "Samuel Slime",
-      },
+    await createUser({
+      email: userEmail,
+      name: "Samuel Slime",
     });
 
     console.log("✨ 2 users successfully created!");

@@ -10,36 +10,29 @@ import { Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
-import { createDate, createMajor } from "../common/utils";
+import { createDate, createMajor, createUser } from "../common/utils";
 
 describe("Major Requirements Actions", () => {
   beforeAll(async () => {
     const major = await createMajor("Computer Science B.S", "2019-2020");
     console.log("✨ 1 major successfully created!");
+    const adminEmail = "sammyslug@ucsc.edu";
 
-    const sammyEmail = "sammyslug@ucsc.edu";
-    const user = await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: sammyEmail,
-        name: "Sammy Slug",
-        role: Role.ADMIN,
-        majorId: major.id,
-      },
+    const user = await createUser({
+      email: adminEmail,
+      name: "Sammy Slug",
+      role: Role.ADMIN,
+      majorId: major.id,
     });
-
-    await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: "sslug@ucsc.edu",
-        name: "Samuel Slug",
-      },
+    await createUser({
+      email: "sslug@ucsc.edu",
+      name: "Samuel Slug",
     });
 
     // add permissions
     await prisma.permissions.create({
       data: {
-        userEmail: sammyEmail,
+        userEmail: adminEmail,
         majorEditingPermissions: {
           create: [
             {
@@ -79,6 +72,7 @@ describe("Major Requirements Actions", () => {
       major!.id,
       user!.id,
     );
+
     expect(success).toBe(true);
 
     console.log("✨ major requirements successfully created!");
@@ -89,8 +83,6 @@ describe("Major Requirements Actions", () => {
     await prisma.user.deleteMany();
     await prisma.majorRequirement.deleteMany();
     await prisma.major.deleteMany();
-
-    await prisma.$disconnect();
   });
 
   let major: Major | null;

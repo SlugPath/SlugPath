@@ -9,23 +9,18 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
+import { createUser } from "../common/utils";
 
 describe("Major actions", () => {
   beforeAll(async () => {
-    await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: `sammyslug@ucsc.edu`,
-        name: "Sammy Slug",
-      },
+    await createUser({
+      email: `sammyslug@ucsc.edu`,
+      name: "Sammy Slug",
     });
 
-    await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: `samuelslug@ucsc.edu`,
-        name: "Samuel Slug",
-      },
+    await createUser({
+      email: "samuelslug@ucsc.edu",
+      name: "Samuel Slug",
     });
 
     console.log("✨ 2 users successfully created!");
@@ -106,8 +101,6 @@ describe("Major actions", () => {
       prisma.planner.deleteMany(),
       prisma.permissions.deleteMany(),
     ]);
-
-    await prisma.$disconnect();
   });
 
   let user: User;

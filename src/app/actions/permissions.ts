@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 import { Permissions } from "../types/Permissions";
 import { getUserMajorById } from "./major";
@@ -9,7 +10,7 @@ export async function savePermissions(
   userId: string,
   permissions: Permissions[],
 ) {
-  if ((await getUserRole(userId)) !== "ADMIN")
+  if ((await getUserRole(userId)) !== Role.ADMIN)
     throw new Error("User is not an admin");
 
   const operations: any[] = [];

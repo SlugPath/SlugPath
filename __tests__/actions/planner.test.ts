@@ -10,6 +10,7 @@ import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
+import { createUser } from "../common/utils";
 
 describe("Planner actions", () => {
   const cseCourses = () => [
@@ -63,12 +64,9 @@ describe("Planner actions", () => {
   ];
 
   beforeAll(async () => {
-    await prisma.user.create({
-      data: {
-        id: uuidv4(),
-        email: `sammyslug@ucsc.edu`,
-        name: "Sammy Slug",
-      },
+    await createUser({
+      email: `sammyslug@ucsc.edu`,
+      name: "Sammy Slug",
     });
 
     console.log("✨ 1 user successfully created!");
@@ -82,8 +80,6 @@ describe("Planner actions", () => {
       prisma.label.deleteMany(),
       prisma.major.deleteMany(),
     ]);
-
-    await prisma.$disconnect();
   });
 
   let user: User;

@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Major } from "@customTypes/Major";
+import { Role } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
 
 // returns todays date + days
 export function createDate(days: number): Date {
@@ -24,6 +26,32 @@ export async function createMajor(
   return prisma.major.create({
     data: {
       ...majorData,
+    },
+  });
+}
+
+/**
+ * Creates a user in the database
+ * @returns newly created user
+ */
+export async function createUser({
+  email,
+  name,
+  role,
+  majorId,
+}: {
+  email: string;
+  name: string;
+  role?: Role;
+  majorId?: number;
+}) {
+  return await prisma.user.create({
+    data: {
+      id: uuidv4(),
+      email,
+      name,
+      role,
+      majorId,
     },
   });
 }
