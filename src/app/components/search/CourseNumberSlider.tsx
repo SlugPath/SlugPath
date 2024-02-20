@@ -22,8 +22,12 @@ function valueText(value: number) {
   return `${value}`;
 }
 
-export default function CourseNumberSlider() {
-  const [value, setValue] = React.useState<number[]>([0, 299]);
+export default function CourseNumberSlider({
+  onSliderChange,
+}: {
+  onSliderChange: (values: [number, number]) => void;
+}) {
+  const [range, setRange] = React.useState<number[]>([0, 299]);
   const [maxValue, setMaxValue] = React.useState("299");
   const [minValue, setMinValue] = React.useState("0");
   const { mode } = useColorScheme();
@@ -31,7 +35,7 @@ export default function CourseNumberSlider() {
   const backgroundColor = mode === "light" ? "#f1f5f9" : "#181a1c";
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[]);
+    setRange(newValue as number[]);
   };
 
   // Update slider value when min or max input field changes
@@ -55,7 +59,11 @@ export default function CourseNumberSlider() {
         newMinValue <= newMaxValue &&
         newMaxValue >= newMinValue
       ) {
-        setValue([
+        setRange([
+          isNaN(newMinValue) ? 0 : newMinValue,
+          isNaN(newMaxValue) ? 299 : newMaxValue,
+        ]);
+        onSliderChange([
           isNaN(newMinValue) ? 0 : newMinValue,
           isNaN(newMaxValue) ? 299 : newMaxValue,
         ]);
@@ -71,15 +79,17 @@ export default function CourseNumberSlider() {
     newValue: number | number[],
   ) => {
     const newValues = newValue as number[];
-    setValue(newValues);
+    setRange(newValues);
     setMinValue(newValues[0].toString());
     setMaxValue(newValues[1].toString());
+    const newRange: [number, number] = newValue as [number, number];
+    onSliderChange(newRange);
   };
 
   return (
     <div
       style={{
-        width: 270,
+        minWidth: 270,
         marginBottom: "0.5rem",
         textAlign: "center",
         backgroundColor,
@@ -96,7 +106,7 @@ export default function CourseNumberSlider() {
         </Typography>
         <Slider
           getAriaLabel={() => "Temperature range"}
-          value={value}
+          value={range}
           onChange={handleChange}
           onChangeCommitted={handleSliderChangeCommitted}
           valueLabelDisplay="auto"

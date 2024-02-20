@@ -25,11 +25,29 @@ export async function coursesBy(
     return {};
   };
 
+  console.log("number range: ", pred.numberRange);
+
+  /* If number is provided, it behaves as before. 
+  If numberRange is provided with values different from the default range (0, 299), 
+  it sets gte (greater than or equal to) and lte (less than or equal to) */
   const numberParam = () => {
     if (pred.number) {
+      console.log("In number");
       return {
         number: {
           contains: pred.number,
+        },
+      };
+    }
+    if (
+      pred.numberRange &&
+      (pred.numberRange[0] !== 0 || pred.numberRange[1] !== 299)
+    ) {
+      console.log("In number range");
+      return {
+        number: {
+          gte: pred.numberRange[0].toString(), // Greater than or equal to minNumber
+          lte: pred.numberRange[1].toString(), // Less than or equal to maxNumber
         },
       };
     }
@@ -50,11 +68,17 @@ export async function coursesBy(
   const courses = await prisma.course.findMany({
     where: {
       departmentCode: departmentCodeParam().departmentCode,
-      number: numberParam().number,
+      ...numberParam(),
       ge: geParam().ge,
     },
   });
 
+  // Log the generated filter conditions for debugging
+  console.log("Filter conditions:", {
+    departmentCode: departmentCodeParam().departmentCode,
+    ...numberParam(),
+    ge: geParam().ge,
+  });
   // Convert to a stored course and sort by number
   const res = courses.map(toStoredCourse);
   res.sort(compareCoursesByNum);

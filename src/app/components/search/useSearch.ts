@@ -4,6 +4,11 @@ import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
+/* Need to update the search to accomadate the number range.
+Cases1: If nummber input is not empty and number range is set to the default min and max values use the number input value
+Case2: If number input is empty and number range is not default values use number range
+Case3: If number input is empty and number range is set to default use deafault  */
+
 export default function useSearch() {
   // Query to get the list of departments
   const { data: departments } = useQuery({
@@ -22,10 +27,12 @@ export default function useSearch() {
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
+  const [numberRange, setNumberRange] = useState<number[]>([0, 299]);
   const [queryDetails, setQueryDetails] = useState({
     departmentCode: "",
     number: "",
     ge: "",
+    numberRange: [0, 299],
   });
 
   // Query to get the courses based on the query details
@@ -43,7 +50,8 @@ export default function useSearch() {
   });
 
   useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
+    callback: () =>
+      handleSearch(departmentCode ?? "", number, ge ?? "", numberRange),
     delay: 100,
     dependencies: [departmentCode, number, ge],
   });
@@ -71,16 +79,24 @@ export default function useSearch() {
     departmentCode: string,
     textInput: string,
     geInput: string,
+    sliderInput: number[],
   ) => {
     const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
       textInput,
       departmentCode,
     );
+    console.log("handleSearch: ", sliderInput);
     setQueryDetails({
       departmentCode: departmentCodeParsed,
       number: numberParsed,
       ge: geInput,
+      numberRange: sliderInput,
     });
+  };
+
+  const handleChangeNumberRange = (newRange: number[]) => {
+    console.log("handleChangeNumberRange: ", newRange);
+    setNumberRange(newRange);
   };
 
   return {
@@ -92,12 +108,14 @@ export default function useSearch() {
       number,
       ge,
       geOptions,
+      numberRange,
     },
     handlers: {
       handleChangeDepartment,
       handleChangeNumber,
       handleChangeGE,
       handleSearch,
+      handleChangeNumberRange,
     },
   };
 }

@@ -1,6 +1,7 @@
 import { SearchParams } from "@customTypes/Course";
 import { Divider, Input, Option, Select } from "@mui/joy";
 import React from "react";
+import { useEffect } from "react";
 
 import CourseNumberSlider from "./CourseNumberSlider";
 
@@ -16,31 +17,47 @@ export interface SearchInputsProps {
     number: string;
     ge: string | null;
     geOptions: SearchParams;
+    numberRange: number[];
   };
   handlers: {
-    handleSearch: (department: string, number: string, ge: string) => void;
+    handleSearch: (
+      department: string,
+      number: string,
+      ge: string,
+      numberRange: number[],
+    ) => void;
     handleChangeNumber: (number: string) => void;
     handleChangeGE: selectChangeHandler;
     handleChangeDepartment: selectChangeHandler;
+    handleChangeNumberRange: (numberRange: number[]) => void;
   };
 }
 
 export default function SearchInputs({ params, handlers }: SearchInputsProps) {
-  const { departmentCode, number, ge, departments, geOptions } = params;
+  const { departmentCode, number, ge, departments, geOptions, numberRange } =
+    params;
   const {
     handleSearch,
     handleChangeDepartment,
     handleChangeGE,
     handleChangeNumber,
+    handleChangeNumberRange,
   } = handlers;
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSearch(departmentCode ?? "", number, ge ?? "", numberRange);
+  };
+
+  useEffect(() => {
+    const syntheticEvent = new Event(
+      "submit",
+    ) as unknown as React.FormEvent<HTMLFormElement>;
+    handleSubmit(syntheticEvent);
+  }, [numberRange]);
+
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        handleSearch(departmentCode ?? "", number, ge ?? "");
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-6 gap-2 p-2">
         <Select
           placeholder="Department"
@@ -86,7 +103,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
             </Option>
           ))}
         </Select>
-        <CourseNumberSlider />
+        <CourseNumberSlider onSliderChange={handleChangeNumberRange} />
       </div>
       <Divider sx={{ height: 3, marginBottom: "0.75rem" }} />
     </form>
