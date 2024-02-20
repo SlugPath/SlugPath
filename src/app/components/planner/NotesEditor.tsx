@@ -1,5 +1,6 @@
+import { debounce } from "lodash";
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 
 export interface NotesEditorProps {
@@ -13,10 +14,16 @@ export default function NotesEditor({
 }: NotesEditorProps) {
   const [text, setText] = useState(content);
 
-  const handleChange = (value: string) => {
+  const handleChange = debounce((value: string) => {
     setText(value);
-    onUpdateNotes(value);
-  };
+  }, 300);
+
+  useEffect(() => {
+    onUpdateNotes(text);
+
+    // Disable the eslint rule to prevent rerendering when onUpdateNotes changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
 
   const toolbarOptions = {
     toolbar: [
@@ -43,7 +50,7 @@ export default function NotesEditor({
         modules={toolbarOptions}
         style={{ height: "20rem", border: "none" }}
         theme="snow"
-        value={text}
+        defaultValue={text}
         onChange={handleChange}
       />
     </div>

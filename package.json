@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:silent": "jest --runInBand --forceExit --silent",
     "test:watch": "jest --runInBand --forceExit --watchAll",
     "analyze": "cross-env ANALYZE=true next build",

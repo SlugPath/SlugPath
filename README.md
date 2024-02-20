@@ -36,10 +36,12 @@ pnpm dev
 Et Voilà! The app should be running on `localhost:3000`.
 
 ## Authors
+
 - **Furkan Ercevik** - [fercevik729](https://github.com/fercevik729)
 - **Oskar Luthje** - [oluthje](https://github.com/oluthje)
 
 ## Contributors
+
 - **Teresa Wu** - [tqwu](https://github.com/tqwu)
 - **Ahmad Joseph** - [aajoseph-dev](https://github.com/aajoseph-dev)
 - **Lily Knab** - [lilyknab](https://github.com/lilyknab)
