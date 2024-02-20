@@ -12,13 +12,13 @@ import {
   IconButton,
   Input,
   Select,
-  Textarea,
   Typography,
   useColorScheme,
 } from "@mui/joy";
 import Option from "@mui/joy/Option";
 import { useContext, useState } from "react";
 
+import NotesEditor from "../../NotesEditor";
 import DraggableCourseCard from "../../quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
@@ -64,7 +64,11 @@ export function Requirements({
 
       {/* Notes start */}
       {requirements.notes && requirements.notes.length > 0 && (
-        <Typography>{requirements.notes}</Typography>
+        <NotesEditor
+          content={requirements.notes}
+          onUpdateNotes={() => {}}
+          readOnly={true}
+        />
       )}
       {/* Notes end */}
 
@@ -203,13 +207,9 @@ export function RequirementsEditing({
 
       {/* Notes start */}
       <div>
-        <Textarea
-          minRows={2}
-          variant="soft"
-          placeholder="Write notes here…"
-          style={{ ...cardStyleProps(parents + 1, mode) }}
-          value={requirements.notes}
-          onChange={(e) => handleUpdateNotes(e.target.value)}
+        <NotesEditor
+          content={requirements.notes || ""}
+          onUpdateNotes={(content: string) => handleUpdateNotes(content)}
         />
       </div>
       {/* Notes start */}
