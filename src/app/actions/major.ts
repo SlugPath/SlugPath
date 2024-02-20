@@ -117,9 +117,7 @@ export async function updateUserMajor({
       catalogYear,
     },
   });
-  const majorId = major?.id;
-
-  if (majorId === undefined)
+  if (!major)
     throw new Error(
       `could not find major with name ${name} and catalog year ${catalogYear}`,
     );
@@ -129,7 +127,7 @@ export async function updateUserMajor({
       id: userId,
     },
     data: {
-      majorId,
+      majorId: major.id,
       defaultPlannerId,
     },
   });

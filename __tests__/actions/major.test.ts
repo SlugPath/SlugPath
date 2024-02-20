@@ -6,18 +6,16 @@ import {
   getUserMajorByEmail,
   updateUserMajor,
 } from "@actions/major";
-import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
 
 describe("Major actions", () => {
   beforeAll(async () => {
-    const hash = crypto.randomBytes(16).toString("hex");
     await prisma.user.create({
       data: {
         id: uuidv4(),
-        email: `sammyslug${hash}@ucsc.edu`,
+        email: `sammyslug@ucsc.edu`,
         name: "Sammy Slug",
       },
     });
@@ -25,7 +23,7 @@ describe("Major actions", () => {
     await prisma.user.create({
       data: {
         id: uuidv4(),
-        email: `samuelslug${hash}@ucsc.edu`,
+        email: `samuelslug@ucsc.edu`,
         name: "Samuel Slug",
       },
     });
@@ -52,7 +50,7 @@ describe("Major actions", () => {
           title: "Computer Systems and C Programming",
           description:
             "Introduction to C programming language and computer programming in a UNIX environment. Topics include program structure, UNIX editors, compiling and linking, debugging tools, fundamentals of C programming, basic algorithms and data structures, and basic UNIX commands.",
-          number: `13S${hash}`,
+          number: `13S`,
           credits: 7,
           prerequisites: "None",
           ge: ["si", "peT"],
@@ -64,7 +62,7 @@ describe("Major actions", () => {
           title: "Introduction to Data Structures and Algorithms",
           description:
             "Introduction to data structures and algorithms. Abstract data types including stacks, queues, priority queues, hash tables, binary trees, search trees, balanced trees and graphs. Sorting; asymptotic analysis; fundamental graph algorithms including graph search, shortest path, and minimum spanning trees; concurrency and synchronization. Credit is not given for both this course and CSE 100.",
-          number: `101${hash}`,
+          number: `101`,
           credits: 5,
           prerequisites: "None",
           ge: ["None"],
@@ -76,7 +74,7 @@ describe("Major actions", () => {
           title: "Introduction to Algorithm Analysis",
           description:
             "Introduction to the design and analysis of algorithms. Divide-and-conquer, dynamic programming, greedy algorithms, amortized analysis, randomization, and basic data structures. Credit is not given for both this course and CSE 101.",
-          number: `102${hash}`,
+          number: `102`,
           credits: 5,
           prerequisites: "None",
           ge: ["None"],
@@ -86,7 +84,7 @@ describe("Major actions", () => {
           department: "Mathematics",
           departmentCode: "Math",
           title: "Calculus",
-          number: `19A${hash}`,
+          number: `19A`,
           credits: 5,
           description:
             "Introduction to differential and integral calculus of functions of one variable. Emphasis is on applications and problem solving using the tools of calculus. Topics include limits, the derivative, rules for differentiation, graphing strategy, optimization problems, differentials, implicit differentiation, related rates, exponential and logarithmic functions, antiderivatives, definite integrals, areas, and methods of integration. Further topics may include integration by parts, trigonometric substitution, partial fractions, integration by tables, arc length, and surface area.",
@@ -106,6 +104,7 @@ describe("Major actions", () => {
       prisma.major.deleteMany(),
       prisma.course.deleteMany(),
       prisma.planner.deleteMany(),
+      prisma.permissions.deleteMany(),
     ]);
 
     await prisma.$disconnect();

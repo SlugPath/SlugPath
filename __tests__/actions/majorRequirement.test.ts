@@ -2,49 +2,60 @@ import { Major } from "@/app/types/Major";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import prisma from "@/lib/prisma";
 import {
+  getAllRequirementLists,
   getMajorRequirements,
   saveMajorRequirements,
 } from "@actions/majorRequirements";
 import { Role } from "@prisma/client";
-import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
-async function createMajor(name: string, catalogYear: string): Promise<Major> {
-  const majorData = {
-    name,
-    catalogYear,
-  };
-  return prisma.major.create({
-    data: {
-      ...majorData,
-    },
-  });
-}
+import { User } from "../common/Types";
+import { createDate, createMajor } from "../common/utils";
 
 describe("Major Requirements Actions", () => {
-  const hash = crypto.randomBytes(20).toString("hex");
   beforeAll(async () => {
-    const sammyEmail = "sammyslug@ucsc.edu" + hash;
+    const major = await createMajor("Computer Science B.S", "2019-2020");
+    console.log("✨ 1 major successfully created!");
+
+    const sammyEmail = "sammyslug@ucsc.edu";
     const user = await prisma.user.create({
       data: {
         id: uuidv4(),
         email: sammyEmail,
         name: "Sammy Slug",
         role: Role.ADMIN,
+        majorId: major.id,
       },
     });
+
     await prisma.user.create({
       data: {
         id: uuidv4(),
-        email: "sslug@ucsc.edu" + hash,
+        email: "sslug@ucsc.edu",
         name: "Samuel Slug",
       },
     });
 
-    console.log("✨ 2 users successfully created!");
+    // add permissions
+    await prisma.permissions.create({
+      data: {
+        userEmail: sammyEmail,
+        majorEditingPermissions: {
+          create: [
+            {
+              major: {
+                connect: {
+                  id: major.id,
+                },
+              },
+              expirationDate: createDate(1),
+            },
+          ],
+        },
+      },
+    });
 
-    const major = await createMajor("Computer Science B.S", "2019-2020");
-    console.log("✨ 1 major successfully created!");
+    console.log("✨ 2 users successfully created!");
 
     const majorRequirementsData: RequirementList = {
       id: uuidv4(),
@@ -53,7 +64,7 @@ describe("Major Requirements Actions", () => {
         {
           id: "1",
           departmentCode: "CSE",
-          number: "12" + hash,
+          number: "12",
           credits: 5,
           title: "Coding class",
           quartersOffered: ["Fall", "Winter", "Spring"],
@@ -63,37 +74,45 @@ describe("Major Requirements Actions", () => {
         },
       ],
     };
-    await saveMajorRequirements(majorRequirementsData, major!.id, user!.id);
+    const { success } = await saveMajorRequirements(
+      majorRequirementsData,
+      major!.id,
+      user!.id,
+    );
+    expect(success).toBe(true);
 
     console.log("✨ major requirements successfully created!");
   });
 
   afterAll(async () => {
+    await prisma.permissions.deleteMany();
     await prisma.user.deleteMany();
     await prisma.majorRequirement.deleteMany();
     await prisma.major.deleteMany();
 
-    expect(await prisma.user.count()).toBe(0);
     await prisma.$disconnect();
   });
 
-  it("should get major requirements for a major", async () => {
-    const major = await prisma.major.findFirst();
-    const majorRequirements = await getMajorRequirements(major!.id);
-    expect(majorRequirements.requirements).toHaveLength(1);
-  });
+  let major: Major | null;
+  let user: User;
+  beforeEach(async () => {
+    major = await prisma.major.findFirst();
+    expect(major).not.toBeNull();
 
-  it("should fail to save major requirements for a user without permission", async () => {
-    const user = await prisma.user.findFirst({
+    user = await prisma.user.findFirst({
       where: {
         name: "Samuel Slug",
       },
     });
     expect(user).not.toBeNull();
+  });
 
-    const major = await prisma.major.findFirst({});
-    expect(major).not.toBeNull();
+  it("should get major requirements for a major", async () => {
+    const majorRequirements = await getMajorRequirements(major!.id);
+    expect(majorRequirements.requirements).toHaveLength(1);
+  });
 
+  it("should fail to save major requirements for a user without permission", async () => {
     const majorRequirementsData: RequirementList = {
       id: uuidv4(),
       binder: Binder.AND,
@@ -101,7 +120,7 @@ describe("Major Requirements Actions", () => {
         {
           id: "1",
           departmentCode: "CSE",
-          number: "12" + hash,
+          number: "12",
           credits: 5,
           title: "Coding class",
           quartersOffered: ["Fall", "Winter", "Spring"],
@@ -116,6 +135,21 @@ describe("Major Requirements Actions", () => {
       major!.id,
       user!.id,
     );
-    expect(result!.error).not.toBeNull();
+    expect(result).toEqual({ success: false });
+  });
+
+  it("should return all requirement lists", async () => {
+    const requirements = await getAllRequirementLists();
+    expect(requirements).toHaveLength(1);
+  });
+
+  it("should return all major requirements", async () => {
+    const majorRequirements = await getMajorRequirements(major!.id);
+    expect(majorRequirements.requirements).toHaveLength(1);
+  });
+
+  it("should return an empty major requirement list if the major does not exist", async () => {
+    const majorReqs = await getMajorRequirements(major!.id + 1);
+    expect(majorReqs.requirements).toHaveLength(0);
   });
 });

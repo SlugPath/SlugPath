@@ -3,18 +3,15 @@ import { initialPlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import {
   getAllPlanners,
-  getPlanner,
   getPlannerById,
   saveAllPlanners,
 } from "@actions/planner";
 import { expect } from "@jest/globals";
-import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
 
 describe("Planner actions", () => {
-  const hash = crypto.randomBytes(16).toString("hex");
   const cseCourses = () => [
     {
       id: uuidv4(),
@@ -69,7 +66,7 @@ describe("Planner actions", () => {
     await prisma.user.create({
       data: {
         id: uuidv4(),
-        email: `sammyslug${hash}@ucsc.edu`,
+        email: `sammyslug@ucsc.edu`,
         name: "Sammy Slug",
       },
     });
@@ -131,7 +128,7 @@ describe("Planner actions", () => {
     expect(allPlanners).toHaveLength(1);
 
     // Ensure the content of that planner is updated
-    const check2 = await getPlanner({ userId: user!.id, plannerId });
+    const check2 = await getPlannerById(plannerId);
     expect(check2).not.toBeNull();
 
     const courses = check2!.quarters[0].courses;
@@ -139,6 +136,10 @@ describe("Planner actions", () => {
     courses?.forEach((c, idx) => {
       expect(c).toStrictEqual(plannerCourses[idx].id);
     });
+  });
+
+  it("should return an empty list if user is invalid", async () => {
+    expect(await getAllPlanners("invalid-email")).toHaveLength(0);
   });
 
   it("should throw an error if planner id is invalid", async () => {
@@ -186,10 +187,7 @@ describe("Planner actions", () => {
     const allPlanners = await getAllPlanners(user!.email);
     expect(allPlanners).toHaveLength(1);
     // Ensure the content of that planner is updated
-    const check2 = await getPlanner({
-      userId: user!.id,
-      plannerId: plannerData.id,
-    });
+    const check2 = await getPlannerById(plannerData.id);
     expect(check2).not.toBeNull();
     const courses = check2?.quarters[0].courses;
     expect(courses).toBeDefined();
@@ -209,7 +207,7 @@ async function createPlanner(
     planners: [planner],
   });
 
-  const check = await getPlanner({ userId: user.id, plannerId: planner.id });
+  const check = await getPlannerById(planner.id);
   expect(check).not.toBeNull();
 
   return planner.id;

@@ -10,7 +10,7 @@ export async function savePermissions(
   permissions: Permissions[],
 ) {
   if ((await getUserRole(userId)) !== "ADMIN")
-    return { error: "User is not an admin" };
+    throw new Error("User is not an admin");
 
   const operations: any[] = [];
   operations.push(prisma.permissions.deleteMany());
@@ -60,12 +60,9 @@ export async function savePermissions(
     }
   });
 
-  try {
-    await prisma.$transaction([...operations]);
-    return { title: "OK" };
-  } catch (e) {
-    return { error: e };
-  }
+  await prisma.$transaction([...operations]);
+
+  return { success: true };
 }
 
 export async function getPermissions(): Promise<Permissions[]> {
@@ -88,10 +85,6 @@ export async function getPermissions(): Promise<Permissions[]> {
     },
   });
 
-  if (usersPermissions === null) {
-    return [];
-  }
-
   return usersPermissions;
 }
 
@@ -104,10 +97,11 @@ export async function userHasMajorEditingPermission(
     },
     select: {
       email: true,
+      role: true,
     },
   });
 
-  if (!user) return false;
+  if (!user) throw new Error(`User ${userId} not found`);
 
   const major = await getUserMajorById(userId);
   if (!major) return false;
@@ -150,9 +144,6 @@ export async function getUserRole(userId: string): Promise<string> {
     },
   });
 
-  if (user?.role) {
-    return user.role;
-  }
-
-  return "USER";
+  if (!user) throw new Error(`User ${userId} not found`);
+  return user.role;
 }

@@ -3,50 +3,24 @@ import { Permissions } from "@/app/types/Permissions";
 import prisma from "@/lib/prisma";
 import {
   getPermissions,
+  getUserRole,
   savePermissions,
   userHasMajorEditingPermission,
 } from "@actions/permissions";
 import { Role } from "@prisma/client";
-import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../common/Types";
-
-/**
- * @param name is the name of the major
- * @param catalogYear is the catalog year of the major
- * @returns the object or the major that was created
- */
-export async function createMajor(
-  name: string,
-  catalogYear: string,
-): Promise<Major> {
-  const majorData = {
-    name,
-    catalogYear,
-  };
-  return prisma.major.create({
-    data: {
-      ...majorData,
-    },
-  });
-}
-
-// returns todays date + days
-function createDate(days: number): Date {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date;
-}
+import { createDate, createMajor } from "../common/utils";
 
 describe("Permissions Actions", () => {
-  const hash = crypto.randomBytes(20).toString("hex");
-  const adminEmail = `sammyslug@ucsc.edu${hash}`;
-  const userEmail = `samuelslime@ucsc.edu${hash}`;
+  const adminEmail = `sammyslug@ucsc.edu`;
+  const userEmail = `samuelslime@ucsc.edu`;
+
+  let newMajor: Major;
 
   beforeAll(async () => {
-    const newMajor = await createMajor("Applied Physics B.S", "2020-2021");
-
+    newMajor = await createMajor("Applied Physics B.S", "2020-2021");
     await prisma.user.create({
       data: {
         id: uuidv4(),
@@ -123,13 +97,12 @@ describe("Permissions Actions", () => {
     expect(user).not.toBeNull();
   });
 
-  it("should check that user has major editing permission", async () => {
-    const major = await prisma.major.findFirst();
-    expect(major).not.toBeNull();
-    expect(adminUser).not.toBeNull();
-
-    const hasPermission = await userHasMajorEditingPermission(adminUser!.id);
-    expect(hasPermission).toBe(true);
+  afterEach(async () => {
+    await prisma.permissions.deleteMany({
+      where: {
+        userEmail,
+      },
+    });
   });
 
   it("should check that other users do not have major editing permission", async () => {
@@ -137,6 +110,14 @@ describe("Permissions Actions", () => {
     expect(major).not.toBeNull();
     const hasPermission = await userHasMajorEditingPermission(user!.id);
     expect(hasPermission).toBe(false);
+  });
+
+  it("should check that user has major editing permission", async () => {
+    const major = await prisma.major.findFirst();
+    expect(major).not.toBeNull();
+
+    const hasPermission = await userHasMajorEditingPermission(adminUser!.id);
+    expect(hasPermission).toBe(true);
   });
 
   it("should check that getPermissions works using savePermissions", async () => {
@@ -153,10 +134,13 @@ describe("Permissions Actions", () => {
         ],
       },
     ];
-    expect(adminUser).not.toBeNull();
+    await expect(savePermissions(user!.id, permissions)).rejects.toThrow(
+      "User is not an admin",
+    );
 
-    const result = await savePermissions(adminUser!.id, permissions);
-    expect(result.title).toBe("OK");
+    await expect(savePermissions(adminUser!.id, permissions)).resolves.toEqual({
+      success: true,
+    });
 
     const allPermissions: Permissions[] = await getPermissions();
 
@@ -168,5 +152,88 @@ describe("Permissions Actions", () => {
         });
       }),
     ).toBe(true);
+  });
+
+  describe("userHasMajorEditingPermission", () => {
+    it("should return false if permissions are expired", async () => {
+      const major = await prisma.major.findFirst();
+      expect(major).not.toBeNull();
+
+      const permissions: Permissions[] = [
+        {
+          userEmail: adminEmail,
+          majorEditingPermissions: [
+            {
+              major: major!,
+              expirationDate: createDate(-7),
+            },
+          ],
+        },
+      ];
+
+      expect(await savePermissions(adminUser!.id, permissions)).toEqual({
+        success: true,
+      });
+      const hasPermission = await userHasMajorEditingPermission(user!.id);
+      expect(hasPermission).toBe(false);
+    });
+
+    it("should throw if user not found", async () => {
+      await expect(userHasMajorEditingPermission("invalid")).rejects.toThrow(
+        `User invalid not found`,
+      );
+    });
+
+    it("should return false if permissions are not for current major", async () => {
+      const major = await createMajor("Marine Biology B.S", "2020-2021");
+      const permissions: Permissions[] = [
+        {
+          userEmail,
+          majorEditingPermissions: [
+            {
+              major: major!,
+              expirationDate: createDate(1),
+            },
+          ],
+        },
+      ];
+
+      expect(await savePermissions(adminUser!.id, permissions)).toEqual({
+        success: true,
+      });
+      expect(await userHasMajorEditingPermission(user!.id)).toBe(false);
+    });
+
+    it("should return false if user has no permissions but has a major", async () => {
+      expect(await userHasMajorEditingPermission(user!.id)).toBe(false);
+    });
+
+    beforeEach(async () => {
+      await prisma.user.update({
+        where: {
+          id: user!.id,
+        },
+        data: {
+          majorId: newMajor.id,
+        },
+      });
+    });
+
+    afterAll(async () => {
+      await prisma.user.update({
+        where: {
+          email: userEmail,
+        },
+        data: {
+          majorId: null,
+        },
+      });
+    });
+  });
+
+  it("should throw if user not found", async () => {
+    await expect(getUserRole("invalid")).rejects.toThrow(
+      `User invalid not found`,
+    );
   });
 });

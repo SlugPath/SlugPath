@@ -7,11 +7,8 @@ import {
   getSuggestedClasses,
 } from "@actions/course";
 import { StoredCourse } from "@customTypes/Course";
-import crypto from "crypto";
 
 describe("Course actions", () => {
-  const hash = crypto.randomBytes(16).toString("hex");
-
   beforeAll(async () => {
     await prisma.course.createMany({
       data: [
@@ -21,7 +18,7 @@ describe("Course actions", () => {
           title: "Personal Computer Concepts: Software and Hardware",
           description:
             "Introduction to personal computer hardware and software.",
-          number: `3${hash}`,
+          number: `3`,
           credits: 5,
           prerequisites: "None",
           ge: ["mf"],
@@ -33,7 +30,7 @@ describe("Course actions", () => {
           title: "Introduction to Data Structures and Algorithms",
           description:
             "Introduction to data structures and algorithms. Abstract data types including stacks, queues, priority queues, hash tables, binary trees, search trees, balanced trees and graphs. Sorting; asymptotic analysis; fundamental graph algorithms including graph search, shortest path, and minimum spanning trees; concurrency and synchronization. Credit is not given for both this course and CSE 100.",
-          number: `101${hash}`,
+          number: `101`,
           credits: 5,
           prerequisites: "None",
           ge: ["None"],
@@ -43,7 +40,7 @@ describe("Course actions", () => {
           departmentCode: "CSE",
           department: "Computer Science and Engineering",
           title: "Some random cs class",
-          number: `123${hash}`,
+          number: `123`,
           prerequisites: "None",
           credits: 5,
         },
@@ -60,7 +57,7 @@ describe("Course actions", () => {
     it("should return the specified course", async () => {
       const course = await courseInfo({
         departmentCode: "CSE",
-        number: `3${hash}`,
+        number: `3`,
       });
 
       expect(course).toBeDefined();
@@ -71,7 +68,7 @@ describe("Course actions", () => {
         departmentCode: "CSE",
         title: "Personal Computer Concepts: Software and Hardware",
         description: "Introduction to personal computer hardware and software.",
-        number: `3${hash}`,
+        number: `3`,
         credits: 5,
         ge: ["mf"],
         quartersOffered: ["Fall", "Winter", "Spring"],
@@ -98,7 +95,7 @@ describe("Course actions", () => {
     it("should set description as an empty string if not defined", async () => {
       const course = await courseInfo({
         departmentCode: "CSE",
-        number: `123${hash}`,
+        number: `123`,
       });
 
       expect(course).toBeDefined();
@@ -109,7 +106,7 @@ describe("Course actions", () => {
         departmentCode: "CSE",
         credits: 5,
         title: "Some random cs class",
-        number: `123${hash}`,
+        number: `123`,
         description: "",
         ge: [],
         quartersOffered: [],
@@ -125,9 +122,9 @@ describe("Course actions", () => {
     });
 
     it("should return the specified course with the correct number", async () => {
-      expect(await coursesBy({ number: `3${hash}` })).toHaveLength(2);
-      expect(await coursesBy({ number: `101${hash}` })).toHaveLength(1);
-      expect(await coursesBy({ number: `123${hash}` })).toHaveLength(1);
+      expect(await coursesBy({ number: `3` })).toHaveLength(2);
+      expect(await coursesBy({ number: `101` })).toHaveLength(1);
+      expect(await coursesBy({ number: `123` })).toHaveLength(1);
     });
 
     it("should return the specified course with the correct ge", async () => {
@@ -139,11 +136,7 @@ describe("Course actions", () => {
   describe("getSuggestedClasses", () => {
     it("should return the specified courses", async () => {
       expect(
-        await getSuggestedClasses(
-          ["CSE 101", "CSE 3", "CSE 101", "CSE 123"].map(
-            (title) => title + hash,
-          ),
-        ),
+        await getSuggestedClasses(["CSE 101", "CSE 3", "CSE 101", "CSE 123"]),
       ).toHaveLength(3);
     });
 
@@ -155,11 +148,7 @@ describe("Course actions", () => {
 
     it("should work with different capitalizations", async () => {
       expect(
-        await getSuggestedClasses(
-          ["CSE 101", "cse 3", "cse 101", "cse 123"].map(
-            (title) => title + hash,
-          ),
-        ),
+        await getSuggestedClasses(["CSE 101", "cse 3", "cse 101", "cse 123"]),
       ).toHaveLength(3);
     });
   });

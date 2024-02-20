@@ -148,28 +148,6 @@ export type PlannerInput = {
   plannerId: string;
 };
 
-export async function getPlanner({
-  userId,
-  plannerId,
-}: PlannerInput): Promise<PlannerData | null> {
-  const p = await prisma.planner.findUnique({
-    where: {
-      userId,
-      id: plannerId,
-    },
-    include: {
-      quarters: {
-        include: {
-          courses: true,
-        },
-      },
-      labels: true,
-    },
-  });
-
-  return p ? toPlannerData(p) : null;
-}
-
 export async function getPlannerById(plannerId: string) {
   const p = await prisma.planner.findUnique({
     where: {
