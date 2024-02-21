@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuid4 } from "uuid";
 
 import {
-  getMajorRequirements,
+  getApprovedMajorRequirement,
   saveMajorRequirements,
 } from "../actions/majorRequirementsActions";
 import { Binder, RequirementList } from "../types/Requirements";
@@ -27,7 +27,7 @@ export default function useMajorRequirements(
 
   async function handleSaveMajorRequirements(majorId: number) {
     setLoadingSave(true);
-    await saveMajorRequirements(majorRequirements, majorId, userId!);
+    await saveMajorRequirements(userId!, majorId, majorRequirements);
     setLoadingSave(false);
     setIsSaved(true);
   }
@@ -36,8 +36,12 @@ export default function useMajorRequirements(
     const fetchData = async () => {
       if (majorId === undefined) return;
       try {
-        const result = await getMajorRequirements(majorId);
-        setMajorRequirements(result); // Set the data to the state
+        const result = await getApprovedMajorRequirement(majorId); //this used to be getMajorRequirements
+        if (result == null) {
+          setMajorRequirements(majorRequirements);
+        } else {
+          setMajorRequirements(result);
+        } // Set the data to the state
       } catch (error) {
         console.error("Error fetching data:", error);
       }

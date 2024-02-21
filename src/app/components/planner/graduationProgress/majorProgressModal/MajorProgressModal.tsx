@@ -5,6 +5,7 @@ import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import useMajorRequirementLists from "@/app/hooks/useMajorRequirementLists";
 import useUserPermissions from "@/app/hooks/useUserPermissions";
 import { Binder } from "@/app/types/Requirements";
+//import { List } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -35,14 +36,12 @@ export default function MajorProgressModal() {
   const [editing, setEditing] = useState(false);
   const { data: session } = useSession();
   const { userMajorData } = useMajorSelection(session?.user.id);
-
   const {
     majorRequirementLists,
     onAddMajorRequirementList,
-  } = //we need majorRequirementLists no matter what
-    useMajorRequirementLists(userMajorData?.id);
-
-  console.log(majorRequirementLists);
+    //onGetApprovedMajorRequirement,
+    //onRemoveMajorRequirementList
+  } = useMajorRequirementLists(userMajorData?.id);
 
   function Title() {
     return (
@@ -92,17 +91,22 @@ export default function MajorProgressModal() {
             className="overflow-y-scroll w-full"
             style={{ maxHeight: "80vh" }}
           >
-            {editing ? (
-              <RequirementsComponentEditing
-                requirements={majorRequirements}
-                parents={0}
-              />
-            ) : (
-              <RequirementsComponent
-                requirements={majorRequirements}
-                parents={0}
-              />
-            )}
+            {majorRequirementLists &&
+              majorRequirementLists.map((majorRequirement) => (
+                <div key={majorRequirement.id}>
+                  {editing ? (
+                    <RequirementsComponentEditing
+                      requirements={majorRequirement}
+                      parents={0}
+                    />
+                  ) : (
+                    <RequirementsComponent
+                      requirements={majorRequirement}
+                      parents={0}
+                    />
+                  )}
+                </div>
+              ))}
           </div>
         </div>
         {hasPermissionToEdit && (
@@ -123,11 +127,44 @@ export default function MajorProgressModal() {
           onClick={() => {
             const requirementList = {
               binder: Binder.AND,
-              requirements: [],
+              requirements: [
+                {
+                  binder: Binder.AND,
+                  requirements: [
+                    {
+                      departmentCode: "CSE",
+                      number: "100",
+                      id: uuid4(),
+                      title: "CSE 100",
+                      credits: 4,
+                      ge: [],
+                      quartersOffered: [],
+                      description: "CSE 100 description",
+                      labels: [],
+                    },
+                    {
+                      departmentCode: "CSE",
+                      number: "101",
+                      id: uuid4(),
+                      title: "CSE 101",
+                      credits: 4,
+                      ge: [],
+                      quartersOffered: [],
+                      description: "CSE 101 description",
+                      labels: [],
+                    },
+                  ],
+                  id: uuid4(),
+                  title: "child list",
+                },
+              ],
               id: uuid4(),
-              title: "sick new list",
+              title: "parent list",
             };
-            onAddMajorRequirementList(220, requirementList);
+            const validUserId = session?.user.id || "";
+            onAddMajorRequirementList(validUserId, 220, requirementList);
+            //onRemoveMajorRequirementList(validUserId, 17);
+            console.log(majorRequirementLists);
           }}
         >
           Add Requirement Suggestion

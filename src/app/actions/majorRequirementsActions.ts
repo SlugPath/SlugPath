@@ -6,9 +6,9 @@ import { RequirementList } from "../types/Requirements";
 import { userHasMajorEditingPermission } from "./permissionsActions";
 
 export async function saveMajorRequirements(
-  requirements: RequirementList,
-  majorId: number,
   userId: string,
+  majorId: number,
+  requirements: RequirementList,
 ) {
   const major = await prisma.major.findUnique({
     where: {
@@ -129,12 +129,15 @@ export async function addMajorRequirementList(
   }
 }
 
-export async function removeMajorRequirementList(majorRequirementId: number) {
-  // make sure it's the same user that created it
-
+//added userId to check if it's the same user that added the requirement
+export async function removeMajorRequirementList(
+  userId: string,
+  majorRequirementId: number,
+) {
   try {
-    await prisma.major.delete({
+    await prisma.majorRequirement.delete({
       where: {
+        userId: userId,
         id: majorRequirementId,
       },
     });

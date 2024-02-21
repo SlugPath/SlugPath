@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import {
   addMajorRequirementList,
+  getApprovedMajorRequirement,
   getMajorRequirementLists,
   removeMajorRequirementList,
 } from "../actions/majorRequirementsActions";
@@ -20,19 +21,30 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
   const [loadingSave, setLoadingSave] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
-  async function handleAddMajorRequirementList(
-    majorId: number,
-    requirementList: RequirementList,
-  ) {
+  async function handleGetApprovedMajorRequirement(majorId: number) {
     setLoadingSave(true);
-    await addMajorRequirementList(majorId, requirementList);
+    await getApprovedMajorRequirement(majorId);
     setLoadingSave(false);
     setIsSaved(true);
   }
 
-  async function handleRemoveMajorRequirementList(majorRequirementId: number) {
+  async function handleAddMajorRequirementList(
+    userId: string,
+    majorId: number,
+    requirementList: RequirementList,
+  ) {
     setLoadingSave(true);
-    await removeMajorRequirementList(majorRequirementId);
+    await addMajorRequirementList(userId, majorId, requirementList);
+    setLoadingSave(false);
+    setIsSaved(true);
+  }
+
+  async function handleRemoveMajorRequirementList(
+    userId: string,
+    majorRequirementId: number,
+  ) {
+    setLoadingSave(true);
+    await removeMajorRequirementList(userId, majorRequirementId);
     setLoadingSave(false);
     setIsSaved(true);
   }
@@ -58,6 +70,7 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
     loadingSave,
     majorRequirementLists,
     onAddMajorRequirementList: handleAddMajorRequirementList,
+    onGetApprovedMajorRequirement: handleGetApprovedMajorRequirement,
     onRemoveMajorRequirementList: handleRemoveMajorRequirementList,
   };
 }
