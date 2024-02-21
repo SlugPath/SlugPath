@@ -4,39 +4,28 @@ import prisma from "@/lib/prisma";
 
 import { PlannerTitle } from "../types/Planner";
 
-export async function getMajors() {
-  return await prisma.major.findMany({
-    orderBy: {
-      name: "asc",
-    },
-    select: {
-      name: true,
-      id: true,
-      catalogYear: true,
-    },
-  });
-}
-
-export async function getAllMajorsByCatalogYear(catalogYear: string) {
-  const res = await prisma.major.findMany({
-    where: {
-      catalogYear,
-    },
-    select: {
-      name: true,
-      id: true,
-      catalogYear: true,
-    },
+export async function getMajors(catalogYear?: string) {
+  const query: any = {
     orderBy: [
-      {
-        name: "asc",
-      },
       {
         catalogYear: "desc",
       },
+      {
+        name: "asc",
+      },
     ],
-  });
-  return res.map((major) => major.name);
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
 }
 
 export type UserMajorOutput = {
@@ -64,15 +53,16 @@ export async function getUserMajorByEmail(
       defaultPlannerId: true,
     },
   });
-  const major = userData?.major;
-  if (major === undefined || major === null) {
-    return null;
-  }
+  if (!userData) return null;
+
+  const { major, defaultPlannerId } = userData;
+
+  if (!major) return null;
 
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId || "",
+    defaultPlannerId,
     id: major.id,
   };
 }
@@ -96,14 +86,14 @@ export async function getUserMajorById(
     },
   });
   const major = userData?.major;
-  if (major === undefined || major === null) {
+  if (!major) {
     return null;
   }
 
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId ?? "",
+    defaultPlannerId: userData!.defaultPlannerId,
     id: major.id,
   };
 }
@@ -127,9 +117,7 @@ export async function updateUserMajor({
       catalogYear,
     },
   });
-  const majorId = major?.id;
-
-  if (majorId === undefined)
+  if (!major)
     throw new Error(
       `could not find major with name ${name} and catalog year ${catalogYear}`,
     );
@@ -139,7 +127,7 @@ export async function updateUserMajor({
       id: userId,
     },
     data: {
-      majorId,
+      majorId: major.id,
       defaultPlannerId,
     },
   });

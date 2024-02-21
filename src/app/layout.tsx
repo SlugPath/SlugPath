@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 
 import BetaWarning from "./components/beta/BetaWarning";
 import Navbar from "./components/navbar/Navbar";
-import Provider from "./contexts/Provider";
+import Provider from "./contexts/Providers";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,11 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="overflow-hidden h-full">
+      <body className={`h-full overflow-auto ${inter.className}`}>
         <Provider>
           <ScreenSizeWarning />
-          <div className="bg-bg-light dark:bg-bg-dark min-h-screen pb-1">
+          <div className="bg-blue-200 dark:bg-bg-dark bg-cover min-h-screen pb-1">
             <Navbar />
             <BetaWarning />
             {children}

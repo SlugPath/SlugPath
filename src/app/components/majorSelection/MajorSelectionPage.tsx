@@ -1,6 +1,6 @@
 "use client";
 
-import { PlannerProvider } from "@/app/contexts/PlannerProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
 import { useRouter } from "next/navigation";
 
 import MajorSelection from "./MajorSelection";
