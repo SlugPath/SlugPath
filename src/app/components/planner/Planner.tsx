@@ -10,7 +10,7 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { Clear } from "@mui/icons-material";
+import { Clear, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -21,9 +21,10 @@ import {
   Card,
   IconButton,
 } from "@mui/joy";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
+import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
@@ -220,17 +221,25 @@ function Quarters({
   courseState: PlannerData;
 }) {
   const { deleteYear } = useContext(PlannerContext);
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
   return (
     <StyledAccordion>
       <Box>
-        <AccordionSummary>
-          <Box>
-            <IconButton>
-              <Clear onClick={() => deleteYear(year - 1)} />
-            </IconButton>
-          </Box>
+        <AccordionSummary indicator={null}>
+          <IconButton>
+            <ExpandMore />
+          </IconButton>
           Year {year}
+          <IconButton>
+            <Clear onClick={() => setDeleteAlertOpen(true)} />
+            <ConfirmAlert
+              open={deleteAlertOpen}
+              onClose={() => setDeleteAlertOpen(false)}
+              onConfirm={() => deleteYear(year - 1)}
+              dialogText={"Are you sure you want to delete Year " + year + "?"}
+            />
+          </IconButton>
         </AccordionSummary>
       </Box>
       <AccordionDetails>
