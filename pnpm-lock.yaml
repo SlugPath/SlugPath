@@ -30,8 +30,8 @@ dependencies:
     specifier: ^6.19.1
     version: 6.19.1(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.6)(@mui/system@5.15.6)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
   '@mui/x-date-pickers':
-    specifier: ^6.19.2
-    version: 6.19.2(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.6)(@mui/system@5.15.6)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^6.19.4
+    version: 6.19.4(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.6)(@mui/system@5.15.6)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
   '@prisma/client':
     specifier: ^5.10.0
     version: 5.10.0(prisma@5.10.0)
@@ -1555,8 +1555,8 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mui/x-date-pickers@6.19.2(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.6)(@mui/system@5.15.6)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-/bdWZabexuz+1rKG15XryxiMGb5D0XVx65NU7CZYKm/1+HuUzc0FX9smKEa/YVZnLSNsAp6SULIyPZtAKE+3AA==}
+  /@mui/x-date-pickers@6.19.4(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@mui/material@5.15.6)(@mui/system@5.15.6)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-LekaacLGnoQNN5hD6iXeHFL4LbZPnr1BM57hnUKy5UgKDHqzHzZSdPGc2p7Ktv/Z2NDbpPaLEAgrLwISKIYcow==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@emotion/react': ^11.9.0

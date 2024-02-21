@@ -14,57 +14,24 @@ import { useEffect, useState } from "react";
 export default function useDefaultPlanners(onUpdated?: () => void) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-
-  const { data: defaultPlannerIdData, isLoading: defaultPlannerIdIsPending } =
-    useQuery({
-      queryKey: ["userDefaultPlannerId", session?.user.id],
-      queryFn: async () => {
-        console.log("fetch default planner id");
-        return await getUserDefaultPlannerId(session!.user.id);
-      },
-      enabled: !!session?.user.id,
-    });
+  const {
+    primaryMajor,
+    setPrimaryMajor,
+    defaultPlannerId,
+    setDefaultPlannerId,
+    defaultPlannerIdIsPending,
+  } = useUserPrimaryMajor();
 
   // get user default planner
   const { data: userDefaultPlanner } = useQuery({
-    queryKey: ["userDefaultPlanner", defaultPlannerIdData],
+    queryKey: ["userDefaultPlanner", defaultPlannerId],
     queryFn: async () => {
-      if (!defaultPlannerIdData) return initialPlanner();
-      return await getPlannerById(defaultPlannerIdData);
+      if (!defaultPlannerId) return initialPlanner();
+      return await getPlannerById(defaultPlannerId);
     },
     initialData: initialPlanner(),
-    enabled: !!defaultPlannerIdData && !!session?.user.id,
+    enabled: !!defaultPlannerId && !!session?.user.id,
   });
-
-  // =================== user primary major START ===================
-  const { data: primaryMajorData } = useQuery({
-    queryKey: ["userPrimaryMajor", session?.user.id],
-    queryFn: async () => {
-      return await getUserPrimaryMajor(session!.user.id);
-    },
-    enabled: !!session?.user.id,
-  });
-
-  const [defaultPlannerId, setDefaultPlannerId] = useState<string | undefined>(
-    undefined,
-  );
-  const [primaryMajor, setPrimaryMajor] = useState<Major | undefined>(
-    undefined,
-  );
-
-  useEffect(() => {
-    if (primaryMajorData) {
-      setPrimaryMajor(primaryMajorData);
-    }
-  }, [primaryMajorData]);
-
-  useEffect(() => {
-    if (defaultPlannerIdData) {
-      setDefaultPlannerId(defaultPlannerIdData);
-    }
-  }, [defaultPlannerIdData]);
-
-  // =================== user primary major END ===================
 
   const { data: majorDefaultPlanners, isLoading: loadingMajorDefaultPlanners } =
     useQuery({
@@ -78,16 +45,17 @@ export default function useDefaultPlanners(onUpdated?: () => void) {
       enabled: !!session?.user.id,
     });
 
+  // whenever majorDefaultPlanners is fetched, update defaultPlannerId if it's not in the list
   useEffect(() => {
-    if (defaultPlannerIdData && majorDefaultPlanners) {
+    if (defaultPlannerId && majorDefaultPlanners) {
       const plannerIds = majorDefaultPlanners.map((planner) => planner.id);
-      if (!plannerIds.includes(defaultPlannerIdData)) {
+      if (!plannerIds.includes(defaultPlannerId)) {
         setDefaultPlannerId(majorDefaultPlanners[0]?.id);
       } else {
-        setDefaultPlannerId(defaultPlannerIdData);
+        setDefaultPlannerId(defaultPlannerId);
       }
     }
-  }, [defaultPlannerIdData, majorDefaultPlanners]);
+  }, [defaultPlannerId, majorDefaultPlanners, setDefaultPlannerId]);
 
   // conceptually, updates both primaryMajor and defaultPlannerId
   // defaultPlannerId is used to determine primary major
@@ -126,5 +94,54 @@ export default function useDefaultPlanners(onUpdated?: () => void) {
     updateDefaultPlanner,
     updateDefaultPlannerIsPending,
     updateDefaultPlannerIsError,
+  };
+}
+
+// this simply abstracts the logic for fetching the user's primary major and defaultPlannerId out
+// which improves readability and reusability
+function useUserPrimaryMajor() {
+  const { data: session } = useSession();
+  const { data: primaryMajorData } = useQuery({
+    queryKey: ["userPrimaryMajor", session?.user.id],
+    queryFn: async () => {
+      return await getUserPrimaryMajor(session!.user.id);
+    },
+    enabled: !!session?.user.id,
+  });
+  const { data: defaultPlannerIdData, isLoading: defaultPlannerIdIsPending } =
+    useQuery({
+      queryKey: ["userDefaultPlannerId", session?.user.id],
+      queryFn: async () => {
+        console.log("fetch default planner id");
+        return await getUserDefaultPlannerId(session!.user.id);
+      },
+      enabled: !!session?.user.id,
+    });
+
+  const [defaultPlannerId, setDefaultPlannerId] = useState<string | undefined>(
+    undefined,
+  );
+  const [primaryMajor, setPrimaryMajor] = useState<Major | undefined>(
+    undefined,
+  );
+
+  // update the local state when the data is fetched
+  useEffect(() => {
+    if (primaryMajorData) {
+      setPrimaryMajor(primaryMajorData);
+    }
+  }, [primaryMajorData]);
+  useEffect(() => {
+    if (defaultPlannerIdData) {
+      setDefaultPlannerId(defaultPlannerIdData);
+    }
+  }, [defaultPlannerIdData]);
+
+  return {
+    primaryMajor,
+    setPrimaryMajor,
+    defaultPlannerId,
+    setDefaultPlannerId,
+    defaultPlannerIdIsPending,
   };
 }
