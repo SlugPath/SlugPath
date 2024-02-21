@@ -1,10 +1,9 @@
 import { DefaultPlannerContextProps } from "@customTypes/Context";
 import { useSession } from "next-auth/react";
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
 import useDefaultPlanners from "../components/majorSelection/defaultPlannerSelection/useDefaultPlanners";
 import useMajorSelection from "../components/majorSelection/useMajorSelection";
-import { Major } from "../types/Major";
 
 export const DefaultPlannerContext = createContext(
   {} as DefaultPlannerContextProps,
@@ -16,9 +15,6 @@ export function DefaultPlannerProvider({
   children: React.ReactNode;
 }) {
   const { data: session } = useSession();
-  const [selectedMajor, setSelectedMajor] = useState<Major | undefined>(
-    undefined,
-  );
 
   const {
     saveMajors,
@@ -30,26 +26,28 @@ export function DefaultPlannerProvider({
 
   const {
     primaryMajor,
+    setPrimaryMajor,
     userDefaultPlanner,
     majorDefaultPlanners,
     loadingMajorDefaultPlanners,
     updateDefaultPlanner,
     updateDefaultPlannerIsPending,
     defaultPlannerId,
-  } = useDefaultPlanners(selectedMajor);
+    setDefaultPlannerId,
+  } = useDefaultPlanners();
 
   return (
     <DefaultPlannerContext.Provider
       value={{
-        selectedMajor,
-        setSelectedMajor,
+        primaryMajor,
+        setPrimaryMajor,
         majorDefaultPlanners,
         loadingMajorDefaultPlanners,
         updateDefaultPlanner,
         updateDefaultPlannerIsPending,
         userDefaultPlanner,
-        defaultPlannerId: defaultPlannerId as string | undefined,
-        primaryMajor: primaryMajor as Major | undefined,
+        defaultPlannerId,
+        setDefaultPlannerId,
         userMajors,
         userMajorsIsLoading,
         saveMajors,

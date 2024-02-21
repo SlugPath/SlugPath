@@ -75,15 +75,15 @@ export interface PlannersContextProps {
 }
 
 export interface DefaultPlannerContextProps {
-  selectedMajor: Major | undefined;
-  setSelectedMajor: SetState<Major | undefined>;
+  primaryMajor: Major | undefined;
+  setPrimaryMajor: SetState<Major | undefined>;
   majorDefaultPlanners: PlannerTitle[] | undefined;
   loadingMajorDefaultPlanners: boolean;
   updateDefaultPlanner: (plannerId: string) => void;
   updateDefaultPlannerIsPending: boolean;
   userDefaultPlanner: PlannerData;
   defaultPlannerId: string | undefined;
-  primaryMajor: Major | undefined;
+  setDefaultPlannerId: SetState<string | undefined>;
   userMajors: Major[];
   userMajorsIsLoading: boolean;
   saveMajors: (majors: MajorOutput[]) => void;

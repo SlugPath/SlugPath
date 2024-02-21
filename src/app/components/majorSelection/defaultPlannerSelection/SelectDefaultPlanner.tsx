@@ -16,7 +16,7 @@ import { SyntheticEvent } from "react";
 import MiniPlanner from "../miniPlanner/MiniPlanner";
 
 export interface SelectDefaultPlannerProps {
-  selectedDefaultPlanner: string;
+  selectedDefaultPlanner: string | undefined;
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     value: string | number | null,

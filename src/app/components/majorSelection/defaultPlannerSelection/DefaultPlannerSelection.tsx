@@ -33,15 +33,12 @@ export default function DefaultPlannerSelection({
   );
   const [isSaved, setIsSaved] = useState(false);
 
-  // selected major which is used to fetch majorDefaultPlanners
-  // const [selectedMajor, setSelectedMajor] = useState<Major>({} as Major);
-
   const {
-    selectedMajor,
-    setSelectedMajor,
-    userMajors,
     primaryMajor,
+    setPrimaryMajor,
+    userMajors,
     defaultPlannerId,
+    setDefaultPlannerId,
     // defaultPlannerIdIsPending,
     updateDefaultPlanner,
     updateDefaultPlannerIsPending,
@@ -49,9 +46,6 @@ export default function DefaultPlannerSelection({
     loadingMajorDefaultPlanners,
   } = useContext(DefaultPlannerContext);
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
-  const [selectedDefaultPlanner, setSelectedDefaultPlanner] = useState(
-    defaultPlannerId || "",
-  );
 
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
@@ -60,37 +54,19 @@ export default function DefaultPlannerSelection({
     if (primaryMajor) {
       for (const major of userMajors) {
         if (major.id === primaryMajor.id) {
-          setSelectedMajor(major);
+          setPrimaryMajor(major);
           break;
         }
       }
     }
-  }, [primaryMajor, setSelectedMajor, userMajors]);
-
-  useEffect(() => {
-    /**
-     * Set selectedDefaultPlanner to first majorDefaultPlanner when majorDefaultPlanners changes
-     * if selectedDefaultPlanner is not present in new majorDefaultPlanners
-     * so that default planner tabs work correctly
-     */
-    function updateSelectedDefaultPlanner() {
-      if (majorDefaultPlanners !== undefined) {
-        const plannerIds = majorDefaultPlanners.map((planner) => planner.id);
-        if (!plannerIds.includes(selectedDefaultPlanner)) {
-          setSelectedDefaultPlanner(majorDefaultPlanners[0]?.id);
-        }
-      }
-    }
-
-    updateSelectedDefaultPlanner();
-  }, [majorDefaultPlanners, selectedDefaultPlanner]);
+  }, [primaryMajor, setPrimaryMajor, userMajors]);
 
   function handleChangeSelectedMajor(
     event: React.SyntheticEvent | null,
     newValue: Major | null,
   ) {
     if (newValue != null) {
-      setSelectedMajor(newValue);
+      setPrimaryMajor(newValue);
     }
   }
 
@@ -99,7 +75,7 @@ export default function DefaultPlannerSelection({
     plannerId: string | number | null,
   ) {
     if (typeof plannerId === "string") {
-      setSelectedDefaultPlanner(plannerId);
+      setDefaultPlannerId(plannerId);
       setIsSaved(false);
     }
   }
@@ -140,7 +116,8 @@ export default function DefaultPlannerSelection({
   ]);
 
   function handleSave(buttonName: ButtonName) {
-    updateDefaultPlanner(selectedDefaultPlanner);
+    if (defaultPlannerId === undefined) return;
+    updateDefaultPlanner(defaultPlannerId);
     setSaveButtonClicked(buttonName);
   }
 
@@ -172,9 +149,8 @@ export default function DefaultPlannerSelection({
       <div>
         <ModalsProvider>
           <Typography level="body-lg">Primary Major</Typography>
-          <Typography level="body-lg">id: {defaultPlannerId}</Typography>
           <Select
-            value={selectedMajor}
+            value={primaryMajor}
             placeholder="Choose one…"
             variant="plain"
             onChange={handleChangeSelectedMajor}
@@ -186,7 +162,7 @@ export default function DefaultPlannerSelection({
             ))}
           </Select>
           <SelectDefaultPlanner
-            selectedDefaultPlanner={selectedDefaultPlanner}
+            selectedDefaultPlanner={defaultPlannerId}
             onChange={handleChangeDefaultPlanner}
             majorDefaultPlanners={majorDefaultPlanners}
             loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
