@@ -22,10 +22,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="overflow-hidden h-full">
+      <link rel="icon" href="/icon.svg" type="image/svg" sizes="any" />
       <body className={`h-full overflow-auto ${inter.className}`}>
         <Provider>
           <ScreenSizeWarning />
-          <div className="bg-blue-200 dark:bg-bg-dark bg-cover min-h-screen pb-1">
+          <div className="bg-bg-light dark:bg-bg-dark bg-cover min-h-screen pb-1">
             <Navbar />
             <BetaWarning />
             {children}
