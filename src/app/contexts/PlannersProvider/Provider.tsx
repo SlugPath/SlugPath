@@ -20,13 +20,18 @@ export function PlannersProvider({
     switchPlanners,
     changePlannerName,
     replaceCurrentPlanner,
+    duplicatePlanner,
     activePlanner,
     deletedPlanner,
+    showExportModal,
+    setShowExportModal,
   } = usePlanners(session?.user.id, allPlanners);
 
   return (
     <PlannersContext.Provider
       value={{
+        showExportModal,
+        setShowExportModal,
         planners,
         removePlanner,
         getPlanner,
@@ -35,6 +40,7 @@ export function PlannersProvider({
         switchPlanners,
         changePlannerName,
         replaceCurrentPlanner,
+        duplicatePlanner,
         activePlanner,
         deletedPlanner,
       }}

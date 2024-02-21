@@ -14,28 +14,26 @@ export async function saveMajorRequirements(
   userId: string,
 ) {
   // check if user is allowed to edit this major
-  if (!userHasMajorEditingPermission(userId)) return;
+  if (!(await userHasMajorEditingPermission(userId))) {
+    return { success: false };
+  }
 
   const requirementsAsJSON = convertRequirementListToJSON(requirements);
 
-  try {
-    await prisma.majorRequirement.upsert({
-      where: {
-        majorId: majorId,
-      },
-      update: {
-        requirementList: requirementsAsJSON,
-      },
-      create: {
-        majorId: majorId,
-        requirementList: requirementsAsJSON,
-      },
-    });
+  await prisma.majorRequirement.upsert({
+    where: {
+      majorId: majorId,
+    },
+    update: {
+      requirementList: requirementsAsJSON,
+    },
+    create: {
+      majorId: majorId,
+      requirementList: requirementsAsJSON,
+    },
+  });
 
-    return { title: "OK" };
-  } catch (e) {
-    return { error: e };
-  }
+  return { success: true };
 }
 
 /**
@@ -73,8 +71,8 @@ export async function getMajorRequirements(
   });
 
   // if no requirements are found, return an empty requirement list
-  if (majorRequirement === null) {
-    return createEmptyRequirementList(majorId);
+  if (!majorRequirement) {
+    return await createEmptyRequirementList(majorId);
   }
 
   const requirementList: RequirementList = await convertJSONToRequirementList(
