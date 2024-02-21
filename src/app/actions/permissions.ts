@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 import { Permissions } from "../types/Permissions";
 import { getUserMajorById } from "./major";
@@ -9,12 +10,11 @@ export async function savePermissions(
   userId: string,
   permissions: Permissions[],
 ) {
-  if ((await getUserRole(userId)) !== "ADMIN")
-    return { error: "User is not an admin" };
-
-  await prisma.permissions.deleteMany();
+  if ((await getUserRole(userId)) !== Role.ADMIN)
+    throw new Error("User is not an admin");
 
   const operations: any[] = [];
+  operations.push(prisma.permissions.deleteMany());
 
   permissions.forEach(async (permission) => {
     if (permission.userEmail !== undefined) {
@@ -61,12 +61,9 @@ export async function savePermissions(
     }
   });
 
-  try {
-    await prisma.$transaction([...operations]);
-    return { title: "OK" };
-  } catch (e) {
-    return { error: e };
-  }
+  await prisma.$transaction([...operations]);
+
+  return { success: true };
 }
 
 export async function getPermissions(): Promise<Permissions[]> {
@@ -89,10 +86,6 @@ export async function getPermissions(): Promise<Permissions[]> {
     },
   });
 
-  if (usersPermissions === null) {
-    return [];
-  }
-
   return usersPermissions;
 }
 
@@ -105,39 +98,40 @@ export async function userHasMajorEditingPermission(
     },
     select: {
       email: true,
+      role: true,
     },
   });
 
-  const major = await getUserMajorById(userId);
+  if (!user) throw new Error(`User ${userId} not found`);
 
-  if (major?.id !== undefined && user?.email !== undefined) {
-    const permissions = await prisma.permissions.findUnique({
-      where: {
-        userEmail: user.email ? user.email : "",
-      },
-      select: {
-        majorEditingPermissions: {
-          select: {
-            major: {
-              select: {
-                id: true,
-              },
+  const major = await getUserMajorById(userId);
+  if (!major) return false;
+
+  const permissions = await prisma.permissions.findUnique({
+    where: {
+      userEmail: user.email,
+    },
+    select: {
+      majorEditingPermissions: {
+        select: {
+          major: {
+            select: {
+              id: true,
             },
-            expirationDate: true,
           },
+          expirationDate: true,
         },
       },
-    });
+    },
+  });
 
-    if (permissions?.majorEditingPermissions !== undefined) {
-      for (const majorEditPerm of permissions.majorEditingPermissions) {
-        if (majorEditPerm.major.id == major.id) {
-          return majorEditPerm.expirationDate > new Date();
-        }
-      }
+  if (!permissions) return false;
+
+  for (const majorEditPerm of permissions.majorEditingPermissions) {
+    if (majorEditPerm.major.id == major.id) {
+      return majorEditPerm.expirationDate > new Date();
     }
   }
-
   return false;
 }
 
@@ -151,9 +145,6 @@ export async function getUserRole(userId: string): Promise<string> {
     },
   });
 
-  if (user?.role !== undefined) {
-    return user.role;
-  }
-
-  return "USER";
+  if (!user) throw new Error(`User ${userId} not found`);
+  return user.role;
 }

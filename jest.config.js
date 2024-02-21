@@ -30,6 +30,8 @@ const customJestConfig = {
   // Include any files to ignore during coverage collection
   coveragePathIgnorePatterns: [
     "<rootDir>/src/app/api/",
+    "<rootDir>/src/app/contexts/",
+    "<rootDir>/src/app/logger/",
     "<rootDir>/src/app/components/",
     "<rootDir>/src/app/hooks/",
     "<rootDir>/src/config.ts",

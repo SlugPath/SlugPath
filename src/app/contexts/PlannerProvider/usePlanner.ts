@@ -9,7 +9,7 @@ import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
-import { useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 
 export default function usePlanner(input: {
   userId: string | undefined;
@@ -22,9 +22,12 @@ export default function usePlanner(input: {
     ? getPlanner(input.plannerId)
     : initialPlanner();
 
-  const handleCourseUpdate = (newState: PlannerData) => {
-    setPlanner(input.plannerId, input.title, newState);
-  };
+  const handleCourseUpdate = useCallback(
+    (newState: PlannerData) => {
+      setPlanner(input.plannerId, input.title, newState);
+    },
+    [input.plannerId, input.title, setPlanner],
+  );
 
   const totalCredits = useMemo(
     () => getTotalCredits(courseState.courses!),
@@ -163,12 +166,15 @@ export default function usePlanner(input: {
     });
   };
 
-  const updateNotes = (content: string) => {
-    handleCourseUpdate({
-      ...courseState,
-      notes: content,
-    });
-  };
+  const updateNotes = useCallback(
+    (content: string) => {
+      handleCourseUpdate({
+        ...courseState,
+        notes: content,
+      });
+    },
+    [courseState, handleCourseUpdate],
+  );
 
   const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
     const newCids = courses.map((c) => c.id);
