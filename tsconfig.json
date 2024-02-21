@@ -26,7 +26,7 @@
       "@contexts/*": ["./src/app/contexts/*"],
       "@styles/*": ["./src/app/styles/*"],
       "@customTypes/*": ["./src/app/types/*"],
-      "@actions/*": ["./src/app/actions/*"],
+      "@actions/*": ["./src/app/actions/*"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

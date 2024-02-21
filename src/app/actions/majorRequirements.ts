@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
 
-import { Binder, RequirementList } from "../types/Requirements";
+import { Binder, Requirement, RequirementList } from "../types/Requirements";
 import { courseInfo } from "./course";
 import { userHasMajorEditingPermission } from "./permissions";
 
@@ -16,7 +16,7 @@ export async function saveMajorRequirements(
   // check if user is allowed to edit this major
   if (!userHasMajorEditingPermission(userId)) return;
 
-  const requirementsAsJSON = await convertRequirementListToJSON(requirements);
+  const requirementsAsJSON = convertRequirementListToJSON(requirements);
 
   try {
     await prisma.majorRequirement.upsert({
@@ -103,8 +103,8 @@ export async function getAllRequirementLists(): Promise<RequirementList[]> {
 // Helper functions start ===========================================================
 // ==================================================================================
 
-async function convertRequirementListToJSON(requirementList: RequirementList) {
-  const newReqList = await requirementListMapper((req) => {
+function convertRequirementListToJSON(requirementList: RequirementList) {
+  const newReqList = requirementListMapperSync((req) => {
     return {
       departmentCode: req.departmentCode,
       number: req.number,
@@ -118,29 +118,49 @@ async function convertJSONToRequirementList(requirementListJSON: string) {
   const requirementList = JSON.parse(requirementListJSON) as RequirementList;
 
   return await requirementListMapper(async (req) => {
-    return await courseInfo({
+    const course = await courseInfo({
       departmentCode: req.departmentCode,
       number: req.number,
     });
+    if (!course) {
+      throw new Error("Course not found");
+    }
+    return course;
   }, requirementList);
 }
 
-// This function maps over a requirement list and applies a function to each class within the requirement list.
-// It uses (requirement: any) => any type to avoid making convoluted types to take just the departmentCode and number
+// This function maps over a requirement list and applies an asynchronous function to each class within the requirement list.
 async function requirementListMapper(
-  f: (requirement: any) => any,
+  f: (requirement: Requirement) => Promise<Requirement>,
   requirementList: RequirementList,
 ): Promise<RequirementList> {
   return {
     ...requirementList,
     requirements: await Promise.all(
-      requirementList.requirements.map(async (req) => {
+      requirementList.requirements.map((req) => {
         if (isRequirementList(req)) {
-          return await requirementListMapper(f, req);
+          return requirementListMapper(f, req);
         } else {
-          return await f(req);
+          return f(req);
         }
       }),
     ),
+  };
+}
+
+// This function maps over a requirement list and applies a synchronous function to each class within the requirement list.
+function requirementListMapperSync(
+  f: (requirement: Requirement) => Requirement,
+  requirementList: RequirementList,
+): RequirementList {
+  return {
+    ...requirementList,
+    requirements: requirementList.requirements.map((req) => {
+      if (isRequirementList(req)) {
+        return requirementListMapperSync(f, req);
+      } else {
+        return f(req);
+      }
+    }),
   };
 }

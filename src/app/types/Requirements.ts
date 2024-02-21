@@ -6,7 +6,9 @@ export enum Binder {
   AT_LEAST,
 }
 
-export type Requirement = StoredCourse;
+// Requirement is a course that has a departmentCode and number, but may have other fields
+export type Requirement = Pick<StoredCourse, "departmentCode" | "number"> &
+  Partial<Omit<StoredCourse, "departmentCode" | "number">>;
 
 export type RequirementList = {
   binder: Binder;
