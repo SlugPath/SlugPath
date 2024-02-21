@@ -39,7 +39,6 @@ export default function DefaultPlannerSelection({
     userMajors,
     defaultPlannerId,
     setDefaultPlannerId,
-    // defaultPlannerIdIsPending,
     updateDefaultPlanner,
     updateDefaultPlannerIsPending,
     majorDefaultPlanners,
@@ -146,7 +145,7 @@ export default function DefaultPlannerSelection({
         onConfirm={handleConfirmReplaceCurrent}
         dialogText="Are you sure you want to replace your current planner?"
       />
-      <div>
+      <div className="overflow-y-scroll h-[70vh]">
         <ModalsProvider>
           <Typography level="body-lg">Primary Major</Typography>
           <Select

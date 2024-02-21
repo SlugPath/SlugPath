@@ -10,7 +10,7 @@ export default async function Page() {
   const session = await getServerSession();
   const userMajors = await getUserMajorsByEmail(session?.user.email ?? "");
 
-  if (userMajors) {
+  if (userMajors && userMajors.length > 0) {
     return redirectToPlanner();
   }
 
