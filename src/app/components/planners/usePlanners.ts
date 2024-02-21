@@ -1,8 +1,8 @@
 import { saveAllPlanners } from "@/app/actions/planner";
-import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
-import useLocalStorage from "@/app/hooks/useLocalStorage";
-import { PlannerData } from "@/app/types/Planner";
-import { cloneDefaultPlanner } from "@/lib/plannerUtils";
+import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
+import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { PlannerData } from "@customTypes/Planner";
+import useLocalStorage from "@hooks/useLocalStorage";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -31,6 +31,10 @@ export function usePlanners(
   const { defaultPlanner } = useContext(DefaultPlannerContext);
 
   const [deletedPlanner, setDeletedPlanner] = useState(false);
+
+  const [showExportModal, setShowExportModal] = useState(false);
+
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const { mutate: saveAll } = useMutation({
     mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
@@ -159,6 +163,26 @@ export function usePlanners(
     }
   };
 
+  /**
+   * `duplicatePlanner` creates a new planner from the inputted planner id
+   * @param id unique planner id
+   */
+  function duplicatePlanner(sourceID: string) {
+    const sourcePlannerData = getPlanner(sourceID);
+    const id = uuidv4();
+    setPlanners((prev) => {
+      return [
+        ...prev,
+        {
+          ...clonePlanner(sourcePlannerData),
+          id,
+          title: `Copy of ${sourcePlannerData.title}`,
+        },
+      ];
+    });
+    switchPlanners(id);
+  }
+
   return {
     planners,
     switchPlanners,
@@ -168,7 +192,12 @@ export function usePlanners(
     addPlanner,
     removePlanner,
     replaceCurrentPlanner,
+    duplicatePlanner,
     activePlanner,
     deletedPlanner,
+    showExportModal,
+    showShareModal,
+    setShowExportModal,
+    setShowShareModal,
   };
 }

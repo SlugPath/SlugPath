@@ -81,9 +81,6 @@ export default function MajorSelection({
 
   useEffect(() => {
     if (userMajorData) {
-      console.log(
-        `Updating userMajor data ${JSON.stringify(userMajorData, null, 2)}`,
-      );
       updateUserMajor(
         userMajorData.name,
         userMajorData.catalogYear,

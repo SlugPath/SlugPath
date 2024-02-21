@@ -11,8 +11,6 @@ import { RequirementList, Requirements } from "./Requirements";
 type setShow = SetState<boolean>;
 
 export interface ModalsContextProps {
-  showExportModal: boolean;
-  setShowExportModal: setShow;
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: setShow;
   onShowCourseInfoModal: () => void;
@@ -67,8 +65,13 @@ export interface PlannersContextProps {
   switchPlanners: (id: string) => void;
   changePlannerName: (id: string, newTitle: string) => void;
   replaceCurrentPlanner: () => void;
+  duplicatePlanner: (id: string) => void;
   activePlanner: string | undefined;
   deletedPlanner: boolean;
+  showExportModal: boolean;
+  showShareModal: boolean;
+  setShowExportModal: SetState<boolean>;
+  setShowShareModal: SetState<boolean>;
 }
 
 export interface DefaultPlannerContextProps {
