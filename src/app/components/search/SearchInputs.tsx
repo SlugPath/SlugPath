@@ -1,8 +1,9 @@
 import { SearchParams } from "@customTypes/Course";
-import { Divider, Input, Option, Select } from "@mui/joy";
+import { Button, Divider, Input, Option, Select } from "@mui/joy";
 import React from "react";
 import { useEffect } from "react";
 
+import CourseCreditSlider from "./CourseCreditSlider";
 import CourseNumberSlider from "./CourseNumberSlider";
 
 type selectChangeHandler = (
@@ -18,6 +19,7 @@ export interface SearchInputsProps {
     ge: string | null;
     geOptions: SearchParams;
     numberRange: number[];
+    creditRange: number[];
   };
   handlers: {
     handleSearch: (
@@ -30,6 +32,7 @@ export interface SearchInputsProps {
     handleChangeGE: selectChangeHandler;
     handleChangeDepartment: selectChangeHandler;
     handleChangeNumberRange: (numberRange: number[]) => void;
+    handleChangeCreditRange: (numberRange: number[]) => void;
   };
 }
 
@@ -42,6 +45,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
     handleChangeGE,
     handleChangeNumber,
     handleChangeNumberRange,
+    handleChangeCreditRange,
   } = handlers;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -104,6 +108,10 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
           ))}
         </Select>
         <CourseNumberSlider onSliderChange={handleChangeNumberRange} />
+        <CourseCreditSlider onSliderChange={handleChangeCreditRange} />
+        <Button className="col-span-6" variant="solid">
+          Reset Filters
+        </Button>
       </div>
       <Divider sx={{ height: 3, marginBottom: "0.75rem" }} />
     </form>

@@ -1,12 +1,14 @@
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   FormControl,
   FormHelperText,
   Input,
   Slider,
   Stack,
-  Typography,
   useColorScheme,
 } from "@mui/joy";
 import * as React from "react";
@@ -87,89 +89,83 @@ export default function CourseNumberSlider({
   };
 
   return (
-    <div
-      style={{
-        minWidth: 270,
-        marginBottom: "0.5rem",
+    <Accordion
+      className="col-span-6"
+      sx={{
         textAlign: "center",
         backgroundColor,
         borderRadius: 8,
-        paddingBottom: "0.5rem",
       }}
     >
-      <Box sx={{ width: 235, margin: "auto" }}>
-        <Typography
-          sx={{ borderRadius: 4, padding: 0.75, marginBottom: "1rem" }}
-          gutterBottom
-        >
-          Course Number Range
-        </Typography>
-        <Slider
-          getAriaLabel={() => "Temperature range"}
-          value={range}
-          onChange={handleChange}
-          onChangeCommitted={handleSliderChangeCommitted}
-          valueLabelDisplay="auto"
-          getAriaValueText={valueText}
-          min={0}
-          max={299}
-          marks={marks}
-          sx={{
-            "--Slider-trackSize": "10px",
-            "--Slider-markSize": "5px",
-            "& .MuiSlider-valueLabel": {
-              padding: "3px",
-            },
-            marginBottom: "0.75rem",
-          }}
-        />
-      </Box>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        spacing={3}
-        sx={{ padding: 1, margin: "auto" }}
-      >
-        <FormControl
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Input
-            value={minValue}
-            type="number"
-            placeholder="0"
-            size="sm"
-            onChange={handleMinInputChange}
-            onKeyPress={handleInputKeyPress}
-            sx={{ width: 70, "--Input-radius": "15px" }}
+      <AccordionSummary>Course Number Range</AccordionSummary>
+      <AccordionDetails sx={{ borderRadius: "sm" }}>
+        <Box sx={{ width: 235, margin: "auto", paddingTop: "1.3rem" }}>
+          <Slider
+            value={range}
+            onChange={handleChange}
+            onChangeCommitted={handleSliderChangeCommitted}
+            valueLabelDisplay="auto"
+            getAriaValueText={valueText}
+            min={0}
+            max={299}
+            marks={marks}
+            sx={{
+              "--Slider-trackSize": "10px",
+              "--Slider-markSize": "5px",
+              "& .MuiSlider-valueLabel": {
+                padding: "3px",
+              },
+              marginBottom: "0.75rem",
+            }}
           />
-          <FormHelperText>Min</FormHelperText>
-        </FormControl>
-        <div style={{ marginTop: "0.2rem" }}>
-          <HorizontalRuleIcon />
-        </div>
-        <FormControl
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+        </Box>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          spacing={3}
+          sx={{ paddingTop: "0.75rem", margin: "auto" }}
         >
-          <Input
-            value={maxValue}
-            type="number"
-            placeholder="299"
-            size="sm"
-            onChange={handleMaxInputChange}
-            onKeyPress={handleInputKeyPress}
-            sx={{ width: 70, "--Input-radius": "15px" }}
-          />
-          <FormHelperText sx={{ magrinTop: "0rem" }}>Max</FormHelperText>
-        </FormControl>
-      </Stack>
-    </div>
+          <FormControl
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Input
+              value={minValue}
+              type="number"
+              placeholder="0"
+              size="sm"
+              onChange={handleMinInputChange}
+              onKeyPress={handleInputKeyPress}
+              sx={{ width: 70, "--Input-radius": "15px" }}
+            />
+            <FormHelperText>Min</FormHelperText>
+          </FormControl>
+          <div style={{ marginTop: "0.2rem" }}>
+            <HorizontalRuleIcon />
+          </div>
+          <FormControl
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Input
+              value={maxValue}
+              type="number"
+              placeholder="299"
+              size="sm"
+              onChange={handleMaxInputChange}
+              onKeyPress={handleInputKeyPress}
+              sx={{ width: 70, "--Input-radius": "15px" }}
+            />
+            <FormHelperText sx={{ magrinTop: "0rem" }}>Max</FormHelperText>
+          </FormControl>
+        </Stack>
+      </AccordionDetails>
+    </Accordion>
   );
 }

@@ -28,6 +28,7 @@ export default function useSearch() {
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
   const [numberRange, setNumberRange] = useState<number[]>([0, 299]);
+  const [creditRange, setCreditRange] = useState<number[]>([1, 15]);
   const [queryDetails, setQueryDetails] = useState({
     departmentCode: "",
     number: "",
@@ -95,8 +96,11 @@ export default function useSearch() {
   };
 
   const handleChangeNumberRange = (newRange: number[]) => {
-    console.log("handleChangeNumberRange: ", newRange);
     setNumberRange(newRange);
+  };
+
+  const handleChangeCreditRange = (newRange: number[]) => {
+    setCreditRange(newRange);
   };
 
   return {
@@ -109,6 +113,7 @@ export default function useSearch() {
       ge,
       geOptions,
       numberRange,
+      creditRange,
     },
     handlers: {
       handleChangeDepartment,
@@ -116,6 +121,7 @@ export default function useSearch() {
       handleChangeGE,
       handleSearch,
       handleChangeNumberRange,
+      handleChangeCreditRange,
     },
   };
 }
