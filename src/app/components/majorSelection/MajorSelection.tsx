@@ -25,8 +25,6 @@ import SelectMajorName from "./SelectMajorName";
 
 export default function MajorSelection() {
   const queryClient = useQueryClient();
-  // const { setMajorToAdd } = useContext(DefaultPlannerContext);
-
   const [selectedMajors, setSelectedMajors] = useState<Major[]>([]);
   const [programType, setProgramType] = useState<ProgramType>(
     ProgramType.Major,
@@ -56,19 +54,6 @@ export default function MajorSelection() {
   useEffect(() => {
     setSelectedMajors(userMajors);
   }, [userMajors]);
-
-  // when searching for a major, setMajorToAdd so defaultPlannerSelection can display
-  // default planners for this major
-  // useEffect(() => {
-  //   if (programType in ProgramType && catalogYear.length > 0 && majorName.length > 0) {
-  //     setMajorToAdd({
-  //       name: majorName,
-  //       catalogYear,
-  //       programType,
-  //       id: 0,
-  //     });
-  //   }
-  // }, [programType, catalogYear, majorName]);
 
   function handleChangeProgramType(
     event: React.SyntheticEvent | null,

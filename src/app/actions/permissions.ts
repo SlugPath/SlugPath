@@ -1,21 +1,19 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 import { Permissions } from "../types/Permissions";
-
-// import { getUserMajorById } from "./major";
 
 export async function savePermissions(
   userId: string,
   permissions: Permissions[],
 ) {
-  if ((await getUserRole(userId)) !== "ADMIN")
-    return { error: "User is not an admin" };
-
-  await prisma.permissions.deleteMany();
+  if ((await getUserRole(userId)) !== Role.ADMIN)
+    throw new Error("User is not an admin");
 
   const operations: any[] = [];
+  operations.push(prisma.permissions.deleteMany());
 
   permissions.forEach(async (permission) => {
     if (permission.userEmail !== undefined) {
@@ -62,12 +60,9 @@ export async function savePermissions(
     }
   });
 
-  try {
-    await prisma.$transaction([...operations]);
-    return { title: "OK" };
-  } catch (e) {
-    return { error: e };
-  }
+  await prisma.$transaction([...operations]);
+
+  return { success: true };
 }
 
 export async function getPermissions(): Promise<Permissions[]> {
@@ -91,10 +86,6 @@ export async function getPermissions(): Promise<Permissions[]> {
     },
   });
 
-  if (usersPermissions === null) {
-    return [];
-  }
-
   return usersPermissions;
 }
 
@@ -107,8 +98,11 @@ export async function getUserPermissions(
     },
     select: {
       email: true,
+      role: true,
     },
   });
+
+  if (!user) throw new Error(`User ${userId} not found`);
 
   if (user?.email === undefined) {
     throw new Error("User not found");
@@ -149,9 +143,6 @@ export async function getUserRole(userId: string): Promise<string> {
     },
   });
 
-  if (user?.role !== undefined) {
-    return user.role;
-  }
-
-  return "USER";
+  if (!user) throw new Error(`User ${userId} not found`);
+  return user.role;
 }

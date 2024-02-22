@@ -1,6 +1,5 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
 import { Button, Card, Typography } from "@mui/joy";
@@ -8,17 +7,12 @@ import { useSession } from "next-auth/react";
 import { useContext } from "react";
 
 export default function PlannerActions() {
-  const { setShowExportModal, setShowMajorsModal, setShowPermissionsModal } =
+  const { setShowMajorsModal, setShowPermissionsModal } =
     useContext(ModalsContext);
   const { isAdmin } = useContext(PermissionsContext);
   const { status } = useSession();
 
   const buttons = [
-    {
-      name: "Export Plan",
-      icon: <FileDownloadIcon fontSize="large" />,
-      onClick: () => setShowExportModal(true),
-    },
     {
       name: "Majors",
       icon: <SchoolIcon fontSize="large" />,
@@ -32,6 +26,7 @@ export default function PlannerActions() {
       name: "Permissions",
       icon: <LockOpenIcon fontSize="large" />,
       onClick: () => setShowPermissionsModal(true),
+      disabled: false,
     });
   }
 

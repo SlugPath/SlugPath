@@ -1,11 +1,11 @@
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { DraggableLocation } from "@hello-pangea/dnd";
 import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { MajorVerificationContext } from "../contexts/MajorVerificationProvider";
-import { ModalsContext } from "../contexts/ModalsProvider";
+import { ModalsContext } from "../contexts/ModalsProvider/Provider";
 import { StoredCourse } from "../types/Course";
 import { RequirementList } from "../types/Requirements";
 

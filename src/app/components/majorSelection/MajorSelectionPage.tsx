@@ -2,7 +2,7 @@
 
 import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
 import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
-import { PlannerProvider } from "@/app/contexts/PlannerProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
 import { useRouter } from "next/navigation";
 
 import { MajorAndPlannerSelection } from "../planner/graduationProgress/majorsModal/MajorsModal";

@@ -3,20 +3,28 @@ import { useEffect, useRef, useState } from "react";
 
 import { SetState } from "../types/Common";
 
+function getInitial<T>(remoteValue: T): T {
+  if (isArray(remoteValue)) {
+    return [] as T;
+  } else if (typeof remoteValue === "object") {
+    return {} as T;
+  }
+  return remoteValue;
+}
+
 export default function useLocalStorage<T>(
   key: string,
   remoteValue: T,
 ): [T, SetState<T>] {
   const isMounted = useRef(false);
-  const initial = isArray(remoteValue) ? ([] as T) : ({} as T);
-  const [value, setValue] = useState<T>(initial);
+  const [value, setValue] = useState<T>(getInitial(remoteValue));
 
   useEffect(() => {
     const initialize = () => {
       const item = window.localStorage.getItem(key);
       if (item) {
         try {
-          setValue(JSON.parse(item));
+          setValue(JSON.parse(item) as T);
         } catch (e) {
           console.error(e);
         }

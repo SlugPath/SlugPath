@@ -9,11 +9,11 @@ datasource db {
 }
 
 model User {
-  id               String        @id
+  id               String    @id
   email            String    @unique
   name             String?
-  role             Role          @default(USER)
-  defaultPlannerId String?
+  role             Role      @default(USER)
+  defaultPlannerId String    @default("")
   planners         Planner[]
   majors           Major[]
 }
@@ -92,18 +92,18 @@ model MajorRequirement {
 }
 
 model Permissions {
-  id                      Int     @id @default(autoincrement())
+  id                      Int                      @id @default(autoincrement())
   majorEditingPermissions MajorEditingPermission[]
-  userEmail               String  @unique
+  userEmail               String                   @unique
 }
 
 model MajorEditingPermission {
-  id                Int         @id @default(autoincrement())
-  major             Major       @relation(fields: [majorId], references: [id])
-  majorId           Int         @unique
-  permissions       Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
-  permissionsId     Int
-  expirationDate    DateTime
+  id             Int         @id @default(autoincrement())
+  major          Major       @relation(fields: [majorId], references: [id])
+  majorId        Int         @unique
+  permissions    Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
+  permissionsId  Int
+  expirationDate DateTime
 }
 
 model Label {

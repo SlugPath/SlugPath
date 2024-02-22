@@ -1,5 +1,5 @@
-import { getPlannerById } from "@/app/actions/planner";
 import { EMPTY_PLANNER, initialPlanner } from "@/lib/plannerUtils";
+import { getPlannerById } from "@actions/planner";
 import { Card, Skeleton } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 

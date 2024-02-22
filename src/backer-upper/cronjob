@@ -1,0 +1,1 @@
+0 19 * * * root pg_dump \"$POSTGRES_URL\" > /tmp/backup/\$(date +\%Y\%m\%d\%H\%M\%S)_backup.sql && aws s3 cp /tmp/backup/\$(date +\%Y\%m\%d\%H\%M\%S)_backup.sql s3://$AWS_BUCKET/

@@ -1,8 +1,4 @@
-import {
-  MajorInput,
-  getUserMajorsById,
-  saveUserMajors,
-} from "@/app/actions/major";
+import { MajorInput, getUserMajorsById, saveUserMajors } from "@actions/major";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 /**

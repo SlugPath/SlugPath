@@ -28,24 +28,20 @@ export async function saveMajorRequirements(
 
   const requirementsAsJSON = JSON.stringify(requirements);
 
-  try {
-    await prisma.majorRequirement.upsert({
-      where: {
-        majorId: majorId,
-      },
-      update: {
-        requirementList: requirementsAsJSON,
-      },
-      create: {
-        majorId: majorId,
-        requirementList: requirementsAsJSON,
-      },
-    });
+  await prisma.majorRequirement.upsert({
+    where: {
+      majorId: majorId,
+    },
+    update: {
+      requirementList: requirementsAsJSON,
+    },
+    create: {
+      majorId: majorId,
+      requirementList: requirementsAsJSON,
+    },
+  });
 
-    return { title: "OK" };
-  } catch (e) {
-    return { error: e };
-  }
+  return { success: true };
 }
 
 /**
@@ -83,11 +79,11 @@ export async function getMajorRequirements(
   });
 
   // if no requirements are found, return an empty requirement list
-  if (majorRequirement === null) {
-    return createEmptyRequirementList(majorId);
+  if (!majorRequirement) {
+    return await createEmptyRequirementList(majorId);
   }
 
-  const requirementList: RequirementList = parseRequirementList(
+  const requirementList: RequirementList = JSON.parse(
     majorRequirement.requirementList as string,
   );
 
@@ -98,10 +94,6 @@ export async function getAllRequirementLists(): Promise<RequirementList[]> {
   const requirementLists = await prisma.majorRequirement.findMany();
 
   return requirementLists.map((reqList) => {
-    return parseRequirementList(reqList.requirementList as string);
+    return JSON.parse(reqList.requirementList as string);
   });
-}
-
-function parseRequirementList(requirementList: string): RequirementList {
-  return JSON.parse(requirementList) as RequirementList;
 }

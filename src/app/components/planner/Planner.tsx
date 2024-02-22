@@ -1,7 +1,11 @@
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
-import { ModalsContext } from "@contexts/ModalsProvider";
+import {
+  CourseInfoContext,
+  CourseInfoProvider,
+} from "@contexts/CourseInfoProvider";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
+import { PermissionsProvider } from "@contexts/PermissionsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
@@ -16,7 +20,6 @@ import {
 import { useContext } from "react";
 
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import ExportModal from "../modals/exportModal/ExportModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
@@ -28,7 +31,7 @@ import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
 import EditMajorRequirementsModal from "./graduationProgress/majorsModal/EditMajorRequirementsModal";
 import MajorsModal from "./graduationProgress/majorsModal/MajorsModal";
-import ReplaceRLModal from "./graduationProgress/majorsModal/ReplaceRLModal";
+import ReplaceRequirementsModal from "./graduationProgress/majorsModal/ReplaceRequirementsModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 export default function Planner({ isActive }: { isActive: boolean }) {
@@ -43,63 +46,68 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <PermissionsProvider>
-          <div className="flex justify-between space-x-4">
-            <div className="flex-initial pr-2">
-              <SearchContainer />
-            </div>
-            <div className="overflow-auto w-full flex-grow">
-              <AccordionGroup>
-                <div className="space-y-2 h-[75vh] overflow-auto">
-                  <Years courseState={courseState} />
-                  <Accordion
-                    variant="soft"
-                    sx={{
-                      borderRadius: "0.5rem",
-                      "&.MuiAccordion-root": {
-                        "& .MuiAccordionSummary-root": {
-                          padding: "0.5rem 0",
-                          paddingX: "0.5rem",
-                        },
-                      },
-                    }}
-                    defaultExpanded={true}
-                  >
-                    <AccordionSummary>Notes</AccordionSummary>
-                    <AccordionDetails>
-                      <NotesEditor
-                        content={courseState.notes}
-                        onUpdateNotes={updateNotes}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
+          <ModalsProvider>
+            <CourseInfoProvider>
+              <div className="flex justify-between space-x-4">
+                <div className="flex-initial pr-2">
+                  <SearchContainer />
                 </div>
-              </AccordionGroup>
-            </div>
+                <div className="overflow-auto w-full flex-grow">
+                  <AccordionGroup>
+                    <div className="space-y-2 h-[75vh] overflow-auto">
+                      <Years courseState={courseState} />
+                      <Accordion
+                        variant="soft"
+                        sx={{
+                          borderRadius: "0.5rem",
+                          "&.MuiAccordion-root": {
+                            "& .MuiAccordionSummary-root": {
+                              padding: "0.5rem 0",
+                              paddingX: "0.5rem",
+                            },
+                          },
+                        }}
+                        defaultExpanded={true}
+                      >
+                        <AccordionSummary>Notes</AccordionSummary>
+                        <AccordionDetails>
+                          <NotesEditor
+                            content={courseState.notes}
+                            onUpdateNotes={updateNotes}
+                          />
+                        </AccordionDetails>
+                      </Accordion>
+                    </div>
+                  </AccordionGroup>
+                </div>
 
-            <div className="flex flex-col self-start gap-3">
-              <PlannerActions />
-              <GraduationProgressCard
-                totalCredits={totalCredits}
-                geSatisfied={geSatisfied}
-                courseState={courseState}
-              />
-            </div>
-          </div>
-          <Modals />
+                <div className="flex flex-col self-start gap-3">
+                  <PlannerActions />
+                  <GraduationProgressCard
+                    totalCredits={totalCredits}
+                    geSatisfied={geSatisfied}
+                    courseState={courseState}
+                  />
+                </div>
+              </div>
+              <Modals />
+            </CourseInfoProvider>
+          </ModalsProvider>
         </PermissionsProvider>
       </DragDropContext>
     </div>
   );
 }
 
-// this solves the bug of <Search /> not working after another <Search /> is interacted with in MajorProgressModal
-// multiple <Search /> components existing at the same time is problematic
+// SearchContainer is used to hide the main Search component when another modal that uses the Search component is open,
+// such as the CourseInfoModal or MajorProgressModal.
 function SearchContainer() {
+  const { showCourseInfoModal } = useContext(CourseInfoContext);
   const { showMajorsModal } = useContext(ModalsContext);
 
   return (
     <>
-      {!showMajorsModal ? (
+      {!showMajorsModal && !showCourseInfoModal ? (
         <Search displayCustomCourseSelection={true} />
       ) : (
         <Card className="w-80 h-full" />
@@ -152,10 +160,9 @@ function Modals() {
   return (
     <>
       <CourseInfoModal />
-      <ExportModal />
       <MajorsModal />
       <EditMajorRequirementsModal />
-      <ReplaceRLModal />
+      <ReplaceRequirementsModal />
       <PermissionsModal />
     </>
   );

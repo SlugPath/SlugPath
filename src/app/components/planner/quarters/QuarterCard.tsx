@@ -1,5 +1,5 @@
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { getTotalCredits } from "@/lib/plannerUtils";
+import { ModalsContext } from "@contexts/ModalsProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { Card, Chip } from "@mui/joy";
