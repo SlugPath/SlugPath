@@ -109,9 +109,17 @@ export default function usePlanner(input: {
     const quarters = [...courseState.quarters];
     const idx = quarters.findIndex((q) => q.year === year);
     if (idx == -1) {
-      console.log(JSON.stringify(quarters, null, 2));
       throw new Error("Year not found"); // should not happen
     }
+
+    const toRemoveCourses = quarters
+      .slice(idx, idx + 4)
+      .map((q) => q.courses)
+      .flat();
+    const newCourses = courseState.courses.filter(
+      (c) => !toRemoveCourses.includes(c.id),
+    );
+
     quarters.splice(idx, 4);
 
     for (let j = idx; j < quarters.length; j++) {
@@ -124,6 +132,7 @@ export default function usePlanner(input: {
     }
     handleCourseUpdate({
       ...courseState,
+      courses: newCourses,
       quarters,
       years: courseState.years - 1,
     });

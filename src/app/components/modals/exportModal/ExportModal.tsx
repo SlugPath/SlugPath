@@ -16,6 +16,7 @@ export default function ExportModal() {
     getPlanner,
   } = useContext(PlannersContext);
   if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
+  console.log(`In ExportModal, activePlanner: ${activePlanner}`);
 
   const courseState = getPlanner(activePlanner);
 

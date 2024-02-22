@@ -40,14 +40,7 @@ export function Requirements({
   const Classes = (requirement: any) => (
     <div className="flex flex-row items-center space-x-1">
       <div className="w-full">
-        <MiniCourseCard
-          course={requirement}
-          quarter={{
-            year: 0,
-            title: "Fall",
-            courses: [],
-          }}
-        />
+        <MiniCourseCard course={requirement} />
       </div>
       <FulfillmentMark {...requirement} />
     </div>

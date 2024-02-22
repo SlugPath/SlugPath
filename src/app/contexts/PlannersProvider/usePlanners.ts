@@ -74,7 +74,7 @@ export function usePlanners(
    * `switchPlanner` switches between planners
    * @param id unique planner id
    */
-  function switchPlanners(id: string) {
+  function switchPlanners(id: string | undefined) {
     setActivePlanner(id);
   }
 
@@ -153,12 +153,11 @@ export function usePlanners(
     setDeletedPlanner(true);
     setPlanners(newPlanners);
 
+    console.log("Deleted planner with id: ", id);
+
     // Switch to the next planner upon deletion if one exists
     const newActive = newPlanners[newPlanners.length - 1]?.id;
-
-    if (newActive !== undefined) {
-      switchPlanners(newActive);
-    }
+    switchPlanners(newActive);
   };
 
   /**

@@ -151,7 +151,10 @@ export function findCourseById(
   id: string,
 ): StoredCourse {
   const course = courseState.courses.find((c) => c.id === id);
-  if (course === undefined) throw new Error("course not found");
+  if (course === undefined)
+    throw new Error(
+      `course ${id} not found in ${JSON.stringify(courseState, null, 2)}`,
+    );
   return course;
 }
 

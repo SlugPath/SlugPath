@@ -21,6 +21,7 @@ import {
   Button,
   Card,
   IconButton,
+  Tooltip,
 } from "@mui/joy";
 import { useContext, useState } from "react";
 
@@ -72,19 +73,21 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   <AccordionGroup>
                     <div className="space-y-2 h-[75vh] overflow-auto">
                       <Years courseState={courseState} />
-                      <Button
-                        onClick={() => {
-                          if (courseState.years < MAX_YEARS) {
-                            addYear();
-                          } else {
-                            setTooManyYearsAlertOpen(true);
-                          }
-                        }}
-                        fullWidth={true}
-                        size="lg"
-                      >
-                        Add Year
-                      </Button>
+                      {courseState.years == MAX_YEARS ? (
+                        <Tooltip title="Cannot add more years. Too many open.">
+                          <span>
+                            <Button disabled fullWidth={true} size="lg">
+                              {" "}
+                              Add Year{" "}
+                            </Button>
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <Button fullWidth={true} size="lg" onClick={addYear}>
+                          {" "}
+                          Add Year{" "}
+                        </Button>
+                      )}
                       <TooManyPlannersAlert
                         open={tooManyYearsAlertOpen}
                         onClose={() => setTooManyYearsAlertOpen(false)}
