@@ -10,7 +10,7 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { Clear, ExpandMore } from "@mui/icons-material";
+import { Clear, ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -27,6 +27,7 @@ import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
+import TooManyPlannersAlert from "../planners/plannerTabs/TooManyPlannersAlert";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
@@ -39,6 +40,8 @@ import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorPro
 import ReplaceRequirementsModal from "./graduationProgress/majorProgressModal/ReplaceRequirementsModal";
 import QuarterCard from "./quarters/QuarterCard";
 
+const MAX_YEARS = 10;
+
 export default function Planner({ isActive }: { isActive: boolean }) {
   const {
     handleDragEnd,
@@ -49,6 +52,8 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     addYear,
   } = useContext(PlannerContext);
 
+  const [tooManyYearsAlertOpen, setTooManyYearsAlertOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   if (!isActive) {
     return <></>;
   }
@@ -68,12 +73,24 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                     <div className="space-y-2 h-[75vh] overflow-auto">
                       <Years courseState={courseState} />
                       <Button
-                        onClick={() => addYear()}
+                        onClick={() => {
+                          if (courseState.years < MAX_YEARS) {
+                            addYear();
+                          } else {
+                            setTooManyYearsAlertOpen(true);
+                          }
+                        }}
                         fullWidth={true}
                         size="lg"
                       >
                         Add Year
                       </Button>
+                      <TooManyPlannersAlert
+                        open={tooManyYearsAlertOpen}
+                        onClose={() => setTooManyYearsAlertOpen(false)}
+                        warningContent="Too Many Years"
+                        dialogContent="You have too many years open. Delete one to add a new one."
+                      />
                       <Accordion
                         variant="soft"
                         sx={{
@@ -86,8 +103,16 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                           },
                         }}
                         defaultExpanded={true}
+                        expanded={isExpanded === true}
+                        onChange={(_, expanded) => {
+                          setIsExpanded(expanded ? true : false);
+                        }}
                       >
-                        <AccordionSummary>Notes</AccordionSummary>
+                        <AccordionSummary indicator={null}>
+                          {indicatorIcon(isExpanded)}
+                          Notes
+                          <IconButton />
+                        </AccordionSummary>
                         <AccordionDetails>
                           <NotesEditor
                             content={courseState.notes}
@@ -259,4 +284,20 @@ function Quarters({
       </AccordionDetails>
     </StyledAccordion>
   );
+}
+
+function indicatorIcon(isExpanded: boolean) {
+  if (isExpanded == true) {
+    return (
+      <IconButton>
+        <ExpandLess />
+      </IconButton>
+    );
+  } else {
+    return (
+      <IconButton>
+        <ExpandMore />
+      </IconButton>
+    );
+  }
 }

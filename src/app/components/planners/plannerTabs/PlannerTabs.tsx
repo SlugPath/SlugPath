@@ -134,6 +134,8 @@ export default function PlannerTabs() {
       <TooManyPlannersAlert
         open={tooManyAlertIsOpen}
         onClose={() => setTooManyAlertIsOpen(false)}
+        warningContent="Too Many Planners"
+        dialogContent="You have too many planners open. Delete one to make a new one."
       />
     </>
   );
