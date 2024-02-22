@@ -31,7 +31,6 @@ import TooManyPlannersAlert from "../planners/plannerTabs/TooManyPlannersAlert";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
-import StyledAccordion from "./StyledAccordion";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
@@ -247,14 +246,29 @@ function Quarters({
 }) {
   const { deleteYear } = useContext(PlannerContext);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <StyledAccordion>
+    <Accordion
+      variant="soft"
+      sx={{
+        borderRadius: "0.5rem",
+        "&.MuiAccordion-root": {
+          "& .MuiAccordionSummary-root": {
+            padding: "0.5rem 0",
+            paddingX: "0.5rem",
+          },
+        },
+      }}
+      defaultExpanded={true}
+      expanded={isExpanded === true}
+      onChange={(_, expanded) => {
+        setIsExpanded(expanded ? true : false);
+      }}
+    >
       <Box>
         <AccordionSummary indicator={null}>
-          <IconButton>
-            <ExpandMore />
-          </IconButton>
+          {indicatorIcon(isExpanded)}
           Year {year}
           <IconButton>
             <Clear onClick={() => setDeleteAlertOpen(true)} />
@@ -282,7 +296,7 @@ function Quarters({
           })}
         </div>
       </AccordionDetails>
-    </StyledAccordion>
+    </Accordion>
   );
 }
 
