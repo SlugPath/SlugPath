@@ -14,6 +14,10 @@ import {
 export async function coursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
+  console.log("pred.departmentCode: ", pred.departmentCode);
+  console.log("pred.number: ", pred.number);
+  console.log("pred.numberRange: ", pred.numberRange);
+  console.log("pred.ge: ", pred.ge);
   const departmentCodeParam = () => {
     if (pred.departmentCode?.length != 0) {
       return {
@@ -25,29 +29,12 @@ export async function coursesBy(
     return {};
   };
 
-  console.log("number range: ", pred.numberRange);
-
-  /* If number is provided, it behaves as before. 
-  If numberRange is provided with values different from the default range (0, 299), 
-  it sets gte (greater than or equal to) and lte (less than or equal to) */
   const numberParam = () => {
     if (pred.number) {
       console.log("In number");
       return {
         number: {
           contains: pred.number,
-        },
-      };
-    }
-    if (
-      pred.numberRange &&
-      (pred.numberRange[0] !== 0 || pred.numberRange[1] !== 299)
-    ) {
-      console.log("In number range");
-      return {
-        number: {
-          gte: pred.numberRange[0].toString(), // Greater than or equal to minNumber
-          lte: pred.numberRange[1].toString(), // Less than or equal to maxNumber
         },
       };
     }
@@ -65,20 +52,38 @@ export async function coursesBy(
     return {};
   };
 
-  const courses = await prisma.course.findMany({
-    where: {
-      departmentCode: departmentCodeParam().departmentCode,
-      ...numberParam(),
-      ge: geParam().ge,
-    },
-  });
-
-  // Log the generated filter conditions for debugging
-  console.log("Filter conditions:", {
-    departmentCode: departmentCodeParam().departmentCode,
-    ...numberParam(),
-    ge: geParam().ge,
-  });
+  let courses = [];
+  if (
+    pred.numberRange &&
+    (pred.numberRange[0] !== 0 || pred.numberRange[1] !== 299) &&
+    !pred.number
+  ) {
+    console.log("In range");
+    if (pred.ge) {
+      courses = await prisma.$queryRaw<Course[]>`
+        SELECT *
+        FROM "Course"
+        WHERE ("departmentCode" = ${pred.departmentCode} OR ${pred.departmentCode} = '') 
+        AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) BETWEEN ${pred.numberRange[0]} AND ${pred.numberRange[1]}
+        AND ${pred.ge} = ANY("ge")
+      `;
+    } else {
+      courses = await prisma.$queryRaw<Course[]>`
+      SELECT *
+      FROM "Course"
+      WHERE ("departmentCode" = ${pred.departmentCode} OR ${pred.departmentCode} = '') 
+      AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) BETWEEN ${pred.numberRange[0]} AND ${pred.numberRange[1]}
+    `;
+    }
+  } else {
+    courses = await prisma.course.findMany({
+      where: {
+        departmentCode: departmentCodeParam().departmentCode,
+        number: numberParam().number,
+        ge: geParam().ge,
+      },
+    });
+  }
   // Convert to a stored course and sort by number
   const res = courses.map(toStoredCourse);
   res.sort(compareCoursesByNum);
