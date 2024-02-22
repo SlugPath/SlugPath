@@ -76,9 +76,7 @@ export default function PermissionsAccordion({
                     className="flex flex-row gap-1 items-center justify-between p-1"
                   >
                     <div className="flex flex-row gap-1 items-center justify-between w-full">
-                      <Typography>
-                        {major.name} {major.catalogYear}
-                      </Typography>
+                      <Typography>{getMajorName(major)}</Typography>
                       <div className="flex flex-row gap-1 items-center justify-start">
                         <ExpirationLabel
                           expirationDate={majorEditPerm.expirationDate}
@@ -176,9 +174,15 @@ function SelectMajor({
     >
       {majors.map((major, index) => (
         <Option key={index} value={major}>
-          {major.name} {major.catalogYear}
+          {getMajorName(major)}
         </Option>
       ))}
     </Select>
   );
+}
+
+function getMajorName(major: Major) {
+  return `${major.name} ${major.catalogYear} ${
+    major.programType === "Minor" ? "(Minor)" : ""
+  }`;
 }

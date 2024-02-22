@@ -1,5 +1,6 @@
 import { MajorInput, getUserMajorsById, saveUserMajors } from "@actions/major";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 /**
  *
@@ -7,22 +8,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
  * @param onCompleted a callback to invoke upon completion of a query
  * @returns
  */
-export default function useMajorSelection(
-  userId: string | undefined,
-  onSuccess?: () => void,
-) {
+export default function useMajorSelection(onSuccess?: () => void) {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
   // Update user major data
   const queryClient = useQueryClient();
-  const {
-    isPending: userMajorsIsLoading,
-    // isError,
-    data: userMajors,
-  } = useQuery({
+  const { isPending: userMajorsIsLoading, data: userMajors } = useQuery({
     queryKey: ["userMajors", userId],
     queryFn: async () => {
       return await getUserMajorsById(userId!);
     },
-    enabled: !!userId,
+    enabled: !!session,
   });
 
   const {

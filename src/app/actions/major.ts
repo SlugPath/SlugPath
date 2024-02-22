@@ -55,7 +55,7 @@ export type MajorOutput = {
 
 export async function getUserMajorsByEmail(
   email: string,
-): Promise<MajorOutput[] | null> {
+): Promise<MajorOutput[]> {
   const userData = await prisma.user.findUnique({
     where: {
       email,
@@ -73,15 +73,13 @@ export async function getUserMajorsByEmail(
   });
 
   if (userData === null) {
-    return null;
+    return [];
   }
 
   return userData?.majors;
 }
 
-export async function getUserMajorsById(
-  id: string,
-): Promise<MajorOutput[] | null> {
+export async function getUserMajorsById(id: string): Promise<MajorOutput[]> {
   const userData = await prisma.user.findUnique({
     where: {
       id,
@@ -100,7 +98,7 @@ export async function getUserMajorsById(
   });
 
   if (userData === null) {
-    return null;
+    return [];
   }
 
   return userData?.majors;

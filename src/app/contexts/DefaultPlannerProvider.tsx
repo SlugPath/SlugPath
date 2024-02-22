@@ -1,5 +1,4 @@
 import { MajorOutput } from "@actions/major";
-import { useSession } from "next-auth/react";
 import { createContext } from "react";
 
 import useDefaultPlanners from "../components/majorSelection/defaultPlannerSelection/useDefaultPlanners";
@@ -34,15 +33,13 @@ export function DefaultPlannerProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
-
   const {
     saveMajors,
     userMajors,
     userMajorsIsLoading,
     loadingSaveMajor,
     errorSavingMajor,
-  } = useMajorSelection(session?.user.id);
+  } = useMajorSelection();
 
   const {
     primaryMajor,

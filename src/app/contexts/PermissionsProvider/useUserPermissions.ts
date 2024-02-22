@@ -8,13 +8,13 @@ export default function useUserPermissions() {
 
   const { data: permissions, refetch: refetchGetUserPermissions } = useQuery({
     queryKey: ["userHasMajorEditingPermission"],
-    queryFn: () => getUserPermissions(session!.user.id),
+    queryFn: async () => await getUserPermissions(session!.user.id),
     enabled: !!session,
   });
 
   const { data: userRole } = useQuery({
     queryKey: ["getUserRole"],
-    queryFn: () => getUserRole(session!.user.id),
+    queryFn: async () => await getUserRole(session!.user.id),
     enabled: !!session,
   });
 

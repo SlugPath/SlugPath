@@ -187,12 +187,17 @@ export function RequirementsComponentEditing({
     return shouldHaveClasses(parents);
   }
 
+  // user cannot edit title of the parent RequirementList
+  function allowedToEditTitle(parents: number) {
+    return parents > 0;
+  }
+
   return (
     <Card variant="soft" style={cardStyleProps(parents, mode)}>
       {/* Title begin */}
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row">
-          {editingTitle ? (
+          {editingTitle && allowedToEditTitle(parents) ? (
             <EditableTitle
               title={title ?? ""}
               setTitle={setTitle}
@@ -203,7 +208,9 @@ export function RequirementsComponentEditing({
           ) : (
             <Title requirements={requirements} fulfillmentMark={true} />
           )}
-          <EditIconButton onClick={handleToggleEditingTitle} />
+          {allowedToEditTitle(parents) && (
+            <EditIconButton onClick={handleToggleEditingTitle} />
+          )}
         </div>
         {shouldDisplayDeleteButton(parents) && (
           <DeleteIconButton

@@ -1,7 +1,6 @@
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { Major } from "@/app/types/Major";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { ModalsProvider } from "@contexts/ModalsProvider";
 import { Button, CircularProgress, Option, Select, Typography } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 
@@ -19,14 +18,12 @@ export interface DefaultPlannerSelectionProps {
   onSaved: () => void;
   saveButtonName: string;
   isInPlannerPage?: boolean;
-  onSkip?: () => void;
 }
 
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
   isInPlannerPage,
-  onSkip,
 }: DefaultPlannerSelectionProps) {
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
@@ -66,6 +63,7 @@ export default function DefaultPlannerSelection({
   ) {
     if (newValue != null) {
       setPrimaryMajor(newValue);
+      setIsSaved(false);
     }
   }
 
@@ -92,7 +90,6 @@ export default function DefaultPlannerSelection({
         case ButtonName.CreateNew:
           setIsSaved(true);
           setTimeout(() => {
-            console.log("add planner");
             addPlanner();
           }, 200);
           break;
@@ -100,7 +97,6 @@ export default function DefaultPlannerSelection({
           setIsSaved(true);
           setTimeout(() => {
             replaceCurrentPlanner();
-            console.log("replace planner");
           }, 200);
           break;
       }
@@ -143,56 +139,47 @@ export default function DefaultPlannerSelection({
         open={replaceAlertOpen}
         onClose={() => setReplaceAlertOpen(false)}
         onConfirm={handleConfirmReplaceCurrent}
-        dialogText="Are you sure you want to replace your current planner?"
+        dialogText="Are you sure you want to replace your current planner? Your notes and courses will be deleted."
       />
       <div className="overflow-y-scroll h-[70vh]">
-        <ModalsProvider>
-          <Typography level="body-lg">Primary Major</Typography>
-          <Select
-            value={primaryMajor}
-            placeholder="Choose one…"
-            variant="plain"
-            onChange={handleChangeSelectedMajor}
-          >
-            {userMajors.map((major, index) => (
-              <Option key={index} value={major}>
-                {major.name} {major.catalogYear}
-              </Option>
-            ))}
-          </Select>
-          <SelectDefaultPlanner
-            selectedDefaultPlanner={defaultPlannerId}
-            onChange={handleChangeDefaultPlanner}
-            majorDefaultPlanners={majorDefaultPlanners}
-            loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-            addPlannerCardContainer={isInPlannerPage}
-          />
-          <CourseInfoModal />
-        </ModalsProvider>
+        <Typography level="body-lg">Primary Major</Typography>
+        <Select
+          value={primaryMajor}
+          placeholder="Choose one…"
+          variant="plain"
+          onChange={handleChangeSelectedMajor}
+        >
+          {userMajors.map((major, index) => (
+            <Option key={index} value={major}>
+              {major.name} {major.catalogYear}
+            </Option>
+          ))}
+        </Select>
+        <SelectDefaultPlanner
+          selectedDefaultPlanner={defaultPlannerId}
+          onChange={handleChangeDefaultPlanner}
+          majorDefaultPlanners={majorDefaultPlanners}
+          loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+          addPlannerCardContainer={isInPlannerPage}
+        />
+        <CourseInfoModal />
       </div>
       <div className="flex justify-end w-full">
         {updateDefaultPlannerIsPending ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
           <div>
-            {onSkip && (
-              <Button onClick={onSkip} variant="plain">
-                Skip
-              </Button>
+            <Button disabled={isSaved} onClick={handleClickSave}>
+              {saveButtonName}
+            </Button>
+            {isInPlannerPage && (
+              <>
+                <Button color="warning" onClick={handleClickReplaceCurrent}>
+                  Replace Current
+                </Button>
+                <Button onClick={handleClickCreateNew}>Create New</Button>
+              </>
             )}
-            <div>
-              <Button disabled={isSaved} onClick={handleClickSave}>
-                {saveButtonName}
-              </Button>
-              {isInPlannerPage && (
-                <>
-                  <Button color="warning" onClick={handleClickReplaceCurrent}>
-                    Replace Current
-                  </Button>
-                  <Button onClick={handleClickCreateNew}>Create New</Button>
-                </>
-              )}
-            </div>
           </div>
         )}
       </div>

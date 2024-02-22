@@ -18,6 +18,7 @@ import {
 } from "@mui/joy";
 import { ProgramType } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
@@ -33,6 +34,8 @@ export default function MajorSelection() {
   const [catalogYear, setCatalogYear] = useState("");
 
   const [error, setError] = useState("");
+
+  const { data: session } = useSession();
 
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear, programType],
@@ -170,7 +173,7 @@ export default function MajorSelection() {
           onRemoveMajor={handleRemoveMajor}
           onAddMajor={handleAddMajor}
         />
-        {userMajorsIsLoading && <CircularProgress />}
+        {userMajorsIsLoading && session && <CircularProgress />}
         {loadingSaveMajor && <LinearProgress />}
       </Card>
 
