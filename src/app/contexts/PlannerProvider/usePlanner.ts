@@ -9,6 +9,7 @@ import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
+import { Quarter } from "@customTypes/Quarter";
 import { useCallback, useContext, useMemo } from "react";
 
 export default function usePlanner(input: {
@@ -55,8 +56,7 @@ export default function usePlanner(input: {
         quarters: [
           ...courseState.quarters.slice(0, idx),
           {
-            id: quarter.id,
-            title: quarter.title,
+            ...quarter,
             courses: newCourses,
           },
           ...courseState.quarters.slice(idx + 1),
@@ -88,47 +88,45 @@ export default function usePlanner(input: {
   };
 
   const addYear = () => {
-    courseState.quarters.push(
-      {
-        id: "quarter-" + courseState.years + "-Fall",
-        title: "Fall",
-        courses: [],
-      },
-      {
-        id: "quarter-" + courseState.years + "-Winter",
-        title: "Winter",
-        courses: [],
-      },
-      {
-        id: "quarter-" + courseState.years + "-Spring",
-        title: "Spring",
-        courses: [],
-      },
-      {
-        id: "quarter-" + courseState.years + "-Summer",
-        title: "Summer",
-        courses: [],
-      },
-    );
-    handleCourseUpdate({ ...courseState, years: courseState.years + 1 });
+    handleCourseUpdate({
+      ...courseState,
+      years: courseState.years + 1,
+      quarters: [
+        ...courseState.quarters,
+        // Add new quarters for the new year
+        ...["Fall", "Winter", "Spring", "Summer"].map((t) => {
+          return {
+            year: courseState.years,
+            title: t,
+            courses: [],
+          } as Quarter;
+        }),
+      ],
+    });
   };
 
   const deleteYear = (year: number) => {
-    for (let i = 0; i < courseState.quarters.length; i++) {
-      if (year == parseInt(courseState.quarters[i].id[8])) {
-        courseState.quarters.splice(i, 4);
-        for (let j = i; j < courseState.quarters.length; j++) {
-          const quarterToChange = courseState.quarters[j];
-          const newYear = parseInt(quarterToChange.id[8]) - 1;
-          courseState.quarters[j].id =
-            quarterToChange.id.substring(0, 8) +
-            newYear.toString() +
-            quarterToChange.id.substring(9);
-        }
-        break;
-      }
+    const quarters = [...courseState.quarters];
+    const idx = quarters.findIndex((q) => q.year === year);
+    if (idx == -1) {
+      console.log(JSON.stringify(quarters, null, 2));
+      throw new Error("Year not found"); // should not happen
     }
-    handleCourseUpdate({ ...courseState, years: courseState.years - 1 });
+    quarters.splice(idx, 4);
+
+    for (let j = idx; j < quarters.length; j++) {
+      const quarterToChange = quarters[j];
+      const newYear = quarterToChange.year - 1;
+      quarters[j] = {
+        ...quarterToChange,
+        year: newYear,
+      };
+    }
+    handleCourseUpdate({
+      ...courseState,
+      quarters,
+      years: courseState.years - 1,
+    });
   };
 
   const getAllLabels = () => {

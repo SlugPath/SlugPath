@@ -1,4 +1,5 @@
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
+import { getQuarterId } from "@/lib/quarterUtils";
 import {
   CourseInfoContext,
   CourseInfoProvider,
@@ -10,7 +11,7 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { Clear, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { DeleteOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -271,7 +272,7 @@ function Quarters({
           {indicatorIcon(isExpanded)}
           Year {year}
           <IconButton>
-            <Clear onClick={() => setDeleteAlertOpen(true)} />
+            <DeleteOutline onClick={() => setDeleteAlertOpen(true)} />
             <ConfirmAlert
               open={deleteAlertOpen}
               onClose={() => setDeleteAlertOpen(false)}
@@ -284,11 +285,12 @@ function Quarters({
       <AccordionDetails>
         <div className="flex flex-row space-x-2">
           {quarters.map((quarter) => {
-            const courses = findCoursesInQuarter(courseState, quarter.id);
+            const courses = findCoursesInQuarter(courseState, quarter);
+            const id = getQuarterId(quarter);
             return (
               <QuarterCard
-                id={quarter.id}
-                key={quarter.id}
+                key={id}
+                id={id}
                 title={quarter.title}
                 courses={courses}
               />

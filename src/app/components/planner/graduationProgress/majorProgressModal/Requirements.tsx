@@ -43,8 +43,8 @@ export function Requirements({
         <MiniCourseCard
           course={requirement}
           quarter={{
-            id: "0",
-            title: "2021 Fall",
+            year: 0,
+            title: "Fall",
             courses: [],
           }}
         />
