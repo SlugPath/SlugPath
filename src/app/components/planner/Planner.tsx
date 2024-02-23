@@ -275,7 +275,13 @@ function Quarters({
           {indicatorIcon(isExpanded)}
           Year {year}
           <IconButton>
-            <DeleteOutline onClick={() => setDeleteAlertOpen(true)} />
+            <DeleteOutline
+              onClick={(e) => {
+                // Prevent the accordion from expanding/collapsing
+                e.stopPropagation();
+                setDeleteAlertOpen(true);
+              }}
+            />
             <ConfirmAlert
               open={deleteAlertOpen}
               onClose={() => setDeleteAlertOpen(false)}

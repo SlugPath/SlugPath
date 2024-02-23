@@ -152,9 +152,6 @@ export function usePlanners(
     const newPlanners = planners.filter((p) => p.id !== id);
     setDeletedPlanner(true);
     setPlanners(newPlanners);
-
-    console.log("Deleted planner with id: ", id);
-
     // Switch to the next planner upon deletion if one exists
     const newActive = newPlanners[newPlanners.length - 1]?.id;
     switchPlanners(newActive);
