@@ -70,7 +70,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                         defaultExpanded={true}
                       >
                         <AccordionSummary>Notes</AccordionSummary>
-                        <AccordionDetails>
+                        <AccordionDetails className="m-4 min-h-[300px]">
                           <NotesEditor
                             content={courseState.notes}
                             onUpdateNotes={updateNotes}
