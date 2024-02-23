@@ -18,7 +18,7 @@ export default function Navbar() {
             <LogoAlt className="h-10 w-auto" />
           </Link>
 
-          <div className="flex flex-1 justify-end place-items-center gap-4">
+          <div className="flex flex-1 justify-end place-items-center gap-2">
             <ToggleDarkModeButton />
             <LoginButton />
           </div>
