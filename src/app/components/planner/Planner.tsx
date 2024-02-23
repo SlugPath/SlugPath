@@ -30,7 +30,7 @@ import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorPro
 import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLModal";
 import QuarterCard from "./quarters/QuarterCard";
 
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 
@@ -45,14 +45,22 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   }
 
   const searchParams = useSearchParams()
-  const search = searchParams.get('share')
+  
+  let search = searchParams.get('share') || ""
+
+  const router = useRouter();
 
   const { duplicatePlanner } = useContext(PlannersContext);
 
-
+  // currently getting called twice. Maybe because the planner page is loading twice
   if (search) {
+    console.log()
     console.log("Calling Duplicate")
-    duplicatePlanner(search)
+    router.replace('/planner', undefined);
+
+    duplicatePlanner(search);
+    search = ""
+    console.log("Search has been cleared")
   }
   console.log(`Planner ID: ${search}`)
 
