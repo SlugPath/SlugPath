@@ -43,18 +43,18 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   }
 
   return (
-    <div>
+    <div className="flex border-green-500 border-2 w-full flex-1 min-w-0">
       <DragDropContext onDragEnd={handleDragEnd}>
         <PermissionsProvider>
           <ModalsProvider>
             <CourseInfoProvider>
-              <div className="flex justify-between space-x-4">
+              <div className="flex justify-between space-x-4 border-2 border-rose-500 w-full min-w-0">
                 <div className="flex-initial pr-2">
                   <SearchContainer />
                 </div>
-                <div className="overflow-auto w-full flex-grow">
+                <div className="overflow-auto w-full flex-grow border-2 max-h-full">
                   <AccordionGroup>
-                    <div className="space-y-2 h-[75vh] overflow-auto">
+                    <div className="space-y-2 overflow-auto border-2 border-green-500 min-w-0">
                       <Years courseState={courseState} />
                       <Accordion
                         variant="soft"

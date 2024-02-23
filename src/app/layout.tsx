@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`h-full overflow-auto ${inter.className}`}>
         <Provider>
           <ScreenSizeWarning />
-          <div className="bg-blue-200 dark:bg-bg-dark bg-cover min-h-screen pb-1">
+          <div className="bg-blue-200 dark:bg-bg-dark bg-cover min-h-screen border-green-500 border-2 flex flex-col max-h-screen min-w-0">
             <Navbar />
             <BetaWarning />
             {children}

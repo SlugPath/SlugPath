@@ -3,11 +3,26 @@ import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
 
+/**
+ * Zips two arrays together
+ * @param arr1 First array
+ * @param arr2 Second array
+ * @returns zip of two arrays
+ */
 export const zip = (arr1: any[], arr2: any[]) => {
   return arr1.map((elem, index) => [elem, arr2[index]]);
 };
 
 // Utility function to truncate tab title
+
+/**
+ * Truncates a title to a certain length
+ *
+ * NOTE: There is also a tailwindCSS class for this (truncate)
+ * @param title title to truncate
+ * @param maxLength
+ * @returns truncated title
+ */
 export const truncateTitle = (title: string, maxLength: number = 20) => {
   return title.length > maxLength
     ? `${title.substring(0, maxLength)}...`
@@ -19,7 +34,7 @@ export const truncateTitle = (title: string, maxLength: number = 20) => {
  * number representing the order in which they should appear.
  * @param a Course instance
  * @param b another Course instance
- * @returns
+ * @returns -1 if a should appear before b, 1 if a should appear after b, 0 if they are equal
  */
 export function compareCoursesByNum(a: StoredCourse, b: StoredCourse): number {
   // Check departments first
@@ -63,4 +78,13 @@ export function toStoredCourse({
     labels: [],
     id: uuidv4(),
   };
+}
+
+/**
+ * Join an array of strings with a space (for use with tailwind classes)
+ * @param {string[]} classes
+ * @returns {string}
+ */
+export function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(" ");
 }
