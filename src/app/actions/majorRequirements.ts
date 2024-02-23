@@ -11,8 +11,10 @@ export async function saveMajorRequirements(
   majorId: number,
   userId: string,
 ) {
+  const hasPermission = await userHasMajorEditPermission(userId, majorId);
+
   // check if user is allowed to edit this major
-  if (!userHasMajorEditPermission(userId, majorId)) return { success: false };
+  if (!hasPermission) return { success: false };
 
   const requirementsAsJSON = JSON.stringify(requirements);
 

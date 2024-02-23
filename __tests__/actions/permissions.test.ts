@@ -4,6 +4,7 @@ import { Permissions } from "@/app/types/Permissions";
 import prisma from "@/lib/prisma";
 import {
   getPermissions,
+  getUserPermissions,
   getUserRole,
   savePermissions,
   userHasMajorEditPermission,
@@ -175,9 +176,9 @@ describe("Permissions Actions", () => {
     });
 
     it("should throw if user not found", async () => {
-      await expect(
-        await userHasMajorEditPermission("invalid", 0),
-      ).rejects.toThrow(`User invalid not found`);
+      await expect(await getUserPermissions("invalid")).rejects.toThrow(
+        `User invalid not found`,
+      );
     });
 
     it("should return false if permissions are not for current major", async () => {

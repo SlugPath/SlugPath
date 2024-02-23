@@ -102,7 +102,7 @@ export async function getUserPermissions(
     },
   });
 
-  if (!user) throw new Error(`User ${userId} not found`);
+  if (user == null) throw new Error(`User ${userId} not found`);
 
   const permissions = await prisma.permissions.findUnique({
     where: {
