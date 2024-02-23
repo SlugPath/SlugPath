@@ -1,8 +1,8 @@
+"use client";
+
 import { WarningAmberOutlined } from "@mui/icons-material";
 import { Alert } from "@mui/joy";
 import { useEffect, useState } from "react";
-
-import CloseIconButton from "../buttons/CloseIconButton";
 
 export default function BetaWarning({ show = true }: { show?: boolean }) {
   const [visible, setVisible] = useState(true);
@@ -32,11 +32,13 @@ export default function BetaWarning({ show = true }: { show?: boolean }) {
           cursor: "pointer",
           opacity: visible ? 1 : 0,
           transition: "opacity 350ms ease-in-out",
+          alignItems: "center",
         }}
       >
-        SlugPath is currently in development. Breaking changes are to be
-        expected.
-        <CloseIconButton onClick={() => setVisible(false)} />
+        <p>
+          SlugPath is currently in development. Breaking changes are to be
+          expected.
+        </p>
       </Alert>
     )
   );

@@ -9,16 +9,16 @@ datasource db {
 }
 
 model User {
-  id                          String             @id
-  email                       String?
+  id                          String         @id
+  email                       String    @unique
   name                        String?
   majorId                     Int?
-  role                        Role               @default(USER)
-  defaultPlannerId            String?
+  role                        Role           @default(USER)
+  defaultPlannerId            String    @default("")
   majorRequirementSuggestions MajorRequirement[]
   planners                    Planner[]
   upvotes                     Upvote?
-  major                       Major?             @relation(fields: [majorId], references: [id])
+  major                       Major?         @relation(fields: [majorId], references: [id])
 }
 
 model Planner {
@@ -73,11 +73,11 @@ model Course {
 }
 
 model Major {
-  id                  Int                       @id @default(autoincrement())
+  id                  Int                              @id @default(autoincrement())
   name                String
   catalogYear         String
-  createdAt           DateTime                  @default(now())
-  updatedAt           DateTime                  @updatedAt
+  createdAt           DateTime                         @default(now())
+  updatedAt           DateTime                         @updatedAt
   permissions         MajorEditingPermission[]
   approvedRequirement MajorRequirement?         @relation("ApprovedMajorRequirement")
   majorRequirements   MajorRequirement[]
@@ -114,17 +114,17 @@ model Upvote {
 
 model Permissions {
   id                      Int                      @id @default(autoincrement())
-  userEmail               String                   @unique
   majorEditingPermissions MajorEditingPermission[]
+  userEmail               String                   @unique
 }
 
 model MajorEditingPermission {
   id             Int         @id @default(autoincrement())
+  major          Major       @relation(fields: [majorId], references: [id])
   majorId        Int         @unique
+  permissions    Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
   permissionsId  Int
   expirationDate DateTime
-  major          Major       @relation(fields: [majorId], references: [id])
-  permissions    Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
 }
 
 model Label {

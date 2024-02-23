@@ -1,0 +1,70 @@
+name: CI/CD Pipeline
+
+on: [push]
+
+env:
+  POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"
+  # Mock values for testing
+  LOGFLARE_API_KEY: "github-actions"
+  LOGFLARE_SOURCE_TOKEN: "github-actions"
+  PAUSE_TOKEN: "github-actions"
+  WEBHOOK_SECRET: "github-actions"
+  PROJECT_ID: "github-actions"
+  TEAM_ID: "github-actions"
+  GOOGLE_CLIENT_ID: "github-actions"
+  GOOGLE_CLIENT_SECRET: "github-actions"
+  NEXTAUTH_SECRET: "github-actions"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Print Git Commit
+        run: echo ${{ github.sha}}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check Format
+        run: pnpm run format:check
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Setup Postgres DB
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Run Jest Tests
+        run: pnpm run test
+
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: float
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      POSTGRES_PRISMA_URL: "postgres://postgres:postgres@localhost:5432/float?schema=public"

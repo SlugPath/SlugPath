@@ -3,7 +3,7 @@ import { Button, MenuButton } from "@mui/joy";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import UserAvatar from "../UserAvatar";
+import UserAvatar from "../miscellaneous/UserAvatar";
 
 export default function LoginButton() {
   const { data: session, status } = useSession();
@@ -24,7 +24,7 @@ export default function LoginButton() {
       ) : (
         <Dropdown>
           <MenuButton color="neutral" variant="plain" size="sm">
-            <UserAvatar name={session.user?.name} />
+            <UserAvatar image={session.user?.image} />
           </MenuButton>
           <Menu variant="soft">
             <MenuItem

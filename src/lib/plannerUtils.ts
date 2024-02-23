@@ -1,19 +1,12 @@
 import { StoredCourse } from "@/app/types/Course";
 import { Label } from "@/app/types/Label";
-import {
-  PlannerDataInput,
-  PlannerData as PlannerDataOutput,
-  QuarterInput,
-} from "@/graphql/planner/schema";
-import { PlannerData, findCourseById } from "@customTypes/PlannerData";
+import { PlannerData } from "@/app/types/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { Term } from "@customTypes/Quarter";
 import { LabelColor } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
-import { MAX_STORED_COURSE_TITLE } from "./consts";
 import { initialLabels } from "./labels";
-import { truncateTitle } from "./utils";
 
 const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
 export const years = 4;
@@ -27,6 +20,8 @@ export const initialPlanner = (): PlannerData => {
     courses: [],
     labels: initialLabels(),
     notes: "",
+    title: "New Planner",
+    id: uuidv4(),
   };
 };
 
@@ -37,6 +32,8 @@ export const emptyPlanner = (): PlannerData => {
     courses: [],
     labels: [],
     notes: "",
+    id: uuidv4(),
+    title: "",
   };
 };
 
@@ -54,65 +51,6 @@ export function createQuarters() {
   }
 
   return quarters;
-}
-
-export function serializePlanner(courseState: PlannerData): PlannerDataInput {
-  const result: PlannerDataInput = {
-    years: courseState.years,
-    quarters: [],
-    labels: courseState.labels.map((l) => {
-      return {
-        ...l,
-        color: l.color as string,
-      };
-    }),
-    notes: courseState.notes,
-  };
-
-  courseState.quarters.forEach((q) => {
-    const quarter: QuarterInput = {
-      id: q.id,
-      title: q.title,
-      courses: q.courses.map((cid) => {
-        const course = findCourseById(courseState, cid);
-        course.title = truncateTitle(getTitle(course), MAX_STORED_COURSE_TITLE);
-        return course;
-      }),
-    };
-    result.quarters.push(quarter);
-  });
-
-  return result;
-}
-
-export function deserializePlanner(output: PlannerDataOutput): PlannerData {
-  const result: PlannerData = {
-    years: output.years,
-    quarters: [],
-    courses: [],
-    labels: output.labels.map((l) => {
-      return {
-        ...l,
-        color: l.color as LabelColor,
-      };
-    }),
-    notes: output.notes,
-  };
-
-  output.quarters.forEach((q) => {
-    const quarter: Quarter = {
-      title: q.title,
-      id: q.id,
-      courses: [],
-    };
-    q.courses.forEach((c) => {
-      result.courses.push(c);
-      quarter.courses.push(c.id);
-    });
-    result.quarters.push(quarter);
-  });
-
-  return result;
 }
 
 export const customCourse = (): StoredCourse => {
@@ -190,6 +128,39 @@ export async function getRealEquivalent(
     ge: equivalent.ge,
     quartersOffered: equivalent.quartersOffered,
   };
+}
+
+/**
+ * Finds a quarter with a given id in an array of `Quarter`
+ * @param quarters array of quarters in a `CourseState` instance
+ * @param id quarter id
+ * @returns quarter and index where it was located
+ */
+export function findQuarter(
+  quarters: Quarter[],
+  id: string,
+): { quarter: Quarter; idx: number } {
+  const quarter = quarters.find((q) => q.id == id);
+  const idx = quarters.findIndex((q) => q.id == id);
+  if (quarter === undefined) throw new Error(`invalid quarter id: ${id}`);
+  return { quarter, idx };
+}
+
+export function findCourseById(
+  courseState: PlannerData,
+  id: string,
+): StoredCourse {
+  const course = courseState.courses.find((c) => c.id === id);
+  if (course === undefined) throw new Error("course not found");
+  return course;
+}
+
+export function findCoursesInQuarter(
+  courseState: PlannerData,
+  qid: string,
+): StoredCourse[] {
+  const { quarter } = findQuarter(courseState.quarters, qid);
+  return quarter.courses.map((cid) => findCourseById(courseState, cid));
 }
 
 export function isCustomCourse(c: StoredCourse): boolean {
@@ -327,7 +298,16 @@ export function extractTermFromQuarter(
   if (qid === undefined) return undefined;
 
   const tokens = qid.split("-");
-  return tokens[tokens.length - 1] as Term;
+  const term = tokens[tokens.length - 1];
+  if (
+    term !== "Fall" &&
+    term !== "Winter" &&
+    term !== "Spring" &&
+    term !== "Summer"
+  ) {
+    return undefined;
+  }
+  return term as Term;
 }
 
 export function isOffered(
@@ -336,4 +316,128 @@ export function isOffered(
 ): boolean {
   if (term === undefined) return true;
   return quartersOffered.find((t) => (t as Term) == term) !== undefined;
+}
+
+/**
+ * Copies a PlannerData, but changes the id's of the courses within the planner
+ * to prevent data inconsistencies
+ * Also adds a value for notes
+ * Copies labels over as well
+ * @param sourcePlanner a planner
+ * @returns a unique PlannerData instance
+ */
+export function clonePlanner(sourcePlanner: PlannerData): PlannerData {
+  const clone = { ...sourcePlanner };
+
+  const sourceLabels = clone.labels;
+
+  // Create a lookup table between old ids and newStoredCourse
+  const lookup = {} as any;
+  sourcePlanner.courses.forEach((c) => {
+    lookup[c.id] = { ...c, id: uuidv4() };
+  });
+
+  clone.labels = initialLabels();
+
+  // Create a mapping between old and new label IDs
+  // AND Transfer names from sourceLabels to clone.labels
+  const labelMapping = {} as any;
+  sourceLabels.forEach((sourceLabel, index) => {
+    labelMapping[sourceLabel.id] = clone.labels[index].id;
+    clone.labels[index].name = sourceLabel.name;
+  });
+
+  // Pass the new Stored courses to the clone with updated labels
+  clone.courses = Object.values(lookup).map((course: any) => ({
+    ...course,
+    labels: course.labels.map(
+      (sourceLabelId: string) => labelMapping[sourceLabelId] || sourceLabelId,
+    ),
+  }));
+
+  // Replace all the references in the quarters to course ids with their new
+  // counterparts
+  clone.quarters = sourcePlanner.quarters.map((q) => {
+    return {
+      ...q,
+      courses: q.courses.map((crs) => {
+        return lookup[crs].id;
+      }),
+    };
+  });
+
+  return clone;
+}
+
+/**
+ * Copies a PlannerData, but changes the id's of the courses within the planner
+ * to prevent data inconsistencies
+ * Also adds a value for notes
+ * @param defaultPlanner a defaultPlanner
+ * @returns a unique PlannerData instance
+ */
+export function cloneDefaultPlanner(defaultPlanner: PlannerData): PlannerData {
+  const clone = { ...defaultPlanner };
+
+  // Create a lookup table between old ids and newStoredCourse
+  const lookup = {} as any;
+  defaultPlanner.courses.forEach((c) => {
+    lookup[c.id] = { ...c, id: uuidv4() };
+  });
+  // Pass the new Stored courses to the clone
+  clone.courses = Object.values(lookup);
+
+  // Replace all the references in the quarters to course ids with their new
+  // counterparts
+  clone.quarters = defaultPlanner.quarters.map((q) => {
+    return {
+      ...q,
+      courses: q.courses.map((crs) => {
+        return lookup[crs].id;
+      }),
+    };
+  });
+  clone.labels = initialLabels();
+  return clone;
+}
+
+/**
+ * Converts a Planner from the database to a PlannerData type
+ * @param planner planner from the database
+ * @returns a PlannerData instance
+ */
+export function toPlannerData(planner: any): PlannerData {
+  // Set all the courses for each quarter
+  const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner()));
+  const allCourses: StoredCourse[] = [];
+  planner?.quarters.forEach((q: any) => {
+    const quarterId = `quarter-${q.year}-${q.term}`;
+    const courseIds: string[] = q.courses.map((c: StoredCourse) => c.id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const courses = q.courses.map(({ quarterId: _, ...rest }: any) => {
+      return {
+        ...rest,
+        quartersOffered: rest.quartersOffered.map((q: any) => q as Term),
+        ge: rest.ge.map((g: any) => g as string),
+      };
+    });
+    allCourses.push(...courses);
+    newPlanner.quarters.push({
+      id: quarterId,
+      title: `${q.term}`,
+      courses: courseIds,
+    });
+  });
+
+  newPlanner.labels = [
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ...planner.labels.map(({ plannerId: _, ...l }: any) => l),
+  ];
+  newPlanner.notes = planner.notes ? planner.notes : "";
+  newPlanner.courses = allCourses;
+  newPlanner.title = planner.title;
+  newPlanner.id = planner.id;
+
+  // Return new modified planner
+  return newPlanner;
 }

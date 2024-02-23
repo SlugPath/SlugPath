@@ -8,6 +8,8 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
+  modulePathIgnorePatterns: ["<rootDir>/build"],
+
   // Setup files to run before each test file in the suite is executed
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 
@@ -17,7 +19,7 @@ const customJestConfig = {
   },
 
   // Configure testing environment
-  testEnvironment: "jest-environment-jsdom",
+  testEnvironment: "node",
 
   // Specify files to collect coverage from
   collectCoverageFrom: ["src/**/*.{ts,tsx}", "!**/node_modules/**"],
@@ -28,6 +30,8 @@ const customJestConfig = {
   // Include any files to ignore during coverage collection
   coveragePathIgnorePatterns: [
     "<rootDir>/src/app/api/",
+    "<rootDir>/src/app/contexts/",
+    "<rootDir>/src/app/logger/",
     "<rootDir>/src/app/components/",
     "<rootDir>/src/app/hooks/",
     "<rootDir>/src/config.ts",

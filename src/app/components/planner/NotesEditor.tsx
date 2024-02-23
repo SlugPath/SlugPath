@@ -1,5 +1,7 @@
-import { Textarea } from "@mui/joy";
-import { useState } from "react";
+import { debounce } from "lodash";
+import dynamic from "next/dynamic";
+import { useEffect, useMemo, useState } from "react";
+import "react-quill/dist/quill.snow.css";
 
 export interface NotesEditorProps {
   content: string;
@@ -12,18 +14,45 @@ export default function NotesEditor({
 }: NotesEditorProps) {
   const [text, setText] = useState(content);
 
+  const handleChange = debounce((value: string) => {
+    setText(value);
+  }, 300);
+
+  useEffect(() => {
+    onUpdateNotes(text);
+
+    // Disable the eslint rule to prevent rerendering when onUpdateNotes changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
+
+  const toolbarOptions = {
+    toolbar: [
+      [{ font: [] }],
+      [{ header: [1, 2, 3] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      ["clean"],
+    ],
+  };
+
+  const ReactQuill = useMemo(
+    () => dynamic(() => import("react-quill"), { ssr: false }),
+    [],
+  );
+
   return (
-    <Textarea
-      minRows={7}
-      onBlur={() => onUpdateNotes(text)}
-      value={text}
-      onChange={(e) => {
-        setText(e.target.value);
-      }}
-      sx={{
-        outline: "none",
-      }}
-      className="border-0"
-    />
+    <div className="m-4 min-h-[400px]">
+      <ReactQuill
+        modules={toolbarOptions}
+        style={{ height: "20rem", border: "none" }}
+        theme="snow"
+        defaultValue={text}
+        onChange={handleChange}
+      />
+    </div>
   );
 }

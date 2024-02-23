@@ -1,11 +1,11 @@
-import { StoredCourse } from "@/graphql/planner/schema";
 import { CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { PlannerContext } from "@contexts/PlannerProvider";
+import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { Add } from "@mui/icons-material";
 import { Button, Card, Typography } from "@mui/joy";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 import CustomCourseModal from "../modals/courseInfoModal/CustomCourseModal";
 import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard";
@@ -13,9 +13,12 @@ import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard
 const MAX_CUSTOM_COURSES = 3;
 
 export default function CustomCourseSelection() {
-  const [tooManyError, setTooManyError] = useState(false);
   const { customCourses, handleAddCustom } = useContext(PlannerContext);
   const numCourses = useMemo(() => customCourses.length, [customCourses]);
+  const tooManyError = useMemo(
+    () => numCourses == MAX_CUSTOM_COURSES,
+    [numCourses],
+  );
 
   const [open, setOpen] = useState(false);
 
@@ -30,7 +33,8 @@ export default function CustomCourseSelection() {
       description === undefined ||
       title === undefined ||
       credits === undefined ||
-      quartersOffered === undefined
+      quartersOffered === undefined ||
+      tooManyError
     ) {
       setOpen(false);
       return;
@@ -40,16 +44,8 @@ export default function CustomCourseSelection() {
   };
 
   const handleOpen = () => {
-    if (numCourses > MAX_CUSTOM_COURSES) {
-      setTooManyError(true);
-      return;
-    }
     setOpen(true);
   };
-
-  useEffect(() => {
-    if (numCourses <= MAX_CUSTOM_COURSES) setTooManyError(false);
-  }, [numCourses]);
 
   return (
     <Card className="w-80 mb-2 mr-2" variant="plain">

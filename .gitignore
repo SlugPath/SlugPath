@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn*
 
 # testing
 /coverage
@@ -36,3 +37,10 @@ next-env.d.ts
 
 # data backups
 backup.sql
+
+# terraform
+.terraform/
+.terraform.tfstate.lock.info
+terraform.tfvars
+terraform.tfstate*
+tfplan

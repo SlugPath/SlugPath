@@ -1,9 +1,9 @@
-import { quartersPerYear } from "@/lib/plannerUtils";
+import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
-import { PlannerData, findCoursesInQuarter } from "@customTypes/PlannerData";
+import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 
-import MiniQuarterCard from "../MiniQuarterCard";
+import MiniQuarterCard from "./MiniQuarterCard";
 
 export default function MiniQuarters({
   courseState,

@@ -1,7 +1,7 @@
-import usePermissions from "@/app/components/permissionsModal/usePermissions";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PermissionsContext } from "@contexts/PermissionsProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,
@@ -16,7 +16,7 @@ import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
 import { z } from "zod";
 
-import IsSatisfiedMark from "../IsSatisfiedMark";
+import IsSatisfiedMark from "../miscellaneous/IsSatisfiedMark";
 import ConfirmAlert from "../modals/ConfirmAlert";
 import PermissionsList from "./PermissionsList";
 
@@ -24,21 +24,21 @@ export default function PermissionsModal() {
   const { showPermissionsModal, setShowPermissionsModal } =
     useContext(ModalsContext);
 
-  const [email, setEmail] = useState<string>("");
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const {
-    isPending: loadingPermissions,
-    isSaved,
     permissionsList,
+    loadingPermissions,
+    isSaved,
     onSetPermissionsList,
     onSavePermissions,
-  } = usePermissions();
+  } = useContext(PermissionsContext);
 
-  const [permissionsAlertOpen, setPermissionsAlertOpen] =
-    useState<boolean>(false);
+  const [permissionsAlertOpen, setPermissionsAlertOpen] = useState(false);
   const [permissionsToRemove, setPermissionsToRemove] =
     useState<Permissions | null>(null);
 
+  // Handlers
   function handleAddUser() {
     if (selectionIsValid()) {
       onSetPermissionsList([
@@ -111,7 +111,10 @@ export default function PermissionsModal() {
     permissionsCopy.majorEditingPermissions =
       permissionsCopy.majorEditingPermissions.map((majorEditPerm) => {
         const otherMajor = majorEditPerm.major;
-        if (otherMajor.name === major.name) {
+        if (
+          otherMajor.name === major.name &&
+          otherMajor.catalogYear === major.catalogYear
+        ) {
           return {
             major: otherMajor,
             expirationDate: expirationDate,
@@ -126,6 +129,7 @@ export default function PermissionsModal() {
     ]);
   }
 
+  // Helpers
   function isUserAlreadyAdded(email: string) {
     return permissionsList.some((p) => p.userEmail === email);
   }

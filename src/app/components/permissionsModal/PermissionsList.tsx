@@ -1,17 +1,13 @@
-import useMajors from "@/app/hooks/useMajors";
-import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
+import { Major } from "@customTypes/Major";
+import { Permissions } from "@customTypes/Permissions";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
+import { lazy } from "react";
 
-import PermissionsAccordion from "./PermissionsAccordion";
+import useMajors from "./useMajors";
 
-export default function PermissionsList({
-  permissionsList,
-  onAddMajorEditPermission,
-  onRemoveMajorEditPermission,
-  onRemovePermissions,
-  onUpdateMajorEditPermissionExpirationDate,
-}: {
+const PermissionsAccordion = lazy(() => import("./PermissionsAccordion"));
+
+export interface PermissionsListProps {
   permissionsList: Permissions[];
   onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
   onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
@@ -21,7 +17,15 @@ export default function PermissionsList({
     major: Major,
     expirationDate: Date,
   ) => void;
-}) {
+}
+
+export default function PermissionsList({
+  permissionsList,
+  onAddMajorEditPermission,
+  onRemoveMajorEditPermission,
+  onRemovePermissions,
+  onUpdateMajorEditPermissionExpirationDate,
+}: PermissionsListProps) {
   const { majors } = useMajors();
 
   return (

@@ -6,7 +6,7 @@ import {
   getApprovedMajorRequirement,
   getMajorRequirementLists,
   removeMajorRequirementList,
-} from "../actions/majorRequirementsActions";
+} from "../actions/majorRequirements";
 import { RequirementList } from "../types/Requirements";
 
 export default function useMajorRequirementLists(majorId: number | undefined) {

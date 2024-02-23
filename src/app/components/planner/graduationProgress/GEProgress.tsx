@@ -1,5 +1,5 @@
 import { GESMappedToCourses } from "@/lib/plannerUtils";
-import { PlannerData } from "@customTypes/PlannerData";
+import { PlannerData } from "@customTypes/Planner";
 import { Typography, useColorScheme } from "@mui/joy";
 import { blue } from "@mui/material/colors";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
@@ -9,6 +9,16 @@ const satisfied = blue[200];
 const satisfiedDark = blue[700];
 const notSatisfied = blue[50];
 const notSatisfiedDark = "#172554";
+
+export default function GEProgress({
+  ge,
+  courseState,
+}: {
+  ge: string[];
+  courseState: PlannerData;
+}) {
+  return <GEProgressModal ge={ge} courseState={courseState} />;
+}
 
 const GEProgressModal = ({
   ge,
@@ -116,14 +126,4 @@ const GEProgressModal = ({
       </div>
     </>
   );
-};
-
-export const GEProgress = ({
-  ge,
-  courseState,
-}: {
-  ge: string[];
-  courseState: PlannerData;
-}) => {
-  return <GEProgressModal ge={ge} courseState={courseState} />;
 };
