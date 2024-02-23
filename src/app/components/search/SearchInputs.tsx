@@ -1,7 +1,7 @@
 import { SearchParams } from "@customTypes/Course";
 import { Button, Divider, Input, Option, Select } from "@mui/joy";
 import React from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import CourseCreditSlider from "./CourseCreditSlider";
 import CourseNumberSlider from "./CourseNumberSlider";
@@ -27,18 +27,27 @@ export interface SearchInputsProps {
       number: string,
       ge: string,
       numberRange: number[],
+      creditRange: number[],
     ) => void;
     handleChangeNumber: (number: string) => void;
     handleChangeGE: selectChangeHandler;
     handleChangeDepartment: selectChangeHandler;
     handleChangeNumberRange: (numberRange: number[]) => void;
     handleChangeCreditRange: (numberRange: number[]) => void;
+    handleReset: () => void;
   };
 }
 
 export default function SearchInputs({ params, handlers }: SearchInputsProps) {
-  const { departmentCode, number, ge, departments, geOptions, numberRange } =
-    params;
+  const {
+    departmentCode,
+    number,
+    ge,
+    departments,
+    geOptions,
+    numberRange,
+    creditRange,
+  } = params;
   const {
     handleSearch,
     handleChangeDepartment,
@@ -46,19 +55,29 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
     handleChangeNumber,
     handleChangeNumberRange,
     handleChangeCreditRange,
+    handleReset,
   } = handlers;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    handleSearch(departmentCode ?? "", number, ge ?? "", numberRange);
-  };
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      handleSearch(
+        departmentCode ?? "",
+        number,
+        ge ?? "",
+        numberRange,
+        creditRange,
+      );
+    },
+    [handleSearch, departmentCode, number, ge, numberRange, creditRange],
+  );
 
   useEffect(() => {
     const syntheticEvent = new Event(
       "submit",
     ) as unknown as React.FormEvent<HTMLFormElement>;
     handleSubmit(syntheticEvent);
-  }, [numberRange]);
+  }, [handleSubmit, numberRange, creditRange]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -90,6 +109,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
           variant="soft"
           name="number"
           aria-label="number"
+          value={number}
           onChange={(event) => handleChangeNumber(event.target.value)}
         />
         <Select
@@ -109,11 +129,11 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
         </Select>
         <CourseNumberSlider onSliderChange={handleChangeNumberRange} />
         <CourseCreditSlider onSliderChange={handleChangeCreditRange} />
-        <Button className="col-span-6" variant="solid">
+        <Button className="col-span-6" variant="solid" onClick={handleReset}>
           Reset Filters
         </Button>
       </div>
-      <Divider sx={{ height: 3, marginBottom: "0.75rem" }} />
+      <Divider sx={{ height: 3, marginBottom: "0.25rem" }} />
     </form>
   );
 }

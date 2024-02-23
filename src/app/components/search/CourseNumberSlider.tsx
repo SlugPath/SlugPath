@@ -2,7 +2,6 @@ import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import {
   Accordion,
   AccordionDetails,
-  AccordionSummary,
   Box,
   FormControl,
   FormHelperText,
@@ -11,6 +10,9 @@ import {
   Stack,
   useColorScheme,
 } from "@mui/joy";
+import AccordionSummary, {
+  accordionSummaryClasses,
+} from "@mui/joy/AccordionSummary";
 import * as React from "react";
 
 const marks = [
@@ -88,6 +90,12 @@ export default function CourseNumberSlider({
     onSliderChange(newRange);
   };
 
+  // Function to reset slider range to default value
+  /*   const handleReset = () => {
+    setRange([0,299]);
+    onSliderChange([0,299]);
+  }; */
+
   return (
     <Accordion
       className="col-span-6"
@@ -95,7 +103,11 @@ export default function CourseNumberSlider({
         textAlign: "center",
         backgroundColor,
         borderRadius: 8,
+        [`& .${accordionSummaryClasses.button}:hover`]: {
+          bgcolor: "transparent",
+        },
       }}
+      defaultExpanded={true}
     >
       <AccordionSummary>Course Number Range</AccordionSummary>
       <AccordionDetails sx={{ borderRadius: "sm" }}>
@@ -135,11 +147,17 @@ export default function CourseNumberSlider({
             <Input
               value={minValue}
               type="number"
-              placeholder="0"
+              defaultValue={0}
               size="sm"
               onChange={handleMinInputChange}
               onKeyPress={handleInputKeyPress}
               sx={{ width: 70, "--Input-radius": "15px" }}
+              slotProps={{
+                input: {
+                  min: 0,
+                  max: maxValue,
+                },
+              }}
             />
             <FormHelperText>Min</FormHelperText>
           </FormControl>
@@ -156,11 +174,17 @@ export default function CourseNumberSlider({
             <Input
               value={maxValue}
               type="number"
-              placeholder="299"
+              defaultValue={299}
               size="sm"
               onChange={handleMaxInputChange}
               onKeyPress={handleInputKeyPress}
               sx={{ width: 70, "--Input-radius": "15px" }}
+              slotProps={{
+                input: {
+                  min: minValue,
+                  max: 299,
+                },
+              }}
             />
             <FormHelperText sx={{ magrinTop: "0rem" }}>Max</FormHelperText>
           </FormControl>

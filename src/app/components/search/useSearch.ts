@@ -4,11 +4,6 @@ import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-/* Need to update the search to accomadate the number range.
-Cases1: If nummber input is not empty and number range is set to the default min and max values use the number input value
-Case2: If number input is empty and number range is not default values use number range
-Case3: If number input is empty and number range is set to default use deafault  */
-
 export default function useSearch() {
   // Query to get the list of departments
   const { data: departments } = useQuery({
@@ -34,6 +29,7 @@ export default function useSearch() {
     number: "",
     ge: "",
     numberRange: [0, 299],
+    creditRange: [1, 15],
   });
 
   // Query to get the courses based on the query details
@@ -52,9 +48,15 @@ export default function useSearch() {
 
   useDebounce({
     callback: () =>
-      handleSearch(departmentCode ?? "", number, ge ?? "", numberRange),
+      handleSearch(
+        departmentCode ?? "",
+        number,
+        ge ?? "",
+        numberRange,
+        creditRange,
+      ),
     delay: 100,
-    dependencies: [departmentCode, number, ge],
+    dependencies: [departmentCode, number, ge, numberRange, creditRange],
   });
 
   // Handlers
@@ -80,18 +82,20 @@ export default function useSearch() {
     departmentCode: string,
     textInput: string,
     geInput: string,
-    sliderInput: number[],
+    sliderNumberInput: number[],
+    sliderCreditInput: number[],
   ) => {
     const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
       textInput,
       departmentCode,
     );
-    console.log("handleSearch: ", sliderInput);
+    console.log("handleSearch: ", sliderNumberInput);
     setQueryDetails({
       departmentCode: departmentCodeParsed,
       number: numberParsed,
       ge: geInput,
-      numberRange: sliderInput,
+      numberRange: sliderNumberInput,
+      creditRange: sliderCreditInput,
     });
   };
 
@@ -101,6 +105,21 @@ export default function useSearch() {
 
   const handleChangeCreditRange = (newRange: number[]) => {
     setCreditRange(newRange);
+  };
+
+  const handleReset = () => {
+    setDepartmentCode("");
+    setNumber("");
+    setGE("");
+    setNumberRange([0, 299]);
+    setCreditRange([1, 15]);
+    handleSearch(
+      departmentCode ?? "",
+      number,
+      ge ?? "",
+      numberRange,
+      creditRange,
+    );
   };
 
   return {
@@ -122,6 +141,7 @@ export default function useSearch() {
       handleSearch,
       handleChangeNumberRange,
       handleChangeCreditRange,
+      handleReset,
     },
   };
 }

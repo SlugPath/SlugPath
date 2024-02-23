@@ -1,11 +1,13 @@
 import {
   Accordion,
   AccordionDetails,
-  AccordionSummary,
   Box,
   Slider,
   useColorScheme,
 } from "@mui/joy";
+import AccordionSummary, {
+  accordionSummaryClasses,
+} from "@mui/joy/AccordionSummary";
 import * as React from "react";
 
 const marks = [
@@ -43,6 +45,12 @@ export default function CourseCreditSlider({
     onSliderChange(newRange);
   };
 
+  // Function to reset slider range to default value
+  /*   const handleReset = () => {
+    setRange([1,15]);
+    onSliderChange([1,15]);
+  }; */
+
   return (
     <Accordion
       className="col-span-6"
@@ -50,7 +58,11 @@ export default function CourseCreditSlider({
         textAlign: "center",
         backgroundColor,
         borderRadius: 8,
+        [`& .${accordionSummaryClasses.button}:hover`]: {
+          bgcolor: "transparent",
+        },
       }}
+      defaultExpanded={true}
     >
       <AccordionSummary>Course Credit Range</AccordionSummary>
       <AccordionDetails>

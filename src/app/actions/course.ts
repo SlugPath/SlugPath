@@ -14,10 +14,6 @@ import {
 export async function coursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
-  console.log("pred.departmentCode: ", pred.departmentCode);
-  console.log("pred.number: ", pred.number);
-  console.log("pred.numberRange: ", pred.numberRange);
-  console.log("pred.ge: ", pred.ge);
   const departmentCodeParam = () => {
     if (pred.departmentCode?.length != 0) {
       return {
@@ -31,7 +27,6 @@ export async function coursesBy(
 
   const numberParam = () => {
     if (pred.number) {
-      console.log("In number");
       return {
         number: {
           contains: pred.number,
@@ -52,19 +47,27 @@ export async function coursesBy(
     return {};
   };
 
+  const creditParam = () => {
+    if (pred.creditRange) {
+      return {
+        credits: {
+          gte: pred.creditRange[0],
+          lte: pred.creditRange[1],
+        },
+      };
+    }
+    return {};
+  };
+
   let courses = [];
-  if (
-    pred.numberRange &&
-    (pred.numberRange[0] !== 0 || pred.numberRange[1] !== 299) &&
-    !pred.number
-  ) {
-    console.log("In range");
+  if (!pred.number) {
     if (pred.ge) {
       courses = await prisma.$queryRaw<Course[]>`
         SELECT *
         FROM "Course"
         WHERE ("departmentCode" = ${pred.departmentCode} OR ${pred.departmentCode} = '') 
         AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) BETWEEN ${pred.numberRange[0]} AND ${pred.numberRange[1]}
+        AND "credits" BETWEEN ${pred.creditRange[0]} AND ${pred.creditRange[1]}
         AND ${pred.ge} = ANY("ge")
       `;
     } else {
@@ -73,6 +76,7 @@ export async function coursesBy(
       FROM "Course"
       WHERE ("departmentCode" = ${pred.departmentCode} OR ${pred.departmentCode} = '') 
       AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) BETWEEN ${pred.numberRange[0]} AND ${pred.numberRange[1]}
+      AND "credits" BETWEEN ${pred.creditRange[0]} AND ${pred.creditRange[1]}
     `;
     }
   } else {
@@ -81,6 +85,7 @@ export async function coursesBy(
         departmentCode: departmentCodeParam().departmentCode,
         number: numberParam().number,
         ge: geParam().ge,
+        credits: creditParam().credits,
       },
     });
   }
