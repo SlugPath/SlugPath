@@ -1,3 +1,4 @@
+import { saveUserMajors } from "@/app/actions/major";
 import { Major } from "@/app/types/Major";
 import { Permissions } from "@/app/types/Permissions";
 import prisma from "@/lib/prisma";
@@ -5,9 +6,9 @@ import {
   getPermissions,
   getUserRole,
   savePermissions,
-  userHasMajorEditingPermission,
+  userHasMajorEditPermission,
 } from "@actions/permissions";
-import { Role } from "@prisma/client";
+import { ProgramType, Role } from "@prisma/client";
 
 import { User } from "../common/Types";
 import { createDate, createMajor, createUser } from "../common/utils";
@@ -19,12 +20,16 @@ describe("Permissions Actions", () => {
   let newMajor: Major;
 
   beforeAll(async () => {
-    newMajor = await createMajor("Applied Physics B.S", "2020-2021");
+    newMajor = await createMajor(
+      "Applied Physics B.S",
+      "2020-2021",
+      ProgramType.Major,
+    );
     await createUser({
       email: adminEmail,
       name: "Sammy Slug",
       role: Role.ADMIN,
-      majorId: newMajor.id,
+      majors: [newMajor],
     });
 
     await createUser({
@@ -97,20 +102,23 @@ describe("Permissions Actions", () => {
   it("should check that other users do not have major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
-    const hasPermission = await userHasMajorEditingPermission(user!.id);
-    expect(hasPermission).toBe(false);
+    expect(await userHasMajorEditPermission(user!.id, major!.id)).toBe(false);
   });
 
   it("should check that user has major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
-
-    const hasPermission = await userHasMajorEditingPermission(adminUser!.id);
-    expect(hasPermission).toBe(true);
+    expect(await userHasMajorEditPermission(adminUser!.id, major!.id)).toBe(
+      true,
+    );
   });
 
   it("should check that getPermissions works using savePermissions", async () => {
-    const newMajor = await createMajor("Theater B.A", "2020-2021");
+    const newMajor = await createMajor(
+      "Theater B.A",
+      "2020-2021",
+      ProgramType.Major,
+    );
 
     const permissions: Permissions[] = [
       {
@@ -163,18 +171,21 @@ describe("Permissions Actions", () => {
       expect(await savePermissions(adminUser!.id, permissions)).toEqual({
         success: true,
       });
-      const hasPermission = await userHasMajorEditingPermission(user!.id);
-      expect(hasPermission).toBe(false);
+      expect(await userHasMajorEditPermission(user!.id, major!.id)).toBe(false);
     });
 
     it("should throw if user not found", async () => {
-      await expect(userHasMajorEditingPermission("invalid")).rejects.toThrow(
-        `User invalid not found`,
-      );
+      await expect(
+        await userHasMajorEditPermission("invalid", 0),
+      ).rejects.toThrow(`User invalid not found`);
     });
 
     it("should return false if permissions are not for current major", async () => {
-      const major = await createMajor("Marine Biology B.S", "2020-2021");
+      const major = await createMajor(
+        "Marine Biology B.S",
+        "2020-2021",
+        ProgramType.Major,
+      );
       const permissions: Permissions[] = [
         {
           userEmail,
@@ -190,32 +201,29 @@ describe("Permissions Actions", () => {
       expect(await savePermissions(adminUser!.id, permissions)).toEqual({
         success: true,
       });
-      expect(await userHasMajorEditingPermission(user!.id)).toBe(false);
+
+      expect(await userHasMajorEditPermission(user!.id, newMajor.id)).toBe(
+        false,
+      );
     });
 
     it("should return false if user has no permissions but has a major", async () => {
-      expect(await userHasMajorEditingPermission(user!.id)).toBe(false);
+      expect(await userHasMajorEditPermission(user!.id, newMajor.id)).toBe(
+        false,
+      );
     });
 
     beforeEach(async () => {
-      await prisma.user.update({
-        where: {
-          id: user!.id,
-        },
-        data: {
-          majorId: newMajor.id,
-        },
+      await saveUserMajors({
+        userId: user!.id,
+        majors: [newMajor],
       });
     });
 
     afterAll(async () => {
-      await prisma.user.update({
-        where: {
-          email: userEmail,
-        },
-        data: {
-          majorId: null,
-        },
+      await saveUserMajors({
+        userId: user!.id,
+        majors: [],
       });
     });
   });

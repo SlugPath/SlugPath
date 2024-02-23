@@ -104,10 +104,6 @@ export async function getUserPermissions(
 
   if (!user) throw new Error(`User ${userId} not found`);
 
-  if (user?.email === undefined) {
-    throw new Error("User not found");
-  }
-
   const permissions = await prisma.permissions.findUnique({
     where: {
       userEmail: user?.email,
@@ -131,6 +127,21 @@ export async function getUserPermissions(
   });
 
   return permissions;
+}
+
+export async function userHasMajorEditPermission(
+  userId: string,
+  majorId: number,
+): Promise<boolean> {
+  const permissions = await getUserPermissions(userId);
+
+  if (permissions?.majorEditingPermissions) {
+    return permissions?.majorEditingPermissions.some((majorEditPerm) => {
+      return majorEditPerm.major.id == majorId;
+    });
+  }
+
+  return false;
 }
 
 export async function getUserRole(userId: string): Promise<string> {

@@ -127,6 +127,24 @@ export async function saveUserMajors({
     throw new Error(`could not find user with id ${userId}`);
   }
 
+  const userMajors = await connectUserMajors({
+    userId,
+    majors,
+  });
+
+  return userMajors;
+}
+
+/**
+ * Connects the user to the given majors while disconnecting any old majors.
+ */
+export async function connectUserMajors({
+  userId,
+  majors,
+}: {
+  userId: string;
+  majors: MajorInput[];
+}): Promise<MajorOutput[]> {
   // disconnect any old majors
   const oldMajors = await getUserMajorsById(userId);
   if (oldMajors !== null) {
@@ -152,9 +170,14 @@ export async function saveUserMajors({
           programType: major.programType,
         },
       });
+
       return majorFound?.id;
     }),
   );
+
+  const filteredMajorIds = majorIds.filter(
+    (id) => id !== undefined,
+  ) as number[];
 
   // connect the new majors
   const userData = await prisma.user.update({
@@ -163,7 +186,7 @@ export async function saveUserMajors({
     },
     data: {
       majors: {
-        connect: majorIds.map((id) => {
+        connect: filteredMajorIds.map((id) => {
           return {
             id,
           };

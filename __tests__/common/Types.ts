@@ -1,4 +1,4 @@
-import { $Enums } from "@prisma/client";
+import { $Enums, Major } from "@prisma/client";
 
 export type User = {
   id: string;
@@ -6,5 +6,5 @@ export type User = {
   name: string | null;
   role: $Enums.Role;
   defaultPlannerId: string | null;
-  majorId: number | null;
+  majors?: Major[];
 } | null;

@@ -1,5 +1,5 @@
 import { getUserPermissions, getUserRole } from "@/app/actions/permissions";
-import { Major } from "@/app/types/Major";
+import { getMajorsAllowedToEdit } from "@/lib/permissionsUtils";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 
@@ -18,24 +18,8 @@ export default function useUserPermissions() {
     enabled: !!session,
   });
 
-  function getMajorsAllowedToEdit(): Major[] {
-    // filter out expires major editing permissions
-    const majorEditingPermissions =
-      permissions?.majorEditingPermissions.filter((majorEditPerm) => {
-        if (majorEditPerm.expirationDate > new Date()) {
-          return majorEditPerm;
-        }
-      }) ?? [];
-
-    const majors = majorEditingPermissions.map((permission) => {
-      return permission.major;
-    });
-
-    return majors;
-  }
-
   return {
-    majorsAllowedToEdit: getMajorsAllowedToEdit(),
+    majorsAllowedToEdit: getMajorsAllowedToEdit(permissions),
     isAdmin: userRole === "ADMIN",
     refetchGetUserPermissions: refetchGetUserPermissions,
   };

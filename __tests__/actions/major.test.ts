@@ -1,15 +1,15 @@
+import { Major } from "@/app/types/Major";
 import prisma from "@/lib/prisma";
 import {
-  UserMajorOutput,
   getMajorDefaultPlanners,
   getMajors,
-  getUserMajorByEmail,
-  updateUserMajor,
+  getUserMajorsByEmail,
+  saveUserMajors,
 } from "@actions/major";
-import { v4 as uuidv4 } from "uuid";
+import { ProgramType } from "@prisma/client";
 
 import { User } from "../common/Types";
-import { createUser } from "../common/utils";
+import { createUser, removeIdFromMajorOutput } from "../common/utils";
 
 describe("Major actions", () => {
   beforeAll(async () => {
@@ -116,10 +116,9 @@ describe("Major actions", () => {
 
   afterEach(async () => {
     // Clean up
-    await prisma.user.updateMany({
-      data: {
-        majorId: undefined,
-      },
+    await saveUserMajors({
+      userId: user!.id,
+      majors: [],
     });
     await prisma.major.deleteMany();
   });
@@ -131,83 +130,98 @@ describe("Major actions", () => {
     const majorData = {
       name,
       catalogYear,
+      programType: ProgramType.Major,
     };
-    const { id } = await prisma.major.create({
+    await prisma.major.create({
       data: {
         ...majorData,
       },
     });
 
-    const defaultPlannerId = uuidv4();
-    const majorResult: UserMajorOutput = {
-      ...majorData,
-      defaultPlannerId,
-      id,
-    };
+    // const defaultPlannerId = uuidv4();
+    const majors = [majorData];
 
-    // Update user major
-    const res = await updateUserMajor({
-      userId: user!.id,
-      ...majorData,
-      defaultPlannerId,
-    });
-    expect(res).toStrictEqual(majorResult);
+    // Update user majors
+    const res = removeIdFromMajorOutput(
+      await saveUserMajors({
+        userId: user!.id,
+        majors: majors,
+      }),
+    );
 
-    const check = await getUserMajorByEmail(user!.email);
-    expect(check).toStrictEqual(majorResult);
+    expect(majors).toStrictEqual(res);
+
+    const check = removeIdFromMajorOutput(
+      await getUserMajorsByEmail(user!.email),
+    );
+    expect(check).toStrictEqual(res);
   });
 
   it("should fail since major doesn't exist", async () => {
-    const defaultPlannerId = uuidv4();
     const name = "Unknown major";
     const catalogYear = "2020-2021";
 
     await expect(
-      updateUserMajor({
+      await saveUserMajors({
         userId: user!.id,
-        name,
-        catalogYear,
-        defaultPlannerId,
+        majors: [
+          {
+            name,
+            catalogYear,
+            programType: ProgramType.Major,
+          },
+        ],
       }),
-    ).rejects.toThrow(
-      `could not find major with name ${name} and catalog year ${catalogYear}`,
-    );
+    ).toStrictEqual([]);
   });
 
   it("should return an empty list", async () => {
     const name = "Brand New Major B.S";
     const catalogYear = "2020-2021";
 
+    // get user
+    const user = await prisma.user.findFirst({
+      where: {
+        name: "Samuel Slug",
+      },
+    });
+
     await prisma.major.create({
       data: {
         name,
         catalogYear,
+        programType: ProgramType.Major,
       },
     });
 
     expect(
       await getMajorDefaultPlanners({
-        name,
-        catalogYear,
+        userId: user!.id,
+        major: {
+          name,
+          catalogYear,
+          programType: ProgramType.Major,
+        },
       }),
     ).toHaveLength(0);
   });
 
   it("should return correct number of majors", async () => {
-    expect(await getMajors("2020-2021")).toHaveLength(0);
+    expect(await getMajors()).toHaveLength(0);
 
     await prisma.major.create({
       data: {
         catalogYear: "2020-2021",
         name: "Robotics Engineering B.S.",
+        programType: ProgramType.Major,
       },
     });
 
-    expect(await getMajors("2020-2021")).toHaveLength(1);
+    expect(await getMajors()).toHaveLength(1);
   });
 
   it('should return "null" for a user without a major', async () => {
-    expect(await getUserMajorByEmail("invalid@example.com")).toBeNull();
+    expect(await getUserMajorsByEmail("invalid@example.com")).toHaveLength(0);
   });
 
   it("should correctly add major information for 2 users", async () => {
@@ -217,8 +231,8 @@ describe("Major actions", () => {
       },
     });
     expect(user2).not.toBeNull();
-    expect(await getUserMajorByEmail(user!.email)).toBeNull();
-    expect(await getUserMajorByEmail(user2!.email)).toBeNull();
+    expect(await getUserMajorsByEmail(user!.email)).toHaveLength(0);
+    expect(await getUserMajorsByEmail(user2!.email)).toHaveLength(0);
 
     // Create major
     const name = "Computer Science B.S";
@@ -226,40 +240,40 @@ describe("Major actions", () => {
     const majorData = {
       name,
       catalogYear,
+      programType: ProgramType.Major,
     };
-    const { id } = await prisma.major.create({
+
+    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      updatedAt: _,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      createdAt: __,
+      ...createdMajor
+    } = await prisma.major.create({
       data: {
         ...majorData,
       },
     });
 
-    const defaultPlannerId = uuidv4();
-
-    const majorResult: UserMajorOutput = {
-      ...majorData,
-      defaultPlannerId,
-      id,
-    };
+    const majorResult: Major[] = [createdMajor];
 
     // Update User 1
     expect(
-      await updateUserMajor({
+      await saveUserMajors({
         userId: user!.id,
-        ...majorData,
-        defaultPlannerId,
+        majors: [majorData],
       }),
     ).toStrictEqual(majorResult);
     // Update User 2
     expect(
-      await updateUserMajor({
+      await saveUserMajors({
         userId: user2!.id,
-        ...majorData,
-        defaultPlannerId,
+        majors: [majorData],
       }),
     ).toStrictEqual(majorResult);
 
     // Check if both users have the same major
-    expect(await getUserMajorByEmail(user!.email)).toStrictEqual(majorResult);
-    expect(await getUserMajorByEmail(user2!.email)).toStrictEqual(majorResult);
+    expect(await getUserMajorsByEmail(user!.email)).toStrictEqual(majorResult);
+    expect(await getUserMajorsByEmail(user2!.email)).toStrictEqual(majorResult);
   });
 });
