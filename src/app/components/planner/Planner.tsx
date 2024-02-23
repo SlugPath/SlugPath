@@ -30,6 +30,12 @@ import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorPro
 import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLModal";
 import QuarterCard from "./quarters/QuarterCard";
 
+import { useSearchParams } from 'next/navigation'
+
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
+
+
+
 export default function Planner({ isActive }: { isActive: boolean }) {
   const { handleDragEnd, totalCredits, geSatisfied, courseState, updateNotes } =
     useContext(PlannerContext);
@@ -37,6 +43,18 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   if (!isActive) {
     return <></>;
   }
+
+  const searchParams = useSearchParams()
+  const search = searchParams.get('share')
+
+  const { duplicatePlanner } = useContext(PlannersContext);
+
+
+  if (search) {
+    console.log("Calling Duplicate")
+    duplicatePlanner(search)
+  }
+  console.log(`Planner ID: ${search}`)
 
   return (
     <div>
