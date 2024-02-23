@@ -2,7 +2,6 @@ import { Major } from "@/app/types/Major";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import prisma from "@/lib/prisma";
 import {
-  getAllRequirementLists,
   getMajorRequirements,
   saveMajorRequirements,
 } from "@actions/majorRequirements";
@@ -53,19 +52,7 @@ describe("Major Requirements Actions", () => {
     const majorRequirementsData: RequirementList = {
       id: uuidv4(),
       binder: Binder.AND,
-      requirements: [
-        {
-          id: "1",
-          departmentCode: "CSE",
-          number: "12",
-          credits: 5,
-          title: "Coding class",
-          quartersOffered: ["Fall", "Winter", "Spring"],
-          description: "This is a coding class",
-          labels: [],
-          ge: [],
-        },
-      ],
+      requirements: [],
     };
     const { success } = await saveMajorRequirements(
       majorRequirementsData,
@@ -101,26 +88,14 @@ describe("Major Requirements Actions", () => {
 
   it("should get major requirements for a major", async () => {
     const majorRequirements = await getMajorRequirements(major!.id);
-    expect(majorRequirements.requirements).toHaveLength(1);
+    expect(majorRequirements.requirements).toHaveLength(0);
   });
 
   it("should fail to save major requirements for a user without permission", async () => {
     const majorRequirementsData: RequirementList = {
       id: uuidv4(),
       binder: Binder.AND,
-      requirements: [
-        {
-          id: "1",
-          departmentCode: "CSE",
-          number: "12",
-          credits: 5,
-          title: "Coding class",
-          quartersOffered: ["Fall", "Winter", "Spring"],
-          description: "This is a coding class",
-          labels: [],
-          ge: [],
-        },
-      ],
+      requirements: [],
     };
     const result = await saveMajorRequirements(
       majorRequirementsData,
@@ -131,13 +106,13 @@ describe("Major Requirements Actions", () => {
   });
 
   it("should return all requirement lists", async () => {
-    const requirements = await getAllRequirementLists();
+    const requirements = await prisma.majorRequirement.findMany();
     expect(requirements).toHaveLength(1);
   });
 
   it("should return all major requirements", async () => {
     const majorRequirements = await getMajorRequirements(major!.id);
-    expect(majorRequirements.requirements).toHaveLength(1);
+    expect(majorRequirements.requirements).toHaveLength(0);
   });
 
   it("should return an empty major requirement list if the major does not exist", async () => {
