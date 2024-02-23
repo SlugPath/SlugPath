@@ -45,6 +45,7 @@ export function MajorVerificationProvider({
       requirementListToUpdate.requirements = requirementList.requirements;
       requirementListToUpdate.title = requirementList.title;
       requirementListToUpdate.binder = requirementList.binder;
+      requirementListToUpdate.notes = requirementList.notes;
       if (requirementList.atLeast) {
         requirementListToUpdate.atLeast = requirementList.atLeast;
       }

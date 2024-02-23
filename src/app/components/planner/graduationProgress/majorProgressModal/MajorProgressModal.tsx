@@ -110,7 +110,28 @@ function MajorRequirements({
   editing: boolean;
 }) {
   return (
-    <div className="overflow-y-scroll w-full" style={{ maxHeight: "80vh" }}>
+    <div
+      className="overflow-y-scroll w-full space-y-2"
+      style={{ maxHeight: "80vh" }}
+    >
+      {editing && (
+        <Card variant="soft" color="warning">
+          <Typography level="h4" className="mb-2">
+            Hold your horses, contributors!
+          </Typography>
+          <Typography>
+            Please be sure to describe any limitations with the major
+            requirements that you contribute in the notes. For example, if
+            certain requirements cannot be modeled with the current system, or
+            anything is missing.
+          </Typography>
+          <Typography>
+            Please also include notes for students about nontrivial
+            requirements, such as elective rules. Thank you for your
+            contribution!
+          </Typography>
+        </Card>
+      )}
       {editing ? (
         <RequirementsEditing requirements={majorRequirements} parents={0} />
       ) : (
