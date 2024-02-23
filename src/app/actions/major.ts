@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { ProgramType } from "@prisma/client";
 
+import { Major } from "../types/Major";
 import { PlannerTitle } from "../types/Planner";
 
 export async function getMajors() {
@@ -46,16 +47,7 @@ export async function getAllMajorsBy(
   return res.map((major) => major.name);
 }
 
-export type MajorOutput = {
-  name: string;
-  catalogYear: string;
-  programType: ProgramType;
-  id: number;
-};
-
-export async function getUserMajorsByEmail(
-  email: string,
-): Promise<MajorOutput[]> {
+export async function getUserMajorsByEmail(email: string): Promise<Major[]> {
   const userData = await prisma.user.findUnique({
     where: {
       email,
@@ -79,7 +71,7 @@ export async function getUserMajorsByEmail(
   return userData?.majors;
 }
 
-export async function getUserMajorsById(id: string): Promise<MajorOutput[]> {
+export async function getUserMajorsById(id: string): Promise<Major[]> {
   const userData = await prisma.user.findUnique({
     where: {
       id,
@@ -116,7 +108,7 @@ export async function saveUserMajors({
 }: {
   userId: string;
   majors: MajorInput[];
-}): Promise<MajorOutput[]> {
+}): Promise<Major[]> {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -144,7 +136,7 @@ export async function connectUserMajors({
 }: {
   userId: string;
   majors: MajorInput[];
-}): Promise<MajorOutput[]> {
+}): Promise<Major[]> {
   // disconnect any old majors
   const oldMajors = await getUserMajorsById(userId);
   if (oldMajors !== null) {

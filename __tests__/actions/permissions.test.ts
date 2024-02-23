@@ -176,7 +176,7 @@ describe("Permissions Actions", () => {
     });
 
     it("should throw if user not found", async () => {
-      await expect(await getUserPermissions("invalid")).rejects.toThrow(
+      await expect(getUserPermissions("invalid")).rejects.toThrow(
         `User invalid not found`,
       );
     });

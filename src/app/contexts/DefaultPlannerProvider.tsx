@@ -1,4 +1,3 @@
-import { MajorOutput } from "@actions/major";
 import { createContext } from "react";
 
 import useDefaultPlanners from "../components/majorSelection/defaultPlannerSelection/useDefaultPlanners";
@@ -19,7 +18,7 @@ export interface DefaultPlannerContextProps {
   setDefaultPlannerId: SetState<string | undefined>;
   userMajors: Major[];
   userMajorsIsLoading: boolean;
-  saveMajors: (majors: MajorOutput[]) => void;
+  saveMajors: (majors: Major[]) => void;
   loadingSaveMajor: boolean;
   errorSavingMajor: boolean;
 }
