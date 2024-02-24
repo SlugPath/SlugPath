@@ -53,8 +53,6 @@ export function compareCoursesByNum(a: StoredCourse, b: StoredCourse): number {
 export function toStoredCourse({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   department: _,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  prerequisites: __,
   ...rest
 }: Course): StoredCourse {
   return {
