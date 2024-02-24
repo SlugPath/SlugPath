@@ -1,4 +1,5 @@
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
+import { getQuarterId } from "@/lib/quarterUtils";
 import {
   CourseInfoContext,
   CourseInfoProvider,
@@ -10,22 +11,28 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
+import { DeleteOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
+  Box,
+  Button,
   Card,
+  IconButton,
+  Tooltip,
 } from "@mui/joy";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
+import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
+import TooManyPlannersAlert from "../planners/plannerTabs/TooManyPlannersAlert";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
-import StyledAccordion from "./StyledAccordion";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
@@ -34,10 +41,20 @@ import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorPro
 import ReplaceRequirementsModal from "./graduationProgress/majorProgressModal/ReplaceRequirementsModal";
 import QuarterCard from "./quarters/QuarterCard";
 
-export default function Planner({ isActive }: { isActive: boolean }) {
-  const { handleDragEnd, totalCredits, geSatisfied, courseState, updateNotes } =
-    useContext(PlannerContext);
+const MAX_YEARS = 10;
 
+export default function Planner({ isActive }: { isActive: boolean }) {
+  const {
+    handleDragEnd,
+    totalCredits,
+    geSatisfied,
+    courseState,
+    updateNotes,
+    addYear,
+  } = useContext(PlannerContext);
+
+  const [tooManyYearsAlertOpen, setTooManyYearsAlertOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   if (!isActive) {
     return <></>;
   }
@@ -56,6 +73,27 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   <AccordionGroup>
                     <div className="space-y-2 h-[75vh] overflow-auto">
                       <Years courseState={courseState} />
+                      {courseState.years == MAX_YEARS ? (
+                        <Tooltip title="Cannot add more years. Too many open.">
+                          <span>
+                            <Button disabled fullWidth={true} size="lg">
+                              {" "}
+                              Add Year{" "}
+                            </Button>
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <Button fullWidth={true} size="lg" onClick={addYear}>
+                          {" "}
+                          Add Year{" "}
+                        </Button>
+                      )}
+                      <TooManyPlannersAlert
+                        open={tooManyYearsAlertOpen}
+                        onClose={() => setTooManyYearsAlertOpen(false)}
+                        warningContent="Too Many Years"
+                        dialogContent="You have too many years open. Delete one to add a new one."
+                      />
                       <Accordion
                         variant="soft"
                         sx={{
@@ -68,9 +106,17 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                           },
                         }}
                         defaultExpanded={true}
+                        expanded={isExpanded === true}
+                        onChange={(_, expanded) => {
+                          setIsExpanded(expanded ? true : false);
+                        }}
                       >
-                        <AccordionSummary>Notes</AccordionSummary>
-                        <AccordionDetails className="m-4 min-h-[300px]">
+                        <AccordionSummary indicator={null}>
+                          {indicatorIcon(isExpanded)}
+                          Notes
+                          <IconButton />
+                        </AccordionSummary>
+                        <AccordionDetails>
                           <NotesEditor
                             content={courseState.notes}
                             onUpdateNotes={updateNotes}
@@ -171,22 +217,24 @@ function Modals() {
 function Years({ courseState }: { courseState: PlannerData }) {
   return (
     <div className="space-y-2">
-      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
-        const slice_val = quartersPerYear * i;
-        const quarters = courseState.quarters.slice(
-          slice_val,
-          slice_val + quartersPerYear,
-        );
+      {Array.from({ length: courseState.years }, (_, index) => index).map(
+        (i) => {
+          const slice_val = quartersPerYear * i;
+          const quarters = courseState.quarters.slice(
+            slice_val,
+            slice_val + quartersPerYear,
+          );
 
-        return (
-          <Quarters
-            key={i}
-            year={i + 1}
-            quarters={quarters}
-            courseState={courseState}
-          />
-        );
-      })}
+          return (
+            <Quarters
+              key={i}
+              year={i + 1}
+              quarters={quarters}
+              courseState={courseState}
+            />
+          );
+        },
+      )}
     </div>
   );
 }
@@ -200,17 +248,58 @@ function Quarters({
   quarters: Quarter[];
   courseState: PlannerData;
 }) {
+  const { deleteYear } = useContext(PlannerContext);
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+
   return (
-    <StyledAccordion>
-      <AccordionSummary>Year {year}</AccordionSummary>
+    <Accordion
+      variant="soft"
+      sx={{
+        borderRadius: "0.5rem",
+        "&.MuiAccordion-root": {
+          "& .MuiAccordionSummary-root": {
+            padding: "0.5rem 0",
+            paddingX: "0.5rem",
+          },
+        },
+      }}
+      defaultExpanded={true}
+      expanded={isExpanded === true}
+      onChange={(_, expanded) => {
+        setIsExpanded(expanded ? true : false);
+      }}
+    >
+      <Box>
+        <AccordionSummary indicator={null}>
+          {indicatorIcon(isExpanded)}
+          Year {year}
+          <IconButton>
+            <DeleteOutline
+              onClick={(e) => {
+                // Prevent the accordion from expanding/collapsing
+                e.stopPropagation();
+                setDeleteAlertOpen(true);
+              }}
+            />
+            <ConfirmAlert
+              open={deleteAlertOpen}
+              onClose={() => setDeleteAlertOpen(false)}
+              onConfirm={() => deleteYear(year - 1)}
+              dialogText={"Are you sure you want to delete Year " + year + "?"}
+            />
+          </IconButton>
+        </AccordionSummary>
+      </Box>
       <AccordionDetails>
         <div className="flex flex-row space-x-2">
           {quarters.map((quarter) => {
-            const courses = findCoursesInQuarter(courseState, quarter.id);
+            const courses = findCoursesInQuarter(courseState, quarter);
+            const id = getQuarterId(quarter);
             return (
               <QuarterCard
-                id={quarter.id}
-                key={quarter.id}
+                key={id}
+                id={id}
                 title={quarter.title}
                 courses={courses}
               />
@@ -218,6 +307,22 @@ function Quarters({
           })}
         </div>
       </AccordionDetails>
-    </StyledAccordion>
+    </Accordion>
   );
+}
+
+function indicatorIcon(isExpanded: boolean) {
+  if (isExpanded == true) {
+    return (
+      <IconButton>
+        <ExpandLess />
+      </IconButton>
+    );
+  } else {
+    return (
+      <IconButton>
+        <ExpandMore />
+      </IconButton>
+    );
+  }
 }

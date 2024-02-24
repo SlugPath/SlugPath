@@ -48,12 +48,15 @@ export default function NotesEditor({
   );
 
   return (
-    <ReactQuill
-      modules={toolbarOptions}
-      theme={readOnly ? "bubble" : "snow"}
-      defaultValue={text}
-      onChange={handleChange}
-      readOnly={readOnly}
-    />
+    <div className="mb-2 h-64">
+      <ReactQuill
+        modules={toolbarOptions}
+        style={{ height: "80%" }}
+        theme={readOnly ? "bubble" : "snow"}
+        defaultValue={text}
+        onChange={handleChange}
+        readOnly={readOnly}
+      />
+    </div>
   );
 }

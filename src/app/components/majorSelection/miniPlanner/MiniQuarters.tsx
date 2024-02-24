@@ -23,7 +23,7 @@ export default function MiniQuarters({
             {quarters.map((quarter: Quarter, index: number) => {
               const courses: StoredCourse[] = findCoursesInQuarter(
                 courseState,
-                quarter.id,
+                quarter,
               );
 
               return (
