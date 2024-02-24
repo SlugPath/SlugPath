@@ -31,7 +31,10 @@ export default function PlannerPDF({
             <Text style={styles.plannerTitle}>
               {getActivePlanner(planners, activePlanner)}
             </Text>
-            <Image style={styles.image} src="/images/slug-icon.png" />
+
+            {/* Image rendered as pdf, no need for alt text */}
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image style={styles.image} src="/images/slug-path-icon.png" />
           </View>
           <View>
             <Years courseState={courseState} />

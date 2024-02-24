@@ -86,9 +86,7 @@ export async function getUserMajorById(
     },
   });
   const major = userData?.major;
-  if (!major) {
-    return null;
-  }
+  if (!major) return null;
 
   return {
     name: major.name,
