@@ -71,6 +71,7 @@ describe("Course actions", () => {
         number: `3`,
         credits: 5,
         ge: ["mf"],
+        prerequisites: "None",
         quartersOffered: ["Fall", "Winter", "Spring"],
       });
     });
@@ -107,6 +108,7 @@ describe("Course actions", () => {
         credits: 5,
         title: "Some random cs class",
         number: `123`,
+        prerequisites: "None",
         description: "",
         ge: [],
         quartersOffered: [],
