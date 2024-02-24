@@ -37,7 +37,9 @@ export default function useLocalStorage<T>(
     return () => {
       isMounted.current = false;
     };
-  }, [key, remoteValue]);
+    // Disable this eslint rule because remoteValue might be a nested object
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, JSON.stringify(remoteValue)]);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -45,7 +47,9 @@ export default function useLocalStorage<T>(
     } else {
       isMounted.current = true;
     }
-  }, [key, value]);
+    // Disable this eslint rule because value might be a nested object
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, JSON.stringify(value)]);
 
   return [value, setValue];
 }

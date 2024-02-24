@@ -1,5 +1,5 @@
-import { saveAllPlanners } from "@/app/actions/planner";
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
+import { saveAllPlanners } from "@actions/planner";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import useLocalStorage from "@hooks/useLocalStorage";
@@ -7,30 +7,23 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import { MultiPlanner } from "./Types";
+
 export function usePlanners(
   userId: string | undefined,
   allPlanners: PlannerData[],
 ) {
-  // Each planner has an immutable uuid associated with it
-  // this will allow users to edit their planner names
-  const [planners, setPlanners] = useLocalStorage<PlannerData[]>(
-    "planners",
-    allPlanners,
-  );
-  const [activePlanner, setActivePlanner] = useLocalStorage<string | undefined>(
-    "activePlanner",
-    planners[0]?.id,
-  );
+  const [{ planners, activePlanner }, setMultiPlanner] =
+    useLocalStorage<MultiPlanner>("multiPlanner", {
+      planners: allPlanners,
+      activePlanner: allPlanners[0]?.id,
+    });
 
-  useEffect(() => {
-    if (planners.length === 1) {
-      setActivePlanner(planners[0].id);
-    }
-  }, [planners, setActivePlanner]);
+  const switchPlanners = (id: string | undefined) => {
+    setMultiPlanner((prev) => ({ ...prev, activePlanner: id }));
+  };
 
   const { defaultPlanner } = useContext(DefaultPlannerContext);
-
-  const [deletedPlanner, setDeletedPlanner] = useState(false);
 
   const [showExportModal, setShowExportModal] = useState(false);
 
@@ -70,27 +63,17 @@ export function usePlanners(
     };
   }, [userId, planners, saveAll]);
 
-  /**
-   * `switchPlanner` switches between planners
-   * @param id unique planner id
-   */
-  function switchPlanners(id: string | undefined) {
-    setActivePlanner(id);
-  }
-
   function getPlanner(id: string) {
     const p = planners.find((p) => p.id === id);
     if (!p) throw new Error(`Planner not found with id '${id}'`);
     return p;
   }
 
-  function setPlanner(id: string, title: string, courseState: PlannerData) {
-    setPlanners((prev) => {
-      const idx = prev.findIndex((p) => p.id === id);
-      const before = prev.slice(0, idx);
-      const after = prev.slice(idx + 1);
-      return [...before, { ...courseState, id, title }, ...after];
-    });
+  function setPlanner(id: string, courseState: PlannerData) {
+    setMultiPlanner((prev) => ({
+      ...prev,
+      planners: prev.planners.map((p) => (p.id === id ? courseState : p)),
+    }));
   }
 
   /**
@@ -99,11 +82,12 @@ export function usePlanners(
    * @param newTitle new title of the planner
    */
   function changePlannerName(id: string, newTitle: string) {
-    setPlanners((prev) => {
-      return prev.map((p) => {
+    setMultiPlanner((prev) => ({
+      ...prev,
+      planners: prev.planners.map((p) => {
         return p.id === id ? { ...p, title: newTitle } : p;
-      });
-    });
+      }),
+    }));
   }
 
   /**
@@ -111,13 +95,14 @@ export function usePlanners(
    */
   function addPlanner() {
     const id = uuidv4();
-    setPlanners((prev) => {
-      return [
-        ...prev,
-        { ...cloneDefaultPlanner(defaultPlanner), id, title: "New Planner" },
-      ];
-    });
-    switchPlanners(id);
+    setMultiPlanner((prev) => ({
+      planners: prev.planners.concat({
+        ...cloneDefaultPlanner(defaultPlanner),
+        id,
+        title: "New Planner",
+      }),
+      activePlanner: id,
+    }));
   }
 
   /**
@@ -127,20 +112,24 @@ export function usePlanners(
    * default planner.
    */
   function replaceCurrentPlanner() {
-    if (activePlanner === undefined) {
-      return;
-    }
-    setPlanners((prev) => {
-      const title = prev.find((p) => p.id === activePlanner)?.title ?? "";
-      const idx = prev.findIndex((p) => p.id === activePlanner);
-      const before = prev.slice(0, idx);
-      const after = prev.slice(idx + 1);
-      const res = [
-        ...before,
-        { ...cloneDefaultPlanner(defaultPlanner), id: activePlanner, title },
-        ...after,
-      ];
-      return res;
+    setMultiPlanner((prev) => {
+      if (prev.activePlanner === undefined) {
+        return prev;
+      }
+      const title =
+        prev.planners.find((p) => p.id === prev.activePlanner)?.title ?? "";
+      return {
+        ...prev,
+        planners: prev.planners.map((p) =>
+          p.id === prev.activePlanner
+            ? {
+                ...cloneDefaultPlanner(defaultPlanner),
+                id: prev.activePlanner,
+                title,
+              }
+            : p,
+        ),
+      };
     });
   }
 
@@ -149,12 +138,15 @@ export function usePlanners(
    * @param id unique planner id
    */
   const removePlanner = (id: string) => {
-    const newPlanners = planners.filter((p) => p.id !== id);
-    setDeletedPlanner(true);
-    setPlanners(newPlanners);
-    // Switch to the next planner upon deletion if one exists
-    const newActive = newPlanners[newPlanners.length - 1]?.id;
-    switchPlanners(newActive);
+    setMultiPlanner((prev) => {
+      const idx = prev.planners.findIndex((p) => p.id === id);
+      const newPlanners = prev.planners.filter((p) => p.id !== id);
+      const newActivePlanner = newPlanners[idx]?.id ?? newPlanners[idx - 1]?.id;
+      return {
+        planners: newPlanners,
+        activePlanner: newActivePlanner,
+      };
+    });
   };
 
   /**
@@ -164,17 +156,15 @@ export function usePlanners(
   function duplicatePlanner(sourceID: string) {
     const sourcePlannerData = getPlanner(sourceID);
     const id = uuidv4();
-    setPlanners((prev) => {
-      return [
-        ...prev,
-        {
-          ...clonePlanner(sourcePlannerData),
-          id,
-          title: `Copy of ${sourcePlannerData.title}`,
-        },
-      ];
-    });
-    switchPlanners(id);
+    setMultiPlanner((prev) => ({
+      ...prev,
+      activePlanner: id,
+      planners: prev.planners.concat({
+        ...clonePlanner(sourcePlannerData),
+        id,
+        title: `Copy of ${sourcePlannerData.title}`,
+      }),
+    }));
   }
 
   return {
@@ -188,7 +178,6 @@ export function usePlanners(
     replaceCurrentPlanner,
     duplicatePlanner,
     activePlanner,
-    deletedPlanner,
     showExportModal,
     setShowExportModal,
   };

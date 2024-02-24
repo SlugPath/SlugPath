@@ -1,2 +1,2 @@
 export { PlannersProvider, PlannersContext } from "./Provider";
-export { type PlannersProviderProps } from "./Types";
+export { type PlannersProviderProps, type MultiPlanner } from "./Types";

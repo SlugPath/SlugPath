@@ -25,9 +25,9 @@ export default function usePlanner(input: {
 
   const handleCourseUpdate = useCallback(
     (newState: PlannerData) => {
-      setPlanner(input.plannerId, input.title, newState);
+      setPlanner(input.plannerId, newState);
     },
-    [input.plannerId, input.title, setPlanner],
+    [input.plannerId, setPlanner],
   );
 
   const totalCredits = useMemo(
