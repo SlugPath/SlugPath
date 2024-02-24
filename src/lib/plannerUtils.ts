@@ -7,8 +7,9 @@ import { LabelColor } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 import { initialLabels } from "./labels";
+import { getQuarterId } from "./quarterUtils";
 
-const quarterNames = ["Fall", "Winter", "Spring", "Summer"];
+const quarterNames: Term[] = ["Fall", "Winter", "Spring", "Summer"];
 export const years = 4;
 export const quartersPerYear = 4;
 export const EMPTY_PLANNER = "emptyPlanner";
@@ -41,9 +42,8 @@ export function createQuarters() {
   const quarters: Quarter[] = [];
   for (let year = 0; year < years; year++) {
     for (let quarter = 0; quarter < quartersPerYear; quarter++) {
-      const id = `quarter-${year}-${quarterNames[quarter]}`;
       quarters.push({
-        id,
+        year,
         title: `${quarterNames[quarter]}`,
         courses: [],
       });
@@ -140,8 +140,8 @@ export function findQuarter(
   quarters: Quarter[],
   id: string,
 ): { quarter: Quarter; idx: number } {
-  const quarter = quarters.find((q) => q.id == id);
-  const idx = quarters.findIndex((q) => q.id == id);
+  const quarter = quarters.find((q) => getQuarterId(q) == id);
+  const idx = quarters.findIndex((q) => getQuarterId(q) == id);
   if (quarter === undefined) throw new Error(`invalid quarter id: ${id}`);
   return { quarter, idx };
 }
@@ -151,15 +151,17 @@ export function findCourseById(
   id: string,
 ): StoredCourse {
   const course = courseState.courses.find((c) => c.id === id);
-  if (course === undefined) throw new Error("course not found");
+  if (course === undefined)
+    throw new Error(
+      `course ${id} not found in ${JSON.stringify(courseState, null, 2)}`,
+    );
   return course;
 }
 
 export function findCoursesInQuarter(
   courseState: PlannerData,
-  qid: string,
+  quarter: Quarter,
 ): StoredCourse[] {
-  const { quarter } = findQuarter(courseState.quarters, qid);
   return quarter.courses.map((cid) => findCourseById(courseState, cid));
 }
 
@@ -411,7 +413,6 @@ export function toPlannerData(planner: any): PlannerData {
   const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner()));
   const allCourses: StoredCourse[] = [];
   planner?.quarters.forEach((q: any) => {
-    const quarterId = `quarter-${q.year}-${q.term}`;
     const courseIds: string[] = q.courses.map((c: StoredCourse) => c.id);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const courses = q.courses.map(({ quarterId: _, ...rest }: any) => {
@@ -423,8 +424,8 @@ export function toPlannerData(planner: any): PlannerData {
     });
     allCourses.push(...courses);
     newPlanner.quarters.push({
-      id: quarterId,
-      title: `${q.term}`,
+      year: q.year,
+      title: q.term,
       courses: courseIds,
     });
   });

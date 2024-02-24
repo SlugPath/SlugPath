@@ -20,6 +20,7 @@ import {
 import Option from "@mui/joy/Option";
 import { useContext, useState } from "react";
 
+import NotesEditor from "../../NotesEditor";
 import DraggableCourseCard from "../../quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
@@ -48,14 +49,7 @@ export function RequirementsComponent({
   const Classes = (requirement: any) => (
     <div className="flex flex-row items-center space-x-1">
       <div className="w-full">
-        <MiniCourseCard
-          course={requirement}
-          quarter={{
-            id: "0",
-            title: "2021 Fall",
-            courses: [],
-          }}
-        />
+        <MiniCourseCard course={requirement} />
       </div>
       <FulfillmentMark {...requirement} />
     </div>
@@ -63,6 +57,7 @@ export function RequirementsComponent({
 
   return (
     <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
+      {/* Title start */}
       {!hideTitle && (
         <div className="flex flex-row justify-between items-center">
           <Title requirements={requirements} fulfillmentMark={true} />
@@ -78,6 +73,18 @@ export function RequirementsComponent({
           )}
         </div>
       )}
+      {/* Title end */}
+
+      {/* Notes start */}
+      {requirements.notes && requirements.notes.length > 0 && (
+        <NotesEditor
+          content={requirements.notes}
+          onUpdateNotes={() => {}}
+          readOnly={true}
+        />
+      )}
+      {/* Notes end */}
+
       {isProgramEmpty() ? (
         <Typography className="text-gray-400">
           There is no data for this degree program yet
@@ -86,7 +93,7 @@ export function RequirementsComponent({
         <>
           {/* Binder title */}
           <div className="flex flex-row items-center space-x-1">
-            <Typography>{BinderTitle(requirements)}</Typography>
+            <Typography fontWeight="md">{BinderTitle(requirements)}</Typography>
             {/* if there is no title, display the FulfillmentMark next to the Binder Title */}
             {requirements.title!.length == 0 && (
               <FulfillmentMark {...requirements} />
@@ -138,6 +145,13 @@ export function RequirementsComponentEditing({
       });
     }
     setEditingTitle(!editingTitle);
+  }
+
+  function handleUpdateNotes(notes: string) {
+    updateRequirementList(major.id, requirements.id, {
+      ...requirements,
+      notes,
+    });
   }
 
   function handleNewBinderSelected(
@@ -219,6 +233,15 @@ export function RequirementsComponentEditing({
         )}
       </div>
       {/* Title end */}
+
+      {/* Notes start */}
+      <div>
+        <NotesEditor
+          content={requirements.notes || ""}
+          onUpdateNotes={(content: string) => handleUpdateNotes(content)}
+        />
+      </div>
+      {/* Notes start */}
 
       {/* Binder begin */}
       <div className="flex flex-row items-center space-x-1">

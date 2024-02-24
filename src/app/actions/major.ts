@@ -6,18 +6,29 @@ import { ProgramType } from "@prisma/client";
 import { Major } from "../types/Major";
 import { PlannerTitle } from "../types/Planner";
 
-export async function getMajors() {
-  return await prisma.major.findMany({
-    orderBy: {
-      name: "asc",
-    },
+export async function getMajors(catalogYear?: string) {
+  const query: any = {
+    orderBy: [
+      {
+        name: "asc",
+      },
+      {
+        catalogYear: "asc",
+      },
+    ],
     select: {
       name: true,
       id: true,
       catalogYear: true,
       programType: true,
     },
-  });
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
 }
 
 export async function getAllMajorsBy(

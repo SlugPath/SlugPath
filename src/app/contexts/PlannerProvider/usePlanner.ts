@@ -9,6 +9,7 @@ import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
+import { Quarter } from "@customTypes/Quarter";
 import { useCallback, useContext, useMemo } from "react";
 
 export default function usePlanner(input: {
@@ -55,8 +56,7 @@ export default function usePlanner(input: {
         quarters: [
           ...courseState.quarters.slice(0, idx),
           {
-            id: quarter.id,
-            title: quarter.title,
+            ...quarter,
             courses: newCourses,
           },
           ...courseState.quarters.slice(idx + 1),
@@ -84,6 +84,57 @@ export default function usePlanner(input: {
         }
         return c;
       }),
+    });
+  };
+
+  const addYear = () => {
+    handleCourseUpdate({
+      ...courseState,
+      years: courseState.years + 1,
+      quarters: [
+        ...courseState.quarters,
+        // Add new quarters for the new year
+        ...["Fall", "Winter", "Spring", "Summer"].map((t) => {
+          return {
+            year: courseState.years,
+            title: t,
+            courses: [],
+          } as Quarter;
+        }),
+      ],
+    });
+  };
+
+  const deleteYear = (year: number) => {
+    const quarters = [...courseState.quarters];
+    const idx = quarters.findIndex((q) => q.year === year);
+    if (idx == -1) {
+      throw new Error("Year not found"); // should not happen
+    }
+
+    const toRemoveCourses = quarters
+      .slice(idx, idx + 4)
+      .map((q) => q.courses)
+      .flat();
+    const newCourses = courseState.courses.filter(
+      (c) => !toRemoveCourses.includes(c.id),
+    );
+
+    quarters.splice(idx, 4);
+
+    for (let j = idx; j < quarters.length; j++) {
+      const quarterToChange = quarters[j];
+      const newYear = quarterToChange.year - 1;
+      quarters[j] = {
+        ...quarterToChange,
+        year: newYear,
+      };
+    }
+    handleCourseUpdate({
+      ...courseState,
+      courses: newCourses,
+      quarters,
+      years: courseState.years - 1,
     });
   };
 
@@ -167,5 +218,7 @@ export default function usePlanner(input: {
     getAllLabels,
     updatePlannerLabels,
     updateNotes,
+    addYear,
+    deleteYear,
   };
 }
