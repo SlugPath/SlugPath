@@ -21,12 +21,12 @@ export default function PlannerList() {
     }
   }, [deletedPlanner]);
 
-  if (planners.length == 0) return <HelpfulTips />;
+  if (!planners || planners.length == 0) return <HelpfulTips />;
 
   return (
     <>
       <List>
-        {planners.map(({ id, title }, index) => (
+        {planners?.map(({ id, title }, index) => (
           <ListItem
             sx={{
               display: activePlanner === id ? "block" : "none",
