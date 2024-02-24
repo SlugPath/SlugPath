@@ -1,10 +1,21 @@
 import { SearchParams } from "@customTypes/Course";
-import { Button, Divider, Input, Option, Select } from "@mui/joy";
+import {
+  AccordionDetails,
+  Button,
+  Divider,
+  Input,
+  Option,
+  Select,
+  useColorScheme,
+} from "@mui/joy";
+import Accordion, { accordionClasses } from "@mui/joy/Accordion";
+import AccordionSummary, {
+  accordionSummaryClasses,
+} from "@mui/joy/AccordionSummary";
 import React from "react";
 import { useCallback, useEffect } from "react";
 
-import CourseCreditSlider from "./CourseCreditSlider";
-import CourseNumberSlider from "./CourseNumberSlider";
+import CustomSliderComponent from "./CustomSliderComponent";
 
 type selectChangeHandler = (
   event: React.SyntheticEvent | null,
@@ -79,6 +90,24 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
     handleSubmit(syntheticEvent);
   }, [handleSubmit, numberRange, creditRange]);
 
+  const { mode } = useColorScheme();
+
+  const backgroundColor = mode === "light" ? "#f1f5f9" : "#181a1c";
+
+  const courseNumberMarks = [
+    { value: 0, label: "0" },
+    { value: 100, label: "100" },
+    { value: 200, label: "200" },
+    { value: 299, label: "299" },
+  ];
+
+  const creditMarks = [
+    { value: 1, label: "1" },
+    { value: 5, label: "5" },
+    { value: 10, label: "10" },
+    { value: 15, label: "15" },
+  ];
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-6 gap-2 p-2">
@@ -127,8 +156,50 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
             </Option>
           ))}
         </Select>
-        <CourseNumberSlider onSliderChange={handleChangeNumberRange} />
-        <CourseCreditSlider onSliderChange={handleChangeCreditRange} />
+        <Accordion
+          className="col-span-6"
+          sx={{
+            textAlign: "center",
+            backgroundColor,
+            borderRadius: 8,
+            [`& .${accordionSummaryClasses.root}`]: {
+              "& button:hover": {
+                background: "transparent",
+              },
+            },
+            [`& .${accordionClasses.root}.${accordionClasses.expanded}`]: {
+              borderBottom: "1px solid",
+              borderColor: "background.level2",
+            },
+            '& [aria-expanded="true"]': {
+              boxShadow: (theme) =>
+                `inset 0 -1px 0 ${theme.vars.palette.divider}`,
+            },
+          }}
+          defaultExpanded={false}
+        >
+          <AccordionSummary>Advanced Search</AccordionSummary>
+          <AccordionDetails sx={{ borderRadius: "sm" }}>
+            <CustomSliderComponent
+              onSliderChange={handleChangeNumberRange}
+              sliderRange={numberRange}
+              defaultRangeValue={[1, 299]}
+              marks={courseNumberMarks}
+              label={"Course Number Range"}
+            />
+            <Divider
+              sx={{ height: 3, marginBottom: "0.5rem", marginTop: "0.5rem" }}
+            />
+            <CustomSliderComponent
+              onSliderChange={handleChangeCreditRange}
+              sliderRange={creditRange}
+              defaultRangeValue={[1, 15]}
+              marks={creditMarks}
+              label={"Course Credit Range"}
+              showMinMaxInputs={false}
+            />
+          </AccordionDetails>
+        </Accordion>
         <Button className="col-span-6" variant="solid" onClick={handleReset}>
           Reset Filters
         </Button>

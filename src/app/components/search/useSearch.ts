@@ -22,7 +22,7 @@ export default function useSearch() {
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
-  const [numberRange, setNumberRange] = useState<number[]>([0, 299]);
+  const [numberRange, setNumberRange] = useState<number[]>([1, 299]);
   const [creditRange, setCreditRange] = useState<number[]>([1, 15]);
   const [queryDetails, setQueryDetails] = useState({
     departmentCode: "",
@@ -89,7 +89,6 @@ export default function useSearch() {
       textInput,
       departmentCode,
     );
-    console.log("handleSearch: ", sliderNumberInput);
     setQueryDetails({
       departmentCode: departmentCodeParsed,
       number: numberParsed,
