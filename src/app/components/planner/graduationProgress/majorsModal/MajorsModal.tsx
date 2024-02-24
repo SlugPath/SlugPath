@@ -1,5 +1,5 @@
-import MajorSelection from "@/app/components/majorSelection/MajorSelection";
-import DefaultPlannerSelection from "@/app/components/majorSelection/defaultPlannerSelection/DefaultPlannerSelection";
+import DefaultPlannerSelection from "@/app/components/planner/graduationProgress/majorsModal/defaultPlannerSelection/DefaultPlannerSelection";
+import MajorSelection from "@/app/components/planner/graduationProgress/majorsModal/majorSelection/MajorSelection";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
@@ -46,8 +46,11 @@ export function MajorAndPlannerSelection({
   isInPlannerPage: boolean;
   onSavedDefaultPlanner?: () => void;
 }) {
-  const { setShowMajorRequirementsEditModal, setMajorToEdit } =
-    useContext(ModalsContext);
+  const {
+    setShowMajorsModal,
+    setShowMajorRequirementsEditModal,
+    setMajorToEdit,
+  } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
   const { majorsAllowedToEdit } = useContext(PermissionsContext);
   const { userMajors } = useContext(DefaultPlannerContext);
@@ -68,7 +71,8 @@ export function MajorAndPlannerSelection({
             if (majorRequirements === undefined) {
               return (
                 <div key={index}>
-                  Missing requirements for {major.name} {major.catalogYear}
+                  Missing requirements for {major.name} {major.catalogYear}.
+                  Reloading the page may help.
                 </div>
               );
             }
@@ -101,6 +105,7 @@ export function MajorAndPlannerSelection({
           onSaved={onSavedDefaultPlanner ?? (() => {})}
           saveButtonName={isInPlannerPage ? "Save" : "Next"}
           isInPlannerPage={isInPlannerPage}
+          onReplacePlanner={() => setShowMajorsModal(false)}
         />
       </Card>
     </div>

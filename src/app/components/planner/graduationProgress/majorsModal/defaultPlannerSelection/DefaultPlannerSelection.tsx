@@ -4,8 +4,8 @@ import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { Button, CircularProgress, Option, Select, Typography } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 
-import ConfirmAlert from "../../modals/ConfirmAlert";
-import CourseInfoModal from "../../modals/courseInfoModal/CourseInfoModal";
+import ConfirmAlert from "../../../../modals/ConfirmAlert";
+import CourseInfoModal from "../../../../modals/courseInfoModal/CourseInfoModal";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
 
 enum ButtonName {
@@ -18,12 +18,14 @@ export interface DefaultPlannerSelectionProps {
   onSaved: () => void;
   saveButtonName: string;
   isInPlannerPage?: boolean;
+  onReplacePlanner?: () => void;
 }
 
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
   isInPlannerPage,
+  onReplacePlanner,
 }: DefaultPlannerSelectionProps) {
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
@@ -95,6 +97,7 @@ export default function DefaultPlannerSelection({
           break;
         case ButtonName.ReplaceCurrent:
           setIsSaved(true);
+          if (onReplacePlanner) onReplacePlanner();
           setTimeout(() => {
             replaceCurrentPlanner();
           }, 200);
@@ -106,6 +109,7 @@ export default function DefaultPlannerSelection({
     updateDefaultPlannerIsPending,
     addPlanner,
     replaceCurrentPlanner,
+    onReplacePlanner,
     onSaved,
     defaultPlannerId,
   ]);

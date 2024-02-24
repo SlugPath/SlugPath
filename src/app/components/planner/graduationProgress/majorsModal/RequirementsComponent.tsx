@@ -1,4 +1,4 @@
-import { MiniCourseCard } from "@/app/components/majorSelection/MiniCourseCard";
+import { MiniCourseCard } from "@/app/components/planner/graduationProgress/majorsModal/majorSelection/MiniCourseCard";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { StoredCourse } from "@/app/types/Course";
 import { Major } from "@/app/types/Major";

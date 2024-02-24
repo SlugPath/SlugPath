@@ -1,4 +1,4 @@
-import MajorSelectionPage from "@components/majorSelection/MajorSelectionPage";
+import MajorSelectionPage from "@/app/components/planner/graduationProgress/majorsModal/majorSelection/MajorSelectionPage";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 

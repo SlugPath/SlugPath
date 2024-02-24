@@ -23,7 +23,7 @@ export default function SelectMajorName({
         placeholder="Choose one…"
         variant="plain"
         onChange={onChange}
-        disabled={majors?.length == 0}
+        disabled={majors === undefined || majors?.length == 0}
       >
         {majors?.map((major, index) => (
           <Option key={index} value={major}>

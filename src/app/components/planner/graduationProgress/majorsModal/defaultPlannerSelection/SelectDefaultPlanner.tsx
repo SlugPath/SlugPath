@@ -13,7 +13,7 @@ import {
 } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
-import MiniPlanner from "../miniPlanner/MiniPlanner";
+import MiniPlanner from "../majorSelection/miniPlanner/MiniPlanner";
 
 export interface SelectDefaultPlannerProps {
   selectedDefaultPlanner: string | undefined;
@@ -39,7 +39,7 @@ export default function SelectDefaultPlanner({
     <>
       <div className="flex flex-row space-x-2">
         <Typography level="body-lg">Select a default planner</Typography>
-        <Tooltip title="The default planner you select will be auto filled into any new planners you create">
+        <Tooltip title="The default planner you select will be used to auto-fill classes into your planner">
           <Info sx={{ color: "gray" }} />
         </Tooltip>
       </div>

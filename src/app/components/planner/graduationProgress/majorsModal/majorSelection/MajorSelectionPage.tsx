@@ -7,7 +7,7 @@ import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 import { useRouter } from "next/navigation";
 
-import { MajorAndPlannerSelection } from "../planner/graduationProgress/majorsModal/MajorsModal";
+import { MajorAndPlannerSelection } from "../MajorsModal";
 
 export default function MajorSelectionPage() {
   const router = useRouter();
