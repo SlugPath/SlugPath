@@ -37,8 +37,8 @@ export default function SelectDefaultPlanner({
 
   return (
     <>
-      <div className="flex flex-row space-x-2">
-        <Typography level="body-lg">Select a default planner</Typography>
+      <div className="flex flex-row space-x-2 items-center">
+        <Typography level="body-lg">Default Planner</Typography>
         <Tooltip title="The default planner you select will be used to auto-fill classes into your planner">
           <Info sx={{ color: "gray" }} />
         </Tooltip>

@@ -87,7 +87,7 @@ export function RequirementsComponent({
 
       {isProgramEmpty() ? (
         <Typography className="text-gray-400">
-          There is no data for this degree program yet
+          There is no requirements data for this degree program yet
         </Typography>
       ) : (
         <>

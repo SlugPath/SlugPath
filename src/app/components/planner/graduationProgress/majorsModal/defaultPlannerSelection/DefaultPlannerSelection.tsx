@@ -1,7 +1,16 @@
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { Major } from "@/app/types/Major";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { Button, CircularProgress, Option, Select, Typography } from "@mui/joy";
+import ReportIcon from "@mui/icons-material/Report";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Option,
+  Select,
+  Tooltip,
+  Typography,
+} from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 
 import ConfirmAlert from "../../../../modals/ConfirmAlert";
@@ -10,8 +19,8 @@ import SelectDefaultPlanner from "./SelectDefaultPlanner";
 
 enum ButtonName {
   Save = "Save",
-  CreateNew = "Create New",
-  ReplaceCurrent = "Replace Current",
+  CreateNew = "Create New Planner",
+  ReplaceCurrent = "Replace Current Planner",
 }
 
 export interface DefaultPlannerSelectionProps {
@@ -31,6 +40,7 @@ export default function DefaultPlannerSelection({
     ButtonName.Save,
   );
   const [isSaved, setIsSaved] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     primaryMajor,
@@ -115,7 +125,13 @@ export default function DefaultPlannerSelection({
   ]);
 
   function handleSave(buttonName: ButtonName) {
-    if (defaultPlannerId === undefined) return;
+    if (defaultPlannerId === undefined) {
+      setError(
+        "Please select your majors, then choose a primary major and a default planner.",
+      );
+      return;
+    }
+    setError("");
     updateDefaultPlanner(defaultPlannerId);
     setSaveButtonClicked(buttonName);
   }
@@ -137,28 +153,42 @@ export default function DefaultPlannerSelection({
     handleSave(ButtonName.CreateNew);
   }
 
+  const ErrorAlert = () => (
+    <div>
+      {error.length > 0 && (
+        <Alert color="danger" startDecorator={<ReportIcon />}>
+          {error}
+        </Alert>
+      )}
+    </div>
+  );
+
   return (
-    <div className="space-y-4 w-full">
+    <div className="w-full">
       <ConfirmAlert
         open={replaceAlertOpen}
         onClose={() => setReplaceAlertOpen(false)}
         onConfirm={handleConfirmReplaceCurrent}
         dialogText="Are you sure you want to replace your current planner? Your notes and courses will be deleted."
       />
-      <div className="overflow-y-scroll h-[70vh]">
-        <Typography level="body-lg">Primary Major</Typography>
-        <Select
-          value={primaryMajor}
-          placeholder="Choose one…"
-          variant="plain"
-          onChange={handleChangeSelectedMajor}
-        >
-          {userMajors.map((major, index) => (
-            <Option key={index} value={major}>
-              {major.name} {major.catalogYear}
-            </Option>
-          ))}
-        </Select>
+      <div className="overflow-y-scroll h-[70vh] space-y-2">
+        {error.length > 0 && <ErrorAlert />}
+        <div>
+          <Typography level="body-lg">Primary Major</Typography>
+          <Select
+            value={primaryMajor}
+            placeholder="Choose one…"
+            variant="plain"
+            onChange={handleChangeSelectedMajor}
+            disabled={userMajors.length === 0}
+          >
+            {userMajors.map((major, index) => (
+              <Option key={index} value={major}>
+                {major.name} {major.catalogYear}
+              </Option>
+            ))}
+          </Select>
+        </div>
         <SelectDefaultPlanner
           selectedDefaultPlanner={defaultPlannerId}
           onChange={handleChangeDefaultPlanner}
@@ -178,10 +208,16 @@ export default function DefaultPlannerSelection({
             </Button>
             {isInPlannerPage && (
               <>
-                <Button color="warning" onClick={handleClickReplaceCurrent}>
-                  Replace Current
-                </Button>
-                <Button onClick={handleClickCreateNew}>Create New</Button>
+                <Tooltip title="Replace your currently selected planner with the courses in your default planner.">
+                  <Button color="warning" onClick={handleClickReplaceCurrent}>
+                    {ButtonName.ReplaceCurrent}
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Create a new planner with the courses in your default planner.">
+                  <Button onClick={handleClickCreateNew}>
+                    {ButtonName.CreateNew}
+                  </Button>
+                </Tooltip>
               </>
             )}
           </div>
