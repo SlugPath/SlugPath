@@ -48,7 +48,7 @@ export default function NotesEditor({
   );
 
   return (
-    <div className="mb-2 h-96">
+    <div className="mb-2 h-64">
       <ReactQuill
         modules={toolbarOptions}
         style={{ height: "80%" }}
