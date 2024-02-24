@@ -22,7 +22,6 @@ export function PlannersProvider({
     replaceCurrentPlanner,
     duplicatePlanner,
     activePlanner,
-    deletedPlanner,
     showExportModal,
     setShowExportModal,
   } = usePlanners(session?.user.id, allPlanners);
@@ -42,7 +41,6 @@ export function PlannersProvider({
         replaceCurrentPlanner,
         duplicatePlanner,
         activePlanner,
-        deletedPlanner,
       }}
     >
       {children}

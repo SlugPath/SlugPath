@@ -25,8 +25,6 @@ export function usePlanners(
 
   const { defaultPlanner } = useContext(DefaultPlannerContext);
 
-  const [deletedPlanner, setDeletedPlanner] = useState(false);
-
   const [showExportModal, setShowExportModal] = useState(false);
 
   const { mutate: saveAll } = useMutation({
@@ -140,13 +138,15 @@ export function usePlanners(
    * @param id unique planner id
    */
   const removePlanner = (id: string) => {
-    const newPlanners = planners.filter((p) => p.id !== id);
-    setMultiPlanner((prev) => ({
-      ...prev,
-      planners: prev.planners.filter((p) => p.id !== id),
-      activePlanner: newPlanners[newPlanners.length - 1]?.id,
-    }));
-    setDeletedPlanner(true);
+    setMultiPlanner((prev) => {
+      const idx = prev.planners.findIndex((p) => p.id === id);
+      const newPlanners = prev.planners.filter((p) => p.id !== id);
+      const newActivePlanner = newPlanners[idx]?.id ?? newPlanners[idx - 1]?.id;
+      return {
+        planners: newPlanners,
+        activePlanner: newActivePlanner,
+      };
+    });
   };
 
   /**
@@ -178,7 +178,6 @@ export function usePlanners(
     replaceCurrentPlanner,
     duplicatePlanner,
     activePlanner,
-    deletedPlanner,
     showExportModal,
     setShowExportModal,
   };

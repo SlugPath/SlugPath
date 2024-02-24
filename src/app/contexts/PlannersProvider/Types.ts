@@ -18,7 +18,6 @@ export interface PlannersContextProps {
   replaceCurrentPlanner: () => void;
   duplicatePlanner: (id: string) => void;
   activePlanner: string | undefined;
-  deletedPlanner: boolean;
   showExportModal: boolean;
   setShowExportModal: SetState<boolean>;
 }

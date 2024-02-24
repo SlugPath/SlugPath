@@ -4,22 +4,12 @@ import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { List, ListItem } from "@mui/joy";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 import Planner from "../planner/Planner";
-import DeletedPlannerSnackbar from "./plannerTabs/DeletedPlannerSnackbar";
 
 export default function PlannerList() {
-  const { planners, deletedPlanner, activePlanner } =
-    useContext(PlannersContext);
-  const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
-    useState(false);
-
-  useEffect(() => {
-    if (deletedPlanner) {
-      setOpenDeletedPlannerSnackbar(true);
-    }
-  }, [deletedPlanner]);
+  const { planners, activePlanner } = useContext(PlannersContext);
 
   if (!planners || planners.length == 0) return <HelpfulTips />;
 
@@ -41,10 +31,6 @@ export default function PlannerList() {
           </ListItem>
         ))}
       </List>
-      <DeletedPlannerSnackbar
-        open={openDeletedPlannerSnackbar}
-        setOpen={setOpenDeletedPlannerSnackbar}
-      />
     </>
   );
 }
