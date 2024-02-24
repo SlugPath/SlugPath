@@ -21,10 +21,7 @@ export default function ToggleButton() {
   }, [isDark]);
 
   return (
-    <Button
-      variant="solid"
-      className="text-secondary-100 dark:text-secondary-200 hover:bg-primary-400"
-    >
+    <Button variant="solid" className="hover:bg-primary-400">
       {isDark ? (
         <DarkModeIcon onClick={handleToggleMode} sx={{ color: "#fff" }} />
       ) : (

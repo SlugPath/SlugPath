@@ -22,15 +22,15 @@ export function Logo(props: React.ComponentPropsWithoutRef<"svg">) {
           fill="#ffbf00"
         />
       </g>
-      <text transform="translate(1263.97 670.49)" fontSize="435.4">
-        <tspan x="0" y="0" fill="#231f20" fontFamily="Inter-Light, Inter">
+      <text transform="translate(1257.79 670.49)" fontSize="435.4">
+        <tspan x="0" y="0" fill="#231f20" fontFamily="Inter-Regular, Inter">
           Slug
         </tspan>
-        <tspan x="886.86" y="0" fontFamily="Inter-Black, Inter">
+        <tspan x="899.23" y="0" fontFamily="Inter-Black, Inter">
           {" "}
         </tspan>
         <tspan
-          x="973.43"
+          x="985.81"
           y="0"
           fill="#2563eb"
           fontFamily="Inter-Black, Inter"
@@ -38,11 +38,11 @@ export function Logo(props: React.ComponentPropsWithoutRef<"svg">) {
         >
           P
         </tspan>
-        <tspan x="1248.65" y="0" fill="#2563eb" fontFamily="Inter-Black, Inter">
+        <tspan x="1261.03" y="0" fill="#2563eb" fontFamily="Inter-Black, Inter">
           a
         </tspan>
         <tspan
-          x="1505.93"
+          x="1518.3"
           y="0"
           fill="#2563eb"
           fontFamily="Inter-Black, Inter"
@@ -50,7 +50,7 @@ export function Logo(props: React.ComponentPropsWithoutRef<"svg">) {
         >
           t
         </tspan>
-        <tspan x="1687.12" y="0" fill="#2563eb" fontFamily="Inter-Black, Inter">
+        <tspan x="1699.5" y="0" fill="#2563eb" fontFamily="Inter-Black, Inter">
           h
         </tspan>
       </text>
@@ -61,15 +61,15 @@ export function Logo(props: React.ComponentPropsWithoutRef<"svg">) {
 export function LogoAlt(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg aria-hidden="true" viewBox="0 0 3484 1114" {...props}>
-      <text transform="translate(1263.97 670.49)" fontSize="435.4">
-        <tspan x="0" y="0" fill="#fff" fontFamily="Inter-Light, Inter">
+      <text transform="translate(1257.79 670.87)" fontSize="435.4">
+        <tspan x="0" y="0" fill="#fff" fontFamily="Inter-Regular, Inter">
           Slug
         </tspan>
-        <tspan x="886.86" y="0" fontFamily="Inter-Black, Inter">
+        <tspan x="899.23" y="0" fontFamily="Inter-Black, Inter">
           {" "}
         </tspan>
         <tspan
-          x="973.43"
+          x="985.81"
           y="0"
           fill="#fff"
           fontFamily="Inter-Black, Inter"
@@ -77,11 +77,11 @@ export function LogoAlt(props: React.ComponentPropsWithoutRef<"svg">) {
         >
           P
         </tspan>
-        <tspan x="1248.65" y="0" fill="#fff" fontFamily="Inter-Black, Inter">
+        <tspan x="1261.03" y="0" fill="#fff" fontFamily="Inter-Black, Inter">
           a
         </tspan>
         <tspan
-          x="1505.93"
+          x="1518.3"
           y="0"
           fill="#fff"
           fontFamily="Inter-Black, Inter"
@@ -89,7 +89,7 @@ export function LogoAlt(props: React.ComponentPropsWithoutRef<"svg">) {
         >
           t
         </tspan>
-        <tspan x="1687.12" y="0" fill="#fff" fontFamily="Inter-Black, Inter">
+        <tspan x="1699.5" y="0" fill="#fff" fontFamily="Inter-Black, Inter">
           h
         </tspan>
       </text>
