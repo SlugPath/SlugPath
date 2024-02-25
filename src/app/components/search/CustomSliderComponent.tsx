@@ -37,10 +37,9 @@ export default function CustomSliderComponent({
   );
 
   useEffect(() => {
-    // Update slider range when numberRange or creditRange changes
     setRange([sliderRange[0], sliderRange[1]]);
-    setMinValue(sliderRange[0].toString()); // Update min value
-    setMaxValue(sliderRange[1].toString()); // Update max value
+    setMinValue(sliderRange[0].toString());
+    setMaxValue(sliderRange[1].toString());
   }, [sliderRange]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {

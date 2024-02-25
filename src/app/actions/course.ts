@@ -90,7 +90,6 @@ export async function coursesBy(
     });
   }
 
-  //console.log("courses: ", courses);
   // Convert to a stored course and sort by number
   const res = courses.map(toStoredCourse);
   res.sort(compareCoursesByNum);
@@ -128,7 +127,6 @@ export async function getSuggestedClasses(
 export async function courseInfo(
   pred: CourseQuery,
 ): Promise<StoredCourse | undefined> {
-  console.log("courseInfo");
   const course = await prisma.course.findFirst({
     where: {
       departmentCode: pred.departmentCode,
