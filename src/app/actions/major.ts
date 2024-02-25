@@ -8,10 +8,10 @@ export async function getMajors(catalogYear?: string) {
   const query: any = {
     orderBy: [
       {
-        catalogYear: "desc",
+        name: "asc",
       },
       {
-        name: "asc",
+        catalogYear: "asc",
       },
     ],
     select: {
@@ -53,15 +53,16 @@ export async function getUserMajorByEmail(
       defaultPlannerId: true,
     },
   });
-  const major = userData?.major;
-  if (major === undefined || major === null) {
-    return null;
-  }
+  if (!userData) return null;
+
+  const { major, defaultPlannerId } = userData;
+
+  if (!major) return null;
 
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId || "",
+    defaultPlannerId,
     id: major.id,
   };
 }
@@ -85,14 +86,12 @@ export async function getUserMajorById(
     },
   });
   const major = userData?.major;
-  if (major === undefined || major === null) {
-    return null;
-  }
+  if (!major) return null;
 
   return {
     name: major.name,
     catalogYear: major.catalogYear,
-    defaultPlannerId: userData?.defaultPlannerId ?? "",
+    defaultPlannerId: userData!.defaultPlannerId,
     id: major.id,
   };
 }
@@ -116,9 +115,7 @@ export async function updateUserMajor({
       catalogYear,
     },
   });
-  const majorId = major?.id;
-
-  if (majorId === undefined)
+  if (!major)
     throw new Error(
       `could not find major with name ${name} and catalog year ${catalogYear}`,
     );
@@ -128,7 +125,7 @@ export async function updateUserMajor({
       id: userId,
     },
     data: {
-      majorId,
+      majorId: major.id,
       defaultPlannerId,
     },
   });

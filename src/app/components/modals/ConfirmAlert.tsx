@@ -21,7 +21,8 @@ export interface ConfirmAlertProps {
 export default function ConfirmAlert(props: ConfirmAlertProps) {
   const { onClose, open, onConfirm } = props;
 
-  function handleConfirm() {
+  function handleConfirm(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
     onConfirm();
     onClose();
   }
@@ -41,7 +42,14 @@ export default function ConfirmAlert(props: ConfirmAlertProps) {
           <Button variant="solid" color="danger" onClick={handleConfirm}>
             {props.confirmButtonName ? props.confirmButtonName : "Confirm"}
           </Button>
-          <Button variant="plain" color="neutral" onClick={() => onClose()}>
+          <Button
+            variant="plain"
+            color="neutral"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+          >
             Cancel
           </Button>
         </DialogActions>

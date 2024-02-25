@@ -96,7 +96,7 @@ export default function PlannerTabs() {
   return (
     <>
       <div className="grid grid-flow-col gap-2 ml-1 overflow-x-auto">
-        {planners.map(({ id, title }) => (
+        {planners?.map(({ id, title }) => (
           <CustomTab
             key={id}
             title={title}
@@ -134,6 +134,8 @@ export default function PlannerTabs() {
       <TooManyPlannersAlert
         open={tooManyAlertIsOpen}
         onClose={() => setTooManyAlertIsOpen(false)}
+        warningContent="Too Many Planners"
+        dialogContent="You have too many planners open. Delete one to make a new one."
       />
     </>
   );

@@ -1,9 +1,6 @@
 import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
-import {
-  findCoursesInQuarter,
-  findQuarter,
-  quartersPerYear,
-} from "@/lib/plannerUtils";
+import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
+import { getQuarterId } from "@/lib/quarterUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
@@ -34,7 +31,10 @@ export default function PlannerPDF({
             <Text style={styles.plannerTitle}>
               {getActivePlanner(planners, activePlanner)}
             </Text>
-            <Image style={styles.image} src="/images/slug-icon.png" />
+
+            {/* Image rendered as pdf, no need for alt text */}
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image style={styles.image} src="/images/slug-path-icon.png" />
           </View>
           <View>
             <Years courseState={courseState} />
@@ -50,10 +50,10 @@ function Years({ courseState }: { courseState: PlannerData }) {
     <View>
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
         const slice_val = quartersPerYear * i;
-        const quarters = courseState.quarters
-          .slice(slice_val, slice_val + quartersPerYear)
-          .map((q) => q.id);
-
+        const quarters = courseState.quarters.slice(
+          slice_val,
+          slice_val + quartersPerYear,
+        );
         return (
           <PDFQuarters key={i} quarters={quarters} courseState={courseState} />
         );
@@ -66,15 +66,16 @@ function PDFQuarters({
   quarters,
   courseState,
 }: {
-  quarters: string[];
+  quarters: Quarter[];
   courseState: PlannerData;
 }) {
   return (
     <View style={styles.yearView}>
       {quarters.map((q) => {
-        const { quarter } = findQuarter(courseState.quarters, q);
         const courses = findCoursesInQuarter(courseState, q);
-        return <PDFQuarter key={q} quarter={quarter} courses={courses} />;
+        return (
+          <PDFQuarter key={getQuarterId(q)} quarter={q} courses={courses} />
+        );
       })}
     </View>
   );

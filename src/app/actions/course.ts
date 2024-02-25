@@ -15,7 +15,7 @@ export async function coursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
   const departmentCodeParam = () => {
-    if (pred.departmentCode?.length != 0) {
+    if (pred.departmentCode) {
       return {
         departmentCode: {
           contains: pred.departmentCode,
@@ -105,7 +105,7 @@ export async function getSuggestedClasses(
     const res = await prisma.course.findFirst({
       where: {
         departmentCode: {
-          equals: title.split(" ")[0],
+          equals: title.split(" ")[0].toUpperCase(),
         },
         number: {
           equals: title.split(" ")[1],

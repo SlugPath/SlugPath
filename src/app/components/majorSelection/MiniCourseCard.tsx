@@ -1,16 +1,15 @@
 import { isCustomCourse } from "@/lib/plannerUtils";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { CourseTerm, StoredCourse } from "@customTypes/Course";
-import { Quarter } from "@customTypes/Quarter";
 import { Card, Link } from "@mui/joy";
 import { useContext } from "react";
 
 export function MiniCourseCard({
   course,
-  quarter,
+  quarterTitle,
 }: {
   course: StoredCourse;
-  quarter: Quarter;
+  quarterTitle?: string;
 }) {
   const { onShowCourseInfoModal, setDisplayCourse } =
     useContext(CourseInfoContext);
@@ -23,7 +22,7 @@ export function MiniCourseCard({
   }
 
   function handleClickedCourse(course: StoredCourse) {
-    const courseTerm = [course, quarter.title] as CourseTerm;
+    const courseTerm = [course, quarterTitle] as CourseTerm;
     setDisplayCourse(courseTerm);
     onShowCourseInfoModal();
   }

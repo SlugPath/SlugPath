@@ -1,6 +1,6 @@
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { Switch, useColorScheme } from "@mui/joy";
+import { Button, useColorScheme } from "@mui/joy";
 import { useEffect, useMemo } from "react";
 
 export default function ToggleButton() {
@@ -21,24 +21,12 @@ export default function ToggleButton() {
   }, [isDark]);
 
   return (
-    <Switch
-      checked={isDark}
-      variant="soft"
-      startDecorator={
-        <LightModeIcon
-          sx={{
-            color: "#fcb103",
-          }}
-        />
-      }
-      endDecorator={
-        <DarkModeIcon
-          sx={{
-            color: "#6703fc",
-          }}
-        />
-      }
-      onChange={handleToggleMode}
-    />
+    <Button variant="solid" className="hover:bg-primary-400">
+      {isDark ? (
+        <DarkModeIcon onClick={handleToggleMode} sx={{ color: "#fff" }} />
+      ) : (
+        <LightModeIcon onClick={handleToggleMode} sx={{ color: "#fff" }} />
+      )}
+    </Button>
   );
 }
