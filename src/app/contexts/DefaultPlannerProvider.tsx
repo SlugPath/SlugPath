@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
-import useDefaultPlanners from "../components/planner/graduationProgress/majorsModal/defaultPlannerSelection/useDefaultPlanners";
-import useMajorSelection from "../components/planner/graduationProgress/majorsModal/majorSelection/useMajorSelection";
+import useDefaultPlanners from "../components/modals/majorsModal/defaultPlannerSelection/useDefaultPlanners";
+import useMajorSelection from "../components/modals/majorsModal/majorSelection/useMajorSelection";
 import { SetState } from "../types/Common";
 import { Major } from "../types/Major";
 import { PlannerData, PlannerTitle } from "../types/Planner";

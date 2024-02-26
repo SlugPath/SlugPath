@@ -135,6 +135,18 @@ export async function saveUserMajors({
     majors,
   });
 
+  // if no majors, remove default planner
+  if (majors.length == 0) {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        defaultPlannerId: "",
+      },
+    });
+  }
+
   return userMajors;
 }
 

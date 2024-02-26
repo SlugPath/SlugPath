@@ -165,7 +165,6 @@ export default function PermissionsModal() {
       <Sheet
         sx={{
           width: "50%",
-          height: "95%",
           margin: 10,
           borderRadius: "md",
           p: 3,

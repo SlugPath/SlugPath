@@ -1,3 +1,5 @@
+import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
+import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { Major } from "@/app/types/Major";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
@@ -13,8 +15,6 @@ import {
 } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
 
-import ConfirmAlert from "../../../../modals/ConfirmAlert";
-import CourseInfoModal from "../../../../modals/courseInfoModal/CourseInfoModal";
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
 
 enum ButtonName {
@@ -91,6 +91,8 @@ export default function DefaultPlannerSelection({
 
   // Handlers
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+
     if (updateDefaultPlannerIsPending && defaultPlannerId !== undefined) {
       switch (saveButtonClicked) {
         case ButtonName.Save:
@@ -101,19 +103,23 @@ export default function DefaultPlannerSelection({
         // before the new planner is created or replaced
         case ButtonName.CreateNew:
           setIsSaved(true);
-          setTimeout(() => {
+          timeoutId = setTimeout(() => {
             addPlanner();
           }, 200);
           break;
         case ButtonName.ReplaceCurrent:
           setIsSaved(true);
           if (onReplacePlanner) onReplacePlanner();
-          setTimeout(() => {
+          timeoutId = setTimeout(() => {
             replaceCurrentPlanner();
           }, 200);
           break;
       }
     }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [
     saveButtonClicked,
     updateDefaultPlannerIsPending,
@@ -189,13 +195,15 @@ export default function DefaultPlannerSelection({
             ))}
           </Select>
         </div>
-        <SelectDefaultPlanner
-          selectedDefaultPlanner={defaultPlannerId}
-          onChange={handleChangeDefaultPlanner}
-          majorDefaultPlanners={majorDefaultPlanners}
-          loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-          addPlannerCardContainer={isInPlannerPage}
-        />
+        {userMajors.length > 0 && (
+          <SelectDefaultPlanner
+            selectedDefaultPlanner={defaultPlannerId}
+            onChange={handleChangeDefaultPlanner}
+            majorDefaultPlanners={majorDefaultPlanners}
+            loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+            addPlannerCardContainer={isInPlannerPage}
+          />
+        )}
         <CourseInfoModal />
       </div>
       <div className="flex justify-end w-full">

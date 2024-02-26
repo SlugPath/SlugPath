@@ -1,4 +1,4 @@
-import { MiniCourseCard } from "@/app/components/planner/graduationProgress/majorsModal/majorSelection/MiniCourseCard";
+import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { StoredCourse } from "@/app/types/Course";
 import { Major } from "@/app/types/Major";
@@ -20,12 +20,12 @@ import {
 import Option from "@mui/joy/Option";
 import { useContext, useState } from "react";
 
-import NotesEditor from "../../NotesEditor";
-import DraggableCourseCard from "../../quarters/courses/DraggableCourseCard";
+import NotesEditor from "../../planner/NotesEditor";
+import DraggableCourseCard from "../../planner/quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
 
-export function RequirementsComponent({
+export function Requirements({
   major,
   requirements,
   parents,
@@ -104,7 +104,7 @@ export function RequirementsComponent({
           {requirements.requirements.map((requirement, index) => {
             if ("requirements" in requirement) {
               return (
-                <RequirementsComponent
+                <Requirements
                   key={index}
                   major={major}
                   requirements={requirement}
@@ -122,7 +122,7 @@ export function RequirementsComponent({
   );
 }
 
-export function RequirementsComponentEditing({
+export function RequirementsEditing({
   major,
   requirements,
   parents,
@@ -193,25 +193,25 @@ export function RequirementsComponentEditing({
     );
   }
 
-  function shouldHaveClasses(parents: number) {
-    return parents > 0;
-  }
-
   function shouldDisplayDeleteButton(parents: number) {
-    return shouldHaveClasses(parents);
+    return !isGreatestParent(parents);
   }
 
   // user cannot edit title of the parent RequirementList
-  function allowedToEditTitle(parents: number) {
-    return parents > 0;
+  function isGreatestParent(parents: number) {
+    return parents == 0;
   }
 
   return (
-    <Card variant="soft" style={cardStyleProps(parents, mode)}>
+    <Card
+      variant="soft"
+      style={cardStyleProps(parents, mode)}
+      className="space-y-2"
+    >
       {/* Title begin */}
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row">
-          {editingTitle && allowedToEditTitle(parents) ? (
+          {editingTitle && !isGreatestParent(parents) ? (
             <EditableTitle
               title={title ?? ""}
               setTitle={setTitle}
@@ -222,7 +222,7 @@ export function RequirementsComponentEditing({
           ) : (
             <Title requirements={requirements} fulfillmentMark={true} />
           )}
-          {allowedToEditTitle(parents) && (
+          {!isGreatestParent(parents) && (
             <EditIconButton onClick={handleToggleEditingTitle} />
           )}
         </div>
@@ -244,28 +244,30 @@ export function RequirementsComponentEditing({
       {/* Notes start */}
 
       {/* Binder begin */}
-      <div className="flex flex-row items-center space-x-1">
-        <Select
-          variant="soft"
-          placeholder="Choose one…"
-          defaultValue={getBinderValue(requirements)}
-          onChange={handleNewBinderSelected}
-          style={{ ...cardStyleProps(parents + 1, mode) }}
-        >
-          <Option value="0">All</Option>
-          {Array.from({ length: 11 }, (_, index) => index).map((i) => {
-            return (
-              <Option key={i + 1} value={(i + 1).toString()}>
-                {i + 1}
-              </Option>
-            );
-          })}
-        </Select>
-        <Typography>of the following</Typography>
-      </div>
+      {!isGreatestParent(parents) && (
+        <div className="flex flex-row items-center space-x-1">
+          <Select
+            variant="soft"
+            placeholder="Choose one…"
+            defaultValue={getBinderValue(requirements)}
+            onChange={handleNewBinderSelected}
+            style={{ ...cardStyleProps(parents + 1, mode) }}
+          >
+            <Option value="0">All</Option>
+            {Array.from({ length: 11 }, (_, index) => index).map((i) => {
+              return (
+                <Option key={i + 1} value={(i + 1).toString()}>
+                  {i + 1}
+                </Option>
+              );
+            })}
+          </Select>
+          <Typography>of the following</Typography>
+        </div>
+      )}
       {/* Binder end */}
 
-      {shouldHaveClasses(parents) && !hasRequirementLists() && (
+      {!isGreatestParent(parents) && !hasRequirementLists() && (
         <Classes
           requirements={requirements}
           deleteCourse={deleteCourse}
@@ -389,7 +391,7 @@ function RequirementLists({
       {requirementsWithoutClasses.map((requirement, index) => {
         if ("requirements" in requirement) {
           return (
-            <RequirementsComponentEditing
+            <RequirementsEditing
               key={index}
               major={major}
               requirements={requirement}

@@ -27,6 +27,9 @@ import { useContext, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
+import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
+import MajorsModal from "../modals/majorsModal/MajorsModal";
+import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import TooManyPlannersAlert from "../planners/plannerTabs/TooManyPlannersAlert";
 import Search from "../search/Search";
@@ -36,9 +39,6 @@ import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
-import EditMajorRequirementsModal from "./graduationProgress/majorsModal/EditMajorRequirementsModal";
-import MajorsModal from "./graduationProgress/majorsModal/MajorsModal";
-import ReplaceRequirementsModal from "./graduationProgress/majorsModal/ReplaceRequirementsModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 const MAX_YEARS = 10;

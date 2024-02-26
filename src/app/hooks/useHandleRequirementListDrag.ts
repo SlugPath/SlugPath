@@ -30,6 +30,19 @@ export default function useHandleRequirementListDrag() {
     draggableId: string,
     destination: DraggableLocation,
   ) {
+    function requirementListHasCourse(
+      requirementList: RequirementList,
+      course: StoredCourse,
+    ) {
+      return requirementList.requirements.find((c) => {
+        const someCourse = c as StoredCourse;
+        return (
+          someCourse.title === course.title &&
+          someCourse.number === course.number
+        );
+      });
+    }
+
     if (majorRequirements === undefined) return;
 
     const len = REQUIREMENT_LIST_DROPPABLE_PREFIX.length;
@@ -42,6 +55,8 @@ export default function useHandleRequirementListDrag() {
     const index = destination.index;
 
     if (requirementList) {
+      if (requirementListHasCourse(requirementList, course)) return;
+
       requirementList.requirements.splice(index, 0, course);
       updateRequirementList(majorToEdit!.id, id, requirementList);
     }

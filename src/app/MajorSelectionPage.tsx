@@ -1,13 +1,12 @@
 "use client";
 
+import { MajorAndPlannerSelection } from "@/app/components/modals/majorsModal/MajorsModal";
 import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
 import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsProvider } from "@/app/contexts/ModalsProvider/Provider";
 import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 import { useRouter } from "next/navigation";
-
-import { MajorAndPlannerSelection } from "../MajorsModal";
 
 export default function MajorSelectionPage() {
   const router = useRouter();

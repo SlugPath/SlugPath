@@ -16,14 +16,14 @@ import { SyntheticEvent } from "react";
 import MiniPlanner from "../majorSelection/miniPlanner/MiniPlanner";
 
 export interface SelectDefaultPlannerProps {
-  selectedDefaultPlanner: string | undefined;
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     value: string | number | null,
   ) => void;
-  majorDefaultPlanners: PlannerTitle[] | undefined;
   loadingMajorDefaultPlanners: boolean;
+  majorDefaultPlanners?: PlannerTitle[];
   addPlannerCardContainer?: boolean;
+  selectedDefaultPlanner?: string;
 }
 
 export default function SelectDefaultPlanner({

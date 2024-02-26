@@ -1,7 +1,7 @@
-import MajorSelectionPage from "@/app/components/planner/graduationProgress/majorsModal/majorSelection/MajorSelectionPage";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+import MajorSelectionPage from "./MajorSelectionPage";
 import { getUserMajorsByEmail } from "./actions/major";
 
 export default async function Page() {

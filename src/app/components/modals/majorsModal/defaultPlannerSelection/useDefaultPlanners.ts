@@ -112,7 +112,6 @@ function useUserPrimaryMajor() {
     useQuery({
       queryKey: ["userDefaultPlannerId", session?.user.id],
       queryFn: async () => {
-        console.log("fetch default planner id");
         return await getUserDefaultPlannerId(session!.user.id);
       },
       enabled: !!session?.user.id,

@@ -14,8 +14,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 
-import StyledAccordion from "../../StyledAccordion";
-import { RequirementsComponent } from "./RequirementsComponent";
+import StyledAccordion from "../../planner/StyledAccordion";
+import { Requirements } from "./Requirements";
 
 export default function ReplaceRequirementsModal() {
   const {
@@ -128,7 +128,7 @@ function RequirementLists({
             </div>
           </AccordionSummary>
           <AccordionDetails>
-            <RequirementsComponent
+            <Requirements
               requirements={requirementList}
               parents={0}
               hideTitle={true}

@@ -47,3 +47,6 @@ backup.sql
 terraform.tfvars
 terraform.tfstate*
 tfplan
+
+#icloud
+.App.tsx.icloud

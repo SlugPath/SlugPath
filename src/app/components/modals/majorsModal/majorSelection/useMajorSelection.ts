@@ -48,6 +48,9 @@ export default function useMajorSelection(onSuccess?: () => void) {
       if (onSuccess) onSuccess();
       queryClient.refetchQueries({ queryKey: ["userMajors", userId] });
       queryClient.invalidateQueries({ queryKey: ["userMajors", userId] });
+      queryClient.refetchQueries({
+        queryKey: ["userDefaultPlannerId", session?.user.id],
+      });
     },
   });
 

@@ -12,7 +12,7 @@ import {
 } from "@mui/joy";
 import { useContext } from "react";
 
-import { RequirementsComponentEditing } from "./RequirementsComponent";
+import { RequirementsEditing } from "./Requirements";
 
 export default function EditMajorRequirementsModal() {
   const {
@@ -82,7 +82,7 @@ export default function EditMajorRequirementsModal() {
               )}
               <div className="w-full overflow-auto h-[80vh]">
                 {majorRequirements ? (
-                  <RequirementsComponentEditing
+                  <RequirementsEditing
                     requirements={majorRequirements}
                     parents={0}
                     major={major}

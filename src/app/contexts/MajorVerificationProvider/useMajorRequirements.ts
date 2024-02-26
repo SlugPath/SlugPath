@@ -51,7 +51,7 @@ export default function useMajorRequirements(
       return listOfMajorRequirements;
     };
 
-    async function asyncWork() {
+    async function fetchAllMajorRequirements() {
       // first create empty listOfMajorRequirements
       let newListOfMajorRequirements = majors.map((major) => {
         return {
@@ -75,7 +75,7 @@ export default function useMajorRequirements(
       setListOfMajorRequirements(newListOfMajorRequirements);
     }
 
-    asyncWork();
+    fetchAllMajorRequirements();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [majors]);

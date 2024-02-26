@@ -1,5 +1,5 @@
-import DefaultPlannerSelection from "@/app/components/planner/graduationProgress/majorsModal/defaultPlannerSelection/DefaultPlannerSelection";
-import MajorSelection from "@/app/components/planner/graduationProgress/majorsModal/majorSelection/MajorSelection";
+import DefaultPlannerSelection from "@/app/components/modals/majorsModal/defaultPlannerSelection/DefaultPlannerSelection";
+import MajorSelection from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
@@ -9,7 +9,7 @@ import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useContext } from "react";
 
-import { RequirementsComponent } from "./RequirementsComponent";
+import { Requirements } from "./Requirements";
 
 export default function MajorsModal() {
   const { setShowMajorsModal: setShowModal, showMajorsModal: showModal } =
@@ -61,8 +61,8 @@ export function MajorAndPlannerSelection({
   }
 
   return (
-    <div className="flex flex-row space-x-3 grid grid-cols-4 w-full">
-      <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-2">
+    <div className="flex-row space-x-3 grid grid-cols-7 w-full">
+      <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-3">
         <MajorSelection />
         <div className="space-y-2 w-full">
           {userMajors.map((major, index) => {
@@ -78,7 +78,7 @@ export function MajorAndPlannerSelection({
             }
 
             return (
-              <RequirementsComponent
+              <Requirements
                 key={index}
                 major={major}
                 requirements={majorRequirements}
@@ -94,7 +94,7 @@ export function MajorAndPlannerSelection({
           })}
         </div>
       </div>
-      <Card variant="soft" className="col-span-2">
+      <Card variant="soft" className="col-span-4">
         <Typography
           level="h4"
           className="flex flex-col space-y-2 justify-between mb-2"
