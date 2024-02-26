@@ -35,17 +35,17 @@ export default function useMajorRequirements(
     queryKey: ["allMajorRequirements", ...majors],
     queryFn: async () => {
       const initRequirements = majors.map(emptyMajorRequirements);
-      setListOfMajorRequirements(
-        await Promise.all(
-          initRequirements.map(async (majorReq) => {
-            return {
-              ...majorReq,
-              majorRequirements: await getMajorRequirements(majorReq.major.id),
-              isSaved: true,
-            };
-          }),
-        ),
+      const res = await Promise.all(
+        initRequirements.map(async (majorReq) => {
+          return {
+            ...majorReq,
+            majorRequirements: await getMajorRequirements(majorReq.major.id),
+            isSaved: true,
+          };
+        }),
       );
+      setListOfMajorRequirements(res);
+      return res;
     },
   });
 
