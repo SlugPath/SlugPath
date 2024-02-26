@@ -41,19 +41,19 @@ const termEnrollmentSchema = z.object({
 
 type TermEnrollmentInfo = z.infer<typeof termEnrollmentSchema>[];
 
-// getPastEnrollmentInfo returns the quarters offered and the professors who taught a course
-// in past quarters
-export async function getPastEnrollmentInfo(course: CourseEnrollQuery) {
-  const pastQuarters = getPastQuarters();
+// getEnrollmentInfo returns the quarters offered and the professors who taught a course
+// in past quarters and upcoming quarters.
+export async function getEnrollmentInfo(course: CourseEnrollQuery) {
   const pastOfferings = await Promise.all(
-    pastQuarters.map(({ id }) =>
+    terms.map(({ id }) =>
       fetch(createEnrollmentInfoURL(id, course)).then((res) => res.json()),
     ),
   ).then((offers) => {
     // Get the term and instructors for each time the course was offered previously
     return filterOfferings(offers, course).map((c) => ({
       term: getTermById(c.strm),
-      instructors: c.instructors.flatMap((inst: Instructor) => inst.name),
+      // Get last name of instructor
+      instructor: c.instructors[0].name.split(",")[0],
     }));
   });
   pastOfferings.sort((a, b) =>
@@ -62,9 +62,9 @@ export async function getPastEnrollmentInfo(course: CourseEnrollQuery) {
   return pastOfferings;
 }
 
-// getFutureEnrollmentInfo returns current and future enrollment information about a particular
+// getMoreEnrollmentInfo returns current and future enrollment information about a particular
 // course
-export async function getFutureEnrollmentInfo(course: CourseEnrollQuery) {
+export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
   const futureQuarters = getFutureQuarters();
 
   return Promise.all(
@@ -79,13 +79,11 @@ export async function getFutureEnrollmentInfo(course: CourseEnrollQuery) {
   ).then((offers) => {
     return filterOfferings(offers, course).map((c) => ({
       term: getTermById(c.strm),
-      instructors: c.instructors.flatMap((inst: Instructor) => inst.name),
+      // Get last name of instructor
+      instructor: c.instructors[0].name.split(",")[0],
+      class_meeting: `${c.start_time}-${c.end_time}, ${c.meeting_days} @ ${c.location}`,
       class_section: c.class_section,
       component: c.component,
-      start_time: c.start_time,
-      end_time: c.end_time,
-      location: c.location,
-      meeting_days: c.meeting_days,
       enrl_status: c.enrl_status,
       waitlist_total: c.waitlist_total,
       enrl_capacity: c.enrl_capacity,
@@ -140,11 +138,6 @@ function getFutureQuarters() {
   return terms.filter((t) => t.id >= currentId);
 }
 
-function getPastQuarters() {
-  const { id: currentId } = getCurrentQuarter();
-  return terms.filter((t) => t.id <= currentId);
-}
-
 function getTermById(id: string) {
   const term = terms.find((t) => `${t.id}` === id);
   if (!term) throw new Error(`couldn't find term by id ${id}`);
@@ -160,6 +153,7 @@ function filterOfferings(offers: any[], course: CourseEnrollQuery) {
     (off) => termEnrollmentSchema.safeParse(off).success,
   );
   // Only get the offerings that match the course number
+  // TODO: currently returns multiple instances for classes with multiple instructors in one term
   const allClasses: ClassInfo[] = terms
     .flatMap((v) => v.classes)
     .filter((c) => c.catalog_nbr === course.number);

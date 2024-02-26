@@ -1,4 +1,4 @@
-import { getPastEnrollmentInfo } from "@/app/actions/enrollment";
+import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { courseInfo } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -21,6 +21,7 @@ import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
+import MoreEnrollInfo from "./MoreEnrollInfo";
 import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
@@ -63,7 +64,7 @@ export default function CourseInfoModal({
 
   const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
     queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
-    queryFn: async () => await getPastEnrollmentInfo(course!),
+    queryFn: async () => await getEnrollmentInfo(course!),
     enabled: course !== undefined && !isCustomCourse(course),
     initialData: [],
   });
@@ -92,18 +93,13 @@ export default function CourseInfoModal({
     return `${c.description}`;
   }
 
-  function instructors() {
-    if (enrollLoading) return [];
-    return Array.from(new Set(enrollmentInfo.flatMap((e) => e.instructors)));
-  }
-
-  function credits(c: StoredCourse | undefined) {
+  function credits(c?: StoredCourse) {
     if (loading) return "";
     if (!c) return course?.credits;
     return c.credits;
   }
 
-  function ge(c: StoredCourse | undefined) {
+  function ge(c?: StoredCourse) {
     if (loading || !c) return "";
     const capitalize: { [key: string]: string } = {
       peT: "PE-T",
@@ -120,7 +116,7 @@ export default function CourseInfoModal({
     });
   }
 
-  function prerequisites(c: StoredCourse | undefined) {
+  function prerequisites(c?: StoredCourse) {
     const start = "Prerequisite(s):";
     if (loading || !c || !c.prerequisites) return `${start} None`;
     const preqs: string = c.prerequisites;
@@ -253,53 +249,40 @@ export default function CourseInfoModal({
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
               <Skeleton loading={enrollLoading} variant="text" width="50%">
-                {!isCustomCourse(course) && (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Typography component="p">Quarters:</Typography>
-                    {enrollmentInfo.map((e, i) => {
-                      let color: "warning" | "primary" | "success" | "danger";
-                      switch (e.term.title) {
-                        case "Fall":
-                          color = "warning";
-                          break;
-                        case "Winter":
-                          color = "primary";
-                          break;
-                        case "Spring":
-                          color = "success";
-                          break;
-                        default:
-                          color = "danger";
-                      }
-                      return (
-                        <Chip key={i} color={color}>
-                          {e.term.title} {e.term.catalogYear}
-                        </Chip>
-                      );
-                    })}
-                  </div>
-                )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Typography component="p">Quarters Offered:</Typography>
+                  {enrollmentInfo.map((e, i) => {
+                    let color: "warning" | "primary" | "success" | "danger";
+                    switch (e.term.title) {
+                      case "Fall":
+                        color = "warning";
+                        break;
+                      case "Winter":
+                        color = "primary";
+                        break;
+                      case "Spring":
+                        color = "success";
+                        break;
+                      default:
+                        color = "danger";
+                    }
+                    return (
+                      <Chip key={i} color={color}>
+                        {e.term.title} {e.term.catalogYear}, {e.instructor}
+                      </Chip>
+                    );
+                  })}
+                </div>
                 {isCSE(course) && !isOffered(course.quartersOffered, term) && (
                   <Typography
-                    variant="soft"
                     color="warning"
                     component="p"
                     startDecorator={<WarningAmberRounded color="warning" />}
                   >
                     Warning: {course.departmentCode} {course.number} is not
-                    offered in {` ${term}`}
+                    offered in {` ${term}`} Quarter
                   </Typography>
                 )}
-              </Skeleton>
-              <Skeleton loading={enrollLoading} variant="text" width="50%">
-                <div className="flex flex-wrap gap-2 items-center">
-                  <Typography component="p">Instructors:</Typography>
-                  {instructors().map((inst, i) => (
-                    <Chip key={i} color="primary">
-                      {inst}
-                    </Chip>
-                  ))}
-                </div>
               </Skeleton>
             </>
           ) : (
@@ -313,6 +296,7 @@ export default function CourseInfoModal({
             </div>
           )}
           <Typography component="p">Credits: {credits(data)}</Typography>
+          <MoreEnrollInfo course={course} />
           {!viewOnly && course.labels && (
             <SelectedLabels
               labels={getCourseLabels(course)}
