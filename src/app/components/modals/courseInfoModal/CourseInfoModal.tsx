@@ -1,5 +1,6 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { truncateTitle } from "@/lib/utils";
 import { courseInfo } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -25,7 +26,7 @@ import MoreEnrollInfo from "./MoreEnrollInfo";
 import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
-const MAX_MODAL_TITLE = 50;
+const MAX_MODAL_TITLE = 60;
 
 export default function CourseInfoModal({
   viewOnly = false,
@@ -78,8 +79,8 @@ export default function CourseInfoModal({
   function title(c?: StoredCourse) {
     if (loading) return "";
     if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
-    return `${c.departmentCode} ${c.number} ${getTitle(c)}`.slice(
-      0,
+    return truncateTitle(
+      `${c.departmentCode} ${c.number} ${getTitle(c)}`,
       MAX_MODAL_TITLE,
     );
   }

@@ -79,15 +79,11 @@ export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
   ).then((offers) => {
     return filterOfferings(offers, course).map((c) => ({
       term: getTermById(c.strm),
-      // Get last name of instructor
-      instructor: c.instructors[0].name.split(",")[0],
+      instructor: c.instructors[0].name,
       class_meeting: `${c.start_time}-${c.end_time}, ${c.meeting_days} @ ${c.location}`,
       class_section: c.class_section,
-      component: c.component,
-      enrl_status: c.enrl_status,
       waitlist_total: c.waitlist_total,
-      enrl_capacity: c.enrl_capacity,
-      enrl_total: c.enrl_total,
+      enrolled: `${c.enrl_total} of ${c.enrl_capacity} enrolled`,
     }));
   });
 }

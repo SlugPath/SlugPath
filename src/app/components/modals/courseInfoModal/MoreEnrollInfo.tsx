@@ -1,5 +1,6 @@
 import { getMoreEnrollmentInfo } from "@actions/enrollment";
 import { StoredCourse } from "@customTypes/Course";
+import { Groups, LocationOn, People, Person } from "@mui/icons-material";
 import Info from "@mui/icons-material/Info";
 import {
   Accordion,
@@ -24,10 +25,13 @@ export default function MoreEnrollInfo({ course }: MoreEnrollInfoProps) {
 
   if (isLoading) return null;
 
+  if (data && data.length === 0) return null;
+
   return (
     <>
       <Typography component="h2" level="h4" textColor="inherit" fontWeight="md">
-        Upcoming Enrollment Info for {course?.departmentCode} {course?.number}
+        Current & Upcoming Enrollment Information for {course?.departmentCode}{" "}
+        {course?.number}
       </Typography>
       <div className="overflow-y-scroll w-full" style={{ maxHeight: "25vh" }}>
         <AccordionGroup>
@@ -39,8 +43,30 @@ export default function MoreEnrollInfo({ course }: MoreEnrollInfoProps) {
               </AccordionSummary>
               <AccordionDetails>
                 <Card>
-                  <Typography>Instructor: {off.instructor}</Typography>
-                  <Typography>Meetings: {off.class_meeting}</Typography>
+                  <Typography>
+                    <span className="flex items-center gap-2">
+                      <Person />
+                      Instructor: {off.instructor}
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span className="flex items-center gap-2">
+                      <LocationOn />
+                      Meetings: {off.class_meeting}
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span className="flex items-center gap-2">
+                      <Groups />
+                      {off.enrolled}
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span className="flex items-center gap-2">
+                      <People />
+                      {off.waitlist_total} waitlisted
+                    </span>
+                  </Typography>
                 </Card>
               </AccordionDetails>
             </Accordion>
