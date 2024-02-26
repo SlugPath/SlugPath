@@ -1,5 +1,9 @@
-import { getPermissions, savePermissions } from "@actions/permissions";
-import { Permissions } from "@customTypes/Permissions";
+import { Permission } from "@/app/types/Permission";
+import {
+  getPermissions,
+  removePermission,
+  upsertPermission,
+} from "@actions/permissions";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -7,41 +11,108 @@ import { useState } from "react";
 import useUserPermissions from "./useUserPermissions";
 
 export default function usePermissions() {
-  const [permissionsList, setPermissionsList] = useState<Permissions[]>([]);
+  const [permissions, setPermissions] = useState<Permission[]>([]);
   const [isSaved, setIsSaved] = useState<boolean>(true);
 
   const { data: session } = useSession();
   const { isAdmin, hasPermissionToEdit, refetchHasPermissionToEdit } =
     useUserPermissions();
-  const { isPending } = useQuery({
+  const { isPending: getPermissionsPending } = useQuery({
     queryKey: ["getPermissions"],
     queryFn: async () => {
-      const permissions = await getPermissions();
-      if (permissions) {
-        setPermissionsList(permissions);
+      const perms = await getPermissions();
+      if (perms) {
+        handleSetPermissions(perms);
       }
       return permissions;
     },
   });
-  const { isPending: mutationPending, mutate } = useMutation({
-    mutationFn: () => savePermissions(session!.user.id, permissionsList),
+
+  const {
+    isPending: upsertPermissionPending,
+    mutate: upsertPermissionMutation,
+  } = useMutation({
+    mutationFn: async (permission: Permission) => {
+      const perm = await upsertPermission({
+        userId: session!.user.id,
+        permission,
+      });
+      replacePermissionInState(perm);
+      return perm;
+    },
     onSuccess: () => {
       setIsSaved(true);
       refetchHasPermissionToEdit();
     },
   });
 
-  function handleSetPermissionsList(newPermissionsList: Permissions[]) {
-    setPermissionsList(newPermissionsList);
-    setIsSaved(false);
+  const {
+    isPending: removePermissionPending,
+    mutate: removePermissionMutation,
+  } = useMutation({
+    mutationFn: async (userEmail: string) => {
+      const result = await removePermission({
+        userId: session!.user.id,
+        userEmail,
+      });
+      if (result.userEmail === userEmail) {
+        removePermissionFromState(userEmail);
+      }
+      return result;
+    },
+    onSuccess: () => {
+      setIsSaved(true);
+      refetchHasPermissionToEdit();
+    },
+  });
+
+  function replacePermissionInState(permission: Permission) {
+    const newPerms = permissions.map((p) => {
+      if (p.userEmail === permission.userEmail) {
+        return permission;
+      }
+      return p;
+    });
+    handleSetPermissions(newPerms);
+  }
+
+  function removePermissionFromState(userEmail: string) {
+    const newPerms = permissions.filter((p) => p.userEmail !== userEmail);
+    handleSetPermissions(newPerms);
+  }
+
+  function sortPermissions(permissions: Permission[]): Permission[] {
+    function sortMajorEditingPermissions(permission: Permission) {
+      return permission.majorEditingPermissions.sort((a, b) =>
+        a.major.name.localeCompare(b.major.name),
+      );
+    }
+
+    const sortedPerms = permissions.sort((a, b) =>
+      a.userEmail.localeCompare(b.userEmail),
+    );
+    return sortedPerms.map((p) => {
+      return {
+        ...p,
+        majorEditingPermissions: sortMajorEditingPermissions(p),
+      };
+    });
+  }
+
+  // use this function when setting permissions, to ensure they are sorted
+  function handleSetPermissions(permissions: Permission[]) {
+    setPermissions(sortPermissions(permissions));
   }
 
   return {
     isSaved,
-    isPending: isPending || mutationPending,
-    permissionsList,
-    onSetPermissionsList: handleSetPermissionsList,
-    onSavePermissions: mutate,
+    isPending:
+      getPermissionsPending ||
+      upsertPermissionPending ||
+      removePermissionPending,
+    permissions,
+    onUpsertPermission: upsertPermissionMutation,
+    onRemovePermission: removePermissionMutation,
     isAdmin,
     hasPermissionToEdit,
   };

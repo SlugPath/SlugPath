@@ -1,6 +1,6 @@
 import { Major } from "./Major";
 
-export interface Permissions {
+export interface Permission {
   userEmail: string;
   majorEditingPermissions: MajorEditingPermission[];
 }

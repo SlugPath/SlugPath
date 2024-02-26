@@ -1,41 +1,41 @@
+import { Permission } from "@/app/types/Permission";
 import { Major } from "@customTypes/Major";
-import { Permissions } from "@customTypes/Permissions";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
 import { lazy } from "react";
 
 import useMajors from "./useMajors";
 
-const PermissionsAccordion = lazy(() => import("./PermissionsAccordion"));
+const PermissionAccordion = lazy(() => import("./PermissionAccordion"));
 
-export interface PermissionsListProps {
-  permissionsList: Permissions[];
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemovePermissions: (permissions: Permissions) => void;
+export interface PermissionsProps {
+  permissions: Permission[];
+  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
+  onRemoveMajorEditPermission: (permission: Permission, major: Major) => void;
+  onRemovePermissions: (permission: Permission) => void;
   onUpdateMajorEditPermissionExpirationDate: (
-    permissions: Permissions,
+    permission: Permission,
     major: Major,
     expirationDate: Date,
   ) => void;
 }
 
 export default function PermissionsList({
-  permissionsList,
+  permissions,
   onAddMajorEditPermission,
   onRemoveMajorEditPermission,
   onRemovePermissions,
   onUpdateMajorEditPermissionExpirationDate,
-}: PermissionsListProps) {
+}: PermissionsProps) {
   const { majors } = useMajors();
 
   return (
     <AccordionGroup className="w-full h-[70vh] overflow-auto">
       <List className="flex flex-col gap-1">
-        {permissionsList.map((permissions, index) => (
+        {permissions.map((permission, index) => (
           <ListItem key={index}>
             <ListItemContent>
-              <PermissionsAccordion
-                permissions={permissions}
+              <PermissionAccordion
+                permission={permission}
                 majors={majors}
                 onAddMajorEditPermission={onAddMajorEditPermission}
                 onRemoveMajorEditPermission={onRemoveMajorEditPermission}

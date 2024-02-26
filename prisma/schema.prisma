@@ -91,7 +91,7 @@ model MajorRequirement {
   majorId         Int   @unique
 }
 
-model Permissions {
+model Permission {
   id                      Int                      @id @default(autoincrement())
   majorEditingPermissions MajorEditingPermission[]
   userEmail               String                   @unique
@@ -101,8 +101,8 @@ model MajorEditingPermission {
   id             Int         @id @default(autoincrement())
   major          Major       @relation(fields: [majorId], references: [id])
   majorId        Int         @unique
-  permissions    Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
-  permissionsId  Int
+  permission    Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  permissionId  Int
   expirationDate DateTime
 }
 

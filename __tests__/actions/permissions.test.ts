@@ -1,5 +1,5 @@
 import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
+import { Permission } from "@/app/types/Permission";
 import prisma from "@/lib/prisma";
 import {
   getPermissions,
@@ -35,7 +35,7 @@ describe("Permissions Actions", () => {
     console.log("✨ 2 users successfully created!");
 
     // add permissions
-    await prisma.permissions.create({
+    await prisma.permission.create({
       data: {
         userEmail: adminEmail,
         majorEditingPermissions: {
@@ -58,7 +58,7 @@ describe("Permissions Actions", () => {
 
   afterAll(async () => {
     await prisma.user.deleteMany();
-    await prisma.permissions.deleteMany();
+    await prisma.permission.deleteMany();
     await prisma.major.deleteMany();
 
     expect(await prisma.user.count()).toBe(0);
@@ -87,7 +87,7 @@ describe("Permissions Actions", () => {
   });
 
   afterEach(async () => {
-    await prisma.permissions.deleteMany({
+    await prisma.permission.deleteMany({
       where: {
         userEmail,
       },
@@ -112,7 +112,7 @@ describe("Permissions Actions", () => {
   it("should check that getPermissions works using savePermissions", async () => {
     const newMajor = await createMajor("Theater B.A", "2020-2021");
 
-    const permissions: Permissions[] = [
+    const permissions: Permission[] = [
       {
         userEmail: adminEmail,
         majorEditingPermissions: [
@@ -131,7 +131,7 @@ describe("Permissions Actions", () => {
       success: true,
     });
 
-    const allPermissions: Permissions[] = await getPermissions();
+    const allPermissions: Permission[] = await getPermissions();
 
     // check that all permissions are in allPermissions
     expect(
@@ -148,7 +148,7 @@ describe("Permissions Actions", () => {
       const major = await prisma.major.findFirst();
       expect(major).not.toBeNull();
 
-      const permissions: Permissions[] = [
+      const permissions: Permission[] = [
         {
           userEmail: adminEmail,
           majorEditingPermissions: [
@@ -175,7 +175,7 @@ describe("Permissions Actions", () => {
 
     it("should return false if permissions are not for current major", async () => {
       const major = await createMajor("Marine Biology B.S", "2020-2021");
-      const permissions: Permissions[] = [
+      const permissions: Permission[] = [
         {
           userEmail,
           majorEditingPermissions: [

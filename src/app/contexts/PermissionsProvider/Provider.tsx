@@ -13,9 +13,9 @@ export function PermissionsProvider({
   const {
     isPending: loadingPermissions,
     isSaved,
-    permissionsList,
-    onSetPermissionsList,
-    onSavePermissions,
+    permissions,
+    onUpsertPermission,
+    onRemovePermission,
     isAdmin,
     hasPermissionToEdit,
   } = usePermissions();
@@ -25,9 +25,9 @@ export function PermissionsProvider({
       value={{
         loadingPermissions,
         isSaved,
-        permissionsList,
-        onSetPermissionsList,
-        onSavePermissions,
+        permissions,
+        onUpsertPermission,
+        onRemovePermission,
         isAdmin,
         hasPermissionToEdit,
       }}

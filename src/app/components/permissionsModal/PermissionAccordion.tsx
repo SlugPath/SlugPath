@@ -1,5 +1,5 @@
 import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
+import { Permission } from "@/app/types/Permission";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -30,19 +30,19 @@ import StyledAccordion from "../planner/StyledAccordion";
 const materialTheme = extendMaterialTheme();
 
 export interface PermissionsAccordionProps {
-  permissions: Permissions;
+  permission: Permission;
   majors: Major[];
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemovePermissions: (permissions: Permissions) => void;
+  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
+  onRemoveMajorEditPermission: (permission: Permission, major: Major) => void;
+  onRemovePermissions: (permission: Permission) => void;
   onUpdateMajorEditPermissionExpirationDate: (
-    permissions: Permissions,
+    permission: Permission,
     major: Major,
     expirationDate: Date,
   ) => void;
 }
 export default function PermissionsAccordion({
-  permissions,
+  permission,
   majors,
   onAddMajorEditPermission,
   onRemoveMajorEditPermission,
@@ -53,10 +53,10 @@ export default function PermissionsAccordion({
     <StyledAccordion>
       <AccordionSummary>
         <div className="flex flex-row ml-2 gap-1 items-center justify-between w-full">
-          <Typography>{permissions.userEmail}</Typography>
+          <Typography>{permission.userEmail}</Typography>
           <Button
             color="danger"
-            onClick={() => onRemovePermissions(permissions)}
+            onClick={() => onRemovePermissions(permission)}
           >
             Remove
           </Button>
@@ -64,7 +64,7 @@ export default function PermissionsAccordion({
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          {permissions.majorEditingPermissions.map((majorEditPerm, index) => {
+          {permission.majorEditingPermissions.map((majorEditPerm, index) => {
             const major = majorEditPerm.major;
 
             return (
@@ -94,7 +94,7 @@ export default function PermissionsAccordion({
                                 slotProps={{ textField: { size: "small" } }}
                                 onChange={(date) =>
                                   onUpdateMajorEditPermissionExpirationDate(
-                                    permissions,
+                                    permission,
                                     major,
                                     date!,
                                   )
@@ -107,7 +107,7 @@ export default function PermissionsAccordion({
                     </div>
                     <CloseIconButton
                       onClick={() =>
-                        onRemoveMajorEditPermission(permissions, major)
+                        onRemoveMajorEditPermission(permission, major)
                       }
                     />
                   </Card>
@@ -118,7 +118,7 @@ export default function PermissionsAccordion({
         </List>
         <SelectMajor
           majors={majors}
-          permissions={permissions}
+          permission={permission}
           onAddMajorEditPermission={onAddMajorEditPermission}
         />
       </AccordionDetails>
@@ -147,12 +147,12 @@ function ExpirationLabel({ expirationDate }: { expirationDate: Date }) {
 
 function SelectMajor({
   majors,
-  permissions,
+  permission,
   onAddMajorEditPermission,
 }: {
   majors: Major[];
-  permissions: Permissions;
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
+  permission: Permission;
+  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
 }) {
   const [value, setValue] = useState<Major | null>(null);
 
@@ -161,7 +161,7 @@ function SelectMajor({
     newValue: Major | null,
   ) {
     if (newValue) {
-      onAddMajorEditPermission(permissions, newValue);
+      onAddMajorEditPermission(permission, newValue);
       setValue(null);
     }
   }

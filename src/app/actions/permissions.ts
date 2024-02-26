@@ -3,71 +3,113 @@
 import prisma from "@/lib/prisma";
 import { Role } from "@prisma/client";
 
-import { Permissions } from "../types/Permissions";
+import { Permission } from "../types/Permission";
 import { getUserMajorById } from "./major";
 
-export async function savePermissions(
-  userId: string,
-  permissions: Permissions[],
-) {
+export async function upsertPermission({
+  userId,
+  permission,
+}: {
+  userId: string;
+  permission: Permission;
+}): Promise<Permission> {
   if ((await getUserRole(userId)) !== Role.ADMIN)
     throw new Error("User is not an admin");
 
-  const operations: any[] = [];
-  operations.push(prisma.permissions.deleteMany());
+  // delete previous permissions if they exist
+  if (
+    await prisma.permission.findUnique({
+      where: {
+        userEmail: permission.userEmail,
+      },
+    })
+  ) {
+    await prisma.permission.delete({
+      where: {
+        userEmail: permission.userEmail,
+      },
+    });
+  }
 
-  permissions.forEach(async (permission) => {
-    if (permission.userEmail !== undefined) {
-      operations.push(
-        prisma.permissions.upsert({
-          where: {
-            userEmail: permission.userEmail,
-          },
-          update: {
-            majorEditingPermissions: {
-              create: permission.majorEditingPermissions.map(
-                (majorEditPerm) => {
-                  return {
-                    major: {
-                      connect: {
-                        id: majorEditPerm.major.id,
-                      },
-                    },
-                    expirationDate: majorEditPerm.expirationDate,
-                  };
-                },
-              ),
+  const result = prisma.permission.upsert({
+    where: {
+      userEmail: permission.userEmail,
+    },
+    update: {
+      majorEditingPermissions: {
+        create: permission.majorEditingPermissions.map((majorEditPerm) => {
+          return {
+            major: {
+              connect: {
+                id: majorEditPerm.major.id,
+              },
             },
-          },
-          create: {
-            userEmail: permission.userEmail,
-            majorEditingPermissions: {
-              create: permission.majorEditingPermissions.map(
-                (majorEditPerm) => {
-                  return {
-                    major: {
-                      connect: {
-                        id: majorEditPerm.major.id,
-                      },
-                    },
-                    expirationDate: majorEditPerm.expirationDate,
-                  };
-                },
-              ),
-            },
-          },
+            expirationDate: majorEditPerm.expirationDate,
+          };
         }),
-      );
-    }
+      },
+    },
+    create: {
+      userEmail: permission.userEmail,
+      majorEditingPermissions: {
+        create: permission.majorEditingPermissions.map((majorEditPerm) => {
+          return {
+            major: {
+              connect: {
+                id: majorEditPerm.major.id,
+              },
+            },
+            expirationDate: majorEditPerm.expirationDate,
+          };
+        }),
+      },
+    },
+    select: {
+      userEmail: true,
+      majorEditingPermissions: {
+        select: {
+          major: {
+            select: {
+              id: true,
+              name: true,
+              catalogYear: true,
+            },
+          },
+          expirationDate: true,
+          id: true,
+        },
+      },
+    },
   });
 
-  await prisma.$transaction([...operations]);
-
-  return { success: true };
+  return result;
 }
 
-export async function getPermissions(): Promise<Permissions[]> {
-  const usersPermissions = await prisma.permissions.findMany({
+/**
+ * userId is the id of the potential admin making the request
+ * userEmail is the email of the user to remove permissions from
+ */
+export async function removePermission({
+  userId,
+  userEmail,
+}: {
+  userId: string;
+  userEmail: string;
+}) {
+  if ((await getUserRole(userId)) !== Role.ADMIN)
+    throw new Error("User is not an admin");
+
+  const result = prisma.permission.delete({
+    where: {
+      userEmail,
+    },
+  });
+
+  return result;
+}
+
+export async function getPermissions(): Promise<Permission[]> {
+  const usersPermissions = await prisma.permission.findMany({
     select: {
       userEmail: true,
       majorEditingPermissions: {
@@ -107,7 +149,7 @@ export async function userHasMajorEditingPermission(
   const major = await getUserMajorById(userId);
   if (!major) return false;
 
-  const permissions = await prisma.permissions.findUnique({
+  const permissions = await prisma.permission.findUnique({
     where: {
       userEmail: user.email,
     },
