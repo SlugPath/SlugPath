@@ -80,10 +80,7 @@ export default function PermissionsModal() {
     permissionsCopy.majorEditingPermissions =
       permissionsCopy.majorEditingPermissions.filter((majorEditPerm) => {
         const otherMajor = majorEditPerm.major;
-        return (
-          otherMajor.name !== major.name ||
-          otherMajor.catalogYear !== major.catalogYear
-        );
+        return otherMajor.name !== major.name;
       });
     onUpsertPermission(permissionsCopy);
   }
@@ -196,7 +193,6 @@ export default function PermissionsModal() {
               </div>
             </div>
             <PermissionList
-              permissions={permissions}
               onAddMajorEditPermission={handleAddMajorEditPermission}
               onRemoveMajorEditPermission={handleRemoveMajorEditPermission}
               onRemovePermissions={handleConfirmRemovePermissions}

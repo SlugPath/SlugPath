@@ -158,7 +158,7 @@ export async function userHasMajorEditingPermission(
         select: {
           major: {
             select: {
-              id: true,
+              name: true,
             },
           },
           expirationDate: true,
@@ -170,7 +170,7 @@ export async function userHasMajorEditingPermission(
   if (!permissions) return false;
 
   for (const majorEditPerm of permissions.majorEditingPermissions) {
-    if (majorEditPerm.major.id == major.id) {
+    if (majorEditPerm.major.name == major.name) {
       return majorEditPerm.expirationDate > new Date();
     }
   }

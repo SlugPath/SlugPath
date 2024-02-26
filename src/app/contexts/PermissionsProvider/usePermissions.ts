@@ -67,13 +67,20 @@ export default function usePermissions() {
   });
 
   function replacePermissionInState(permission: Permission) {
-    const newPerms = permissions.map((p) => {
-      if (p.userEmail === permission.userEmail) {
-        return permission;
-      }
-      return p;
-    });
-    handleSetPermissions(newPerms);
+    const userPermExists = permissions.find(
+      (p) => p.userEmail === permission.userEmail,
+    );
+    if (userPermExists) {
+      const newPerms = permissions.map((p) => {
+        if (p.userEmail === permission.userEmail) {
+          return permission;
+        }
+        return p;
+      });
+      handleSetPermissions(newPerms);
+    } else {
+      handleSetPermissions([...permissions, permission]);
+    }
   }
 
   function removePermissionFromState(userEmail: string) {

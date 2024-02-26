@@ -1,14 +1,14 @@
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
 import { Permission } from "@/app/types/Permission";
 import { Major } from "@customTypes/Major";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
-import { lazy } from "react";
+import { lazy, useContext } from "react";
 
 import useMajors from "./useMajors";
 
 const PermissionAccordion = lazy(() => import("./PermissionAccordion"));
 
 export interface PermissionsProps {
-  permissions: Permission[];
   onAddMajorEditPermission: (permission: Permission, major: Major) => void;
   onRemoveMajorEditPermission: (permission: Permission, major: Major) => void;
   onRemovePermissions: (permission: Permission) => void;
@@ -20,13 +20,13 @@ export interface PermissionsProps {
 }
 
 export default function PermissionsList({
-  permissions,
   onAddMajorEditPermission,
   onRemoveMajorEditPermission,
   onRemovePermissions,
   onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsProps) {
   const { majors } = useMajors();
+  const { permissions } = useContext(PermissionsContext);
 
   return (
     <AccordionGroup className="w-full h-[70vh] overflow-auto">

@@ -1,3 +1,4 @@
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
 import { Major } from "@/app/types/Major";
 import { Permission } from "@/app/types/Permission";
 import {
@@ -22,7 +23,7 @@ import {
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 
 import CloseIconButton from "../buttons/CloseIconButton";
 import StyledAccordion from "../planner/StyledAccordion";
@@ -49,6 +50,8 @@ export default function PermissionsAccordion({
   onRemovePermissions,
   onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsAccordionProps) {
+  const { loadingPermissions } = useContext(PermissionsContext);
+
   return (
     <StyledAccordion>
       <AccordionSummary>
@@ -57,6 +60,7 @@ export default function PermissionsAccordion({
           <Button
             color="danger"
             onClick={() => onRemovePermissions(permission)}
+            loading={loadingPermissions}
           >
             Remove
           </Button>
@@ -76,9 +80,7 @@ export default function PermissionsAccordion({
                     className="flex flex-row gap-1 items-center justify-between p-1"
                   >
                     <div className="flex flex-row gap-1 items-center justify-between w-full">
-                      <Typography>
-                        {major.name} {major.catalogYear}
-                      </Typography>
+                      <Typography>{major.name}</Typography>
                       <div className="flex flex-row gap-1 items-center justify-start">
                         <ExpirationLabel
                           expirationDate={majorEditPerm.expirationDate}
@@ -176,7 +178,7 @@ function SelectMajor({
     >
       {majors.map((major, index) => (
         <Option key={index} value={major}>
-          {major.name} {major.catalogYear}
+          {major.name}
         </Option>
       ))}
     </Select>
