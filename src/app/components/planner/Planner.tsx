@@ -53,14 +53,13 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   const { duplicatePlanner } = useContext(PlannersContext);
 
   // currently getting called twice. Maybe because the planner page is loading twice
+  // will try moving this to Planners.tsx
   if (search) {
     console.log()
     console.log("Calling Duplicate")
     router.replace('/planner', undefined);
 
     duplicatePlanner(search);
-    search = ""
-    console.log("Search has been cleared")
   }
   console.log(`Planner ID: ${search}`)
 

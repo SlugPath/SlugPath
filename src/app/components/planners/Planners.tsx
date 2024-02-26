@@ -8,7 +8,7 @@ import ShareModal from "../modals/shareModal/ShareModal";
 import PlannerList from "./PlannerList";
 import PlannerTabs from "./plannerTabs/PlannerTabs";
 
-export default function Planners({ planners }: { planners: PlannerData[] }) {
+export default function Planners({ planners, isShare }: { planners: PlannerData[], isShare: boolean }) {
   return (
     <PlannersProvider allPlanners={planners}>
       <div className="pt-4 mb-auto">

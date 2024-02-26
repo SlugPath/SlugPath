@@ -21,7 +21,7 @@ export default function ShareModal() {
 
   const handleCopyToClipboard = () => {
     navigator.clipboard
-      .writeText("http://localhost:3000/planner?share=" + activePlanner)
+      .writeText("http://localhost:3000/planner/" + activePlanner)
       .then(() => {
         console.log("Text copied to clipboard:", activePlanner);
         // You can add a success message or perform other actions here
@@ -65,8 +65,8 @@ export default function ShareModal() {
         </Typography>
         <Suspense fallback={<ExportSkeleton />}>
           <h1 style={{ marginTop: "20px" }}>
-            <a href={`http://localhost:3000/planner?share=${activePlanner}`}>
-            http://localhost:3000/planner?share={activePlanner}
+            <a href={`http://localhost:3000/planner/${activePlanner}`}>
+            http://localhost:3000/planner/{activePlanner}
             </a>
           </h1>
           <Button

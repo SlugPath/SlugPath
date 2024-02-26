@@ -7,5 +7,7 @@ export default async function Home() {
   const session = await getServerSession();
 
   const planners = await getAllPlanners(session?.user.email ?? "");
-  return <Planners planners={planners} />;
+
+  console.log("This should only be seen once")
+  return <Planners planners={planners} isShare={false}/>;
 }
