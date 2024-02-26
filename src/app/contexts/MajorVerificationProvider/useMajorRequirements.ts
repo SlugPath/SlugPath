@@ -2,9 +2,10 @@ import {
   getMajorRequirements,
   saveMajorRequirements,
 } from "@/app/actions/majorRequirements";
-import { Major } from "@/app/types/Major";
+import { Major } from "@customTypes/Major";
 import { Binder, RequirementList } from "@customTypes/Requirements";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function useMajorRequirements(
   majors: Major[],
@@ -19,67 +20,36 @@ export default function useMajorRequirements(
     }[]
   >();
 
-  // whenever the list of majors changes, fetch the major requirements for each major
-  useEffect(() => {
-    const fetchMajorRequirements = async (
-      majorId: number,
-      listOfRequirements: any,
-    ) => {
-      try {
-        const requirements: RequirementList =
-          await getMajorRequirements(majorId);
+  const emptyMajorRequirements = (major: Major) => ({
+    majorRequirements: {
+      id: "",
+      binder: Binder.AND,
+      requirements: [],
+    } as RequirementList,
+    major: major,
+    loadingSave: false,
+    isSaved: true,
+  });
 
-        // save the loaded major requirements to the state
-        const newListOfMajorRequirements = listOfRequirements.map(
-          (majorRequirement: any) => {
-            if (majorRequirement.major.id === majorId) {
-              return {
-                ...majorRequirement,
-                majorRequirements: requirements,
-                isSaved: true,
-              };
-            }
-            return majorRequirement;
-          },
-        );
+  useQuery({
+    queryKey: ["allMajorRequirements", ...majors],
+    queryFn: async () => {
+      const initRequirements = majors.map(emptyMajorRequirements);
+      setListOfMajorRequirements(
+        await Promise.all(
+          initRequirements.map(async (majorReq) => {
+            return {
+              ...majorReq,
+              majorRequirements: await getMajorRequirements(majorReq.major.id),
+              isSaved: true,
+            };
+          }),
+        ),
+      );
+    },
+  });
 
-        return newListOfMajorRequirements;
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
-      return listOfMajorRequirements;
-    };
-
-    async function asyncWork() {
-      // first create empty listOfMajorRequirements
-      let newListOfMajorRequirements = majors.map((major) => {
-        return {
-          majorRequirements: {
-            id: "",
-            binder: Binder.AND,
-            requirements: [],
-          },
-          major: major,
-          loadingSave: false,
-          isSaved: true,
-        };
-      });
-
-      for (const major of majors) {
-        newListOfMajorRequirements = await fetchMajorRequirements(
-          major.id,
-          newListOfMajorRequirements,
-        );
-      }
-      setListOfMajorRequirements(newListOfMajorRequirements);
-    }
-
-    asyncWork();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [majors]);
-
+  // handlers start ================================================
   function handleSetMajorRequirements(
     majorId: number,
     newMajorRequirements: RequirementList,
@@ -144,6 +114,7 @@ export default function useMajorRequirements(
     setLoadingSave(majorId, false);
     setIsSaved(majorId, true);
   }
+  // handlers end =================================================
 
   // helper functions start ================================================================================
   function getRequirementsForMajor(
