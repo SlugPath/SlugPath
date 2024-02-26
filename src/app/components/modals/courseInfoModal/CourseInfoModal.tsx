@@ -1,3 +1,4 @@
+import { getPastEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { courseInfo } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -52,15 +53,19 @@ export default function CourseInfoModal({
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ["course", course?.departmentCode, course?.number],
-    queryFn: async () => {
-      // Don't fetch if the course is undefined or a custom course
-      const res = await courseInfo({
+    queryFn: async () =>
+      await courseInfo({
         departmentCode: course!.departmentCode,
         number: course!.number,
-      });
-      return res;
-    },
+      }),
     enabled: course && !isCustomCourse(course),
+  });
+
+  const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
+    queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
+    queryFn: async () => await getPastEnrollmentInfo(course!),
+    enabled: course !== undefined && !isCustomCourse(course),
+    initialData: [],
   });
 
   // This is to prevent illegally opening the modal
@@ -69,7 +74,7 @@ export default function CourseInfoModal({
   }
 
   // Accessors
-  function title(c: StoredCourse | undefined) {
+  function title(c?: StoredCourse) {
     if (loading) return "";
     if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
     return `${c.departmentCode} ${c.number} ${getTitle(c)}`.slice(
@@ -78,7 +83,7 @@ export default function CourseInfoModal({
     );
   }
 
-  function description(c: StoredCourse | undefined) {
+  function description(c?: StoredCourse) {
     // If it is a custom course with a description, display it
     if (course && isCustomCourse(course)) {
       return `Description: ${course.description}`;
@@ -87,11 +92,9 @@ export default function CourseInfoModal({
     return `${c.description}`;
   }
 
-  function quartersOffered(c: StoredCourse | undefined) {
-    if (loading) return "";
-    if (!c) return `Quarters Offered: ${course?.quartersOffered.join(", ")}`;
-    if (c.quartersOffered.length == 0) return "Quarters Offered: None";
-    return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
+  function instructors() {
+    if (enrollLoading) return [];
+    return Array.from(new Set(enrollmentInfo.flatMap((e) => e.instructors)));
   }
 
   function credits(c: StoredCourse | undefined) {
@@ -244,45 +247,79 @@ export default function CourseInfoModal({
               {description(data)}
             </Typography>
           </Skeleton>
-          <Skeleton loading={loading} variant="text" width="50%">
-            {!isCSE(course) && !isCustomCourse(course) && (
-              <Typography
-                variant="soft"
-                color="warning"
-                component="p"
-                startDecorator={<WarningAmberRounded color="warning" />}
-              >
-                Warning: quarters offered information is unavailable for this
-                course.
-              </Typography>
-            )}
-            {isCSE(course) && !isOffered(course.quartersOffered, term) && (
-              <Typography
-                variant="soft"
-                color="warning"
-                component="p"
-                startDecorator={<WarningAmberRounded color="warning" />}
-              >
-                Warning: {course.departmentCode} {course.number} is not offered
-                in {` ${term}`}
-              </Typography>
-            )}
-            <Typography component="p">{quartersOffered(data)}</Typography>
-            <Typography component="p">Credits: {credits(data)}</Typography>
-            {data !== undefined && (
-              <>
-                <Typography component="p">{prerequisites(data)}</Typography>
-                <Typography component="p">GE: {ge(data)}</Typography>
-              </>
-            )}
-            {!viewOnly && course.labels && (
-              <SelectedLabels
-                labels={getCourseLabels(course)}
-                handleOpenLabels={handleOpenLabels}
-                ge={course.ge}
-              />
-            )}
-          </Skeleton>
+          {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
+          {!isCustomCourse(course) ? (
+            <>
+              <Typography component="p">{prerequisites(data)}</Typography>
+              <Typography component="p">GE: {ge(data)}</Typography>
+              <Skeleton loading={enrollLoading} variant="text" width="50%">
+                {!isCustomCourse(course) && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Typography component="p">Quarters:</Typography>
+                    {enrollmentInfo.map((e, i) => {
+                      let color: "warning" | "primary" | "success" | "danger";
+                      switch (e.term.title) {
+                        case "Fall":
+                          color = "warning";
+                          break;
+                        case "Winter":
+                          color = "primary";
+                          break;
+                        case "Spring":
+                          color = "success";
+                          break;
+                        default:
+                          color = "danger";
+                      }
+                      return (
+                        <Chip key={i} color={color}>
+                          {e.term.title} {e.term.catalogYear}
+                        </Chip>
+                      );
+                    })}
+                  </div>
+                )}
+                {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+                  <Typography
+                    variant="soft"
+                    color="warning"
+                    component="p"
+                    startDecorator={<WarningAmberRounded color="warning" />}
+                  >
+                    Warning: {course.departmentCode} {course.number} is not
+                    offered in {` ${term}`}
+                  </Typography>
+                )}
+              </Skeleton>
+              <Skeleton loading={enrollLoading} variant="text" width="50%">
+                <div className="flex flex-wrap gap-2 items-center">
+                  <Typography component="p">Instructors:</Typography>
+                  {instructors().map((inst, i) => (
+                    <Chip key={i} color="primary">
+                      {inst}
+                    </Chip>
+                  ))}
+                </div>
+              </Skeleton>
+            </>
+          ) : (
+            <div className="flex flex-row gap-2 items-center">
+              <Typography component="p">Quarters Offered:</Typography>
+              {course.quartersOffered.map((q, i) => (
+                <Chip key={i} color="primary">
+                  {q}
+                </Chip>
+              ))}
+            </div>
+          )}
+          <Typography component="p">Credits: {credits(data)}</Typography>
+          {!viewOnly && course.labels && (
+            <SelectedLabels
+              labels={getCourseLabels(course)}
+              handleOpenLabels={handleOpenLabels}
+              ge={course.ge}
+            />
+          )}
           <ModalClose variant="plain" />
           {!viewOnly && customCourseInPlanner && (
             <div className="flex gap-2">

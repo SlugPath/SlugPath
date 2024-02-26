@@ -1,6 +1,7 @@
 "use server";
 
 import { terms } from "@/lib/consts";
+import { z } from "zod";
 
 import { StoredCourse } from "../types/Course";
 import { Term } from "../types/Quarter";
@@ -9,27 +10,48 @@ type Instructor = {
   cruzid: string;
   name: string;
 };
+
+type CourseEnrollQuery = Pick<StoredCourse, "number" | "departmentCode">;
+
+const classInfoSchema = z.object({
+  strm: z.string(),
+  class_nbr: z.string(),
+  class_section: z.string(),
+  session_code: z.string(),
+  class_status: z.string(),
+  subject: z.string(),
+  catalog_nbr: z.string(),
+  component: z.string(),
+  start_time: z.string(),
+  end_time: z.string(),
+  location: z.string(),
+  meeting_days: z.string(),
+  enrl_status: z.string(),
+  waitlist_total: z.string(),
+  enrl_capacity: z.string(),
+  enrl_total: z.string(),
+  instructors: z.custom<Instructor[]>(),
+});
+
+type ClassInfo = z.infer<typeof classInfoSchema>;
+
+const termEnrollmentSchema = z.object({
+  classes: z.array(classInfoSchema),
+});
+
+type TermEnrollmentInfo = z.infer<typeof termEnrollmentSchema>[];
+
 // getPastEnrollmentInfo returns the quarters offered and the professors who taught a course
 // in past quarters
-export async function getPastEnrollmentInfo(
-  course: Pick<StoredCourse, "number" | "departmentCode">,
-) {
+export async function getPastEnrollmentInfo(course: CourseEnrollQuery) {
   const pastQuarters = getPastQuarters();
   const pastOfferings = await Promise.all(
     pastQuarters.map(({ id }) =>
       fetch(createEnrollmentInfoURL(id, course)).then((res) => res.json()),
     ),
   ).then((offers) => {
-    // Only get the valid offerings because sometimes a course is not offered
-    // in a particular quarter
-    const valid = offers.filter((of) => of.status === undefined);
-    // Only get the offerings that match the course number
-    const allClasses = valid
-      .flatMap((v) => v.classes)
-      .filter((c) => c.catalog_nbr === course.number);
-
-    // Final transformation
-    return allClasses.map((c) => ({
+    // Get the term and instructors for each time the course was offered previously
+    return filterOfferings(offers, course).map((c) => ({
       term: getTermById(c.strm),
       instructors: c.instructors.flatMap((inst: Instructor) => inst.name),
     }));
@@ -39,9 +61,9 @@ export async function getPastEnrollmentInfo(
   );
 }
 
-export async function getFutureEnrollmentInfo(
-  course: Pick<StoredCourse, "number" | "departmentCode">,
-) {
+// getFutureEnrollmentInfo returns current and future enrollment information about a particular
+// course
+export async function getFutureEnrollmentInfo(course: CourseEnrollQuery) {
   const futureQuarters = getFutureQuarters();
 
   return Promise.all(
@@ -53,13 +75,25 @@ export async function getFutureEnrollmentInfo(
         },
       }).then((res) => res.json()),
     ),
-  );
-}
-
-export async function getQuartersOffered(course: StoredCourse) {
-  const url = createEnrollmentInfoURL(2248, course);
-  const res = await fetch(url);
-  return await res.json();
+  ).then((offers) => {
+    return filterOfferings(offers, course).map((c) => ({
+      term: getTermById(c.strm),
+      instructors: c.instructors.flatMap((inst: Instructor) => inst.name),
+      class_section: c.class_section,
+      class_status: c.class_status,
+      session_code: c.session_code,
+      subject: c.subject,
+      component: c.component,
+      start_time: c.start_time,
+      end_time: c.end_time,
+      location: c.location,
+      meeting_days: c.meeting_days,
+      enrl_status: c.enrl_status,
+      waitlist_total: c.waitlist_total,
+      enrl_capacity: c.enrl_capacity,
+      enrl_total: c.enrl_total,
+    }));
+  });
 }
 
 // =========== Helper functions =============
@@ -73,7 +107,7 @@ function createEnrollmentInfoURL(
 function getCurrentQuarter() {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
+  const currentYear = currentDate.getFullYear() - 2000;
   let term: Term;
   switch (true) {
     case currentMonth >= 9 && currentMonth <= 12:
@@ -105,7 +139,7 @@ function getCurrentQuarter() {
 
 function getFutureQuarters() {
   const { id: currentId } = getCurrentQuarter();
-  return terms.filter((t) => t.id > currentId);
+  return terms.filter((t) => t.id >= currentId);
 }
 
 function getPastQuarters() {
@@ -119,4 +153,18 @@ function getTermById(id: string) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id: _, ...rest } = term;
   return rest;
+}
+
+function filterOfferings(offers: any[], course: CourseEnrollQuery) {
+  // Filter offerings because sometimes a course is not offered
+  // in a particular quarter. We do this using zod to safely parse
+  const terms: TermEnrollmentInfo = offers.filter(
+    (off) => termEnrollmentSchema.safeParse(off).success,
+  );
+  // Only get the offerings that match the course number
+  const allClasses: ClassInfo[] = terms
+    .flatMap((v) => v.classes)
+    .filter((c) => c.catalog_nbr === course.number);
+
+  return allClasses;
 }

@@ -23,29 +23,29 @@ export const geOptions = [
   { label: "PR-S", value: "prS" },
 ] as SearchParams;
 export const terms = [
-  // 2023-2024 Catalog Year
-  { id: 2238, title: "Fall", catalogYear: "2023-2024" },
-  { id: 2240, title: "Winter", catalogYear: "2023-2024" },
-  { id: 2242, title: "Spring", catalogYear: "2023-2024" },
-  { id: 2244, title: "Summer", catalogYear: "2023-2024" },
+  // 23-24 Catalog Year
+  { id: 2238, title: "Fall", catalogYear: "23-24" },
+  { id: 2240, title: "Winter", catalogYear: "23-24" },
+  { id: 2242, title: "Spring", catalogYear: "23-24" },
+  { id: 2244, title: "Summer", catalogYear: "23-24" },
 
-  // 2022-2023 Catalog Year
-  { id: 2228, title: "Fall", catalogYear: "2022-2023" },
-  { id: 2230, title: "Winter", catalogYear: "2022-2023" },
-  { id: 2232, title: "Spring", catalogYear: "2022-2023" },
-  { id: 2234, title: "Summer", catalogYear: "2022-2023" },
+  // 22-23 Catalog Year
+  { id: 2228, title: "Fall", catalogYear: "22-23" },
+  { id: 2230, title: "Winter", catalogYear: "22-23" },
+  { id: 2232, title: "Spring", catalogYear: "22-23" },
+  { id: 2234, title: "Summer", catalogYear: "22-23" },
 
-  // 2021-2022 Catalog Year
-  { id: 2218, title: "Fall", catalogYear: "2021-2022" },
-  { id: 2220, title: "Winter", catalogYear: "2021-2022" },
-  { id: 2222, title: "Spring", catalogYear: "2021-2022" },
-  { id: 2224, title: "Summer", catalogYear: "2021-2022" },
+  // 21-22 Catalog Year
+  { id: 2218, title: "Fall", catalogYear: "21-22" },
+  { id: 2220, title: "Winter", catalogYear: "21-22" },
+  { id: 2222, title: "Spring", catalogYear: "21-22" },
+  { id: 2224, title: "Summer", catalogYear: "21-22" },
 
-  // 2020-2021 Catalog Year
-  { id: 2208, title: "Fall", catalogYear: "2020-2021" },
-  { id: 2210, title: "Winter", catalogYear: "2020-2021" },
-  { id: 2212, title: "Spring", catalogYear: "2020-2021" },
-  { id: 2214, title: "Summer", catalogYear: "2020-2021" },
+  // 20-21 Catalog Year
+  { id: 2208, title: "Fall", catalogYear: "20-21" },
+  { id: 2210, title: "Winter", catalogYear: "20-21" },
+  { id: 2212, title: "Spring", catalogYear: "20-21" },
+  { id: 2214, title: "Summer", catalogYear: "20-21" },
 ] as const;
 export const REQUIREMENT_LIST_DROPPABLE_PREFIX = "requirement-list-";
 export const SEARCH_DROPPABLE = "search-droppable";

@@ -33,10 +33,12 @@ async function createPlanner(
       if (!c) {
         throw new Error(`Course with id ${cid} not found`);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { prerequisites: _, ...crs } = c;
       return {
-        ...c,
-        ge: [...c.ge],
-        quartersOffered: [...c.quartersOffered],
+        ...crs,
+        ge: [...crs.ge],
+        quartersOffered: [...crs.quartersOffered],
       };
     });
 
