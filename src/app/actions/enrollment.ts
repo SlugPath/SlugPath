@@ -56,9 +56,10 @@ export async function getPastEnrollmentInfo(course: CourseEnrollQuery) {
       instructors: c.instructors.flatMap((inst: Instructor) => inst.name),
     }));
   });
-  return pastOfferings.toSorted((a, b) =>
+  pastOfferings.sort((a, b) =>
     a.term.catalogYear.localeCompare(b.term.catalogYear),
   );
+  return pastOfferings;
 }
 
 // getFutureEnrollmentInfo returns current and future enrollment information about a particular
@@ -80,9 +81,6 @@ export async function getFutureEnrollmentInfo(course: CourseEnrollQuery) {
       term: getTermById(c.strm),
       instructors: c.instructors.flatMap((inst: Instructor) => inst.name),
       class_section: c.class_section,
-      class_status: c.class_status,
-      session_code: c.session_code,
-      subject: c.subject,
       component: c.component,
       start_time: c.start_time,
       end_time: c.end_time,
