@@ -13,7 +13,6 @@ import AccordionSummary, {
   accordionSummaryClasses,
 } from "@mui/joy/AccordionSummary";
 import React from "react";
-import { useCallback, useEffect } from "react";
 
 import CustomSliderComponent from "./CustomSliderComponent";
 
@@ -69,33 +68,12 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
     handleReset,
   } = handlers;
 
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      handleSearch(
-        departmentCode ?? "",
-        number,
-        ge ?? "",
-        numberRange,
-        creditRange,
-      );
-    },
-    [handleSearch, departmentCode, number, ge, numberRange, creditRange],
-  );
-
-  useEffect(() => {
-    const syntheticEvent = new Event(
-      "submit",
-    ) as unknown as React.FormEvent<HTMLFormElement>;
-    handleSubmit(syntheticEvent);
-  }, [handleSubmit, numberRange, creditRange]);
-
   const { mode } = useColorScheme();
 
   const backgroundColor = mode === "light" ? "#f1f5f9" : "#181a1c";
 
   const courseNumberMarks = [
-    { value: 0, label: "0" },
+    { value: 1, label: "1" },
     { value: 100, label: "100" },
     { value: 200, label: "200" },
     { value: 299, label: "299" },
@@ -109,7 +87,18 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
   ];
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleSearch(
+          departmentCode ?? "",
+          number,
+          ge ?? "",
+          numberRange,
+          creditRange,
+        );
+      }}
+    >
       <div className="grid grid-cols-6 gap-2 p-2">
         <Select
           placeholder="Department"
@@ -196,7 +185,6 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
               defaultRangeValue={[1, 15]}
               marks={creditMarks}
               label={"Course Credit Range"}
-              showMinMaxInputs={false}
             />
           </AccordionDetails>
         </Accordion>

@@ -56,7 +56,7 @@ export default function useSearch() {
         creditRange,
       ),
     delay: 100,
-    dependencies: [departmentCode, number, ge, numberRange, creditRange],
+    dependencies: [departmentCode, number, ge, ...numberRange, ...creditRange],
   });
 
   // Handlers
