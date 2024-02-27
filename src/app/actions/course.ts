@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { compareCoursesByNum, toStoredCourse } from "@/lib/utils";
-import { Course } from "@prisma/client";
+import { Course, Prisma } from "@prisma/client";
 
 import {
   CourseQuery,
@@ -61,24 +61,25 @@ export async function coursesBy(
 
   let courses = [];
   if (!pred.number) {
-    if (pred.ge) {
-      courses = await prisma.$queryRaw<Course[]>`
-        SELECT *
-        FROM "Course"
-        WHERE ("departmentCode" = ${pred.departmentCode} OR ${pred.departmentCode} = '') 
-        AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) BETWEEN ${pred.numberRange[0]} AND ${pred.numberRange[1]}
-        AND "credits" BETWEEN ${pred.creditRange[0]} AND ${pred.creditRange[1]}
-        AND ${pred.ge} = ANY("ge")
-      `;
-    } else {
-      courses = await prisma.$queryRaw<Course[]>`
+    courses = await prisma.$queryRaw<Course[]>`
       SELECT *
       FROM "Course"
-      WHERE ("departmentCode" = ${pred.departmentCode} OR ${pred.departmentCode} = '') 
-      AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) BETWEEN ${pred.numberRange[0]} AND ${pred.numberRange[1]}
-      AND "credits" BETWEEN ${pred.creditRange[0]} AND ${pred.creditRange[1]}
+      WHERE
+      ${
+        pred.departmentCode
+          ? Prisma.sql`"departmentCode" = ${pred.departmentCode} AND`
+          : Prisma.empty
+      }
+      ${pred.ge ? Prisma.sql`${pred.ge} = ANY("ge") AND` : Prisma.empty}
+      CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) >= ${
+        pred.numberRange[0]
+      } 
+      AND CAST(REGEXP_REPLACE("number", '[^0-9]', '', 'g') AS INT) <= ${
+        pred.numberRange[1]
+      }
+      AND "credits" >= ${pred.creditRange[0]} 
+      AND "credits" <= ${pred.creditRange[1]};
     `;
-    }
   } else {
     courses = await prisma.course.findMany({
       where: {

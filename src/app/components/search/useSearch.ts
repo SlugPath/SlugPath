@@ -25,7 +25,7 @@ export default function useSearch() {
     departmentCode: "",
     number: "",
     ge: "",
-    numberRange: [0, 299],
+    numberRange: [1, 299],
     creditRange: [1, 15],
   });
 
@@ -100,7 +100,7 @@ export default function useSearch() {
     setDepartmentCode("");
     setNumber("");
     setGE("");
-    setNumberRange([0, 299]);
+    setNumberRange([1, 299]);
     setCreditRange([1, 15]);
     handleSearch(
       departmentCode ?? "",
