@@ -1,9 +1,6 @@
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { getQuarterId } from "@/lib/quarterUtils";
-import {
-  CourseInfoContext,
-  CourseInfoProvider,
-} from "@contexts/CourseInfoProvider";
+import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PermissionsProvider } from "@contexts/PermissionsProvider";
@@ -11,7 +8,12 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { DeleteOutline, ExpandLess, ExpandMore } from "@mui/icons-material";
+import {
+  Add,
+  DeleteOutline,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -31,7 +33,6 @@ import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequireme
 import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
-import TooManyPlannersAlert from "../planners/plannerTabs/TooManyPlannersAlert";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
@@ -53,7 +54,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     addYear,
   } = useContext(PlannerContext);
 
-  const [tooManyYearsAlertOpen, setTooManyYearsAlertOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
   if (!isActive) {
     return <></>;
@@ -72,27 +72,32 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 <AccordionGroup>
                   <div className="space-y-2 h-[75vh] overflow-auto">
                     <Years courseState={courseState} />
-                    {courseState.years == MAX_YEARS ? (
-                      <Tooltip title="Cannot add more years. Too many open.">
-                        <span>
-                          <Button disabled fullWidth={true} size="lg">
-                            {" "}
-                            Add Year{" "}
-                          </Button>
-                        </span>
-                      </Tooltip>
-                    ) : (
-                      <Button fullWidth={true} size="lg" onClick={addYear}>
-                        {" "}
-                        Add Year{" "}
-                      </Button>
-                    )}
-                    <TooManyPlannersAlert
-                      open={tooManyYearsAlertOpen}
-                      onClose={() => setTooManyYearsAlertOpen(false)}
-                      warningContent="Too Many Years"
-                      dialogContent="You have too many years open. Delete one to add a new one."
-                    />
+                    <div className="my-4">
+                      {courseState.years == MAX_YEARS ? (
+                        <Tooltip title="Cannot add more years.">
+                          <span>
+                            <Button
+                              disabled
+                              fullWidth={true}
+                              size="lg"
+                              startDecorator={<Add />}
+                            >
+                              {" "}
+                              Add Year{" "}
+                            </Button>
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <Button
+                          fullWidth={true}
+                          size="lg"
+                          onClick={addYear}
+                          startDecorator={<Add />}
+                        >
+                          Add Year
+                        </Button>
+                      )}
+                    </div>
                     <Accordion
                       variant="soft"
                       sx={{
@@ -125,7 +130,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   </div>
                 </AccordionGroup>
               </div>
-
               <div className="flex flex-col self-start gap-3">
                 <PlannerActions />
                 <GraduationProgressCard
@@ -146,18 +150,18 @@ export default function Planner({ isActive }: { isActive: boolean }) {
 // SearchContainer is used to hide the main Search component when another modal that uses the Search component is open,
 // such as the CourseInfoModal or MajorProgressModal.
 function SearchContainer() {
-  const { showCourseInfoModal } = useContext(CourseInfoContext);
   const { showMajorsModal } = useContext(ModalsContext);
 
-  return (
-    <>
-      {!showMajorsModal && !showCourseInfoModal ? (
-        <Search displayCustomCourseSelection={true} />
-      ) : (
-        <Card className="w-80 h-full" />
-      )}
-    </>
-  );
+  // Don't show the virtualized search menu if the majorProgressModal is open
+  if (showMajorsModal)
+    return (
+      <div className="flex flex-col gap-2 w-80">
+        <Card className="h-20" />
+        <Card className="h-[67vh]" />
+      </div>
+    );
+
+  return <Search displayCustomCourseSelection />;
 }
 
 function GraduationProgressCard({
