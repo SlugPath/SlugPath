@@ -13,12 +13,9 @@ export const zip = (arr1: any[], arr2: any[]) => {
   return arr1.map((elem, index) => [elem, arr2[index]]);
 };
 
-// Utility function to truncate tab title
-
 /**
  * Truncates a title to a certain length
  *
- * NOTE: There is also a tailwindCSS class for this (truncate)
  * @param title title to truncate
  * @param maxLength
  * @returns truncated title
@@ -80,8 +77,8 @@ export function toStoredCourse({
 
 /**
  * Join an array of strings with a space (for use with tailwind classes)
- * @param {string[]} classes
- * @returns {string}
+ * @param classes
+ * @returns joined string
  */
 export function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");

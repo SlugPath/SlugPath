@@ -13,7 +13,6 @@ export default function PlannerList() {
 
   if (!planners || planners.length == 0) return <HelpfulTips />;
 
-  // Why using map? Why not just render the Planner component directly?
   return (
     <div className="w-full flex-1 flex flex-col min-h-0">
       {planners.map(({ id, title }, index) => (
