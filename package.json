@@ -21,6 +21,7 @@
     "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@headlessui/react": "^1.7.18",
     "@hello-pangea/dnd": "^16.5.0",
     "@mui/icons-material": "^5.15.10",
     "@mui/joy": "5.0.0-beta.24",

@@ -10,7 +10,7 @@ import PlannerTabs from "./plannerTabs/PlannerTabs";
 export default function Planners({ planners }: { planners: PlannerData[] }) {
   return (
     <PlannersProvider allPlanners={planners}>
-      <div className="pt-4 mb-auto">
+      <div className="pt-4 mb-auto relative">
         <div className="flex justify-left px-7">
           <PlannerTabs />
         </div>

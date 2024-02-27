@@ -11,7 +11,7 @@ export default function Navbar() {
   const { status } = useSession();
 
   return (
-    <header className="bg-primary-500 w-full">
+    <header className="bg-primary-500 w-full h-14">
       <nav className={`${status !== "authenticated" ? "py-1.5" : "py-1"} px-5`}>
         <div className="flex flex-row">
           <Link href="/" className="pr-2">
