@@ -178,10 +178,21 @@ export async function userHasMajorEditPermission(
 ): Promise<boolean> {
   const permissions = await getUserPermissions(userId);
 
+  const major = await prisma.major.findUnique({
+    where: {
+      id: majorId,
+    },
+    select: {
+      name: true,
+    },
+  });
+
+  if (!major) throw new Error(`Major ${majorId} not found`);
+
   if (permissions?.majorEditingPermissions) {
     return permissions?.majorEditingPermissions.some((majorEditPerm) => {
       return (
-        majorEditPerm.major.id == majorId &&
+        majorEditPerm.major.name == major.name &&
         majorEditPerm.expirationDate > new Date()
       );
     });

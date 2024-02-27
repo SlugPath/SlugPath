@@ -5,9 +5,7 @@ export function hasPermissionToEditMajor(
   major: Major,
   majorsAllowedToEdit: Major[],
 ) {
-  return majorsAllowedToEdit.some(
-    (m) => m.name == major.name && m.catalogYear == major.catalogYear,
-  );
+  return majorsAllowedToEdit.some((m) => m.name == major.name);
 }
 
 export function getMajorsAllowedToEdit(

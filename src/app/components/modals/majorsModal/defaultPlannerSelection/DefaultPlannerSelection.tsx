@@ -91,8 +91,6 @@ export default function DefaultPlannerSelection({
 
   // Handlers
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
-
     if (updateDefaultPlannerIsPending && defaultPlannerId !== undefined) {
       switch (saveButtonClicked) {
         case ButtonName.Save:
@@ -103,23 +101,19 @@ export default function DefaultPlannerSelection({
         // before the new planner is created or replaced
         case ButtonName.CreateNew:
           setIsSaved(true);
-          timeoutId = setTimeout(() => {
+          setTimeout(() => {
             addPlanner();
           }, 200);
           break;
         case ButtonName.ReplaceCurrent:
           setIsSaved(true);
           if (onReplacePlanner) onReplacePlanner();
-          timeoutId = setTimeout(() => {
+          setTimeout(() => {
             replaceCurrentPlanner();
           }, 200);
           break;
       }
     }
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
   }, [
     saveButtonClicked,
     updateDefaultPlannerIsPending,
