@@ -44,19 +44,13 @@ export default function SelectDefaultPlanner({
         </Tooltip>
       </div>
       <div className="space-y-2">
-        <Tabs
-          defaultValue={selectedDefaultPlanner}
-          value={selectedDefaultPlanner}
-          variant="soft"
-          onChange={onChange}
-        >
+        <Tabs value={selectedDefaultPlanner} variant="soft" onChange={onChange}>
           <TabList>
-            {defaultPlanners &&
-              defaultPlanners.map((planner, index) => (
-                <Tab key={index} value={planner.id}>
-                  {planner.title}
-                </Tab>
-              ))}
+            {defaultPlanners?.map((planner, index) => (
+              <Tab key={index} value={planner.id}>
+                {planner.title}
+              </Tab>
+            ))}
           </TabList>
         </Tabs>
         {loadingMajorDefaultPlanners ? (

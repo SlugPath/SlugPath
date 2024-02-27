@@ -2,7 +2,7 @@ import { Major } from "@/app/types/Major";
 import { MajorInput, getUserMajorsById, saveUserMajors } from "@actions/major";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 /**
  *
@@ -16,19 +16,15 @@ export default function useMajorSelection(onSuccess?: () => void) {
   const userId = session?.user.id;
   // Update user major data
   const queryClient = useQueryClient();
-  const { isPending: userMajorsIsLoading, data: userMajorsData } = useQuery({
+  const { isPending: userMajorsIsLoading } = useQuery({
     queryKey: ["userMajors", userId],
     queryFn: async () => {
-      return await getUserMajorsById(userId!);
+      const res = await getUserMajorsById(userId!);
+      setUserMajors(res);
+      return res;
     },
     enabled: !!session,
   });
-
-  useEffect(() => {
-    if (userMajorsData) {
-      setUserMajors(userMajorsData);
-    }
-  }, [userMajorsData]);
 
   const {
     mutate: saveMajors,
@@ -47,10 +43,9 @@ export default function useMajorSelection(onSuccess?: () => void) {
     onSuccess: () => {
       if (onSuccess) onSuccess();
       queryClient.refetchQueries({ queryKey: ["userMajors", userId] });
-      queryClient.invalidateQueries({ queryKey: ["userMajors", userId] });
-      queryClient.refetchQueries({
-        queryKey: ["userDefaultPlannerId", session?.user.id],
-      });
+      // need to refetch the primary major because it might be null now
+      // if we deleted the current primary major and we need to reflect that in the UI
+      queryClient.refetchQueries({ queryKey: ["userPrimaryMajor", userId] });
     },
   });
 

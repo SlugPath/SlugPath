@@ -41,7 +41,6 @@ export default function DefaultPlannerSelection({
   );
   const [isSaved, setIsSaved] = useState(false);
   const [error, setError] = useState("");
-
   const {
     primaryMajor,
     setPrimaryMajor,
@@ -54,23 +53,10 @@ export default function DefaultPlannerSelection({
     loadingMajorDefaultPlanners,
   } = useContext(DefaultPlannerContext);
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
-
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
-  // if primaryMajor is present, set selectedMajor to primaryMajor
-  useEffect(() => {
-    if (primaryMajor) {
-      for (const major of userMajors) {
-        if (major.id === primaryMajor.id) {
-          setPrimaryMajor(major);
-          break;
-        }
-      }
-    }
-  }, [primaryMajor, setPrimaryMajor, userMajors]);
-
   function handleChangeSelectedMajor(
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     newValue: Major | null,
   ) {
     if (newValue != null) {
@@ -80,7 +66,7 @@ export default function DefaultPlannerSelection({
   }
 
   function handleChangeDefaultPlanner(
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     plannerId: string | number | null,
   ) {
     if (typeof plannerId === "string") {
@@ -91,8 +77,6 @@ export default function DefaultPlannerSelection({
 
   // Handlers
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
-
     if (updateDefaultPlannerIsPending && defaultPlannerId !== undefined) {
       switch (saveButtonClicked) {
         case ButtonName.Save:
@@ -103,23 +87,14 @@ export default function DefaultPlannerSelection({
         // before the new planner is created or replaced
         case ButtonName.CreateNew:
           setIsSaved(true);
-          timeoutId = setTimeout(() => {
-            addPlanner();
-          }, 200);
+          addPlanner();
           break;
         case ButtonName.ReplaceCurrent:
           setIsSaved(true);
           if (onReplacePlanner) onReplacePlanner();
-          timeoutId = setTimeout(() => {
-            replaceCurrentPlanner();
-          }, 200);
-          break;
+          replaceCurrentPlanner();
       }
     }
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
   }, [
     saveButtonClicked,
     updateDefaultPlannerIsPending,
@@ -169,6 +144,16 @@ export default function DefaultPlannerSelection({
     </div>
   );
 
+  // Set the primary major to the instance of the corresponding majors
+  // in userMajors, because the references are different even though
+  // the values are the same
+  useEffect(() => {
+    if (primaryMajor) {
+      const found = userMajors.find((m) => m.id === primaryMajor.id) ?? null;
+      setPrimaryMajor(found);
+    }
+  }, [primaryMajor, userMajors, setPrimaryMajor]);
+
   return (
     <div className="w-full">
       <ConfirmAlert
@@ -180,11 +165,11 @@ export default function DefaultPlannerSelection({
       <div className="overflow-y-scroll h-[70vh] space-y-2">
         {error.length > 0 && <ErrorAlert />}
         <div>
-          <Typography level="body-lg">Primary Major</Typography>
+          <Typography level="body-lg">Primary Program</Typography>
           <Select
-            value={primaryMajor}
             placeholder="Choose one…"
             variant="plain"
+            value={primaryMajor}
             onChange={handleChangeSelectedMajor}
             disabled={userMajors.length === 0}
           >
@@ -195,7 +180,7 @@ export default function DefaultPlannerSelection({
             ))}
           </Select>
         </div>
-        {userMajors.length > 0 && (
+        {userMajors.length > 0 && primaryMajor && (
           <SelectDefaultPlanner
             selectedDefaultPlanner={defaultPlannerId}
             onChange={handleChangeDefaultPlanner}

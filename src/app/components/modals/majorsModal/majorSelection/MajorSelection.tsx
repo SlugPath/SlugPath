@@ -19,7 +19,7 @@ import {
 import { ProgramType } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useContext, useEffect, useState } from "react";
+import { SyntheticEvent, useContext, useEffect, useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectMajorName from "./SelectMajorName";
@@ -59,8 +59,8 @@ export default function MajorSelection() {
   }, [userMajors]);
 
   function handleChangeProgramType(
-    event: React.SyntheticEvent | null,
-    newValue: ProgramType,
+    _: React.SyntheticEvent | null,
+    newValue: ProgramType | null,
   ) {
     if (newValue != null) {
       queryClient.invalidateQueries({
@@ -71,7 +71,7 @@ export default function MajorSelection() {
   }
 
   function handleChangeMajorName(
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     newValue: string | null,
   ) {
     if (newValue != null) {
@@ -80,7 +80,7 @@ export default function MajorSelection() {
   }
 
   function handleChangeCatalogYear(
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     newCatalogYear: string | null,
   ) {
     if (typeof newCatalogYear === "string") {
@@ -126,7 +126,7 @@ export default function MajorSelection() {
         "You have already added this major: " + majorName + " " + catalogYear,
       );
     } else {
-      // actually add the major here
+      // Optimistically update the UI
       const newMajors = [...selectedMajors, majorToAdd];
       setSelectedMajors(newMajors);
       setMajorName("");
@@ -182,6 +182,28 @@ export default function MajorSelection() {
   );
 }
 
+interface MajorsListProps {
+  selectedMajors: Major[];
+  major: string;
+  catalogYear: string;
+  programType: ProgramType;
+  majors: string[] | undefined;
+  handleChangeProgramType: (
+    _: React.SyntheticEvent | null,
+    newValue: ProgramType | null,
+  ) => void;
+  handleChangeCatalogYear: (
+    _: React.SyntheticEvent | null,
+    newValue: string | null,
+  ) => void;
+  handleChangeMajorName: (
+    _: React.SyntheticEvent | null,
+    newValue: string | null,
+  ) => void;
+  errorSavingMajor: boolean;
+  onRemoveMajor: (majorId: number) => void;
+  onAddMajor: () => void;
+}
 function MajorsList({
   selectedMajors,
   major,
@@ -194,19 +216,7 @@ function MajorsList({
   errorSavingMajor,
   onRemoveMajor,
   onAddMajor,
-}: {
-  selectedMajors: Major[];
-  major: string;
-  catalogYear: string;
-  programType: ProgramType;
-  majors: any;
-  handleChangeProgramType: any;
-  handleChangeCatalogYear: any;
-  handleChangeMajorName: any;
-  errorSavingMajor: any;
-  onRemoveMajor: any;
-  onAddMajor: any;
-}) {
+}: MajorsListProps) {
   return (
     <>
       <Typography level="h4" textColor="inherit" fontWeight="lg" mb={1}>

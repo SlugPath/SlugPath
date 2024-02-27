@@ -7,8 +7,8 @@ import { Major } from "../types/Major";
 import { PlannerData, PlannerTitle } from "../types/Planner";
 
 export interface DefaultPlannerContextProps {
-  primaryMajor: Major | undefined;
-  setPrimaryMajor: SetState<Major | undefined>;
+  primaryMajor: Major | null;
+  setPrimaryMajor: SetState<Major | null>;
   majorDefaultPlanners: PlannerTitle[] | undefined;
   loadingMajorDefaultPlanners: boolean;
   updateDefaultPlanner: (plannerId: string) => void;
