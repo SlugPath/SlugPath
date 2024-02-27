@@ -87,7 +87,7 @@ export default function SearchResults({
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {hasResults() ? (
               <div>
-                <div className="overflow-y-auto h-[62vh]">
+                <div className="overflow-y-auto h-[54vh]">
                   <AutoSizer>
                     {({ height, width }) => (
                       <List
@@ -102,7 +102,7 @@ export default function SearchResults({
                 </div>
               </div>
             ) : (
-              <div className="flex justify-center items-center h-96">
+              <div className="flex justify-center items-center h-[54vh]">
                 {!hasResults() && !loading ? (
                   <p className="text-gray-400 text-center">
                     No results. Try changing the search parameters.

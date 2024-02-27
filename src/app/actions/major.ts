@@ -8,10 +8,10 @@ export async function getMajors(catalogYear?: string) {
   const query: any = {
     orderBy: [
       {
-        catalogYear: "desc",
+        name: "asc",
       },
       {
-        name: "asc",
+        catalogYear: "asc",
       },
     ],
     select: {
@@ -86,9 +86,7 @@ export async function getUserMajorById(
     },
   });
   const major = userData?.major;
-  if (!major) {
-    return null;
-  }
+  if (!major) return null;
 
   return {
     name: major.name,

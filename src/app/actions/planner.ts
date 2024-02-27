@@ -2,7 +2,7 @@
 
 import { toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
-import { LabelColor, Term } from "@prisma/client";
+import { LabelColor } from "@prisma/client";
 
 import { PlannerData } from "../types/Planner";
 
@@ -27,7 +27,7 @@ async function createPlanner(
   const notes = plannerData.notes;
 
   const newQuarters = plannerData.quarters.map((q) => {
-    const [year, term] = q.id.split("-").slice(1);
+    const { year, title: term } = q;
     const enrolledCourses = q.courses.map((cid) => {
       const c = plannerData.courses.find((c) => c.id === cid);
       if (!c) {
@@ -41,8 +41,8 @@ async function createPlanner(
     });
 
     return {
-      year: parseInt(year),
-      term: term as Term,
+      year,
+      term,
       courses: {
         create: enrolledCourses,
       },

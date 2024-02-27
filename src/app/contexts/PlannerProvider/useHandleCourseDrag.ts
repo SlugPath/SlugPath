@@ -1,5 +1,6 @@
 import { CUSTOM_DROPPABLE, SEARCH_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId, findQuarter } from "@/lib/plannerUtils";
+import { getQuarterId } from "@/lib/quarterUtils";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
@@ -115,7 +116,7 @@ export default function useHandleCourseDrag({
     );
 
     function isSameQuarter(startQuarter: Quarter, finishQuarter: Quarter) {
-      return startQuarter.id === finishQuarter.id;
+      return getQuarterId(startQuarter) === getQuarterId(finishQuarter);
     }
 
     if (isSameQuarter(startQuarter, finishQuarter)) {

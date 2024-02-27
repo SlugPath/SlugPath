@@ -4,27 +4,16 @@ import { cn } from "@/lib/utils";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 import Planner from "../planner/Planner";
-import DeletedPlannerSnackbar from "./plannerTabs/DeletedPlannerSnackbar";
 
 export default function PlannerList() {
-  const { planners, deletedPlanner, activePlanner } =
-    useContext(PlannersContext);
-  const [openDeletedPlannerSnackbar, setOpenDeletedPlannerSnackbar] =
-    useState(false);
+  const { planners, activePlanner } = useContext(PlannersContext);
 
-  useEffect(() => {
-    if (deletedPlanner) {
-      setOpenDeletedPlannerSnackbar(true);
-    }
-  }, [deletedPlanner]);
-
-  if (planners.length == 0) return <HelpfulTips />;
+  if (!planners || planners.length == 0) return <HelpfulTips />;
 
   // Why using map? Why not just render the Planner component directly?
-
   return (
     <div className="border-2 border-yellow-500 w-full flex-1 flex flex-col min-h-0">
       {planners.map(({ id, title }, index) => (
@@ -42,10 +31,6 @@ export default function PlannerList() {
           </MajorVerificationProvider>
         </div>
       ))}
-      <DeletedPlannerSnackbar
-        open={openDeletedPlannerSnackbar}
-        setOpen={setOpenDeletedPlannerSnackbar}
-      />
     </div>
   );
 }
