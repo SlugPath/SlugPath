@@ -2,7 +2,7 @@ import {
   getMajorRequirements,
   saveMajorRequirements,
 } from "@/app/actions/majorRequirements";
-import { Major } from "@/app/types/Major";
+import { Major } from "@customTypes/Major";
 import { Binder, RequirementList } from "@customTypes/Requirements";
 import { useEffect, useState } from "react";
 
@@ -144,6 +144,7 @@ export default function useMajorRequirements(
     setLoadingSave(majorId, false);
     setIsSaved(majorId, true);
   }
+  // handlers end =================================================
 
   // helper functions start ================================================================================
   function getRequirementsForMajor(
