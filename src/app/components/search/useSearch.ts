@@ -1,5 +1,6 @@
 import { geOptions } from "@/lib/consts";
 import { coursesBy, getAllDepartments } from "@actions/course";
+import { SearchQueryDetails } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -8,14 +9,10 @@ export default function useSearch() {
   // Query to get the list of departments
   const { data: departments } = useQuery({
     queryKey: ["departments"],
-    queryFn: async () => {
-      try {
-        const depts = await getAllDepartments();
-        return [{ label: "--", value: null }, ...depts];
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    queryFn: async () => [
+      { label: "--", value: null },
+      ...(await getAllDepartments()),
+    ],
   });
 
   // Query details for course search
@@ -24,7 +21,7 @@ export default function useSearch() {
   const [ge, setGE] = useState<string | null>(null);
   const [numberRange, setNumberRange] = useState<number[]>([1, 299]);
   const [creditRange, setCreditRange] = useState<number[]>([1, 15]);
-  const [queryDetails, setQueryDetails] = useState({
+  const [queryDetails, setQueryDetails] = useState<SearchQueryDetails>({
     departmentCode: "",
     number: "",
     ge: "",
@@ -36,14 +33,7 @@ export default function useSearch() {
   const { data: courses, isLoading: loading } = useQuery({
     queryKey: ["courses", queryDetails],
     placeholderData: keepPreviousData,
-    queryFn: async () => {
-      try {
-        const res = await coursesBy(queryDetails);
-        return res;
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    queryFn: async () => await coursesBy(queryDetails),
   });
 
   useDebounce({
@@ -61,7 +51,7 @@ export default function useSearch() {
 
   // Handlers
   const handleChangeDepartment = (
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     value: string | null,
   ) => {
     setDepartmentCode(value);
