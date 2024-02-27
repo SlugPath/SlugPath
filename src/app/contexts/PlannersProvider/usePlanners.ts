@@ -23,7 +23,7 @@ export function usePlanners(
     setMultiPlanner((prev) => ({ ...prev, activePlanner: id }));
   };
 
-  const { defaultPlanner } = useContext(DefaultPlannerContext);
+  const { userDefaultPlanner } = useContext(DefaultPlannerContext);
 
   const [showExportModal, setShowExportModal] = useState(false);
 
@@ -97,7 +97,7 @@ export function usePlanners(
     const id = uuidv4();
     setMultiPlanner((prev) => ({
       planners: prev.planners.concat({
-        ...cloneDefaultPlanner(defaultPlanner),
+        ...cloneDefaultPlanner(userDefaultPlanner),
         id,
         title: "New Planner",
       }),
@@ -123,7 +123,7 @@ export function usePlanners(
         planners: prev.planners.map((p) =>
           p.id === prev.activePlanner
             ? {
-                ...cloneDefaultPlanner(defaultPlanner),
+                ...cloneDefaultPlanner(userDefaultPlanner),
                 id: prev.activePlanner,
                 title,
               }

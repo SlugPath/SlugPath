@@ -1,5 +1,6 @@
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
 import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
+import { Permission } from "@/app/types/Permission";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -22,7 +23,7 @@ import {
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 
 import CloseIconButton from "../buttons/CloseIconButton";
 import StyledAccordion from "../planner/StyledAccordion";
@@ -30,33 +31,36 @@ import StyledAccordion from "../planner/StyledAccordion";
 const materialTheme = extendMaterialTheme();
 
 export interface PermissionsAccordionProps {
-  permissions: Permissions;
+  permission: Permission;
   majors: Major[];
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemoveMajorEditPermission: (permissions: Permissions, major: Major) => void;
-  onRemovePermissions: (permissions: Permissions) => void;
+  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
+  onRemoveMajorEditPermission: (permission: Permission, major: Major) => void;
+  onRemovePermissions: (permission: Permission) => void;
   onUpdateMajorEditPermissionExpirationDate: (
-    permissions: Permissions,
+    permission: Permission,
     major: Major,
     expirationDate: Date,
   ) => void;
 }
 export default function PermissionsAccordion({
-  permissions,
+  permission,
   majors,
   onAddMajorEditPermission,
   onRemoveMajorEditPermission,
   onRemovePermissions,
   onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsAccordionProps) {
+  const { loadingPermissions } = useContext(PermissionsContext);
+
   return (
     <StyledAccordion>
       <AccordionSummary>
         <div className="flex flex-row ml-2 gap-1 items-center justify-between w-full">
-          <Typography>{permissions.userEmail}</Typography>
+          <Typography>{permission.userEmail}</Typography>
           <Button
             color="danger"
-            onClick={() => onRemovePermissions(permissions)}
+            onClick={() => onRemovePermissions(permission)}
+            loading={loadingPermissions}
           >
             Remove
           </Button>
@@ -64,7 +68,7 @@ export default function PermissionsAccordion({
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          {permissions.majorEditingPermissions.map((majorEditPerm, index) => {
+          {permission.majorEditingPermissions.map((majorEditPerm, index) => {
             const major = majorEditPerm.major;
 
             return (
@@ -77,7 +81,8 @@ export default function PermissionsAccordion({
                   >
                     <div className="flex flex-row gap-1 items-center justify-between w-full">
                       <Typography>
-                        {major.name} {major.catalogYear}
+                        {major.name}{" "}
+                        {major.programType == "Minor" ? "(Minor)" : ""}
                       </Typography>
                       <div className="flex flex-row gap-1 items-center justify-start">
                         <ExpirationLabel
@@ -94,7 +99,7 @@ export default function PermissionsAccordion({
                                 slotProps={{ textField: { size: "small" } }}
                                 onChange={(date) =>
                                   onUpdateMajorEditPermissionExpirationDate(
-                                    permissions,
+                                    permission,
                                     major,
                                     date!,
                                   )
@@ -107,7 +112,7 @@ export default function PermissionsAccordion({
                     </div>
                     <CloseIconButton
                       onClick={() =>
-                        onRemoveMajorEditPermission(permissions, major)
+                        onRemoveMajorEditPermission(permission, major)
                       }
                     />
                   </Card>
@@ -118,7 +123,7 @@ export default function PermissionsAccordion({
         </List>
         <SelectMajor
           majors={majors}
-          permissions={permissions}
+          permission={permission}
           onAddMajorEditPermission={onAddMajorEditPermission}
         />
       </AccordionDetails>
@@ -147,21 +152,21 @@ function ExpirationLabel({ expirationDate }: { expirationDate: Date }) {
 
 function SelectMajor({
   majors,
-  permissions,
+  permission,
   onAddMajorEditPermission,
 }: {
   majors: Major[];
-  permissions: Permissions;
-  onAddMajorEditPermission: (permissions: Permissions, major: Major) => void;
+  permission: Permission;
+  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
 }) {
   const [value, setValue] = useState<Major | null>(null);
 
   function onChange(
-    event: SyntheticEvent<Element, Event> | null,
+    _: SyntheticEvent<Element, Event> | null,
     newValue: Major | null,
   ) {
     if (newValue) {
-      onAddMajorEditPermission(permissions, newValue);
+      onAddMajorEditPermission(permission, newValue);
       setValue(null);
     }
   }
@@ -169,14 +174,14 @@ function SelectMajor({
   return (
     <Select
       value={value}
-      placeholder="Add a major..."
+      placeholder="Add a program..."
       variant="plain"
       onChange={onChange}
       disabled={majors.length == 0}
     >
       {majors.map((major, index) => (
         <Option key={index} value={major}>
-          {major.name} {major.catalogYear}
+          {major.name} {major.programType == "Minor" ? "(Minor)" : ""}
         </Option>
       ))}
     </Select>

@@ -13,11 +13,11 @@ export function PermissionsProvider({
   const {
     isPending: loadingPermissions,
     isSaved,
-    permissionsList,
-    onSetPermissionsList,
-    onSavePermissions,
+    permissions,
+    onUpsertPermission,
+    onRemovePermission,
     isAdmin,
-    hasPermissionToEdit,
+    majorsAllowedToEdit,
   } = usePermissions();
 
   return (
@@ -25,11 +25,11 @@ export function PermissionsProvider({
       value={{
         loadingPermissions,
         isSaved,
-        permissionsList,
-        onSetPermissionsList,
-        onSavePermissions,
+        permissions,
+        onUpsertPermission,
+        onRemovePermission,
         isAdmin,
-        hasPermissionToEdit,
+        majorsAllowedToEdit,
       }}
     >
       {children}
