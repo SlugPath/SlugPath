@@ -17,7 +17,7 @@ export default function QuarterCard({
   courses: StoredCourse[];
 }) {
   const totalCredits = getTotalCredits(courses);
-  const { showMajorProgressModal } = useContext(ModalsContext);
+  const { showMajorsModal } = useContext(ModalsContext);
 
   return (
     <Card size="md" className="min-w-[130px] w-full" variant="plain">
@@ -28,7 +28,7 @@ export default function QuarterCard({
         </Chip>
       </div>
       {/* disable quarterCard droppable when majorProgressModal droppable may be active, prevents dnd issues */}
-      <Droppable droppableId={id} isDropDisabled={showMajorProgressModal}>
+      <Droppable droppableId={id} isDropDisabled={showMajorsModal}>
         {(provided) => {
           return (
             <div

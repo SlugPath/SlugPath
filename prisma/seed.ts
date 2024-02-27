@@ -1,7 +1,13 @@
-import { majors, years } from "@/lib/defaultPlanners";
+import { majors, minors, years } from "@/lib/defaultPlanners";
 import { createQuarters, getRealEquivalent } from "@/lib/plannerUtils";
 import { zip } from "@/lib/utils";
-import { Major, PrismaClient, PrismaPromise, Term } from "@prisma/client";
+import {
+  Major,
+  PrismaClient,
+  PrismaPromise,
+  ProgramType,
+  Term,
+} from "@prisma/client";
 
 import { getCourses, getPlanners } from "./csvreader";
 
@@ -50,6 +56,22 @@ async function main() {
           data: {
             name: m,
             catalogYear: y,
+            programType: ProgramType.Major,
+          },
+        }),
+      );
+    }
+  }
+
+  // Load all minors
+  for (const m of minors) {
+    for (const y of years) {
+      ops.push(
+        prisma.major.create({
+          data: {
+            name: m,
+            catalogYear: y,
+            programType: ProgramType.Minor,
           },
         }),
       );
@@ -58,6 +80,7 @@ async function main() {
   await prisma.$transaction([...ops]);
   console.log(`✨ Loaded ${courses.length} courses ✨`);
   console.log(`✨ Loaded all majors ✨`);
+  console.log(`✨ Loaded all minors ✨`);
 
   const planners = await getPlanners();
 
@@ -67,11 +90,13 @@ async function main() {
   }
   console.log(`✨ Loaded all default planners ✨`);
 
-  await prisma.major.deleteMany({
+  // remove the majors that don't have any default planners but have major as program type
+  await prisma.major.findMany({
     where: {
       defaultPlanners: {
         none: {},
       },
+      programType: ProgramType.Major,
     },
   });
 
@@ -79,11 +104,11 @@ async function main() {
 
   const allMajors = await prisma.major.findMany();
 
-  const ops2 = [];
+  const ops3 = [];
   for (const m of allMajors) {
-    ops2.push(createNonePlannerForMajor(m));
+    ops3.push(createNonePlannerForMajor(m));
   }
-  await prisma.$transaction([...ops2]);
+  await prisma.$transaction([...ops3]);
   console.log(`✨ Done ✨`);
 }
 
@@ -167,9 +192,10 @@ async function addPlannersInCatalogYear(planners: any, catalogYear: string) {
     ).id;
     await prisma.major.update({
       where: {
-        name_catalogYear: {
+        name_catalogYear_programType: {
           name: majorName,
           catalogYear,
+          programType: ProgramType.Major,
         },
       },
       data: {

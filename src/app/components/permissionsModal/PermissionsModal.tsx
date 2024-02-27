@@ -1,5 +1,5 @@
 import { Major } from "@/app/types/Major";
-import { Permissions } from "@/app/types/Permissions";
+import { Permission } from "@/app/types/Permission";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PermissionsContext } from "@contexts/PermissionsProvider";
 import ReportIcon from "@mui/icons-material/Report";
@@ -18,7 +18,7 @@ import { z } from "zod";
 
 import IsSatisfiedMark from "../miscellaneous/IsSatisfiedMark";
 import ConfirmAlert from "../modals/ConfirmAlert";
-import PermissionsList from "./PermissionsList";
+import PermissionList from "./PermissionList";
 
 export default function PermissionsModal() {
   const { showPermissionsModal, setShowPermissionsModal } =
@@ -27,87 +27,70 @@ export default function PermissionsModal() {
   const [email, setEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const {
-    permissionsList,
+    permissions,
     loadingPermissions,
     isSaved,
-    onSetPermissionsList,
-    onSavePermissions,
+    onUpsertPermission,
+    onRemovePermission,
   } = useContext(PermissionsContext);
 
   const [permissionsAlertOpen, setPermissionsAlertOpen] = useState(false);
-  const [permissionsToRemove, setPermissionsToRemove] =
-    useState<Permissions | null>(null);
+  const [permissionToRemove, setPermissionToRemove] =
+    useState<Permission | null>(null);
 
   // Handlers
   function handleAddUser() {
     if (selectionIsValid()) {
-      onSetPermissionsList([
-        ...permissionsList,
-        { userEmail: email, majorEditingPermissions: [] },
-      ]);
+      onUpsertPermission({ userEmail: email, majorEditingPermissions: [] });
       setEmail("");
     } else {
       setErrorMsg("Invalid email or email has already been added");
     }
   }
 
-  function handleConfirmRemovePermissions(permissions: Permissions) {
-    setPermissionsToRemove(permissions);
+  function handleConfirmRemovePermissions(permission: Permission) {
+    setPermissionToRemove(permission);
     setPermissionsAlertOpen(true);
   }
 
-  function handleRemovePermissions(permissions: Permissions) {
-    onSetPermissionsList(
-      permissionsList.filter((u) => u.userEmail !== permissions.userEmail),
-    );
+  function handleRemovePermissions(permission: Permission) {
+    onRemovePermission(permission.userEmail);
   }
 
-  function handleAddMajorEditPermission(
-    permissions: Permissions,
-    major: Major,
-  ) {
-    if (isMajorAlreadyAdded(permissions, major)) {
+  function handleAddMajorEditPermission(permission: Permission, major: Major) {
+    if (isMajorAlreadyAdded(permission, major)) {
       return;
     }
 
-    const permissionsCopy = { ...permissions };
+    const permissionsCopy = { ...permission };
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 14);
     permissionsCopy.majorEditingPermissions.push({
       major: major,
       expirationDate,
     });
-    onSetPermissionsList([
-      ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
-      permissionsCopy,
-    ]);
+    onUpsertPermission(permissionsCopy);
   }
 
   function handleRemoveMajorEditPermission(
-    permissions: Permissions,
+    permission: Permission,
     major: Major,
   ) {
-    const permissionsCopy = { ...permissions };
+    const permissionsCopy = { ...permission };
     permissionsCopy.majorEditingPermissions =
       permissionsCopy.majorEditingPermissions.filter((majorEditPerm) => {
         const otherMajor = majorEditPerm.major;
-        return (
-          otherMajor.name !== major.name ||
-          otherMajor.catalogYear !== major.catalogYear
-        );
+        return otherMajor.name !== major.name;
       });
-    onSetPermissionsList([
-      ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
-      permissionsCopy,
-    ]);
+    onUpsertPermission(permissionsCopy);
   }
 
   function handleUpdateMajorEditPermissionExpirationDate(
-    permissions: Permissions,
+    permission: Permission,
     major: Major,
     expirationDate: Date,
   ) {
-    const permissionsCopy = { ...permissions };
+    const permissionsCopy = { ...permission };
     permissionsCopy.majorEditingPermissions =
       permissionsCopy.majorEditingPermissions.map((majorEditPerm) => {
         const otherMajor = majorEditPerm.major;
@@ -123,19 +106,16 @@ export default function PermissionsModal() {
           return majorEditPerm;
         }
       });
-    onSetPermissionsList([
-      ...permissionsList.filter((p) => p.userEmail !== permissions.userEmail),
-      permissionsCopy,
-    ]);
+    onUpsertPermission(permissionsCopy);
   }
 
   // Helpers
   function isUserAlreadyAdded(email: string) {
-    return permissionsList.some((p) => p.userEmail === email);
+    return permissions.some((p) => p.userEmail === email);
   }
 
-  function isMajorAlreadyAdded(permissions: Permissions, major: Major) {
-    return permissions.majorEditingPermissions.some((m) => {
+  function isMajorAlreadyAdded(permission: Permission, major: Major) {
+    return permission.majorEditingPermissions.some((m) => {
       const otherMajor = m.major;
       return (
         otherMajor.name === major.name &&
@@ -165,7 +145,6 @@ export default function PermissionsModal() {
       <Sheet
         sx={{
           width: "50%",
-          height: "95%",
           margin: 10,
           borderRadius: "md",
           p: 3,
@@ -209,24 +188,10 @@ export default function PermissionsModal() {
               </div>
               <div className="flex flex-row gap-1 items-center">
                 <IsSatisfiedMark isSatisfied={isSaved} />
-                {loadingPermissions ? (
-                  <CircularProgress />
-                ) : (
-                  <Button
-                    disabled={isSaved}
-                    color="primary"
-                    onClick={() => {
-                      onSavePermissions();
-                      setErrorMsg("");
-                    }}
-                  >
-                    Save
-                  </Button>
-                )}
+                {loadingPermissions && <CircularProgress />}
               </div>
             </div>
-            <PermissionsList
-              permissionsList={permissionsList}
+            <PermissionList
               onAddMajorEditPermission={handleAddMajorEditPermission}
               onRemoveMajorEditPermission={handleRemoveMajorEditPermission}
               onRemovePermissions={handleConfirmRemovePermissions}
@@ -240,7 +205,7 @@ export default function PermissionsModal() {
         <ConfirmAlert
           open={permissionsAlertOpen}
           onClose={() => setPermissionsAlertOpen(false)}
-          onConfirm={() => handleRemovePermissions(permissionsToRemove!)}
+          onConfirm={() => handleRemovePermissions(permissionToRemove!)}
           dialogText="Are you sure you want remove this permission?"
         />
       </Sheet>

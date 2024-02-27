@@ -17,11 +17,11 @@ export default function SelectCatalogYear({
 }: SelectCatalogYearProps) {
   return (
     <>
-      <Typography level="body-lg">Select your catalog year</Typography>
+      <Typography level="body-lg">Catalog Year</Typography>
       <Select
         value={catalogYear}
         placeholder="Choose one…"
-        variant="soft"
+        variant="plain"
         onChange={onChange}
       >
         {years.map((year, index) => (
