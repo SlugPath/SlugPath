@@ -1,5 +1,6 @@
 "use client";
 
+import { ModalsProvider } from "@/app/contexts/ModalsProvider";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
@@ -24,9 +25,11 @@ export default function PlannerList() {
             key={id}
           >
             <MajorVerificationProvider>
-              <PlannerProvider plannerId={id} title={title} order={index}>
-                <Planner isActive={activePlanner === id} />
-              </PlannerProvider>
+              <ModalsProvider>
+                <PlannerProvider plannerId={id} title={title} order={index}>
+                  <Planner isActive={activePlanner === id} />
+                </PlannerProvider>
+              </ModalsProvider>
             </MajorVerificationProvider>
           </ListItem>
         ))}
