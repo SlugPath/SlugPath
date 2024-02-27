@@ -60,18 +60,18 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   }
 
   return (
-    <div className="flex border-green-500 border-2 w-full flex-1 min-w-0">
+    <div className="flex w-full flex-1 min-h-0">
       <DragDropContext onDragEnd={handleDragEnd}>
         <PermissionsProvider>
           <ModalsProvider>
             <CourseInfoProvider>
-              <div className="flex justify-between space-x-4 border-2 border-rose-500 w-full min-w-0">
-                <div className="flex-initial pr-2">
+              <div className="flex justify-between space-x-4 w-full min-h-0">
+                <div className="flex flex-col min-h-0 flex-initial">
                   <SearchContainer />
                 </div>
-                <div className="overflow-auto w-full flex-grow border-2 max-h-full">
+                <div className="overflow-auto w-full flex-grow max-h-full">
                   <AccordionGroup>
-                    <div className="space-y-2 overflow-auto border-2 border-green-500 min-w-0">
+                    <div className="space-y-2 overflow-auto min-h-0">
                       <Years courseState={courseState} />
                       <div className="my-4">
                         {courseState.years == MAX_YEARS ? (
@@ -158,9 +158,9 @@ function SearchContainer() {
   // Don't show the virtualized search menu if the majorProgressModal is open
   if (showMajorProgressModal)
     return (
-      <div className="flex flex-col gap-2 w-80">
+      <div className="flex flex-col gap-2 w-80 h-full">
         <Card className="h-20" />
-        <Card className="h-[67vh]" />
+        <Card className="h-full flex-1" />
       </div>
     );
 

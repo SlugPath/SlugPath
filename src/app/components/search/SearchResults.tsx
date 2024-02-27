@@ -84,10 +84,14 @@ export default function SearchResults({
     >
       {(provided, snapshot) => {
         return (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="h-full"
+          >
             {hasResults() ? (
-              <div>
-                <div className="overflow-y-auto h-[54vh]">
+              <div className="h-full">
+                <div className="overflow-y-auto h-full">
                   <AutoSizer>
                     {({ height, width }) => (
                       <List

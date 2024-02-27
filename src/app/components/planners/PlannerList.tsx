@@ -15,13 +15,13 @@ export default function PlannerList() {
 
   // Why using map? Why not just render the Planner component directly?
   return (
-    <div className="border-2 border-yellow-500 w-full flex-1 flex flex-col min-h-0">
+    <div className="w-full flex-1 flex flex-col min-h-0">
       {planners.map(({ id, title }, index) => (
         <div
           key={id}
           className={
             (cn(activePlanner === id ? "block" : "none"),
-            "flex w-full flex-1 border-blue-500 border-2")
+            "flex w-full flex-1 min-h-0")
           }
         >
           <MajorVerificationProvider>
