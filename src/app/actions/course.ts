@@ -59,8 +59,22 @@ export async function coursesBy(
     return {};
   };
 
+  // Since course numbers can contain non-integer characters, a raw SQL query is necessary.
+  // If the number field is empty, a raw query is used. If not, regular Prisma Client commands are used,
+  // as the course number slider has no effect when the number field is active.
   let courses = [];
-  if (!pred.number) {
+  if (pred.number) {
+    courses = await prisma.course.findMany({
+      where: {
+        departmentCode: departmentCodeParam().departmentCode,
+        number: numberParam().number,
+        ge: geParam().ge,
+        credits: creditParam().credits,
+      },
+    });
+  } else {
+    // Raw query filters integers from course number characters to see if in slider range
+    // If department or ge fields are empty an empty query is used
     courses = await prisma.$queryRaw<Course[]>`
       SELECT *
       FROM "Course"
@@ -80,15 +94,6 @@ export async function coursesBy(
       AND "credits" >= ${pred.creditRange[0]} 
       AND "credits" <= ${pred.creditRange[1]};
     `;
-  } else {
-    courses = await prisma.course.findMany({
-      where: {
-        departmentCode: departmentCodeParam().departmentCode,
-        number: numberParam().number,
-        ge: geParam().ge,
-        credits: creditParam().credits,
-      },
-    });
   }
 
   // Convert to a stored course and sort by number
