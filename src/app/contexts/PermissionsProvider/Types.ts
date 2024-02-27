@@ -1,3 +1,4 @@
+import { Major } from "@/app/types/Major";
 import { Permission } from "@/app/types/Permission";
 
 export interface PermissionsContextProps {
@@ -7,5 +8,5 @@ export interface PermissionsContextProps {
   onUpsertPermission: (permission: Permission) => void;
   onRemovePermission: (userEmail: string) => void;
   isAdmin: boolean;
-  hasPermissionToEdit: boolean;
+  majorsAllowedToEdit: Major[];
 }

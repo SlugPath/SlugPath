@@ -5,7 +5,7 @@ import {
   CourseInfoProvider,
 } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
-import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
 import { PermissionsProvider } from "@contexts/PermissionsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
@@ -25,9 +25,11 @@ import {
 } from "@mui/joy";
 import { useContext, useState } from "react";
 
-import MajorSelectionModal from "../majorSelection/MajorSelectionModal";
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
+import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
+import MajorsModal from "../modals/majorsModal/MajorsModal";
+import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import TooManyPlannersAlert from "../planners/plannerTabs/TooManyPlannersAlert";
 import Search from "../search/Search";
@@ -37,8 +39,6 @@ import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
-import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorProgressModal";
-import ReplaceRequirementsModal from "./graduationProgress/majorProgressModal/ReplaceRequirementsModal";
 import QuarterCard from "./quarters/QuarterCard";
 
 const MAX_YEARS = 10;
@@ -63,82 +63,80 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <PermissionsProvider>
-          <ModalsProvider>
-            <CourseInfoProvider>
-              <div className="flex justify-between space-x-4">
-                <div className="flex-initial pr-2">
-                  <SearchContainer />
-                </div>
-                <div className="overflow-auto w-full flex-grow">
-                  <AccordionGroup>
-                    <div className="space-y-2 h-[75vh] overflow-auto">
-                      <Years courseState={courseState} />
-                      {courseState.years == MAX_YEARS ? (
-                        <Tooltip title="Cannot add more years. Too many open.">
-                          <span>
-                            <Button disabled fullWidth={true} size="lg">
-                              {" "}
-                              Add Year{" "}
-                            </Button>
-                          </span>
-                        </Tooltip>
-                      ) : (
-                        <Button fullWidth={true} size="lg" onClick={addYear}>
-                          {" "}
-                          Add Year{" "}
-                        </Button>
-                      )}
-                      <TooManyPlannersAlert
-                        open={tooManyYearsAlertOpen}
-                        onClose={() => setTooManyYearsAlertOpen(false)}
-                        warningContent="Too Many Years"
-                        dialogContent="You have too many years open. Delete one to add a new one."
-                      />
-                      <Accordion
-                        variant="soft"
-                        sx={{
-                          borderRadius: "0.5rem",
-                          "&.MuiAccordion-root": {
-                            "& .MuiAccordionSummary-root": {
-                              padding: "0.5rem 0",
-                              paddingX: "0.5rem",
-                            },
-                          },
-                        }}
-                        defaultExpanded={true}
-                        expanded={isExpanded === true}
-                        onChange={(_, expanded) => {
-                          setIsExpanded(expanded ? true : false);
-                        }}
-                      >
-                        <AccordionSummary indicator={null}>
-                          {indicatorIcon(isExpanded)}
-                          Notes
-                          <IconButton />
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <NotesEditor
-                            content={courseState.notes}
-                            onUpdateNotes={updateNotes}
-                          />
-                        </AccordionDetails>
-                      </Accordion>
-                    </div>
-                  </AccordionGroup>
-                </div>
-
-                <div className="flex flex-col self-start gap-3">
-                  <PlannerActions />
-                  <GraduationProgressCard
-                    totalCredits={totalCredits}
-                    geSatisfied={geSatisfied}
-                    courseState={courseState}
-                  />
-                </div>
+          <CourseInfoProvider>
+            <div className="flex justify-between space-x-4">
+              <div className="flex-initial pr-2">
+                <SearchContainer />
               </div>
-              <Modals />
-            </CourseInfoProvider>
-          </ModalsProvider>
+              <div className="overflow-auto w-full flex-grow">
+                <AccordionGroup>
+                  <div className="space-y-2 h-[75vh] overflow-auto">
+                    <Years courseState={courseState} />
+                    {courseState.years == MAX_YEARS ? (
+                      <Tooltip title="Cannot add more years. Too many open.">
+                        <span>
+                          <Button disabled fullWidth={true} size="lg">
+                            {" "}
+                            Add Year{" "}
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    ) : (
+                      <Button fullWidth={true} size="lg" onClick={addYear}>
+                        {" "}
+                        Add Year{" "}
+                      </Button>
+                    )}
+                    <TooManyPlannersAlert
+                      open={tooManyYearsAlertOpen}
+                      onClose={() => setTooManyYearsAlertOpen(false)}
+                      warningContent="Too Many Years"
+                      dialogContent="You have too many years open. Delete one to add a new one."
+                    />
+                    <Accordion
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
+                          },
+                        },
+                      }}
+                      defaultExpanded={true}
+                      expanded={isExpanded === true}
+                      onChange={(_, expanded) => {
+                        setIsExpanded(expanded ? true : false);
+                      }}
+                    >
+                      <AccordionSummary indicator={null}>
+                        {indicatorIcon(isExpanded)}
+                        Notes
+                        <IconButton />
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <NotesEditor
+                          content={courseState.notes}
+                          onUpdateNotes={updateNotes}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                </AccordionGroup>
+              </div>
+
+              <div className="flex flex-col self-start gap-3">
+                <PlannerActions />
+                <GraduationProgressCard
+                  totalCredits={totalCredits}
+                  geSatisfied={geSatisfied}
+                  courseState={courseState}
+                />
+              </div>
+            </div>
+            <Modals />
+          </CourseInfoProvider>
         </PermissionsProvider>
       </DragDropContext>
     </div>
@@ -149,11 +147,11 @@ export default function Planner({ isActive }: { isActive: boolean }) {
 // such as the CourseInfoModal or MajorProgressModal.
 function SearchContainer() {
   const { showCourseInfoModal } = useContext(CourseInfoContext);
-  const { showMajorProgressModal } = useContext(ModalsContext);
+  const { showMajorsModal } = useContext(ModalsContext);
 
   return (
     <>
-      {!showMajorProgressModal && !showCourseInfoModal ? (
+      {!showMajorsModal && !showCourseInfoModal ? (
         <Search displayCustomCourseSelection={true} />
       ) : (
         <Card className="w-80 h-full" />
@@ -206,8 +204,8 @@ function Modals() {
   return (
     <>
       <CourseInfoModal />
-      <MajorSelectionModal />
-      <MajorProgressModal />
+      <MajorsModal />
+      <EditMajorRequirementsModal />
       <ReplaceRequirementsModal />
       <PermissionsModal />
     </>

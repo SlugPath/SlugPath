@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { Role } from "@prisma/client";
 
 import { Permission } from "../types/Permission";
-import { getUserMajorById } from "./major";
 
 export async function upsertPermission({
   userId,
@@ -73,10 +72,10 @@ export async function upsertPermission({
               id: true,
               name: true,
               catalogYear: true,
+              programType: true,
             },
           },
           expirationDate: true,
-          id: true,
         },
       },
     },
@@ -119,6 +118,7 @@ export async function getPermissions(): Promise<Permission[]> {
               id: true,
               name: true,
               catalogYear: true,
+              programType: true,
             },
           },
           expirationDate: true,
@@ -131,9 +131,7 @@ export async function getPermissions(): Promise<Permission[]> {
   return usersPermissions;
 }
 
-export async function userHasMajorEditingPermission(
-  userId: string,
-): Promise<boolean> {
+export async function getUserPermissions(userId: string): Promise<Permission> {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -144,36 +142,51 @@ export async function userHasMajorEditingPermission(
     },
   });
 
-  if (!user) throw new Error(`User ${userId} not found`);
-
-  const major = await getUserMajorById(userId);
-  if (!major) return false;
+  if (user == null) throw new Error(`User ${userId} not found`);
 
   const permissions = await prisma.permission.findUnique({
     where: {
-      userEmail: user.email,
+      userEmail: user?.email,
     },
     select: {
       majorEditingPermissions: {
         select: {
           major: {
             select: {
+              id: true,
               name: true,
+              catalogYear: true,
+              programType: true,
             },
           },
           expirationDate: true,
         },
       },
+      userEmail: true,
     },
   });
 
-  if (!permissions) return false;
+  if (permissions == null)
+    return { userEmail: user.email, majorEditingPermissions: [] };
 
-  for (const majorEditPerm of permissions.majorEditingPermissions) {
-    if (majorEditPerm.major.name == major.name) {
-      return majorEditPerm.expirationDate > new Date();
-    }
+  return permissions;
+}
+
+export async function userHasMajorEditPermission(
+  userId: string,
+  majorId: number,
+): Promise<boolean> {
+  const permissions = await getUserPermissions(userId);
+
+  if (permissions?.majorEditingPermissions) {
+    return permissions?.majorEditingPermissions.some((majorEditPerm) => {
+      return (
+        majorEditPerm.major.id == majorId &&
+        majorEditPerm.expirationDate > new Date()
+      );
+    });
   }
+
   return false;
 }
 

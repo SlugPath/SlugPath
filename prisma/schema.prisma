@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "darwin"]
 }
 
 datasource db {
@@ -15,8 +15,7 @@ model User {
   role             Role      @default(USER)
   defaultPlannerId String    @default("")
   planners         Planner[]
-  majorId          Int?
-  major            Major?    @relation(fields: [majorId], references: [id])
+  majors           Major[]
 }
 
 model Planner {
@@ -71,17 +70,18 @@ model Course {
 }
 
 model Major {
-  id               Int                      @id @default(autoincrement())
+  id               Int               @id @default(autoincrement())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   name             String
   catalogYear      String
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
+  programType      ProgramType
   defaultPlanners  Planner[]
   users            User[]
   majorRequirement MajorRequirement?
   permissions      MajorEditingPermission[]
 
-  @@unique([name, catalogYear])
+  @@unique([name, catalogYear, programType])
 }
 
 model MajorRequirement {
@@ -136,4 +136,9 @@ enum Term {
   Winter
   Spring
   Summer
+}
+
+enum ProgramType {
+  Major
+  Minor
 }

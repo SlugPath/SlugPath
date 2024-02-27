@@ -1,20 +1,26 @@
-import { initialPlanner } from "@/lib/plannerUtils";
-import { UserMajorOutput, getUserMajorById } from "@actions/major";
-import { getPlannerById } from "@actions/planner";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
+import useDefaultPlanners from "../components/modals/majorsModal/defaultPlannerSelection/useDefaultPlanners";
+import useMajorSelection from "../components/modals/majorsModal/majorSelection/useMajorSelection";
 import { SetState } from "../types/Common";
-import { PlannerData } from "../types/Planner";
+import { Major } from "../types/Major";
+import { PlannerData, PlannerTitle } from "../types/Planner";
 
 export interface DefaultPlannerContextProps {
-  defaultPlanner: PlannerData;
-  setDefaultPlannerId: SetState<string>;
-  loadingDefaultPlanner: boolean;
-  userMajorData: UserMajorOutput | null;
-  loadingMajorData: boolean;
-  errorMajorData: Error | null;
+  primaryMajor: Major | undefined;
+  setPrimaryMajor: SetState<Major | undefined>;
+  majorDefaultPlanners: PlannerTitle[] | undefined;
+  loadingMajorDefaultPlanners: boolean;
+  updateDefaultPlanner: (plannerId: string) => void;
+  updateDefaultPlannerIsPending: boolean;
+  userDefaultPlanner: PlannerData;
+  defaultPlannerId: string | undefined;
+  setDefaultPlannerId: SetState<string | undefined>;
+  userMajors: Major[];
+  userMajorsIsLoading: boolean;
+  saveMajors: (majors: Major[]) => void;
+  loadingSaveMajor: boolean;
+  errorSavingMajor: boolean;
 }
 
 export const DefaultPlannerContext = createContext(
@@ -26,45 +32,43 @@ export function DefaultPlannerProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
-
-  const [defaultPlannerId, setDefaultPlannerId] = useState<string>("");
-
-  // Get user major data
   const {
-    data: userMajorData,
-    isLoading: loadingMajorData,
-    error: errorMajorData,
-  } = useQuery({
-    queryKey: ["userMajorData", session?.user.id],
-    queryFn: async () => {
-      const data = await getUserMajorById(session?.user.id ?? "");
-      setDefaultPlannerId(data?.defaultPlannerId ?? "");
-      return data;
-    },
-    initialData: null,
-    enabled: !!session?.user.id,
-  });
+    saveMajors,
+    userMajors,
+    userMajorsIsLoading,
+    loadingSaveMajor,
+    errorSavingMajor,
+  } = useMajorSelection();
 
-  // Get the default planner data
-  const { data: defaultPlanner, isLoading: loadingDefaultPlanner } = useQuery({
-    queryKey: ["defaultPlanner", defaultPlannerId],
-    queryFn: async () => {
-      return await getPlannerById(defaultPlannerId);
-    },
-    initialData: initialPlanner(),
-    enabled: !!defaultPlannerId,
-  });
+  const {
+    primaryMajor,
+    setPrimaryMajor,
+    userDefaultPlanner,
+    majorDefaultPlanners,
+    loadingMajorDefaultPlanners,
+    updateDefaultPlanner,
+    updateDefaultPlannerIsPending,
+    defaultPlannerId,
+    setDefaultPlannerId,
+  } = useDefaultPlanners();
 
   return (
     <DefaultPlannerContext.Provider
       value={{
-        userMajorData,
-        loadingMajorData,
-        errorMajorData,
-        defaultPlanner,
+        primaryMajor,
+        setPrimaryMajor,
+        majorDefaultPlanners,
+        loadingMajorDefaultPlanners,
+        updateDefaultPlanner,
+        updateDefaultPlannerIsPending,
+        userDefaultPlanner,
+        defaultPlannerId,
         setDefaultPlannerId,
-        loadingDefaultPlanner,
+        userMajors,
+        userMajorsIsLoading,
+        saveMajors,
+        loadingSaveMajor,
+        errorSavingMajor,
       }}
     >
       {children}

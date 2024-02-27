@@ -1,13 +1,15 @@
+import { saveUserMajors } from "@/app/actions/major";
 import { Major } from "@/app/types/Major";
 import { Permission } from "@/app/types/Permission";
 import prisma from "@/lib/prisma";
 import {
   getPermissions,
+  getUserPermissions,
   getUserRole,
-  savePermissions,
-  userHasMajorEditingPermission,
+  upsertPermission,
+  userHasMajorEditPermission,
 } from "@actions/permissions";
-import { Role } from "@prisma/client";
+import { ProgramType, Role } from "@prisma/client";
 
 import { User } from "../common/Types";
 import { createDate, createMajor, createUser } from "../common/utils";
@@ -19,12 +21,16 @@ describe("Permissions Actions", () => {
   let newMajor: Major;
 
   beforeAll(async () => {
-    newMajor = await createMajor("Applied Physics B.S", "2020-2021");
+    newMajor = await createMajor(
+      "Applied Physics B.S",
+      "2020-2021",
+      ProgramType.Major,
+    );
     await createUser({
       email: adminEmail,
       name: "Sammy Slug",
       role: Role.ADMIN,
-      majorId: newMajor.id,
+      majors: [newMajor],
     });
 
     await createUser({
@@ -97,125 +103,146 @@ describe("Permissions Actions", () => {
   it("should check that other users do not have major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
-    const hasPermission = await userHasMajorEditingPermission(user!.id);
-    expect(hasPermission).toBe(false);
+    expect(await userHasMajorEditPermission(user!.id, major!.id)).toBe(false);
   });
 
   it("should check that user has major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
-
-    const hasPermission = await userHasMajorEditingPermission(adminUser!.id);
-    expect(hasPermission).toBe(true);
+    expect(await userHasMajorEditPermission(adminUser!.id, major!.id)).toBe(
+      true,
+    );
   });
 
-  it("should check that getPermissions works using savePermissions", async () => {
-    const newMajor = await createMajor("Theater B.A", "2020-2021");
-
-    const permissions: Permission[] = [
-      {
-        userEmail: adminEmail,
-        majorEditingPermissions: [
-          {
-            major: newMajor,
-            expirationDate: createDate(1),
-          },
-        ],
-      },
-    ];
-    await expect(savePermissions(user!.id, permissions)).rejects.toThrow(
-      "User is not an admin",
+  it("should check that getPermissions works using upsertPermission", async () => {
+    const newMajor = await createMajor(
+      "Theater B.A",
+      "2020-2021",
+      ProgramType.Major,
     );
+    const major = {
+      name: newMajor.name,
+      catalogYear: newMajor.catalogYear,
+      programType: newMajor.programType,
+      id: newMajor.id,
+    };
 
-    await expect(savePermissions(adminUser!.id, permissions)).resolves.toEqual({
-      success: true,
-    });
+    const permission: Permission = {
+      userEmail: adminEmail,
+      majorEditingPermissions: [
+        {
+          major: major,
+          expirationDate: createDate(1),
+        },
+      ],
+    };
+    await expect(
+      upsertPermission({ userId: user!.id, permission }),
+    ).rejects.toThrow("User is not an admin");
+
+    await expect(
+      upsertPermission({ userId: adminUser!.id, permission }),
+    ).resolves.toEqual(permission);
 
     const allPermissions: Permission[] = await getPermissions();
 
     // check that all permissions are in allPermissions
     expect(
-      permissions.every((permission) => {
-        return allPermissions.some((allPermission) => {
-          return permission.userEmail === allPermission.userEmail;
-        });
+      allPermissions.some((allPermission) => {
+        return allPermission.userEmail === adminEmail;
       }),
     ).toBe(true);
   });
 
   describe("userHasMajorEditingPermission", () => {
     it("should return false if permissions are expired", async () => {
-      const major = await prisma.major.findFirst();
+      const major = await prisma.major.findFirst({
+        select: {
+          id: true,
+          name: true,
+          catalogYear: true,
+          programType: true,
+        },
+      });
       expect(major).not.toBeNull();
 
-      const permissions: Permission[] = [
-        {
-          userEmail: adminEmail,
-          majorEditingPermissions: [
-            {
-              major: major!,
-              expirationDate: createDate(-7),
-            },
-          ],
-        },
-      ];
+      const permission: Permission = {
+        userEmail: adminEmail,
+        majorEditingPermissions: [
+          {
+            major: major!,
+            expirationDate: createDate(-7),
+          },
+        ],
+      };
 
-      expect(await savePermissions(adminUser!.id, permissions)).toEqual({
-        success: true,
-      });
-      const hasPermission = await userHasMajorEditingPermission(user!.id);
-      expect(hasPermission).toBe(false);
+      expect(
+        await upsertPermission({ userId: adminUser!.id, permission }),
+      ).toEqual(permission);
+      expect(await userHasMajorEditPermission(adminUser!.id, major!.id)).toBe(
+        false,
+      );
     });
 
     it("should throw if user not found", async () => {
-      await expect(userHasMajorEditingPermission("invalid")).rejects.toThrow(
+      await expect(getUserPermissions("invalid")).rejects.toThrow(
         `User invalid not found`,
       );
     });
 
     it("should return false if permissions are not for current major", async () => {
-      const major = await createMajor("Marine Biology B.S", "2020-2021");
-      const permissions: Permission[] = [
-        {
-          userEmail,
-          majorEditingPermissions: [
-            {
-              major: major!,
-              expirationDate: createDate(1),
-            },
-          ],
-        },
-      ];
+      const newMajor = await createMajor(
+        "Marine Biology B.S",
+        "2020-2021",
+        ProgramType.Major,
+      );
+      const major = {
+        name: newMajor.name,
+        catalogYear: newMajor.catalogYear,
+        programType: newMajor.programType,
+        id: newMajor.id,
+      };
+      const secondMajor = await createMajor(
+        "Economics B.S.",
+        "2020-2021",
+        ProgramType.Major,
+      );
+      const permission: Permission = {
+        userEmail,
+        majorEditingPermissions: [
+          {
+            major: major!,
+            expirationDate: createDate(1),
+          },
+        ],
+      };
 
-      expect(await savePermissions(adminUser!.id, permissions)).toEqual({
-        success: true,
-      });
-      expect(await userHasMajorEditingPermission(user!.id)).toBe(false);
+      expect(
+        await upsertPermission({ userId: adminUser!.id, permission }),
+      ).toEqual(permission);
+
+      expect(await userHasMajorEditPermission(user!.id, secondMajor.id)).toBe(
+        false,
+      );
     });
 
     it("should return false if user has no permissions but has a major", async () => {
-      expect(await userHasMajorEditingPermission(user!.id)).toBe(false);
+      expect(await userHasMajorEditPermission(user!.id, newMajor.id)).toBe(
+        false,
+      );
     });
 
     beforeEach(async () => {
-      await prisma.user.update({
-        where: {
-          id: user!.id,
-        },
-        data: {
-          majorId: newMajor.id,
-        },
+      await saveUserMajors({
+        userId: user!.id,
+        majors: [newMajor],
       });
     });
 
     afterAll(async () => {
-      await prisma.user.update({
-        where: {
-          email: userEmail,
-        },
-        data: {
-          majorId: null,
-        },
+      await saveUserMajors({
+        userId: user!.id,
+        majors: [],
       });
     });
   });
