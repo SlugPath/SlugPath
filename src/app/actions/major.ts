@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { ProgramType } from "@prisma/client";
+import { PrismaClient, ProgramType } from "@prisma/client";
 
 import { Major } from "../types/Major";
 import { PlannerTitle } from "../types/Planner";
@@ -82,8 +82,11 @@ export async function getUserMajorsByEmail(email: string): Promise<Major[]> {
   return userData?.majors;
 }
 
-export async function getUserMajorsById(id: string): Promise<Major[]> {
-  const userData = await prisma.user.findUnique({
+export async function getUserMajorsById(
+  id: string,
+  client: PrismaClient = prisma,
+): Promise<Major[]> {
+  const userData = await client.user.findUnique({
     where: {
       id,
     },
@@ -130,38 +133,43 @@ export async function saveUserMajors({
     throw new Error(`could not find user with id ${userId}`);
   }
 
-  const userMajors = await connectUserMajors({
-    userId,
-    majors,
-  });
-
-  // if no majors, remove default planner
-  if (majors.length == 0) {
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        defaultPlannerId: "",
-      },
+  return await prisma.$transaction(async (tx) => {
+    const userMajors = await connectUserMajors({
+      userId,
+      majors,
+      client: tx as PrismaClient,
     });
-  }
 
-  return userMajors;
+    // if no majors, remove default planner
+    if (majors.length == 0) {
+      await tx.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          defaultPlannerId: "",
+        },
+      });
+    }
+
+    return userMajors;
+  });
 }
 
 /**
  * Connects the user to the given majors while disconnecting any old majors.
  */
 export async function connectUserMajors({
+  client = prisma,
   userId,
   majors,
 }: {
+  client?: PrismaClient;
   userId: string;
   majors: MajorInput[];
 }): Promise<Major[]> {
   // disconnect any old majors
-  const oldMajors = await getUserMajorsById(userId);
+  const oldMajors = await getUserMajorsById(userId, client);
   if (oldMajors !== null) {
     await prisma.user.update({
       where: {
@@ -178,7 +186,7 @@ export async function connectUserMajors({
   // find major ids from the input
   const majorIds = await Promise.all(
     majors.map(async (major) => {
-      const majorFound = await prisma.major.findFirst({
+      const majorFound = await client.major.findFirst({
         where: {
           name: major.name,
           catalogYear: major.catalogYear,
@@ -195,7 +203,7 @@ export async function connectUserMajors({
   ) as number[];
 
   // connect the new majors
-  const userData = await prisma.user.update({
+  const userData = await client.user.update({
     where: {
       id: userId,
     },

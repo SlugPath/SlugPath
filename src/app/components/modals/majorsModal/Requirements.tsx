@@ -155,7 +155,7 @@ export function RequirementsEditing({
   }
 
   function handleNewBinderSelected(
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     newValue: string | null,
   ) {
     if (newValue === "0") {

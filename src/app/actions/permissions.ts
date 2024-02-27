@@ -16,72 +16,75 @@ export async function upsertPermission({
     throw new Error("User is not an admin");
 
   // delete previous permissions if they exist
-  if (
-    await prisma.permission.findUnique({
-      where: {
-        userEmail: permission.userEmail,
-      },
-    })
-  ) {
-    await prisma.permission.delete({
-      where: {
-        userEmail: permission.userEmail,
-      },
-    });
-  }
+  return prisma.$transaction(async (tx) => {
+    if (
+      await tx.permission.findUnique({
+        where: {
+          userEmail: permission.userEmail,
+        },
+      })
+    ) {
+      await tx.permission.delete({
+        where: {
+          userEmail: permission.userEmail,
+        },
+      });
+    }
 
-  const result = prisma.permission.upsert({
-    where: {
-      userEmail: permission.userEmail,
-    },
-    update: {
-      majorEditingPermissions: {
-        create: permission.majorEditingPermissions.map((majorEditPerm) => {
-          return {
-            major: {
-              connect: {
-                id: majorEditPerm.major.id,
-              },
-            },
-            expirationDate: majorEditPerm.expirationDate,
-          };
-        }),
+    // Create new permissions
+    const result = tx.permission.upsert({
+      where: {
+        userEmail: permission.userEmail,
       },
-    },
-    create: {
-      userEmail: permission.userEmail,
-      majorEditingPermissions: {
-        create: permission.majorEditingPermissions.map((majorEditPerm) => {
-          return {
-            major: {
-              connect: {
-                id: majorEditPerm.major.id,
+      update: {
+        majorEditingPermissions: {
+          create: permission.majorEditingPermissions.map((majorEditPerm) => {
+            return {
+              major: {
+                connect: {
+                  id: majorEditPerm.major.id,
+                },
               },
-            },
-            expirationDate: majorEditPerm.expirationDate,
-          };
-        }),
-      },
-    },
-    select: {
-      userEmail: true,
-      majorEditingPermissions: {
-        select: {
-          major: {
-            select: {
-              id: true,
-              name: true,
-              catalogYear: true,
-              programType: true,
-            },
-          },
-          expirationDate: true,
+              expirationDate: majorEditPerm.expirationDate,
+            };
+          }),
         },
       },
-    },
-  });
+      create: {
+        userEmail: permission.userEmail,
+        majorEditingPermissions: {
+          create: permission.majorEditingPermissions.map((majorEditPerm) => {
+            return {
+              major: {
+                connect: {
+                  id: majorEditPerm.major.id,
+                },
+              },
+              expirationDate: majorEditPerm.expirationDate,
+            };
+          }),
+        },
+      },
+      select: {
+        userEmail: true,
+        majorEditingPermissions: {
+          select: {
+            major: {
+              select: {
+                id: true,
+                name: true,
+                catalogYear: true,
+                programType: true,
+              },
+            },
+            expirationDate: true,
+          },
+        },
+      },
+    });
 
-  return result;
+    return result;
+  });
 }
 
 /**

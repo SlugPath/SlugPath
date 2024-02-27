@@ -162,7 +162,7 @@ function SelectMajor({
   const [value, setValue] = useState<Major | null>(null);
 
   function onChange(
-    event: SyntheticEvent<Element, Event> | null,
+    _: SyntheticEvent<Element, Event> | null,
     newValue: Major | null,
   ) {
     if (newValue) {
@@ -174,7 +174,7 @@ function SelectMajor({
   return (
     <Select
       value={value}
-      placeholder="Add a major..."
+      placeholder="Add a program..."
       variant="plain"
       onChange={onChange}
       disabled={majors.length == 0}
