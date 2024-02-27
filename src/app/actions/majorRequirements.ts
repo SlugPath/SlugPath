@@ -6,17 +6,17 @@ import { v4 as uuid4 } from "uuid";
 
 import { Binder, Requirement, RequirementList } from "../types/Requirements";
 import { courseInfo } from "./course";
-import { userHasMajorEditingPermission } from "./permissions";
+import { userHasMajorEditPermission } from "./permissions";
 
 export async function saveMajorRequirements(
   requirements: RequirementList,
   majorId: number,
   userId: string,
 ) {
+  const hasPermission = await userHasMajorEditPermission(userId, majorId);
+
   // check if user is allowed to edit this major
-  if (!(await userHasMajorEditingPermission(userId))) {
-    return { success: false };
-  }
+  if (!hasPermission) return { success: false };
 
   const requirementsAsJSON = convertRequirementListToJSON(requirements);
 

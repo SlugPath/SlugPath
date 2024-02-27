@@ -1,14 +1,16 @@
+import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
+import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
+import { StoredCourse } from "@/app/types/Course";
+import { Major } from "@/app/types/Major";
+import { Binder, RequirementList } from "@/app/types/Requirements";
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
-import { MiniCourseCard } from "@components/majorSelection/MiniCourseCard";
-import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
-import { StoredCourse } from "@customTypes/Course";
-import { Binder, RequirementList } from "@customTypes/Requirements";
 import { Droppable } from "@hello-pangea/dnd";
 import { Delete, Edit } from "@mui/icons-material";
 import {
   Button,
   Card,
+  Chip,
   IconButton,
   Input,
   Select,
@@ -18,19 +20,25 @@ import {
 import Option from "@mui/joy/Option";
 import { useContext, useState } from "react";
 
-import NotesEditor from "../../NotesEditor";
-import DraggableCourseCard from "../../quarters/courses/DraggableCourseCard";
+import NotesEditor from "../../planner/NotesEditor";
+import DraggableCourseCard from "../../planner/quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
 
 export function Requirements({
+  major,
   requirements,
   parents,
   hideTitle,
+  hasEditPermission,
+  onClickEdit,
 }: {
+  major: Major;
   requirements: RequirementList;
   parents: number;
   hideTitle: boolean;
+  hasEditPermission?: boolean;
+  onClickEdit?: (major: Major) => void;
 }) {
   const { mode } = useColorScheme();
 
@@ -51,7 +59,19 @@ export function Requirements({
     <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
       {/* Title start */}
       {!hideTitle && (
-        <Title requirements={requirements} fulfillmentMark={true} />
+        <div className="flex flex-row justify-between items-center">
+          <Title requirements={requirements} fulfillmentMark={true} />
+          {hasEditPermission && parents == 0 && (
+            <div className="flex flex-row items-center">
+              <Chip color="success" variant="solid" className="mr-6">
+                You have edit permission
+              </Chip>
+              {onClickEdit && (
+                <Button onClick={() => onClickEdit(major)}>Edit</Button>
+              )}
+            </div>
+          )}
+        </div>
       )}
       {/* Title end */}
 
@@ -67,7 +87,7 @@ export function Requirements({
 
       {isProgramEmpty() ? (
         <Typography className="text-gray-400">
-          There is no data for this degree program yet
+          There is no requirements data for this degree program yet
         </Typography>
       ) : (
         <>
@@ -86,6 +106,7 @@ export function Requirements({
               return (
                 <Requirements
                   key={index}
+                  major={major}
                   requirements={requirement}
                   parents={parents + 1}
                   hideTitle={false}
@@ -102,9 +123,11 @@ export function Requirements({
 }
 
 export function RequirementsEditing({
+  major,
   requirements,
   parents,
 }: {
+  major: Major;
   requirements: RequirementList;
   parents: number;
 }) {
@@ -116,26 +139,32 @@ export function RequirementsEditing({
 
   function handleToggleEditingTitle() {
     if (editingTitle) {
-      updateRequirementList(requirements.id, { ...requirements, title });
+      updateRequirementList(major.id, requirements.id, {
+        ...requirements,
+        title,
+      });
     }
     setEditingTitle(!editingTitle);
   }
 
   function handleUpdateNotes(notes: string) {
-    updateRequirementList(requirements.id, { ...requirements, notes });
+    updateRequirementList(major.id, requirements.id, {
+      ...requirements,
+      notes,
+    });
   }
 
   function handleNewBinderSelected(
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     newValue: string | null,
   ) {
     if (newValue === "0") {
-      updateRequirementList(requirements.id, {
+      updateRequirementList(major.id, requirements.id, {
         ...requirements,
         binder: Binder.AND,
       });
     } else if (newValue !== null) {
-      updateRequirementList(requirements.id, {
+      updateRequirementList(major.id, requirements.id, {
         ...requirements,
         binder: Binder.AT_LEAST,
         atLeast: parseInt(newValue),
@@ -144,7 +173,7 @@ export function RequirementsEditing({
   }
 
   function deleteCourse(course: StoredCourse) {
-    updateRequirementList(requirements.id, {
+    updateRequirementList(major.id, requirements.id, {
       ...requirements,
       requirements: requirements.requirements.filter(
         (requirement) => requirement !== course,
@@ -164,20 +193,25 @@ export function RequirementsEditing({
     );
   }
 
-  function shouldHaveClasses(parents: number) {
-    return parents > 0;
+  function shouldDisplayDeleteButton(parents: number) {
+    return !isGreatestParent(parents);
   }
 
-  function shouldDisplayDeleteButton(parents: number) {
-    return shouldHaveClasses(parents);
+  // user cannot edit title of the parent RequirementList
+  function isGreatestParent(parents: number) {
+    return parents == 0;
   }
 
   return (
-    <Card variant="soft" style={cardStyleProps(parents, mode)}>
+    <Card
+      variant="soft"
+      style={cardStyleProps(parents, mode)}
+      className="space-y-2"
+    >
       {/* Title begin */}
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row">
-          {editingTitle ? (
+          {editingTitle && !isGreatestParent(parents) ? (
             <EditableTitle
               title={title ?? ""}
               setTitle={setTitle}
@@ -188,11 +222,13 @@ export function RequirementsEditing({
           ) : (
             <Title requirements={requirements} fulfillmentMark={true} />
           )}
-          <EditIconButton onClick={handleToggleEditingTitle} />
+          {!isGreatestParent(parents) && (
+            <EditIconButton onClick={handleToggleEditingTitle} />
+          )}
         </div>
         {shouldDisplayDeleteButton(parents) && (
           <DeleteIconButton
-            onClick={() => removeRequirementList(requirements.id)}
+            onClick={() => removeRequirementList(major.id, requirements.id)}
           />
         )}
       </div>
@@ -208,28 +244,30 @@ export function RequirementsEditing({
       {/* Notes start */}
 
       {/* Binder begin */}
-      <div className="flex flex-row items-center space-x-1">
-        <Select
-          variant="soft"
-          placeholder="Choose one…"
-          defaultValue={getBinderValue(requirements)}
-          onChange={handleNewBinderSelected}
-          style={{ ...cardStyleProps(parents + 1, mode) }}
-        >
-          <Option value="0">All</Option>
-          {Array.from({ length: 11 }, (_, index) => index).map((i) => {
-            return (
-              <Option key={i + 1} value={(i + 1).toString()}>
-                {i + 1}
-              </Option>
-            );
-          })}
-        </Select>
-        <Typography>of the following</Typography>
-      </div>
+      {!isGreatestParent(parents) && (
+        <div className="flex flex-row items-center space-x-1">
+          <Select
+            variant="soft"
+            placeholder="Choose one…"
+            defaultValue={getBinderValue(requirements)}
+            onChange={handleNewBinderSelected}
+            style={{ ...cardStyleProps(parents + 1, mode) }}
+          >
+            <Option value="0">All</Option>
+            {Array.from({ length: 11 }, (_, index) => index).map((i) => {
+              return (
+                <Option key={i + 1} value={(i + 1).toString()}>
+                  {i + 1}
+                </Option>
+              );
+            })}
+          </Select>
+          <Typography>of the following</Typography>
+        </div>
+      )}
       {/* Binder end */}
 
-      {shouldHaveClasses(parents) && !hasRequirementLists() && (
+      {!isGreatestParent(parents) && !hasRequirementLists() && (
         <Classes
           requirements={requirements}
           deleteCourse={deleteCourse}
@@ -237,9 +275,13 @@ export function RequirementsEditing({
           mode={mode}
         />
       )}
-      <RequirementLists requirements={requirements} parents={parents} />
+      <RequirementLists
+        major={major}
+        requirements={requirements}
+        parents={parents}
+      />
       {hasClasses() ? null : (
-        <Button onClick={() => addRequirementList(requirements.id)}>
+        <Button onClick={() => addRequirementList(major.id, requirements.id)}>
           + Add Requirement List
         </Button>
       )}
@@ -332,9 +374,11 @@ function Classes({
 }
 
 function RequirementLists({
+  major,
   requirements,
   parents,
 }: {
+  major: Major;
   requirements: RequirementList;
   parents: number;
 }) {
@@ -349,6 +393,7 @@ function RequirementLists({
           return (
             <RequirementsEditing
               key={index}
+              major={major}
               requirements={requirement}
               parents={parents + 1}
             />

@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Major } from "@customTypes/Major";
-import { Role } from "@prisma/client";
+import { ProgramType, Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 // returns todays date + days
@@ -18,10 +18,12 @@ export function createDate(days: number): Date {
 export async function createMajor(
   name: string,
   catalogYear: string,
+  programType: ProgramType,
 ): Promise<Major> {
   const majorData = {
     name,
     catalogYear,
+    programType,
   };
   return prisma.major.create({
     data: {
@@ -38,12 +40,12 @@ export async function createUser({
   email,
   name,
   role,
-  majorId,
+  majors,
 }: {
   email: string;
   name: string;
   role?: Role;
-  majorId?: number;
+  majors?: Major[];
 }) {
   return await prisma.user.create({
     data: {
@@ -51,7 +53,20 @@ export async function createUser({
       email,
       name,
       role,
-      majorId,
+      majors: {
+        connect: majors?.map((major) => ({ id: major.id })),
+      },
     },
+  });
+}
+
+// non prisma helper functions
+export function removeIdFromMajorOutput(majors: Major[]) {
+  return majors.map((r) => {
+    return {
+      name: r.name,
+      catalogYear: r.catalogYear,
+      programType: r.programType,
+    };
   });
 }

@@ -7,20 +7,24 @@ export interface MajorVerificationContextProps {
     requirements: Requirements,
     courses: StoredCourse[],
   ) => boolean;
-  majorRequirements: RequirementList;
+  getRequirementsForMajor: (majorId: number) => RequirementList | undefined;
+  getLoadingSave: (majorId: number) => boolean;
+  getIsSaved: (majorId: number) => boolean;
   calculateMajorProgressPercentage: (courseState: PlannerData) => number;
   errors: string;
-  loadingSave: boolean;
-  isSaved: boolean;
   findRequirementList: (
     id: string,
     requirements: RequirementList,
   ) => RequirementList | null;
-  addRequirementList: (parentRequirementListId: string) => void;
-  removeRequirementList: (requirementListId: string) => void;
+  addRequirementList: (
+    majorId: number,
+    parentRequirementListId: string,
+  ) => void;
+  removeRequirementList: (majorId: number, requirementListId: string) => void;
   updateRequirementList: (
+    majorId: number,
     requirementListId: string,
     newRequirementList: RequirementList,
   ) => void;
-  onSaveMajorRequirements: () => void;
+  onSaveMajorRequirements: (majorId: number) => void;
 }
