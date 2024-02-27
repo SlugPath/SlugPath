@@ -1,5 +1,6 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { getQuarterColor } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
 import { courseInfo } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -253,22 +254,8 @@ export default function CourseInfoModal({
                 <div className="flex flex-wrap items-center gap-2">
                   <Typography component="p">Quarters Offered:</Typography>
                   {enrollmentInfo.map((e, i) => {
-                    let color: "warning" | "primary" | "success" | "danger";
-                    switch (e.term.title) {
-                      case "Fall":
-                        color = "warning";
-                        break;
-                      case "Winter":
-                        color = "primary";
-                        break;
-                      case "Spring":
-                        color = "success";
-                        break;
-                      default:
-                        color = "danger";
-                    }
                     return (
-                      <Chip key={i} color={color}>
+                      <Chip key={i} color={getQuarterColor(e.term.title)}>
                         {e.term.title} {e.term.catalogYear}, {e.instructor}
                       </Chip>
                     );

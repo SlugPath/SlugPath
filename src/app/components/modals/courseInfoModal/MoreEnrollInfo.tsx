@@ -1,3 +1,4 @@
+import { getQuarterColor } from "@/lib/quarterUtils";
 import { getMoreEnrollmentInfo } from "@actions/enrollment";
 import { StoredCourse } from "@customTypes/Course";
 import { Groups, LocationOn, People, Person } from "@mui/icons-material";
@@ -8,6 +9,7 @@ import {
   AccordionGroup,
   AccordionSummary,
   Card,
+  Chip,
   Typography,
 } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
@@ -38,8 +40,10 @@ export default function MoreEnrollInfo({ course }: MoreEnrollInfoProps) {
           {data?.map((off, i) => (
             <Accordion key={i}>
               <AccordionSummary indicator={<Info />}>
-                {off.term.title} {off.term.catalogYear}, Section{" "}
-                {off.class_section}
+                <Chip color={getQuarterColor(off.term.title)}>
+                  {off.term.title} {off.term.catalogYear} Section{" "}
+                  {off.class_section}
+                </Chip>
               </AccordionSummary>
               <AccordionDetails>
                 <Card>

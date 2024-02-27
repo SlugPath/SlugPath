@@ -145,12 +145,12 @@ function getTermById(id: string) {
 function filterOfferings(offers: any[], course: CourseEnrollQuery) {
   // Filter offerings because sometimes a course is not offered
   // in a particular quarter. We do this using zod to safely parse
-  const terms: TermEnrollmentInfo = offers.filter(
+  const termInfo: TermEnrollmentInfo = offers.filter(
     (off) => termEnrollmentSchema.safeParse(off).success,
   );
   // Only get the offerings that match the course number
   // TODO: currently returns multiple instances for classes with multiple instructors in one term
-  const allClasses: ClassInfo[] = terms
+  const allClasses: ClassInfo[] = termInfo
     .flatMap((v) => v.classes)
     .filter((c) => c.catalog_nbr === course.number);
 
