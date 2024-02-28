@@ -1,10 +1,10 @@
 "use client";
 
 import { ModalsProvider } from "@/app/contexts/ModalsProvider";
+import { cn } from "@/lib/utils";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 import { PlannersContext } from "@contexts/PlannersProvider";
-import { List, ListItem } from "@mui/joy";
 import { useContext } from "react";
 
 import Planner from "../planner/Planner";
@@ -15,26 +15,25 @@ export default function PlannerList() {
   if (!planners || planners.length == 0) return <HelpfulTips />;
 
   return (
-    <>
-      <List>
-        {planners?.map(({ id, title }, index) => (
-          <ListItem
-            sx={{
-              display: activePlanner === id ? "block" : "none",
-            }}
-            key={id}
-          >
-            <MajorVerificationProvider>
-              <ModalsProvider>
-                <PlannerProvider plannerId={id} title={title} order={index}>
-                  <Planner isActive={activePlanner === id} />
-                </PlannerProvider>
-              </ModalsProvider>
-            </MajorVerificationProvider>
-          </ListItem>
-        ))}
-      </List>
-    </>
+    <div className="w-full flex-1 flex flex-col min-h-0">
+      {planners.map(({ id, title }, index) => (
+        <div
+          key={id}
+          className={
+            (cn(activePlanner === id ? "block" : "none"),
+            "flex w-full flex-1 min-h-0")
+          }
+        >
+          <MajorVerificationProvider>
+            <ModalsProvider>
+              <PlannerProvider plannerId={id} title={title} order={index}>
+                <Planner isActive={activePlanner === id} />
+              </PlannerProvider>
+            </ModalsProvider>
+          </MajorVerificationProvider>
+        </div>
+      ))}
+    </div>
   );
 }
 
