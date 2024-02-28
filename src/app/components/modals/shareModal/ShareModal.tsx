@@ -5,6 +5,8 @@ import { Suspense, useContext } from "react";
 
 import ExportSkeleton from "./ExportSkeleton";
 
+let url = "http://localhost:3000/planner/"
+
 const copyButtonStyle = {
   // backgroundColor: 'yellow',
   marginTop: "15px",
@@ -21,7 +23,7 @@ export default function ShareModal() {
 
   const handleCopyToClipboard = () => {
     navigator.clipboard
-      .writeText("http://localhost:3000/planner/" + activePlanner)
+      .writeText(url + activePlanner)
       .then(() => {
         console.log("Text copied to clipboard:", activePlanner);
         // You can add a success message or perform other actions here
@@ -65,8 +67,8 @@ export default function ShareModal() {
         </Typography>
         <Suspense fallback={<ExportSkeleton />}>
           <h1 style={{ marginTop: "20px" }}>
-            <a href={`http://localhost:3000/planner/${activePlanner}`}>
-            http://localhost:3000/planner/{activePlanner}
+            <a href={`${url}${activePlanner}`}>
+            {url}{activePlanner}
             </a>
           </h1>
           <Button
