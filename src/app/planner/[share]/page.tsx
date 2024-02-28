@@ -2,16 +2,11 @@ import Planners from "@components/planners/Planners";
 import { getServerSession } from "next-auth";
 
 import { getAllPlanners, getPlannerById, saveAllPlanners } from "../../actions/planner";
-import { useContext } from "react";
 
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
-
-import { usePlanners } from "@/app/components/planners/usePlanners";
-
-import { v4 as uuidv4 } from "uuid";
 import { clonePlanner } from "@/lib/plannerUtils";
-import { PlannerData } from "@/app/types/Planner";
-import { DeleteBucketReplicationCommand } from "@aws-sdk/client-s3";
+
+import { authOptions } from "@/lib/auth";
+
 
 
 
@@ -19,7 +14,7 @@ export default async function Page({ params }: { params: { share: string } }) {
   console.log("In Share")
   console.log("Slug = " + params.share)
 
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   const planners = await getAllPlanners(session?.user.email ?? "");
 
@@ -34,12 +29,19 @@ export default async function Page({ params }: { params: { share: string } }) {
   let duplicatePlanner = await clonePlanner(sharedPlanner)
 
   planners.unshift(duplicatePlanner)
+
+  console.log(`user: ${session?.user.id}`)
+  console.log(`planners: ${planners}`)
+
   
   // save it
-  await saveAllPlanners({
-    userId: session?.user.email ?? "",
+  let temp = await saveAllPlanners({
+    userId: session?.user.id ?? "",
     planners: planners,
   });
+
+  console.log(`temp: ${temp}`)
+
 
   // set it to the active planner ?
 
