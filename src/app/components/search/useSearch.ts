@@ -19,10 +19,14 @@ export default function useSearch() {
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
+  const [numberRange, setNumberRange] = useState<number[]>([1, 299]);
+  const [creditRange, setCreditRange] = useState<number[]>([1, 15]);
   const [queryDetails, setQueryDetails] = useState<SearchQueryDetails>({
     departmentCode: "",
     number: "",
     ge: "",
+    numberRange: [1, 299],
+    creditRange: [1, 15],
   });
 
   // Query to get the courses based on the query details
@@ -33,9 +37,16 @@ export default function useSearch() {
   });
 
   useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
+    callback: () =>
+      handleSearch(
+        departmentCode ?? "",
+        number,
+        ge ?? "",
+        numberRange,
+        creditRange,
+      ),
     delay: 100,
-    dependencies: [departmentCode, number, ge],
+    dependencies: [departmentCode, number, ge, ...numberRange, ...creditRange],
   });
 
   // Handlers
@@ -61,6 +72,8 @@ export default function useSearch() {
     departmentCode: string,
     textInput: string,
     geInput: string,
+    sliderNumberInput: number[],
+    sliderCreditInput: number[],
   ) => {
     const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
       textInput,
@@ -70,7 +83,32 @@ export default function useSearch() {
       departmentCode: departmentCodeParsed,
       number: numberParsed,
       ge: geInput,
+      numberRange: sliderNumberInput,
+      creditRange: sliderCreditInput,
     });
+  };
+
+  const handleChangeNumberRange = (newRange: number[]) => {
+    setNumberRange(newRange);
+  };
+
+  const handleChangeCreditRange = (newRange: number[]) => {
+    setCreditRange(newRange);
+  };
+
+  const handleReset = () => {
+    setDepartmentCode("");
+    setNumber("");
+    setGE("");
+    setNumberRange([1, 299]);
+    setCreditRange([1, 15]);
+    handleSearch(
+      departmentCode ?? "",
+      number,
+      ge ?? "",
+      numberRange,
+      creditRange,
+    );
   };
 
   return {
@@ -82,12 +120,17 @@ export default function useSearch() {
       number,
       ge,
       geOptions,
+      numberRange,
+      creditRange,
     },
     handlers: {
       handleChangeDepartment,
       handleChangeNumber,
       handleChangeGE,
       handleSearch,
+      handleChangeNumberRange,
+      handleChangeCreditRange,
+      handleReset,
     },
   };
 }

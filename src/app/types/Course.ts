@@ -46,6 +46,8 @@ export const queryDetailsSchema = z.object({
   departmentCode: z.string().optional(),
   number: z.string().optional(),
   ge: z.string().optional(),
+  numberRange: z.array(z.number()).length(2),
+  creditRange: z.array(z.number()).length(2),
 });
 
 export type SearchQueryDetails = z.infer<typeof queryDetailsSchema>;
