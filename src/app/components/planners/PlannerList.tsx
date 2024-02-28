@@ -19,10 +19,9 @@ export default function PlannerList() {
       {planners.map(({ id, title }, index) => (
         <div
           key={id}
-          className={
-            (cn(activePlanner === id ? "block" : "none"),
-            "flex w-full flex-1 min-h-0")
-          }
+          className={cn(
+            activePlanner === id ? "flex w-full flex-1 min-h-0" : "hidden",
+          )}
         >
           <MajorVerificationProvider>
             <ModalsProvider>
