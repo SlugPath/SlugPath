@@ -118,20 +118,86 @@ describe("Course actions", () => {
 
   describe("coursesBy", () => {
     it("should return the specified course with the correct department", async () => {
-      expect(await coursesBy({ departmentCode: "CSE" })).toHaveLength(3);
+      expect(
+        await coursesBy({
+          departmentCode: "CSE",
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(3);
 
-      expect(await coursesBy({ departmentCode: "ANTH" })).toHaveLength(0);
+      expect(
+        await coursesBy({
+          departmentCode: "ANTH",
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(0);
     });
 
     it("should return the specified course with the correct number", async () => {
-      expect(await coursesBy({ number: `3` })).toHaveLength(2);
-      expect(await coursesBy({ number: `101` })).toHaveLength(1);
-      expect(await coursesBy({ number: `123` })).toHaveLength(1);
+      expect(
+        await coursesBy({
+          number: `3`,
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(2);
+      expect(
+        await coursesBy({
+          number: `101`,
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(1);
+      expect(
+        await coursesBy({
+          number: `123`,
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(1);
     });
 
     it("should return the specified course with the correct ge", async () => {
-      expect(await coursesBy({ ge: "mf" })).toHaveLength(1);
-      expect(await coursesBy({ ge: "ta" })).toHaveLength(0);
+      expect(
+        await coursesBy({
+          ge: "mf",
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(1);
+      expect(
+        await coursesBy({
+          ge: "ta",
+          numberRange: [1, 299],
+          creditRange: [1, 15],
+        }),
+      ).toHaveLength(0);
+    });
+
+    it("should return the specified courses within the number range", async () => {
+      expect(
+        await coursesBy({ numberRange: [1, 299], creditRange: [1, 15] }),
+      ).toHaveLength(3);
+      expect(
+        await coursesBy({ numberRange: [1, 3], creditRange: [1, 15] }),
+      ).toHaveLength(1);
+      expect(
+        await coursesBy({ numberRange: [100, 299], creditRange: [1, 15] }),
+      ).toHaveLength(2);
+    });
+
+    it("should return the specified courses within the credit range", async () => {
+      expect(
+        await coursesBy({ creditRange: [3, 4], numberRange: [1, 299] }),
+      ).toHaveLength(0);
+      expect(
+        await coursesBy({ creditRange: [5, 12], numberRange: [1, 299] }),
+      ).toHaveLength(3);
+      expect(
+        await coursesBy({ creditRange: [1, 15], numberRange: [1, 299] }),
+      ).toHaveLength(3);
     });
   });
 
