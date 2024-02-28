@@ -12,12 +12,12 @@ import Accordion, { accordionClasses } from "@mui/joy/Accordion";
 import AccordionSummary, {
   accordionSummaryClasses,
 } from "@mui/joy/AccordionSummary";
-import React from "react";
+import { SyntheticEvent } from "react";
 
 import CustomSliderComponent from "./CustomSliderComponent";
 
 type selectChangeHandler = (
-  event: React.SyntheticEvent | null,
+  event: SyntheticEvent | null,
   value: string | null,
 ) => void;
 
