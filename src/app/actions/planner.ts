@@ -33,12 +33,13 @@ async function createPlanner(
       if (!c) {
         throw new Error(`Course with id ${cid} not found`);
       }
+      // Remove prerequisites from the course when saving
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { prerequisites: _, ...crs } = c;
+      const { prerequisites: _, ...rest } = c;
       return {
-        ...crs,
-        ge: [...crs.ge],
-        quartersOffered: [...crs.quartersOffered],
+        ...rest,
+        ge: [...rest.ge],
+        quartersOffered: [...rest.quartersOffered],
       };
     });
 

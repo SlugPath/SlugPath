@@ -8,3 +8,10 @@ export interface Quarter {
 }
 
 export type Term = "Fall" | "Winter" | "Spring" | "Summer";
+
+export const termOrder: Record<Term, number> = {
+  Fall: 1,
+  Winter: 2,
+  Spring: 3,
+  Summer: 4,
+} as const;

@@ -4,7 +4,7 @@ import { terms } from "@/lib/consts";
 import { z } from "zod";
 
 import { StoredCourse } from "../types/Course";
-import { Term } from "../types/Quarter";
+import { Term, termOrder } from "../types/Quarter";
 
 type Instructor = {
   cruzid: string;
@@ -35,11 +35,25 @@ const classInfoSchema = z.object({
 
 type ClassInfo = z.infer<typeof classInfoSchema>;
 
+type ClassOffering = {
+  term: {
+    title: Term;
+    catalogYear: string;
+  };
+  instructor: string;
+};
+
 const termEnrollmentSchema = z.object({
   classes: z.array(classInfoSchema),
 });
 
 type TermEnrollmentInfo = z.infer<typeof termEnrollmentSchema>[];
+
+function cmpOfferings(a: ClassOffering, b: ClassOffering) {
+  if (a.term.catalogYear !== b.term.catalogYear)
+    return a.term.catalogYear.localeCompare(b.term.catalogYear);
+  return termOrder[a.term.title] - termOrder[b.term.title];
+}
 
 // getEnrollmentInfo returns the quarters offered and the professors who taught a course
 // in past quarters and upcoming quarters.
@@ -56,9 +70,7 @@ export async function getEnrollmentInfo(course: CourseEnrollQuery) {
       instructor: c.instructors[0].name.split(",")[0],
     }));
   });
-  pastOfferings.sort((a, b) =>
-    a.term.catalogYear.localeCompare(b.term.catalogYear),
-  );
+  pastOfferings.sort(cmpOfferings);
   return pastOfferings;
 }
 

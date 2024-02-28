@@ -250,7 +250,7 @@ export default function CourseInfoModal({
             <>
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
-              <Skeleton loading={enrollLoading} variant="text" width="50%">
+              <Skeleton loading={enrollLoading}>
                 <div className="flex flex-wrap items-center gap-2">
                   <Typography component="p">Quarters Offered:</Typography>
                   {enrollmentInfo.map((e, i) => {
@@ -261,17 +261,17 @@ export default function CourseInfoModal({
                     );
                   })}
                 </div>
-                {isCSE(course) && !isOffered(course.quartersOffered, term) && (
-                  <Typography
-                    color="warning"
-                    component="p"
-                    startDecorator={<WarningAmberRounded color="warning" />}
-                  >
-                    Warning: {course.departmentCode} {course.number} is not
-                    offered in {` ${term}`} Quarter
-                  </Typography>
-                )}
               </Skeleton>
+              {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+                <Typography
+                  color="warning"
+                  component="p"
+                  startDecorator={<WarningAmberRounded color="warning" />}
+                >
+                  Warning: {course.departmentCode} {course.number} is not
+                  offered in {` ${term}`} Quarter
+                </Typography>
+              )}
             </>
           ) : (
             <div className="flex flex-row gap-2 items-center">

@@ -2,7 +2,6 @@ import { getQuarterColor } from "@/lib/quarterUtils";
 import { getMoreEnrollmentInfo } from "@actions/enrollment";
 import { StoredCourse } from "@customTypes/Course";
 import { Groups, LocationOn, People, Person } from "@mui/icons-material";
-import Info from "@mui/icons-material/Info";
 import {
   Accordion,
   AccordionDetails,
@@ -31,22 +30,21 @@ export default function MoreEnrollInfo({ course }: MoreEnrollInfoProps) {
 
   return (
     <>
-      <Typography component="h2" level="h4" textColor="inherit" fontWeight="md">
-        Current & Upcoming Enrollment Information for {course?.departmentCode}{" "}
-        {course?.number}
+      <Typography component="p" textColor="inherit">
+        Current & Upcoming Enrollment Information
       </Typography>
-      <div className="overflow-y-scroll w-full" style={{ maxHeight: "25vh" }}>
+      <div className="overflow-y-scroll w-full" style={{ maxHeight: "20vh" }}>
         <AccordionGroup>
           {data?.map((off, i) => (
             <Accordion key={i}>
-              <AccordionSummary indicator={<Info />}>
+              <AccordionSummary>
                 <Chip color={getQuarterColor(off.term.title)}>
                   {off.term.title} {off.term.catalogYear} Section{" "}
                   {off.class_section}
                 </Chip>
               </AccordionSummary>
               <AccordionDetails>
-                <Card>
+                <Card variant="soft">
                   <Typography>
                     <span className="flex items-center gap-2">
                       <Person />
