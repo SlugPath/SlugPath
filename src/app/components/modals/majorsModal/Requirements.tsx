@@ -14,13 +14,13 @@ import {
   IconButton,
   Input,
   Select,
+  Textarea,
   Typography,
   useColorScheme,
 } from "@mui/joy";
 import Option from "@mui/joy/Option";
 import { useContext, useState } from "react";
 
-import NotesEditor from "../../planner/NotesEditor";
 import DraggableCourseCard from "../../planner/quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
@@ -56,7 +56,11 @@ export function Requirements({
   );
 
   return (
-    <Card variant="soft" style={{ ...cardStyleProps(parents, mode) }}>
+    <Card
+      variant="soft"
+      style={{ ...cardStyleProps(parents, mode) }}
+      className="m-0"
+    >
       {/* Title start */}
       {!hideTitle && (
         <div className="flex flex-row justify-between items-center">
@@ -77,10 +81,17 @@ export function Requirements({
 
       {/* Notes start */}
       {requirements.notes && requirements.notes.length > 0 && (
-        <NotesEditor
-          content={requirements.notes}
-          onUpdateNotes={() => {}}
-          readOnly={true}
+        <Textarea
+          variant="soft"
+          value={requirements.notes}
+          readOnly
+          style={{
+            ...cardStyleProps(parents, mode),
+          }}
+          sx={{
+            "--Textarea-focusedThickness": "0.0rem",
+            boxShadow: "none",
+          }}
         />
       )}
       {/* Notes end */}
@@ -236,9 +247,12 @@ export function RequirementsEditing({
 
       {/* Notes start */}
       <div>
-        <NotesEditor
-          content={requirements.notes || ""}
-          onUpdateNotes={(content: string) => handleUpdateNotes(content)}
+        <Textarea
+          variant="soft"
+          value={requirements.notes || ""}
+          onChange={(e) => handleUpdateNotes(e.target.value)}
+          placeholder="Add notes..."
+          style={{ ...cardStyleProps(parents + 1, mode) }}
         />
       </div>
       {/* Notes start */}

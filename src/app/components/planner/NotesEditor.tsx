@@ -23,8 +23,6 @@ export default function NotesEditor({
 
   useEffect(() => {
     onUpdateNotes(text);
-
-    // Disable the eslint rule to prevent rerendering when onUpdateNotes changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
@@ -48,15 +46,12 @@ export default function NotesEditor({
   );
 
   return (
-    <div className="mb-2 h-64">
-      <ReactQuill
-        modules={toolbarOptions}
-        style={{ height: "80%" }}
-        theme={readOnly ? "bubble" : "snow"}
-        defaultValue={text}
-        onChange={handleChange}
-        readOnly={readOnly}
-      />
-    </div>
+    <ReactQuill
+      modules={toolbarOptions}
+      theme={readOnly ? "bubble" : "snow"}
+      defaultValue={text}
+      onChange={handleChange}
+      readOnly={readOnly}
+    />
   );
 }
