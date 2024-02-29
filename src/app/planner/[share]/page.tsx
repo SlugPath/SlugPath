@@ -4,7 +4,7 @@ import {
   getAllPlanners,
   getPlannerById,
   saveAllPlanners,
-} from "../../actions/planner";
+} from "@actions/planner";
 
 import { clonePlanner } from "@/lib/plannerUtils";
 

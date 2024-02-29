@@ -25,7 +25,8 @@
       "@hooks/*": ["./src/app/hooks/*"],
       "@contexts/*": ["./src/app/contexts/*"],
       "@styles/*": ["./src/app/styles/*"],
-      "@customTypes/*": ["./src/app/types/*"]
+      "@customTypes/*": ["./src/app/types/*"],
+      "@actions/*": ["./src/app/actions/*"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -38,7 +39,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/env/server.mjs",
-    "jest.config.js"
+    "jest.config.js",
+    "src/app/planner/error.tsx"
   ],
   "exclude": ["node_modules"]
 }
