@@ -1,5 +1,6 @@
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { getQuarterId } from "@/lib/quarterUtils";
+import NotesEditor from "@components/notesEditor";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
@@ -34,7 +35,6 @@ import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
-import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
