@@ -1,5 +1,5 @@
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { PermissionsProvider } from "@contexts/PermissionsProvider";
 import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { ModalsContext, ModalsProvider } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -30,12 +30,6 @@ import MajorProgressModal from "./graduationProgress/majorProgressModal/MajorPro
 import ReplaceRLModal from "./graduationProgress/majorProgressModal/ReplaceRLModal";
 import QuarterCard from "./quarters/QuarterCard";
 
-import { useSearchParams, useRouter } from 'next/navigation'
-
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
-
-
-
 export default function Planner({ isActive }: { isActive: boolean }) {
   const { handleDragEnd, totalCredits, geSatisfied, courseState, updateNotes } =
     useContext(PlannerContext);
@@ -43,25 +37,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   if (!isActive) {
     return <></>;
   }
-
-  const searchParams = useSearchParams()
-  
-  let search = searchParams.get('share') || ""
-
-  const router = useRouter();
-
-  const { duplicatePlanner } = useContext(PlannersContext);
-
-  // currently getting called twice. Maybe because the planner page is loading twice
-  // will try moving this to Planners.tsx
-  if (search) {
-    console.log()
-    console.log("Calling Duplicate")
-    router.replace('/planner', undefined);
-
-    duplicatePlanner(search);
-  }
-  console.log(`Planner ID: ${search}`)
 
   return (
     <div>
