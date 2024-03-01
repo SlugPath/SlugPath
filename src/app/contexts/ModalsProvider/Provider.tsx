@@ -8,8 +8,6 @@ export const ModalsContext = createContext({} as ModalsContextProps);
 
 export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
-    showExportModal,
-    setShowExportModal,
     showMajorsModal,
     setShowMajorsModal,
     showPermissionsModal,
@@ -27,8 +25,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   return (
     <ModalsContext.Provider
       value={{
-        showExportModal,
-        setShowExportModal,
         showMajorsModal,
         setShowMajorsModal,
         showPermissionsModal,

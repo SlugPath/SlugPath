@@ -23,18 +23,18 @@ export function PlannersProvider({
     duplicatePlanner,
     activePlanner,
     showExportModal,
-    showShareModal,
     setShowExportModal,
+    showShareModal,
     setShowShareModal,
   } = usePlanners(session?.user.id, allPlanners);
 
   return (
     <PlannersContext.Provider
       value={{
-        showExportModal,
-        setShowExportModal,
         showShareModal,
         setShowShareModal,
+        showExportModal,
+        setShowExportModal,
         planners,
         removePlanner,
         getPlanner,

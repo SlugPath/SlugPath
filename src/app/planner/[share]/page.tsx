@@ -1,20 +1,14 @@
-import { getServerSession } from "next-auth";
-
+import { PlannerData } from "@/app/types/Planner";
+import { authOptions } from "@/lib/auth";
+import { clonePlanner } from "@/lib/plannerUtils";
 import {
   getAllPlanners,
   getPlannerById,
   saveAllPlanners,
 } from "@actions/planner";
-
-import { clonePlanner } from "@/lib/plannerUtils";
-
-import { authOptions } from "@/lib/auth";
-
-import { v4 as uuidv4 } from "uuid";
-
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-
-import { PlannerData } from "@/app/types/Planner";
+import { v4 as uuidv4 } from "uuid";
 
 export default async function Page({ params }: { params: { share: string } }) {
   console.log("In Share");
@@ -48,12 +42,10 @@ export default async function Page({ params }: { params: { share: string } }) {
   // console.log(`planners: ${JSON.stringify(planners, null, 2)}`)
 
   // save it
-  const temp = await saveAllPlanners({
+  await saveAllPlanners({
     userId: session?.user.id ?? "",
     planners,
   });
-
-  console.log(`temp: ${temp}`);
 
   // set it to the active planner ?
 

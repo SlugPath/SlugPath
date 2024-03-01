@@ -1,6 +1,5 @@
+import { SetShow } from "@customTypes/Common";
 import { PlannerData } from "@customTypes/Planner";
-
-import { SetState } from "../../types/Common";
 
 export interface MultiPlanner {
   planners: PlannerData[];
@@ -19,7 +18,9 @@ export interface PlannersContextProps {
   duplicatePlanner: (id: string) => void;
   activePlanner: string | undefined;
   showExportModal: boolean;
-  setShowExportModal: SetState<boolean>;
+  setShowExportModal: SetShow;
+  showShareModal: boolean;
+  setShowShareModal: SetShow;
 }
 
 export interface PlannersProviderProps {
