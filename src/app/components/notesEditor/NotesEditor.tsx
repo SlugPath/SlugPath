@@ -1,7 +1,10 @@
+import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useState } from "react";
 
-const extensions = [StarterKit];
+const extensions = [StarterKit, Underline, Link];
 
 export interface NotesEditorProps {
   content: string;
@@ -13,6 +16,7 @@ export default function NotesEditor({
   content,
   onUpdateNotes,
 }: NotesEditorProps) {
+  const [linkUrl, setLinkUrl] = useState("");
   const editor = useEditor(
     {
       extensions,
@@ -35,6 +39,14 @@ export default function NotesEditor({
   ) => {
     event.preventDefault(); // Prevent the button from losing focus
     formattingFunction();
+  };
+
+  const toggleLink = () => {
+    if (editor.isActive("link")) {
+      editor.chain().focus().unsetLink().run();
+    } else {
+      editor.chain().focus().setLink({ href: linkUrl }).run();
+    }
   };
 
   const buttonBaseClasses =
@@ -70,6 +82,48 @@ export default function NotesEditor({
         }`}
       >
         Italic
+      </button>
+      <button
+        onMouseDown={(event) =>
+          applyFormatting(event, () =>
+            editor.chain().focus().toggleUnderline().run(),
+          )
+        }
+        disabled={!editor.can().toggleUnderline()}
+        className={`${buttonBaseClasses} ${
+          editor.isActive("underline") ? activeClasses : inactiveClasses
+        }`}
+      >
+        Underline
+      </button>
+      <button
+        onMouseDown={(event) =>
+          applyFormatting(event, () =>
+            editor.chain().focus().toggleStrike().run(),
+          )
+        }
+        disabled={!editor.can().chain().focus().toggleStrike().run()}
+        className={`${buttonBaseClasses} ${
+          editor.isActive("strike") ? activeClasses : inactiveClasses
+        }`}
+      >
+        Strike
+      </button>
+      {/* Input field for link URL */}
+      <input
+        type="text"
+        placeholder="Enter URL"
+        value={linkUrl}
+        onChange={(e) => setLinkUrl(e.target.value)}
+        className="px-2 py-1 text-sm border rounded"
+      />
+      {/* Button to apply link */}
+      <button
+        onMouseDown={(event) => applyFormatting(event, toggleLink)}
+        disabled={!linkUrl}
+        className="px-2 py-1 text-sm font-medium rounded transition-colors duration-150 bg-blue-500 text-white hover:bg-blue-600"
+      >
+        Toggle Link
       </button>
       <button
         onMouseDown={(event) =>
