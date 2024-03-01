@@ -104,6 +104,7 @@ export default function ReplaceCustomModal({
             height: "70%",
             display: "flex",
             flexDirection: "column",
+            gap: "1rem",
           }}
         >
           <Typography level="title-lg">
@@ -111,20 +112,30 @@ export default function ReplaceCustomModal({
           </Typography>
           <div className="flex flex-row items-start gap-2 flex-1">
             <DragDropContext onDragEnd={handleDragEnd}>
-              <Search displayCustomCourseSelection={false} />
+              <Card
+                variant="soft"
+                size="sm"
+                sx={{
+                  height: "100%",
+                  flex: "1 1 0%",
+                  paddingRight: "0.5rem",
+                }}
+              >
+                <Search displayCustomCourseSelection={false} />
+              </Card>
               <Droppable
                 droppableId={droppableId}
                 isDropDisabled={suggestedLoading}
               >
                 {(provided) => {
                   return (
-                    <div className="flex flex-col w-full gap-2 h-fit px-10">
+                    <div className="flex flex-col w-full gap-2 h-fit px-5">
                       <Card
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         variant="soft"
                         size="sm"
-                        className="rounded-md mt-5 min-h-48"
+                        className="rounded-md min-h-48"
                       >
                         {classes.map((course, index) => {
                           return (

@@ -60,27 +60,38 @@ export default function EditMajorRequirementsModal() {
     >
       <Sheet
         sx={{
-          width: "60%",
+          width: "70%",
+          minWidth: "50rem",
           margin: 10,
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
+          height: "80%",
+          minHeight: "30rem",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <div className="mb-4">
           <Title />
         </div>
         {major !== undefined && (
-          <>
-            <div className="flex flex-row mb-3">
+          <div className="flex min-h-0 flex-col flex-1">
+            <div className="flex flex-row mb-3 flex-1 min-h-0">
               {showModal && (
-                <div className="flex-initial pr-2">
-                  <Card variant="soft" size="sm">
-                    <Search displayCustomCourseSelection={false} />
-                  </Card>
-                </div>
+                <Card
+                  variant="soft"
+                  size="sm"
+                  sx={{
+                    height: "100%",
+                    flex: "1 1 0%",
+                    paddingRight: "0.5rem",
+                  }}
+                >
+                  <Search displayCustomCourseSelection={false} />
+                </Card>
               )}
-              <div className="w-full overflow-auto h-[80vh]">
+              <div className="flex flex-col justify-between w-full overflow-auto h-full px-5 gap-5">
                 {majorRequirements ? (
                   <RequirementsEditing
                     requirements={majorRequirements}
@@ -90,29 +101,29 @@ export default function EditMajorRequirementsModal() {
                 ) : (
                   <div>Major requirements could not be loaded.</div>
                 )}
+
+                {/* edit buttons start */}
+                <div className="flex flex-row justify-end space-x-2 min-h-0">
+                  <Tooltip title="Replace with a Requirement List from a different program">
+                    <Button
+                      color="warning"
+                      onClick={() => setShowReplaceRLModal(true)}
+                    >
+                      Replace
+                    </Button>
+                  </Tooltip>
+                  <Button
+                    disabled={isSaved}
+                    onClick={handleSave}
+                    loading={loadingSave}
+                  >
+                    {isSaved ? "Saved" : "Save"}
+                  </Button>
+                </div>
+                {/* edit buttons end */}
               </div>
             </div>
-
-            {/* edit buttons start */}
-            <div className="flex flex-row justify-end space-x-2">
-              <Tooltip title="Replace with a Requirement List from a different program">
-                <Button
-                  color="warning"
-                  onClick={() => setShowReplaceRLModal(true)}
-                >
-                  Replace
-                </Button>
-              </Tooltip>
-              <Button
-                disabled={isSaved}
-                onClick={handleSave}
-                loading={loadingSave}
-              >
-                {isSaved ? "Saved" : "Save"}
-              </Button>
-            </div>
-            {/* edit buttons end */}
-          </>
+          </div>
         )}
         <ModalClose variant="plain" />
       </Sheet>
