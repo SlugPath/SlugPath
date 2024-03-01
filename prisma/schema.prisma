@@ -17,7 +17,7 @@ model User {
   defaultPlannerId            String    @default("")
   majorRequirementSuggestions MajorRequirement[]
   planners                    Planner[]
-  upvotes                     Upvote?
+  upvotes                     Upvote[]
   major                       Major?         @relation(fields: [majorId], references: [id])
 }
 
@@ -106,10 +106,12 @@ model MajorRequirement {
 
 model Upvote {
   id                 Int              @id @default(autoincrement())
-  userId             String           @unique
+  userId             String           
   majorRequirementId Int
   majorRequirement   MajorRequirement @relation(fields: [majorRequirementId], references: [id])
   user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, majorRequirementId])
 }
 
 model Permissions {

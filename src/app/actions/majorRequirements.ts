@@ -119,27 +119,48 @@ export async function getApprovedMajorRequirement(
   return null;
 }
 
+//ADDON: RETURN VALUE NOW HAS USERID ATTACHED TO THE REQUIREMENTLIST [RequirementList, string]
 export async function getMajorRequirementLists(
   majorId: number,
-): Promise<RequirementList[]> {
+): Promise<Array<[RequirementList, string]>> {
   const majorRequirements = await prisma.majorRequirement.findMany({
     where: {
       majorId: majorId,
     },
+    select: {
+      requirementList: true,
+      userId: true,
+    },
   });
 
-  if (majorRequirements == undefined) {
+  if (majorRequirements.length === 0) {
     return [];
   }
 
-  const majorRequirementsList = majorRequirements.map((majorRequirement) => {
-    const parseRequirementsList = JSON.parse(
-      majorRequirement.requirementList as string,
-    ) as RequirementList;
-    return parseRequirementsList;
-  });
+  const majorRequirementsList: Array<[RequirementList, string]> =
+    await Promise.all(
+      majorRequirements.map(async (majorRequirement) => {
+        const parseRequirementsList = JSON.parse(
+          majorRequirement.requirementList as string,
+        ) as RequirementList;
+        const userName = (await getUserName(majorRequirement.userId)) ?? "";
+        return [parseRequirementsList, userName];
+      }),
+    );
 
   return majorRequirementsList;
+}
+
+async function getUserName(userId: string) {
+  const name = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (name !== null && name.name !== null) {
+    return name.name;
+  }
+  return null;
 }
 
 // this is part of crowd sourcing feature
@@ -188,6 +209,65 @@ export async function removeMajorRequirementList(
       where: {
         userId: userId,
         id: majorRequirementId,
+      },
+    });
+
+    return { title: "OK" };
+  } catch (e) {
+    return { error: e };
+  }
+}
+
+//returns a list of names who upvoted a specific major requirement
+export async function getUpvotes(majorRequirementId: number): Promise<number> {
+  // return an integer
+  const upvotes = await prisma.upvote.findMany({
+    where: {
+      majorRequirementId: majorRequirementId,
+    },
+  });
+
+  if (upvotes !== null) {
+    return upvotes.length;
+  }
+  return 0;
+}
+
+export async function addUpvote(userId: string, majorRequirementId: number) {
+  try {
+    const newUpvote = await prisma.upvote.create({
+      data: {
+        userId: userId,
+        majorRequirementId: majorRequirementId,
+      },
+    });
+
+    await prisma.majorRequirement.update({
+      where: {
+        id: majorRequirementId,
+      },
+      data: {
+        upvotes: {
+          connect: {
+            id: newUpvote.id,
+          },
+        },
+      },
+    });
+
+    return { title: "OK" };
+  } catch (e) {
+    console.log(e);
+    return { error: "error" };
+  }
+}
+
+export async function removeUpvote(userId: string, upvoteId: number) {
+  try {
+    await prisma.upvote.delete({
+      where: {
+        userId: userId,
+        id: upvoteId,
       },
     });
 

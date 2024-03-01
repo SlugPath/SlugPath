@@ -5,10 +5,15 @@ import Search from "@components/search/Search";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PermissionsContext } from "@contexts/PermissionsProvider";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Button,
   Card,
   Chip,
+  IconButton,
   Modal,
   ModalClose,
   Sheet,
@@ -16,6 +21,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { CircularProgress } from "@mui/material";
+//mport ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { useSession } from "next-auth/react";
 import { useContext, useState } from "react";
 import { v4 as uuid4 } from "uuid";
@@ -40,8 +46,13 @@ export default function MajorProgressModal() {
     majorRequirementLists,
     onAddMajorRequirementList,
     //onGetApprovedMajorRequirement,
-    //onRemoveMajorRequirementList
+    //onRemoveMajorRequirementList,
+    //onGetUpvotes,
+    //onAddUpvote,
+    //onRemoveUpvote,
   } = useMajorRequirementLists(userMajorData?.id);
+  //const approvedMajorRequirementList = onGetApprovedMajorRequirement(220);
+  const validUserId = session?.user.id || "";
 
   function Title() {
     return (
@@ -101,22 +112,55 @@ export default function MajorProgressModal() {
             style={{ maxHeight: "80vh" }}
           >
             {majorRequirementLists &&
-              majorRequirementLists.map((majorRequirement: RequirementList) => (
-                <div key={majorRequirement.id}>
-                  {editing ? (
-                    <RequirementsEditing
-                      requirements={majorRequirement}
-                      parents={0}
-                    />
-                  ) : (
-                    <Requirements
-                      requirements={majorRequirement}
-                      parents={0}
-                      hideTitle={false}
-                    />
-                  )}
-                </div>
-              ))}
+              majorRequirementLists.map(
+                ([majorRequirement, userId]: [RequirementList, string]) => (
+                  <div key={majorRequirement.id}>
+                    <Accordion
+                      key={majorRequirement.id}
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
+                          },
+                        },
+                      }}
+                      //defaultExpanded={}
+                    >
+                      <AccordionSummary>
+                        <Typography>{userId}&apos;s suggestion</Typography>
+                        <div>
+                          <IconButton
+                          //onClick={() => onAddUpvote(validUserId, 220)}
+                          >
+                            <ThumbUpIcon />
+                          </IconButton>
+                          0
+                          {/* <IconButton onClick={() => onRemoveUpvote(220)}>
+                            <ThumbDownIcon />
+                          </IconButton> */}
+                        </div>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        {editing ? (
+                          <RequirementsEditing
+                            requirements={majorRequirement}
+                            parents={0}
+                          />
+                        ) : (
+                          <Requirements
+                            requirements={majorRequirement}
+                            parents={0}
+                            hideTitle={false}
+                          />
+                        )}
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                ),
+              )}
           </div>
         </div>
         <EditButtons
@@ -164,13 +208,12 @@ export default function MajorProgressModal() {
               id: uuid4(),
               title: "parent list",
             };
-            const validUserId = session?.user.id || "";
             onAddMajorRequirementList(validUserId, 220, requirementList);
             //onRemoveMajorRequirementList(validUserId, 17);
             console.log(majorRequirementLists);
           }}
         >
-          Add Requirement Suggestion
+          Suggest
         </Button>
         <ModalClose variant="plain" />
       </Sheet>
