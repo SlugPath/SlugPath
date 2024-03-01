@@ -35,7 +35,7 @@ export default function MajorSelection() {
 
   const [error, setError] = useState("");
 
-  const { data: session } = useSession();
+  const { status } = useSession();
 
   const { data: majors } = useQuery({
     queryKey: ["majors", catalogYear, programType],
@@ -173,7 +173,9 @@ export default function MajorSelection() {
           onRemoveMajor={handleRemoveMajor}
           onAddMajor={handleAddMajor}
         />
-        {userMajorsIsLoading && session && <CircularProgress />}
+        {userMajorsIsLoading && status === "authenticated" && (
+          <CircularProgress />
+        )}
         {loadingSaveMajor && <LinearProgress />}
       </Card>
 
@@ -225,7 +227,8 @@ function MajorsList({
 
       {errorSavingMajor && (
         <Alert color="danger" startDecorator={<ReportIcon />}>
-          Error saving major data. Please log out and try again.
+          Error saving major data. Please make sure you&apos;re logged in. You
+          can skip this page if you don&apos;t have an account.
         </Alert>
       )}
 
