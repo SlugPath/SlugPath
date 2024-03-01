@@ -14,7 +14,7 @@ type PlannerCreateInput = {
   order: number;
 };
 
-async function createPlanner(
+export async function createPlanner(
   tx: any,
   { userId, plannerId, plannerData, title, order }: PlannerCreateInput,
 ) {
