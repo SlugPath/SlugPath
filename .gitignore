@@ -38,9 +38,15 @@ next-env.d.ts
 # data backups
 backup.sql
 
+# vs code directory
+.vscode
+
 # terraform
 .terraform/
 .terraform.tfstate.lock.info
 terraform.tfvars
 terraform.tfstate*
 tfplan
+
+#icloud
+.App.tsx.icloud

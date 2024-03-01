@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "darwin"]
 }
 
 datasource db {
@@ -9,14 +9,13 @@ datasource db {
 }
 
 model User {
-  id               String        @id
+  id               String    @id
   email            String    @unique
   name             String?
-  role             Role          @default(USER)
-  defaultPlannerId String?
+  role             Role      @default(USER)
+  defaultPlannerId String    @default("")
   planners         Planner[]
-  majorId          Int?
-  major            Major?        @relation(fields: [majorId], references: [id])
+  majors           Major[]   @relation("MajorToUser")
 }
 
 model Planner {
@@ -71,39 +70,40 @@ model Course {
 }
 
 model Major {
-  id               Int               @id @default(autoincrement())
+  id               Int                     @id @default(autoincrement())
   name             String
   catalogYear      String
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  defaultPlanners  Planner[]
-  users            User[]
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  programType      ProgramType             @default(Major)
+  permissions      MajorEditingPermission?
   majorRequirement MajorRequirement?
-  permissions      MajorEditingPermission[]
+  defaultPlanners  Planner[]
+  users            User[]                  @relation("MajorToUser")
 
-  @@unique([name, catalogYear])
+  @@unique([name, catalogYear, programType])
 }
 
 model MajorRequirement {
   id              Int   @id @default(autoincrement())
   requirementList Json
-  major           Major @relation(fields: [majorId], references: [id])
   majorId         Int   @unique
+  major           Major @relation(fields: [majorId], references: [id])
 }
 
-model Permissions {
-  id                      Int     @id @default(autoincrement())
+model Permission {
+  id                      Int                      @id @default(autoincrement())
+  userEmail               String                   @unique
   majorEditingPermissions MajorEditingPermission[]
-  userEmail               String  @unique
 }
 
 model MajorEditingPermission {
-  id                Int         @id @default(autoincrement())
-  major             Major       @relation(fields: [majorId], references: [id])
-  majorId           Int         @unique
-  permissions       Permissions @relation(fields: [permissionsId], references: [id], onDelete: Cascade)
-  permissionsId     Int
-  expirationDate    DateTime
+  id             Int        @id @default(autoincrement())
+  majorId        Int        @unique
+  permissionId   Int
+  expirationDate DateTime
+  major          Major      @relation(fields: [majorId], references: [id])
+  permission     Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 }
 
 model Label {
@@ -114,6 +114,11 @@ model Label {
   color     LabelColor
   plannerId String
   planner   Planner    @relation(fields: [plannerId], references: [id], onDelete: Cascade)
+}
+
+model Permissions {
+  id        Int    @id @default(autoincrement())
+  userEmail String @unique
 }
 
 enum LabelColor {
@@ -136,4 +141,9 @@ enum Term {
   Winter
   Spring
   Summer
+}
+
+enum ProgramType {
+  Major
+  Minor
 }

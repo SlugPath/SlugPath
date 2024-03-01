@@ -1,6 +1,9 @@
-import { courseInfo } from "@/app/actions/course";
+import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-import { ModalsContext } from "@contexts/ModalsProvider";
+import { getQuarterColor } from "@/lib/quarterUtils";
+import { truncateTitle } from "@/lib/utils";
+import { courseInfo } from "@actions/course";
+import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
@@ -20,16 +23,24 @@ import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
+import MoreEnrollInfo from "./MoreEnrollInfo";
+import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
-const MAX_MODAL_TITLE = 50;
+const MAX_MODAL_TITLE = 60;
 
-export default function CourseInfoModal() {
+export default function CourseInfoModal({
+  viewOnly = false,
+}: {
+  viewOnly?: boolean;
+}) {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
   const {
     setShowCourseInfoModal: setShowModal,
     showCourseInfoModal: showModal,
-  } = useContext(ModalsContext);
+    displayCourse: courseTerm,
+    setDisplayCourse,
+  } = useContext(CourseInfoContext);
 
   const {
     editCustomCourse,
@@ -39,21 +50,25 @@ export default function CourseInfoModal() {
   } = useContext(PlannerContext);
 
   const [editing, setEditing] = useState(false);
-  const { displayCourse: courseTerm, setDisplayCourse } =
-    useContext(ModalsContext);
+  const [replacing, setReplacing] = useState(false);
+
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ["course", course?.departmentCode, course?.number],
-    queryFn: async () => {
-      // Don't fetch if the course is undefined or a custom course
-      const res = await courseInfo({
+    queryFn: async () =>
+      await courseInfo({
         departmentCode: course!.departmentCode,
         number: course!.number,
-      });
-      return res;
-    },
+      }),
     enabled: course && !isCustomCourse(course),
+  });
+
+  const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
+    queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
+    queryFn: async () => await getEnrollmentInfo(course!),
+    enabled: course !== undefined && !isCustomCourse(course),
+    initialData: [],
   });
 
   // This is to prevent illegally opening the modal
@@ -62,16 +77,16 @@ export default function CourseInfoModal() {
   }
 
   // Accessors
-  function title(c: StoredCourse | undefined) {
+  function title(c?: StoredCourse) {
     if (loading) return "";
     if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
-    return `${c.departmentCode} ${c.number} ${getTitle(c)}`.slice(
-      0,
+    return truncateTitle(
+      `${c.departmentCode} ${c.number} ${getTitle(c)}`,
       MAX_MODAL_TITLE,
     );
   }
 
-  function description(c: StoredCourse | undefined) {
+  function description(c?: StoredCourse) {
     // If it is a custom course with a description, display it
     if (course && isCustomCourse(course)) {
       return `Description: ${course.description}`;
@@ -80,20 +95,13 @@ export default function CourseInfoModal() {
     return `${c.description}`;
   }
 
-  function quartersOffered(c: StoredCourse | undefined) {
-    if (loading) return "";
-    if (!c) return `Quarters Offered: ${course?.quartersOffered.join(", ")}`;
-    if (c.quartersOffered.length == 0) return "Quarters Offered: None";
-    return `Quarters Offered: ${c.quartersOffered.join(", ")}`;
-  }
-
-  function credits(c: StoredCourse | undefined) {
+  function credits(c?: StoredCourse) {
     if (loading) return "";
     if (!c) return course?.credits;
     return c.credits;
   }
 
-  function ge(c: StoredCourse | undefined) {
+  function ge(c?: StoredCourse) {
     if (loading || !c) return "";
     const capitalize: { [key: string]: string } = {
       peT: "PE-T",
@@ -110,7 +118,7 @@ export default function CourseInfoModal() {
     });
   }
 
-  function prerequisites(c: StoredCourse | undefined) {
+  function prerequisites(c?: StoredCourse) {
     const start = "Prerequisite(s):";
     if (loading || !c || !c.prerequisites) return `${start} None`;
     const preqs: string = c.prerequisites;
@@ -147,6 +155,22 @@ export default function CourseInfoModal() {
         onClose={handleClose}
         defaultCourse={course}
         isOpen={editing}
+      />
+    );
+  }
+
+  // Only show this modal if it is a custom course,
+  // in the planner, and the course is being replaced
+  if (replacing && customCourseInPlanner) {
+    return (
+      <ReplaceCustomModal
+        onSave={() => {
+          setReplacing(false);
+          setShowModal(false);
+        }}
+        onClose={() => setReplacing(false)}
+        isOpen={replacing}
+        customCourse={course}
       />
     );
   }
@@ -221,57 +245,81 @@ export default function CourseInfoModal() {
               {description(data)}
             </Typography>
           </Skeleton>
-          <Skeleton loading={loading} variant="text" width="50%">
-            {!isCSE(course) && !isCustomCourse(course) && (
-              <Typography
-                variant="soft"
-                color="warning"
-                component="p"
-                startDecorator={<WarningAmberRounded color="warning" />}
-              >
-                Warning: quarters offered information is unavailable for this
-                course.
-              </Typography>
-            )}
-            {isCSE(course) && !isOffered(course.quartersOffered, term) && (
-              <Typography
-                variant="soft"
-                color="warning"
-                component="p"
-                startDecorator={<WarningAmberRounded color="warning" />}
-              >
-                Warning: {course.departmentCode} {course.number} is not offered
-                in {` ${term}`}
-              </Typography>
-            )}
-            <Typography component="p">{quartersOffered(data)}</Typography>
-            <Typography component="p">Credits: {credits(data)}</Typography>
-            {data !== undefined && (
-              <>
-                <Typography component="p">{prerequisites(data)}</Typography>
-                <Typography component="p">GE: {ge(data)}</Typography>
-              </>
-            )}
-            {course.labels && (
-              <SelectedLabels
-                labels={getCourseLabels(course)}
-                handleOpenLabels={handleOpenLabels}
-                ge={course.ge}
-              />
-            )}
-          </Skeleton>
+          {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
+          {!isCustomCourse(course) ? (
+            <>
+              <Typography component="p">{prerequisites(data)}</Typography>
+              <Typography component="p">GE: {ge(data)}</Typography>
+              <Skeleton loading={enrollLoading}>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Typography component="p">Quarters Offered:</Typography>
+                  {enrollmentInfo.map((e, i) => {
+                    return (
+                      <Chip key={i} color={getQuarterColor(e.term.title)}>
+                        {e.term.title} {e.term.catalogYear}, {e.instructor}
+                      </Chip>
+                    );
+                  })}
+                </div>
+              </Skeleton>
+              {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+                <Typography
+                  color="warning"
+                  component="p"
+                  startDecorator={<WarningAmberRounded color="warning" />}
+                >
+                  Warning: {course.departmentCode} {course.number} is not
+                  offered in {` ${term}`} Quarter
+                </Typography>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-row gap-2 items-center">
+              <Typography component="p">Quarters Offered:</Typography>
+              {course.quartersOffered.map((q, i) => (
+                <Chip key={i} color="primary">
+                  {q}
+                </Chip>
+              ))}
+            </div>
+          )}
+          <Typography component="p">Credits: {credits(data)}</Typography>
+          <MoreEnrollInfo course={course} />
+          {!viewOnly && course.labels && (
+            <SelectedLabels
+              labels={getCourseLabels(course)}
+              handleOpenLabels={handleOpenLabels}
+              ge={course.ge}
+            />
+          )}
           <ModalClose variant="plain" />
-          {customCourseInPlanner && (
-            <Button onClick={() => setEditing(true)} className="w-full">
-              <Typography
-                level="body-lg"
-                sx={{
-                  color: "white",
-                }}
+          {!viewOnly && customCourseInPlanner && (
+            <div className="flex gap-2">
+              <Button onClick={() => setEditing(true)} className="w-1/2">
+                <Typography
+                  level="body-lg"
+                  sx={{
+                    color: "white",
+                  }}
+                >
+                  Edit
+                </Typography>
+              </Button>
+              <Button
+                onClick={() => setReplacing(true)}
+                className="w-1/2"
+                color="success"
               >
-                Edit
-              </Typography>
-            </Button>
+                <Typography
+                  level="body-lg"
+                  sx={{
+                    color: "white",
+                  }}
+                >
+                  Replace
+                </Typography>
+              </Button>
+            </div>
           )}
         </div>
       </Sheet>

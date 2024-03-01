@@ -1,3 +1,4 @@
+import { APP_URL } from "@/config";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { Button } from "@mui/joy";
@@ -5,7 +6,7 @@ import { Suspense, useContext } from "react";
 
 import ExportSkeleton from "./ExportSkeleton";
 
-let url = "http://localhost:3000/planner/"
+const url = `${APP_URL}/planner/`;
 
 const copyButtonStyle = {
   // backgroundColor: 'yellow',
@@ -17,13 +18,14 @@ const copyButtonStyle = {
 
 // Create styles
 export default function ShareModal() {
-  const { activePlanner, setShowShareModal, showShareModal } =
+  const { activePlanner, showShareModal, setShowShareModal } =
     useContext(PlannersContext);
+
   if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
 
   const handleCopyToClipboard = () => {
     navigator.clipboard
-      .writeText(url + activePlanner)
+      .writeText(`${url}${activePlanner}`)
       .then(() => {
         console.log("Text copied to clipboard:", activePlanner);
         // You can add a success message or perform other actions here
@@ -67,9 +69,7 @@ export default function ShareModal() {
         </Typography>
         <Suspense fallback={<ExportSkeleton />}>
           <h1 style={{ marginTop: "20px" }}>
-            <a href={`${url}${activePlanner}`}>
-            {url}{activePlanner}
-            </a>
+            <a href={`${activePlanner}`}>{`${url}${activePlanner}`}</a>
           </h1>
           <Button
             variant="solid"

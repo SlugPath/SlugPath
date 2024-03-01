@@ -1,76 +1,117 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
-import { Permissions } from "../types/Permissions";
-import { getUserMajorById } from "./major";
+import { Permission } from "../types/Permission";
 
-export async function savePermissions(
-  userId: string,
-  permissions: Permissions[],
-) {
-  if ((await getUserRole(userId)) !== "ADMIN")
-    return { error: "User is not an admin" };
+export async function upsertPermission({
+  userId,
+  permission,
+}: {
+  userId: string;
+  permission: Permission;
+}): Promise<Permission> {
+  if ((await getUserRole(userId)) !== Role.ADMIN)
+    throw new Error("User is not an admin");
 
-  await prisma.permissions.deleteMany();
-
-  const operations: any[] = [];
-
-  permissions.forEach(async (permission) => {
-    if (permission.userEmail !== undefined) {
-      operations.push(
-        prisma.permissions.upsert({
-          where: {
-            userEmail: permission.userEmail,
-          },
-          update: {
-            majorEditingPermissions: {
-              create: permission.majorEditingPermissions.map(
-                (majorEditPerm) => {
-                  return {
-                    major: {
-                      connect: {
-                        id: majorEditPerm.major.id,
-                      },
-                    },
-                    expirationDate: majorEditPerm.expirationDate,
-                  };
-                },
-              ),
-            },
-          },
-          create: {
-            userEmail: permission.userEmail,
-            majorEditingPermissions: {
-              create: permission.majorEditingPermissions.map(
-                (majorEditPerm) => {
-                  return {
-                    major: {
-                      connect: {
-                        id: majorEditPerm.major.id,
-                      },
-                    },
-                    expirationDate: majorEditPerm.expirationDate,
-                  };
-                },
-              ),
-            },
-          },
-        }),
-      );
+  // delete previous permissions if they exist
+  return prisma.$transaction(async (tx) => {
+    if (
+      await tx.permission.findUnique({
+        where: {
+          userEmail: permission.userEmail,
+        },
+      })
+    ) {
+      await tx.permission.delete({
+        where: {
+          userEmail: permission.userEmail,
+        },
+      });
     }
-  });
 
-  try {
-    await prisma.$transaction([...operations]);
-    return { title: "OK" };
-  } catch (e) {
-    return { error: e };
-  }
+    // Create new permissions
+    const result = tx.permission.upsert({
+      where: {
+        userEmail: permission.userEmail,
+      },
+      update: {
+        majorEditingPermissions: {
+          create: permission.majorEditingPermissions.map((majorEditPerm) => {
+            return {
+              major: {
+                connect: {
+                  id: majorEditPerm.major.id,
+                },
+              },
+              expirationDate: majorEditPerm.expirationDate,
+            };
+          }),
+        },
+      },
+      create: {
+        userEmail: permission.userEmail,
+        majorEditingPermissions: {
+          create: permission.majorEditingPermissions.map((majorEditPerm) => {
+            return {
+              major: {
+                connect: {
+                  id: majorEditPerm.major.id,
+                },
+              },
+              expirationDate: majorEditPerm.expirationDate,
+            };
+          }),
+        },
+      },
+      select: {
+        userEmail: true,
+        majorEditingPermissions: {
+          select: {
+            major: {
+              select: {
+                id: true,
+                name: true,
+                catalogYear: true,
+                programType: true,
+              },
+            },
+            expirationDate: true,
+          },
+        },
+      },
+    });
+
+    return result;
+  });
 }
 
-export async function getPermissions(): Promise<Permissions[]> {
-  const usersPermissions = await prisma.permissions.findMany({
+/**
+ * userId is the id of the potential admin making the request
+ * userEmail is the email of the user to remove permissions from
+ */
+export async function removePermission({
+  userId,
+  userEmail,
+}: {
+  userId: string;
+  userEmail: string;
+}) {
+  if ((await getUserRole(userId)) !== Role.ADMIN)
+    throw new Error("User is not an admin");
+
+  const result = prisma.permission.delete({
+    where: {
+      userEmail,
+    },
+  });
+
+  return result;
+}
+
+export async function getPermissions(): Promise<Permission[]> {
+  const usersPermissions = await prisma.permission.findMany({
     select: {
       userEmail: true,
       majorEditingPermissions: {
@@ -80,6 +121,7 @@ export async function getPermissions(): Promise<Permissions[]> {
               id: true,
               name: true,
               catalogYear: true,
+              programType: true,
             },
           },
           expirationDate: true,
@@ -89,53 +131,74 @@ export async function getPermissions(): Promise<Permissions[]> {
     },
   });
 
-  if (usersPermissions === null) {
-    return [];
-  }
-
   return usersPermissions;
 }
 
-export async function userHasMajorEditingPermission(
-  userId: string,
-): Promise<boolean> {
+export async function getUserPermissions(userId: string): Promise<Permission> {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
     },
     select: {
       email: true,
+      role: true,
     },
   });
 
-  const major = await getUserMajorById(userId);
+  if (user == null) throw new Error(`User ${userId} not found`);
 
-  if (major?.id !== undefined && user?.email !== undefined) {
-    const permissions = await prisma.permissions.findUnique({
-      where: {
-        userEmail: user.email ? user.email : "",
-      },
-      select: {
-        majorEditingPermissions: {
-          select: {
-            major: {
-              select: {
-                id: true,
-              },
+  const permissions = await prisma.permission.findUnique({
+    where: {
+      userEmail: user?.email,
+    },
+    select: {
+      majorEditingPermissions: {
+        select: {
+          major: {
+            select: {
+              id: true,
+              name: true,
+              catalogYear: true,
+              programType: true,
             },
-            expirationDate: true,
           },
+          expirationDate: true,
         },
       },
-    });
+      userEmail: true,
+    },
+  });
 
-    if (permissions?.majorEditingPermissions !== undefined) {
-      for (const majorEditPerm of permissions.majorEditingPermissions) {
-        if (majorEditPerm.major.id == major.id) {
-          return majorEditPerm.expirationDate > new Date();
-        }
-      }
-    }
+  if (permissions == null)
+    return { userEmail: user.email, majorEditingPermissions: [] };
+
+  return permissions;
+}
+
+export async function userHasMajorEditPermission(
+  userId: string,
+  majorId: number,
+): Promise<boolean> {
+  const permissions = await getUserPermissions(userId);
+
+  const major = await prisma.major.findUnique({
+    where: {
+      id: majorId,
+    },
+    select: {
+      name: true,
+    },
+  });
+
+  if (!major) throw new Error(`Major ${majorId} not found`);
+
+  if (permissions?.majorEditingPermissions) {
+    return permissions?.majorEditingPermissions.some((majorEditPerm) => {
+      return (
+        majorEditPerm.major.name == major.name &&
+        majorEditPerm.expirationDate > new Date()
+      );
+    });
   }
 
   return false;
@@ -151,9 +214,6 @@ export async function getUserRole(userId: string): Promise<string> {
     },
   });
 
-  if (user?.role !== undefined) {
-    return user.role;
-  }
-
-  return "USER";
+  if (!user) throw new Error(`User ${userId} not found`);
+  return user.role;
 }

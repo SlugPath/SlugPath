@@ -4,8 +4,9 @@ import { Add } from "@mui/icons-material";
 import { IconButton, Input, useColorScheme } from "@mui/joy";
 import { useContext, useState } from "react";
 
-import DropDownButton from "../../buttons/DropDownButton";
+import PlannerDropDown from "../../buttons/PlannerDropDown";
 import ConfirmAlert from "../../modals/ConfirmAlert";
+import RenameModal from "../../modals/RenameModal";
 import TitleSnackbar from "./TitleSnackbar";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
@@ -95,7 +96,7 @@ export default function PlannerTabs() {
   return (
     <>
       <div className="grid grid-flow-col gap-2 ml-1 overflow-x-auto">
-        {planners.map(({ id, title }) => (
+        {planners?.map(({ id, title }) => (
           <CustomTab
             key={id}
             title={title}
@@ -133,6 +134,8 @@ export default function PlannerTabs() {
       <TooManyPlannersAlert
         open={tooManyAlertIsOpen}
         onClose={() => setTooManyAlertIsOpen(false)}
+        warningContent="Too Many Planners"
+        dialogContent="You have too many planners open. Delete one to make a new one."
       />
     </>
   );
@@ -165,7 +168,7 @@ function CustomTab({
   const [text, setText] = useState(title);
   const [hovering, setHovering] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const [renameFromDropDown, setRenameFromDropDown] = useState(false);
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
 
   function backgroundColor() {
     if (mode === "light") {
@@ -209,25 +212,30 @@ function CustomTab({
     }
   }
 
-  function handleRename() {
-    setRenameFromDropDown(true);
+  function handleOpenRenameModal() {
     if (selected) {
       setPlannerBeingEdited(id);
     }
+    setRenameModalOpen(true);
   }
+
+  const handleCloseRenameModal = () => {
+    setRenameModalOpen(false);
+  };
+
+  const handleConfirmRenameModal = (newTitle: string) => {
+    setText(newTitle);
+    onEndEditing(newTitle);
+    handleCloseRenameModal();
+  };
 
   const handleContextMenu = (e: any) => {
     e.preventDefault(); // Prevent the default right-click context menu
     setDropDownOpen(true); // Open the dropdown
   };
 
-  // Needed to edit the blur event so that it was ignored on the transition from
-  // the dropdown to the editing page
   const handleBlurEditing = (text: string) => {
-    if (!renameFromDropDown) {
-      onEndEditing(text);
-    }
-    setRenameFromDropDown(false);
+    onEndEditing(text);
   };
 
   const handleDropDownClosed = (isClosed: boolean) => {
@@ -284,14 +292,20 @@ function CustomTab({
       ) : (
         <span className="truncate px-2">{truncateTitle(text)}</span>
       )}
-      <DropDownButton
+      <PlannerDropDown
         id={id}
         title={title}
         onRightClick={dropDownOpen}
         onDeleteButtonClick={onOpenDeleteAlert}
         onDuplicateButtonClick={onDuplicate}
-        onRenameButtonClick={handleRename}
+        onRenameButtonClick={handleOpenRenameModal}
         dropDownClosed={handleDropDownClosed}
+      />
+      <RenameModal
+        open={renameModalOpen}
+        onClose={handleCloseRenameModal}
+        onConfirm={handleConfirmRenameModal}
+        title={title} // Pass the current title to the modal
       />
     </div>
   );

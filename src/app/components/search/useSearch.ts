@@ -1,5 +1,6 @@
-import { coursesBy, getAllDepartments } from "@/app/actions/course";
 import { geOptions } from "@/lib/consts";
+import { coursesBy, getAllDepartments } from "@actions/course";
+import { SearchQueryDetails } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -8,49 +9,49 @@ export default function useSearch() {
   // Query to get the list of departments
   const { data: departments } = useQuery({
     queryKey: ["departments"],
-    queryFn: async () => {
-      try {
-        const depts = await getAllDepartments();
-        return [{ label: "--", value: null }, ...depts];
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    queryFn: async () => [
+      { label: "--", value: null },
+      ...(await getAllDepartments()),
+    ],
   });
 
   // Query details for course search
   const [departmentCode, setDepartmentCode] = useState<string | null>(null);
   const [number, setNumber] = useState("");
   const [ge, setGE] = useState<string | null>(null);
-  const [queryDetails, setQueryDetails] = useState({
+  const [numberRange, setNumberRange] = useState<number[]>([1, 299]);
+  const [creditRange, setCreditRange] = useState<number[]>([1, 15]);
+  const [queryDetails, setQueryDetails] = useState<SearchQueryDetails>({
     departmentCode: "",
     number: "",
     ge: "",
+    numberRange: [1, 299],
+    creditRange: [1, 15],
   });
 
   // Query to get the courses based on the query details
   const { data: courses, isLoading: loading } = useQuery({
     queryKey: ["courses", queryDetails],
     placeholderData: keepPreviousData,
-    queryFn: async () => {
-      try {
-        const res = await coursesBy(queryDetails);
-        return res;
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    queryFn: async () => await coursesBy(queryDetails),
   });
 
   useDebounce({
-    callback: () => handleSearch(departmentCode ?? "", number, ge ?? ""),
+    callback: () =>
+      handleSearch(
+        departmentCode ?? "",
+        number,
+        ge ?? "",
+        numberRange,
+        creditRange,
+      ),
     delay: 100,
-    dependencies: [departmentCode, number, ge],
+    dependencies: [departmentCode, number, ge, ...numberRange, ...creditRange],
   });
 
   // Handlers
   const handleChangeDepartment = (
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     value: string | null,
   ) => {
     setDepartmentCode(value);
@@ -71,6 +72,8 @@ export default function useSearch() {
     departmentCode: string,
     textInput: string,
     geInput: string,
+    sliderNumberInput: number[],
+    sliderCreditInput: number[],
   ) => {
     const [departmentCodeParsed, numberParsed] = getDeptCodeAndCourseNum(
       textInput,
@@ -80,7 +83,32 @@ export default function useSearch() {
       departmentCode: departmentCodeParsed,
       number: numberParsed,
       ge: geInput,
+      numberRange: sliderNumberInput,
+      creditRange: sliderCreditInput,
     });
+  };
+
+  const handleChangeNumberRange = (newRange: number[]) => {
+    setNumberRange(newRange);
+  };
+
+  const handleChangeCreditRange = (newRange: number[]) => {
+    setCreditRange(newRange);
+  };
+
+  const handleReset = () => {
+    setDepartmentCode("");
+    setNumber("");
+    setGE("");
+    setNumberRange([1, 299]);
+    setCreditRange([1, 15]);
+    handleSearch(
+      departmentCode ?? "",
+      number,
+      ge ?? "",
+      numberRange,
+      creditRange,
+    );
   };
 
   return {
@@ -92,12 +120,17 @@ export default function useSearch() {
       number,
       ge,
       geOptions,
+      numberRange,
+      creditRange,
     },
     handlers: {
       handleChangeDepartment,
       handleChangeNumber,
       handleChangeGE,
       handleSearch,
+      handleChangeNumberRange,
+      handleChangeCreditRange,
+      handleReset,
     },
   };
 }

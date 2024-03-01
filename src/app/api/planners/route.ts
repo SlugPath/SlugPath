@@ -1,6 +1,6 @@
-import { saveAllPlanners } from "@/app/actions/planner";
-import { PlannerData } from "@/app/types/Planner";
 import { authOptions } from "@/lib/auth";
+import { saveAllPlanners } from "@actions/planner";
+import { PlannerData } from "@customTypes/Planner";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";

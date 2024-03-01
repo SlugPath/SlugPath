@@ -20,20 +20,24 @@ export default function SelectedLabels({
   return (
     <div className="flex flex-row items-center justify-start">
       <Typography>Labels:</Typography>
-      <List orientation="horizontal">
-        {allLabels.map((label) => (
-          <ListItem key={label.id}>
-            <CourseLabel
-              label={label}
-              displayText={label.name.length > 0}
-              inMenu
-            />
-          </ListItem>
-        ))}
-        <IconButton onClick={handleOpenLabels}>
-          <Add />
-        </IconButton>
-      </List>
+      <div
+        style={{ overflowX: "auto", display: "flex", scrollbarWidth: "none" }}
+      >
+        <List orientation="horizontal">
+          {allLabels.map((label) => (
+            <ListItem key={label.id}>
+              <CourseLabel
+                label={label}
+                displayText={label.name.length > 0}
+                inMenu
+              />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+      <IconButton onClick={handleOpenLabels}>
+        <Add />
+      </IconButton>
     </div>
   );
 }
