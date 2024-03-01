@@ -106,7 +106,7 @@ export default function SearchResults({
                 </div>
               </div>
             ) : (
-              <div className="flex justify-center items-center h-[54vh]">
+              <div className="flex justify-center items-center overflow-y-auto h-full">
                 {!hasResults() && !loading ? (
                   <p className="text-gray-400 text-center">
                     No results. Try changing the search parameters.
