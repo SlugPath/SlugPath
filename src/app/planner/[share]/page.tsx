@@ -27,7 +27,9 @@ export default async function Page({ params }: { params: { share: string } }) {
     id: uuidv4(),
   };
 
-  // give the clone a new ID
+  // update the title of the new planner
+  duplicatePlanner.title = "Shared: "  + duplicatePlanner.title
+
   console.log(`New planner id: ${duplicatePlanner.id}`);
   console.log(`
     ============================================================

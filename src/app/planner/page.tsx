@@ -1,12 +1,20 @@
-import { getAllPlanners } from "@actions/planner";
 import Planners from "@components/planners/Planners";
 import { getServerSession } from "next-auth";
 
+import { getAllPlanners } from "../actions/planner";
+
 export default async function Home() {
+
+
+  /* TODO:
+  Compare local storage with server
+  Check updateTime to determine which one has newer data
+  Load from there
+  */
   const session = await getServerSession();
 
   const planners = await getAllPlanners(session?.user.email ?? "");
 
-  console.log("This should only be seen once");
-  return <Planners planners={planners} />;
+  console.log("This should only be seen once")
+  return <Planners planners={planners}/>;
 }
