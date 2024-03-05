@@ -120,7 +120,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                         Notes
                         <IconButton />
                       </AccordionSummary>
-                      <AccordionDetails className="mb-2 h-64">
+                      <AccordionDetails className="mb-3">
                         <NotesEditor
                           content={courseState.notes}
                           onUpdateNotes={updateNotes}
