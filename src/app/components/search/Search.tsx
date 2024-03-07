@@ -17,7 +17,6 @@ export default function Search({
 
   return (
     <>
-      {displayCustomCourseSelection && <CustomCourseSelection />}
       <Card
         className="flex flex-col w-80 h-full min-h-0 min-w-80"
         variant="plain"
@@ -25,6 +24,7 @@ export default function Search({
         <SearchInputs handlers={handlers} params={params} />
         <SearchResults courses={courses} loading={loading} />
       </Card>
+      {displayCustomCourseSelection && <CustomCourseSelection />}
     </>
   );
 }
