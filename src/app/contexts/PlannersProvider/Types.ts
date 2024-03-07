@@ -23,6 +23,5 @@ export interface PlannersContextProps {
 }
 
 export interface PlannersProviderProps {
-  allPlanners: PlannerData[];
   children: React.ReactNode;
 }

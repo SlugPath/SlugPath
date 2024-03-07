@@ -1,23 +1,47 @@
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
-import { saveAllPlanners } from "@actions/planner";
+import { getAllPlanners, saveAllPlanners } from "@actions/planner";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
-import useLocalStorage from "@hooks/useLocalStorage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { MultiPlanner } from "./Types";
 
-export function usePlanners(
-  userId: string | undefined,
-  allPlanners: PlannerData[],
-) {
-  const [{ planners, activePlanner }, setMultiPlanner] =
-    useLocalStorage<MultiPlanner>("multiPlanner", {
-      planners: allPlanners,
-      activePlanner: allPlanners[0]?.id,
-    });
+export function usePlanners() {
+  const { data: session } = useSession();
+  const [{ planners, activePlanner }, setMultiPlanner] = useState<MultiPlanner>(
+    {
+      planners: [],
+      activePlanner: undefined,
+    },
+  );
+  const userId = session?.user.id;
+
+  // Refetch every 2 minute
+  const { data } = useQuery({
+    queryKey: ["planners"],
+    queryFn: async () => {
+      const userEmail = session?.user.email ?? "";
+      if (userEmail.length == 0) return [];
+      const planners = await getAllPlanners(userEmail);
+      return planners;
+    },
+    throwOnError: true,
+    refetchInterval: 60 * 1000,
+  });
+
+  // We have to use a useEffect here because we prefetch the data on the server using react-query
+  // so we have to set the data result to multiplanner
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setMultiPlanner({
+        planners: data,
+        activePlanner: data[0].id,
+      });
+    }
+  }, [data, setMultiPlanner]);
 
   const switchPlanners = (id: string | undefined) => {
     setMultiPlanner((prev) => ({ ...prev, activePlanner: id }));
@@ -27,7 +51,28 @@ export function usePlanners(
 
   const [showExportModal, setShowExportModal] = useState(false);
 
+  const [isWindowFocused, setIsWindowFocused] = useState(true);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      setIsWindowFocused(true);
+    };
+
+    const handleBlur = () => {
+      setIsWindowFocused(false);
+    };
+
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, []);
+
   const { mutate: saveAll } = useMutation({
+    mutationKey: ["savePlanners"],
     mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
       await saveAllPlanners(input);
     },
@@ -36,10 +81,10 @@ export function usePlanners(
     },
   });
 
-  // Save changes to the planners every 30 seconds in the database
+  // Save changes to the planners every 30 seconds in the database if the tab is currently focused
   useEffect(() => {
     const saveChanges = () => {
-      if (userId) {
+      if (userId && isWindowFocused) {
         saveAll({ userId, planners });
       }
     };
@@ -48,7 +93,7 @@ export function usePlanners(
     return () => {
       clearInterval(interval);
     };
-  }, [saveAll, userId, planners]);
+  }, [saveAll, userId, planners, isWindowFocused]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
