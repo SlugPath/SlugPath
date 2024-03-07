@@ -24,6 +24,7 @@ import {
   Card,
   IconButton,
   Tooltip,
+  Typography,
 } from "@mui/joy";
 import { useContext, useState } from "react";
 
@@ -275,7 +276,7 @@ function Quarters({
       <Box>
         <AccordionSummary indicator={null}>
           {indicatorIcon(isExpanded)}
-          Year {year}
+          <Typography level="title-lg">Year {year}</Typography>
           <IconButton>
             <DeleteOutline
               onClick={(e) => {
