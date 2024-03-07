@@ -19,7 +19,7 @@ import {
 import { ProgramType } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { SyntheticEvent, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
 import SelectMajorName from "./SelectMajorName";

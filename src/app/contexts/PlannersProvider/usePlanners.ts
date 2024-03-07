@@ -19,7 +19,6 @@ export function usePlanners() {
   );
   const userId = session?.user.id;
 
-  // Refetch every 2 minute
   const { data } = useQuery({
     queryKey: ["planners"],
     queryFn: async () => {
@@ -28,12 +27,12 @@ export function usePlanners() {
       const planners = await getAllPlanners(userEmail);
       return planners;
     },
+    refetchInterval: 1000 * 180,
     throwOnError: true,
-    refetchInterval: 60 * 1000,
   });
 
   // We have to use a useEffect here because we prefetch the data on the server using react-query
-  // so we have to set the data result to multiplanner
+  // so we have to set the data result to multiplanner manually
   useEffect(() => {
     if (data && data.length > 0) {
       setMultiPlanner({
@@ -48,11 +47,10 @@ export function usePlanners() {
   };
 
   const { userDefaultPlanner } = useContext(DefaultPlannerContext);
-
   const [showExportModal, setShowExportModal] = useState(false);
 
+  // Manage window focus
   const [isWindowFocused, setIsWindowFocused] = useState(true);
-
   useEffect(() => {
     const handleFocus = () => {
       setIsWindowFocused(true);
