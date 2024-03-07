@@ -27,14 +27,12 @@ export interface DefaultPlannerSelectionProps {
   onSaved: () => void;
   saveButtonName: string;
   isInPlannerPage?: boolean;
-  onReplacePlanner?: () => void;
 }
 
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
   isInPlannerPage,
-  onReplacePlanner,
 }: DefaultPlannerSelectionProps) {
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
@@ -78,20 +76,13 @@ export default function DefaultPlannerSelection({
   // Handlers
   useEffect(() => {
     if (updateDefaultPlannerIsPending && defaultPlannerId !== undefined) {
+      setIsSaved(true);
+      onSaved();
       switch (saveButtonClicked) {
-        case ButtonName.Save:
-          setIsSaved(true);
-          onSaved();
-          break;
-        // These are slightly delayed to allow the save to complete
-        // before the new planner is created or replaced
         case ButtonName.CreateNew:
-          setIsSaved(true);
           addPlanner();
           break;
         case ButtonName.ReplaceCurrent:
-          setIsSaved(true);
-          if (onReplacePlanner) onReplacePlanner();
           replaceCurrentPlanner();
       }
     }
@@ -100,7 +91,6 @@ export default function DefaultPlannerSelection({
     updateDefaultPlannerIsPending,
     addPlanner,
     replaceCurrentPlanner,
-    onReplacePlanner,
     onSaved,
     defaultPlannerId,
   ]);
@@ -186,7 +176,6 @@ export default function DefaultPlannerSelection({
             onChange={handleChangeDefaultPlanner}
             majorDefaultPlanners={majorDefaultPlanners}
             loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-            addPlannerCardContainer={isInPlannerPage}
           />
         )}
         <CourseInfoModal />
