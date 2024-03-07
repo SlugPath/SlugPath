@@ -13,6 +13,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
@@ -52,6 +53,8 @@ export default function DefaultPlannerSelection({
   } = useContext(DefaultPlannerContext);
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
+
+  const router = useRouter();
 
   function handleChangeSelectedMajor(
     _: React.SyntheticEvent | null,
@@ -180,15 +183,21 @@ export default function DefaultPlannerSelection({
         )}
         <CourseInfoModal />
       </div>
-      <div className="flex justify-end w-full">
+      <div className="flex justify-end w-full gap-4">
         {updateDefaultPlannerIsPending ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
-          <div>
+          <>
             <Button disabled={isSaved} onClick={handleClickSave}>
               {saveButtonName}
             </Button>
-            {isInPlannerPage && (
+            {!isInPlannerPage ? (
+              <Tooltip title="Skip to planner dashboard without selecting a default planner.">
+                <Button color="danger" onClick={() => router.push("/planner")}>
+                  Skip
+                </Button>
+              </Tooltip>
+            ) : (
               <>
                 <Tooltip title="Replace your currently selected planner with the courses in your default planner.">
                   <Button color="warning" onClick={handleClickReplaceCurrent}>
@@ -196,13 +205,13 @@ export default function DefaultPlannerSelection({
                   </Button>
                 </Tooltip>
                 <Tooltip title="Create a new planner with the courses in your default planner.">
-                  <Button onClick={handleClickCreateNew}>
+                  <Button color="success" onClick={handleClickCreateNew}>
                     {ButtonName.CreateNew}
                   </Button>
                 </Tooltip>
               </>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

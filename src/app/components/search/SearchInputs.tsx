@@ -146,8 +146,9 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
           ))}
         </Select>
         <Accordion
-          className="col-span-6"
+          className="col-span-6 font-normal"
           sx={{
+            padding: "0.5rem",
             textAlign: "center",
             backgroundColor,
             borderRadius: 8,
@@ -161,6 +162,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
               borderColor: "background.level2",
             },
             '& [aria-expanded="true"]': {
+              paddingBottom: "0.75rem",
               boxShadow: (theme) =>
                 `inset 0 -1px 0 ${theme.vars.palette.divider}`,
             },
