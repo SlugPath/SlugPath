@@ -1,5 +1,5 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
-import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { getQuarterColor } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
 import { courseInfo } from "@actions/course";
@@ -69,7 +69,8 @@ export default function CourseInfoModal({
     queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
     queryFn: async () => await getEnrollmentInfo(course!),
     enabled: course !== undefined && !isCustomCourse(course),
-    initialData: [],
+    placeholderData: [],
+    staleTime: Infinity,
   });
 
   // This is to prevent illegally opening the modal
@@ -254,7 +255,7 @@ export default function CourseInfoModal({
               <Skeleton loading={enrollLoading}>
                 <div className="flex flex-wrap items-center gap-2">
                   <Typography component="p">Quarters Offered:</Typography>
-                  {enrollmentInfo.map((e, i) => {
+                  {enrollmentInfo!.map((e, i) => {
                     return (
                       <Chip key={i} color={getQuarterColor(e.term.title)}>
                         {e.term.title} {e.term.catalogYear}, {e.instructor}
@@ -263,30 +264,31 @@ export default function CourseInfoModal({
                   })}
                 </div>
               </Skeleton>
-              {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+            </>
+          ) : (
+            <>
+              <div className="flex flex-row gap-2 items-center">
+                <Typography component="p">Quarters Offered:</Typography>
+                {course.quartersOffered.map((q, i) => (
+                  <Chip key={i} color="primary">
+                    {q}
+                  </Chip>
+                ))}
+              </div>
+              {!isOffered(course.quartersOffered, term) && (
                 <Typography
                   color="warning"
                   component="p"
                   startDecorator={<WarningAmberRounded color="warning" />}
                 >
-                  Warning: {course.departmentCode} {course.number} is not
-                  offered in {` ${term}`} Quarter
+                  Warning: {course.title} is not offered in {` ${term}`} Quarter
                 </Typography>
               )}
             </>
-          ) : (
-            <div className="flex flex-row gap-2 items-center">
-              <Typography component="p">Quarters Offered:</Typography>
-              {course.quartersOffered.map((q, i) => (
-                <Chip key={i} color="primary">
-                  {q}
-                </Chip>
-              ))}
-            </div>
           )}
           <Typography component="p">Credits: {credits(data)}</Typography>
           <MoreEnrollInfo course={course} />
-          {!viewOnly && course.labels && (
+          {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}
               handleOpenLabels={handleOpenLabels}

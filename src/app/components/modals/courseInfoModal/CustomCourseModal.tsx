@@ -1,3 +1,4 @@
+import { Term } from "@/app/types/Quarter";
 import { customCourse } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import { StoredCourse } from "@customTypes/Course";
@@ -21,26 +22,17 @@ import {
 import { ChangeEvent, useState } from "react";
 
 const MAX_DESCRIPTION_LENGTH = 2000;
+const QUARTERS: Term[] = ["Fall", "Winter", "Spring", "Summer"];
+
+const cmpQuarters = (a: string, b: string) => {
+  return QUARTERS.indexOf(a as Term) - QUARTERS.indexOf(b as Term);
+};
 
 export interface CustomCourseModalProps {
   isOpen: boolean;
   onClose: (c: StoredCourse) => void;
   defaultCourse?: StoredCourse | undefined;
 }
-
-type QuartersOffered = {
-  Fall: boolean;
-  Winter: boolean;
-  Spring: boolean;
-  Summer: boolean;
-};
-
-const allQuartersOffered = {
-  Fall: true,
-  Winter: true,
-  Spring: true,
-  Summer: true,
-};
 
 export default function CustomCourseModal({
   isOpen,
@@ -51,9 +43,22 @@ export default function CustomCourseModal({
     defaultCourse ? { ...defaultCourse } : customCourse(),
   );
 
-  const [quarters, setQuarters] = useState<QuartersOffered>({
-    ...allQuartersOffered,
-  });
+  const setQuarters = (newQuarter: string, offered: boolean) => {
+    setCustomCourse((prev) => {
+      let quartersOffered = prev.quartersOffered;
+      if (offered) {
+        quartersOffered = [...quartersOffered, newQuarter];
+      } else {
+        quartersOffered = quartersOffered.filter((q) => q != newQuarter);
+      }
+      // Sort them in a canonical order
+      quartersOffered.sort(cmpQuarters);
+      return {
+        ...prev,
+        quartersOffered,
+      };
+    });
+  };
 
   // Errors
   const [invalidCreditsError, setInvalidCreditsError] = useState(false);
@@ -95,14 +100,9 @@ export default function CustomCourseModal({
 
   const handleQuarterChange = (
     e: ChangeEvent<HTMLInputElement>,
-    item: keyof QuartersOffered,
+    item: "Fall" | "Winter" | "Spring" | "Summer",
   ) => {
-    setQuarters((prev) => {
-      return {
-        ...prev,
-        [item]: e.target.checked,
-      };
-    });
+    setQuarters(item, e.target.checked);
   };
 
   const onSave = () => {
@@ -117,16 +117,10 @@ export default function CustomCourseModal({
       return;
     }
 
-    // Get all the quarters
-    const quartersOffered = Object.keys(quarters).filter(
-      (q) => quarters[q as keyof QuartersOffered],
-    );
-    course.quartersOffered = quartersOffered;
     onClose(course);
 
     // Reset custom course and quarters
     setCustomCourse(customCourse());
-    setQuarters({ ...allQuartersOffered });
   };
 
   return (
@@ -228,15 +222,16 @@ export default function CustomCourseModal({
                     "--ListItem-radius": "20px",
                   }}
                 >
-                  {["Fall", "Winter", "Spring", "Summer"].map((item) => (
+                  {QUARTERS.map((item) => (
                     <ListItem key={item}>
                       <Checkbox
                         overlay
                         disableIcon
-                        checked={quarters[item as keyof QuartersOffered]}
-                        onChange={(e) =>
-                          handleQuarterChange(e, item as keyof QuartersOffered)
+                        checked={
+                          course.quartersOffered.findIndex((q) => q === item) !=
+                          -1
                         }
+                        onChange={(e) => handleQuarterChange(e, item)}
                         variant="soft"
                         label={item}
                       />
