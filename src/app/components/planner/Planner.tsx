@@ -52,9 +52,9 @@ export default function Planner({ isActive }: { isActive: boolean }) {
     addYear,
   } = useContext(PlannerContext);
 
-  const yearRange = Array.from(
-    { length: courseState.years },
-    (_, index) => index,
+  const yearRange = useMemo(
+    () => Array.from({ length: courseState.years }, (_, index) => index),
+    [courseState],
   );
 
   const [isExpanded, setIsExpanded] = useState(true);
