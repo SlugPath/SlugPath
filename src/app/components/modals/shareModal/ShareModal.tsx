@@ -3,6 +3,7 @@ import { PlannersContext } from "@contexts/PlannersProvider";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { Button } from "@mui/joy";
 import { Suspense, useContext } from "react";
+import ShareIcon from '@mui/icons-material/Share';
 
 import ExportSkeleton from "./ExportSkeleton";
 
@@ -65,12 +66,21 @@ export default function ShareModal() {
           mb={1}
           textAlign={"center"}
         >
-          Share Code
+          Share This Planner
         </Typography>
         <Suspense fallback={<ExportSkeleton />}>
-          <h1 style={{ marginTop: "20px" }}>
-            <a href={`${activePlanner}`}>{`${url}${activePlanner}`}</a>
-          </h1>
+        <div style={{ marginTop: '25px', marginBottom: '15px', position: 'relative' }}>
+          <div style={{ position: 'absolute', left: '5px', top: '20%', color: '#757575' }}>
+            <ShareIcon className="dark:fill-white" style={{ color: 'black' }} />
+          </div>
+          <input 
+            type="text" 
+            value={url + activePlanner} 
+            readOnly 
+            className="pl-10 py-2 pr-4 w-full dark:bg-slate-800 rounded border bg-gray-200 focus:bg-white focus:outline-none focus:border-blue-500 w-full"
+            style={{ width: '30vw' }}
+          />
+        </div>
           <Button
             variant="solid"
             color="primary"
