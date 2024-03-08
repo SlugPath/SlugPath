@@ -1,22 +1,24 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
 
-import { Binder, RequirementList } from "../types/Requirements";
-import { userHasMajorEditingPermission } from "./permissions";
+import { Binder, Requirement, RequirementList } from "../types/Requirements";
+import { courseInfo } from "./course";
+import { userHasMajorEditPermission } from "./permissions";
 
 export async function saveMajorRequirements(
   requirements: RequirementList,
   majorId: number,
   userId: string,
 ) {
-  // check if user is allowed to edit this major
-  if (!(await userHasMajorEditingPermission(userId))) {
-    return { success: false };
-  }
+  const hasPermission = await userHasMajorEditPermission(userId, majorId);
 
-  const requirementsAsJSON = JSON.stringify(requirements);
+  // check if user is allowed to edit this major
+  if (!hasPermission) return { success: false };
+
+  const requirementsAsJSON = convertRequirementListToJSON(requirements);
 
   await prisma.majorRequirement.upsert({
     where: {
@@ -81,7 +83,7 @@ export async function getMajorRequirements(
     return await createEmptyRequirementList(majorId);
   }
 
-  const requirementList: RequirementList = JSON.parse(
+  const requirementList: RequirementList = await convertJSONToRequirementList(
     majorRequirement.requirementList as string,
   );
 
@@ -91,9 +93,82 @@ export async function getMajorRequirements(
 export async function getAllRequirementLists(): Promise<RequirementList[]> {
   const requirementLists = await prisma.majorRequirement.findMany();
 
-  return requirementLists.map((reqList) => {
-    return JSON.parse(reqList.requirementList as string);
+  const convertedRequirementLists: RequirementList[] = [];
+
+  requirementLists.forEach(async (reqList) => {
+    const r = await convertJSONToRequirementList(
+      reqList.requirementList as string,
+    );
+    convertedRequirementLists.push(r);
   });
+
+  return convertedRequirementLists;
+}
+
+// ==================================================================================
+// Helper functions start ===========================================================
+// ==================================================================================
+
+function convertRequirementListToJSON(requirementList: RequirementList) {
+  const newReqList = requirementListMapperSync((req) => {
+    return {
+      departmentCode: req.departmentCode,
+      number: req.number,
+    };
+  }, requirementList);
+
+  return JSON.stringify(newReqList);
+}
+
+async function convertJSONToRequirementList(requirementListJSON: string) {
+  console.log(requirementListJSON);
+  const requirementList = JSON.parse(requirementListJSON) as RequirementList;
+  return await requirementListMapper(async (req) => {
+    const course = await courseInfo({
+      departmentCode: req.departmentCode,
+      number: req.number,
+    });
+    if (!course) {
+      throw new Error("Course not found");
+    }
+    return course;
+  }, requirementList);
+}
+
+// This function maps over a requirement list and applies an asynchronous function to each class within the requirement list.
+async function requirementListMapper(
+  f: (requirement: Requirement) => Promise<Requirement>,
+  requirementList: RequirementList,
+): Promise<RequirementList> {
+  return {
+    ...requirementList,
+    requirements: await Promise.all(
+      requirementList.requirements.map((req) => {
+        if (isRequirementList(req)) {
+          return requirementListMapper(f, req);
+        } else {
+          return f(req);
+        }
+      }),
+    ),
+  };
+}
+
+// This function maps over a requirement list and applies a synchronous function to each class within the requirement list.
+function requirementListMapperSync(
+  f: (requirement: Requirement) => Requirement,
+  requirementList: RequirementList,
+): RequirementList {
+  return {
+    ...requirementList,
+    requirements: requirementList.requirements.map((req) => {
+      if (isRequirementList(req)) {
+        return requirementListMapperSync(f, req);
+      } else {
+        return f(req);
+      }
+    }),
+  };
 }
 
 export async function getApprovedMajorRequirement(

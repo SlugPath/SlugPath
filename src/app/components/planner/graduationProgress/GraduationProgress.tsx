@@ -12,9 +12,8 @@ export default function GraduationProgress({
   courseState: PlannerData;
   majorProgressPercentage: number;
 }) {
-  const creditsPercentage = (credits / 180) * 100;
-  const gePercentage =
-    (Object.keys(GESMappedToCourses({ courseState })).length / 10) * 100;
+  const creditsPercentage = Math.min((credits / 180) * 100, 100);
+  const gePercentage = (GESMappedToCourses({ courseState }).size / 10) * 100;
   const totalPercentage: number = Math.floor(
     (creditsPercentage + gePercentage + majorProgressPercentage) / 3,
   );

@@ -2,7 +2,7 @@
 
 import { toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
-import { LabelColor, Term } from "@prisma/client";
+import { LabelColor } from "@prisma/client";
 
 import { PlannerData } from "../types/Planner";
 
@@ -27,22 +27,25 @@ async function createPlanner(
   const notes = plannerData.notes;
 
   const newQuarters = plannerData.quarters.map((q) => {
-    const [year, term] = q.id.split("-").slice(1);
+    const { year, title: term } = q;
     const enrolledCourses = q.courses.map((cid) => {
       const c = plannerData.courses.find((c) => c.id === cid);
       if (!c) {
         throw new Error(`Course with id ${cid} not found`);
       }
+      // Remove prerequisites from the course when saving
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { prerequisites: _, ...rest } = c;
       return {
-        ...c,
-        ge: [...c.ge],
-        quartersOffered: [...c.quartersOffered],
+        ...rest,
+        ge: [...rest.ge],
+        quartersOffered: [...rest.quartersOffered],
       };
     });
 
     return {
-      year: parseInt(year),
-      term: term as Term,
+      year,
+      term,
       courses: {
         create: enrolledCourses,
       },

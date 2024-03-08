@@ -10,14 +10,16 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
     showExportModal,
     setShowExportModal,
-    showMajorSelectionModal,
-    setShowMajorSelectionModal,
-    showMajorProgressModal,
-    setShowMajorProgressModal,
+    showMajorsModal,
+    setShowMajorsModal,
     showPermissionsModal,
     setShowPermissionsModal,
     showReplaceRLModal,
     setShowReplaceRLModal,
+    showMajorRequirementsEditModal,
+    setShowMajorRequirementsEditModal,
+    majorToEdit,
+    setMajorToEdit,
   } = useModals();
 
   const { courseState } = useContext(PlannerContext);
@@ -27,15 +29,17 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
       value={{
         showExportModal,
         setShowExportModal,
-        showMajorSelectionModal,
-        setShowMajorSelectionModal,
-        showMajorProgressModal,
-        setShowMajorProgressModal,
+        showMajorsModal,
+        setShowMajorsModal,
         showPermissionsModal,
         setShowPermissionsModal,
         showReplaceRLModal,
         setShowReplaceRLModal,
+        showMajorRequirementsEditModal,
+        setShowMajorRequirementsEditModal,
         courseState,
+        majorToEdit,
+        setMajorToEdit,
       }}
     >
       {children}

@@ -12,22 +12,22 @@ import {
 export interface TooManyPlannersAlertProps {
   open: boolean;
   onClose: () => void;
+  warningContent: string;
+  dialogContent: string;
 }
 
 export default function TooManyPlannersAlert(props: TooManyPlannersAlertProps) {
-  const { open, onClose } = props;
+  const { open, onClose, warningContent, dialogContent } = props;
 
   return (
     <Modal open={open} onClose={onClose}>
       <ModalDialog variant="outlined" role="alertdialog">
         <DialogTitle>
           <WarningRounded />
-          Too Many Planners
+          {warningContent}
         </DialogTitle>
         <Divider />
-        <DialogContent>
-          You have too many planners open. Delete one to make a new one.
-        </DialogContent>
+        <DialogContent>{dialogContent}</DialogContent>
         <DialogActions>
           <Button variant="plain" color="neutral" onClick={() => onClose()}>
             OK

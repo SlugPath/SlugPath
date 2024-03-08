@@ -3,9 +3,12 @@ import { useState } from "react";
 
 import {
   addMajorRequirementList,
+  addUpvote,
   getApprovedMajorRequirement,
   getMajorRequirementLists,
+  getUpvotes,
   removeMajorRequirementList,
+  removeUpvote,
 } from "../actions/majorRequirements";
 import { RequirementList } from "../types/Requirements";
 
@@ -49,21 +52,26 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
     setIsSaved(true);
   }
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       if (majorId === undefined) return;
-  //       try {
-  //         const result = await getMajorRequirementLists(majorId);
-  //         setMajorRequirementList(result); // Set the data to the state
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
+  async function handleGetUpvotes(majorRequirementId: number) {
+    setLoadingSave(true);
+    await getUpvotes(majorRequirementId);
+    setLoadingSave(false);
+    setIsSaved(true);
+  }
 
-  //     if (majorId) {
-  //       fetchData();
-  //     }
-  //   }, [majorId]);
+  async function handleAddUpvote(userId: string, majorRequirementId: number) {
+    setLoadingSave(true);
+    await addUpvote(userId, majorRequirementId);
+    setLoadingSave(false);
+    setIsSaved(true);
+  }
+
+  async function handleRemoveUpvote(userId: string, upvoteId: number) {
+    setLoadingSave(true);
+    await removeUpvote(userId, upvoteId);
+    setLoadingSave(false);
+    setIsSaved(true);
+  }
 
   return {
     isSaved,
@@ -72,5 +80,8 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
     onAddMajorRequirementList: handleAddMajorRequirementList,
     onGetApprovedMajorRequirement: handleGetApprovedMajorRequirement,
     onRemoveMajorRequirementList: handleRemoveMajorRequirementList,
+    onGetUpvotes: handleGetUpvotes,
+    onAddUpvote: handleAddUpvote,
+    onRemoveUpvote: handleRemoveUpvote,
   };
 }

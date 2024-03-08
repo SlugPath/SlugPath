@@ -1,11 +1,12 @@
-import { Permissions } from "@customTypes/Permissions";
+import { Major } from "@/app/types/Major";
+import { Permission } from "@/app/types/Permission";
 
 export interface PermissionsContextProps {
   loadingPermissions: boolean;
   isSaved: boolean;
-  permissionsList: Permissions[];
-  onSetPermissionsList: (permissions: Permissions[]) => void;
-  onSavePermissions: () => void;
+  permissions: Permission[];
+  onUpsertPermission: (permission: Permission) => void;
+  onRemovePermission: (userEmail: string) => void;
   isAdmin: boolean;
-  hasPermissionToEdit: boolean;
+  majorsAllowedToEdit: Major[];
 }
