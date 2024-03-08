@@ -24,6 +24,7 @@ interface LabelsSelectionModalProps {
   labels: Label[];
   selectedLabels: Label[];
   onUpdateLabels: (labels: Label[]) => void;
+  showLabelChecks?: boolean;
 }
 
 export default function LabelsSelectionModal({
@@ -32,6 +33,7 @@ export default function LabelsSelectionModal({
   labels,
   selectedLabels,
   onUpdateLabels,
+  showLabelChecks = true,
 }: LabelsSelectionModalProps) {
   const [checkedLabels, setCheckedLabels] = useState(selectedLabels);
 
@@ -121,6 +123,7 @@ export default function LabelsSelectionModal({
                   handleToggle={handleToggle}
                   isChecked={isChecked(displayLabel)}
                   onLabelChanged={handleLabelChanged}
+                  showCheck={showLabelChecks}
                 />
               );
             })}
@@ -145,12 +148,14 @@ function LabelListItem({
   handleToggle,
   isChecked,
   onLabelChanged,
+  showCheck,
 }: {
   label: Label;
   index: number;
   handleToggle: (label: Label) => void;
   isChecked: boolean;
   onLabelChanged: (label: Label) => void;
+  showCheck: boolean;
 }) {
   const [editing, setEditing] = useState(false);
   const [labelName, setLabelName] = useState(label.name);
@@ -179,7 +184,9 @@ function LabelListItem({
 
   return (
     <ListItem key={index}>
-      <Checkbox onChange={() => handleToggle(label)} checked={isChecked} />
+      {showCheck && ( // Conditionally render checkbox based on showCheck
+        <Checkbox onChange={() => handleToggle(label)} checked={isChecked} />
+      )}
       <CourseLabel label={updatedLabel} displayText={displayText()} inMenu>
         {editing ? (
           <Input

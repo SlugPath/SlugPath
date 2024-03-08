@@ -34,6 +34,7 @@ import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
+import LabelLegend from "./LabelLegend";
 import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
@@ -137,6 +138,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   geSatisfied={geSatisfied}
                   courseState={courseState}
                 />
+                <LabelLegend />
               </div>
             </div>
             <Modals />

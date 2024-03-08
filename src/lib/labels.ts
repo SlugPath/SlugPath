@@ -62,6 +62,8 @@ export function getColor(color: string) {
       return { backgroundColor: "#8B5CF6" };
     case "pink":
       return { backgroundColor: "#EC4899" };
+    case "grey":
+      return { backgroundColor: "#858D9B" };
     default:
       return { backgroundColor: "#6B7280" };
   }

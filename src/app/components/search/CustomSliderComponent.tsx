@@ -45,7 +45,7 @@ export default function CustomSliderComponent({
 
   return (
     <div className="col-span-6">
-      <Box sx={{ width: 235, margin: "auto" }}>
+      <Box sx={{ width: 230, margin: "auto" }}>
         <Typography sx={{ marginBottom: "0.5rem" }}>{label}</Typography>
         <Slider
           value={range}
@@ -62,7 +62,7 @@ export default function CustomSliderComponent({
             "& .MuiSlider-valueLabel": {
               padding: "3px",
             },
-            marginBottom: "0.05rem",
+            marginBottom: "0.15rem",
           }}
         />
       </Box>
