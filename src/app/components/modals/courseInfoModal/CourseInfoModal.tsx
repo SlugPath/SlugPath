@@ -62,6 +62,7 @@ export default function CourseInfoModal({
         number: course!.number,
       }),
     enabled: course && !isCustomCourse(course),
+    staleTime: Infinity,
   });
 
   const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
