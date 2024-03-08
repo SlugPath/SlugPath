@@ -30,12 +30,14 @@ const cmpQuarters = (a: string, b: string) => {
 
 export interface CustomCourseModalProps {
   isOpen: boolean;
-  onClose: (c: StoredCourse) => void;
+  onClose: () => void;
+  onSave: (c: StoredCourse) => void;
   defaultCourse?: StoredCourse | undefined;
 }
 
 export default function CustomCourseModal({
   isOpen,
+  onSave,
   onClose,
   defaultCourse,
 }: CustomCourseModalProps) {
@@ -105,7 +107,7 @@ export default function CustomCourseModal({
     setQuarters(item, e.target.checked);
   };
 
-  const onSave = () => {
+  const handleSave = () => {
     // Validation
     if (course.title.length == 0) {
       setTooShortError(true);
@@ -117,7 +119,7 @@ export default function CustomCourseModal({
       return;
     }
 
-    onClose(course);
+    onSave(course);
 
     // Reset custom course and quarters
     setCustomCourse(customCourse());
@@ -241,7 +243,7 @@ export default function CustomCourseModal({
               </div>
             </div>
           </div>
-          <Button className="w-full" onClick={onSave}>
+          <Button className="w-full" onClick={handleSave}>
             <Typography
               level="body-lg"
               sx={{
