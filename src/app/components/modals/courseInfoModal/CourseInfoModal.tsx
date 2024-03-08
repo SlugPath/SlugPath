@@ -142,18 +142,23 @@ export default function CourseInfoModal({
     setDisplayCourse([newCourse, term]);
   };
 
-  const handleClose = (crs: StoredCourse) => {
-    editCustomCourse(crs);
-    setDisplayCourse([crs, term]);
-    setEditing(false);
-  };
-
   // Only show this second modal if it is a custom course,
   // in the planner, and the course is being edited
   const customCourseInPlanner = isCustomCourse(course) && term !== undefined;
   if (editing && customCourseInPlanner) {
+    const handleClose = () => {
+      setEditing(false);
+    };
+
+    const handleSave = (crs: StoredCourse) => {
+      editCustomCourse(crs);
+      setDisplayCourse([crs, term]);
+      handleClose();
+    };
+
     return (
       <CustomCourseModal
+        onSave={handleSave}
         onClose={handleClose}
         defaultCourse={course}
         isOpen={editing}
