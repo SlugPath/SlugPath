@@ -9,13 +9,6 @@ import ExportSkeleton from "./ExportSkeleton";
 
 const url = `${APP_URL}/planner/`;
 
-const copyButtonStyle = {
-  // backgroundColor: 'yellow',
-  marginTop: "15px",
-  // padding: '10px 20px',
-  // borderRadius: '20px',
-  transition: "background-color 0.3s ease",
-};
 
 // Create styles
 export default function ShareModal() {
@@ -54,7 +47,7 @@ export default function ShareModal() {
           p: 3,
           boxShadow: "lg",
           height: "auto",
-          width: "auto",
+          width: "32vw",
         }}
       >
         <Typography
@@ -68,28 +61,28 @@ export default function ShareModal() {
         >
           Share This Planner
         </Typography>
-        <Suspense fallback={<ExportSkeleton />}>
         <div style={{ marginTop: '25px', marginBottom: '15px', position: 'relative' }}>
-          <div style={{ position: 'absolute', left: '5px', top: '20%', color: '#757575' }}>
-            <ShareIcon className="dark:fill-white" style={{ color: 'black' }} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+            <div style={{ position: 'absolute', left: '5px', top: '20%', color: '#757575' }}>
+              <ShareIcon className="dark:fill-white" style={{ color: 'black' }} />
+            </div>
+            <input 
+              type="text" 
+              value={url + activePlanner} 
+              readOnly 
+              className="w-full pl-10 py-2 pr-4 w-full dark:bg-slate-800 rounded border bg-gray-200 focus:bg-white focus:outline-none focus:border-blue-500"
+              // style={{ width: '30vw' }}
+            />
           </div>
-          <input 
-            type="text" 
-            value={url + activePlanner} 
-            readOnly 
-            className="pl-10 py-2 pr-4 w-full dark:bg-slate-800 rounded border bg-gray-200 focus:bg-white focus:outline-none focus:border-blue-500 w-full"
-            style={{ width: '30vw' }}
-          />
         </div>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={handleCopyToClipboard}
-            style={copyButtonStyle}
+
+        <button
+          onClick={handleCopyToClipboard}
+          className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded font-normal float-right transition duration-500 ease-in-out transform hover:scale-105"
           >
-            Copy to Clipboard
-          </Button>
-        </Suspense>
+          Copy Link
+        </button>
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>
