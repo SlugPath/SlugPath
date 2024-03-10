@@ -32,12 +32,12 @@ import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
-import NotesEditor from "./NotesEditor";
 import PlannerActions from "./PlannerActions";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
 import MajorProgress from "./graduationProgress/MajorProgress";
+import NotesEditor from "./notesEditor";
 import QuarterCard from "./quarters/QuarterCard";
 
 const MAX_YEARS = 10;
@@ -123,7 +123,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                         Notes
                         <IconButton />
                       </AccordionSummary>
-                      <AccordionDetails className="mb-2 h-64">
+                      <AccordionDetails className="mb-3">
                         <NotesEditor
                           content={courseState.notes}
                           onUpdateNotes={updateNotes}
