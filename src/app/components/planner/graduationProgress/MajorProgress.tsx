@@ -13,7 +13,10 @@ export default function MajorProgress({
         <div className="flex flex-col w-full">
           <Typography>Major</Typography>
         </div>
-        <ProgressBar percentage={majorProgressPercentage} />
+        <ProgressBar
+          percentage={majorProgressPercentage}
+          progressType={"major"}
+        />
       </div>
     </div>
   );
