@@ -22,7 +22,6 @@ import {
   Card,
   IconButton,
   Tooltip,
-  Typography,
 } from "@mui/joy";
 import { useContext, useMemo, useState } from "react";
 
@@ -265,7 +264,7 @@ function Year({ year }: { year: number }) {
       <div>
         <AccordionSummary indicator={null} className="text-xl font-bold">
           {indicatorIcon(isExpanded)}
-          <Typography level="title-lg">Year {year}</Typography>
+          Year {year}
           <IconButton>
             <DeleteOutline
               onClick={(e) => {
