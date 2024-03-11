@@ -292,7 +292,7 @@ export default function CourseInfoModal({
             </>
           )}
           <Typography component="p">Credits: {credits(data)}</Typography>
-          <MoreEnrollInfo course={course} />
+          {!isCustomCourse(course) && <MoreEnrollInfo course={course} />}
           {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}
