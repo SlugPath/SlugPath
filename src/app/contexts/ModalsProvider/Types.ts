@@ -13,6 +13,8 @@ export interface ModalsContextProps {
   setShowReplaceRLModal: SetShow;
   showMajorRequirementsEditModal: boolean;
   setShowMajorRequirementsEditModal: SetShow;
+  showSuggestionsModal: boolean;
+  setShowSuggestionsModal: SetShow;
   courseState: PlannerData;
   majorToEdit: Major | undefined;
   setMajorToEdit: SetState<Major | undefined>;

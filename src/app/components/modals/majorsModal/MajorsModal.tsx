@@ -52,6 +52,7 @@ export function MajorAndPlannerSelection({
     setShowMajorsModal,
     setShowMajorRequirementsEditModal,
     setMajorToEdit,
+    setShowSuggestionsModal,
   } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
   const { majorsAllowedToEdit } = useContext(PermissionsContext);
@@ -69,7 +70,6 @@ export function MajorAndPlannerSelection({
         <div className="space-y-2 w-full">
           {userMajors.map((major, index) => {
             const majorRequirements = getRequirementsForMajor(major.id);
-            console.log(major.id);
 
             if (majorRequirements === null || majorRequirements === undefined) {
               return (
@@ -82,12 +82,6 @@ export function MajorAndPlannerSelection({
 
             return (
               <div key={index} className="relative">
-                <button
-                  className="absolute top-0 right-0 p-2 bg-blue-500 text-white rounded"
-                  onClick={() => handleClickEditRequirements(major)}
-                >
-                  Edit
-                </button>
                 <Requirements
                   major={major}
                   requirements={majorRequirements}
@@ -99,6 +93,14 @@ export function MajorAndPlannerSelection({
                   )}
                   onClickEdit={handleClickEditRequirements}
                 />
+                <button
+                  className="absolute top-0 right-0 p-2 bg-blue-500 text-white rounded"
+                  onClick={() => {
+                    setShowSuggestionsModal(true);
+                  }}
+                >
+                  Suggest
+                </button>
               </div>
             );
           })}

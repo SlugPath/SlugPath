@@ -18,6 +18,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
     setShowReplaceRLModal,
     showMajorRequirementsEditModal,
     setShowMajorRequirementsEditModal,
+    showSuggestionsModal,
+    setShowSuggestionsModal,
     majorToEdit,
     setMajorToEdit,
   } = useModals();
@@ -37,6 +39,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
         setShowReplaceRLModal,
         showMajorRequirementsEditModal,
         setShowMajorRequirementsEditModal,
+        showSuggestionsModal,
+        setShowSuggestionsModal,
         courseState,
         majorToEdit,
         setMajorToEdit,

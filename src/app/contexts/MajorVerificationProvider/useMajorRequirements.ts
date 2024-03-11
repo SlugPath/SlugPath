@@ -153,6 +153,17 @@ export default function useMajorRequirements(
     const req = listOfMajorRequirements?.find(
       (majorRequirement) => majorRequirement.major.id === majorId,
     )?.majorRequirements;
+    if (req === null) {
+      const emptyRequirementList: RequirementList = {
+        binder: Binder.AND,
+        requirements: [],
+        id: "",
+        atLeast: undefined,
+        title: "Requirement List",
+        notes: "notes",
+      };
+      return emptyRequirementList;
+    }
     return req;
   }
 

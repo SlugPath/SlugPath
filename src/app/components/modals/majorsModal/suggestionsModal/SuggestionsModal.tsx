@@ -28,10 +28,10 @@ import { v4 as uuid4 } from "uuid";
 
 //import { Requirements, RequirementsEditing } from '../Requirements';
 
-export default function SuggestionModal() {
+export default function SuggestionsModal() {
   const {
-    setShowMajorsModal: setShowModal,
-    showMajorsModal: showModal,
+    setShowSuggestionsModal: setShowModal,
+    showSuggestionsModal: showModal,
     setShowReplaceRLModal,
   } = useContext(ModalsContext);
   const { getLoadingSave, onSaveMajorRequirements } = useContext(
