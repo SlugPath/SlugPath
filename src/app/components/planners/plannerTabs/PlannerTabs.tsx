@@ -49,7 +49,7 @@ export default function PlannerTabs() {
    */
   const handleAddPlanner = () => {
     // Check if user has too many planners open
-    if (Object.keys(planners).length == MAX_PLANNERS) {
+    if (planners.length == MAX_PLANNERS) {
       setTooManyAlertIsOpen(true);
       return;
     }

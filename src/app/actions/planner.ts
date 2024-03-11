@@ -151,7 +151,8 @@ export type PlannerInput = {
   plannerId: string;
 };
 
-export async function getPlannerById(plannerId: string) {
+export async function getPlannerById(plannerId: string | undefined) {
+  if (!plannerId) return null;
   const p = await prisma.planner.findUnique({
     where: {
       id: plannerId,

@@ -1,15 +1,14 @@
 "use client";
 
 import { PlannersProvider } from "@contexts/PlannersProvider";
-import { PlannerData } from "@customTypes/Planner";
 
 import ExportModal from "../modals/exportModal/ExportModal";
 import PlannerList from "./PlannerList";
 import PlannerTabs from "./plannerTabs/PlannerTabs";
 
-export default function Planners({ planners }: { planners: PlannerData[] }) {
+export default function Planners() {
   return (
-    <PlannersProvider allPlanners={planners}>
+    <PlannersProvider>
       <div className="flex flex-col py-4 mb-auto flex-1 min-h-0 gap-4">
         <div className="flex justify-left px-7">
           <PlannerTabs />

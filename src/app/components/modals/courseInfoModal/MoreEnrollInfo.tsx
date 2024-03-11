@@ -22,6 +22,7 @@ export default function MoreEnrollInfo({ course }: MoreEnrollInfoProps) {
     queryKey: ["currentEnrollInfo", course?.departmentCode, course?.number],
     queryFn: async () => await getMoreEnrollmentInfo(course!),
     enabled: course !== undefined,
+    staleTime: 15 * 60 * 1000,
   });
 
   if (isLoading) return null;

@@ -41,9 +41,9 @@ export default function useDefaultPlanners(onUpdated?: () => void) {
 
   // get user default planner
   const { data: userDefaultPlanner } = useQuery({
-    queryKey: ["userDefaultPlanner", defaultPlannerId],
+    queryKey: ["userDefaultPlanner", defaultPlannerId!],
     queryFn: async () => await getPlannerById(defaultPlannerId!),
-    initialData: initialPlanner(),
+    placeholderData: initialPlanner(),
     enabled: !!defaultPlannerId && !!session?.user.id,
   });
 
@@ -85,6 +85,9 @@ export default function useDefaultPlanners(onUpdated?: () => void) {
       });
       queryClient.refetchQueries({
         queryKey: ["userPrimaryMajor", session?.user.id],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["userDefaultPlanner"],
       });
     },
   });
