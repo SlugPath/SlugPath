@@ -1,9 +1,22 @@
 "use client";
 
+import SelectMajorName from "@/app/components/modals/majorsModal/majorSelection/SelectMajorName";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Majors() {
+  const [majorInput, setMajorInput] = useState("");
+
+  function handleChangeMajorInput(
+    _: React.SyntheticEvent | null,
+    newValue: string | null,
+  ) {
+    if (newValue != null) {
+      setMajorInput(newValue);
+    }
+  }
+
   return (
     <>
       <div>
@@ -18,6 +31,14 @@ export default function Majors() {
       </div>
 
       <div className="h-12" />
+
+      <div className="flex flex-col gap-4">
+        <SelectMajorName
+          selectedMajor={majorInput}
+          majors={["test"]}
+          onChange={handleChangeMajorInput}
+        />
+      </div>
 
       <div className="h-10" />
 
