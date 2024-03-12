@@ -1,14 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
 import Link from "next/link";
-import { useState } from "react";
 
 import SelectBox from "../components/accountCreation/SelectBox";
 
 export default function Register() {
-  const [contAccCreate, setContAccCreate] = useState<boolean | undefined>();
+  const { skipSetup, setSkipSetup } = useAccountCreationStore();
 
   return (
     <>
@@ -27,8 +27,8 @@ export default function Register() {
       <div className="h-12" />
 
       <SelectBox
-        selected={contAccCreate === true}
-        setSelected={() => setContAccCreate(true)}
+        selected={skipSetup === false}
+        setSelected={() => setSkipSetup(false)}
       >
         <div className="flex gap-3">
           <div className="border-gray-300 border-2 rounded-lg p-2 w-fit h-fit">
@@ -49,8 +49,8 @@ export default function Register() {
       <div className="h-5" />
 
       <SelectBox
-        selected={contAccCreate === false}
-        setSelected={() => setContAccCreate(false)}
+        selected={skipSetup === true}
+        setSelected={() => setSkipSetup(true)}
       >
         <div className="flex gap-3">
           <div className="border-gray-300 border-2 rounded-lg p-2 h-fit w-fit">
@@ -68,10 +68,10 @@ export default function Register() {
       <Link
         href="/register/majors"
         className={cn(
-          contAccCreate === undefined && "cursor-not-allowed opacity-50",
+          skipSetup === undefined && "cursor-not-allowed opacity-50",
           "bg-primary-500 text-white w-full flex items-center justify-center py-2 rounded-lg transition-opacity",
         )}
-        aria-disabled={contAccCreate === undefined}
+        aria-disabled={skipSetup === undefined}
       >
         Continue
       </Link>
