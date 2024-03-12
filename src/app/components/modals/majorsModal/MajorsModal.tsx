@@ -60,6 +60,11 @@ export function MajorAndPlannerSelection({
     setShowMajorRequirementsEditModal(true);
   }
 
+  const handleSave = () => {
+    setShowMajorsModal(false);
+    if (onSavedDefaultPlanner) onSavedDefaultPlanner();
+  };
+
   return (
     <div className="flex-row space-x-3 grid grid-cols-7 w-full">
       <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-3">
@@ -70,10 +75,10 @@ export function MajorAndPlannerSelection({
 
             if (majorRequirements === undefined) {
               return (
-                <div key={index}>
+                <Card key={index}>
                   Missing requirements for {major.name} {major.catalogYear}.
                   Reloading the page may help.
-                </div>
+                </Card>
               );
             }
 
@@ -102,10 +107,9 @@ export function MajorAndPlannerSelection({
           My Default Planner
         </Typography>
         <DefaultPlannerSelection
-          onSaved={onSavedDefaultPlanner ?? (() => {})}
+          onSaved={handleSave}
           saveButtonName={isInPlannerPage ? "Save" : "Next"}
           isInPlannerPage={isInPlannerPage}
-          onReplacePlanner={() => setShowMajorsModal(false)}
         />
       </Card>
     </div>

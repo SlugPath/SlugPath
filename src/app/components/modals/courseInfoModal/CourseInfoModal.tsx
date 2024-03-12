@@ -1,5 +1,5 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
-import { getTitle, isCSE, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { getQuarterColor } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
 import { courseInfo } from "@actions/course";
@@ -62,13 +62,15 @@ export default function CourseInfoModal({
         number: course!.number,
       }),
     enabled: course && !isCustomCourse(course),
+    staleTime: Infinity,
   });
 
   const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
     queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
     queryFn: async () => await getEnrollmentInfo(course!),
     enabled: course !== undefined && !isCustomCourse(course),
-    initialData: [],
+    placeholderData: [],
+    staleTime: Infinity,
   });
 
   // This is to prevent illegally opening the modal
@@ -140,18 +142,23 @@ export default function CourseInfoModal({
     setDisplayCourse([newCourse, term]);
   };
 
-  const handleClose = (crs: StoredCourse) => {
-    editCustomCourse(crs);
-    setDisplayCourse([crs, term]);
-    setEditing(false);
-  };
-
   // Only show this second modal if it is a custom course,
   // in the planner, and the course is being edited
   const customCourseInPlanner = isCustomCourse(course) && term !== undefined;
   if (editing && customCourseInPlanner) {
+    const handleClose = () => {
+      setEditing(false);
+    };
+
+    const handleSave = (crs: StoredCourse) => {
+      editCustomCourse(crs);
+      setDisplayCourse([crs, term]);
+      handleClose();
+    };
+
     return (
       <CustomCourseModal
+        onSave={handleSave}
         onClose={handleClose}
         defaultCourse={course}
         isOpen={editing}
@@ -253,7 +260,7 @@ export default function CourseInfoModal({
               <Skeleton loading={enrollLoading}>
                 <div className="flex flex-wrap items-center gap-2">
                   <Typography component="p">Quarters Offered:</Typography>
-                  {enrollmentInfo.map((e, i) => {
+                  {enrollmentInfo!.map((e, i) => {
                     return (
                       <Chip key={i} color={getQuarterColor(e.term.title)}>
                         {e.term.title} {e.term.catalogYear}, {e.instructor}
@@ -262,30 +269,31 @@ export default function CourseInfoModal({
                   })}
                 </div>
               </Skeleton>
-              {isCSE(course) && !isOffered(course.quartersOffered, term) && (
+            </>
+          ) : (
+            <>
+              <div className="flex flex-row gap-2 items-center">
+                <Typography component="p">Quarters Offered:</Typography>
+                {course.quartersOffered.map((q, i) => (
+                  <Chip key={i} color="primary">
+                    {q}
+                  </Chip>
+                ))}
+              </div>
+              {!isOffered(course.quartersOffered, term) && (
                 <Typography
                   color="warning"
                   component="p"
                   startDecorator={<WarningAmberRounded color="warning" />}
                 >
-                  Warning: {course.departmentCode} {course.number} is not
-                  offered in {` ${term}`} Quarter
+                  Warning: {course.title} is not offered in {` ${term}`} Quarter
                 </Typography>
               )}
             </>
-          ) : (
-            <div className="flex flex-row gap-2 items-center">
-              <Typography component="p">Quarters Offered:</Typography>
-              {course.quartersOffered.map((q, i) => (
-                <Chip key={i} color="primary">
-                  {q}
-                </Chip>
-              ))}
-            </div>
           )}
           <Typography component="p">Credits: {credits(data)}</Typography>
-          <MoreEnrollInfo course={course} />
-          {!viewOnly && course.labels && (
+          {!isCustomCourse(course) && <MoreEnrollInfo course={course} />}
+          {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}
               handleOpenLabels={handleOpenLabels}

@@ -60,7 +60,11 @@ export default function CustomCourseSelection() {
           Add Custom Course
         </Typography>
       </Button>
-      <CustomCourseModal isOpen={open} onClose={handleAdd} />
+      <CustomCourseModal
+        isOpen={open}
+        onSave={handleAdd}
+        onClose={() => setOpen(false)}
+      />
       {tooManyError && (
         <div className="text-red-500 text-center text-md">
           Too many courses. Drag or delete one.

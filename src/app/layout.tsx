@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 
 import BetaWarning from "./components/beta/BetaWarning";
 import Navbar from "./components/navbar/Navbar";
-import Provider from "./contexts/Providers";
+import Providers from "./contexts/Providers";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en" className="overflow-hidden h-full">
       <link rel="icon" href="/icon.svg" type="image/svg" sizes="any" />
       <body className={`h-full overflow-auto ${inter.className}`}>
-        <Provider>
+        <Providers>
           <ScreenSizeWarning />
           <div className="bg-bg-light dark:bg-bg-dark bg-cover min-h-screen flex flex-col max-h-screen min-w-0">
             <Navbar />
@@ -43,7 +43,7 @@ export default function RootLayout({
               </a>
             </div>
           </div>
-        </Provider>
+        </Providers>
       </body>
     </html>
   );
