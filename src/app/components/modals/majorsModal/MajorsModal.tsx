@@ -52,6 +52,7 @@ export function MajorAndPlannerSelection({
     setShowMajorsModal,
     setShowMajorRequirementsEditModal,
     setMajorToEdit,
+    setMajorToSuggest,
     setShowSuggestionsModal,
   } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
@@ -61,6 +62,11 @@ export function MajorAndPlannerSelection({
   function handleClickEditRequirements(major: Major) {
     setMajorToEdit(major);
     setShowMajorRequirementsEditModal(true);
+  }
+
+  function handleClickSuggest(major: Major) {
+    setMajorToSuggest(major);
+    setShowSuggestionsModal(true);
   }
 
   return (
@@ -95,9 +101,7 @@ export function MajorAndPlannerSelection({
                 />
                 <button
                   className="absolute top-0 right-0 p-2 bg-blue-500 text-white rounded"
-                  onClick={() => {
-                    setShowSuggestionsModal(true);
-                  }}
+                  onClick={() => handleClickSuggest(major)}
                 >
                   Suggest
                 </button>

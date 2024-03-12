@@ -121,7 +121,6 @@ function convertRequirementListToJSON(requirementList: RequirementList) {
 }
 
 async function convertJSONToRequirementList(requirementListJSON: string) {
-  console.log(requirementListJSON);
   const requirementList = JSON.parse(requirementListJSON) as RequirementList;
   return await requirementListMapper(async (req) => {
     const course = await courseInfo({

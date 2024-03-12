@@ -22,6 +22,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
     setShowSuggestionsModal,
     majorToEdit,
     setMajorToEdit,
+    majorToSuggest,
+    setMajorToSuggest,
   } = useModals();
 
   const { courseState } = useContext(PlannerContext);
@@ -44,6 +46,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
         courseState,
         majorToEdit,
         setMajorToEdit,
+        majorToSuggest,
+        setMajorToSuggest,
       }}
     >
       {children}

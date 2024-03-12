@@ -8,8 +8,11 @@ export default function useModals() {
   const [showReplaceRLModal, setShowReplaceRLModal] = useState(false); // RL = Requirement List
   const [showMajorRequirementsEditModal, setShowMajorRequirementsEditModal] =
     useState(false);
-  const [majorToEdit, setMajorToEdit] = useState<Major | undefined>(undefined);
   const [showSuggestionsModal, setShowSuggestionsModal] = useState(false);
+  const [majorToEdit, setMajorToEdit] = useState<Major | undefined>(undefined);
+  const [majorToSuggest, setMajorToSuggest] = useState<Major | undefined>(
+    undefined,
+  );
 
   return {
     showExportModal,
@@ -26,5 +29,7 @@ export default function useModals() {
     setShowSuggestionsModal,
     majorToEdit,
     setMajorToEdit,
+    majorToSuggest,
+    setMajorToSuggest,
   };
 }

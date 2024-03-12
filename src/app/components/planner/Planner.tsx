@@ -32,6 +32,7 @@ import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
 import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
+import SuggestionsModal from "../modals/majorsModal/suggestionsModal/SuggestionsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import NotesEditor from "./NotesEditor";
@@ -210,6 +211,7 @@ function Modals() {
       <CourseInfoModal />
       <MajorsModal />
       <EditMajorRequirementsModal />
+      <SuggestionsModal />
       <ReplaceRequirementsModal />
       <PermissionsModal />
     </>
