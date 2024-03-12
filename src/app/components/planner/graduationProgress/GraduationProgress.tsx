@@ -24,8 +24,8 @@ export default function GraduationProgress({
       <div className="flex flex-row gap-1 place-items-center">
         <IsSatisfiedMark isSatisfied={totalPercentage == 100} />
         <Tooltip
-          title="Combined progress toward graduation(major, credits, GE)"
-          variant="outlined"
+          title="Combined progress toward graduation (major, credits, GE)"
+          variant="soft"
         >
           <Typography level="title-md">{totalPercentage}%</Typography>
         </Tooltip>

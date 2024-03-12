@@ -25,7 +25,7 @@ export default function ProgressBar({
         progressType +
         ` requirements completed`
       }
-      variant="outlined"
+      variant="soft"
     >
       <div
         className="flex flex-row w-full h-6 rounded-md"

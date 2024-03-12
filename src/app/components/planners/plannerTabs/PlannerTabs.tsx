@@ -113,7 +113,7 @@ export default function PlannerTabs() {
             onDuplicate={() => handleDuplicatePlanner(id)}
           />
         ))}
-        <Tooltip title="Create Planner" variant="outlined">
+        <Tooltip title="Create Planner" variant="soft">
           <IconButton
             aria-label="Add"
             onClick={() => handleAddPlanner()}

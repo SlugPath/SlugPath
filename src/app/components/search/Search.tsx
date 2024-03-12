@@ -1,4 +1,5 @@
-import { Card } from "@mui/joy";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { Card, Tooltip, Typography } from "@mui/joy";
 
 import CustomCourseSelection from "./CustomCourseSelection";
 import SearchInputs from "./SearchInputs";
@@ -17,10 +18,18 @@ export default function Search({
 
   return (
     <>
-      <Card
-        className="flex flex-col w-80 h-full min-h-0 min-w-80"
-        variant="plain"
-      >
+      <Card className=" flex-col w-80 h-full min-h-0 min-w-80" variant="plain">
+        <div className="flex flex-col place-items-center">
+          <Typography level="title-lg">
+            Course Search
+            <Tooltip
+              title="Search by class name, or filter by department or GE type"
+              variant="soft"
+            >
+              <HelpOutlineIcon style={{ fontSize: "22px" }} />
+            </Tooltip>
+          </Typography>
+        </div>
         <SearchInputs handlers={handlers} params={params} />
         <SearchResults courses={courses} loading={loading} />
       </Card>

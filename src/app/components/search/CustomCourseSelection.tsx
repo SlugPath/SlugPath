@@ -48,7 +48,7 @@ export default function CustomCourseSelection() {
   };
 
   return (
-    <Card className="w-80 mt-2 mr-2" variant="plain">
+    <Card className="w-80 mt-2 mr-2 min-h-0" variant="plain">
       <Button onClick={handleOpen} startDecorator={<Add />}>
         <Typography
           level="body-md"
@@ -88,7 +88,7 @@ export default function CustomCourseSelection() {
                       ...course,
                       suffix: "custom",
                     })}
-                    isCustom={true}
+                    isCustom
                   />
                 ))}
                 {provided.placeholder}
