@@ -11,6 +11,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
+// TODO: Extract async caching and querying logic from useState ?
+// TODO: Why is there a useQuery and useMutation in the same hook?
+
 export default function useDefaultPlanners(onUpdated?: () => void) {
   const queryClient = useQueryClient();
   const { data: session } = useSession();

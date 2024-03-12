@@ -1,11 +1,13 @@
-import { Major } from "@/app/types/Major";
-import { getMajors } from "@actions/major";
 import { useQuery } from "@tanstack/react-query";
 
+import { getPrograms } from "../actions/major";
+import { Major } from "../types/Major";
+
+// TODO: Extract filter from cache logic
 export default function useMajors() {
   const { data: majors } = useQuery({
-    queryKey: ["allMajors"],
-    queryFn: async () => await getMajors(),
+    queryKey: ["allPrograms"],
+    queryFn: async () => await getPrograms(),
     initialData: [],
   });
 

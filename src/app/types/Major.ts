@@ -6,3 +6,9 @@ export interface Major {
   catalogYear: string;
   programType: ProgramType;
 }
+
+export type MajorInput = {
+  name: string;
+  catalogYear: string;
+  programType: ProgramType;
+};

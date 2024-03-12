@@ -2,8 +2,8 @@ import { Major } from "@/app/types/Major";
 import prisma from "@/lib/prisma";
 import {
   getMajorDefaultPlanners,
-  getMajors,
-  getUserMajorsByEmail,
+  getPrograms,
+  getUserProgramsByEmail,
   saveUserMajors,
 } from "@actions/major";
 import { ProgramType } from "@prisma/client";
@@ -152,7 +152,7 @@ describe("Major actions", () => {
     expect(majors).toStrictEqual(res);
 
     const check = removeIdFromMajorOutput(
-      await getUserMajorsByEmail(user!.email),
+      await getUserProgramsByEmail(user!.email),
     );
     expect(check).toStrictEqual(res);
   });
@@ -207,7 +207,7 @@ describe("Major actions", () => {
   });
 
   it("should return correct number of majors", async () => {
-    expect(await getMajors()).toHaveLength(0);
+    expect(await getPrograms()).toHaveLength(0);
 
     await prisma.major.create({
       data: {
@@ -217,11 +217,11 @@ describe("Major actions", () => {
       },
     });
 
-    expect(await getMajors()).toHaveLength(1);
+    expect(await getPrograms()).toHaveLength(1);
   });
 
   it('should return "null" for a user without a major', async () => {
-    expect(await getUserMajorsByEmail("invalid@example.com")).toHaveLength(0);
+    expect(await getUserProgramsByEmail("invalid@example.com")).toHaveLength(0);
   });
 
   it("should correctly add major information for 2 users", async () => {
@@ -231,8 +231,8 @@ describe("Major actions", () => {
       },
     });
     expect(user2).not.toBeNull();
-    expect(await getUserMajorsByEmail(user!.email)).toHaveLength(0);
-    expect(await getUserMajorsByEmail(user2!.email)).toHaveLength(0);
+    expect(await getUserProgramsByEmail(user!.email)).toHaveLength(0);
+    expect(await getUserProgramsByEmail(user2!.email)).toHaveLength(0);
 
     // Create major
     const name = "Computer Science B.S";
@@ -273,7 +273,11 @@ describe("Major actions", () => {
     ).toStrictEqual(majorResult);
 
     // Check if both users have the same major
-    expect(await getUserMajorsByEmail(user!.email)).toStrictEqual(majorResult);
-    expect(await getUserMajorsByEmail(user2!.email)).toStrictEqual(majorResult);
+    expect(await getUserProgramsByEmail(user!.email)).toStrictEqual(
+      majorResult,
+    );
+    expect(await getUserProgramsByEmail(user2!.email)).toStrictEqual(
+      majorResult,
+    );
   });
 });

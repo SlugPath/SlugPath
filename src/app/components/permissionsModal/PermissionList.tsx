@@ -1,10 +1,9 @@
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
+import useMajors from "@/app/hooks/useMajors";
 import { Permission } from "@/app/types/Permission";
 import { Major } from "@customTypes/Major";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
 import { lazy, useContext } from "react";
-
-import useMajors from "./useMajors";
 
 const PermissionAccordion = lazy(() => import("./PermissionAccordion"));
 

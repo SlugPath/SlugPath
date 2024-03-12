@@ -1,3 +1,4 @@
+import useClassSuggestions from "@/app/hooks/useClassSuggestions";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
@@ -17,7 +18,6 @@ import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import CourseInfoModal from "./CourseInfoModal";
-import useClassSuggestions from "./useClassSuggestions";
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;

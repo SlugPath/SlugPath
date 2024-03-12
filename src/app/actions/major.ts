@@ -3,11 +3,22 @@
 import prisma from "@/lib/prisma";
 import { PrismaClient, ProgramType } from "@prisma/client";
 
-import { Major } from "../types/Major";
+import { Major, MajorInput } from "../types/Major";
 import { PlannerTitle } from "../types/Planner";
 
+/**
+ * Fetch all majors, optionally filtered by catalog year
+ * @param catalogYear Year of the catalog to get majors for
+ * @returns major degree programs
+ */
 export async function getMajors(catalogYear?: string) {
   const query: any = {
+    where: { programType: "Major" },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
     orderBy: [
       {
         name: "asc",
@@ -16,12 +27,6 @@ export async function getMajors(catalogYear?: string) {
         catalogYear: "asc",
       },
     ],
-    select: {
-      name: true,
-      id: true,
-      catalogYear: true,
-      programType: true,
-    },
   };
   if (catalogYear) {
     query.where = {
@@ -31,7 +36,73 @@ export async function getMajors(catalogYear?: string) {
   return await prisma.major.findMany(query);
 }
 
-export async function getAllMajorsBy(
+/**
+ * Fetch all mionrs, optionally filtered by catalog year
+ * @param catalogYear Year of the catalog to get minors for
+ * @returns minor degree programs
+ */
+export async function getMinors(catalogYear?: string) {
+  const query: any = {
+    where: { programType: "Minor" },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
+    orderBy: [
+      {
+        name: "asc",
+      },
+      {
+        catalogYear: "asc",
+      },
+    ],
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
+}
+
+/**
+ * Fetch all majors and minors, optionally filtered by catalog year
+ * @param catalogYear Year of the catalog to get programs for
+ * @returns degree programs
+ */
+export async function getPrograms(catalogYear?: string) {
+  const query: any = {
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+      programType: true,
+    },
+    orderBy: [
+      {
+        name: "asc",
+      },
+      {
+        catalogYear: "asc",
+      },
+    ],
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
+}
+
+/**
+ * Fetch all majors or minors for a specified year
+ * @param programType Major or Minor
+ * @param catalogYear Year of the catalog to get majors or minors for
+ * @returns filtered degree programs
+ */
+export async function getProgramsByTypeInYear(
   programType: ProgramType,
   catalogYear: string,
 ) {
@@ -58,7 +129,12 @@ export async function getAllMajorsBy(
   return res.map((major) => major.name);
 }
 
-export async function getUserMajorsByEmail(email: string): Promise<Major[]> {
+/**
+ * Fetch all majors for a user by their email
+ * @param email email for a user
+ * @returns user's majors
+ */
+export async function getUserProgramsByEmail(email: string): Promise<Major[]> {
   const userData = await prisma.user.findUnique({
     where: {
       email,
@@ -82,13 +158,19 @@ export async function getUserMajorsByEmail(email: string): Promise<Major[]> {
   return userData?.majors;
 }
 
-export async function getUserMajorsById(
-  id: string,
+/**
+ * Fetch all majors for a user by their user id
+ * @param userId id for a user
+ * @param client prisma client
+ * @returns user's majors
+ */
+export async function getUserProgramsById(
+  userId: string,
   client: PrismaClient = prisma,
 ): Promise<Major[]> {
   const userData = await client.user.findUnique({
     where: {
-      id,
+      id: userId,
     },
     select: {
       majors: {
@@ -109,12 +191,6 @@ export async function getUserMajorsById(
 
   return userData?.majors;
 }
-
-export type MajorInput = {
-  name: string;
-  catalogYear: string;
-  programType: ProgramType;
-};
 
 export async function saveUserMajors({
   userId,
@@ -169,7 +245,7 @@ export async function connectUserMajors({
   majors: MajorInput[];
 }): Promise<Major[]> {
   // disconnect any old majors
-  const oldMajors = await getUserMajorsById(userId, client);
+  const oldMajors = await getUserProgramsById(userId, client);
   if (oldMajors !== null) {
     await prisma.user.update({
       where: {
@@ -347,7 +423,7 @@ export async function getUserPrimaryMajor(userId: string) {
   }
 
   // if no default planner, find first major in user's list of majors
-  const userMajors = await getUserMajorsById(userId);
+  const userMajors = await getUserProgramsById(userId);
   if (userMajors !== null && userMajors.length > 0) {
     return userMajors[0];
   }

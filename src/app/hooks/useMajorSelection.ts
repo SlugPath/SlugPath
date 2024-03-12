@@ -1,8 +1,11 @@
-import { Major } from "@/app/types/Major";
-import { MajorInput, getUserMajorsById, saveUserMajors } from "@actions/major";
+import { Major, MajorInput } from "@/app/types/Major";
+import { getUserProgramsById, saveUserMajors } from "@actions/major";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+
+// TODO: Extract async caching and querying logic from useState ?
+// TODO: Why is there a useQuery and useMutation in the same hook?
 
 /**
  *
@@ -19,7 +22,7 @@ export default function useMajorSelection(onSuccess?: () => void) {
   const { isPending: userMajorsIsLoading } = useQuery({
     queryKey: ["userMajors", userId],
     queryFn: async () => {
-      const res = await getUserMajorsById(userId!);
+      const res = await getUserProgramsById(userId!);
       setUserMajors(res);
       return res;
     },
