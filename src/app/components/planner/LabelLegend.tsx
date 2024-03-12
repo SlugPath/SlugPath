@@ -1,6 +1,6 @@
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { Label } from "@customTypes/Label";
-import { AccordionDetails, Button, Chip, useColorScheme } from "@mui/joy";
+import { AccordionDetails, Button, Chip } from "@mui/joy";
 import Accordion, { accordionClasses } from "@mui/joy/Accordion";
 import AccordionSummary, {
   accordionSummaryClasses,
@@ -11,9 +11,6 @@ import LabelsSelectionModal from "../modals/courseInfoModal/LabelSelectionModal"
 import CourseLabel from "../planner/quarters/courses/CourseLabel";
 
 export default function LabelLegend() {
-  const { mode } = useColorScheme();
-  const backgroundColor = mode === "light" ? "#f1f5f9" : "#181a1c";
-
   const { getAllLabels, updatePlannerLabels } = useContext(PlannerContext);
 
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
@@ -24,12 +21,9 @@ export default function LabelLegend() {
   };
 
   const handleUpdateLabels = (labels: Label[]) => {
-    //const newLabels = labels.map((label) => label.id);
-    //const newCourse: StoredCourse = { ...course, labels: newLabels };
     updatePlannerLabels({
       labels,
     });
-    // setDisplayCourse([newCourse, term]);
   };
 
   return (
@@ -45,10 +39,10 @@ export default function LabelLegend() {
         />
       )}
       <Accordion
+        className="bg-secondary-100 dark:bg-secondary-900"
         sx={{
           padding: "0.5rem",
           textAlign: "center",
-          backgroundColor,
           borderRadius: 8,
 
           [`& .${accordionSummaryClasses.root}`]: {
