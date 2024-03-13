@@ -129,6 +129,7 @@ enum LabelColor {
   BLUE
   PURPLE
   PINK
+  GREY
 }
 
 enum Role {
