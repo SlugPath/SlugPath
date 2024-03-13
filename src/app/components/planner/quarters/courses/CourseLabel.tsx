@@ -8,6 +8,7 @@ export interface CourseLabelProps {
   children?: React.ReactNode;
   inMenu?: boolean;
 }
+
 export default function CourseLabel({
   label,
   displayText,
@@ -18,8 +19,11 @@ export default function CourseLabel({
 
   return (
     <Chip
-      style={getColor(label.color)}
-      className={inMenu ? "px-4" : "px-2 mx-1"}
+      style={getColor(label.color ?? "grey")}
+      sx={{
+        paddingX: inMenu ? "1rem" : "0.5rem",
+        marginX: "0.25rem",
+      }}
     >
       {displayTextDefault && <div>{label.name}</div>}
       {children}
