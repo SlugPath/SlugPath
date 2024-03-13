@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
+import { usePlanners } from "../../hooks/usePlanners";
 import { PlannersContextProps, PlannersProviderProps } from "./Types";
-import { usePlanners } from "./usePlanners";
 
 export const PlannersContext = createContext({} as PlannersContextProps);
 

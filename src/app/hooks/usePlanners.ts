@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { MultiPlanner } from "./Types";
+import { MultiPlanner } from "../contexts/PlannersProvider/Types";
 
 export function usePlanners() {
   const { data: session } = useSession();

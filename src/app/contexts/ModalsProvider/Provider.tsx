@@ -1,8 +1,8 @@
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { createContext, useContext } from "react";
 
+import useModals from "../../hooks/useModals";
 import { ModalsContextProps } from "./Types";
-import useModals from "./useModals";
 
 export const ModalsContext = createContext({} as ModalsContextProps);
 

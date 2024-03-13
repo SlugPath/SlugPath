@@ -64,8 +64,12 @@ export default function DefaultPlannerSelection({
     isPending: updateDefaultPlannerIsPending,
   } = useUpdateUserDefaultPlannerId();
 
+  // TODO: Deeper issue here. Should be react-query mutation if server state,
+  // however, no current database storage for primary major. Unclear if this
+  // state should be persisted on server, or if it should be stored in local
+  // storage.
   const setPrimaryMajor = (program: Program | null) =>
-    alert(`setPrimaryMajor currently unimplemented ${program}`);
+    console.warn(`setPrimaryMajor currently unimplemented ${program}`);
 
   const setDefaultPlannerId = (plannerId: string) =>
     alert(`setDefaultPlannerId currently unimplemented ${plannerId}`);
@@ -148,21 +152,11 @@ export default function DefaultPlannerSelection({
     handleSave(ButtonName.CreateNew);
   }
 
-  const ErrorAlert = () => (
-    <div>
-      {error.length > 0 && (
-        <Alert color="danger" startDecorator={<ReportIcon />}>
-          {error}
-        </Alert>
-      )}
-    </div>
-  );
-
   // Set the primary major to the instance of the corresponding majors
   // in userMajors, because the references are different even though
   // the values are the same
   useEffect(() => {
-    if (primaryProgram) {
+    if (primaryProgram && userPrograms && userPrograms.length > 0) {
       const found =
         userPrograms.find((m) => m.id === primaryProgram.id) ?? null;
       setPrimaryMajor(found);
@@ -178,7 +172,11 @@ export default function DefaultPlannerSelection({
         dialogText="Are you sure you want to replace your current planner? Your notes and courses will be deleted."
       />
       <div className="overflow-y-scroll h-[70vh] space-y-2">
-        {error.length > 0 && <ErrorAlert />}
+        {error.length > 0 && (
+          <Alert color="danger" startDecorator={<ReportIcon />}>
+            {error}
+          </Alert>
+        )}
         <div>
           <Typography level="body-lg">Primary Program</Typography>
           <Select
@@ -186,16 +184,17 @@ export default function DefaultPlannerSelection({
             variant="plain"
             value={primaryProgram}
             onChange={handleChangeSelectedMajor}
-            disabled={userPrograms.length === 0}
+            disabled={!userPrograms || userPrograms.length === 0}
           >
-            {userPrograms.map((major, index) => (
-              <Option key={index} value={major}>
-                {major.name} {major.catalogYear}
-              </Option>
-            ))}
+            {userPrograms &&
+              userPrograms.map((major, index) => (
+                <Option key={index} value={major}>
+                  {major.name} {major.catalogYear}
+                </Option>
+              ))}
           </Select>
         </div>
-        {userPrograms.length > 0 && primaryProgram && (
+        {userPrograms && userPrograms.length > 0 && primaryProgram && (
           <SelectDefaultPlanner
             selectedDefaultPlanner={defaultPlannerId ?? undefined}
             onChange={handleChangeDefaultPlanner}
