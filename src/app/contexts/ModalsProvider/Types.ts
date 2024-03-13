@@ -3,8 +3,6 @@ import { SetShow, SetState } from "@customTypes/Common";
 import { PlannerData } from "@customTypes/Planner";
 
 export interface ModalsContextProps {
-  showExportModal: boolean;
-  setShowExportModal: SetShow;
   showMajorsModal: boolean;
   setShowMajorsModal: SetShow;
   showPermissionsModal: boolean;

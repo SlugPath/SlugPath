@@ -1,4 +1,3 @@
-import { getAllPlanners } from "@actions/planner";
 import Planners from "@components/planners/Planners";
 import {
   HydrationBoundary,
@@ -8,11 +7,11 @@ import {
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+import { getAllPlanners } from "../actions/planner";
+
 export default async function Home() {
-  const queryClient = new QueryClient();
-
   const session = await getServerSession();
-
+  const queryClient = new QueryClient();
   if (!session) redirect("/");
 
   await queryClient.prefetchQuery({

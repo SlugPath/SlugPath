@@ -1,8 +1,8 @@
-import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
-import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
-import { Major } from "@/app/types/Major";
+import ConfirmAlert from "@components/modals/ConfirmAlert";
+import CourseInfoModal from "@components/modals/courseInfoModal/CourseInfoModal";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
+import { PlannersContext } from "@contexts/PlannersProvider";
+import { Major } from "@customTypes/Major";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,

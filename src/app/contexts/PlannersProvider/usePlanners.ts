@@ -48,6 +48,7 @@ export function usePlanners() {
 
   const { userDefaultPlanner } = useContext(DefaultPlannerContext);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // Manage window focus
   const [isWindowFocused, setIsWindowFocused] = useState(true);
@@ -223,5 +224,7 @@ export function usePlanners() {
     activePlanner,
     showExportModal,
     setShowExportModal,
+    showShareModal,
+    setShowShareModal,
   };
 }

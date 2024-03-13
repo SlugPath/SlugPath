@@ -19,11 +19,15 @@ export function PlannersProvider({ children }: PlannersProviderProps) {
     activePlanner,
     showExportModal,
     setShowExportModal,
+    showShareModal,
+    setShowShareModal,
   } = usePlanners();
 
   return (
     <PlannersContext.Provider
       value={{
+        showShareModal,
+        setShowShareModal,
         showExportModal,
         setShowExportModal,
         planners,
