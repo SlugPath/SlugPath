@@ -1,23 +1,18 @@
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { Label } from "@customTypes/Label";
-import { AccordionDetails, Button, Chip } from "@mui/joy";
-import Accordion, { accordionClasses } from "@mui/joy/Accordion";
-import AccordionSummary, {
-  accordionSummaryClasses,
-} from "@mui/joy/AccordionSummary";
+import { Button, Card, CardContent, Chip, Typography } from "@mui/joy";
 import { useContext, useState } from "react";
 
-import LabelsSelectionModal from "../modals/courseInfoModal/LabelSelectionModal";
+import EditLabelsModal from "../modals/EditLabelsModal";
 import CourseLabel from "../planner/quarters/courses/CourseLabel";
 
 export default function LabelLegend() {
   const { getAllLabels, updatePlannerLabels } = useContext(PlannerContext);
 
-  const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
+  const [showEditLabelsModal, setShowEditLabelsModal] = useState(false);
 
-  // Handlers
   const handleEditLabels = () => {
-    setShowLabelSelectionModal(true);
+    setShowEditLabelsModal(true);
   };
 
   const handleUpdateLabels = (labels: Label[]) => {
@@ -28,42 +23,26 @@ export default function LabelLegend() {
 
   return (
     <div>
-      {getAllLabels() && (
-        <LabelsSelectionModal
-          showModal={showLabelSelectionModal}
-          setShowModal={setShowLabelSelectionModal}
+      {getAllLabels() && showEditLabelsModal && (
+        <EditLabelsModal
+          showModal={showEditLabelsModal}
+          setShowModal={setShowEditLabelsModal}
           labels={getAllLabels()}
-          selectedLabels={getAllLabels()}
           onUpdateLabels={handleUpdateLabels}
-          showLabelChecks={false}
         />
       )}
-      <Accordion
-        className="bg-secondary-100 dark:bg-secondary-900"
+      <Card
+        variant="plain"
         sx={{
-          padding: "0.5rem",
+          padding: "1rem",
           textAlign: "center",
           borderRadius: 8,
-
-          [`& .${accordionSummaryClasses.root}`]: {
-            "& button:hover": {
-              background: "transparent",
-            },
-          },
-          [`& .${accordionClasses.root}.${accordionClasses.expanded}`]: {
-            borderBottom: "1px solid",
-            borderColor: "background.level2",
-          },
-          '& [aria-expanded="true"]': {
-            paddingBottom: "0.5rem",
-            boxShadow: (theme) =>
-              `inset 0 -1px 0 ${theme.vars.palette.divider}`,
-          },
         }}
-        defaultExpanded={false}
       >
-        <AccordionSummary>Labels</AccordionSummary>
-        <AccordionDetails sx={{ borderRadius: "sm", paddingTop: "0.5rem" }}>
+        <Typography level="title-lg" sx={{ marginBottom: "-0.25rem" }}>
+          Labels
+        </Typography>
+        <CardContent>
           <div
             className="flex flex-wrap items-center gap-2"
             style={{ maxWidth: "300px", maxHeight: "100px", overflowY: "auto" }}
@@ -89,8 +68,8 @@ export default function LabelLegend() {
           >
             Edit Labels
           </Button>
-        </AccordionDetails>
-      </Accordion>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
   Input,
   Option,
   Select,
+  useColorScheme,
 } from "@mui/joy";
 import Accordion, { accordionClasses } from "@mui/joy/Accordion";
 import AccordionSummary, {
@@ -66,6 +67,10 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
     handleChangeCreditRange,
     handleReset,
   } = handlers;
+
+  const { mode } = useColorScheme();
+
+  const backgroundColor = mode === "light" ? "#f1f5f9" : "#181a1c";
 
   const courseNumberMarks = [
     { value: 1, label: "1" },
@@ -141,10 +146,11 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
           ))}
         </Select>
         <Accordion
-          className="bg-secondary-100 dark:bg-secondary-900 col-span-6 font-normal"
+          className="col-span-6"
           sx={{
             padding: "0.5rem",
             textAlign: "center",
+            backgroundColor,
             borderRadius: 8,
             [`& .${accordionSummaryClasses.root}`]: {
               "& button:hover": {

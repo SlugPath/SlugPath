@@ -4,7 +4,6 @@ import { Label } from "@customTypes/Label";
 import { Edit } from "@mui/icons-material";
 import {
   Button,
-  Checkbox,
   DialogActions,
   IconButton,
   Input,
@@ -14,73 +13,50 @@ import {
   Sheet,
   Typography,
 } from "@mui/joy";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import CourseLabel from "../../planner/quarters/courses/CourseLabel";
+import CourseLabel from "../planner/quarters/courses/CourseLabel";
 
-interface LabelsSelectionModalProps {
+interface EditLabelsModalProps {
   setShowModal: (showModal: boolean) => void;
   showModal: boolean;
   labels: Label[];
-  selectedLabels: Label[];
   onUpdateLabels: (labels: Label[]) => void;
 }
 
-export default function LabelsSelectionModal({
+export default function EditLabelsModal({
   setShowModal,
   showModal,
   labels,
-  selectedLabels,
   onUpdateLabels,
-}: LabelsSelectionModalProps) {
-  const [checkedLabels, setCheckedLabels] = useState(selectedLabels);
+}: EditLabelsModalProps) {
+  const [editedLabels, setEditedLabels] = useState(labels);
 
-  function handleToggle(label: Label) {
-    const currentIndex = checkedLabels.findIndex(
-      (checkedLabel) => checkedLabel.id === label.id,
+  const handleLabelChange = (updatedLabel: Label) => {
+    const currentIndex = editedLabels.findIndex(
+      (editedLabel) => editedLabel.id === updatedLabel.id,
     );
-    const newChecked = [...checkedLabels];
+    const newEditedLabels = [...editedLabels];
+    newEditedLabels[currentIndex] = updatedLabel;
+    setEditedLabels(newEditedLabels);
+  };
 
-    if (currentIndex === -1) {
-      newChecked.push(label);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setCheckedLabels(newChecked);
-  }
-
-  function handleSave() {
-    onUpdateLabels(checkedLabels);
+  const handleSave = () => {
+    console.log("editedLabels");
+    console.log(editedLabels);
+    onUpdateLabels(editedLabels);
     setShowModal(false);
-  }
+  };
 
-  function handleCancel() {
-    setCheckedLabels(selectedLabels);
+  const handleCancel = () => {
+    setEditedLabels(labels);
     setShowModal(false);
-  }
-
-  function isChecked(label: Label) {
-    return (
-      checkedLabels.findIndex(
-        (checkedLabel) => checkedLabel.id === label.id,
-      ) !== -1
-    );
-  }
-
-  function handleLabelChanged(label: Label) {
-    const currentIndex = checkedLabels.findIndex(
-      (checkedLabel) => checkedLabel.id === label.id,
-    );
-    const newChecked = [...checkedLabels];
-    newChecked[currentIndex] = label;
-    setCheckedLabels(newChecked);
-  }
+  };
 
   return (
     <Modal
       open={showModal}
-      onClose={() => setShowModal(false)}
+      onClose={handleCancel}
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -105,27 +81,17 @@ export default function LabelsSelectionModal({
           mb={1}
         >
           Edit Labels
-          <List>
-            {labels.map((label: Label, index: number) => {
-              let displayLabel = selectedLabels.find(
-                (selectedLabel) => selectedLabel.id === label.id,
-              );
-              if (!displayLabel) {
-                displayLabel = label;
-              }
-              return (
-                <LabelListItem
-                  key={index}
-                  label={displayLabel}
-                  index={index}
-                  handleToggle={handleToggle}
-                  isChecked={isChecked(displayLabel)}
-                  onLabelChanged={handleLabelChanged}
-                />
-              );
-            })}
-          </List>
         </Typography>
+        <List>
+          {editedLabels.map((label: Label, index: number) => (
+            <LabelListItem
+              key={index}
+              label={label}
+              index={index}
+              onLabelChange={handleLabelChange}
+            />
+          ))}
+        </List>
         <DialogActions>
           <Button variant="solid" color="primary" onClick={handleSave}>
             Save
@@ -142,33 +108,22 @@ export default function LabelsSelectionModal({
 function LabelListItem({
   label,
   index,
-  handleToggle,
-  isChecked,
-  onLabelChanged,
+  onLabelChange,
 }: {
   label: Label;
   index: number;
-  handleToggle: (label: Label) => void;
-  isChecked: boolean;
-  onLabelChanged: (label: Label) => void;
+  onLabelChange: (label: Label) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [labelName, setLabelName] = useState(label.name);
   const [updatedLabel, setUpdatedLabel] = useState(label);
-
-  // stop editing if label becomes unchecked
-  useEffect(() => {
-    if (isChecked == false && editing) {
-      setEditing(false);
-    }
-  }, [editing, isChecked]);
 
   const handleEndEditing = () => {
     if (editing) {
       setEditing(false);
       const newLabel = { ...label };
       newLabel.name = truncateTitle(labelName, MAX_LABEL_NAME);
-      onLabelChanged(newLabel);
+      onLabelChange(newLabel);
       setUpdatedLabel(newLabel);
     }
   };
@@ -179,7 +134,6 @@ function LabelListItem({
 
   return (
     <ListItem key={index}>
-      <Checkbox onChange={() => handleToggle(label)} checked={isChecked} />
       <CourseLabel label={updatedLabel} displayText={displayText()} inMenu>
         {editing ? (
           <Input
@@ -201,7 +155,6 @@ function LabelListItem({
         onClick={() => {
           editing ? handleEndEditing() : setEditing(true);
         }}
-        disabled={!isChecked}
       >
         <Edit />
       </IconButton>
