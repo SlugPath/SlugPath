@@ -3,7 +3,6 @@ import {
   extractTermFromQuarter,
   geLabels,
   getDeptAndNumber,
-  isCSE,
   isCustomCourse,
   isOffered,
 } from "@/lib/plannerUtils";
@@ -134,7 +133,7 @@ interface TitleProps {
   quarterId?: string;
 }
 const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
-  const checkOffered = course && (isCSE(course) || isCustomCourse(course));
+  const checkOffered = course && isCustomCourse(course);
   return (
     <Typography
       endDecorator={

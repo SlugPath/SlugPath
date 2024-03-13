@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { createContext } from "react";
 
 import { PlannersContextProps, PlannersProviderProps } from "./Types";
@@ -6,11 +5,7 @@ import { usePlanners } from "./usePlanners";
 
 export const PlannersContext = createContext({} as PlannersContextProps);
 
-export function PlannersProvider({
-  allPlanners,
-  children,
-}: PlannersProviderProps) {
-  const { data: session } = useSession();
+export function PlannersProvider({ children }: PlannersProviderProps) {
   const {
     planners,
     removePlanner,
@@ -26,7 +21,7 @@ export function PlannersProvider({
     setShowExportModal,
     showShareModal,
     setShowShareModal,
-  } = usePlanners(session?.user.id, allPlanners);
+  } = usePlanners();
 
   return (
     <PlannersContext.Provider

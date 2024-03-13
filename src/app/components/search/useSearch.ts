@@ -13,6 +13,7 @@ export default function useSearch() {
       { label: "--", value: null },
       ...(await getAllDepartments()),
     ],
+    staleTime: Infinity,
   });
 
   // Query details for course search
@@ -34,6 +35,7 @@ export default function useSearch() {
     queryKey: ["courses", queryDetails],
     placeholderData: keepPreviousData,
     queryFn: async () => await coursesBy(queryDetails),
+    staleTime: Infinity,
   });
 
   useDebounce({
@@ -62,7 +64,7 @@ export default function useSearch() {
   };
 
   const handleChangeGE = (
-    event: React.SyntheticEvent | null,
+    _: React.SyntheticEvent | null,
     value: string | null,
   ) => {
     setGE(value === "" ? null : value);

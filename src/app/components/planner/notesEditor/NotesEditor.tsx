@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 
+import "./style.css";
+
 export interface NotesEditorProps {
   content: string;
   onUpdateNotes: (content: string) => void;
@@ -46,12 +48,14 @@ export default function NotesEditor({
   );
 
   return (
-    <ReactQuill
-      modules={toolbarOptions}
-      theme={readOnly ? "bubble" : "snow"}
-      defaultValue={text}
-      onChange={handleChange}
-      readOnly={readOnly}
-    />
+    <div>
+      <ReactQuill
+        modules={toolbarOptions}
+        theme={readOnly ? "bubble" : "snow"}
+        defaultValue={text}
+        onChange={handleChange}
+        readOnly={readOnly}
+      />
+    </div>
   );
 }

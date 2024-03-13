@@ -1,7 +1,7 @@
 import { Accordion } from "@mui/joy";
 
 export default function StyledAccordion({
-  defaultExpanded,
+  defaultExpanded = false,
   children,
 }: {
   defaultExpanded?: boolean;

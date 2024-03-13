@@ -1,18 +1,31 @@
 import Planners from "@components/planners/Planners";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 import { getAllPlanners } from "../actions/planner";
 
 export default async function Home() {
-  /* TODO:
-  Compare local storage with server
-  Check updateTime to determine which one has newer data
-  Load from there
-  */
   const session = await getServerSession();
+  const queryClient = new QueryClient();
+  if (!session) redirect("/");
 
-  const planners = await getAllPlanners(session?.user.email ?? "");
+  await queryClient.prefetchQuery({
+    queryKey: ["planners"],
+    queryFn: async () => {
+      const userEmail = session.user.email ?? "";
+      if (userEmail.length === 0) return [];
+      return await getAllPlanners(userEmail);
+    },
+  });
 
-  console.log("This should only be seen once");
-  return <Planners planners={planners} />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Planners />
+    </HydrationBoundary>
+  );
 }

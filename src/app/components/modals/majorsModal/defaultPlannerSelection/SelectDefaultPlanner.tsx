@@ -2,7 +2,6 @@ import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 import { PlannerTitle } from "@customTypes/Planner";
 import Info from "@mui/icons-material/Info";
 import {
-  Card,
   List,
   ListItem,
   Tab,
@@ -22,7 +21,6 @@ export interface SelectDefaultPlannerProps {
   ) => void;
   loadingMajorDefaultPlanners: boolean;
   majorDefaultPlanners?: PlannerTitle[];
-  addPlannerCardContainer?: boolean;
   selectedDefaultPlanner?: string;
 }
 
@@ -31,7 +29,6 @@ export default function SelectDefaultPlanner({
   onChange,
   majorDefaultPlanners,
   loadingMajorDefaultPlanners,
-  addPlannerCardContainer,
 }: SelectDefaultPlannerProps) {
   const defaultPlanners: PlannerTitle[] = majorDefaultPlanners ?? [];
 
@@ -68,16 +65,7 @@ export default function SelectDefaultPlanner({
                     }}
                     key={index}
                   >
-                    {addPlannerCardContainer ? (
-                      <Card variant="soft">
-                        <MiniPlanner
-                          plannerId={id}
-                          active={plannerIsSelected}
-                        />
-                      </Card>
-                    ) : (
-                      <MiniPlanner plannerId={id} active={plannerIsSelected} />
-                    )}
+                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
                   </ListItem>
                 );
               })}

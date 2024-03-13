@@ -123,7 +123,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
         <Input
           className="w-full col-span-4"
           color="neutral"
-          placeholder="Number"
+          placeholder="Ex. CSE 13S or 5A"
           variant="soft"
           name="number"
           aria-label="number"
@@ -148,6 +148,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
         <Accordion
           className="col-span-6"
           sx={{
+            padding: "0.5rem",
             textAlign: "center",
             backgroundColor,
             borderRadius: 8,
@@ -161,13 +162,16 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
               borderColor: "background.level2",
             },
             '& [aria-expanded="true"]': {
+              paddingBottom: "0.75rem",
               boxShadow: (theme) =>
                 `inset 0 -1px 0 ${theme.vars.palette.divider}`,
             },
           }}
           defaultExpanded={false}
         >
-          <AccordionSummary>Advanced Search</AccordionSummary>
+          <AccordionSummary className="font-normal">
+            Advanced Search
+          </AccordionSummary>
           <AccordionDetails sx={{ borderRadius: "sm" }}>
             <CustomSliderComponent
               onSliderChange={handleChangeNumberRange}

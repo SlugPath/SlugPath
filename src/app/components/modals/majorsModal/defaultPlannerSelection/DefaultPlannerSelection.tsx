@@ -13,6 +13,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
@@ -27,14 +28,12 @@ export interface DefaultPlannerSelectionProps {
   onSaved: () => void;
   saveButtonName: string;
   isInPlannerPage?: boolean;
-  onReplacePlanner?: () => void;
 }
 
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
   isInPlannerPage,
-  onReplacePlanner,
 }: DefaultPlannerSelectionProps) {
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
@@ -54,6 +53,8 @@ export default function DefaultPlannerSelection({
   } = useContext(DefaultPlannerContext);
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
+
+  const router = useRouter();
 
   function handleChangeSelectedMajor(
     _: React.SyntheticEvent | null,
@@ -78,20 +79,13 @@ export default function DefaultPlannerSelection({
   // Handlers
   useEffect(() => {
     if (updateDefaultPlannerIsPending && defaultPlannerId !== undefined) {
+      setIsSaved(true);
+      onSaved();
       switch (saveButtonClicked) {
-        case ButtonName.Save:
-          setIsSaved(true);
-          onSaved();
-          break;
-        // These are slightly delayed to allow the save to complete
-        // before the new planner is created or replaced
         case ButtonName.CreateNew:
-          setIsSaved(true);
           addPlanner();
           break;
         case ButtonName.ReplaceCurrent:
-          setIsSaved(true);
-          if (onReplacePlanner) onReplacePlanner();
           replaceCurrentPlanner();
       }
     }
@@ -100,7 +94,6 @@ export default function DefaultPlannerSelection({
     updateDefaultPlannerIsPending,
     addPlanner,
     replaceCurrentPlanner,
-    onReplacePlanner,
     onSaved,
     defaultPlannerId,
   ]);
@@ -186,20 +179,25 @@ export default function DefaultPlannerSelection({
             onChange={handleChangeDefaultPlanner}
             majorDefaultPlanners={majorDefaultPlanners}
             loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
-            addPlannerCardContainer={isInPlannerPage}
           />
         )}
         <CourseInfoModal />
       </div>
-      <div className="flex justify-end w-full">
+      <div className="flex justify-end w-full gap-4">
         {updateDefaultPlannerIsPending ? (
           <CircularProgress variant="plain" color="primary" />
         ) : (
-          <div>
+          <>
             <Button disabled={isSaved} onClick={handleClickSave}>
               {saveButtonName}
             </Button>
-            {isInPlannerPage && (
+            {!isInPlannerPage ? (
+              <Tooltip title="Skip to planner dashboard without selecting a default planner.">
+                <Button color="danger" onClick={() => router.push("/planner")}>
+                  Skip
+                </Button>
+              </Tooltip>
+            ) : (
               <>
                 <Tooltip title="Replace your currently selected planner with the courses in your default planner.">
                   <Button color="warning" onClick={handleClickReplaceCurrent}>
@@ -207,13 +205,13 @@ export default function DefaultPlannerSelection({
                   </Button>
                 </Tooltip>
                 <Tooltip title="Create a new planner with the courses in your default planner.">
-                  <Button onClick={handleClickCreateNew}>
+                  <Button color="success" onClick={handleClickCreateNew}>
                     {ButtonName.CreateNew}
                   </Button>
                 </Tooltip>
               </>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>
