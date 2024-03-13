@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "LabelColor" AS ENUM ('RED', 'ORANGE', 'YELLOW', 'GREEN', 'BLUE', 'PURPLE', 'PINK', 'GREY');
+CREATE TYPE "LabelColor" AS ENUM ('RED', 'ORANGE', 'YELLOW', 'GREEN', 'BLUE', 'PURPLE', 'PINK');
 
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
@@ -193,4 +193,3 @@ ALTER TABLE "_MajorToUser" ADD CONSTRAINT "_MajorToUser_A_fkey" FOREIGN KEY ("A"
 
 -- AddForeignKey
 ALTER TABLE "_MajorToUser" ADD CONSTRAINT "_MajorToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-

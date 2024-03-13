@@ -42,8 +42,6 @@ export default function EditLabelsModal({
   };
 
   const handleSave = () => {
-    console.log("editedLabels");
-    console.log(editedLabels);
     onUpdateLabels(editedLabels);
     setShowModal(false);
   };
