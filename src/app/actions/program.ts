@@ -422,7 +422,7 @@ export async function getUserDefaultPlannerId(userId: string) {
  * @param userId user id for the user to get primary major for
  * @returns primary major for the user
  */
-export async function getUserPrimaryMajor(userId: string) {
+export async function getUserPrimaryProgram(userId: string) {
   // first find major based on user's default planner
   const user = await prisma.user.findUnique({
     where: {
