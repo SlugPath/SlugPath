@@ -1,107 +1,95 @@
 import { APP_URL } from "@/config";
 import { PlannersContext } from "@contexts/PlannersProvider";
-import ShareIcon from "@mui/icons-material/Share";
-import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useContext } from "react";
-
-const url = `${APP_URL}/planner/`;
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import {
+  IconButton,
+  Modal,
+  ModalClose,
+  Sheet,
+  Snackbar,
+  Typography,
+} from "@mui/joy";
+import { useContext, useState } from "react";
 
 // Create styles
 export default function ShareModal() {
   const { activePlanner, showShareModal, setShowShareModal } =
     useContext(PlannersContext);
 
+  const [open, setOpen] = useState(false);
+
   if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
 
+  const plannerURL = `${APP_URL}/planner/${activePlanner}`;
+
   const handleCopyToClipboard = () => {
-    navigator.clipboard
-      .writeText(`${url}${activePlanner}`)
-      .then(() => {
-        console.log("Text copied to clipboard:", activePlanner);
-        // You can add a success message or perform other actions here
-      })
-      .catch((error) => {
-        console.error("Error copying text to clipboard:", error);
-        // You can add an error message or handle the error here
-      });
+    navigator.clipboard.writeText(plannerURL).then(() => setOpen(true));
   };
 
   return (
-    <Modal
-      open={showShareModal}
-      onClose={() => setShowShareModal(false)}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Sheet
-        sx={{
-          margin: 10,
-          borderRadius: "md",
-          p: 3,
-          boxShadow: "lg",
-          height: "auto",
-          width: "32vw",
+    <>
+      <Snackbar
+        open={open}
+        variant="solid"
+        color="primary"
+        onClose={() => setOpen(false)}
+        autoHideDuration={2000}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
         }}
       >
-        <Typography
-          component="h2"
-          id="modal-title"
-          level="h4"
-          textColor="inherit"
-          fontWeight="lg"
-          mb={1}
-          textAlign={"center"}
-        >
-          Share This Planner
+        <Typography level="title-md" className="mx-auto">
+          Copied share planner link to clipboard!
         </Typography>
-        <div
-          style={{
-            marginTop: "25px",
-            marginBottom: "15px",
-            position: "relative",
+      </Snackbar>
+      <Modal
+        open={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Sheet
+          sx={{
+            margin: 10,
+            borderRadius: "md",
+            p: 3,
+            boxShadow: "lg",
+            height: "auto",
+            width: "32vw",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
+          <Typography
+            component="h2"
+            id="modal-title"
+            level="h4"
+            textColor="inherit"
+            fontWeight="lg"
+            mb={1}
+            textAlign={"center"}
           >
-            <div
-              style={{
-                position: "absolute",
-                left: "5px",
-                top: "20%",
-                color: "#757575",
-              }}
-            >
-              <ShareIcon
+            Share This Planner
+          </Typography>
+          <div className="my-5 flex flex-row items-center">
+            <IconButton onClick={() => handleCopyToClipboard()}>
+              <ContentCopy
                 className="dark:fill-white"
                 style={{ color: "black" }}
               />
-            </div>
-            <input
-              type="text"
-              value={url + activePlanner}
-              readOnly
-              className="w-full pl-10 py-2 pr-4 w-full dark:bg-slate-800 rounded border bg-gray-200 focus:bg-white focus:outline-none focus:border-blue-500"
-              // style={{ width: '30vw' }}
-            />
+            </IconButton>
+            <Typography
+              variant="soft"
+              className="ml-2 p-2 w-full rounded-lg bg-black"
+            >
+              {plannerURL}
+            </Typography>
           </div>
-        </div>
-
-        <button
-          onClick={handleCopyToClipboard}
-          className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded font-normal float-right transition duration-500 ease-in-out transform hover:scale-105"
-        >
-          Copy Link
-        </button>
-        <ModalClose variant="plain" sx={{ m: 1 }} />
-      </Sheet>
-    </Modal>
+          <ModalClose variant="plain" sx={{ m: 1 }} />
+        </Sheet>
+      </Modal>
+    </>
   );
 }
