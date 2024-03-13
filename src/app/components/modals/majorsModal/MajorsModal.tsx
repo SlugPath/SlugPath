@@ -1,12 +1,13 @@
 import DefaultPlannerSelection from "@/app/components/modals/majorsModal/defaultPlannerSelection/DefaultPlannerSelection";
-import MajorSelection from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
-import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import UserProgramsEditor from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
+import { useUserPrograms } from "@/app/hooks/reactQuery";
 import { Program } from "@/app/types/Program";
 import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useContext } from "react";
 
 import { Requirements } from "./Requirements";
@@ -46,6 +47,8 @@ export function MajorAndPlannerSelection({
   isInPlannerPage: boolean;
   onSavedDefaultPlanner?: () => void;
 }) {
+  const { data: session } = useSession();
+
   const {
     setShowMajorsModal,
     setShowMajorRequirementsEditModal,
@@ -53,7 +56,11 @@ export function MajorAndPlannerSelection({
   } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
   const { majorsAllowedToEdit } = useContext(PermissionsContext);
-  const { userMajors } = useContext(DefaultPlannerContext);
+
+  // TODO: test loading
+  const { data: userPrograms } = useUserPrograms(session?.user.id);
+
+  console.log("userPrograms", userPrograms);
 
   function handleClickEditRequirements(major: Program) {
     setMajorToEdit(major);
@@ -68,15 +75,15 @@ export function MajorAndPlannerSelection({
   return (
     <div className="flex-row space-x-3 grid grid-cols-7 w-full">
       <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-3">
-        <MajorSelection />
+        <UserProgramsEditor />
         <div className="space-y-2 w-full">
-          {userMajors.map((major, index) => {
-            const majorRequirements = getRequirementsForMajor(major.id);
+          {userPrograms.map((program, index) => {
+            const majorRequirements = getRequirementsForMajor(program.id);
 
             if (majorRequirements === undefined) {
               return (
                 <Card key={index}>
-                  Missing requirements for {major.name} {major.catalogYear}.
+                  Missing requirements for {program.name} {program.catalogYear}.
                   Reloading the page may help.
                 </Card>
               );
@@ -85,12 +92,12 @@ export function MajorAndPlannerSelection({
             return (
               <Requirements
                 key={index}
-                major={major}
+                major={program}
                 requirements={majorRequirements}
                 parents={0}
                 hideTitle={false}
                 hasEditPermission={hasPermissionToEditMajor(
-                  major,
+                  program,
                   majorsAllowedToEdit,
                 )}
                 onClickEdit={handleClickEditRequirements}

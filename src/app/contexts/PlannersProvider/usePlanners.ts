@@ -1,10 +1,10 @@
+import { useUserDefaultPlanner } from "@/app/hooks/reactQuery";
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
 import { getAllPlanners, saveAllPlanners } from "@actions/planner";
-import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { MultiPlanner } from "./Types";
@@ -46,7 +46,7 @@ export function usePlanners() {
     setMultiPlanner((prev) => ({ ...prev, activePlanner: id }));
   };
 
-  const { userDefaultPlanner } = useContext(DefaultPlannerContext);
+  const { data: userDefaultPlanner } = useUserDefaultPlanner(userId);
   const [showExportModal, setShowExportModal] = useState(false);
 
   // Manage window focus

@@ -1,8 +1,14 @@
 import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
 import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import {
+  useUpdateUserDefaultPlannerId,
+  useUserDefaultPlannerId,
+  useUserPrimaryProgram,
+  useUserProgramDefaultPlanners,
+  useUserPrograms,
+} from "@/app/hooks/reactQuery";
 import { Program } from "@/app/types/Program";
-import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,
@@ -13,6 +19,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -35,22 +42,36 @@ export default function DefaultPlannerSelection({
   onSaved,
   isInPlannerPage,
 }: DefaultPlannerSelectionProps) {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
   );
   const [isSaved, setIsSaved] = useState(false);
   const [error, setError] = useState("");
+
+  // Primary program
+  const { data: primaryProgram } = useUserPrimaryProgram(userId);
+  const { data: defaultPlannerId } = useUserDefaultPlannerId(userId);
   const {
-    primaryMajor,
-    setPrimaryMajor,
-    userMajors,
-    defaultPlannerId,
-    setDefaultPlannerId,
-    updateDefaultPlanner,
-    updateDefaultPlannerIsPending,
-    majorDefaultPlanners,
-    loadingMajorDefaultPlanners,
-  } = useContext(DefaultPlannerContext);
+    data: programDefaultPlanners,
+    isLoading: loadingProgramDefaultPlanners,
+  } = useUserProgramDefaultPlanners(userId, primaryProgram);
+
+  const {
+    mutate: updateDefaultPlanner,
+    isPending: updateDefaultPlannerIsPending,
+  } = useUpdateUserDefaultPlannerId();
+
+  const setPrimaryMajor = (program: Program | null) =>
+    alert(`setPrimaryMajor currently unimplemented ${program}`);
+
+  const setDefaultPlannerId = (plannerId: string) =>
+    alert(`setDefaultPlannerId currently unimplemented ${plannerId}`);
+
+  const { data: userPrograms } = useUserPrograms(session?.user.id);
+
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
@@ -99,14 +120,14 @@ export default function DefaultPlannerSelection({
   ]);
 
   function handleSave(buttonName: ButtonName) {
-    if (defaultPlannerId === undefined) {
+    if (defaultPlannerId === undefined || defaultPlannerId === null) {
       setError(
         "Please select your majors, then choose a primary major and a default planner.",
       );
       return;
     }
     setError("");
-    updateDefaultPlanner(defaultPlannerId);
+    updateDefaultPlanner({ userId: userId!, defaultPlannerId });
     setSaveButtonClicked(buttonName);
   }
 
@@ -141,11 +162,12 @@ export default function DefaultPlannerSelection({
   // in userMajors, because the references are different even though
   // the values are the same
   useEffect(() => {
-    if (primaryMajor) {
-      const found = userMajors.find((m) => m.id === primaryMajor.id) ?? null;
+    if (primaryProgram) {
+      const found =
+        userPrograms.find((m) => m.id === primaryProgram.id) ?? null;
       setPrimaryMajor(found);
     }
-  }, [primaryMajor, userMajors, setPrimaryMajor]);
+  }, [primaryProgram, userPrograms, setPrimaryMajor]);
 
   return (
     <div className="w-full">
@@ -162,23 +184,23 @@ export default function DefaultPlannerSelection({
           <Select
             placeholder="Choose one…"
             variant="plain"
-            value={primaryMajor}
+            value={primaryProgram}
             onChange={handleChangeSelectedMajor}
-            disabled={userMajors.length === 0}
+            disabled={userPrograms.length === 0}
           >
-            {userMajors.map((major, index) => (
+            {userPrograms.map((major, index) => (
               <Option key={index} value={major}>
                 {major.name} {major.catalogYear}
               </Option>
             ))}
           </Select>
         </div>
-        {userMajors.length > 0 && primaryMajor && (
+        {userPrograms.length > 0 && primaryProgram && (
           <SelectDefaultPlanner
-            selectedDefaultPlanner={defaultPlannerId}
+            selectedDefaultPlanner={defaultPlannerId ?? undefined}
             onChange={handleChangeDefaultPlanner}
-            majorDefaultPlanners={majorDefaultPlanners}
-            loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+            majorDefaultPlanners={programDefaultPlanners}
+            loadingMajorDefaultPlanners={loadingProgramDefaultPlanners}
           />
         )}
         <CourseInfoModal />

@@ -24,7 +24,7 @@ export function usePrograms() {
   return useQuery({
     queryKey: ["allPrograms"],
     queryFn: async () => await getPrograms(),
-    initialData: [],
+    placeholderData: [],
   });
 }
 
@@ -39,7 +39,7 @@ export function useUnqiuePrograms() {
       const res = await getPrograms();
       return filterRedundantPrograms(res);
     },
-    initialData: [],
+    placeholderData: [],
   });
 }
 
@@ -56,9 +56,10 @@ export function useProgramTypeOfYear(
   return useQuery({
     queryKey: ["programs", programType, catalogYear],
     queryFn: async () => {
+      console.log("fetching programs", programType, catalogYear);
       return await getProgramsByTypeInYear(programType, catalogYear);
     },
-    initialData: [],
+    placeholderData: [],
     enabled: catalogYear !== "" && programType in ProgramType,
   });
 }
@@ -71,8 +72,7 @@ export function useUserPrograms(userId: string | undefined) {
   return useQuery({
     queryKey: ["userPrograms", userId],
     queryFn: async () => await getUserProgramsById(userId!),
-    initialData: [],
-    enabled: userId !== undefined,
+    placeholderData: [],
   });
 }
 
@@ -85,8 +85,8 @@ export function useUserPrimaryProgram(userId: string | undefined) {
   return useQuery({
     queryKey: ["userPrimaryProgram", userId],
     queryFn: async () => await getUserPrimaryProgram(userId!),
-    initialData: null,
-    enabled: userId !== undefined,
+    placeholderData: null,
+    enabled: !!userId,
   });
 }
 
@@ -103,11 +103,13 @@ export function useSaveUserPrograms() {
     mutationFn: async (params: { userId: string; programs: ProgramInput[] }) =>
       await saveUserPrograms(params),
     onSuccess: (_, { userId }) => {
-      queryClient.refetchQueries({ queryKey: ["userMajors", userId] });
+      queryClient.invalidateQueries({ queryKey: ["userPrograms", userId] });
 
       // NOTE: need to refetch the primary major because it might be null now
       // if we deleted the current primary major and we need to reflect that in the UI
-      queryClient.refetchQueries({ queryKey: ["userPrimaryMajor", userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["userPrimaryProgram", userId],
+      });
     },
   });
 }
@@ -137,7 +139,7 @@ export function useUserDefaultPlannerId(userId: string | undefined) {
     queryFn: async () => {
       return await getUserDefaultPlannerId(userId!);
     },
-    initialData: undefined,
+    placeholderData: undefined,
     enabled: !!userId,
   });
 }
@@ -203,22 +205,27 @@ export function useUserProgramDefaultPlanners(
   userId: string | undefined,
   primaryProgram: Program | undefined | null,
 ) {
+  // const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ["userProgramDefaultPlanners", userId, primaryProgram],
-    queryFn: async () =>
-      await getProgramDefaultPlanners({
+    queryFn: async () => {
+      const planners = await getProgramDefaultPlanners({
         userId: userId!,
         program: primaryProgram!,
-      }),
-    // TODO: set defaultPlannerId to the first default planner id of the
-    // newly selected primary major if it hasn't been already (old code below)
+      });
 
-    // onSuccess: (data) => {
-    //   const ids = data.map((p) => p.id);
-    //   if (defaultPlannerId && !ids.includes(defaultPlannerId))
-    //     setDefaultPlannerId(res[0]?.id);
-    //   }
-    // },
+      // set defaultPlannerId to the first default planner id of the
+      // newly selected primary major if it hasn't been already (old code below)
+      // const ids = planners.map((p) => p.id);
+      // if (defaultPlannerId && !ids.includes(defaultPlannerId))
+      // queryClient.setQueryData(
+      //   ["userDefaultPlannerId", userId],
+      //   planners[0]?.id,
+      // );
+      // }
+      return planners;
+    },
     enabled: !!userId && !!primaryProgram,
   });
 }

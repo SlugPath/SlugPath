@@ -1,9 +1,9 @@
+import { useUserPrograms } from "@/app/hooks/reactQuery";
 import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 import useProgramVerification from "@/app/hooks/useProgramVerification";
 import { useSession } from "next-auth/react";
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
-import { DefaultPlannerContext } from "../DefaultPlannerProvider";
 import { MajorVerificationContextProps } from "./Types";
 
 export const MajorVerificationContext = createContext(
@@ -26,9 +26,11 @@ export function MajorVerificationProvider({
     findRequirementList,
     isMajorRequirementsSatisfied: isProgramRequirementsSatisfied,
   } = useProgramVerification();
-  const { userMajors } = useContext(DefaultPlannerContext);
+
+  const { data: userPrograms } = useUserPrograms(session?.user.id);
+
   const { getLoadingSave, getIsSaved } = useMajorRequirements(
-    userMajors,
+    userPrograms ?? [],
     session?.user.id,
   );
 

@@ -79,6 +79,31 @@ export function filterRedundantPrograms(programs: Program[]) {
   });
 }
 
+/**
+ * Check if a program is in a list of programs
+ * @param program a program to search for
+ * @param programs list of programs to search in
+ * @returns true if the program is in the list of programs, false otherwise
+ */
+export function isProgramInPrograms(
+  program: Program,
+  programs: Program[],
+): boolean {
+  if (programs.length == 0) return false;
+
+  const alreadyAdded = programs.some((userMajor) => {
+    if (
+      userMajor.programType === program.programType &&
+      userMajor.name === program.name &&
+      userMajor.catalogYear === program.catalogYear
+    ) {
+      return true;
+    }
+  });
+
+  return alreadyAdded;
+}
+
 export function toStoredCourse({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   department: _,

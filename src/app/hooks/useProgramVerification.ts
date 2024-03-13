@@ -9,10 +9,9 @@ import {
   Requirements,
 } from "@customTypes/Requirements";
 import { useSession } from "next-auth/react";
-import { useContext } from "react";
 import { v4 as uuid4 } from "uuid";
 
-import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
+import { useUserPrograms } from "./reactQuery";
 
 /**
  * Hook for updating and verifying major or minor requirements
@@ -20,12 +19,14 @@ import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
  */
 export default function useProgramVerification() {
   const { data: session } = useSession();
-  const { userMajors } = useContext(DefaultPlannerContext);
+  const { data: userPrograms } = useUserPrograms(session?.user.id);
+
+  // TODO: remove useMajorRequirements and use react query instead
   const {
     onSetMajorRequirements,
     onSaveMajorRequirements,
     getRequirementsForMajor,
-  } = useMajorRequirements(userMajors, session?.user.id);
+  } = useMajorRequirements(userPrograms ?? [], session?.user.id);
 
   function updateRequirementList(
     majorId: number,
@@ -159,7 +160,11 @@ export default function useProgramVerification() {
   }
 
   function calculateMajorProgressPercentage(courseState: PlannerData): number {
-    const percentages = userMajors.map((major) => {
+    if (!userPrograms) {
+      return 0;
+    }
+
+    const percentages = userPrograms.map((major) => {
       const majorRequirements = getRequirementsForMajor(major.id);
       if (!majorRequirements) {
         return 0;
