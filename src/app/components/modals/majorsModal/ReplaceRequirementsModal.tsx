@@ -1,4 +1,4 @@
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider/Provider";
+import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { getAllRequirementLists } from "@actions/majorRequirements";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { RequirementList } from "@customTypes/Requirements";

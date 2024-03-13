@@ -11,7 +11,12 @@ import {
   StoredCourse,
 } from "../types/Course";
 
-export async function coursesBy(
+/**
+ * Fetches courses from the database based on specified query details
+ * @param pred query details
+ * @returns Courses that match the query details
+ */
+export async function getCoursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
   const departmentCodeParam = () => {

@@ -3,7 +3,7 @@
 import { MajorAndPlannerSelection } from "@/app/components/modals/majorsModal/MajorsModal";
 import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
 import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
-import { ModalsProvider } from "@/app/contexts/ModalsProvider/Provider";
+import { ModalsProvider } from "@/app/contexts/ModalsProvider";
 import { PermissionsProvider } from "@/app/contexts/PermissionsProvider";
 import { useRouter } from "next/navigation";
 

@@ -1,4 +1,4 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
 import {

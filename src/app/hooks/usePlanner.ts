@@ -5,12 +5,13 @@ import {
   initialPlanner,
   isCustomCourse,
 } from "@/lib/plannerUtils";
-import { PlannersContext } from "@contexts/PlannersProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { useCallback, useContext, useMemo } from "react";
+
+import { PlannersContext } from "../contexts/PlannersProvider";
 
 export default function usePlanner(input: {
   userId: string | undefined;

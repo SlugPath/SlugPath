@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { MultiPlanner } from "../contexts/PlannersProvider/Types";
+import { MultiPlanner } from "../contexts/PlannersProvider";
 
 export function usePlanners() {
   const { data: session } = useSession();
@@ -140,7 +140,7 @@ export function usePlanners() {
     const id = uuidv4();
     setMultiPlanner((prev) => ({
       planners: prev.planners.concat({
-        ...cloneDefaultPlanner(userDefaultPlanner),
+        ...cloneDefaultPlanner(userDefaultPlanner!),
         id,
         title: "New Planner",
       }),
@@ -166,7 +166,7 @@ export function usePlanners() {
         planners: prev.planners.map((p) =>
           p.id === prev.activePlanner
             ? {
-                ...cloneDefaultPlanner(userDefaultPlanner),
+                ...cloneDefaultPlanner(userDefaultPlanner!),
                 id: prev.activePlanner,
                 title,
               }

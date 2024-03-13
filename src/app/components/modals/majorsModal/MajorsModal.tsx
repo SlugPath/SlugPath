@@ -77,33 +77,34 @@ export function MajorAndPlannerSelection({
       <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-3">
         <UserProgramsEditor />
         <div className="space-y-2 w-full">
-          {userPrograms.map((program, index) => {
-            const majorRequirements = getRequirementsForMajor(program.id);
+          {userPrograms &&
+            userPrograms.map((program, index) => {
+              const majorRequirements = getRequirementsForMajor(program.id);
 
-            if (majorRequirements === undefined) {
+              if (majorRequirements === undefined) {
+                return (
+                  <Card key={index}>
+                    Missing requirements for {program.name}{" "}
+                    {program.catalogYear}. Reloading the page may help.
+                  </Card>
+                );
+              }
+
               return (
-                <Card key={index}>
-                  Missing requirements for {program.name} {program.catalogYear}.
-                  Reloading the page may help.
-                </Card>
+                <Requirements
+                  key={index}
+                  major={program}
+                  requirements={majorRequirements}
+                  parents={0}
+                  hideTitle={false}
+                  hasEditPermission={hasPermissionToEditMajor(
+                    program,
+                    majorsAllowedToEdit,
+                  )}
+                  onClickEdit={handleClickEditRequirements}
+                />
               );
-            }
-
-            return (
-              <Requirements
-                key={index}
-                major={program}
-                requirements={majorRequirements}
-                parents={0}
-                hideTitle={false}
-                hasEditPermission={hasPermissionToEditMajor(
-                  program,
-                  majorsAllowedToEdit,
-                )}
-                onClickEdit={handleClickEditRequirements}
-              />
-            );
-          })}
+            })}
         </div>
       </div>
       <Card variant="soft" className="col-span-4">

@@ -1,4 +1,4 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
+import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { useUnqiuePrograms } from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
@@ -35,7 +35,7 @@ export default function PermissionsList({
             <ListItemContent>
               <PermissionAccordion
                 permission={permission}
-                programs={programs}
+                programs={programs ?? []}
                 onAddMajorEditPermission={onAddMajorEditPermission}
                 onRemoveMajorEditPermission={onRemoveMajorEditPermission}
                 onRemovePermissions={onRemovePermissions}
