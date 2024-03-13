@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { share: string } }) {
   };
 
   // update the title of the new planner
-  duplicatePlanner.title = "Shared: "  + duplicatePlanner.title
+  duplicatePlanner.title = "Shared: " + duplicatePlanner.title;
 
   console.log(`New planner id: ${duplicatePlanner.id}`);
   console.log(`

@@ -1,14 +1,10 @@
 import { APP_URL } from "@/config";
 import { PlannersContext } from "@contexts/PlannersProvider";
+import ShareIcon from "@mui/icons-material/Share";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { Button } from "@mui/joy";
-import { Suspense, useContext } from "react";
-import ShareIcon from '@mui/icons-material/Share';
-
-import ExportSkeleton from "./ExportSkeleton";
+import { useContext } from "react";
 
 const url = `${APP_URL}/planner/`;
-
 
 // Create styles
 export default function ShareModal() {
@@ -61,16 +57,37 @@ export default function ShareModal() {
         >
           Share This Planner
         </Typography>
-        <div style={{ marginTop: '25px', marginBottom: '15px', position: 'relative' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-            <div style={{ position: 'absolute', left: '5px', top: '20%', color: '#757575' }}>
-              <ShareIcon className="dark:fill-white" style={{ color: 'black' }} />
+        <div
+          style={{
+            marginTop: "25px",
+            marginBottom: "15px",
+            position: "relative",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                left: "5px",
+                top: "20%",
+                color: "#757575",
+              }}
+            >
+              <ShareIcon
+                className="dark:fill-white"
+                style={{ color: "black" }}
+              />
             </div>
-            <input 
-              type="text" 
-              value={url + activePlanner} 
-              readOnly 
+            <input
+              type="text"
+              value={url + activePlanner}
+              readOnly
               className="w-full pl-10 py-2 pr-4 w-full dark:bg-slate-800 rounded border bg-gray-200 focus:bg-white focus:outline-none focus:border-blue-500"
               // style={{ width: '30vw' }}
             />
@@ -80,7 +97,7 @@ export default function ShareModal() {
         <button
           onClick={handleCopyToClipboard}
           className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded font-normal float-right transition duration-500 ease-in-out transform hover:scale-105"
-          >
+        >
           Copy Link
         </button>
         <ModalClose variant="plain" sx={{ m: 1 }} />
