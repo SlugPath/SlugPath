@@ -20,7 +20,7 @@ export default function Search({
     <>
       <Card className=" flex-col w-80 h-full min-h-0 min-w-80" variant="plain">
         <div className="flex flex-col place-items-center">
-          <Typography level="title-lg">
+          <Typography level="title-lg" className="flex items-center gap-2">
             Course Search
             <Tooltip
               title="Search by class name, or filter by department or GE type"
