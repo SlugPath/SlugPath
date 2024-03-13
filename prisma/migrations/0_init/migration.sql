@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "LabelColor" AS ENUM ('RED', 'ORANGE', 'YELLOW', 'GREEN', 'BLUE', 'PURPLE', 'PINK', 'TEAL');
+CREATE TYPE "LabelColor" AS ENUM ('RED', 'ORANGE', 'YELLOW', 'GREEN', 'BLUE', 'PURPLE', 'PINK');
 
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
