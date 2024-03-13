@@ -225,6 +225,30 @@ export async function getMajorRequirementLists(
   return majorRequirementsList;
 }
 
+export async function getMajorRequirementList(
+  majorId: number,
+  userId: string,
+): Promise<RequirementList | null> {
+  const majorRequirement = await prisma.majorRequirement.findFirst({
+    where: {
+      majorId: majorId,
+      userId: userId,
+    },
+    select: {
+      requirementList: true,
+    },
+  });
+  const requirementList = majorRequirement?.requirementList;
+  if (requirementList !== null && requirementList !== undefined) {
+    const parseRequirementsList = JSON.parse(
+      requirementList as string,
+    ) as RequirementList;
+    return parseRequirementsList;
+  }
+
+  return createEmptyRequirementList(majorId);
+}
+
 async function getUserName(userId: string) {
   const name = await prisma.user.findUnique({
     where: {

@@ -18,6 +18,8 @@ export interface ModalsContextProps {
   courseState: PlannerData;
   majorToEdit: Major | undefined;
   setMajorToEdit: SetState<Major | undefined>;
+  userToEdit: string | undefined;
+  setUserToEdit: SetState<string | undefined>;
   majorToSuggest: Major | undefined;
   setMajorToSuggest: SetState<Major | undefined>;
 }

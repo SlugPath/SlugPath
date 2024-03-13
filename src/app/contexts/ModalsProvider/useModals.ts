@@ -10,6 +10,7 @@ export default function useModals() {
     useState(false);
   const [showSuggestionsModal, setShowSuggestionsModal] = useState(false);
   const [majorToEdit, setMajorToEdit] = useState<Major | undefined>(undefined);
+  const [userToEdit, setUserToEdit] = useState<string | undefined>(undefined);
   const [majorToSuggest, setMajorToSuggest] = useState<Major | undefined>(
     undefined,
   );
@@ -29,6 +30,8 @@ export default function useModals() {
     setShowSuggestionsModal,
     majorToEdit,
     setMajorToEdit,
+    userToEdit,
+    setUserToEdit,
     majorToSuggest,
     setMajorToSuggest,
   };

@@ -1,37 +1,88 @@
 //import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import useMajorRequirementLists from "@/app/hooks/useMajorRequirementLists";
-import { Binder, RequirementList } from "@/app/types/Requirements";
-import Search from "@components/search/Search";
-import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { Major } from "@/app/types/Major";
+import {
+  //Binder,
+  RequirementList,
+} from "@/app/types/Requirements";
+//import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
-import { PermissionsContext } from "@contexts/PermissionsProvider";
+//import { PermissionsContext } from "@contexts/PermissionsProvider";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
-  Card, //Chip,
+  Button, //Card, //Chip,
   IconButton,
   Modal,
   ModalClose,
-  Sheet,
-  Tooltip,
+  Sheet, //Tooltip,
   Typography,
 } from "@mui/joy";
-import { CircularProgress } from "@mui/material";
+//import { CircularProgress } from "@mui/material";
 //mport ThumbDownIcon from '@mui/icons-material/ThumbDown';
+//import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
 import { useSession } from "next-auth/react";
-import { useContext, useState } from "react";
-import { v4 as uuid4 } from "uuid";
+import { useContext } from "react";
 
-//import { Requirements, RequirementsEditing } from '../Requirements';
+import { Requirements } from "../Requirements";
 
 export default function SuggestionsModal() {
   const {
     setShowSuggestionsModal: setShowModal,
     showSuggestionsModal: showModal,
+    //setShowReplaceRLModal,
+    setMajorToEdit,
+    setUserToEdit,
+    setShowMajorRequirementsEditModal,
+    majorToSuggest: major,
   } = useContext(ModalsContext);
+
+  // useContext(ModalsContext);
+  // const { getLoadingSave, onSaveMajorRequirements } = useContext(
+  //   MajorVerificationContext,
+  // );
+  //const { majorsAllowedToEdit } = useContext(PermissionsContext);
+  const { data: session } = useSession();
+  const {
+    majorRequirementLists,
+    // onAddMajorRequirementList,
+    // onGetApprovedMajorRequirement,
+    // onGetMajorRequirementList,
+    // onRemoveMajorRequirementList,
+    // onGetUpvotes,
+    onAddUpvote,
+    // onRemoveUpvote,
+  } = useMajorRequirementLists(major?.id);
+
+  // const approvedMajorRequirements =
+  //   major !== undefined ? onGetApprovedMajorRequirement(major.id) : undefined;
+
+  function Title() {
+    return (
+      <div className="flex flex-col space-y-2">
+        <div className="flex flex-row justify-between">
+          <Typography level="h4">
+            {major?.name} {major?.catalogYear} Requirements
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+
+  // function handleToggleEditButton() {
+  //   setEditing(!editing);
+  //   if (editing) {
+  //     onSaveMajorRequirements(major.id);
+  //   }
+  // }
+
+  function handleClickEditRequirements(major: Major) {
+    setMajorToEdit(major);
+    setUserToEdit(session?.user.id);
+    setShowMajorRequirementsEditModal(true);
+  }
 
   return (
     <Modal
@@ -53,160 +104,87 @@ export default function SuggestionsModal() {
           boxShadow: "lg",
         }}
       >
-        <SuggestionsPage />
+        {major !== undefined && (
+          <>
+            <div>
+              <div className="mb-4">
+                <Title />
+              </div>
+
+              <div className="flex flex-row mb-3">
+                <div
+                  className="overflow-y-scroll w-full"
+                  style={{ maxHeight: "80vh" }}
+                >
+                  {majorRequirementLists &&
+                    majorRequirementLists.map(
+                      ([majorRequirement, userId]: [
+                        RequirementList,
+                        string,
+                      ]) => (
+                        <div key={majorRequirement.id}>
+                          <Accordion
+                            key={majorRequirement.id}
+                            variant="soft"
+                            sx={{
+                              borderRadius: "0.5rem",
+                              "&.MuiAccordion-root": {
+                                "& .MuiAccordionSummary-root": {
+                                  padding: "0.5rem 0",
+                                  paddingX: "0.5rem",
+                                },
+                              },
+                            }}
+                            //defaultExpanded={}
+                          >
+                            <AccordionSummary>
+                              <Typography>
+                                {userId}&apos;s suggestion
+                              </Typography>
+                              <div>
+                                <IconButton
+                                  onClick={() => onAddUpvote(userId, major.id)}
+                                >
+                                  <ThumbUpIcon />
+                                </IconButton>
+                                0
+                                {/* <IconButton onClick={() => onRemoveUpvote(220)}>
+                                <ThumbDownIcon />
+                              </IconButton> */}
+                              </div>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Requirements
+                                major={major}
+                                requirements={majorRequirement}
+                                parents={0}
+                                hideTitle={false}
+                              />
+                            </AccordionDetails>
+                          </Accordion>
+                        </div>
+                      ),
+                    )}
+                </div>
+              </div>
+              {/* <EditButtons
+              editing={editing}
+              loadingSave={getLoadingSave(major.id)}
+              hasPermissionToEdit={true}
+              handleToggleEditButton={handleToggleEditButton}
+              handleClickReplaceButton={() => setShowReplaceRLModal(true)}
+            /> */}
+              <div className="flex flex-row justify-end">
+                <Button onClick={() => handleClickEditRequirements(major)}>
+                  Contribute
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
         <ModalClose variant="plain" />
       </Sheet>
     </Modal>
-  );
-}
-
-export function SuggestionsPage() {
-  const { setShowReplaceRLModal, majorToSuggest: major } =
-    useContext(ModalsContext);
-  const { getLoadingSave, onSaveMajorRequirements } = useContext(
-    MajorVerificationContext,
-  );
-  const { majorsAllowedToEdit } = useContext(PermissionsContext);
-  const [editing, setEditing] = useState(false);
-  const { data: session } = useSession();
-  const {
-    majorRequirementLists,
-    onAddMajorRequirementList,
-    //onGetApprovedMajorRequirement,
-    //onRemoveMajorRequirementList,
-    //onGetUpvotes,
-    //onAddUpvote,
-    //onRemoveUpvote,
-  } = useMajorRequirementLists(220);
-
-  const userId = session?.user.id || "";
-  // const approvedMajorRequirements =
-  //   major !== undefined ? onGetApprovedMajorRequirement(major.id) : undefined;
-
-  function Title() {
-    return (
-      <div className="flex flex-col space-y-2">
-        <div className="flex flex-row justify-between">
-          <Typography level="h4">
-            {major?.name} {major?.catalogYear} Requirements
-          </Typography>
-        </div>
-      </div>
-    );
-  }
-
-  function handleToggleEditButton() {
-    setEditing(!editing);
-    if (editing) {
-      onSaveMajorRequirements(220);
-    }
-  }
-
-  return (
-    <div>
-      <div className="mb-4">
-        <Title />
-      </div>
-      <div className="flex flex-row mb-3">
-        {editing && majorsAllowedToEdit && (
-          <div className="flex-initial pr-2">
-            <Card variant="soft" size="sm">
-              <Search displayCustomCourseSelection={false} />
-            </Card>
-          </div>
-        )}
-        <div className="overflow-y-scroll w-full" style={{ maxHeight: "80vh" }}>
-          {majorRequirementLists &&
-            majorRequirementLists.map(
-              ([majorRequirement, userId]: [RequirementList, string]) => (
-                <div key={majorRequirement.id}>
-                  <Accordion
-                    key={majorRequirement.id}
-                    variant="soft"
-                    sx={{
-                      borderRadius: "0.5rem",
-                      "&.MuiAccordion-root": {
-                        "& .MuiAccordionSummary-root": {
-                          padding: "0.5rem 0",
-                          paddingX: "0.5rem",
-                        },
-                      },
-                    }}
-                    //defaultExpanded={}
-                  >
-                    <AccordionSummary>
-                      <Typography>{userId}&apos;s suggestion</Typography>
-                      <div>
-                        <IconButton
-                        //onClick={() => onAddUpvote(validUserId, 220)}
-                        >
-                          <ThumbUpIcon />
-                        </IconButton>
-                        0
-                        {/* <IconButton onClick={() => onRemoveUpvote(220)}>
-                          <ThumbDownIcon />
-                        </IconButton> */}
-                      </div>
-                    </AccordionSummary>
-                    <AccordionDetails></AccordionDetails>
-                  </Accordion>
-                </div>
-              ),
-            )}
-        </div>
-      </div>
-      <EditButtons
-        editing={editing}
-        loadingSave={getLoadingSave(220)}
-        hasPermissionToEdit={true}
-        handleToggleEditButton={handleToggleEditButton}
-        handleClickReplaceButton={() => setShowReplaceRLModal(true)}
-      />
-      <Button
-        onClick={() => {
-          const requirementList = {
-            binder: Binder.AND,
-            requirements: [
-              {
-                binder: Binder.AND,
-                requirements: [
-                  {
-                    departmentCode: "CSE",
-                    number: "100",
-                    id: uuid4(),
-                    title: "CSE 100",
-                    credits: 4,
-                    ge: [],
-                    quartersOffered: [],
-                    description: "CSE 100 description",
-                    labels: [],
-                  },
-                  {
-                    departmentCode: "CSE",
-                    number: "101",
-                    id: uuid4(),
-                    title: "CSE 101",
-                    credits: 4,
-                    ge: [],
-                    quartersOffered: [],
-                    description: "CSE 101 description",
-                    labels: [],
-                  },
-                ],
-                id: uuid4(),
-                title: "child list",
-              },
-            ],
-            id: uuid4(),
-            title: "parent list",
-          };
-          onAddMajorRequirementList(userId, 220, requirementList);
-          //onRemoveMajorRequirementList(validUserId, 17);
-        }}
-      >
-        Suggest
-      </Button>
-    </div>
   );
 }
 
@@ -237,41 +215,41 @@ function MajorRequirements({
   );
 }
 
-function EditButtons({
-  editing,
-  loadingSave,
-  hasPermissionToEdit,
-  handleToggleEditButton,
-  handleClickReplaceButton,
-}: {
-  editing: boolean;
-  loadingSave: boolean;
-  hasPermissionToEdit: boolean;
-  handleToggleEditButton: () => void;
-  handleClickReplaceButton: () => void;
-}) {
-  if (!hasPermissionToEdit) {
-    return null;
-  }
+// function EditButtons({
+//   editing,
+//   loadingSave,
+//   hasPermissionToEdit,
+//   handleToggleEditButton,
+//   handleClickReplaceButton,
+// }: {
+//   editing: boolean;
+//   loadingSave: boolean;
+//   hasPermissionToEdit: boolean;
+//   handleToggleEditButton: () => void;
+//   handleClickReplaceButton: () => void;
+// }) {
+//   if (!hasPermissionToEdit) {
+//     return null;
+//   }
 
-  return (
-    <div className="flex flex-row justify-end">
-      {loadingSave ? (
-        <CircularProgress />
-      ) : (
-        <div className="space-x-2">
-          {editing && (
-            <Tooltip title="Replace with a Requirement List from a different program">
-              <Button color="warning" onClick={handleClickReplaceButton}>
-                Replace
-              </Button>
-            </Tooltip>
-          )}
-          <Button onClick={handleToggleEditButton}>
-            {editing ? "Done" : "Edit Requirement List"}
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-}
+//   return (
+//     <div className="flex flex-row justify-end">
+//       {loadingSave ? (
+//         <CircularProgress />
+//       ) : (
+//         <div className="space-x-2">
+//           {editing && (
+//             <Tooltip title="Replace with a Requirement List from a different program">
+//               <Button color="warning" onClick={handleClickReplaceButton}>
+//                 Replace
+//               </Button>
+//             </Tooltip>
+//           )}
+//           <Button onClick={handleToggleEditButton}>
+//             {editing ? "Done" : "Contribute"}
+//           </Button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }

@@ -1,7 +1,6 @@
 "use client";
 
 import { MajorAndPlannerSelection } from "@/app/components/modals/majorsModal/MajorsModal";
-import { SuggestionsPage } from "@/app/components/modals/majorsModal/suggestionsModal/SuggestionsModal";
 import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
 import { MajorVerificationProvider } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsProvider } from "@/app/contexts/ModalsProvider/Provider";
@@ -24,7 +23,6 @@ export default function MajorSelectionPage() {
                   isInPlannerPage={false}
                   onSavedDefaultPlanner={redirectToPlanner}
                 />
-                <SuggestionsPage />
               </div>
             </PermissionsProvider>
           </MajorVerificationProvider>

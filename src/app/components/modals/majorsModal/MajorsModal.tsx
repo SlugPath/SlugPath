@@ -1,11 +1,12 @@
 import DefaultPlannerSelection from "@/app/components/modals/majorsModal/defaultPlannerSelection/DefaultPlannerSelection";
 import MajorSelection from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
+//import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
+import SuggestionsModal from "@/app/components/modals/majorsModal/suggestionsModal/SuggestionsModal";
 import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
+//import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
 import { Major } from "@/app/types/Major";
-import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useContext } from "react";
 
@@ -56,7 +57,7 @@ export function MajorAndPlannerSelection({
     setShowSuggestionsModal,
   } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
-  const { majorsAllowedToEdit } = useContext(PermissionsContext);
+  //const { majorsAllowedToEdit } = useContext(PermissionsContext);
   const { userMajors } = useContext(DefaultPlannerContext);
 
   function handleClickEditRequirements(major: Major) {
@@ -73,6 +74,7 @@ export function MajorAndPlannerSelection({
     <div className="flex-row space-x-3 grid grid-cols-7 w-full">
       <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-3">
         <MajorSelection />
+        <SuggestionsModal />
         <div className="space-y-2 w-full">
           {userMajors.map((major, index) => {
             const majorRequirements = getRequirementsForMajor(major.id);
@@ -93,10 +95,7 @@ export function MajorAndPlannerSelection({
                   requirements={majorRequirements}
                   parents={0}
                   hideTitle={false}
-                  hasEditPermission={hasPermissionToEditMajor(
-                    major,
-                    majorsAllowedToEdit,
-                  )}
+                  hasEditPermission={false}
                   onClickEdit={handleClickEditRequirements}
                 />
                 <button

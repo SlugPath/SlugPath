@@ -1,6 +1,8 @@
 import Search from "@/app/components/search/Search";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import useMajorRequirementLists from "@/app/hooks/useMajorRequirementLists";
+import { RequirementList } from "@/app/types/Requirements";
 import {
   Button,
   Card,
@@ -10,7 +12,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { RequirementsEditing } from "./Requirements";
 
@@ -20,6 +22,7 @@ export default function EditMajorRequirementsModal() {
     showMajorRequirementsEditModal: showModal,
     setShowReplaceRLModal,
     majorToEdit: major,
+    userToEdit: userId,
   } = useContext(ModalsContext);
   const {
     getLoadingSave,
@@ -28,8 +31,31 @@ export default function EditMajorRequirementsModal() {
     onSaveMajorRequirements,
   } = useContext(MajorVerificationContext);
 
-  const majorRequirements =
-    major !== undefined ? getRequirementsForMajor(major.id) : undefined;
+  const { onGetMajorRequirementList } = useMajorRequirementLists(major?.id);
+
+  const [majorRequirements, setMajorRequirements] = useState<RequirementList>();
+
+  // Need to wait for getMajorRequirementList Fetch
+  useEffect(() => {
+    const getMajorRequirments = async () => {
+      if (!major) return;
+      if (!userId) {
+        const _majorRequirements = getRequirementsForMajor(major.id);
+        setMajorRequirements(_majorRequirements);
+        return;
+      }
+
+      const _majorRequirements = await onGetMajorRequirementList(
+        userId,
+        major.id,
+      );
+      setMajorRequirements(_majorRequirements ?? undefined);
+    };
+    getMajorRequirments();
+  }, [onGetMajorRequirementList, getRequirementsForMajor]);
+
+  //if there's a user, grab the user's suggestion instead
+
   const loadingSave = major !== undefined ? getLoadingSave(major?.id) : false;
   const isSaved = major !== undefined ? getIsSaved(major?.id) : false;
 
@@ -74,7 +100,7 @@ export default function EditMajorRequirementsModal() {
           <>
             <div className="flex flex-row mb-3">
               {showModal && (
-                <div className="flex-initial pr-2">
+                <div className="flex-1 pr-2">
                   <Card variant="soft" size="sm">
                     <Search displayCustomCourseSelection={false} />
                   </Card>

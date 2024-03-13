@@ -22,6 +22,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
     setShowSuggestionsModal,
     majorToEdit,
     setMajorToEdit,
+    userToEdit,
+    setUserToEdit,
     majorToSuggest,
     setMajorToSuggest,
   } = useModals();
@@ -46,6 +48,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
         courseState,
         majorToEdit,
         setMajorToEdit,
+        userToEdit,
+        setUserToEdit,
         majorToSuggest,
         setMajorToSuggest,
       }}

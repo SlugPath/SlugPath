@@ -5,6 +5,7 @@ import {
   addMajorRequirementList,
   addUpvote,
   getApprovedMajorRequirement,
+  getMajorRequirementList,
   getMajorRequirementLists,
   getUpvotes,
   removeMajorRequirementList,
@@ -14,7 +15,7 @@ import { RequirementList } from "../types/Requirements";
 
 export default function useMajorRequirementLists(majorId: number | undefined) {
   const { data: majorRequirementLists } = useQuery({
-    queryKey: ["getMajorRequirementLists"],
+    queryKey: ["getMajorRequirementLists", majorId],
     queryFn: () => {
       if (majorId === undefined) return;
       return getMajorRequirementLists(majorId);
@@ -29,6 +30,17 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
     await getApprovedMajorRequirement(majorId);
     setLoadingSave(false);
     setIsSaved(true);
+  }
+
+  async function handleGetMajorRequirementList(
+    userId: string,
+    majorId: number,
+  ) {
+    setLoadingSave(true);
+    const requriementList = await getMajorRequirementList(majorId, userId);
+    setLoadingSave(false);
+    setIsSaved(true);
+    return requriementList;
   }
 
   async function handleAddMajorRequirementList(
@@ -79,6 +91,7 @@ export default function useMajorRequirementLists(majorId: number | undefined) {
     majorRequirementLists,
     onAddMajorRequirementList: handleAddMajorRequirementList,
     onGetApprovedMajorRequirement: handleGetApprovedMajorRequirement,
+    onGetMajorRequirementList: handleGetMajorRequirementList,
     onRemoveMajorRequirementList: handleRemoveMajorRequirementList,
     onGetUpvotes: handleGetUpvotes,
     onAddUpvote: handleAddUpvote,
