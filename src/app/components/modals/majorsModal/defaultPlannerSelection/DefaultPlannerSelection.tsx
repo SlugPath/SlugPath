@@ -1,7 +1,7 @@
 import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
 import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
-import { Major } from "@/app/types/Major";
+import { Program } from "@/app/types/Program";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import {
@@ -58,7 +58,7 @@ export default function DefaultPlannerSelection({
 
   function handleChangeSelectedMajor(
     _: React.SyntheticEvent | null,
-    newValue: Major | null,
+    newValue: Program | null,
   ) {
     if (newValue != null) {
       setPrimaryMajor(newValue);

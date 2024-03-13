@@ -1,6 +1,6 @@
-import { saveUserMajors } from "@/app/actions/major";
-import { Major } from "@/app/types/Major";
+import { saveUserPrograms } from "@/app/actions/program";
 import { Permission } from "@/app/types/Permission";
+import { Program } from "@/app/types/Program";
 import prisma from "@/lib/prisma";
 import {
   getPermissions,
@@ -18,7 +18,7 @@ describe("Permissions Actions", () => {
   const adminEmail = `sammyslug@ucsc.edu`;
   const userEmail = `samuelslime@ucsc.edu`;
 
-  let newMajor: Major;
+  let newMajor: Program;
 
   beforeAll(async () => {
     newMajor = await createMajor(
@@ -233,14 +233,14 @@ describe("Permissions Actions", () => {
     });
 
     beforeEach(async () => {
-      await saveUserMajors({
+      await saveUserPrograms({
         userId: user!.id,
         majors: [newMajor],
       });
     });
 
     afterAll(async () => {
-      await saveUserMajors({
+      await saveUserPrograms({
         userId: user!.id,
         majors: [],
       });

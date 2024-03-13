@@ -1,5 +1,5 @@
-import { getProgramsByTypeInYear } from "@/app/actions/major";
-import { Major } from "@/app/types/Major";
+import { getProgramsByTypeInYear } from "@/app/actions/program";
+import { Program } from "@/app/types/Program";
 import { years } from "@/lib/defaultPlanners";
 import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { Delete } from "@mui/icons-material";
@@ -26,7 +26,7 @@ import SelectMajorName from "./SelectMajorName";
 
 export default function MajorSelection() {
   const queryClient = useQueryClient();
-  const [selectedMajors, setSelectedMajors] = useState<Major[]>([]);
+  const [selectedMajors, setSelectedMajors] = useState<Program[]>([]);
   const [programType, setProgramType] = useState<ProgramType>(
     ProgramType.Major,
   );
@@ -96,7 +96,7 @@ export default function MajorSelection() {
     );
   }
 
-  function alreadyAddedMajor(major: Major): boolean {
+  function alreadyAddedMajor(major: Program): boolean {
     const alreadyAdded = selectedMajors.some((userMajor) => {
       if (
         userMajor.programType === major.programType &&
@@ -111,7 +111,7 @@ export default function MajorSelection() {
   }
 
   function handleAddMajor() {
-    const majorToAdd: Major = {
+    const majorToAdd: Program = {
       name: majorName,
       catalogYear,
       programType,
@@ -185,7 +185,7 @@ export default function MajorSelection() {
 }
 
 interface MajorsListProps {
-  selectedMajors: Major[];
+  selectedMajors: Program[];
   major: string;
   catalogYear: string;
   programType: ProgramType;

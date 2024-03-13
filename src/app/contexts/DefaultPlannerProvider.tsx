@@ -1,14 +1,14 @@
 import { createContext } from "react";
 
 import useDefaultPlanners from "../hooks/useDefaultPlanners";
-import useMajorSelection from "../hooks/useMajorSelection";
+import useProgramSelection from "../hooks/useMajorSelection";
 import { SetState } from "../types/Common";
-import { Major } from "../types/Major";
 import { PlannerData, PlannerTitle } from "../types/Planner";
+import { Program } from "../types/Program";
 
 export interface DefaultPlannerContextProps {
-  primaryMajor: Major | null;
-  setPrimaryMajor: SetState<Major | null>;
+  primaryMajor: Program | null;
+  setPrimaryMajor: SetState<Program | null>;
   majorDefaultPlanners: PlannerTitle[] | undefined;
   loadingMajorDefaultPlanners: boolean;
   updateDefaultPlanner: (plannerId: string) => void;
@@ -16,9 +16,9 @@ export interface DefaultPlannerContextProps {
   userDefaultPlanner: PlannerData;
   defaultPlannerId: string | undefined;
   setDefaultPlannerId: SetState<string | undefined>;
-  userMajors: Major[];
+  userMajors: Program[];
   userMajorsIsLoading: boolean;
-  saveMajors: (majors: Major[]) => void;
+  saveMajors: (majors: Program[]) => void;
   loadingSaveMajor: boolean;
   errorSavingMajor: boolean;
 }
@@ -38,7 +38,7 @@ export function DefaultPlannerProvider({
     userMajorsIsLoading,
     loadingSaveMajor,
     errorSavingMajor,
-  } = useMajorSelection();
+  } = useProgramSelection();
 
   const {
     primaryMajor,

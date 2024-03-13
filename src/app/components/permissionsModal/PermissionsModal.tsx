@@ -1,5 +1,5 @@
-import { Major } from "@/app/types/Major";
 import { Permission } from "@/app/types/Permission";
+import { Program } from "@/app/types/Program";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { PermissionsContext } from "@contexts/PermissionsProvider";
 import ReportIcon from "@mui/icons-material/Report";
@@ -57,7 +57,10 @@ export default function PermissionsModal() {
     onRemovePermission(permission.userEmail);
   }
 
-  function handleAddMajorEditPermission(permission: Permission, major: Major) {
+  function handleAddMajorEditPermission(
+    permission: Permission,
+    major: Program,
+  ) {
     if (isMajorAlreadyAdded(permission, major)) {
       return;
     }
@@ -74,7 +77,7 @@ export default function PermissionsModal() {
 
   function handleRemoveMajorEditPermission(
     permission: Permission,
-    major: Major,
+    major: Program,
   ) {
     const permissionsCopy = { ...permission };
     permissionsCopy.majorEditingPermissions =
@@ -87,7 +90,7 @@ export default function PermissionsModal() {
 
   function handleUpdateMajorEditPermissionExpirationDate(
     permission: Permission,
-    major: Major,
+    major: Program,
     expirationDate: Date,
   ) {
     const permissionsCopy = { ...permission };
@@ -114,7 +117,7 @@ export default function PermissionsModal() {
     return permissions.some((p) => p.userEmail === email);
   }
 
-  function isMajorAlreadyAdded(permission: Permission, major: Major) {
+  function isMajorAlreadyAdded(permission: Permission, major: Program) {
     return permission.majorEditingPermissions.some((m) => {
       const otherMajor = m.major;
       return (

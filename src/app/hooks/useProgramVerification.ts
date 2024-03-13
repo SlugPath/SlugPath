@@ -1,3 +1,4 @@
+import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 import { StoredCourse } from "@/app/types/Course";
 import { PlannerData } from "@/app/types/Planner";
 import { isRequirementList } from "@/lib/requirementsUtils";
@@ -11,10 +12,13 @@ import { useSession } from "next-auth/react";
 import { useContext } from "react";
 import { v4 as uuid4 } from "uuid";
 
-import { DefaultPlannerContext } from "../DefaultPlannerProvider";
-import useMajorRequirements from "./useMajorRequirements";
+import { DefaultPlannerContext } from "../contexts/DefaultPlannerProvider";
 
-export default function useMajorVerification() {
+/**
+ * Hook for updating and verifying major or minor requirements
+ * @returns functions for updating and verifying major requirements
+ */
+export default function useProgramVerification() {
   const { data: session } = useSession();
   const { userMajors } = useContext(DefaultPlannerContext);
   const {

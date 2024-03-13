@@ -1,4 +1,5 @@
 import { StoredCourse } from "@/app/types/Course";
+import { Program } from "@/app/types/Program";
 import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
@@ -60,6 +61,22 @@ export function compareCoursesByNum(a: StoredCourse, b: StoredCourse): number {
   if (bLet > aLet) return -1;
 
   return 0;
+}
+
+/**
+ * Filter out programs with the same name
+ * @param programs List of programs
+ * @returns List of programs with unique names
+ */
+export function filterRedundantPrograms(programs: Program[]) {
+  const programNames = new Set();
+  return programs.filter((program) => {
+    if (programNames.has(program.name)) {
+      return false;
+    }
+    programNames.add(program.name);
+    return true;
+  });
 }
 
 export function toStoredCourse({

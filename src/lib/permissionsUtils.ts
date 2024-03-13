@@ -1,16 +1,16 @@
-import { Major } from "@/app/types/Major";
 import { Permission } from "@/app/types/Permission";
+import { Program } from "@/app/types/Program";
 
 export function hasPermissionToEditMajor(
-  major: Major,
-  majorsAllowedToEdit: Major[],
+  major: Program,
+  majorsAllowedToEdit: Program[],
 ) {
   return majorsAllowedToEdit.some((m) => m.name == major.name);
 }
 
 export function getMajorsAllowedToEdit(
   permission: Permission | undefined | null,
-): Major[] {
+): Program[] {
   // filter out expires major editing permissions
   const majorEditingPermissions =
     permission?.majorEditingPermissions.filter((majorEditPerm) => {

@@ -1,4 +1,4 @@
-import { Major } from "./Major";
+import { Program } from "./Program";
 
 export interface Permission {
   userEmail: string;
@@ -10,6 +10,6 @@ export interface Permission {
  * which is carried out by frontend logic.
  */
 export interface MajorEditingPermission {
-  major: Major;
+  major: Program;
   expirationDate: Date;
 }

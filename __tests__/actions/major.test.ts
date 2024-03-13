@@ -1,11 +1,11 @@
-import { Major } from "@/app/types/Major";
-import prisma from "@/lib/prisma";
 import {
-  getMajorDefaultPlanners,
+  getProgramDefaultPlanners,
   getPrograms,
   getUserProgramsByEmail,
-  saveUserMajors,
-} from "@actions/major";
+  saveUserPrograms,
+} from "@/app/actions/program";
+import { Program } from "@/app/types/Program";
+import prisma from "@/lib/prisma";
 import { ProgramType } from "@prisma/client";
 
 import { User } from "../common/Types";
@@ -116,7 +116,7 @@ describe("Major actions", () => {
 
   afterEach(async () => {
     // Clean up
-    await saveUserMajors({
+    await saveUserPrograms({
       userId: user!.id,
       majors: [],
     });
@@ -143,7 +143,7 @@ describe("Major actions", () => {
 
     // Update user majors
     const res = removeIdFromMajorOutput(
-      await saveUserMajors({
+      await saveUserPrograms({
         userId: user!.id,
         majors: majors,
       }),
@@ -162,7 +162,7 @@ describe("Major actions", () => {
     const catalogYear = "2020-2021";
 
     await expect(
-      await saveUserMajors({
+      await saveUserPrograms({
         userId: user!.id,
         majors: [
           {
@@ -195,9 +195,9 @@ describe("Major actions", () => {
     });
 
     expect(
-      await getMajorDefaultPlanners({
+      await getProgramDefaultPlanners({
         userId: user!.id,
-        major: {
+        program: {
           name,
           catalogYear,
           programType: ProgramType.Major,
@@ -255,18 +255,18 @@ describe("Major actions", () => {
       },
     });
 
-    const majorResult: Major[] = [createdMajor];
+    const majorResult: Program[] = [createdMajor];
 
     // Update User 1
     expect(
-      await saveUserMajors({
+      await saveUserPrograms({
         userId: user!.id,
         majors: [majorData],
       }),
     ).toStrictEqual(majorResult);
     // Update User 2
     expect(
-      await saveUserMajors({
+      await saveUserPrograms({
         userId: user2!.id,
         majors: [majorData],
       }),

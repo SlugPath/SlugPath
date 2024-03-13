@@ -4,7 +4,7 @@ import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
-import { Major } from "@/app/types/Major";
+import { Program } from "@/app/types/Program";
 import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useContext } from "react";
@@ -55,7 +55,7 @@ export function MajorAndPlannerSelection({
   const { majorsAllowedToEdit } = useContext(PermissionsContext);
   const { userMajors } = useContext(DefaultPlannerContext);
 
-  function handleClickEditRequirements(major: Major) {
+  function handleClickEditRequirements(major: Program) {
     setMajorToEdit(major);
     setShowMajorRequirementsEditModal(true);
   }

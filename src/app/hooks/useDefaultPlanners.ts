@@ -1,11 +1,11 @@
-import { Major } from "@/app/types/Major";
-import { initialPlanner } from "@/lib/plannerUtils";
 import {
-  getMajorDefaultPlanners,
+  getProgramDefaultPlanners,
   getUserDefaultPlannerId,
   getUserPrimaryMajor,
   updateUserDefaultPlanner,
-} from "@actions/major";
+} from "@/app/actions/program";
+import { Program } from "@/app/types/Program";
+import { initialPlanner } from "@/lib/plannerUtils";
 import { getPlannerById } from "@actions/planner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -20,7 +20,7 @@ export default function useDefaultPlanners(onUpdated?: () => void) {
   const [defaultPlannerId, setDefaultPlannerId] = useState<string | undefined>(
     undefined,
   );
-  const [primaryMajor, setPrimaryMajor] = useState<Major | null>(null);
+  const [primaryMajor, setPrimaryMajor] = useState<Program | null>(null);
   useQuery({
     queryKey: ["userPrimaryMajor", session?.user.id],
     queryFn: async () => {
@@ -55,9 +55,9 @@ export default function useDefaultPlanners(onUpdated?: () => void) {
     useQuery({
       queryKey: ["majorDefaults", session?.user.id, primaryMajor],
       queryFn: async () => {
-        const res = await getMajorDefaultPlanners({
+        const res = await getProgramDefaultPlanners({
           userId: session!.user.id,
-          major: primaryMajor!,
+          program: primaryMajor!,
         });
         const ids = res.map((p) => p.id);
         // set defaultPlannerId to the first default planner id of the newly selected primary major

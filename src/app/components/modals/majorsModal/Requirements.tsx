@@ -1,7 +1,7 @@
 import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { StoredCourse } from "@/app/types/Course";
-import { Major } from "@/app/types/Major";
+import { Program } from "@/app/types/Program";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
 import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
@@ -33,12 +33,12 @@ export function Requirements({
   hasEditPermission,
   onClickEdit,
 }: {
-  major: Major;
+  major: Program;
   requirements: RequirementList;
   parents: number;
   hideTitle: boolean;
   hasEditPermission?: boolean;
-  onClickEdit?: (major: Major) => void;
+  onClickEdit?: (major: Program) => void;
 }) {
   const { mode } = useColorScheme();
 
@@ -138,7 +138,7 @@ export function RequirementsEditing({
   requirements,
   parents,
 }: {
-  major: Major;
+  major: Program;
   requirements: RequirementList;
   parents: number;
 }) {
@@ -392,7 +392,7 @@ function RequirementLists({
   requirements,
   parents,
 }: {
-  major: Major;
+  major: Program;
   requirements: RequirementList;
   parents: number;
 }) {

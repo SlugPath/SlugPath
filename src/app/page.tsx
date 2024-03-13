@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import MajorSelectionPage from "./MajorSelectionPage";
-import { getUserProgramsByEmail } from "./actions/major";
+import { getUserProgramsByEmail } from "./actions/program";
 
 export default async function Page() {
   const redirectToPlanner = () => redirect("/planner");

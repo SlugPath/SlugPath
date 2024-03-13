@@ -1,10 +1,10 @@
+import useMajorRequirements from "@/app/hooks/useMajorRequirements";
+import useProgramVerification from "@/app/hooks/useProgramVerification";
 import { useSession } from "next-auth/react";
 import { createContext, useContext } from "react";
 
 import { DefaultPlannerContext } from "../DefaultPlannerProvider";
 import { MajorVerificationContextProps } from "./Types";
-import useMajorRequirements from "./useMajorRequirements";
-import useMajorVerification from "./useMajorVerification";
 
 export const MajorVerificationContext = createContext(
   {} as MajorVerificationContextProps,
@@ -24,8 +24,8 @@ export function MajorVerificationProvider({
     calculateMajorProgressPercentage,
     getRequirementsForMajor,
     findRequirementList,
-    isMajorRequirementsSatisfied,
-  } = useMajorVerification();
+    isMajorRequirementsSatisfied: isProgramRequirementsSatisfied,
+  } = useProgramVerification();
   const { userMajors } = useContext(DefaultPlannerContext);
   const { getLoadingSave, getIsSaved } = useMajorRequirements(
     userMajors,
@@ -35,7 +35,7 @@ export function MajorVerificationProvider({
   return (
     <MajorVerificationContext.Provider
       value={{
-        isMajorRequirementsSatisfied,
+        isMajorRequirementsSatisfied: isProgramRequirementsSatisfied,
         getRequirementsForMajor,
         getLoadingSave,
         getIsSaved,

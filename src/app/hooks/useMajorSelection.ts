@@ -1,50 +1,38 @@
-import { Major, MajorInput } from "@/app/types/Major";
-import { getUserProgramsById, saveUserMajors } from "@actions/major";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { saveUserPrograms } from "@/app/actions/program";
+import { ProgramInput } from "@/app/types/Program";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 
-// TODO: Extract async caching and querying logic from useState ?
-// TODO: Why is there a useQuery and useMutation in the same hook?
+import { useUserPrograms } from "./reactQuery";
 
 /**
- *
- * @param userId a unique id that identifies a user
- * @param onCompleted a callback to invoke upon completion of a query
- * @returns
+ * Hook for updating program selection React Query state
+ * @param onMutateSuccess function to call after program mutation is successful
+ * @returns functions for updating program selection
  */
-export default function useMajorSelection(onSuccess?: () => void) {
-  const [userMajors, setUserMajors] = useState<Major[]>([]);
+export default function useProgramSelection(onMutateSuccess?: () => void) {
+  const queryClient = useQueryClient();
+
   const { data: session } = useSession();
   const userId = session?.user.id;
-  // Update user major data
-  const queryClient = useQueryClient();
-  const { isPending: userMajorsIsLoading } = useQuery({
-    queryKey: ["userMajors", userId],
-    queryFn: async () => {
-      const res = await getUserProgramsById(userId!);
-      setUserMajors(res);
-      return res;
-    },
-    enabled: !!session,
-  });
+
+  const { data: userPrograms, isPending: userProgramsIsLoading } =
+    useUserPrograms(userId!);
 
   const {
-    mutate: saveMajors,
-    isPending: loadingSaveMajor,
-    isError: errorSavingMajor,
+    mutate: savePrograms,
+    isPending: loadingSaveProgram,
+    isError: errorSavingProgram,
   } = useMutation({
     mutationKey: ["saveMajors", userId],
-    mutationFn: async (majors: MajorInput[]) => {
-      const newMajors = await saveUserMajors({
+    mutationFn: async (programs: ProgramInput[]) =>
+      await saveUserPrograms({
         userId: userId!,
-        majors: majors,
-      });
-      setUserMajors(newMajors);
-      return newMajors;
-    },
+        programs,
+      }),
     onSuccess: () => {
-      if (onSuccess) onSuccess();
+      if (onMutateSuccess) onMutateSuccess();
+
       queryClient.refetchQueries({ queryKey: ["userMajors", userId] });
       // need to refetch the primary major because it might be null now
       // if we deleted the current primary major and we need to reflect that in the UI
@@ -53,10 +41,10 @@ export default function useMajorSelection(onSuccess?: () => void) {
   });
 
   return {
-    saveMajors,
-    userMajors,
-    userMajorsIsLoading,
-    loadingSaveMajor,
-    errorSavingMajor,
+    saveMajors: savePrograms,
+    userMajors: userPrograms ?? [],
+    userMajorsIsLoading: userProgramsIsLoading,
+    loadingSaveMajor: loadingSaveProgram,
+    errorSavingMajor: errorSavingProgram,
   };
 }

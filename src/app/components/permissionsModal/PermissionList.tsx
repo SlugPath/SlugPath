@@ -1,19 +1,19 @@
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
-import useMajors from "@/app/hooks/useMajors";
+import { useUnqiuePrograms } from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
-import { Major } from "@customTypes/Major";
+import { Program } from "@/app/types/Program";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
 import { lazy, useContext } from "react";
 
 const PermissionAccordion = lazy(() => import("./PermissionAccordion"));
 
 export interface PermissionsProps {
-  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
-  onRemoveMajorEditPermission: (permission: Permission, major: Major) => void;
+  onAddMajorEditPermission: (permission: Permission, major: Program) => void;
+  onRemoveMajorEditPermission: (permission: Permission, major: Program) => void;
   onRemovePermissions: (permission: Permission) => void;
   onUpdateMajorEditPermissionExpirationDate: (
     permission: Permission,
-    major: Major,
+    major: Program,
     expirationDate: Date,
   ) => void;
 }
@@ -24,7 +24,7 @@ export default function PermissionsList({
   onRemovePermissions,
   onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsProps) {
-  const { majors } = useMajors();
+  const { data: programs } = useUnqiuePrograms();
   const { permissions } = useContext(PermissionsContext);
 
   return (
@@ -35,7 +35,7 @@ export default function PermissionsList({
             <ListItemContent>
               <PermissionAccordion
                 permission={permission}
-                majors={majors}
+                programs={programs}
                 onAddMajorEditPermission={onAddMajorEditPermission}
                 onRemoveMajorEditPermission={onRemoveMajorEditPermission}
                 onRemovePermissions={onRemovePermissions}

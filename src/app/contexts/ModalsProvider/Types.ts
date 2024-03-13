@@ -1,4 +1,4 @@
-import { Major } from "@/app/types/Major";
+import { Program } from "@/app/types/Program";
 import { SetShow, SetState } from "@customTypes/Common";
 import { PlannerData } from "@customTypes/Planner";
 
@@ -14,6 +14,6 @@ export interface ModalsContextProps {
   showMajorRequirementsEditModal: boolean;
   setShowMajorRequirementsEditModal: SetShow;
   courseState: PlannerData;
-  majorToEdit: Major | undefined;
-  setMajorToEdit: SetState<Major | undefined>;
+  majorToEdit: Program | undefined;
+  setMajorToEdit: SetState<Program | undefined>;
 }

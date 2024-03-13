@@ -1,6 +1,6 @@
 import { PermissionsContext } from "@/app/contexts/PermissionsProvider/Provider";
-import { Major } from "@/app/types/Major";
 import { Permission } from "@/app/types/Permission";
+import { Program } from "@/app/types/Program";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -32,19 +32,19 @@ const materialTheme = extendMaterialTheme();
 
 export interface PermissionsAccordionProps {
   permission: Permission;
-  majors: Major[];
-  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
-  onRemoveMajorEditPermission: (permission: Permission, major: Major) => void;
+  programs: Program[];
+  onAddMajorEditPermission: (permission: Permission, major: Program) => void;
+  onRemoveMajorEditPermission: (permission: Permission, major: Program) => void;
   onRemovePermissions: (permission: Permission) => void;
   onUpdateMajorEditPermissionExpirationDate: (
     permission: Permission,
-    major: Major,
+    major: Program,
     expirationDate: Date,
   ) => void;
 }
 export default function PermissionsAccordion({
   permission,
-  majors,
+  programs: majors,
   onAddMajorEditPermission,
   onRemoveMajorEditPermission,
   onRemovePermissions,
@@ -155,15 +155,15 @@ function SelectMajor({
   permission,
   onAddMajorEditPermission,
 }: {
-  majors: Major[];
+  majors: Program[];
   permission: Permission;
-  onAddMajorEditPermission: (permission: Permission, major: Major) => void;
+  onAddMajorEditPermission: (permission: Permission, major: Program) => void;
 }) {
-  const [value, setValue] = useState<Major | null>(null);
+  const [value, setValue] = useState<Program | null>(null);
 
   function onChange(
     _: SyntheticEvent<Element, Event> | null,
-    newValue: Major | null,
+    newValue: Program | null,
   ) {
     if (newValue) {
       onAddMajorEditPermission(permission, newValue);
