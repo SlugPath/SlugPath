@@ -68,7 +68,6 @@ export default function CustomCourseSelection() {
               and classes taken outside of UCSC
             </div>
           }
-          // title="
           variant="soft"
         >
           <HelpOutline style={{ fontSize: "22px" }} />

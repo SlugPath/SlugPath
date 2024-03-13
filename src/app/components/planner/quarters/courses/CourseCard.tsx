@@ -14,7 +14,15 @@ import { CourseTerm, StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import { WarningAmberRounded } from "@mui/icons-material";
-import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
+import {
+  Card,
+  CardContent,
+  CssVarsProvider,
+  Grid,
+  Link,
+  Typography,
+  extendTheme,
+} from "@mui/joy";
 import { useContext, useState } from "react";
 
 import CourseLabel from "./CourseLabel";
@@ -26,6 +34,12 @@ export interface CourseCardProps {
   provided?: DraggableProvided;
   quarterId?: string;
   customDeleteCourse?: () => void;
+}
+
+declare module "@mui/joy/Card" {
+  interface CardPropsColorOverrides {
+    custom: true;
+  }
 }
 
 export default function CourseCard({
@@ -49,6 +63,24 @@ export default function CourseCard({
   });
   const isEnrolledCourse = quarterId !== undefined;
 
+  const theme = extendTheme({
+    components: {
+      JoyCard: {
+        styleOverrides: {
+          root: ({ ownerState, theme }) => ({
+            ...(ownerState.color === "custom" && {
+              invertedColors: true,
+              backgroundColor: "#E6E6FA", //lavender
+              [theme.getColorSchemeSelector("dark")]: {
+                backgroundColor: "#231645",
+              },
+            }),
+          }),
+        },
+      },
+    },
+  });
+
   function handleShowCourseInfoModal(course: StoredCourse) {
     const courseTerm = [
       course,
@@ -60,7 +92,7 @@ export default function CourseCard({
 
   function cardColor() {
     if (isCustomCourse(course)) {
-      return "warning";
+      return "custom";
     } else if (isEnrolledCourse) {
       return "primary";
     } else {
@@ -77,53 +109,63 @@ export default function CourseCard({
   }
 
   return (
-    <Card
-      ref={provided?.innerRef}
-      {...provided?.draggableProps}
-      {...provided?.dragHandleProps}
-      size="sm"
-      variant="soft"
-      color={cardColor()}
-      className="hover:opacity-50"
-      style={{
-        ...getItemStyle(provided?.draggableProps.style),
-        height: "35px",
-        justifyContent: "center",
-      }}
-      onMouseEnter={() => setHighlighted(true)}
-      onMouseLeave={() => setHighlighted(false)}
-    >
-      <CardContent>
-        <Grid container alignItems="center" justifyContent="start" spacing={1}>
-          <Grid xs={10} className="flex flex-row whitespace-nowrap">
-            <Title
-              course={course}
-              onShowCourseInfoModal={handleShowCourseInfoModal}
-              quarterId={quarterId}
-            />
-            <CourseLabelList labels={getCourseLabels(course)} ge={course.ge} />
-          </Grid>
-          <Grid xs={1}>
-            {quarterId !== undefined && (
-              <CloseIconButton
-                onClick={() => handleDeleteCourse(quarterId, index)}
-                sx={{
-                  visibility: highlighted ? "visible" : "hidden",
-                }}
+    <CssVarsProvider theme={theme}>
+      <Card
+        ref={provided?.innerRef}
+        {...provided?.draggableProps}
+        {...provided?.dragHandleProps}
+        size="sm"
+        variant="soft"
+        color={cardColor()}
+        className="hover:opacity-50"
+        style={{
+          ...getItemStyle(provided?.draggableProps.style),
+          height: "35px",
+          justifyContent: "center",
+        }}
+        onMouseEnter={() => setHighlighted(true)}
+        onMouseLeave={() => setHighlighted(false)}
+      >
+        <CardContent>
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="start"
+            spacing={1}
+          >
+            <Grid xs={10} className="flex flex-row whitespace-nowrap">
+              <Title
+                course={course}
+                onShowCourseInfoModal={handleShowCourseInfoModal}
+                quarterId={quarterId}
               />
-            )}
-            {isCustom && (
-              <CloseIconButton
-                onClick={() => handleRemoveCustom(index)}
-                sx={{
-                  visibility: highlighted ? "visible" : "hidden",
-                }}
+              <CourseLabelList
+                labels={getCourseLabels(course)}
+                ge={course.ge}
               />
-            )}
+            </Grid>
+            <Grid xs={1}>
+              {quarterId !== undefined && (
+                <CloseIconButton
+                  onClick={() => handleDeleteCourse(quarterId, index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              )}
+              {isCustom && (
+                <CloseIconButton
+                  onClick={() => handleRemoveCustom(index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </CssVarsProvider>
   );
 }
 
