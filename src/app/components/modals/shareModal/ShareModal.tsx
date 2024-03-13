@@ -7,6 +7,7 @@ import {
   ModalClose,
   Sheet,
   Snackbar,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import { useContext, useState } from "react";
@@ -40,7 +41,7 @@ export default function ShareModal() {
         }}
       >
         <Typography level="title-md" className="mx-auto">
-          Copied share planner link to clipboard!
+          Copied planner link to clipboard!
         </Typography>
       </Snackbar>
       <Modal
@@ -71,15 +72,17 @@ export default function ShareModal() {
             mb={1}
             textAlign={"center"}
           >
-            Share This Planner
+            Share this planner
           </Typography>
           <div className="my-5 flex flex-row items-center">
-            <IconButton onClick={() => handleCopyToClipboard()}>
-              <ContentCopy
-                className="dark:fill-white"
-                style={{ color: "black" }}
-              />
-            </IconButton>
+            <Tooltip title="Copy share planner link">
+              <IconButton onClick={() => handleCopyToClipboard()}>
+                <ContentCopy
+                  className="dark:fill-white"
+                  style={{ color: "black" }}
+                />
+              </IconButton>
+            </Tooltip>
             <Typography
               variant="soft"
               className="ml-2 p-2 w-full rounded-lg bg-black"
