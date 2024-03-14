@@ -11,6 +11,7 @@ import {
   Sheet,
   Typography,
 } from "@mui/joy";
+import { CircularProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 
@@ -27,23 +28,15 @@ export default function ReplaceRequirementsModal() {
     MajorVerificationContext,
   );
 
-  const { data: requirementLists, refetch: refetchRequirementLists } = useQuery(
-    {
-      queryKey: ["getAllRequirementLists"],
-      queryFn: async () => await getAllRequirementLists(),
-    },
-  );
-
-  // const { data, isLoading: loading } = useQuery({
-  //   queryKey: ["course", course?.departmentCode, course?.number],
-  //   queryFn: async () =>
-  //     await courseInfo({
-  //       departmentCode: course!.departmentCode,
-  //       number: course!.number,
-  //     }),
-  //   enabled: course && !isCustomCourse(course),
-  //   staleTime: Infinity,
-  // });
+  const {
+    isLoading: loadingRequirementLists,
+    data: requirementLists,
+    refetch: refetchRequirementLists,
+  } = useQuery({
+    queryKey: ["getAllRequirementLists", showModal],
+    queryFn: async () => await getAllRequirementLists(),
+    enabled: showModal,
+  });
 
   const majorRequirements =
     major !== undefined ? getRequirementsForMajor(major.id) : undefined;
@@ -99,6 +92,7 @@ export default function ReplaceRequirementsModal() {
             handleReplaceRL={handleReplaceRL}
             setShowModal={setShowModal}
           />
+          {loadingRequirementLists && <CircularProgress />}
         </div>
         <ModalClose variant="plain" />
       </Sheet>
