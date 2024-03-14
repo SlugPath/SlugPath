@@ -28,7 +28,6 @@ export function usePlanners() {
       return planners;
     },
     refetchInterval: 1000 * 180,
-    throwOnError: true,
   });
 
   // We have to use a useEffect here because we prefetch the data on the server using react-query
