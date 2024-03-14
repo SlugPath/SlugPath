@@ -87,7 +87,7 @@ export async function getAllRequirementLists(): Promise<RequirementList[]> {
 
   const requirementLists = await Promise.all(
     majors.map(async (major) => {
-      return getMajorRequirements(major.id)
+      return getMajorRequirements(major.id);
     }),
   );
 
