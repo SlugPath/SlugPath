@@ -34,6 +34,17 @@ export default function ReplaceRequirementsModal() {
     },
   );
 
+  // const { data, isLoading: loading } = useQuery({
+  //   queryKey: ["course", course?.departmentCode, course?.number],
+  //   queryFn: async () =>
+  //     await courseInfo({
+  //       departmentCode: course!.departmentCode,
+  //       number: course!.number,
+  //     }),
+  //   enabled: course && !isCustomCourse(course),
+  //   staleTime: Infinity,
+  // });
+
   const majorRequirements =
     major !== undefined ? getRequirementsForMajor(major.id) : undefined;
 
@@ -76,8 +87,7 @@ export default function ReplaceRequirementsModal() {
         <div className="mb-4">
           <Typography level="h4">Replace Current Requirement List</Typography>
           <Typography>
-            Choose a requirement list to replace the current one for `
-            {majorRequirements?.title}`
+            Choose a requirement list to replace `{majorRequirements?.title}`
           </Typography>
         </div>
         <div
