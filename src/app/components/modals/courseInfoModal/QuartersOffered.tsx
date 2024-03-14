@@ -1,4 +1,6 @@
+import { getQuarterColor } from "@/lib/quarterUtils";
 import {
+  Chip,
   Sheet,
   Tab,
   TabList,
@@ -8,48 +10,6 @@ import {
   Typography,
 } from "@mui/joy";
 
-//import { getQuarterColor } from "@/lib/quarterUtils";
-
-/* export default function QuartersOffered({
-  enrollmentInfo,
-}: {
-  enrollmentInfo: Array<{ term: { title: string; catalogYear: string }; instructor: string }>;
-}) {
-  const renderOfferingsForYear = (year: string ) => {
-    const offeringsForYear = enrollmentInfo.filter((e) => e.term.catalogYear === year);
-    return (
-      <div className="flex flex-wrap items-center gap-2" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-      {offeringsForYear.map((offer, index) => (
-        <Chip key={index} color={getQuarterColor(offer.term.title)}>
-          {offer.term.title}, {offer.instructor}
-        </Chip>
-      ))}
-      </div>
-    );
-  };
-
-  const years = ["20-21", "21-22", "22-23", "23-24"];
-
-  return (
-    <div>
-      <Typography component="p">Quarters Offered:</Typography>
-      <Tabs aria-label="Basic tabs" defaultValue={0} size="sm">
-          <TabList>
-              {years.map((year, index) => (
-                  <Tab key={index}> {year}</Tab>
-              ))}
-          </TabList>
-          {years.map((year, index) => (
-              <TabPanel key={index} value={index}>
-              {renderOfferingsForYear(year)}
-              </TabPanel>
-          ))}
-      </Tabs>
-  
-    </div>
-  );
-} */
-
 export default function QuartersOffered({
   enrollmentInfo,
 }: {
@@ -58,95 +18,106 @@ export default function QuartersOffered({
     instructor: string;
   }>;
 }) {
-  const renderOfferingsForYear = (year: string) => {
-    if (!enrollmentInfo) {
-      return null;
-    }
-    const offeringsForYear = enrollmentInfo.filter(
-      (e) => e.term.catalogYear === year,
-    );
-    const quartersMap: Map<
-      string,
-      Array<{ instructor: string; offerings: number }>
-    > = new Map();
-    offeringsForYear.forEach((offer) => {
-      const quarter = offer.term.title;
-      const instructor = offer.instructor;
-      const existingQuarter = quartersMap.get(quarter);
-      if (existingQuarter) {
-        // If the quarter already exists in the map, update the offerings count for the instructor
-        const existingInstructor = existingQuarter.find(
-          (item) => item.instructor === instructor,
-        );
-        if (existingInstructor) {
-          existingInstructor.offerings++;
-        } else {
-          existingQuarter.push({ instructor, offerings: 1 });
-        }
-      } else {
-        // If the quarter doesn't exist in the map, add it along with the instructor and offerings count
-        quartersMap.set(quarter, [{ instructor, offerings: 1 }]);
+  const years = ["20-21", "21-22", "22-23", "23-24"];
+  const quarters = ["Fall", "Winter", "Spring", "Summer"];
+
+  if (!enrollmentInfo) {
+    return null;
+  }
+
+  const getProfessorsForYearAndQuarter = (year: string, quarter: string) => {
+    const professorsSet = new Set<string>();
+    enrollmentInfo.forEach(({ term, instructor }) => {
+      if (term.catalogYear === year && term.title === quarter) {
+        professorsSet.add(instructor);
       }
     });
-
-    if (quartersMap.size === 0) {
-      return null;
-    }
-    return (
-      <Sheet
-        sx={{
-          maxHeight: 300,
-          overflow: "auto",
-        }}
-      >
-        <Table
-          aria-label="table with sticky header"
-          stickyHeader
-          sx={(theme) => ({
-            '& td[scope="Fall"]': { bgcolor: "warning.softBg" },
-            '& td[scope="Winter"]': { bgcolor: "primary.softBg" },
-            '& td[scope="Spring"]': { bgcolor: "success.softBg" },
-            '& td[scope="Summer"]': { bgcolor: "danger.softBg" },
-            "& td": theme.variants.soft.neutral,
-          })}
-        >
-          <thead>
-            <tr>
-              <th scope="col">Quarter</th>
-              <th scope="col">Professor</th>
-              <th scope="col">Number of Offerings</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from(quartersMap.entries()).map(([quarter, instructors]) =>
-              instructors.map(({ instructor, offerings }, index) => (
-                <tr key={`${quarter}-${instructor}-${index}`}>
-                  <td scope={quarter}>{quarter}</td>
-                  <td scope={quarter}>{instructor}</td>
-                  <td scope={quarter}>{offerings}</td>
-                </tr>
-              )),
-            )}
-          </tbody>
-        </Table>
-      </Sheet>
-    );
+    return Array.from(professorsSet);
   };
 
-  const years = ["20-21", "21-22", "22-23", "23-24"];
-
   return (
-    <div>
+    <div style={{ marginBottom: "-0.5rem" }}>
       <Typography component="p">Quarters Offered:</Typography>
-      <Tabs aria-label="Basic tabs" defaultValue={0} size="sm">
-        <TabList>
+      <Tabs
+        aria-label="Basic tabs"
+        defaultValue={0}
+        size="sm"
+        sx={{
+          "--Tab-indicatorThickness": "3px",
+          "--Tabs-spacing": "15px",
+          bgcolor: "background.level1",
+          borderRadius: "sm",
+        }}
+      >
+        <TabList
+          underlinePlacement="bottom"
+          sx={{
+            borderRadius: "0px",
+            /*             bgcolor: 'background.level1',
+            [`& .${tabClasses.root}[aria-selected="true"]`]: {
+              boxShadow: 'sm',
+              bgcolor: 'background.surface',
+            }, */
+          }}
+        >
           {years.map((year, index) => (
-            <Tab key={index}> {year}</Tab>
+            <Tab key={index}> 20{year}</Tab>
           ))}
         </TabList>
         {years.map((year, index) => (
           <TabPanel key={index} value={index}>
-            {renderOfferingsForYear(year)}
+            <Sheet
+              sx={{
+                maxHeight: 300,
+                overflow: "auto",
+              }}
+            >
+              <Table
+                aria-label="table with sticky header"
+                stickyHeader
+                borderAxis="both"
+                sx={(theme) => ({
+                  '& th[scope="col"]': theme.variants.outlined.neutral,
+                })}
+              >
+                <thead>
+                  <tr>
+                    <th scope="col" style={{ width: "10%" }}>
+                      Quarter
+                    </th>
+                    <th scope="col">Professors</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {quarters.map((quarter, index) => (
+                    <tr key={index}>
+                      <td>{quarter}</td>
+                      <td>
+                        <div className="flex justify-start flex-wrap items-center gap-2">
+                          {getProfessorsForYearAndQuarter(year, quarter).map(
+                            (professor, index) => (
+                              <Chip
+                                key={index}
+                                color={getQuarterColor(
+                                  quarter as
+                                    | "Fall"
+                                    | "Winter"
+                                    | "Spring"
+                                    | "Summer",
+                                )}
+                              >
+                                {" "}
+                                {professor}{" "}
+                              </Chip>
+                            ),
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Sheet>
           </TabPanel>
         ))}
       </Tabs>

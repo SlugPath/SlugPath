@@ -1,6 +1,5 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-//import { getQuarterColor } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
 import { courseInfo } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -259,16 +258,6 @@ export default function CourseInfoModal({
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
               <Skeleton loading={enrollLoading}>
-                {/*                 <div className="flex flex-wrap items-center gap-2">
-                  <Typography component="p">Quarters Offered:</Typography>
-                  {enrollmentInfo!.map((e, i) => {
-                    return (
-                      <Chip key={i} color={getQuarterColor(e.term.title)}>
-                        {e.term.title} {e.term.catalogYear}, {e.instructor}
-                      </Chip>
-                    );
-                  })}
-                </div> */}
                 <QuartersOffered enrollmentInfo={enrollmentInfo} />
               </Skeleton>
             </>
