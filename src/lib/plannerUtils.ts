@@ -269,7 +269,7 @@ export function geLabels(ge: string[]): Label[] {
     const geLabel = {
       id: "ge",
       name: "GE",
-      color: LabelColor.GREY,
+      color: LabelColor.GREEN,
     };
     return [geLabel];
   }
