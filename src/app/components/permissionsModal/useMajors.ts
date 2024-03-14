@@ -5,8 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 export default function useMajors() {
   const { data: majors } = useQuery({
     queryKey: ["allMajors"],
-    queryFn: async () => await getMajors(),
-    initialData: [],
+    queryFn: async () => {
+      const m = await getMajors();
+      console.log("got m");
+      console.log(m);
+
+      return m;
+    },
   });
 
   function filterRedundantMajors(majors: Major[]) {
@@ -21,6 +26,6 @@ export default function useMajors() {
   }
 
   return {
-    majors: filterRedundantMajors(majors),
+    majors: majors ? filterRedundantMajors(majors) : [],
   };
 }

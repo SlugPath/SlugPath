@@ -88,7 +88,7 @@ export async function getAllRequirementLists(): Promise<RequirementList[]> {
   const convertedRequirementLists: RequirementList[] = [];
 
   requirementLists.forEach(async (reqList) => {
-    const r = await convertJSONToRequirementList(
+    const r: RequirementList = await convertJSONToRequirementList(
       reqList.requirementList as string,
     );
     convertedRequirementLists.push(r);
