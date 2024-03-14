@@ -1,3 +1,4 @@
+import { getColor } from "@/lib/labels";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { Label } from "@customTypes/Label";
 import { Button, Card, CardContent, Chip, Typography } from "@mui/joy";
@@ -44,14 +45,25 @@ export default function LabelLegend() {
         </Typography>
         <CardContent>
           <div
-            className="flex flex-wrap items-center gap-2"
-            style={{ maxWidth: "300px", maxHeight: "100px", overflowY: "auto" }}
+            className="flex flex-wrap gap-1"
+            style={{
+              maxWidth: "300px",
+              maxHeight: "100px",
+              overflowY: "auto",
+              alignItems: "flex-start",
+            }}
           >
-            <Chip style={{ backgroundColor: "#858D9B" }}>
+            <Chip
+              style={getColor("green")}
+              sx={{ paddingX: "0.5rem", marginX: "0.16rem" }}
+            >
               <div>{"GE"}</div>
             </Chip>
-            {getAllLabels().map((label) => (
-              <div key={label.id}>
+            {getAllLabels().map((label, index) => (
+              <div
+                key={label.id}
+                style={{ marginBottom: index !== 0 ? "0.20rem" : 0 }}
+              >
                 <CourseLabel
                   label={label}
                   displayText={label.name.length > 0}
