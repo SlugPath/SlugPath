@@ -83,18 +83,16 @@ export async function getMajorRequirements(
 }
 
 export async function getAllRequirementLists(): Promise<RequirementList[]> {
-  const requirementLists = await prisma.majorRequirement.findMany();
+  const majors = await prisma.major.findMany();
 
-  const convertedRequirementLists: RequirementList[] = [];
+  const requirementLists = await Promise.all(
+    majors.map(async (major) => {
+      return getMajorRequirements(major.id)
+    }),
+  );
 
-  requirementLists.forEach(async (reqList) => {
-    const r: RequirementList = await convertJSONToRequirementList(
-      reqList.requirementList as string,
-    );
-    convertedRequirementLists.push(r);
-  });
-
-  return convertedRequirementLists;
+  // remove empty requirement lists
+  return requirementLists.filter((reqList) => reqList.requirements.length > 0);
 }
 
 // ==================================================================================
