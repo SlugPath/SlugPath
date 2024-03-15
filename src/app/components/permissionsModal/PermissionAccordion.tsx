@@ -1,11 +1,18 @@
 import {
   useDeleteUserPermissionMutation,
   usePermissions,
+  useUnqiuePrograms,
   useUpdateUserPermissionMutation,
   useUserPermissions,
 } from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
+import { isProgramAlreadyAdded } from "@/lib/permissionsUtils";
+import {
+  addNewProgramToPermissions,
+  removeProgramFromPermissions,
+  updateProgramExpirationDate,
+} from "@/lib/permissionsUtils";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -32,48 +39,92 @@ import { useSession } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
 
 import CloseIconButton from "../buttons/CloseIconButton";
+import ConfirmAlert from "../modals/ConfirmAlert";
 import StyledAccordion from "../planner/StyledAccordion";
 
 const materialTheme = extendMaterialTheme();
 
 export interface PermissionsAccordionProps {
   permission: Permission;
-  programs: Program[];
-  onAddMajorEditPermission: (permission: Permission, major: Program) => void;
-  onRemoveMajorEditPermission: (permission: Permission, major: Program) => void;
-  onRemovePermissions: (permission: Permission) => void;
-  onUpdateMajorEditPermissionExpirationDate: (
-    permission: Permission,
-    major: Program,
-    expirationDate: Date,
-  ) => void;
 }
 
-// TODO: eliminate prop drilling (use react query hooks)
 export default function PermissionsAccordion({
   permission,
-  programs,
-  onAddMajorEditPermission,
-  onRemoveMajorEditPermission,
-  onRemovePermissions,
-  onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsAccordionProps) {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
+  // Modal State
+  const [permissionsAlertOpen, setPermissionsAlertOpen] = useState(false);
+  const [permissionToRemove, setPermissionToRemove] =
+    useState<Permission | null>(null);
+
   // Subscribe to query loading states for permissions
   const { isPending: getPermissionsPending } = usePermissions();
   const { isPending: getUserPermissionsPending } = useUserPermissions(userId);
-  const { isPending: upsertPermissionPending } =
-    useUpdateUserPermissionMutation();
-  const { isPending: removePermissionPending } =
-    useDeleteUserPermissionMutation();
+  const {
+    mutate: updatePermissionMutation,
+    isPending: upsertPermissionPending,
+  } = useUpdateUserPermissionMutation();
+
+  const {
+    mutate: deleteUserPermissionMutation,
+    isPending: removePermissionPending,
+  } = useDeleteUserPermissionMutation();
 
   const isLoading =
     getPermissionsPending ||
     getUserPermissionsPending ||
     upsertPermissionPending ||
     removePermissionPending;
+
+  function handleRemovePermissions(permission: Permission) {
+    setPermissionToRemove(permission);
+    setPermissionsAlertOpen(true);
+  }
+
+  function handleAddProgramEditPermission(
+    permission: Permission,
+    program: Program,
+  ) {
+    if (isProgramAlreadyAdded(program, permission)) return;
+
+    const _permission = addNewProgramToPermissions(program, permission);
+
+    updatePermissionMutation({
+      userId: userId!,
+      permission: _permission,
+    });
+  }
+
+  function handleRemoveMajorEditPermission(
+    permission: Permission,
+    program: Program,
+  ) {
+    const _permission = removeProgramFromPermissions(program.name, permission);
+
+    updatePermissionMutation({
+      userId: userId!,
+      permission: _permission,
+    });
+  }
+
+  function handleUpdateMajorEditPermissionExpirationDate(
+    permission: Permission,
+    program: Program,
+    expirationDate: Date,
+  ) {
+    const _permission = updateProgramExpirationDate(
+      program,
+      expirationDate,
+      permission,
+    );
+
+    updatePermissionMutation({
+      userId: userId!,
+      permission: _permission,
+    });
+  }
 
   return (
     <StyledAccordion>
@@ -82,12 +133,23 @@ export default function PermissionsAccordion({
           <Typography>{permission.userEmail}</Typography>
           <Button
             color="danger"
-            onClick={() => onRemovePermissions(permission)}
+            onClick={() => handleRemovePermissions(permission)}
             loading={isLoading}
           >
             Remove
           </Button>
         </div>
+        <ConfirmAlert
+          open={permissionsAlertOpen}
+          onClose={() => setPermissionsAlertOpen(false)}
+          onConfirm={() =>
+            deleteUserPermissionMutation({
+              userId: userId!,
+              userEmail: permissionToRemove!.userEmail,
+            })
+          }
+          dialogText="Are you sure you want remove this permission?"
+        />
       </AccordionSummary>
       <AccordionDetails>
         <List>
@@ -121,7 +183,7 @@ export default function PermissionsAccordion({
                                 value={programEditPerm.expirationDate}
                                 slotProps={{ textField: { size: "small" } }}
                                 onChange={(date) =>
-                                  onUpdateMajorEditPermissionExpirationDate(
+                                  handleUpdateMajorEditPermissionExpirationDate(
                                     permission,
                                     program,
                                     date!,
@@ -135,7 +197,7 @@ export default function PermissionsAccordion({
                     </div>
                     <CloseIconButton
                       onClick={() =>
-                        onRemoveMajorEditPermission(permission, program)
+                        handleRemoveMajorEditPermission(permission, program)
                       }
                     />
                   </Card>
@@ -145,9 +207,8 @@ export default function PermissionsAccordion({
           })}
         </List>
         <SelectProgram
-          programs={programs}
           permission={permission}
-          onAddProgramEditPermission={onAddMajorEditPermission}
+          onAddProgramEditPermission={handleAddProgramEditPermission}
         />
       </AccordionDetails>
     </StyledAccordion>
@@ -174,14 +235,14 @@ function ExpirationLabel({ expirationDate }: { expirationDate: Date }) {
 }
 
 function SelectProgram({
-  programs,
   permission,
   onAddProgramEditPermission,
 }: {
-  programs: Program[];
   permission: Permission;
   onAddProgramEditPermission: (permission: Permission, major: Program) => void;
 }) {
+  const { data: programs } = useUnqiuePrograms();
+
   const [value, setValue] = useState<Program | null>(null);
 
   function onChange(
@@ -200,13 +261,14 @@ function SelectProgram({
       placeholder="Add a program..."
       variant="plain"
       onChange={onChange}
-      disabled={programs.length == 0}
+      disabled={programs && programs.length == 0}
     >
-      {programs.map((program, index) => (
-        <Option key={index} value={program}>
-          {program.name} {program.programType == "Minor" ? "(Minor)" : ""}
-        </Option>
-      ))}
+      {programs &&
+        programs.map((program, index) => (
+          <Option key={index} value={program}>
+            {program.name} {program.programType == "Minor" ? "(Minor)" : ""}
+          </Option>
+        ))}
     </Select>
   );
 }

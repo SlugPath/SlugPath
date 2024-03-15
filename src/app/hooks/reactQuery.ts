@@ -279,6 +279,9 @@ export function useUpdateUserPermissionMutation() {
       queryClient.invalidateQueries({
         queryKey: ["userPermissions", userId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["permissions"],
+      });
     },
   });
 }
@@ -296,6 +299,9 @@ export function useDeleteUserPermissionMutation() {
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({
         queryKey: ["userPermissions", userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["permissions"],
       });
     },
   });

@@ -3,16 +3,7 @@ import {
   usePermissions,
   useUpdateUserPermissionMutation,
 } from "@/app/hooks/reactQuery";
-import { Permission } from "@/app/types/Permission";
-import { Program } from "@/app/types/Program";
-import {
-  addNewProgramToPermissions,
-  isProgramAlreadyAdded,
-  isUserAlreadyAdded,
-  removeProgramFromPermissions,
-  sortPermissions,
-  updateProgramExpirationDate,
-} from "@/lib/permissionsUtils";
+import { isUserAlreadyAdded, sortPermissions } from "@/lib/permissionsUtils";
 import { isValidEmail } from "@/lib/utils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import ReportIcon from "@mui/icons-material/Report";
@@ -30,7 +21,6 @@ import { useSession } from "next-auth/react";
 import { useContext, useState } from "react";
 
 import IsSatisfiedMark from "../miscellaneous/IsSatisfiedMark";
-import ConfirmAlert from "../modals/ConfirmAlert";
 import PermissionList from "./PermissionList";
 
 export default function PermissionsModal() {
@@ -38,17 +28,13 @@ export default function PermissionsModal() {
   const userId = session?.user.id;
 
   // Modal context
+  // TODO: Remove context
   const { showPermissionsModal, setShowPermissionsModal } =
     useContext(ModalsContext);
 
   // Input state
   const [email, setEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-
-  // Modal State
-  const [permissionsAlertOpen, setPermissionsAlertOpen] = useState(false);
-  const [permissionToRemove, setPermissionToRemove] =
-    useState<Permission | null>(null);
 
   // Fetch permissions
   const { data: permissions, isPending: getPermissionsPending } =
@@ -60,11 +46,9 @@ export default function PermissionsModal() {
     mutate: updatePermissionMutation,
   } = useUpdateUserPermissionMutation();
 
-  // Delete permissions
-  const {
-    isPending: deletePermissionsPending,
-    mutate: deletePermissionsMutation,
-  } = useDeleteUserPermissionMutation();
+  // Delete permissions loading state
+  const { isPending: deletePermissionsPending } =
+    useDeleteUserPermissionMutation();
 
   const isPending =
     getPermissionsPending ||
@@ -72,8 +56,6 @@ export default function PermissionsModal() {
     deletePermissionsPending;
 
   const isSaved = updatePermissionMutationPending || deletePermissionsPending;
-
-  // Handlers
 
   function handleAddUser() {
     if (isUserAlreadyAdded(email, permissions)) {
@@ -91,54 +73,6 @@ export default function PermissionsModal() {
       permission: { userEmail: email, majorEditingPermissions: [] },
     });
     setEmail("");
-  }
-
-  function handleConfirmRemovePermissions(permission: Permission) {
-    setPermissionToRemove(permission);
-    setPermissionsAlertOpen(true);
-  }
-
-  function handleAddMajorEditPermission(
-    permission: Permission,
-    program: Program,
-  ) {
-    if (isProgramAlreadyAdded(program, permission)) return;
-
-    const _permission = addNewProgramToPermissions(program, permission);
-
-    updatePermissionMutation({
-      userId: userId!,
-      permission: _permission,
-    });
-  }
-
-  function handleRemoveMajorEditPermission(
-    permission: Permission,
-    program: Program,
-  ) {
-    const _permission = removeProgramFromPermissions(program.name, permission);
-
-    updatePermissionMutation({
-      userId: userId!,
-      permission: _permission,
-    });
-  }
-
-  function handleUpdateMajorEditPermissionExpirationDate(
-    permission: Permission,
-    program: Program,
-    expirationDate: Date,
-  ) {
-    const _permission = updateProgramExpirationDate(
-      program,
-      expirationDate,
-      permission,
-    );
-
-    updatePermissionMutation({
-      userId: userId!,
-      permission: _permission,
-    });
   }
 
   return (
@@ -196,28 +130,10 @@ export default function PermissionsModal() {
                 {isPending && <CircularProgress />}
               </div>
             </div>
-            <PermissionList
-              onAddMajorEditPermission={handleAddMajorEditPermission}
-              onRemoveMajorEditPermission={handleRemoveMajorEditPermission}
-              onRemovePermissions={handleConfirmRemovePermissions}
-              onUpdateMajorEditPermissionExpirationDate={
-                handleUpdateMajorEditPermissionExpirationDate
-              }
-            />
+            <PermissionList />
           </div>
         </div>
         <ModalClose variant="plain" sx={{ m: 1 }} />
-        <ConfirmAlert
-          open={permissionsAlertOpen}
-          onClose={() => setPermissionsAlertOpen(false)}
-          onConfirm={() =>
-            deletePermissionsMutation({
-              userId: userId!,
-              userEmail: permissionToRemove!.userEmail,
-            })
-          }
-          dialogText="Are you sure you want remove this permission?"
-        />
       </Sheet>
     </Modal>
   );
