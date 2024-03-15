@@ -23,7 +23,7 @@ import { useContext, useState } from "react";
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
 import MoreEnrollInfo from "./MoreEnrollInfo";
-import QuartersOffered from "./QuartersOffered";
+import QuartersOfferedTable from "./QuartersOfferedTable";
 import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
@@ -258,7 +258,10 @@ export default function CourseInfoModal({
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
               <Skeleton loading={enrollLoading}>
-                <QuartersOffered enrollmentInfo={enrollmentInfo} />
+                <Typography component="p">Quarters Offered:</Typography>
+                {enrollmentInfo && enrollmentInfo.length > 0 && (
+                  <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />
+                )}
               </Skeleton>
             </>
           ) : (
