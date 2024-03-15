@@ -258,7 +258,6 @@ export default function CourseInfoModal({
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
               <Skeleton loading={enrollLoading}>
-                <Typography component="p">Quarters Offered:</Typography>
                 {enrollmentInfo && enrollmentInfo.length > 0 && (
                   <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />
                 )}

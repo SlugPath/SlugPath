@@ -1,5 +1,14 @@
 import { getQuarterColor } from "@/lib/quarterUtils";
-import { Chip, Sheet, Tab, TabList, TabPanel, Table, Tabs } from "@mui/joy";
+import {
+  Chip,
+  Sheet,
+  Tab,
+  TabList,
+  TabPanel,
+  Table,
+  Tabs,
+  Typography,
+} from "@mui/joy";
 
 export default function QuartersOfferedTable({
   enrollmentInfo,
@@ -32,7 +41,8 @@ export default function QuartersOfferedTable({
   const quarters = ["Fall", "Winter", "Spring", "Summer"];
 
   return (
-    <div style={{ marginTop: "-0.25rem", marginBottom: "0.25rem" }}>
+    <div style={{ marginBottom: "0.25rem" }}>
+      <Typography component="p">Quarters Offered:</Typography>
       <Tabs
         aria-label="Basic tabs"
         defaultValue={0}
