@@ -5,7 +5,7 @@ import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
 
 import { Binder, Requirement, RequirementList } from "../types/Requirements";
-import { courseInfo } from "./course";
+import { getCourseInfo } from "./course";
 import { userHasProgramEditPermission } from "./permissions";
 
 export async function saveMajorRequirements(
@@ -116,7 +116,7 @@ async function convertJSONToRequirementList(requirementListJSON: string) {
   const requirementList = JSON.parse(requirementListJSON) as RequirementList;
 
   return await requirementListMapper(async (req) => {
-    const course = await courseInfo({
+    const course = await getCourseInfo({
       departmentCode: req.departmentCode,
       number: req.number,
     });

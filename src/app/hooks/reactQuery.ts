@@ -3,6 +3,7 @@ import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { getSuggestedCourses } from "../actions/course";
 import {
   removePermission as deletePermission,
   getPermissions,
@@ -10,7 +11,11 @@ import {
   getUserRole,
   replacePermission,
 } from "../actions/permissions";
-import { getPlannerById, getUserPlannersByEmail } from "../actions/planner";
+import {
+  getPlannerById,
+  getUserPlanners,
+  updateUserPlanners,
+} from "../actions/planner";
 import {
   getProgramDefaultPlanners,
   getPrograms,
@@ -18,10 +23,11 @@ import {
   getUserDefaultPlannerId,
   getUserPrimaryProgram,
   getUserProgramsById,
-  saveUserPrograms,
   updateUserDefaultPlanner,
+  updateUserPrograms,
 } from "../actions/program";
 import { Permission } from "../types/Permission";
+import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
 
 /**
@@ -108,7 +114,7 @@ export function useUpdateUserProgramsMutation() {
 
   return useMutation({
     mutationFn: async (params: { userId: string; programs: ProgramInput[] }) =>
-      await saveUserPrograms(params),
+      await updateUserPrograms(params),
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: ["userPrograms", userId] });
 
@@ -125,14 +131,30 @@ export function useUpdateUserProgramsMutation() {
  * @param email user email
  * @returns React Query useQuery Hook for all planners
  */
-export function usePlanners(email: string | undefined) {
+export function usePlanners(userId: string | undefined) {
   return useQuery({
-    queryKey: ["planners", email],
-    queryFn: async () => await getUserPlannersByEmail(email!),
+    queryKey: ["planners", userId],
+    queryFn: async () => await getUserPlanners(userId!),
     refetchInterval: 1000 * 180,
     placeholderData: [],
     throwOnError: true,
-    enabled: !!email,
+    enabled: !!userId,
+  });
+}
+
+/**
+ * A React Query hook to update all user planners
+ * @returns React Query useMutation Hook for updating all user planners
+ */
+export function useUpdatePlannersMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { userId: string; planners: PlannerData[] }) =>
+      await updateUserPlanners(params),
+    onSuccess: (_, { userId }) => {
+      queryClient.invalidateQueries({ queryKey: ["planners", userId] });
+    },
   });
 }
 
@@ -330,5 +352,18 @@ export function useUserRole(userId: string | undefined) {
     queryKey: ["userRole", userId],
     queryFn: async () => await getUserRole(userId!),
     enabled: !!userId,
+  });
+}
+
+/**
+ * A React Query hook to fetch suggested courses based on course titles
+ * @param titles Course titles to get suggested classes for
+ * @returns React Query useQuery Hook for courses that match the specified titles
+ */
+export function useSuggestedCourses(titles: string[]) {
+  return useQuery({
+    queryKey: ["suggestedCourses", titles],
+    queryFn: async () => await getSuggestedCourses(titles),
+    enabled: titles.length > 0,
   });
 }

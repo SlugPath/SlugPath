@@ -200,7 +200,7 @@ export async function getUserProgramsById(
  * @param programs programs to save
  * @returns updated majors
  */
-export async function saveUserPrograms({
+export async function updateUserPrograms({
   userId,
   programs,
 }: {

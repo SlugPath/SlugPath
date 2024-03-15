@@ -1,4 +1,4 @@
-import { saveUserPrograms } from "@/app/actions/program";
+import { updateUserPrograms } from "@/app/actions/program";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
 import prisma from "@/lib/prisma";
@@ -233,14 +233,14 @@ describe("Permissions Actions", () => {
     });
 
     beforeEach(async () => {
-      await saveUserPrograms({
+      await updateUserPrograms({
         userId: user!.id,
         majors: [newMajor],
       });
     });
 
     afterAll(async () => {
-      await saveUserPrograms({
+      await updateUserPrograms({
         userId: user!.id,
         majors: [],
       });

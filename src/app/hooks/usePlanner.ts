@@ -20,6 +20,7 @@ export default function usePlanner(input: {
   order: number;
 }) {
   const { getPlanner, setPlanner } = useContext(PlannersContext);
+
   const courseState = getPlanner
     ? getPlanner(input.plannerId)
     : initialPlanner();
@@ -35,6 +36,7 @@ export default function usePlanner(input: {
     () => getTotalCredits(courseState.courses!),
     [courseState],
   );
+
   const geSatisfied = useMemo(() => getGeSatisfied(courseState), [courseState]);
 
   /**

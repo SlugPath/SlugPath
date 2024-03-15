@@ -74,13 +74,14 @@ async function createPlanner(
  * @param param userId and planner data
  * @returns planner id of the updated planner
  */
-export async function saveAllUserPlanners({
+export async function updateUserPlanners({
   userId,
   planners,
 }: {
   userId: string;
   planners: PlannerData[];
 }): Promise<void> {
+  console.log("updateUserPlanners", userId, planners);
   await prisma.$transaction(async (tx) => {
     await tx.planner.deleteMany({
       where: {
@@ -104,23 +105,14 @@ export async function saveAllUserPlanners({
 
 /**
  * Retrieves all planners for a user, sorted by `order` field in asc order.
- * @param email user email
+ * @param userId user email
  * @returns a list of planner titles and ids belonging to a user
  */
-export async function getUserPlannersByEmail(
-  email: string,
-): Promise<PlannerData[]> {
-  const user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
-
-  if (!user) return [];
-
+export async function getUserPlanners(userId: string): Promise<PlannerData[]> {
+  console.log("getUserPlanners", userId);
   const plans = await prisma.planner.findMany({
     where: {
-      userId: user.id,
+      userId: userId,
     },
     orderBy: {
       order: "asc",
@@ -139,7 +131,7 @@ export async function getUserPlannersByEmail(
 }
 
 /**
- * Retrieves a single planner for a user by its id
+ * Retrieves a single planner its id
  * @param plannerId planner id
  * @returns a PlannerData instance if it exists, otherwise null
  */
@@ -150,12 +142,12 @@ export async function getPlannerById(plannerId: string | undefined) {
       id: plannerId,
     },
     include: {
+      labels: true,
       quarters: {
         include: {
           courses: true,
         },
       },
-      labels: true,
     },
   });
 

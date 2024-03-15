@@ -2,7 +2,7 @@ import {
   getProgramDefaultPlanners,
   getPrograms,
   getUserProgramsByEmail,
-  saveUserPrograms,
+  updateUserPrograms,
 } from "@/app/actions/program";
 import { Program } from "@/app/types/Program";
 import prisma from "@/lib/prisma";
@@ -116,7 +116,7 @@ describe("Major actions", () => {
 
   afterEach(async () => {
     // Clean up
-    await saveUserPrograms({
+    await updateUserPrograms({
       userId: user!.id,
       majors: [],
     });
@@ -143,7 +143,7 @@ describe("Major actions", () => {
 
     // Update user majors
     const res = removeIdFromMajorOutput(
-      await saveUserPrograms({
+      await updateUserPrograms({
         userId: user!.id,
         majors: majors,
       }),
@@ -162,7 +162,7 @@ describe("Major actions", () => {
     const catalogYear = "2020-2021";
 
     await expect(
-      await saveUserPrograms({
+      await updateUserPrograms({
         userId: user!.id,
         majors: [
           {
@@ -259,14 +259,14 @@ describe("Major actions", () => {
 
     // Update User 1
     expect(
-      await saveUserPrograms({
+      await updateUserPrograms({
         userId: user!.id,
         majors: [majorData],
       }),
     ).toStrictEqual(majorResult);
     // Update User 2
     expect(
-      await saveUserPrograms({
+      await updateUserPrograms({
         userId: user2!.id,
         majors: [majorData],
       }),

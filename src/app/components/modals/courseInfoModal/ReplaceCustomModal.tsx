@@ -1,4 +1,4 @@
-import useClassSuggestions from "@/app/hooks/useClassSuggestions";
+import { useSuggestedCourses } from "@/app/hooks/reactQuery";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
@@ -14,10 +14,12 @@ import {
   Droppable,
 } from "@hello-pangea/dnd";
 import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import CourseInfoModal from "./CourseInfoModal";
+
+const courseNumberRegex = /[A-Z]{2,6} [0-9]{1,3}[A-Z]*/g;
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;
@@ -32,10 +34,19 @@ export default function ReplaceCustomModal({
   onSave,
   customCourse,
 }: ReplaceCustomModalProps) {
-  const { classes, setClasses, suggestedLoading } = useClassSuggestions({
-    isOpen,
-    title: customCourse.title,
-  });
+  // Get all the course numbers from the custom course title
+  const suggestedClasses = Array.from(
+    customCourse.title.toUpperCase().matchAll(courseNumberRegex),
+  ).map((m) => m[0]);
+
+  // Fetch the suggested classes from the database
+  const { data: classes, isLoading: suggestedLoading } =
+    useSuggestedCourses(suggestedClasses);
+
+  // TODO: Mutate classes?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setClasses] = useState<StoredCourse[]>([]);
+
   const { replaceCustomCourse } = useContext(PlannerContext);
   const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourse.id;
 
@@ -50,17 +61,19 @@ export default function ReplaceCustomModal({
     destination: DraggableLocation,
   ) {
     const course = createCourseFromId(draggableId);
-    if (destination.droppableId === droppableId) {
-      // Prevent duplicates
-      if (!classes.find((c) => c.number === course.number)) {
-        setClasses((prev) => [
-          ...prev,
-          {
-            ...course,
-            id: uuidv4(),
-          },
-        ]);
-      }
+    if (destination.droppableId !== droppableId) {
+      return;
+    }
+
+    // Prevent duplicates
+    if (!classes!.find((c) => c.number === course.number)) {
+      setClasses((prev) => [
+        ...prev,
+        {
+          ...course,
+          id: uuidv4(),
+        },
+      ]);
     }
   }
 
@@ -73,7 +86,7 @@ export default function ReplaceCustomModal({
   }
 
   function handleSave() {
-    if (classes.length === 0) {
+    if (!classes || classes.length === 0) {
       return;
     }
     replaceCustomCourse(customCourse.id, classes);
@@ -137,20 +150,21 @@ export default function ReplaceCustomModal({
                         size="sm"
                         className="rounded-md min-h-48"
                       >
-                        {classes.map((course, index) => {
-                          return (
-                            <DraggableCourseCard
-                              key={index}
-                              course={course}
-                              index={index}
-                              draggableId={course.id}
-                              quarterId={droppableId}
-                              isCustom={false}
-                              customDeleteCourse={() => removeCourse(index)}
-                            />
-                          );
-                        })}
-                        {classes.length === 0 && (
+                        {classes &&
+                          classes.map((course, index) => {
+                            return (
+                              <DraggableCourseCard
+                                key={index}
+                                course={course}
+                                index={index}
+                                draggableId={course.id}
+                                quarterId={droppableId}
+                                isCustom={false}
+                                customDeleteCourse={() => removeCourse(index)}
+                              />
+                            );
+                          })}
+                        {classes && classes.length === 0 && (
                           <Typography className="text-gray-400 text-center">
                             Drag official courses here
                           </Typography>

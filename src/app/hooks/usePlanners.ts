@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { saveAllUserPlanners } from "../actions/planner";
+import { updateUserPlanners } from "../actions/planner";
 import { MultiPlanner } from "../contexts/PlannersProvider";
 
 export function usePlannersOld() {
@@ -19,9 +19,8 @@ export function usePlannersOld() {
     },
   );
   const userId = session?.user.id;
-  const email = session?.user.email ?? undefined;
 
-  const { data } = usePlanners(email);
+  const { data } = usePlanners(userId);
 
   // We have to use a useEffect here because we prefetch the data on the server using react-query
   // so we have to set the data result to multiplanner manually
@@ -64,7 +63,7 @@ export function usePlannersOld() {
   const { mutate: saveAll } = useMutation({
     mutationKey: ["savePlanners"],
     mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
-      await saveAllUserPlanners(input);
+      await updateUserPlanners(input);
     },
     onError: (err) => {
       console.error(err);
@@ -87,6 +86,7 @@ export function usePlannersOld() {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
+      console.log("beforeunload, saving planners");
       if (userId) {
         navigator.sendBeacon("/api/planners", JSON.stringify(planners));
       }
