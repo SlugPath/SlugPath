@@ -31,6 +31,7 @@ import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
+import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
@@ -138,7 +139,78 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 geSatisfied={geSatisfied}
                 courseState={courseState}
               />
+              <LabelLegend />
             </div>
+          </div>
+          <div className="overflow-auto w-full flex-grow max-h-full">
+            <AccordionGroup>
+              <div className="space-y-2 overflow-auto min-h-0">
+                <Years yearRange={yearRange} />
+                <div className="my-4">
+                  {courseState.years == MAX_YEARS ? (
+                    <Tooltip title="Cannot add more years.">
+                      <span>
+                        <Button
+                          disabled
+                          fullWidth={true}
+                          size="lg"
+                          startDecorator={<Add />}
+                        >
+                          {" "}
+                          Add Year{" "}
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    <Button
+                      fullWidth={true}
+                      size="lg"
+                      onClick={addYear}
+                      startDecorator={<Add />}
+                    >
+                      Add Year
+                    </Button>
+                  )}
+                </div>
+                <Accordion
+                  variant="soft"
+                  sx={{
+                    borderRadius: "0.5rem",
+                    "&.MuiAccordion-root": {
+                      "& .MuiAccordionSummary-root": {
+                        padding: "0.5rem 0",
+                        paddingX: "0.5rem",
+                      },
+                    },
+                  }}
+                  defaultExpanded={true}
+                  expanded={isExpanded === true}
+                  onChange={(_, expanded) => {
+                    setIsExpanded(expanded ? true : false);
+                  }}
+                >
+                  <AccordionSummary indicator={null}>
+                    {indicatorIcon(isExpanded)}
+                    Notes
+                    <IconButton />
+                  </AccordionSummary>
+                  <AccordionDetails className="mb-3">
+                    <NotesEditor
+                      content={courseState.notes}
+                      onUpdateNotes={updateNotes}
+                    />
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            </AccordionGroup>
+          </div>
+          <div className="flex flex-col self-start gap-3">
+            <PlannerActions />
+            <GraduationProgressCard
+              totalCredits={totalCredits}
+              geSatisfied={geSatisfied}
+              courseState={courseState}
+            />
           </div>
           <Modals />
         </CourseInfoProvider>

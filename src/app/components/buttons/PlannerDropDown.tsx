@@ -34,7 +34,7 @@ export default function PlannerDropDown({
   dropDownClosed,
 }: PlannerDropDownProps) {
   const [open, setOpen] = useState(false);
-  const { setShowExportModal } = useContext(PlannersContext);
+  const { setShowExportModal, setShowShareModal } = useContext(PlannersContext);
 
   const handleOpenChange = useCallback(
     (_: React.SyntheticEvent | null, isOpen: boolean) => {
@@ -99,7 +99,12 @@ export default function PlannerDropDown({
           Download
         </MenuItem>
         {/* FIXME: Need to add the share planner functionality to the dropdown */}
-        <MenuItem onClick={() => alert("Share Button Pressed")}>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowShareModal(true);
+          }}
+        >
           <ListItemDecorator>
             <IosShareIcon />
           </ListItemDecorator>{" "}

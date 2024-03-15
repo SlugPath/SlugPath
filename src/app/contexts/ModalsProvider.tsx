@@ -7,8 +7,6 @@ import { createContext, useContext } from "react";
 import useModals from "../hooks/useModals";
 
 export interface ModalsContextProps {
-  showExportModal: boolean;
-  setShowExportModal: SetShow;
   showMajorsModal: boolean;
   setShowMajorsModal: SetShow;
   showPermissionsModal: boolean;
@@ -26,8 +24,6 @@ export const ModalsContext = createContext({} as ModalsContextProps);
 
 export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
-    showExportModal,
-    setShowExportModal,
     showMajorsModal,
     setShowMajorsModal,
     showPermissionsModal,
@@ -45,8 +41,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   return (
     <ModalsContext.Provider
       value={{
-        showExportModal,
-        setShowExportModal,
         showMajorsModal,
         setShowMajorsModal,
         showPermissionsModal,

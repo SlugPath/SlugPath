@@ -235,14 +235,14 @@ describe("Permissions Actions", () => {
     beforeEach(async () => {
       await updateUserPrograms({
         userId: user!.id,
-        majors: [newMajor],
+        programs: [newMajor],
       });
     });
 
     afterAll(async () => {
       await updateUserPrograms({
         userId: user!.id,
-        majors: [],
+        programs: [],
       });
     });
   });

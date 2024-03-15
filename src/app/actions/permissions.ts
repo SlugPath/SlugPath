@@ -37,7 +37,7 @@ export async function replacePermission({
     }
 
     // Create new permissions
-    const result = tx.permission.upsert({
+    const result = await tx.permission.upsert({
       where: {
         userEmail: permission.userEmail,
       },

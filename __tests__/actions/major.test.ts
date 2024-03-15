@@ -118,7 +118,7 @@ describe("Major actions", () => {
     // Clean up
     await updateUserPrograms({
       userId: user!.id,
-      majors: [],
+      programs: [],
     });
     await prisma.major.deleteMany();
   });
@@ -145,7 +145,7 @@ describe("Major actions", () => {
     const res = removeIdFromMajorOutput(
       await updateUserPrograms({
         userId: user!.id,
-        majors: majors,
+        programs: majors,
       }),
     );
 
@@ -164,7 +164,7 @@ describe("Major actions", () => {
     await expect(
       await updateUserPrograms({
         userId: user!.id,
-        majors: [
+        programs: [
           {
             name,
             catalogYear,
@@ -261,14 +261,14 @@ describe("Major actions", () => {
     expect(
       await updateUserPrograms({
         userId: user!.id,
-        majors: [majorData],
+        programs: [majorData],
       }),
     ).toStrictEqual(majorResult);
     // Update User 2
     expect(
       await updateUserPrograms({
         userId: user2!.id,
-        majors: [majorData],
+        programs: [majorData],
       }),
     ).toStrictEqual(majorResult);
 

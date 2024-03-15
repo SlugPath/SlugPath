@@ -2,7 +2,6 @@ import { Program } from "@/app/types/Program";
 import { useState } from "react";
 
 export default function useModals() {
-  const [showExportModal, setShowExportModal] = useState(false);
   const [showMajorsModal, setShowMajorsModal] = useState(false);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
   const [showReplaceRLModal, setShowReplaceRLModal] = useState(false); // RL = Requirement List
@@ -13,8 +12,6 @@ export default function useModals() {
   );
 
   return {
-    showExportModal,
-    setShowExportModal,
     showMajorsModal,
     setShowMajorsModal,
     showPermissionsModal,

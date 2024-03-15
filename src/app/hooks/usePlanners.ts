@@ -39,6 +39,7 @@ export function usePlannersOld() {
 
   const { data: userDefaultPlanner } = useUserDefaultPlanner(userId);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // Manage window focus
   const [isWindowFocused, setIsWindowFocused] = useState(true);
@@ -215,5 +216,7 @@ export function usePlannersOld() {
     activePlanner,
     showExportModal,
     setShowExportModal,
+    showShareModal,
+    setShowShareModal,
   };
 }

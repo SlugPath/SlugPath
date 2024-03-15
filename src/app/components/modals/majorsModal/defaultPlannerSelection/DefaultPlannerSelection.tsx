@@ -37,6 +37,9 @@ export interface DefaultPlannerSelectionProps {
   isInPlannerPage?: boolean;
 }
 
+// NOTE: This component is currently broken, as setPrimaryMajor has no state.
+// The issue is that the primary major is not stored in the database, so need
+// to make a decision if the state should belong to the client or the server.
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
@@ -64,7 +67,7 @@ export default function DefaultPlannerSelection({
     isPending: updateDefaultPlannerIsPending,
   } = useUpdateUserDefaultPlannerIdMutation();
 
-  // TODO: Deeper issue here. Should be react-query mutation if server state,
+  // TODO: Deeper issue here as mentioned above. Should be react-query mutation if server state,
   // however, no current database storage for primary major. Unclear if this
   // state should be persisted on server, or if it should be stored in local
   // storage.

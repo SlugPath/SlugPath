@@ -1,8 +1,8 @@
+import { SetShow, SetState } from "@customTypes/Common";
 import { PlannerData } from "@customTypes/Planner";
 import { createContext } from "react";
 
 import { usePlannersOld } from "../hooks/usePlanners";
-import { SetState } from "../types/Common";
 
 export interface MultiPlanner {
   planners: PlannerData[];
@@ -22,6 +22,8 @@ export interface PlannersContextProps {
   activePlanner: string | undefined;
   showExportModal: boolean;
   setShowExportModal: SetState<boolean>;
+  showShareModal: boolean;
+  setShowShareModal: SetShow;
 }
 
 export interface PlannersProviderProps {
@@ -44,6 +46,8 @@ export function PlannersProvider({ children }: PlannersProviderProps) {
     activePlanner,
     showExportModal,
     setShowExportModal,
+    showShareModal,
+    setShowShareModal,
   } = usePlannersOld();
 
   return (
@@ -61,6 +65,8 @@ export function PlannersProvider({ children }: PlannersProviderProps) {
         replaceCurrentPlanner,
         duplicatePlanner,
         activePlanner,
+        showShareModal,
+        setShowShareModal,
       }}
     >
       {children}

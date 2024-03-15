@@ -17,14 +17,10 @@ export default function SelectedLabels({
 }) {
   const allLabels = [...geLabels(ge), ...labels];
 
-  if (allLabels.length == 0) return <> </>;
-
   return (
     <div className="flex flex-row items-center justify-start">
       <Typography>Labels:</Typography>
-      <div
-        style={{ overflowX: "auto", display: "flex", scrollbarWidth: "none" }}
-      >
+      <div className="overflow-x-auto flex no-scrollbar">
         <List orientation="horizontal">
           {allLabels.map((label) => (
             <ListItem key={label.id}>
