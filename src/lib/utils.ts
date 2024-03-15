@@ -3,6 +3,7 @@ import { Program } from "@/app/types/Program";
 import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
 /**
  * Zips two arrays together
@@ -124,4 +125,13 @@ export function toStoredCourse({
  */
 export function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
+}
+
+/**
+ * Check if an email is valid
+ * @param email an email to validate
+ * @returns true if the email is valid, false otherwise
+ */
+export function isValidEmail(email: string) {
+  return z.string().email().safeParse(email).success;
 }

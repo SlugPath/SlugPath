@@ -6,8 +6,8 @@ import {
   getPermissions,
   getUserPermissions,
   getUserRole,
-  upsertPermission,
-  userHasMajorEditPermission,
+  replacePermission,
+  userHasProgramEditPermission,
 } from "@actions/permissions";
 import { ProgramType, Role } from "@prisma/client";
 
@@ -103,13 +103,13 @@ describe("Permissions Actions", () => {
   it("should check that other users do not have major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
-    expect(await userHasMajorEditPermission(user!.id, major!.id)).toBe(false);
+    expect(await userHasProgramEditPermission(user!.id, major!.id)).toBe(false);
   });
 
   it("should check that user has major editing permission", async () => {
     const major = await prisma.major.findFirst();
     expect(major).not.toBeNull();
-    expect(await userHasMajorEditPermission(adminUser!.id, major!.id)).toBe(
+    expect(await userHasProgramEditPermission(adminUser!.id, major!.id)).toBe(
       true,
     );
   });
@@ -137,11 +137,11 @@ describe("Permissions Actions", () => {
       ],
     };
     await expect(
-      upsertPermission({ userId: user!.id, permission }),
+      replacePermission({ userId: user!.id, permission }),
     ).rejects.toThrow("User is not an admin");
 
     await expect(
-      upsertPermission({ userId: adminUser!.id, permission }),
+      replacePermission({ userId: adminUser!.id, permission }),
     ).resolves.toEqual(permission);
 
     const allPermissions: Permission[] = await getPermissions();
@@ -177,9 +177,9 @@ describe("Permissions Actions", () => {
       };
 
       expect(
-        await upsertPermission({ userId: adminUser!.id, permission }),
+        await replacePermission({ userId: adminUser!.id, permission }),
       ).toEqual(permission);
-      expect(await userHasMajorEditPermission(adminUser!.id, major!.id)).toBe(
+      expect(await userHasProgramEditPermission(adminUser!.id, major!.id)).toBe(
         false,
       );
     });
@@ -218,16 +218,16 @@ describe("Permissions Actions", () => {
       };
 
       expect(
-        await upsertPermission({ userId: adminUser!.id, permission }),
+        await replacePermission({ userId: adminUser!.id, permission }),
       ).toEqual(permission);
 
-      expect(await userHasMajorEditPermission(user!.id, secondMajor.id)).toBe(
+      expect(await userHasProgramEditPermission(user!.id, secondMajor.id)).toBe(
         false,
       );
     });
 
     it("should return false if user has no permissions but has a major", async () => {
-      expect(await userHasMajorEditPermission(user!.id, newMajor.id)).toBe(
+      expect(await userHasProgramEditPermission(user!.id, newMajor.id)).toBe(
         false,
       );
     });

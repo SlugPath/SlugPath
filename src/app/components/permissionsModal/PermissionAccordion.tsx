@@ -1,4 +1,9 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
+import {
+  useDeleteUserPermissionMutation,
+  usePermissions,
+  useUpdateUserPermissionMutation,
+  useUserPermissions,
+} from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
 import {
@@ -23,7 +28,8 @@ import {
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { SyntheticEvent, useContext, useState } from "react";
+import { useSession } from "next-auth/react";
+import { SyntheticEvent, useState } from "react";
 
 import CloseIconButton from "../buttons/CloseIconButton";
 import StyledAccordion from "../planner/StyledAccordion";
@@ -42,15 +48,32 @@ export interface PermissionsAccordionProps {
     expirationDate: Date,
   ) => void;
 }
+
+// TODO: eliminate prop drilling (use react query hooks)
 export default function PermissionsAccordion({
   permission,
-  programs: majors,
+  programs,
   onAddMajorEditPermission,
   onRemoveMajorEditPermission,
   onRemovePermissions,
   onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsAccordionProps) {
-  const { loadingPermissions } = useContext(PermissionsContext);
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
+  // Subscribe to query loading states for permissions
+  const { isPending: getPermissionsPending } = usePermissions();
+  const { isPending: getUserPermissionsPending } = useUserPermissions(userId);
+  const { isPending: upsertPermissionPending } =
+    useUpdateUserPermissionMutation();
+  const { isPending: removePermissionPending } =
+    useDeleteUserPermissionMutation();
+
+  const isLoading =
+    getPermissionsPending ||
+    getUserPermissionsPending ||
+    upsertPermissionPending ||
+    removePermissionPending;
 
   return (
     <StyledAccordion>
@@ -60,7 +83,7 @@ export default function PermissionsAccordion({
           <Button
             color="danger"
             onClick={() => onRemovePermissions(permission)}
-            loading={loadingPermissions}
+            loading={isLoading}
           >
             Remove
           </Button>
@@ -68,8 +91,8 @@ export default function PermissionsAccordion({
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          {permission.majorEditingPermissions.map((majorEditPerm, index) => {
-            const major = majorEditPerm.major;
+          {permission.majorEditingPermissions.map((programEditPerm, index) => {
+            const program = programEditPerm.major;
 
             return (
               <ListItem key={index}>
@@ -81,12 +104,12 @@ export default function PermissionsAccordion({
                   >
                     <div className="flex flex-row gap-1 items-center justify-between w-full">
                       <Typography>
-                        {major.name}{" "}
-                        {major.programType == "Minor" ? "(Minor)" : ""}
+                        {program.name}{" "}
+                        {program.programType == "Minor" ? "(Minor)" : ""}
                       </Typography>
                       <div className="flex flex-row gap-1 items-center justify-start">
                         <ExpirationLabel
-                          expirationDate={majorEditPerm.expirationDate}
+                          expirationDate={programEditPerm.expirationDate}
                         />
                         <MaterialCssVarsProvider
                           theme={{ [THEME_ID]: materialTheme }}
@@ -95,12 +118,12 @@ export default function PermissionsAccordion({
                           <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <div className="bg-white dark:bg-secondary-800 rounded-md">
                               <DatePicker
-                                value={majorEditPerm.expirationDate}
+                                value={programEditPerm.expirationDate}
                                 slotProps={{ textField: { size: "small" } }}
                                 onChange={(date) =>
                                   onUpdateMajorEditPermissionExpirationDate(
                                     permission,
-                                    major,
+                                    program,
                                     date!,
                                   )
                                 }
@@ -112,7 +135,7 @@ export default function PermissionsAccordion({
                     </div>
                     <CloseIconButton
                       onClick={() =>
-                        onRemoveMajorEditPermission(permission, major)
+                        onRemoveMajorEditPermission(permission, program)
                       }
                     />
                   </Card>
@@ -121,10 +144,10 @@ export default function PermissionsAccordion({
             );
           })}
         </List>
-        <SelectMajor
-          majors={majors}
+        <SelectProgram
+          programs={programs}
           permission={permission}
-          onAddMajorEditPermission={onAddMajorEditPermission}
+          onAddProgramEditPermission={onAddMajorEditPermission}
         />
       </AccordionDetails>
     </StyledAccordion>
@@ -150,14 +173,14 @@ function ExpirationLabel({ expirationDate }: { expirationDate: Date }) {
   );
 }
 
-function SelectMajor({
-  majors,
+function SelectProgram({
+  programs,
   permission,
-  onAddMajorEditPermission,
+  onAddProgramEditPermission,
 }: {
-  majors: Program[];
+  programs: Program[];
   permission: Permission;
-  onAddMajorEditPermission: (permission: Permission, major: Program) => void;
+  onAddProgramEditPermission: (permission: Permission, major: Program) => void;
 }) {
   const [value, setValue] = useState<Program | null>(null);
 
@@ -166,7 +189,7 @@ function SelectMajor({
     newValue: Program | null,
   ) {
     if (newValue) {
-      onAddMajorEditPermission(permission, newValue);
+      onAddProgramEditPermission(permission, newValue);
       setValue(null);
     }
   }
@@ -177,11 +200,11 @@ function SelectMajor({
       placeholder="Add a program..."
       variant="plain"
       onChange={onChange}
-      disabled={majors.length == 0}
+      disabled={programs.length == 0}
     >
-      {majors.map((major, index) => (
-        <Option key={index} value={major}>
-          {major.name} {major.programType == "Minor" ? "(Minor)" : ""}
+      {programs.map((program, index) => (
+        <Option key={index} value={program}>
+          {program.name} {program.programType == "Minor" ? "(Minor)" : ""}
         </Option>
       ))}
     </Select>

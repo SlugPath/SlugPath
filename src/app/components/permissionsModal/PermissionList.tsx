@@ -1,9 +1,9 @@
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
-import { useUnqiuePrograms } from "@/app/hooks/reactQuery";
+import { usePermissions, useUnqiuePrograms } from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
+import { sortPermissions } from "@/lib/permissionsUtils";
 import { AccordionGroup, List, ListItem, ListItemContent } from "@mui/joy";
-import { lazy, useContext } from "react";
+import { lazy } from "react";
 
 const PermissionAccordion = lazy(() => import("./PermissionAccordion"));
 
@@ -25,27 +25,28 @@ export default function PermissionsList({
   onUpdateMajorEditPermissionExpirationDate,
 }: PermissionsProps) {
   const { data: programs } = useUnqiuePrograms();
-  const { permissions } = useContext(PermissionsContext);
+  const { data: permissions } = usePermissions(sortPermissions);
 
   return (
     <AccordionGroup className="w-full h-[70vh] overflow-auto">
       <List className="flex flex-col gap-1">
-        {permissions.map((permission, index) => (
-          <ListItem key={index}>
-            <ListItemContent>
-              <PermissionAccordion
-                permission={permission}
-                programs={programs ?? []}
-                onAddMajorEditPermission={onAddMajorEditPermission}
-                onRemoveMajorEditPermission={onRemoveMajorEditPermission}
-                onRemovePermissions={onRemovePermissions}
-                onUpdateMajorEditPermissionExpirationDate={
-                  onUpdateMajorEditPermissionExpirationDate
-                }
-              />
-            </ListItemContent>
-          </ListItem>
-        ))}
+        {permissions &&
+          permissions.map((permission, index) => (
+            <ListItem key={index}>
+              <ListItemContent>
+                <PermissionAccordion
+                  permission={permission}
+                  programs={programs ?? []}
+                  onAddMajorEditPermission={onAddMajorEditPermission}
+                  onRemoveMajorEditPermission={onRemoveMajorEditPermission}
+                  onRemovePermissions={onRemovePermissions}
+                  onUpdateMajorEditPermissionExpirationDate={
+                    onUpdateMajorEditPermissionExpirationDate
+                  }
+                />
+              </ListItemContent>
+            </ListItem>
+          ))}
       </List>
     </AccordionGroup>
   );

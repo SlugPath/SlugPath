@@ -1,8 +1,20 @@
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
+import {
+  extractUnexpiredPrograms,
+  sortPermissions,
+} from "@/lib/permissionsUtils";
+import { useSession } from "next-auth/react";
+import { useMemo } from "react";
 import { createContext } from "react";
 
-import usePermissions from "../hooks/usePermissions";
+import {
+  useDeleteUserPermissionMutation,
+  usePermissions,
+  useUpdateUserPermissionMutation,
+  useUserPermissions,
+  useUserRole,
+} from "../hooks/reactQuery";
 
 export interface PermissionsContextProps {
   loadingPermissions: boolean;
@@ -21,26 +33,56 @@ export function PermissionsProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
+  // Fetch permissions
+  const { data: permissions, isPending: getPermissionsPending } =
+    usePermissions(sortPermissions);
+
+  // Fetch programsAllowedToEdit
+  const { data: userPermissions, isPending: getUserPermissionsPending } =
+    useUserPermissions(userId);
+
+  const programsAllowedToEdit = useMemo(
+    () => extractUnexpiredPrograms(userPermissions),
+    [userPermissions],
+  );
+
+  // Fetch user role
+  const { data: userRole } = useUserRole(userId);
+  const isAdmin = userRole === "ADMIN";
+
+  // Set permissions
   const {
-    isPending: loadingPermissions,
-    isSaved,
-    permissions,
-    onUpsertPermission,
-    onRemovePermission,
-    isAdmin,
-    majorsAllowedToEdit,
-  } = usePermissions();
+    isPending: upsertPermissionPending,
+    mutate: upsertPermissionMutation,
+  } = useUpdateUserPermissionMutation();
+
+  const {
+    isPending: removePermissionPending,
+    mutate: removePermissionMutation,
+  } = useDeleteUserPermissionMutation();
+
+  const isSaved = !(removePermissionPending || upsertPermissionPending);
+  const isPending =
+    getPermissionsPending ||
+    getUserPermissionsPending ||
+    upsertPermissionPending ||
+    removePermissionPending;
 
   return (
     <PermissionsContext.Provider
       value={{
-        loadingPermissions,
+        loadingPermissions: isPending,
         isSaved,
-        permissions,
-        onUpsertPermission,
-        onRemovePermission,
+        permissions: permissions ?? [],
+        onUpsertPermission: (permission) =>
+          upsertPermissionMutation({ userId: userId!, permission }),
+        onRemovePermission: (userEmail: string) =>
+          removePermissionMutation({ userId: userId!, userEmail }),
         isAdmin,
-        majorsAllowedToEdit,
+        majorsAllowedToEdit: programsAllowedToEdit,
       }}
     >
       {children}

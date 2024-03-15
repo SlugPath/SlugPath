@@ -4,16 +4,14 @@ import { toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import { LabelColor } from "@prisma/client";
 
-import { PlannerData } from "../types/Planner";
+import { PlannerCreateInput, PlannerData } from "../types/Planner";
 
-type PlannerCreateInput = {
-  userId: string;
-  plannerId: string;
-  plannerData: PlannerData;
-  title: string;
-  order: number;
-};
-
+/**
+ * Create a planner for a user
+ * @param tx (transaction) prisma client
+ * @param PlannerCreateInput data needed to create a planner for a user
+ * @returns PlannerData instance
+ */
 async function createPlanner(
   tx: any,
   { userId, plannerId, plannerData, title, order }: PlannerCreateInput,
@@ -72,12 +70,11 @@ async function createPlanner(
 }
 
 /**
- * Creates a planner for a user
- * @param input PlannerCreateInput
+ * Save all planners for a user
+ * @param param userId and planner data
  * @returns planner id of the updated planner
  */
-
-export async function saveAllPlanners({
+export async function saveAllUserPlanners({
   userId,
   planners,
 }: {
@@ -107,10 +104,12 @@ export async function saveAllPlanners({
 
 /**
  * Retrieves all planners for a user, sorted by `order` field in asc order.
- * @param userId user id
+ * @param email user email
  * @returns a list of planner titles and ids belonging to a user
  */
-export async function getAllPlanners(email: string): Promise<PlannerData[]> {
+export async function getUserPlannersByEmail(
+  email: string,
+): Promise<PlannerData[]> {
   const user = await prisma.user.findFirst({
     where: {
       email,
@@ -141,16 +140,9 @@ export async function getAllPlanners(email: string): Promise<PlannerData[]> {
 
 /**
  * Retrieves a single planner for a user by its id
- * @param userId author id
  * @param plannerId planner id
  * @returns a PlannerData instance if it exists, otherwise null
  */
-
-export type PlannerInput = {
-  userId: string;
-  plannerId: string;
-};
-
 export async function getPlannerById(plannerId: string | undefined) {
   if (!plannerId) return null;
   const p = await prisma.planner.findUnique({

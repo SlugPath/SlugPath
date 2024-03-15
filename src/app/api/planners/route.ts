@@ -1,5 +1,5 @@
 import { authOptions } from "@/lib/auth";
-import { saveAllPlanners } from "@actions/planner";
+import { saveAllUserPlanners } from "@actions/planner";
 import { PlannerData } from "@customTypes/Planner";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false });
   }
   const planners = payloadSchema.parse(await request.json());
-  await saveAllPlanners({
+  await saveAllUserPlanners({
     planners,
     userId: session.user.id,
   });

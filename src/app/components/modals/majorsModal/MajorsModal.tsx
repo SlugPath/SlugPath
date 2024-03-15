@@ -2,13 +2,15 @@ import DefaultPlannerSelection from "@/app/components/modals/majorsModal/default
 import UserProgramsEditor from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
-import { useUserPrograms } from "@/app/hooks/reactQuery";
+import { useUserPermissions, useUserPrograms } from "@/app/hooks/reactQuery";
 import { Program } from "@/app/types/Program";
-import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
+import {
+  extractUnexpiredPrograms,
+  hasPermissionToEditProgram,
+} from "@/lib/permissionsUtils";
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useSession } from "next-auth/react";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 import { Requirements } from "./Requirements";
 
@@ -40,6 +42,7 @@ export default function MajorsModal() {
   );
 }
 
+// TODO: Loading states from react-query
 export function MajorAndPlannerSelection({
   isInPlannerPage,
   onSavedDefaultPlanner,
@@ -48,6 +51,7 @@ export function MajorAndPlannerSelection({
   onSavedDefaultPlanner?: () => void;
 }) {
   const { data: session } = useSession();
+  const userId = session?.user.id;
 
   const {
     setShowMajorsModal,
@@ -55,12 +59,17 @@ export function MajorAndPlannerSelection({
     setMajorToEdit,
   } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
-  const { majorsAllowedToEdit } = useContext(PermissionsContext);
 
-  // TODO: test loading
-  const { data: userPrograms } = useUserPrograms(session?.user.id);
+  // Fetch programsAllowedToEdit
+  const { data: userPermissions } = useUserPermissions(userId);
 
-  console.log("userPrograms", userPrograms);
+  const programsAllowedToEdit = useMemo(
+    () => extractUnexpiredPrograms(userPermissions),
+    [userPermissions],
+  );
+
+  // Fetch user programs
+  const { data: userPrograms } = useUserPrograms(userId);
 
   function handleClickEditRequirements(major: Program) {
     setMajorToEdit(major);
@@ -97,9 +106,9 @@ export function MajorAndPlannerSelection({
                   requirements={majorRequirements}
                   parents={0}
                   hideTitle={false}
-                  hasEditPermission={hasPermissionToEditMajor(
+                  hasEditPermission={hasPermissionToEditProgram(
                     program,
-                    majorsAllowedToEdit,
+                    programsAllowedToEdit,
                   )}
                   onClickEdit={handleClickEditRequirements}
                 />

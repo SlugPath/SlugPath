@@ -1,4 +1,4 @@
-import { getAllPlanners } from "@actions/planner";
+import { getUserPlannersByEmail } from "@actions/planner";
 import Planners from "@components/planners/Planners";
 import {
   HydrationBoundary,
@@ -20,7 +20,7 @@ export default async function Home() {
     queryFn: async () => {
       const userEmail = session.user.email ?? "";
       if (userEmail.length === 0) return [];
-      return await getAllPlanners(userEmail);
+      return await getUserPlannersByEmail(userEmail);
     },
   });
 

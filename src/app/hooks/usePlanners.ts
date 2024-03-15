@@ -1,16 +1,17 @@
-import { useUserDefaultPlanner } from "@/app/hooks/reactQuery";
+import { usePlanners, useUserDefaultPlanner } from "@/app/hooks/reactQuery";
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
-import { getAllPlanners, saveAllPlanners } from "@actions/planner";
 import { PlannerData } from "@customTypes/Planner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import { saveAllUserPlanners } from "../actions/planner";
 import { MultiPlanner } from "../contexts/PlannersProvider";
 
-export function usePlanners() {
+export function usePlannersOld() {
   const { data: session } = useSession();
+
   const [{ planners, activePlanner }, setMultiPlanner] = useState<MultiPlanner>(
     {
       planners: [],
@@ -18,18 +19,9 @@ export function usePlanners() {
     },
   );
   const userId = session?.user.id;
+  const email = session?.user.email ?? undefined;
 
-  const { data } = useQuery({
-    queryKey: ["planners"],
-    queryFn: async () => {
-      const userEmail = session?.user.email ?? "";
-      if (userEmail.length == 0) return [];
-      const planners = await getAllPlanners(userEmail);
-      return planners;
-    },
-    refetchInterval: 1000 * 180,
-    throwOnError: true,
-  });
+  const { data } = usePlanners(email);
 
   // We have to use a useEffect here because we prefetch the data on the server using react-query
   // so we have to set the data result to multiplanner manually
@@ -72,7 +64,7 @@ export function usePlanners() {
   const { mutate: saveAll } = useMutation({
     mutationKey: ["savePlanners"],
     mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
-      await saveAllPlanners(input);
+      await saveAllUserPlanners(input);
     },
     onError: (err) => {
       console.error(err);

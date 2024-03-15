@@ -2,7 +2,7 @@ import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
 import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
 import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import {
-  useUpdateUserDefaultPlannerId,
+  useUpdateUserDefaultPlannerIdMutation,
   useUserDefaultPlannerId,
   useUserPrimaryProgram,
   useUserProgramDefaultPlanners,
@@ -62,7 +62,7 @@ export default function DefaultPlannerSelection({
   const {
     mutate: updateDefaultPlanner,
     isPending: updateDefaultPlannerIsPending,
-  } = useUpdateUserDefaultPlannerId();
+  } = useUpdateUserDefaultPlannerIdMutation();
 
   // TODO: Deeper issue here. Should be react-query mutation if server state,
   // however, no current database storage for primary major. Unclear if this

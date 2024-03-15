@@ -1,6 +1,6 @@
 import {
   useProgramTypeOfYear,
-  useSaveUserPrograms,
+  useUpdateUserProgramsMutation,
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
 import { Program } from "@/app/types/Program";
@@ -37,7 +37,7 @@ export default function UserProgramsEditor() {
 
   // Iniitialize hook to save user majors and minors later
   const { mutate: savePrograms, isError: saveProgramsIsError } =
-    useSaveUserPrograms();
+    useUpdateUserProgramsMutation();
 
   function handleRemoveProgram(programId: number) {
     const _programs = userPrograms
@@ -122,7 +122,7 @@ function AddProgramInputs() {
 
   // Iniitialize hook to save user programs later
   const { mutate: savePrograms, isPending: saveProgramsIsLoading } =
-    useSaveUserPrograms();
+    useUpdateUserProgramsMutation();
 
   // Add a major to the user's list of majors
   function handleAddMajor() {

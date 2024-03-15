@@ -3,7 +3,14 @@ import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getPlannerById } from "../actions/planner";
+import {
+  removePermission as deletePermission,
+  getPermissions,
+  getUserPermissions,
+  getUserRole,
+  replacePermission,
+} from "../actions/permissions";
+import { getPlannerById, getUserPlannersByEmail } from "../actions/planner";
 import {
   getProgramDefaultPlanners,
   getPrograms,
@@ -14,6 +21,7 @@ import {
   saveUserPrograms,
   updateUserDefaultPlanner,
 } from "../actions/program";
+import { Permission } from "../types/Permission";
 import { Program, ProgramInput } from "../types/Program";
 
 /**
@@ -95,22 +103,36 @@ export function useUserPrimaryProgram(userId: string | undefined) {
  * @param userId unique id that identifies a user
  * @returns React Query useMutation Hook for saving user programs
  */
-export function useSaveUserPrograms() {
+export function useUpdateUserProgramsMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["savePrograms"], // QUESTION: needs userId? Necessary at all?
     mutationFn: async (params: { userId: string; programs: ProgramInput[] }) =>
       await saveUserPrograms(params),
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: ["userPrograms", userId] });
 
-      // NOTE: need to refetch the primary major because it might be null now
-      // if we deleted the current primary major and we need to reflect that in the UI
+      // NOTE: userPrimaryProgram may change after saving programs
       queryClient.invalidateQueries({
         queryKey: ["userPrimaryProgram", userId],
       });
     },
+  });
+}
+
+/**
+ * A React Query hook to fetch all planners
+ * @param email user email
+ * @returns React Query useQuery Hook for all planners
+ */
+export function usePlanners(email: string | undefined) {
+  return useQuery({
+    queryKey: ["planners", email],
+    queryFn: async () => await getUserPlannersByEmail(email!),
+    refetchInterval: 1000 * 180,
+    placeholderData: [],
+    throwOnError: true,
+    enabled: !!email,
   });
 }
 
@@ -150,11 +172,10 @@ export function useUserDefaultPlannerId(userId: string | undefined) {
  * @param plannerId unique id that identifies a planner
  * @returns React Query useMutation Hook for updating a user's default planner id
  */
-export function useUpdateUserDefaultPlannerId() {
+export function useUpdateUserDefaultPlannerIdMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["updateUserDefaultPlannerId"],
     mutationFn: async (params: {
       userId: string;
       defaultPlannerId: string;
@@ -196,27 +217,26 @@ export function useUserDefaultPlanner(userId: string | undefined) {
 }
 
 /**
- * A React Query hook to fetch a user's default planner id
+ * A React Query hook to fetch a user's default planners for a specified program
  * @param userId unique id that identifies a user
- * @param primaryProgram user's primary program
+ * @param program one of user's programs to fetch default planners for
  * @returns React Query useQuery Hook for a user's default planner id
  */
 export function useUserProgramDefaultPlanners(
   userId: string | undefined,
-  primaryProgram: Program | undefined | null,
+  program: Program | undefined | null,
 ) {
-  // const queryClient = useQueryClient();
-
   return useQuery({
-    queryKey: ["userProgramDefaultPlanners", userId, primaryProgram],
+    queryKey: ["userProgramDefaultPlanners", userId, program],
     queryFn: async () => {
       const planners = await getProgramDefaultPlanners({
         userId: userId!,
-        program: primaryProgram!,
+        program: program!,
       });
 
-      // set defaultPlannerId to the first default planner id of the
+      // OLD NOTE: set defaultPlannerId to the first default planner id of the
       // newly selected primary major if it hasn't been already (old code below)
+
       // const ids = planners.map((p) => p.id);
       // if (defaultPlannerId && !ids.includes(defaultPlannerId))
       // queryClient.setQueryData(
@@ -226,6 +246,83 @@ export function useUserProgramDefaultPlanners(
       // }
       return planners;
     },
-    enabled: !!userId && !!primaryProgram,
+    enabled: !!userId && !!program,
+  });
+}
+
+/**
+ * A React Query hook to fetch permissions for all users
+ * @returns React Query useQuery Hook for user permissions
+ */
+export function usePermissions(
+  select?: (Permission: Permission[]) => Permission[],
+) {
+  return useQuery({
+    queryKey: ["permissions"],
+    queryFn: async () => await getPermissions(),
+    placeholderData: [],
+    select,
+  });
+}
+
+/**
+ * A React Query hook to update a user's permissions in the database
+ * @returns React Query useMutation Hook for updating user permissions
+ */
+export function useUpdateUserPermissionMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { userId: string; permission: Permission }) =>
+      await replacePermission(params),
+    onSuccess: (_, { userId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ["userPermissions", userId],
+      });
+    },
+  });
+}
+
+/**
+ * A React Query hook to delete a user's permissions in the database
+ * @returns React Query useMutation Hook for deleting user permissions
+ */
+export function useDeleteUserPermissionMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { userId: string; userEmail: string }) =>
+      await deletePermission(params),
+    onSuccess: (_, { userId }) => {
+      queryClient.invalidateQueries({
+        queryKey: ["userPermissions", userId],
+      });
+    },
+  });
+}
+
+/**
+ * A React Query hook to fetch a user's permissions
+ * @param userId unique id that identifies a user
+ * @param select function to filter data from the query
+ * @returns React Query useQuery Hook for user permissions
+ */
+export function useUserPermissions(userId: string | undefined) {
+  return useQuery({
+    queryKey: ["userPermissions", userId],
+    queryFn: async () => await getUserPermissions(userId!),
+    enabled: !!userId,
+  });
+}
+
+/**
+ * A React Query hook to fetch a user's role
+ * @returns React Query useQuery Hook for user role
+ */
+export function useUserRole(userId: string | undefined) {
+  return useQuery({
+    queryKey: ["userRole", userId],
+    queryFn: async () => await getUserRole(userId!),
+    enabled: !!userId,
   });
 }

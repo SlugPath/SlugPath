@@ -1,7 +1,7 @@
 import { PlannerData } from "@customTypes/Planner";
 import { createContext } from "react";
 
-import { usePlanners } from "../hooks/usePlanners";
+import { usePlannersOld } from "../hooks/usePlanners";
 import { SetState } from "../types/Common";
 
 export interface MultiPlanner {
@@ -44,7 +44,7 @@ export function PlannersProvider({ children }: PlannersProviderProps) {
     activePlanner,
     showExportModal,
     setShowExportModal,
-  } = usePlanners();
+  } = usePlannersOld();
 
   return (
     <PlannersContext.Provider
