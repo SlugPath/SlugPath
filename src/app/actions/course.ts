@@ -109,6 +109,7 @@ export async function getCoursesBy(
 
 /**
  * Fetch courses that match the specified titles
+ * PURPOSE: for replacing custom courses, look for courses that match the specified titles
  * QUESTION: Is this function description accurate?
  * @param titles course titles to get suggested classes for
  * @returns courses that match the specified titles

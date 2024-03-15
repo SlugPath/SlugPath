@@ -14,7 +14,7 @@ import {
   Droppable,
 } from "@hello-pangea/dnd";
 import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import CourseInfoModal from "./CourseInfoModal";
@@ -35,17 +35,21 @@ export default function ReplaceCustomModal({
   customCourse,
 }: ReplaceCustomModalProps) {
   // Get all the course numbers from the custom course title
-  const suggestedClasses = Array.from(
+  const suggestedTitles = Array.from(
     customCourse.title.toUpperCase().matchAll(courseNumberRegex),
   ).map((m) => m[0]);
 
-  // Fetch the suggested classes from the database
-  const { data: classes, isLoading: suggestedLoading } =
-    useSuggestedCourses(suggestedClasses);
+  // Fetch the suggested classes from the database (to replace custom courses)
+  const {
+    data: initialSuggestedCourses,
+    isLoading: initialSuggestedCoursesLoading,
+  } = useSuggestedCourses(suggestedTitles);
 
-  // TODO: Mutate classes?
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setClasses] = useState<StoredCourse[]>([]);
+  const [suggestedCourses, setSuggestedCourses] = useState<StoredCourse[]>([]);
+
+  useEffect(() => {
+    setSuggestedCourses(initialSuggestedCourses ?? []);
+  }, [initialSuggestedCourses]);
 
   const { replaceCustomCourse } = useContext(PlannerContext);
   const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourse.id;
@@ -66,8 +70,8 @@ export default function ReplaceCustomModal({
     }
 
     // Prevent duplicates
-    if (!classes!.find((c) => c.number === course.number)) {
-      setClasses((prev) => [
+    if (!suggestedCourses!.find((c) => c.number === course.number)) {
+      setSuggestedCourses((prev) => [
         ...prev,
         {
           ...course,
@@ -78,7 +82,7 @@ export default function ReplaceCustomModal({
   }
 
   function removeCourse(index: number) {
-    setClasses((prev) => {
+    setSuggestedCourses((prev) => {
       const newClasses = [...prev];
       newClasses.splice(index, 1);
       return newClasses;
@@ -86,10 +90,10 @@ export default function ReplaceCustomModal({
   }
 
   function handleSave() {
-    if (!classes || classes.length === 0) {
+    if (!suggestedCourses || suggestedCourses.length === 0) {
       return;
     }
-    replaceCustomCourse(customCourse.id, classes);
+    replaceCustomCourse(customCourse.id, suggestedCourses);
     onSave();
   }
 
@@ -138,7 +142,7 @@ export default function ReplaceCustomModal({
               </Card>
               <Droppable
                 droppableId={droppableId}
-                isDropDisabled={suggestedLoading}
+                isDropDisabled={initialSuggestedCoursesLoading}
               >
                 {(provided) => {
                   return (
@@ -150,8 +154,8 @@ export default function ReplaceCustomModal({
                         size="sm"
                         className="rounded-md min-h-48"
                       >
-                        {classes &&
-                          classes.map((course, index) => {
+                        {suggestedCourses &&
+                          suggestedCourses.map((course, index) => {
                             return (
                               <DraggableCourseCard
                                 key={index}
@@ -164,7 +168,7 @@ export default function ReplaceCustomModal({
                               />
                             );
                           })}
-                        {classes && classes.length === 0 && (
+                        {suggestedCourses && suggestedCourses.length === 0 && (
                           <Typography className="text-gray-400 text-center">
                             Drag official courses here
                           </Typography>
