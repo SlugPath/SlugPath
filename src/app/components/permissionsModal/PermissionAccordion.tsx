@@ -59,9 +59,11 @@ export default function PermissionsAccordion({
   const [permissionToRemove, setPermissionToRemove] =
     useState<Permission | null>(null);
 
-  // Subscribe to query loading states for permissions
+  // Subscribe to query loading states (for loading spinners)
   const { isPending: getPermissionsPending } = usePermissions();
   const { isPending: getUserPermissionsPending } = useUserPermissions(userId);
+
+  // Update and delete permission mutations
   const {
     mutate: updatePermissionMutation,
     isPending: upsertPermissionPending,
@@ -77,6 +79,8 @@ export default function PermissionsAccordion({
     getUserPermissionsPending ||
     upsertPermissionPending ||
     removePermissionPending;
+
+  // handlers
 
   function handleRemovePermissions(permission: Permission) {
     setPermissionToRemove(permission);
