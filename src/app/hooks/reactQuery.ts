@@ -3,7 +3,7 @@ import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getSuggestedCourses } from "../actions/course";
+import { getCourse, getSuggestedCourses } from "../actions/course";
 import {
   removePermission as deletePermission,
   getPermissions,
@@ -352,6 +352,26 @@ export function useUserRole(userId: string | undefined) {
     queryKey: ["userRole", userId],
     queryFn: async () => await getUserRole(userId!),
     enabled: !!userId,
+  });
+}
+
+/**
+ * A React Query hook to fetch information on a course
+ * @param departmentCode Department code of the course
+ * @param courseNumber Course number
+ */
+export function useCourse(departmentCode: string, courseNumber: string) {
+  return useQuery({
+    queryKey: ["course", departmentCode, courseNumber],
+    queryFn: async () => {
+      return await getCourse({
+        departmentCode,
+        number: courseNumber,
+      });
+    },
+    placeholderData: undefined,
+    enabled: departmentCode !== "" && courseNumber !== "",
+    staleTime: Infinity, // Course info is static
   });
 }
 

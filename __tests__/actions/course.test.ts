@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { compareCoursesByNum } from "@/lib/utils";
 import {
   getAllDepartments,
-  getCourseInfo,
+  getCourse,
   getCoursesBy,
   getSuggestedCourses,
 } from "@actions/course";
@@ -55,7 +55,7 @@ describe("Course actions", () => {
 
   describe("courseInfo", () => {
     it("should return the specified course", async () => {
-      const course = await getCourseInfo({
+      const course = await getCourse({
         departmentCode: "CSE",
         number: `3`,
       });
@@ -77,7 +77,7 @@ describe("Course actions", () => {
     });
 
     it("should return the first course that matches the query input", async () => {
-      const course = await getCourseInfo({
+      const course = await getCourse({
         departmentCode: "CSE",
       });
 
@@ -87,14 +87,14 @@ describe("Course actions", () => {
 
     it("should return null if no courses match the query input", async () => {
       expect(
-        await getCourseInfo({
+        await getCourse({
           departmentCode: "MATH",
         }),
       ).toBeUndefined();
     });
 
     it("should set description as an empty string if not defined", async () => {
-      const course = await getCourseInfo({
+      const course = await getCourse({
         departmentCode: "CSE",
         number: `123`,
       });

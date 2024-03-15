@@ -147,7 +147,7 @@ export async function getSuggestedCourses(
  * @param pred query details
  * @returns course that matches the query details
  */
-export async function getCourseInfo(
+export async function getCourse(
   pred: CourseQuery,
 ): Promise<StoredCourse | undefined> {
   const course = await prisma.course.findFirst({

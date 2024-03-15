@@ -2,7 +2,7 @@ import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { getQuarterColor } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
-import { getCourseInfo } from "@actions/course";
+import { getCourse } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
@@ -57,7 +57,7 @@ export default function CourseInfoModal({
   const { data, isLoading: loading } = useQuery({
     queryKey: ["course", course?.departmentCode, course?.number],
     queryFn: async () =>
-      await getCourseInfo({
+      await getCourse({
         departmentCode: course!.departmentCode,
         number: course!.number,
       }),

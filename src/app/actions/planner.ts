@@ -81,7 +81,6 @@ export async function updateUserPlanners({
   userId: string;
   planners: PlannerData[];
 }): Promise<void> {
-  console.log("updateUserPlanners", userId, planners);
   await prisma.$transaction(async (tx) => {
     await tx.planner.deleteMany({
       where: {
@@ -109,7 +108,6 @@ export async function updateUserPlanners({
  * @returns a list of planner titles and ids belonging to a user
  */
 export async function getUserPlanners(userId: string): Promise<PlannerData[]> {
-  console.log("getUserPlanners", userId);
   const plans = await prisma.planner.findMany({
     where: {
       userId: userId,
