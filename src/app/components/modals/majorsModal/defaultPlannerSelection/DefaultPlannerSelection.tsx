@@ -40,6 +40,7 @@ export interface DefaultPlannerSelectionProps {
 // NOTE: This component is currently broken, as setPrimaryMajor has no state.
 // The issue is that the primary major is not stored in the database, so need
 // to make a decision if the state should belong to the client or the server.
+// TODO: just grab 0th planner
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
