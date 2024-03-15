@@ -9,6 +9,7 @@ import { useContext } from "react";
 export default function PlannerActions() {
   const { data: session, status } = useSession();
 
+  // TODO: remove modal context
   const { setShowMajorsModal, setShowPermissionsModal } =
     useContext(ModalsContext);
 

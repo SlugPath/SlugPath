@@ -82,7 +82,7 @@ export default function PermissionsAccordion({
 
   // handlers
 
-  function handleRemovePermissions(permission: Permission) {
+  function handleOpenRemovePermissionModal(permission: Permission) {
     setPermissionToRemove(permission);
     setPermissionsAlertOpen(true);
   }
@@ -131,91 +131,98 @@ export default function PermissionsAccordion({
   }
 
   return (
-    <StyledAccordion>
-      <AccordionSummary>
-        <div className="flex flex-row ml-2 gap-1 items-center justify-between w-full">
-          <Typography>{permission.userEmail}</Typography>
-          <Button
-            color="danger"
-            onClick={() => handleRemovePermissions(permission)}
-            loading={isLoading}
-          >
-            Remove
-          </Button>
-        </div>
-        <ConfirmAlert
-          open={permissionsAlertOpen}
-          onClose={() => setPermissionsAlertOpen(false)}
-          onConfirm={() =>
-            deleteUserPermissionMutation({
-              userId: userId!,
-              userEmail: permissionToRemove!.userEmail,
-            })
-          }
-          dialogText="Are you sure you want remove this permission?"
-        />
-      </AccordionSummary>
-      <AccordionDetails>
-        <List>
-          {permission.majorEditingPermissions.map((programEditPerm, index) => {
-            const program = programEditPerm.major;
+    <>
+      <ConfirmAlert
+        open={permissionsAlertOpen}
+        onClose={() => setPermissionsAlertOpen(false)}
+        onConfirm={() =>
+          deleteUserPermissionMutation({
+            userId: userId!,
+            userEmail: permissionToRemove!.userEmail,
+          })
+        }
+        dialogText="Are you sure you want remove this permission?"
+      />
 
-            return (
-              <ListItem key={index}>
-                <ListItemContent>
-                  <Card
-                    variant="plain"
-                    size="sm"
-                    className="flex flex-row gap-1 items-center justify-between p-1"
-                  >
-                    <div className="flex flex-row gap-1 items-center justify-between w-full">
-                      <Typography>
-                        {program.name}{" "}
-                        {program.programType == "Minor" ? "(Minor)" : ""}
-                      </Typography>
-                      <div className="flex flex-row gap-1 items-center justify-start">
-                        <ExpirationLabel
-                          expirationDate={programEditPerm.expirationDate}
+      <StyledAccordion>
+        <AccordionSummary>
+          <div className="flex flex-row ml-2 gap-1 items-center justify-between w-full">
+            <Typography>{permission.userEmail}</Typography>
+            <Button
+              color="danger"
+              onClick={() => handleOpenRemovePermissionModal(permission)}
+              loading={isLoading}
+            >
+              Remove
+            </Button>
+          </div>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List>
+            {permission.majorEditingPermissions.map(
+              (programEditPerm, index) => {
+                const program = programEditPerm.major;
+
+                return (
+                  <ListItem key={index}>
+                    <ListItemContent>
+                      <Card
+                        variant="plain"
+                        size="sm"
+                        className="flex flex-row gap-1 items-center justify-between p-1"
+                      >
+                        <div className="flex flex-row gap-1 items-center justify-between w-full">
+                          <Typography>
+                            {program.name}{" "}
+                            {program.programType == "Minor" ? "(Minor)" : ""}
+                          </Typography>
+                          <div className="flex flex-row gap-1 items-center justify-start">
+                            <ExpirationLabel
+                              expirationDate={programEditPerm.expirationDate}
+                            />
+                            <MaterialCssVarsProvider
+                              theme={{ [THEME_ID]: materialTheme }}
+                            >
+                              <CssBaseline enableColorScheme />
+                              <LocalizationProvider
+                                dateAdapter={AdapterDateFns}
+                              >
+                                <div className="bg-white dark:bg-secondary-800 rounded-md">
+                                  <DatePicker
+                                    value={programEditPerm.expirationDate}
+                                    slotProps={{ textField: { size: "small" } }}
+                                    onChange={(date) =>
+                                      handleUpdateMajorEditPermissionExpirationDate(
+                                        permission,
+                                        program,
+                                        date!,
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </LocalizationProvider>
+                            </MaterialCssVarsProvider>
+                          </div>
+                        </div>
+                        <CloseIconButton
+                          onClick={() =>
+                            handleRemoveMajorEditPermission(permission, program)
+                          }
                         />
-                        <MaterialCssVarsProvider
-                          theme={{ [THEME_ID]: materialTheme }}
-                        >
-                          <CssBaseline enableColorScheme />
-                          <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <div className="bg-white dark:bg-secondary-800 rounded-md">
-                              <DatePicker
-                                value={programEditPerm.expirationDate}
-                                slotProps={{ textField: { size: "small" } }}
-                                onChange={(date) =>
-                                  handleUpdateMajorEditPermissionExpirationDate(
-                                    permission,
-                                    program,
-                                    date!,
-                                  )
-                                }
-                              />
-                            </div>
-                          </LocalizationProvider>
-                        </MaterialCssVarsProvider>
-                      </div>
-                    </div>
-                    <CloseIconButton
-                      onClick={() =>
-                        handleRemoveMajorEditPermission(permission, program)
-                      }
-                    />
-                  </Card>
-                </ListItemContent>
-              </ListItem>
-            );
-          })}
-        </List>
-        <SelectProgram
-          permission={permission}
-          onAddProgramEditPermission={handleAddProgramEditPermission}
-        />
-      </AccordionDetails>
-    </StyledAccordion>
+                      </Card>
+                    </ListItemContent>
+                  </ListItem>
+                );
+              },
+            )}
+          </List>
+          <SelectProgram
+            permission={permission}
+            onAddProgramEditPermission={handleAddProgramEditPermission}
+          />
+        </AccordionDetails>
+      </StyledAccordion>
+    </>
   );
 }
 
