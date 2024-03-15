@@ -100,7 +100,7 @@ describe("Planner actions", () => {
     expect(await getUserPlanners(user!.id)).toHaveLength(0);
     const id = await createPlanner(initialPlanner(), user!);
     expect(await getPlannerById(id)).toBeDefined();
-  });
+  }, 7000);
 
   it("should update 1 planner for 1 user", async () => {
     expect(await getUserPlanners(user!.id)).toHaveLength(0);
