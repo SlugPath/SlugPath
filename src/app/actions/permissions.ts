@@ -32,7 +32,7 @@ export async function upsertPermission({
     }
 
     // Create new permissions
-    const result = tx.permission.upsert({
+    const result = await tx.permission.upsert({
       where: {
         userEmail: permission.userEmail,
       },

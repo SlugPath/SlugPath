@@ -6,12 +6,7 @@ export const initialLabels = (): Label[] => {
     {
       id: uuid(),
       name: "",
-      color: "RED",
-    },
-    {
-      id: uuid(),
-      name: "",
-      color: "GREEN",
+      color: "TEAL",
     },
     {
       id: uuid(),
@@ -21,12 +16,17 @@ export const initialLabels = (): Label[] => {
     {
       id: uuid(),
       name: "",
-      color: "YELLOW",
+      color: "PURPLE",
     },
     {
       id: uuid(),
       name: "",
-      color: "PURPLE",
+      color: "PINK",
+    },
+    {
+      id: uuid(),
+      name: "",
+      color: "RED",
     },
     {
       id: uuid(),
@@ -36,7 +36,7 @@ export const initialLabels = (): Label[] => {
     {
       id: uuid(),
       name: "",
-      color: "PINK",
+      color: "YELLOW",
     },
   ];
 };
@@ -62,6 +62,8 @@ export function getColor(color: string) {
       return { backgroundColor: "#8B5CF6" };
     case "pink":
       return { backgroundColor: "#EC4899" };
+    case "teal":
+      return { backgroundColor: "#00AFC2" };
     case "grey":
       return { backgroundColor: "#858D9B" };
     default:

@@ -19,7 +19,7 @@ export default function SelectMajorName({
     <>
       <Typography level="body-lg">Name</Typography>
       <Select
-        value={selectedMajor}
+        value={selectedMajor == "" ? null : selectedMajor}
         placeholder="Choose one…"
         variant="plain"
         onChange={onChange}
