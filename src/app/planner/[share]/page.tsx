@@ -8,7 +8,5 @@ export default async function Page({ params }: { params: { share: string } }) {
   if (!session) redirect("/");
 
   await duplicatePlanner(session.user.id, params.share);
-
-  console.log(`Updated planner planners`);
   redirect("/planner");
 }
