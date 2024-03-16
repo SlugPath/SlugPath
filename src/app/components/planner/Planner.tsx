@@ -29,7 +29,6 @@ import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
 import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
-import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";
@@ -212,7 +211,6 @@ function Modals() {
       <MajorsModal />
       <EditMajorRequirementsModal />
       <ReplaceRequirementsModal />
-      <PermissionsModal />
     </>
   );
 }

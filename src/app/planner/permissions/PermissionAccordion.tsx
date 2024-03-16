@@ -38,9 +38,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { useSession } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
 
-import CloseIconButton from "../buttons/CloseIconButton";
-import ConfirmAlert from "../modals/ConfirmAlert";
-import StyledAccordion from "../planner/StyledAccordion";
+import CloseIconButton from "../../components/buttons/CloseIconButton";
+import ConfirmAlert from "../../components/modals/ConfirmAlert";
+import StyledAccordion from "../../components/planner/StyledAccordion";
 
 const materialTheme = extendMaterialTheme();
 

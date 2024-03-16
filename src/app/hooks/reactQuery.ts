@@ -282,7 +282,7 @@ export function usePermissions(
   return useQuery({
     queryKey: ["permissions"],
     queryFn: async () => await getPermissions(),
-    placeholderData: [],
+    // placeholderData: [],
     select,
   });
 }
