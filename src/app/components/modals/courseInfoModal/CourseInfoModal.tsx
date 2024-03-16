@@ -1,6 +1,5 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
-import { getQuarterColor } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
 import { getCourse } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -24,6 +23,7 @@ import { useContext, useState } from "react";
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
 import MoreEnrollInfo from "./MoreEnrollInfo";
+import QuartersOfferedTable from "./QuartersOfferedTable";
 import ReplaceCustomModal from "./ReplaceCustomModal";
 import SelectedLabels from "./SelectedLabels";
 
@@ -258,16 +258,9 @@ export default function CourseInfoModal({
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
               <Skeleton loading={enrollLoading}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Typography component="p">Quarters Offered:</Typography>
-                  {enrollmentInfo!.map((e, i) => {
-                    return (
-                      <Chip key={i} color={getQuarterColor(e.term.title)}>
-                        {e.term.title} {e.term.catalogYear}, {e.instructor}
-                      </Chip>
-                    );
-                  })}
-                </div>
+                {enrollmentInfo && enrollmentInfo.length > 0 && (
+                  <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />
+                )}
               </Skeleton>
             </>
           ) : (
