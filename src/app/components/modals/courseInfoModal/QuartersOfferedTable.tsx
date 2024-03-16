@@ -1,14 +1,5 @@
 import { getQuarterColor } from "@/lib/quarterUtils";
-import {
-  Chip,
-  Sheet,
-  Tab,
-  TabList,
-  TabPanel,
-  Table,
-  Tabs,
-  Typography,
-} from "@mui/joy";
+import { Chip, Sheet, Tab, TabList, TabPanel, Table, Tabs } from "@mui/joy";
 
 export default function QuartersOfferedTable({
   enrollmentInfo,
@@ -34,7 +25,9 @@ export default function QuartersOfferedTable({
     enrollmentInfo.forEach(({ term }) => {
       years.add(term.catalogYear);
     });
-    return Array.from(years);
+    const _years = Array.from(years);
+    _years.reverse();
+    return _years;
   };
 
   const years = getUniqueYears();
@@ -42,7 +35,6 @@ export default function QuartersOfferedTable({
 
   return (
     <div style={{ marginBottom: "0.25rem" }}>
-      <Typography component="p">Quarters Offered:</Typography>
       <Tabs
         aria-label="Basic tabs"
         defaultValue={0}
