@@ -106,7 +106,7 @@ export async function updateUserPlanners({
 /**
  * Duplicates a planner for a user
  * @param userId id of the user
- * @param plannerId id of the planner to duplicate
+ * @param plannerId if
  */
 export async function duplicatePlanner(userId: string, plannerId: string) {
   await prisma.$transaction(async (tx) => {
@@ -119,7 +119,7 @@ export async function duplicatePlanner(userId: string, plannerId: string) {
     await createPlanner(tx, {
       userId,
       plannerId: dupePlan.id,
-      title: `Duplicate: ${plan.title}`,
+      title: `Copy of ${plan.title}`,
       plannerData: dupePlan,
       order: 0,
     });

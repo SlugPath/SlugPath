@@ -1,5 +1,6 @@
 import { APP_URL } from "@/config";
 import { PlannersContext } from "@contexts/PlannersProvider";
+import { LibraryAddCheck } from "@mui/icons-material";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import {
   IconButton,
@@ -40,9 +41,15 @@ export default function ShareModal() {
           horizontal: "center",
         }}
       >
-        <Typography level="title-md" className="mx-auto">
-          Copied planner link to clipboard!
-        </Typography>
+        <>
+          <LibraryAddCheck
+            className="dark:fill-white"
+            style={{ color: "black" }}
+          />
+          <Typography level="title-md" className="mx-auto">
+            Copied planner link to clipboard!
+          </Typography>
+        </>
       </Snackbar>
       <Modal
         open={showShareModal}
@@ -60,20 +67,12 @@ export default function ShareModal() {
             p: 3,
             boxShadow: "lg",
             height: "auto",
-            width: "32vw",
+            width: "25vw",
           }}
         >
-          <Typography
-            component="h2"
-            id="modal-title"
-            level="h4"
-            textColor="inherit"
-            fontWeight="lg"
-            mb={1}
-            textAlign={"center"}
-          >
+          <h2 className="font-bold text-2xl mb-1 text-center">
             Share this planner
-          </Typography>
+          </h2>
           <div className="my-5 flex flex-row items-center">
             <Tooltip title="Copy share planner link">
               <IconButton onClick={() => handleCopyToClipboard()}>
@@ -83,12 +82,7 @@ export default function ShareModal() {
                 />
               </IconButton>
             </Tooltip>
-            <Typography
-              variant="soft"
-              className="ml-2 p-2 w-full rounded-lg bg-black"
-            >
-              {plannerURL}
-            </Typography>
+            <p className="ml-2 p-2 w-full rounded-lg truncate">{plannerURL}</p>
           </div>
           <ModalClose variant="plain" sx={{ m: 1 }} />
         </Sheet>
