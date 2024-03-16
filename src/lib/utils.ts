@@ -1,7 +1,9 @@
 import { StoredCourse } from "@/app/types/Course";
+import { Program } from "@/app/types/Program";
 import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
 /**
  * Zips two arrays together
@@ -62,6 +64,47 @@ export function compareCoursesByNum(a: StoredCourse, b: StoredCourse): number {
   return 0;
 }
 
+/**
+ * Filter out programs with the same name
+ * @param programs List of programs
+ * @returns List of programs with unique names
+ */
+export function filterRedundantPrograms(programs: Program[]) {
+  const programNames = new Set();
+  return programs.filter((program) => {
+    if (programNames.has(program.name)) {
+      return false;
+    }
+    programNames.add(program.name);
+    return true;
+  });
+}
+
+/**
+ * Check if a program is in a list of programs
+ * @param program a program to search for
+ * @param programs list of programs to search in
+ * @returns true if the program is in the list of programs, false otherwise
+ */
+export function isProgramInPrograms(
+  program: Program,
+  programs: Program[],
+): boolean {
+  if (programs.length == 0) return false;
+
+  const alreadyAdded = programs.some((userMajor) => {
+    if (
+      userMajor.programType === program.programType &&
+      userMajor.name === program.name &&
+      userMajor.catalogYear === program.catalogYear
+    ) {
+      return true;
+    }
+  });
+
+  return alreadyAdded;
+}
+
 export function toStoredCourse({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   department: _,
@@ -82,4 +125,13 @@ export function toStoredCourse({
  */
 export function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
+}
+
+/**
+ * Check if an email is valid
+ * @param email an email to validate
+ * @returns true if the email is valid, false otherwise
+ */
+export function isValidEmail(email: string) {
+  return z.string().email().safeParse(email).success;
 }

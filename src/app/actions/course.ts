@@ -11,7 +11,12 @@ import {
   StoredCourse,
 } from "../types/Course";
 
-export async function coursesBy(
+/**
+ * Fetches courses from the database based on specified query details
+ * @param pred query details
+ * @returns Courses that match the query details
+ */
+export async function getCoursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
   const departmentCodeParam = () => {
@@ -102,7 +107,14 @@ export async function coursesBy(
   return res;
 }
 
-export async function getSuggestedClasses(
+/**
+ * Fetch courses that match the specified titles
+ * PURPOSE: for replacing custom courses, look for courses that match the specified titles
+ * QUESTION: Is this function description accurate?
+ * @param titles course titles to get suggested classes for
+ * @returns courses that match the specified titles
+ */
+export async function getSuggestedCourses(
   titles: string[],
 ): Promise<StoredCourse[]> {
   const courses: Course[] = [];
@@ -117,6 +129,7 @@ export async function getSuggestedClasses(
         },
       },
     });
+
     // Prevent duplicates and undefined
     if (
       res &&
@@ -130,7 +143,12 @@ export async function getSuggestedClasses(
   return courses.map(toStoredCourse);
 }
 
-export async function courseInfo(
+/**
+ * Fetch course information based on the specified query details
+ * @param pred query details
+ * @returns course that matches the query details
+ */
+export async function getCourse(
   pred: CourseQuery,
 ): Promise<StoredCourse | undefined> {
   const course = await prisma.course.findFirst({
@@ -144,6 +162,10 @@ export async function courseInfo(
   return toStoredCourse(course);
 }
 
+/**
+ * Fetches all departments
+ * @returns all departments in the database
+ */
 export async function getAllDepartments(): Promise<SearchParams> {
   const departments = (
     await prisma.course.findMany({

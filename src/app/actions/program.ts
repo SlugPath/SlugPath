@@ -3,11 +3,22 @@
 import prisma from "@/lib/prisma";
 import { PrismaClient, ProgramType } from "@prisma/client";
 
-import { Major } from "../types/Major";
 import { PlannerTitle } from "../types/Planner";
+import { Program, ProgramInput } from "../types/Program";
 
+/**
+ * Fetch all majors, optionally filtered by catalog year
+ * @param catalogYear Year of the catalog to get majors for
+ * @returns major degree programs
+ */
 export async function getMajors(catalogYear?: string) {
   const query: any = {
+    where: { programType: "Major" },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
     orderBy: [
       {
         name: "asc",
@@ -16,12 +27,6 @@ export async function getMajors(catalogYear?: string) {
         catalogYear: "asc",
       },
     ],
-    select: {
-      name: true,
-      id: true,
-      catalogYear: true,
-      programType: true,
-    },
   };
   if (catalogYear) {
     query.where = {
@@ -31,7 +36,73 @@ export async function getMajors(catalogYear?: string) {
   return await prisma.major.findMany(query);
 }
 
-export async function getAllMajorsBy(
+/**
+ * Fetch all mionrs, optionally filtered by catalog year
+ * @param catalogYear Year of the catalog to get minors for
+ * @returns minor degree programs
+ */
+export async function getMinors(catalogYear?: string) {
+  const query: any = {
+    where: { programType: "Minor" },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+    },
+    orderBy: [
+      {
+        name: "asc",
+      },
+      {
+        catalogYear: "asc",
+      },
+    ],
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
+}
+
+/**
+ * Fetch all majors and minors, optionally filtered by catalog year
+ * @param catalogYear Year of the catalog to get programs for
+ * @returns degree programs
+ */
+export async function getPrograms(catalogYear?: string) {
+  const query: any = {
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+      programType: true,
+    },
+    orderBy: [
+      {
+        name: "asc",
+      },
+      {
+        catalogYear: "asc",
+      },
+    ],
+  };
+  if (catalogYear) {
+    query.where = {
+      catalogYear,
+    };
+  }
+  return await prisma.major.findMany(query);
+}
+
+/**
+ * Fetch all majors or minors for a specified year
+ * @param programType Major or Minor
+ * @param catalogYear Year of the catalog to get majors or minors for
+ * @returns filtered degree programs
+ */
+export async function getProgramsByTypeInYear(
   programType: ProgramType,
   catalogYear: string,
 ) {
@@ -58,7 +129,14 @@ export async function getAllMajorsBy(
   return res.map((major) => major.name);
 }
 
-export async function getUserMajorsByEmail(email: string): Promise<Major[]> {
+/**
+ * Fetch all majors for a user by their email
+ * @param email email for a user
+ * @returns user's majors
+ */
+export async function getUserProgramsByEmail(
+  email: string,
+): Promise<Program[]> {
   const userData = await prisma.user.findUnique({
     where: {
       email,
@@ -82,13 +160,19 @@ export async function getUserMajorsByEmail(email: string): Promise<Major[]> {
   return userData?.majors;
 }
 
-export async function getUserMajorsById(
-  id: string,
+/**
+ * Fetch all majors for a user by their user id
+ * @param userId id for a user
+ * @param client prisma client
+ * @returns user's majors
+ */
+export async function getUserProgramsById(
+  userId: string,
   client: PrismaClient = prisma,
-): Promise<Major[]> {
+): Promise<Program[]> {
   const userData = await client.user.findUnique({
     where: {
-      id,
+      id: userId,
     },
     select: {
       majors: {
@@ -110,19 +194,19 @@ export async function getUserMajorsById(
   return userData?.majors;
 }
 
-export type MajorInput = {
-  name: string;
-  catalogYear: string;
-  programType: ProgramType;
-};
-
-export async function saveUserMajors({
+/**
+ * Update the user's majors in the database
+ * @param userId user id for the user to save majors for
+ * @param programs programs to save
+ * @returns updated majors
+ */
+export async function updateUserPrograms({
   userId,
-  majors,
+  programs,
 }: {
   userId: string;
-  majors: MajorInput[];
-}): Promise<Major[]> {
+  programs: ProgramInput[];
+}): Promise<Program[]> {
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -134,14 +218,14 @@ export async function saveUserMajors({
   }
 
   return await prisma.$transaction(async (tx) => {
-    const userMajors = await connectUserMajors({
+    const userPrograms = await connectUserPrograms({
       userId,
-      majors,
+      programs,
       client: tx as PrismaClient,
     });
 
-    // if no majors, remove default planner
-    if (majors.length == 0) {
+    // if no programs, remove default planner
+    if (programs.length == 0) {
       await tx.user.update({
         where: {
           id: userId,
@@ -152,41 +236,49 @@ export async function saveUserMajors({
       });
     }
 
-    return userMajors;
+    return userPrograms;
   });
 }
 
 /**
- * Connects the user to the given majors while disconnecting any old majors.
+ * Connects the user to the given progra while disconnecting any old majors.
  */
-export async function connectUserMajors({
+
+/**
+ * Connects the user to the given programs while disconnecting any old majors
+ * @param client prisma client
+ * @param userId user id for the user to connect programs for
+ * @param programs programs to connect
+ * @returns updated programs
+ */
+export async function connectUserPrograms({
   client = prisma,
   userId,
-  majors,
+  programs,
 }: {
   client?: PrismaClient;
   userId: string;
-  majors: MajorInput[];
-}): Promise<Major[]> {
+  programs: ProgramInput[];
+}): Promise<Program[]> {
   // disconnect any old majors
-  const oldMajors = await getUserMajorsById(userId, client);
-  if (oldMajors !== null) {
+  const oldPrograms = await getUserProgramsById(userId, client);
+  if (oldPrograms !== null) {
     await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
         majors: {
-          disconnect: oldMajors,
+          disconnect: oldPrograms,
         },
       },
     });
   }
 
   // find major ids from the input
-  const majorIds = await Promise.all(
-    majors.map(async (major) => {
-      const majorFound = await client.major.findFirst({
+  const programIds = await Promise.all(
+    programs.map(async (major) => {
+      const programFound = await client.major.findFirst({
         where: {
           name: major.name,
           catalogYear: major.catalogYear,
@@ -194,11 +286,11 @@ export async function connectUserMajors({
         },
       });
 
-      return majorFound?.id;
+      return programFound?.id;
     }),
   );
 
-  const filteredMajorIds = majorIds.filter(
+  const filteredProgramIds = programIds.filter(
     (id) => id !== undefined,
   ) as number[];
 
@@ -209,7 +301,7 @@ export async function connectUserMajors({
     },
     data: {
       majors: {
-        connect: filteredMajorIds.map((id) => {
+        connect: filteredProgramIds.map((id) => {
           return {
             id,
           };
@@ -231,18 +323,22 @@ export async function connectUserMajors({
   return userData.majors;
 }
 
-export type MajorDefaultsInput = {
-  userId: string;
-  major?: MajorInput;
-};
-
-export async function getMajorDefaultPlanners({
+/**
+ * Fetch all default planners for a user based on their default planner
+ * @param userId user id for the user to get default planners for
+ * @param program program to use for getting default planners
+ * @returns default planners for the user
+ */
+export async function getProgramDefaultPlanners({
   userId,
-  major,
-}: MajorDefaultsInput): Promise<PlannerTitle[]> {
-  async function getMajorToUse() {
-    if (major) {
-      return major;
+  program,
+}: {
+  userId: string;
+  program?: ProgramInput;
+}): Promise<PlannerTitle[]> {
+  async function getProgramToUse() {
+    if (program) {
+      return program;
     } else {
       const user = await prisma.user.findUnique({
         where: {
@@ -275,13 +371,13 @@ export async function getMajorDefaultPlanners({
     }
   }
 
-  const majorToUse = await getMajorToUse();
+  const programToUse = await getProgramToUse();
 
   // get the default planners for majorToUse
-  if (majorToUse) {
+  if (programToUse) {
     return await prisma.planner.findMany({
       where: {
-        major: majorToUse,
+        major: programToUse,
       },
       select: {
         id: true,
@@ -296,6 +392,11 @@ export async function getMajorDefaultPlanners({
   return [];
 }
 
+/**
+ * Fetch the default planner for a user
+ * @param userId user id for the user to get default planner for
+ * @returns
+ */
 export async function getUserDefaultPlannerId(userId: string) {
   const user = await prisma.user.findUnique({
     where: {
@@ -313,12 +414,15 @@ export async function getUserDefaultPlannerId(userId: string) {
 }
 
 /**
- * Get the primary major for a user.
+ * Fetch the primary major for a user.
+ *
  * Done by finding major of the default planner for the user,
  * otherwise returns first major in the user's list of majors,
  * otherwise returns null.
+ * @param userId user id for the user to get primary major for
+ * @returns primary major for the user
  */
-export async function getUserPrimaryMajor(userId: string) {
+export async function getUserPrimaryProgram(userId: string) {
   // first find major based on user's default planner
   const user = await prisma.user.findUnique({
     where: {
@@ -347,7 +451,7 @@ export async function getUserPrimaryMajor(userId: string) {
   }
 
   // if no default planner, find first major in user's list of majors
-  const userMajors = await getUserMajorsById(userId);
+  const userMajors = await getUserProgramsById(userId);
   if (userMajors !== null && userMajors.length > 0) {
     return userMajors[0];
   }
@@ -355,6 +459,12 @@ export async function getUserPrimaryMajor(userId: string) {
   return null;
 }
 
+/**
+ * Update the user's default planner in the database
+ * @param userId user id for the user to update default planner for
+ * @param defaultPlannerId planner id to set as default
+ * @returns
+ */
 export async function updateUserDefaultPlanner({
   userId,
   defaultPlannerId,

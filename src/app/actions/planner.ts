@@ -4,17 +4,15 @@ import { toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import { LabelColor } from "@prisma/client";
 
-import { PlannerData } from "../types/Planner";
+import { PlannerCreateInput, PlannerData } from "../types/Planner";
 
-type PlannerCreateInput = {
-  userId: string;
-  plannerId: string;
-  plannerData: PlannerData;
-  title: string;
-  order: number;
-};
-
-export async function createPlanner(
+/**
+ * Create a planner for a user
+ * @param tx (transaction) prisma client
+ * @param PlannerCreateInput data needed to create a planner for a user
+ * @returns PlannerData instance
+ */
+async function createPlanner(
   tx: any,
   { userId, plannerId, plannerData, title, order }: PlannerCreateInput,
 ) {
@@ -72,12 +70,11 @@ export async function createPlanner(
 }
 
 /**
- * Creates a planner for a user
- * @param input PlannerCreateInput
+ * Save all planners for a user
+ * @param param userId and planner data
  * @returns planner id of the updated planner
  */
-
-export async function saveAllPlanners({
+export async function updateUserPlanners({
   userId,
   planners,
 }: {
@@ -107,21 +104,13 @@ export async function saveAllPlanners({
 
 /**
  * Retrieves all planners for a user, sorted by `order` field in asc order.
- * @param userId user id
+ * @param userId user email
  * @returns a list of planner titles and ids belonging to a user
  */
-export async function getAllPlanners(email: string): Promise<PlannerData[]> {
-  const user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
-
-  if (!user) return [];
-
+export async function getUserPlanners(userId: string): Promise<PlannerData[]> {
   const plans = await prisma.planner.findMany({
     where: {
-      userId: user.id,
+      userId: userId,
     },
     orderBy: {
       order: "asc",
@@ -140,17 +129,10 @@ export async function getAllPlanners(email: string): Promise<PlannerData[]> {
 }
 
 /**
- * Retrieves a single planner for a user by its id
- * @param userId author id
+ * Retrieves a single planner its id
  * @param plannerId planner id
  * @returns a PlannerData instance if it exists, otherwise null
  */
-
-export type PlannerInput = {
-  userId: string;
-  plannerId: string;
-};
-
 export async function getPlannerById(plannerId: string | undefined) {
   if (!plannerId) return null;
   const p = await prisma.planner.findUnique({
@@ -158,12 +140,12 @@ export async function getPlannerById(plannerId: string | undefined) {
       id: plannerId,
     },
     include: {
+      labels: true,
       quarters: {
         include: {
           courses: true,
         },
       },
-      labels: true,
     },
   });
 

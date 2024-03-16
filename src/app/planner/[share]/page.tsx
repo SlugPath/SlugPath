@@ -2,9 +2,9 @@ import { PlannerData } from "@/app/types/Planner";
 import { authOptions } from "@/lib/auth";
 import { clonePlanner } from "@/lib/plannerUtils";
 import {
-  getAllPlanners,
   getPlannerById,
-  saveAllPlanners,
+  getUserPlanners,
+  updateUserPlanners,
 } from "@actions/planner";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { share: string } }) {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/");
 
-  const planners = await getAllPlanners(session?.user.email ?? "");
+  const planners = await getUserPlanners(session?.user.id);
 
   // Share planner part
   const sharedPlanner = await getPlannerById(params.share);
@@ -32,8 +32,8 @@ export default async function Page({ params }: { params: { share: string } }) {
   planners.push(duplicatePlanner);
 
   // save it
-  await saveAllPlanners({
-    userId: session?.user.id ?? "",
+  await updateUserPlanners({
+    userId: session?.user.id,
     planners,
   });
   redirect("/planner");

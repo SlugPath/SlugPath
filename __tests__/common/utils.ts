@@ -1,5 +1,5 @@
+import { Program } from "@/app/types/Program";
 import prisma from "@/lib/prisma";
-import { Major } from "@customTypes/Major";
 import { ProgramType, Role } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
@@ -19,7 +19,7 @@ export async function createMajor(
   name: string,
   catalogYear: string,
   programType: ProgramType,
-): Promise<Major> {
+): Promise<Program> {
   const majorData = {
     name,
     catalogYear,
@@ -45,7 +45,7 @@ export async function createUser({
   email: string;
   name: string;
   role?: Role;
-  majors?: Major[];
+  majors?: Program[];
 }) {
   return await prisma.user.create({
     data: {
@@ -61,7 +61,7 @@ export async function createUser({
 }
 
 // non prisma helper functions
-export function removeIdFromMajorOutput(majors: Major[]) {
+export function removeIdFromMajorOutput(majors: Program[]) {
   return majors.map((r) => {
     return {
       name: r.name,

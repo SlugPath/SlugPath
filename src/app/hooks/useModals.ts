@@ -1,4 +1,4 @@
-import { Major } from "@/app/types/Major";
+import { Program } from "@/app/types/Program";
 import { useState } from "react";
 
 export default function useModals() {
@@ -7,7 +7,9 @@ export default function useModals() {
   const [showReplaceRLModal, setShowReplaceRLModal] = useState(false); // RL = Requirement List
   const [showMajorRequirementsEditModal, setShowMajorRequirementsEditModal] =
     useState(false);
-  const [majorToEdit, setMajorToEdit] = useState<Major | undefined>(undefined);
+  const [majorToEdit, setMajorToEdit] = useState<Program | undefined>(
+    undefined,
+  );
 
   return {
     showMajorsModal,

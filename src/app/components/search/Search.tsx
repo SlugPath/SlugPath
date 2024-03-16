@@ -1,9 +1,9 @@
+import useSearch from "@/app/hooks/useSearch";
 import { Card } from "@mui/joy";
 
 import CustomCourseSelection from "./CustomCourseSelection";
 import SearchInputs from "./SearchInputs";
 import SearchResults from "./SearchResults";
-import useSearch from "./useSearch";
 
 /**
  * Component for searching for courses to add.

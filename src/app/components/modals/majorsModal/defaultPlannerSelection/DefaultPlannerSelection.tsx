@@ -1,8 +1,14 @@
-import ConfirmAlert from "@components/modals/ConfirmAlert";
-import CourseInfoModal from "@components/modals/courseInfoModal/CourseInfoModal";
-import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
-import { PlannersContext } from "@contexts/PlannersProvider";
-import { Major } from "@customTypes/Major";
+import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
+import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import {
+  useUpdateUserDefaultPlannerIdMutation,
+  useUserDefaultPlannerId,
+  useUserPrimaryProgram,
+  useUserProgramDefaultPlanners,
+  useUserPrograms,
+} from "@/app/hooks/reactQuery";
+import { Program } from "@/app/types/Program";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,
@@ -13,6 +19,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -30,27 +37,49 @@ export interface DefaultPlannerSelectionProps {
   isInPlannerPage?: boolean;
 }
 
+// NOTE: This component is currently broken, as setPrimaryMajor has no state.
+// The issue is that the primary major is not stored in the database, so need
+// to make a decision if the state should belong to the client or the server.
+// TODO: just grab 0th planner
 export default function DefaultPlannerSelection({
   saveButtonName,
   onSaved,
   isInPlannerPage,
 }: DefaultPlannerSelectionProps) {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
   const [saveButtonClicked, setSaveButtonClicked] = useState<ButtonName>(
     ButtonName.Save,
   );
   const [isSaved, setIsSaved] = useState(false);
   const [error, setError] = useState("");
+
+  // Primary program
+  const { data: primaryProgram } = useUserPrimaryProgram(userId);
+  const { data: defaultPlannerId } = useUserDefaultPlannerId(userId);
   const {
-    primaryMajor,
-    setPrimaryMajor,
-    userMajors,
-    defaultPlannerId,
-    setDefaultPlannerId,
-    updateDefaultPlanner,
-    updateDefaultPlannerIsPending,
-    majorDefaultPlanners,
-    loadingMajorDefaultPlanners,
-  } = useContext(DefaultPlannerContext);
+    data: programDefaultPlanners,
+    isLoading: loadingProgramDefaultPlanners,
+  } = useUserProgramDefaultPlanners(userId, primaryProgram);
+
+  const {
+    mutate: updateDefaultPlanner,
+    isPending: updateDefaultPlannerIsPending,
+  } = useUpdateUserDefaultPlannerIdMutation();
+
+  // TODO: Deeper issue here as mentioned above. Should be react-query mutation if server state,
+  // however, no current database storage for primary major. Unclear if this
+  // state should be persisted on server, or if it should be stored in local
+  // storage.
+  const setPrimaryMajor = (program: Program | null) =>
+    console.warn(`setPrimaryMajor currently unimplemented ${program}`);
+
+  const setDefaultPlannerId = (plannerId: string) =>
+    alert(`setDefaultPlannerId currently unimplemented ${plannerId}`);
+
+  const { data: userPrograms } = useUserPrograms(session?.user.id);
+
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
@@ -58,7 +87,7 @@ export default function DefaultPlannerSelection({
 
   function handleChangeSelectedMajor(
     _: React.SyntheticEvent | null,
-    newValue: Major | null,
+    newValue: Program | null,
   ) {
     if (newValue != null) {
       setPrimaryMajor(newValue);
@@ -99,14 +128,14 @@ export default function DefaultPlannerSelection({
   ]);
 
   function handleSave(buttonName: ButtonName) {
-    if (defaultPlannerId === undefined) {
+    if (defaultPlannerId === undefined || defaultPlannerId === null) {
       setError(
         "Please select your majors, then choose a primary major and a default planner.",
       );
       return;
     }
     setError("");
-    updateDefaultPlanner(defaultPlannerId);
+    updateDefaultPlanner({ userId: userId!, defaultPlannerId });
     setSaveButtonClicked(buttonName);
   }
 
@@ -127,25 +156,16 @@ export default function DefaultPlannerSelection({
     handleSave(ButtonName.CreateNew);
   }
 
-  const ErrorAlert = () => (
-    <div>
-      {error.length > 0 && (
-        <Alert color="danger" startDecorator={<ReportIcon />}>
-          {error}
-        </Alert>
-      )}
-    </div>
-  );
-
   // Set the primary major to the instance of the corresponding majors
   // in userMajors, because the references are different even though
   // the values are the same
   useEffect(() => {
-    if (primaryMajor) {
-      const found = userMajors.find((m) => m.id === primaryMajor.id) ?? null;
+    if (primaryProgram && userPrograms && userPrograms.length > 0) {
+      const found =
+        userPrograms.find((m) => m.id === primaryProgram.id) ?? null;
       setPrimaryMajor(found);
     }
-  }, [primaryMajor, userMajors, setPrimaryMajor]);
+  }, [primaryProgram, userPrograms, setPrimaryMajor]);
 
   return (
     <div className="w-full">
@@ -156,29 +176,34 @@ export default function DefaultPlannerSelection({
         dialogText="Are you sure you want to replace your current planner? Your notes and courses will be deleted."
       />
       <div className="overflow-y-scroll h-[70vh] space-y-2">
-        {error.length > 0 && <ErrorAlert />}
+        {error.length > 0 && (
+          <Alert color="danger" startDecorator={<ReportIcon />}>
+            {error}
+          </Alert>
+        )}
         <div>
           <Typography level="body-lg">Primary Program</Typography>
           <Select
             placeholder="Choose one…"
             variant="plain"
-            value={primaryMajor}
+            value={primaryProgram}
             onChange={handleChangeSelectedMajor}
-            disabled={userMajors.length === 0}
+            disabled={!userPrograms || userPrograms.length === 0}
           >
-            {userMajors.map((major, index) => (
-              <Option key={index} value={major}>
-                {major.name} {major.catalogYear}
-              </Option>
-            ))}
+            {userPrograms &&
+              userPrograms.map((major, index) => (
+                <Option key={index} value={major}>
+                  {major.name} {major.catalogYear}
+                </Option>
+              ))}
           </Select>
         </div>
-        {userMajors.length > 0 && primaryMajor && (
+        {userPrograms && userPrograms.length > 0 && primaryProgram && (
           <SelectDefaultPlanner
-            selectedDefaultPlanner={defaultPlannerId}
+            selectedDefaultPlanner={defaultPlannerId ?? undefined}
             onChange={handleChangeDefaultPlanner}
-            majorDefaultPlanners={majorDefaultPlanners}
-            loadingMajorDefaultPlanners={loadingMajorDefaultPlanners}
+            majorDefaultPlanners={programDefaultPlanners}
+            loadingMajorDefaultPlanners={loadingProgramDefaultPlanners}
           />
         )}
         <CourseInfoModal />

@@ -1,16 +1,17 @@
+import { usePlanners, useUserDefaultPlanner } from "@/app/hooks/reactQuery";
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
-import { getAllPlanners, saveAllPlanners } from "@actions/planner";
-import { DefaultPlannerContext } from "@contexts/DefaultPlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { MultiPlanner } from "./Types";
+import { updateUserPlanners } from "../actions/planner";
+import { MultiPlanner } from "../contexts/PlannersProvider";
 
-export function usePlanners() {
+export function usePlannersOld() {
   const { data: session } = useSession();
+
   const [{ planners, activePlanner }, setMultiPlanner] = useState<MultiPlanner>(
     {
       planners: [],
@@ -19,16 +20,7 @@ export function usePlanners() {
   );
   const userId = session?.user.id;
 
-  const { data } = useQuery({
-    queryKey: ["planners"],
-    queryFn: async () => {
-      const userEmail = session?.user.email ?? "";
-      if (userEmail.length == 0) return [];
-      const planners = await getAllPlanners(userEmail);
-      return planners;
-    },
-    refetchInterval: 1000 * 180,
-  });
+  const { data } = usePlanners(userId);
 
   // We have to use a useEffect here because we prefetch the data on the server using react-query
   // so we have to set the data result to multiplanner manually
@@ -45,7 +37,7 @@ export function usePlanners() {
     setMultiPlanner((prev) => ({ ...prev, activePlanner: id }));
   };
 
-  const { userDefaultPlanner } = useContext(DefaultPlannerContext);
+  const { data: userDefaultPlanner } = useUserDefaultPlanner(userId);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
@@ -72,7 +64,7 @@ export function usePlanners() {
   const { mutate: saveAll } = useMutation({
     mutationKey: ["savePlanners"],
     mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
-      await saveAllPlanners(input);
+      await updateUserPlanners(input);
     },
     onError: (err) => {
       console.error(err);
@@ -95,6 +87,7 @@ export function usePlanners() {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
+      console.log("beforeunload, saving planners");
       if (userId) {
         navigator.sendBeacon("/api/planners", JSON.stringify(planners));
       }
@@ -140,7 +133,7 @@ export function usePlanners() {
     const id = uuidv4();
     setMultiPlanner((prev) => ({
       planners: prev.planners.concat({
-        ...cloneDefaultPlanner(userDefaultPlanner),
+        ...cloneDefaultPlanner(userDefaultPlanner!),
         id,
         title: "New Planner",
       }),
@@ -166,7 +159,7 @@ export function usePlanners() {
         planners: prev.planners.map((p) =>
           p.id === prev.activePlanner
             ? {
-                ...cloneDefaultPlanner(userDefaultPlanner),
+                ...cloneDefaultPlanner(userDefaultPlanner!),
                 id: prev.activePlanner,
                 title,
               }

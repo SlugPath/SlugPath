@@ -1,4 +1,4 @@
-import { PlannersContext } from "@contexts/PlannersProvider";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForever from "@mui/icons-material/DeleteForever";
