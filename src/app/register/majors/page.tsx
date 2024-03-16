@@ -1,21 +1,16 @@
 "use client";
 
-import SelectMajorName from "@/app/components/modals/majorsModal/majorSelection/SelectMajorName";
 import { cn } from "@/lib/utils";
+import { Option, Select } from "@mui/joy";
 import Link from "next/link";
 import { useState } from "react";
 
+// TODO: Potential issue: do different years have different majors? Should year
+// selection come first, and majors offered that year change depending on that
+// selection?
 export default function Majors() {
   const [majorInput, setMajorInput] = useState("");
-
-  function handleChangeMajorInput(
-    _: React.SyntheticEvent | null,
-    newValue: string | null,
-  ) {
-    if (newValue != null) {
-      setMajorInput(newValue);
-    }
-  }
+  // const [catalogYearInput, setCatalogYearInput] = useState("");
 
   return (
     <>
@@ -33,11 +28,17 @@ export default function Majors() {
       <div className="h-12" />
 
       <div className="flex flex-col gap-4">
-        <SelectMajorName
-          selectedMajor={majorInput}
-          majors={["test"]}
-          onChange={handleChangeMajorInput}
-        />
+        <Select
+          value={majorInput}
+          placeholder="Choose one…"
+          variant="plain"
+          onChange={(_, newValue) => setMajorInput(newValue ?? "")}
+        >
+          <Option value="Computer Science">Computer Science</Option>
+          <Option value="Computer Science">Computer Science</Option>
+          <Option value="Computer Science">Computer Science</Option>
+          <Option value="Computer Science">Computer Science</Option>
+        </Select>
       </div>
 
       <div className="h-10" />
