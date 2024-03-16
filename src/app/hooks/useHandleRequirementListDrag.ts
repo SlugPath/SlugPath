@@ -5,7 +5,7 @@ import { DraggableLocation } from "@hello-pangea/dnd";
 import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { ModalsContext } from "../contexts/ModalsProvider/Provider";
+import { ModalsContext } from "../contexts/ModalsProvider";
 import { StoredCourse } from "../types/Course";
 import { RequirementList } from "../types/Requirements";
 

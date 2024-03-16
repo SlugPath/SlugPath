@@ -1,4 +1,3 @@
-import { getAllPlanners } from "@actions/planner";
 import Planners from "@components/planners/Planners";
 import {
   HydrationBoundary,
@@ -6,21 +5,19 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+
+import { getUserPlanners } from "../../actions/planner";
 
 export default async function Home() {
-  const queryClient = new QueryClient();
-
   const session = await getServerSession();
-
-  if (!session) redirect("/");
+  const userId = session?.user.id ?? "";
+  const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["planners"],
     queryFn: async () => {
-      const userEmail = session.user.email ?? "";
-      if (userEmail.length === 0) return [];
-      return await getAllPlanners(userEmail);
+      if (userId.length === 0) return [];
+      return await getUserPlanners(userId);
     },
   });
 

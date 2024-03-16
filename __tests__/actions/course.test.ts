@@ -1,10 +1,10 @@
 import prisma from "@/lib/prisma";
 import { compareCoursesByNum } from "@/lib/utils";
 import {
-  courseInfo,
-  coursesBy,
   getAllDepartments,
-  getSuggestedClasses,
+  getCourse,
+  getCoursesBy,
+  getSuggestedCourses,
 } from "@actions/course";
 import { StoredCourse } from "@customTypes/Course";
 
@@ -55,7 +55,7 @@ describe("Course actions", () => {
 
   describe("courseInfo", () => {
     it("should return the specified course", async () => {
-      const course = await courseInfo({
+      const course = await getCourse({
         departmentCode: "CSE",
         number: `3`,
       });
@@ -77,7 +77,7 @@ describe("Course actions", () => {
     });
 
     it("should return the first course that matches the query input", async () => {
-      const course = await courseInfo({
+      const course = await getCourse({
         departmentCode: "CSE",
       });
 
@@ -87,14 +87,14 @@ describe("Course actions", () => {
 
     it("should return null if no courses match the query input", async () => {
       expect(
-        await courseInfo({
+        await getCourse({
           departmentCode: "MATH",
         }),
       ).toBeUndefined();
     });
 
     it("should set description as an empty string if not defined", async () => {
-      const course = await courseInfo({
+      const course = await getCourse({
         departmentCode: "CSE",
         number: `123`,
       });
@@ -119,7 +119,7 @@ describe("Course actions", () => {
   describe("coursesBy", () => {
     it("should return the specified course with the correct department", async () => {
       expect(
-        await coursesBy({
+        await getCoursesBy({
           departmentCode: "CSE",
           numberRange: [1, 299],
           creditRange: [1, 15],
@@ -127,7 +127,7 @@ describe("Course actions", () => {
       ).toHaveLength(3);
 
       expect(
-        await coursesBy({
+        await getCoursesBy({
           departmentCode: "ANTH",
           numberRange: [1, 299],
           creditRange: [1, 15],
@@ -137,21 +137,21 @@ describe("Course actions", () => {
 
     it("should return the specified course with the correct number", async () => {
       expect(
-        await coursesBy({
+        await getCoursesBy({
           number: `3`,
           numberRange: [1, 299],
           creditRange: [1, 15],
         }),
       ).toHaveLength(2);
       expect(
-        await coursesBy({
+        await getCoursesBy({
           number: `101`,
           numberRange: [1, 299],
           creditRange: [1, 15],
         }),
       ).toHaveLength(1);
       expect(
-        await coursesBy({
+        await getCoursesBy({
           number: `123`,
           numberRange: [1, 299],
           creditRange: [1, 15],
@@ -161,14 +161,14 @@ describe("Course actions", () => {
 
     it("should return the specified course with the correct ge", async () => {
       expect(
-        await coursesBy({
+        await getCoursesBy({
           ge: "mf",
           numberRange: [1, 299],
           creditRange: [1, 15],
         }),
       ).toHaveLength(1);
       expect(
-        await coursesBy({
+        await getCoursesBy({
           ge: "ta",
           numberRange: [1, 299],
           creditRange: [1, 15],
@@ -178,25 +178,25 @@ describe("Course actions", () => {
 
     it("should return the specified courses within the number range", async () => {
       expect(
-        await coursesBy({ numberRange: [1, 299], creditRange: [1, 15] }),
+        await getCoursesBy({ numberRange: [1, 299], creditRange: [1, 15] }),
       ).toHaveLength(3);
       expect(
-        await coursesBy({ numberRange: [1, 3], creditRange: [1, 15] }),
+        await getCoursesBy({ numberRange: [1, 3], creditRange: [1, 15] }),
       ).toHaveLength(1);
       expect(
-        await coursesBy({ numberRange: [100, 299], creditRange: [1, 15] }),
+        await getCoursesBy({ numberRange: [100, 299], creditRange: [1, 15] }),
       ).toHaveLength(2);
     });
 
     it("should return the specified courses within the credit range", async () => {
       expect(
-        await coursesBy({ creditRange: [3, 4], numberRange: [1, 299] }),
+        await getCoursesBy({ creditRange: [3, 4], numberRange: [1, 299] }),
       ).toHaveLength(0);
       expect(
-        await coursesBy({ creditRange: [5, 12], numberRange: [1, 299] }),
+        await getCoursesBy({ creditRange: [5, 12], numberRange: [1, 299] }),
       ).toHaveLength(3);
       expect(
-        await coursesBy({ creditRange: [1, 15], numberRange: [1, 299] }),
+        await getCoursesBy({ creditRange: [1, 15], numberRange: [1, 299] }),
       ).toHaveLength(3);
     });
   });
@@ -204,19 +204,19 @@ describe("Course actions", () => {
   describe("getSuggestedClasses", () => {
     it("should return the specified courses", async () => {
       expect(
-        await getSuggestedClasses(["CSE 101", "CSE 3", "CSE 101", "CSE 123"]),
+        await getSuggestedCourses(["CSE 101", "CSE 3", "CSE 101", "CSE 123"]),
       ).toHaveLength(3);
     });
 
     it("should return an empty array if no courses are found", async () => {
       expect(
-        await getSuggestedClasses(["ANTH 1", "ANTH 2", "ANTH 3"]),
+        await getSuggestedCourses(["ANTH 1", "ANTH 2", "ANTH 3"]),
       ).toHaveLength(0);
     });
 
     it("should work with different capitalizations", async () => {
       expect(
-        await getSuggestedClasses(["CSE 101", "cse 3", "cse 101", "cse 123"]),
+        await getSuggestedCourses(["CSE 101", "cse 3", "cse 101", "cse 123"]),
       ).toHaveLength(3);
     });
   });

@@ -1,4 +1,4 @@
-import { Major } from "@/app/types/Major";
+import { Program } from "@/app/types/Program";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import prisma from "@/lib/prisma";
 import {
@@ -76,7 +76,7 @@ describe("Major Requirements Actions", () => {
     await prisma.major.deleteMany();
   });
 
-  let major: Major | null;
+  let major: Program | null;
   let user: User;
   beforeEach(async () => {
     major = await prisma.major.findFirst();

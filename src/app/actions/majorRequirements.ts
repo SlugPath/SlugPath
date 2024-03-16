@@ -5,15 +5,15 @@ import { isRequirementList } from "@/lib/requirementsUtils";
 import { v4 as uuid4 } from "uuid";
 
 import { Binder, Requirement, RequirementList } from "../types/Requirements";
-import { courseInfo } from "./course";
-import { userHasMajorEditPermission } from "./permissions";
+import { getCourse } from "./course";
+import { userHasProgramEditPermission } from "./permissions";
 
 export async function saveMajorRequirements(
   requirements: RequirementList,
   majorId: number,
   userId: string,
 ) {
-  const hasPermission = await userHasMajorEditPermission(userId, majorId);
+  const hasPermission = await userHasProgramEditPermission(userId, majorId);
 
   // check if user is allowed to edit this major
   if (!hasPermission) return { success: false };
@@ -83,18 +83,16 @@ export async function getMajorRequirements(
 }
 
 export async function getAllRequirementLists(): Promise<RequirementList[]> {
-  const requirementLists = await prisma.majorRequirement.findMany();
+  const majors = await prisma.major.findMany();
 
-  const convertedRequirementLists: RequirementList[] = [];
+  const requirementLists = await Promise.all(
+    majors.map(async (major) => {
+      return getMajorRequirements(major.id);
+    }),
+  );
 
-  requirementLists.forEach(async (reqList) => {
-    const r = await convertJSONToRequirementList(
-      reqList.requirementList as string,
-    );
-    convertedRequirementLists.push(r);
-  });
-
-  return convertedRequirementLists;
+  // remove empty requirement lists
+  return requirementLists.filter((reqList) => reqList.requirements.length > 0);
 }
 
 // ==================================================================================
@@ -116,7 +114,7 @@ async function convertJSONToRequirementList(requirementListJSON: string) {
   const requirementList = JSON.parse(requirementListJSON) as RequirementList;
 
   return await requirementListMapper(async (req) => {
-    const course = await courseInfo({
+    const course = await getCourse({
       departmentCode: req.departmentCode,
       number: req.number,
     });

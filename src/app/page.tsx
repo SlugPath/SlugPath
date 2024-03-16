@@ -5,13 +5,8 @@ import { redirect } from "next/navigation";
 import SplitScreenContainer from "./components/accountCreation/SplitScreenContainer";
 
 export default async function Page() {
-  const redirectToPlanner = () => redirect("/planner");
-
   const session = await getServerSession();
-
-  if (session?.user) {
-    return redirectToPlanner();
-  }
+  if (!session?.user.id) redirect("/planner");
 
   return (
     <SplitScreenContainer>

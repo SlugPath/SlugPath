@@ -1,3 +1,4 @@
+import { useSuggestedCourses } from "@/app/hooks/reactQuery";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
 import { createCourseFromId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
@@ -13,11 +14,12 @@ import {
   Droppable,
 } from "@hello-pangea/dnd";
 import { Button, Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import CourseInfoModal from "./CourseInfoModal";
-import useClassSuggestions from "./useClassSuggestions";
+
+const courseNumberRegex = /[A-Z]{2,6} [0-9]{1,3}[A-Z]*/g;
 
 export interface ReplaceCustomModalProps {
   onClose: () => void;
@@ -32,10 +34,23 @@ export default function ReplaceCustomModal({
   onSave,
   customCourse,
 }: ReplaceCustomModalProps) {
-  const { classes, setClasses, suggestedLoading } = useClassSuggestions({
-    isOpen,
-    title: customCourse.title,
-  });
+  // Get all the course numbers from the custom course title
+  const suggestedTitles = Array.from(
+    customCourse.title.toUpperCase().matchAll(courseNumberRegex),
+  ).map((m) => m[0]);
+
+  // Fetch the suggested classes from the database (to replace custom courses)
+  const {
+    data: initialSuggestedCourses,
+    isLoading: initialSuggestedCoursesLoading,
+  } = useSuggestedCourses(suggestedTitles);
+
+  const [suggestedCourses, setSuggestedCourses] = useState<StoredCourse[]>([]);
+
+  useEffect(() => {
+    setSuggestedCourses(initialSuggestedCourses ?? []);
+  }, [initialSuggestedCourses]);
+
   const { replaceCustomCourse } = useContext(PlannerContext);
   const droppableId = REPLACE_CUSTOM_DROPPABLE + customCourse.id;
 
@@ -50,22 +65,24 @@ export default function ReplaceCustomModal({
     destination: DraggableLocation,
   ) {
     const course = createCourseFromId(draggableId);
-    if (destination.droppableId === droppableId) {
-      // Prevent duplicates
-      if (!classes.find((c) => c.number === course.number)) {
-        setClasses((prev) => [
-          ...prev,
-          {
-            ...course,
-            id: uuidv4(),
-          },
-        ]);
-      }
+    if (destination.droppableId !== droppableId) {
+      return;
+    }
+
+    // Prevent duplicates
+    if (!suggestedCourses!.find((c) => c.number === course.number)) {
+      setSuggestedCourses((prev) => [
+        ...prev,
+        {
+          ...course,
+          id: uuidv4(),
+        },
+      ]);
     }
   }
 
   function removeCourse(index: number) {
-    setClasses((prev) => {
+    setSuggestedCourses((prev) => {
       const newClasses = [...prev];
       newClasses.splice(index, 1);
       return newClasses;
@@ -73,10 +90,10 @@ export default function ReplaceCustomModal({
   }
 
   function handleSave() {
-    if (classes.length === 0) {
+    if (!suggestedCourses || suggestedCourses.length === 0) {
       return;
     }
-    replaceCustomCourse(customCourse.id, classes);
+    replaceCustomCourse(customCourse.id, suggestedCourses);
     onSave();
   }
 
@@ -125,7 +142,7 @@ export default function ReplaceCustomModal({
               </Card>
               <Droppable
                 droppableId={droppableId}
-                isDropDisabled={suggestedLoading}
+                isDropDisabled={initialSuggestedCoursesLoading}
               >
                 {(provided) => {
                   return (
@@ -137,20 +154,21 @@ export default function ReplaceCustomModal({
                         size="sm"
                         className="rounded-md min-h-48"
                       >
-                        {classes.map((course, index) => {
-                          return (
-                            <DraggableCourseCard
-                              key={index}
-                              course={course}
-                              index={index}
-                              draggableId={course.id}
-                              quarterId={droppableId}
-                              isCustom={false}
-                              customDeleteCourse={() => removeCourse(index)}
-                            />
-                          );
-                        })}
-                        {classes.length === 0 && (
+                        {suggestedCourses &&
+                          suggestedCourses.map((course, index) => {
+                            return (
+                              <DraggableCourseCard
+                                key={index}
+                                course={course}
+                                index={index}
+                                draggableId={course.id}
+                                quarterId={droppableId}
+                                isCustom={false}
+                                customDeleteCourse={() => removeCourse(index)}
+                              />
+                            );
+                          })}
+                        {suggestedCourses && suggestedCourses.length === 0 && (
                           <Typography className="text-gray-400 text-center">
                             Drag official courses here
                           </Typography>
