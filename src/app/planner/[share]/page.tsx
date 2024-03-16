@@ -31,10 +31,14 @@ export default async function Page({ params }: { params: { share: string } }) {
 
   planners.push(duplicatePlanner);
 
+  console.log(`Pushed planner`);
+
   // save it
   await updateUserPlanners({
     userId: session?.user.id,
     planners,
   });
+
+  console.log(`Updated user planners`);
   redirect("/planner");
 }
