@@ -7,7 +7,11 @@ type AccountCreationStore = {
 
   selectedMajors: ProgramInfo[] | undefined;
   addMajorInfo: (majorInfo: ProgramInfo) => void;
-  deleteMajor: (majorInfo: ProgramInfo) => void;
+  deleteMajorInfo: (majorInfo: ProgramInfo) => void;
+
+  selectedMinors: ProgramInfo[] | undefined;
+  addMinorInfo: (minorInfor: ProgramInfo) => void;
+  deleteMinorInfo: (minorInfo: ProgramInfo) => void;
 };
 
 const useAccountCreationStore = create<AccountCreationStore>((set) => ({
@@ -23,7 +27,7 @@ const useAccountCreationStore = create<AccountCreationStore>((set) => ({
       selectedMajors: [...(state.selectedMajors ?? []), newMajorInfo],
     })),
 
-  deleteMajor: (toDeleteMajorInfo) =>
+  deleteMajorInfo: (toDeleteMajorInfo) =>
     set((state) => {
       if (state.selectedMajors === undefined) {
         return { selectedMajors: undefined };
@@ -36,7 +40,28 @@ const useAccountCreationStore = create<AccountCreationStore>((set) => ({
       );
       return { selectedMajors: _majorInfo };
     }),
-  // setMajors: (majors: string[]) => set({ majors }),
+
+  // Minors
+  selectedMinors: undefined,
+
+  addMinorInfo: (newMinorInfo) =>
+    set((state) => ({
+      selectedMinors: [...(state.selectedMinors ?? []), newMinorInfo],
+    })),
+
+  deleteMinorInfo: (toDeleteMinorInfo) =>
+    set((state) => {
+      if (state.selectedMinors === undefined) {
+        return { selectedMinors: undefined };
+      }
+
+      const _majorInfo = state.selectedMinors.filter(
+        (minorInfo) =>
+          minorInfo.programName !== toDeleteMinorInfo.programName ||
+          minorInfo.catalogYear !== toDeleteMinorInfo.catalogYear,
+      );
+      return { selectedMinors: _majorInfo };
+    }),
 }));
 
 export default useAccountCreationStore;

@@ -28,7 +28,7 @@ export default function StepByStepLayout({
 
   return (
     <SplitScreenContainer>
-      <div className="mx-auto w-full max-w-lg lg:w-[32rem]">
+      <div className="mx-auto w-full max-w-xl lg:w-[36rem]">
         {back ? (
           <Link
             href={back}
@@ -42,7 +42,7 @@ export default function StepByStepLayout({
         )}
         {children}
       </div>
-      <div className="mx-auto w-full max-w-lg lg:w-[32rem] pb-10 sm:pb-0 pt-20">
+      <div className="mx-auto w-full max-w-xl lg:w-[36rem] pb-10 sm:pb-0 pt-20">
         <ProgressBar step={step} totalSteps={totalSteps} />
       </div>
     </SplitScreenContainer>

@@ -2,12 +2,16 @@ import ScreenSizeWarning from "@/app/components/modals/ScreenSizeWarning";
 import BetaWarning from "@components/beta/BetaWarning";
 import Navbar from "@components/navbar/Navbar";
 import { OpenInNew } from "@mui/icons-material";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
+  if (!session?.user.id) redirect("/");
   return (
     <div className="bg-bg-light dark:bg-bg-dark bg-cover min-h-screen flex flex-col max-h-screen min-w-0">
       <ScreenSizeWarning />

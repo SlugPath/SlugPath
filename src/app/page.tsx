@@ -6,11 +6,11 @@ import SplitScreenContainer from "./components/accountCreation/SplitScreenContai
 
 export default async function Page() {
   const session = await getServerSession();
-  if (!session?.user.id) redirect("/planner");
+  if (session?.user.id) redirect("/planner");
 
   return (
     <SplitScreenContainer>
-      <div className="flex flex-col items-center justify-center h-full mx-auto w-full max-w-lg lg:w-[32rem]">
+      <div className="flex flex-col items-center justify-center h-full mx-auto w-full max-w-xl lg:w-[36rem]">
         <h2 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 text-center">
           Welcome to SlugPath 🐌🎉
         </h2>

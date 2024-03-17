@@ -1,5 +1,6 @@
 "use client";
 
+import ProgramChip from "@/app/components/ProgramChip";
 import { usePrograms } from "@/app/hooks/reactQuery";
 import {
   cn,
@@ -7,8 +8,8 @@ import {
   isProgramNameInProgramInfos,
 } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
-import { Add, Close, Error, School, Warning } from "@mui/icons-material";
-import { LinearProgress, Option, Select, Tooltip } from "@mui/joy";
+import { Add, Error, Warning } from "@mui/icons-material";
+import { LinearProgress, Option, Select } from "@mui/joy";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -23,12 +24,11 @@ export default function Majors() {
     (state) => state.selectedMajors,
   );
   const addMajorInfo = useAccountCreationStore((state) => state.addMajorInfo);
-  const deleteMajor = useAccountCreationStore((state) => state.deleteMajor);
+  const deleteMajor = useAccountCreationStore((state) => state.deleteMajorInfo);
 
-  const isMaxMajorsSelected = !!(selectedMajors && selectedMajors.length >= 2);
-
-  //TODO: Test when catalogYears is defined, but select a major with no program
-  //for that catalog year
+  const isMaxMajorsSelected = !!(
+    selectedMajors && selectedMajors.length >= MAX_MAJOR_SELECTIONS
+  );
 
   const [error, setError] = useState("");
 
@@ -47,22 +47,18 @@ export default function Majors() {
   // Add a program to the list of selected programs
   const handleAddProgram = () => {
     setError("");
-    const programInfo = {
-      programName: majorInput,
-      catalogYear: catalogYearInput,
-    };
 
     if (
       selectedMajors &&
-      isProgramNameInProgramInfos(programInfo.programName, selectedMajors)
+      isProgramNameInProgramInfos(majorInput, selectedMajors)
     ) {
       setError("You have already added this major");
       return;
     }
 
-    if (selectedMajors && selectedMajors.length >= MAX_MAJOR_SELECTIONS) return;
+    if (isMaxMajorsSelected) return;
 
-    addMajorInfo(programInfo);
+    addMajorInfo({ programName: majorInput, catalogYear: catalogYearInput });
   };
 
   // Delete a program from the list of selected programs
@@ -186,7 +182,7 @@ export default function Majors() {
         )}
         {selectedMajors &&
           selectedMajors.map((program) => (
-            <ProgramTag
+            <ProgramChip
               key={program.programName + program.catalogYear}
               programName={program.programName}
               catalogYear={program.catalogYear}
@@ -210,30 +206,5 @@ export default function Majors() {
         Continue
       </Link>
     </>
-  );
-}
-
-function ProgramTag({
-  programName,
-  catalogYear,
-  deleteProgram,
-}: {
-  programName: string;
-  catalogYear: string;
-  deleteProgram: () => void;
-}) {
-  return (
-    <div className="flex gap-2 items-center bg-white shadow-md w-full px-5 py-4 rounded-lg justify-between">
-      <div className="flex flex-row gap-2 items-center min-w-0">
-        <School sx={{ color: "#000", height: "2rem", marginRight: "0.5rem" }} />
-        <Tooltip title={programName} placement="top">
-          <p className="truncate">{programName}</p>
-        </Tooltip>
-        <p className="text-subtext min-w-fit">({catalogYear})</p>
-      </div>
-      <button className="ml-5" onClick={deleteProgram}>
-        <Close sx={{ color: "#000", height: "2rem" }} />
-      </button>
-    </div>
   );
 }
