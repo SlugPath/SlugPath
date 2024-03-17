@@ -228,7 +228,7 @@ export default function CourseInfoModal({
             </Skeleton>
             {isCustomCourse(course) ? (
               <Tooltip title="We recommend replacing this custom course with a real course.">
-                <Chip color="warning" size="lg" className="mr-2">
+                <Chip color="custom" size="lg" className="mr-2">
                   Custom Course
                 </Chip>
               </Tooltip>

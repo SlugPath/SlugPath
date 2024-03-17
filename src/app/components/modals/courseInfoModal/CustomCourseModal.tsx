@@ -7,7 +7,6 @@ import {
   Button,
   Checkbox,
   Chip,
-  CssVarsProvider,
   FormControl,
   FormHelperText,
   Input,
@@ -19,7 +18,6 @@ import {
   Textarea,
   Tooltip,
   Typography,
-  extendTheme,
 } from "@mui/joy";
 import { ChangeEvent, useState } from "react";
 
@@ -29,13 +27,6 @@ const QUARTERS: Term[] = ["Fall", "Winter", "Spring", "Summer"];
 const cmpQuarters = (a: string, b: string) => {
   return QUARTERS.indexOf(a as Term) - QUARTERS.indexOf(b as Term);
 };
-
-declare module "@mui/joy/Chip" {
-  interface ChipPropsColorOverrides {
-    custom: true;
-  }
-}
-
 export interface CustomCourseModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -84,24 +75,6 @@ export default function CustomCourseModal({
       };
     });
   };
-
-  const theme = extendTheme({
-    components: {
-      JoyChip: {
-        styleOverrides: {
-          root: ({ ownerState, theme }) => ({
-            ...(ownerState.color === "custom" && {
-              invertedColors: true,
-              backgroundColor: "#E6E6FA", //lavender
-              [theme.getColorSchemeSelector("dark")]: {
-                backgroundColor: "#231645",
-              },
-            }),
-          }),
-        },
-      },
-    },
-  });
 
   const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newDescription = truncateTitle(
@@ -174,11 +147,9 @@ export default function CustomCourseModal({
           <div className="flex flex-row justify-between items-center">
             <Typography level="title-lg">Edit Custom Course</Typography>
             <Tooltip title="We recommend replacing this custom course with a real course.">
-              <CssVarsProvider theme={theme}>
-                <Chip color="custom" size="lg" className="mt-2 mr-2">
-                  Custom Course
-                </Chip>
-              </CssVarsProvider>
+              <Chip color="custom" size="lg" className="mt-2 mr-2">
+                Custom Course
+              </Chip>
             </Tooltip>
           </div>
           <FormControl error={tooShortError}>

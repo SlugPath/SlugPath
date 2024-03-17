@@ -48,7 +48,7 @@ export default function CustomCourseSelection() {
   };
 
   return (
-    <Card className="w-80 mt-2 mr-2 min-h-56" variant="plain">
+    <Card className="w-80 mt-2 mr-2" variant="plain">
       <div className="flex flex-row gap-2 items-center mx-auto">
         <Button onClick={handleOpen}>
           <Typography
