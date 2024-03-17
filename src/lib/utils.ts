@@ -111,14 +111,12 @@ export function isProgramInPrograms(
  * @param programInfos a list of program names and catalog years
  * @returns true if the programInfo is in the list of programInfos, otherwise false
  */
-export const isProgramInfoInProgramInfos = (
-  programInfo: ProgramInfo,
+export const isProgramNameInProgramInfos = (
+  programName: string,
   programInfos: ProgramInfo[],
 ) => {
   return programInfos.some(
-    (info) =>
-      info.programName === programInfo.programName &&
-      info.catalogYear === programInfo.catalogYear,
+    (programInfo) => programName === programInfo.programName,
   );
 };
 

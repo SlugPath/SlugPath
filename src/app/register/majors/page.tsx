@@ -4,7 +4,7 @@ import { usePrograms } from "@/app/hooks/reactQuery";
 import {
   cn,
   filterRedundantPrograms,
-  isProgramInfoInProgramInfos,
+  isProgramNameInProgramInfos,
 } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { Add, Close, Error, School, Warning } from "@mui/icons-material";
@@ -25,7 +25,7 @@ export default function Majors() {
   const addMajorInfo = useAccountCreationStore((state) => state.addMajorInfo);
   const deleteMajor = useAccountCreationStore((state) => state.deleteMajor);
 
-  console.log(selectedMajors);
+  const isMaxMajorsSelected = !!(selectedMajors && selectedMajors.length >= 2);
 
   //TODO: Test when catalogYears is defined, but select a major with no program
   //for that catalog year
@@ -54,7 +54,7 @@ export default function Majors() {
 
     if (
       selectedMajors &&
-      isProgramInfoInProgramInfos(programInfo, selectedMajors)
+      isProgramNameInProgramInfos(programInfo.programName, selectedMajors)
     ) {
       setError("You have already added this major");
       return;
@@ -136,12 +136,12 @@ export default function Majors() {
         <button
           type="button"
           className={cn(
-            (!majorInput || !catalogYearInput) &&
+            (!majorInput || !catalogYearInput || isMaxMajorsSelected) &&
               "cursor-not-allowed opacity-50",
             "bg-primary-500 text-white px-3 py-1 rounded-lg flex items-center justify-center gap-1 font-bold",
           )}
           onClick={handleAddProgram}
-          disabled={!majorInput || !catalogYearInput}
+          disabled={!majorInput || !catalogYearInput || isMaxMajorsSelected}
         >
           <Add sx={{ color: "#fff" }} />
           Add
@@ -150,21 +150,19 @@ export default function Majors() {
 
       <div className="h-10 flex items-center">
         {(isPending || isFetching) && <LinearProgress />}
-        {selectedMajors &&
-          selectedMajors.length < MAX_MAJOR_SELECTIONS &&
-          error.length > 0 && (
-            <p className="text-red-500 text-sm mt-2 flex items-center">
-              <Error
-                sx={{
-                  color: "rgb(239 68 68 / 1)",
-                  marginRight: "0.2rem",
-                  height: "1rem",
-                }}
-              />
-              {error}
-            </p>
-          )}
-        {selectedMajors && selectedMajors.length >= MAX_MAJOR_SELECTIONS && (
+        {!isMaxMajorsSelected && error.length > 0 && (
+          <p className="text-red-500 text-sm mt-2 flex items-center">
+            <Error
+              sx={{
+                color: "rgb(239 68 68 / 1)",
+                marginRight: "0.2rem",
+                height: "1rem",
+              }}
+            />
+            {error}
+          </p>
+        )}
+        {isMaxMajorsSelected && (
           <p className="text-yellow-500 text-sm mt-2 flex items-center">
             <Warning
               sx={{
