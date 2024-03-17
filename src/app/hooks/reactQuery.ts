@@ -3,6 +3,7 @@ import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { getCatalogYears } from "../actions/catalogYears";
 import { getCourse, getSuggestedCourses } from "../actions/course";
 import {
   removePermission as deletePermission,
@@ -31,24 +32,41 @@ import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
 
 /**
- * A React Query hook to fetch all majors and minors
+ * A React Query hook to fetch all majors and minors, optionally for a specific
+ * catalog year
+ * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
 export function usePrograms() {
   return useQuery({
-    queryKey: ["allPrograms"],
+    queryKey: ["programs"],
     queryFn: async () => await getPrograms(),
     placeholderData: [],
   });
 }
 
 /**
- * A React Query hook to fetch all unique majors and minors
+ * A React Query hook to fetch all majors and minors, optionally for a specific
+ * catalog year
+ * @param catalogYear Year of selected catalog
+ * @returns React Query useQuery Hook for all majors and minors
+ */
+export function useProgramsInYear(catalogYear: string) {
+  return useQuery({
+    queryKey: ["programs", catalogYear],
+    queryFn: async () => await getPrograms(catalogYear),
+    placeholderData: [],
+  });
+}
+
+/**
+ * A React Query hook to fetch all unique majors and minors, optionally for a
+ * specific catalog year
  * @returns React Query useQuery Hook for all majors and minors
  */
 export function useUnqiuePrograms() {
   return useQuery({
-    queryKey: ["allUniquePrograms"],
+    queryKey: ["uniquePrograms"],
     queryFn: async () => {
       const res = await getPrograms();
       return filterRedundantPrograms(res);
@@ -56,9 +74,26 @@ export function useUnqiuePrograms() {
     placeholderData: [],
   });
 }
+/**
+ * A React Query hook to fetch all unique majors and minors, optionally for a
+ * specific catalog year
+ * @param catalogYear Year of selected catalog
+ * @returns React Query useQuery Hook for all majors and minors
+ */
+export function useUnqiueProgramsInYear(catalogYear: string) {
+  return useQuery({
+    queryKey: ["uniquePrograms", catalogYear],
+    queryFn: async () => {
+      const res = await getPrograms(catalogYear);
+      return filterRedundantPrograms(res);
+    },
+    placeholderData: [],
+  });
+}
 
 /**
- * A React Query hook to fetch degree programs of a specified program type (major or minor) for a specific catalog year
+ * A React Query hook to fetch degree programs of a specified program type
+ * (major or minor) for a specific catalog year
  * @param programType Major or Minor
  * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for degree programs
@@ -70,13 +105,27 @@ export function useProgramTypeOfYear(
   return useQuery({
     queryKey: ["programs", programType, catalogYear],
     queryFn: async () => {
-      console.log("fetching programs", programType, catalogYear);
       return await getProgramsByTypeInYear(programType, catalogYear);
     },
     placeholderData: [],
     enabled: catalogYear !== "" && programType in ProgramType,
   });
 }
+
+/**
+ * A React Query hook to fetch all catalog years, optionally for a specific
+ * program
+ * @param programName (Optional) Name of the program
+ * @returns React Query useQuery Hook for all catalog years
+ */
+export function useCatalogYears(programName?: string) {
+  return useQuery({
+    queryKey: ["years", programName],
+    queryFn: async () => await getCatalogYears(programName),
+    placeholderData: [],
+  });
+}
+
 /**
  * A React Query hook to fetch all majors and minors for a user by their user id
  * @param userId unique id that identifies a user
@@ -128,7 +177,7 @@ export function useUpdateUserProgramsMutation() {
 
 /**
  * A React Query hook to fetch all planners
- * @param email user email
+ * @param userId unique id that identifies a user
  * @returns React Query useQuery Hook for all planners
  */
 export function usePlanners(userId: string | undefined) {

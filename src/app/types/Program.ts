@@ -12,3 +12,8 @@ export type ProgramInput = {
   catalogYear: string;
   programType: ProgramType;
 };
+
+export type ProgramInfo = {
+  programName: string;
+  catalogYear: string;
+};

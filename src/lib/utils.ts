@@ -1,5 +1,5 @@
 import { StoredCourse } from "@/app/types/Course";
-import { Program } from "@/app/types/Program";
+import { Program, ProgramInfo } from "@/app/types/Program";
 import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
@@ -104,6 +104,23 @@ export function isProgramInPrograms(
 
   return alreadyAdded;
 }
+
+/**
+ * Checks if a programInfo is in a list of programInfos
+ * @param programInfo a program name and catalog year
+ * @param programInfos a list of program names and catalog years
+ * @returns true if the programInfo is in the list of programInfos, otherwise false
+ */
+export const isProgramInfoInProgramInfos = (
+  programInfo: ProgramInfo,
+  programInfos: ProgramInfo[],
+) => {
+  return programInfos.some(
+    (info) =>
+      info.programName === programInfo.programName &&
+      info.catalogYear === programInfo.catalogYear,
+  );
+};
 
 export function toStoredCourse({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

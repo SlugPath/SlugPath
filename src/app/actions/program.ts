@@ -126,7 +126,7 @@ export async function getProgramsByTypeInYear(
       },
     ],
   });
-  return res.map((major) => major.name);
+  return res;
 }
 
 /**

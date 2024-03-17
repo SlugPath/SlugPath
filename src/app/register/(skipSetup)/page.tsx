@@ -8,7 +8,8 @@ import Link from "next/link";
 import SelectBox from "../../components/accountCreation/SelectBox";
 
 export default function Register() {
-  const { skipSetup, setSkipSetup } = useAccountCreationStore();
+  const skipSetup = useAccountCreationStore((state) => state.skipSetup);
+  const setSkipSetup = useAccountCreationStore((state) => state.setSkipSetup);
 
   const continueHref = skipSetup ? "/planner" : "/register/majors";
 
@@ -71,7 +72,7 @@ export default function Register() {
         href={continueHref}
         className={cn(
           skipSetup === undefined && "cursor-not-allowed opacity-50",
-          "bg-primary-500 text-white w-full flex items-center justify-center py-2 rounded-lg transition-opacity",
+          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity",
         )}
         aria-disabled={skipSetup === undefined}
       >

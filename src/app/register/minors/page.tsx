@@ -25,7 +25,7 @@ export default function Minors() {
         href="/planner"
         className={cn(
           false && "cursor-not-allowed opacity-50",
-          "bg-primary-500 text-white w-full flex items-center justify-center py-2 rounded-lg transition-opacity",
+          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity",
         )}
         aria-disabled={false === undefined}
       >
