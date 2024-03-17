@@ -1,6 +1,6 @@
 import useSearch from "@/app/hooks/useSearch";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { Card, Tooltip, Typography } from "@mui/joy";
+import { Card, CircularProgress, Tooltip, Typography } from "@mui/joy";
 
 import CustomCourseSelection from "./CustomCourseSelection";
 import SearchInputs from "./SearchInputs";
@@ -31,6 +31,9 @@ export default function Search({
           </Typography>
         </div>
         <SearchInputs handlers={handlers} params={params} />
+        <div className="flex flex-col place-items-center">
+          {loading ? <CircularProgress /> : null}
+        </div>
         <SearchResults courses={courses} loading={loading} />
       </Card>
       {displayCustomCourseSelection && <CustomCourseSelection />}
