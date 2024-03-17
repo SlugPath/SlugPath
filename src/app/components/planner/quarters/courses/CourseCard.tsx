@@ -104,20 +104,25 @@ export default function CourseCard({
             <CourseLabelList labels={getCourseLabels(course)} ge={course.ge} />
           </Grid>
           <Grid xs={1}>
-            {isCustom ? (
-              <CloseIconButton
-                onClick={() => handleRemoveCustom(index)}
-                sx={{
-                  visibility: highlighted ? "visible" : "hidden",
-                }}
-              />
+            {/* Show delete icon only if the course is in the planner or in the custom course selection */}
+            {quarterId !== undefined ? (
+              isCustom ? (
+                <CloseIconButton
+                  onClick={() => handleRemoveCustom(index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              ) : (
+                <CloseIconButton
+                  onClick={() => handleDeleteCourse(quarterId, index)}
+                  sx={{
+                    visibility: highlighted ? "visible" : "hidden",
+                  }}
+                />
+              )
             ) : (
-              <CloseIconButton
-                onClick={() => handleDeleteCourse(quarterId, index)}
-                sx={{
-                  visibility: highlighted ? "visible" : "hidden",
-                }}
-              />
+              <></>
             )}
           </Grid>
         </Grid>
