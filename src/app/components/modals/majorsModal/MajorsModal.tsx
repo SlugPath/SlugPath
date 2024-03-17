@@ -1,13 +1,16 @@
 import DefaultPlannerSelection from "@/app/components/modals/majorsModal/defaultPlannerSelection/DefaultPlannerSelection";
-import MajorSelection from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
-import { DefaultPlannerContext } from "@/app/contexts/DefaultPlannerProvider";
+import UserProgramsEditor from "@/app/components/modals/majorsModal/majorSelection/MajorSelection";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PermissionsContext } from "@/app/contexts/PermissionsProvider";
-import { Major } from "@/app/types/Major";
-import { hasPermissionToEditMajor } from "@/lib/permissionsUtils";
+import { useUserPermissions, useUserPrograms } from "@/app/hooks/reactQuery";
+import { Program } from "@/app/types/Program";
+import {
+  extractUnexpiredPrograms,
+  hasPermissionToEditProgram,
+} from "@/lib/permissionsUtils";
 import { Card, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useContext } from "react";
+import { useSession } from "next-auth/react";
+import { useContext, useMemo } from "react";
 
 import { Requirements } from "./Requirements";
 
@@ -39,6 +42,7 @@ export default function MajorsModal() {
   );
 }
 
+// TODO: Loading states from react-query
 export function MajorAndPlannerSelection({
   isInPlannerPage,
   onSavedDefaultPlanner,
@@ -46,16 +50,28 @@ export function MajorAndPlannerSelection({
   isInPlannerPage: boolean;
   onSavedDefaultPlanner?: () => void;
 }) {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
   const {
     setShowMajorsModal,
     setShowMajorRequirementsEditModal,
     setMajorToEdit,
   } = useContext(ModalsContext);
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
-  const { majorsAllowedToEdit } = useContext(PermissionsContext);
-  const { userMajors } = useContext(DefaultPlannerContext);
 
-  function handleClickEditRequirements(major: Major) {
+  // Fetch programsAllowedToEdit
+  const { data: userPermissions } = useUserPermissions(userId);
+
+  const programsAllowedToEdit = useMemo(
+    () => extractUnexpiredPrograms(userPermissions),
+    [userPermissions],
+  );
+
+  // Fetch user programs
+  const { data: userPrograms } = useUserPrograms(userId);
+
+  function handleClickEditRequirements(major: Program) {
     setMajorToEdit(major);
     setShowMajorRequirementsEditModal(true);
   }
@@ -68,35 +84,36 @@ export function MajorAndPlannerSelection({
   return (
     <div className="flex-row space-x-3 grid grid-cols-7 w-full">
       <div className="flex flex-col overflow-y-scroll h-[80vh] col-span-3">
-        <MajorSelection />
+        <UserProgramsEditor />
         <div className="space-y-2 w-full">
-          {userMajors.map((major, index) => {
-            const majorRequirements = getRequirementsForMajor(major.id);
+          {userPrograms &&
+            userPrograms.map((program, index) => {
+              const majorRequirements = getRequirementsForMajor(program.id);
 
-            if (majorRequirements === undefined) {
+              if (majorRequirements === undefined) {
+                return (
+                  <Card key={index}>
+                    Missing requirements for {program.name}{" "}
+                    {program.catalogYear}. Reloading the page may help.
+                  </Card>
+                );
+              }
+
               return (
-                <Card key={index}>
-                  Missing requirements for {major.name} {major.catalogYear}.
-                  Reloading the page may help.
-                </Card>
+                <Requirements
+                  key={index}
+                  major={program}
+                  requirements={majorRequirements}
+                  parents={0}
+                  hideTitle={false}
+                  hasEditPermission={hasPermissionToEditProgram(
+                    program,
+                    programsAllowedToEdit,
+                  )}
+                  onClickEdit={handleClickEditRequirements}
+                />
               );
-            }
-
-            return (
-              <Requirements
-                key={index}
-                major={major}
-                requirements={majorRequirements}
-                parents={0}
-                hideTitle={false}
-                hasEditPermission={hasPermissionToEditMajor(
-                  major,
-                  majorsAllowedToEdit,
-                )}
-                onClickEdit={handleClickEditRequirements}
-              />
-            );
-          })}
+            })}
         </div>
       </div>
       <Card variant="soft" className="col-span-4">

@@ -1,6 +1,5 @@
-import { EMPTY_PLANNER, initialPlanner } from "@/lib/plannerUtils";
-import { getPlannerById } from "@actions/planner";
-import { useQuery } from "@tanstack/react-query";
+import { usePlanner } from "@/app/hooks/reactQuery";
+import { EMPTY_PLANNER } from "@/lib/plannerUtils";
 
 import MiniQuarters from "./MiniQuarters";
 
@@ -11,12 +10,7 @@ export default function MiniPlanner({
   plannerId: string;
   active?: boolean;
 }) {
-  const { data: courseState, isLoading: loading } = useQuery({
-    queryKey: ["getPlanner", plannerId],
-    queryFn: async () => await getPlannerById(plannerId),
-    placeholderData: initialPlanner(),
-    enabled: !!plannerId && plannerId !== EMPTY_PLANNER,
-  });
+  const { data: courseState, isLoading: loading } = usePlanner(plannerId);
 
   if (!active || plannerId === EMPTY_PLANNER || loading) {
     return <></>;

@@ -1,10 +1,10 @@
 "use client";
 
 import { ModalsProvider } from "@/app/contexts/ModalsProvider";
+import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import { cn } from "@/lib/utils";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
-import { PlannersContext } from "@contexts/PlannersProvider";
 import { useContext } from "react";
 
 import Planner from "../planner/Planner";

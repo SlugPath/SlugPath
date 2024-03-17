@@ -1,15 +1,29 @@
+import { Program } from "@/app/types/Program";
 import { PlannerContext } from "@contexts/PlannerProvider";
+import { SetShow, SetState } from "@customTypes/Common";
+import { PlannerData } from "@customTypes/Planner";
 import { createContext, useContext } from "react";
 
-import { ModalsContextProps } from "./Types";
-import useModals from "./useModals";
+import useModals from "../hooks/useModals";
+
+export interface ModalsContextProps {
+  showMajorsModal: boolean;
+  setShowMajorsModal: SetShow;
+  showPermissionsModal: boolean;
+  setShowPermissionsModal: SetShow;
+  showReplaceRLModal: boolean;
+  setShowReplaceRLModal: SetShow;
+  showMajorRequirementsEditModal: boolean;
+  setShowMajorRequirementsEditModal: SetShow;
+  courseState: PlannerData;
+  majorToEdit: Program | undefined;
+  setMajorToEdit: SetState<Program | undefined>;
+}
 
 export const ModalsContext = createContext({} as ModalsContextProps);
 
 export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
-    showExportModal,
-    setShowExportModal,
     showMajorsModal,
     setShowMajorsModal,
     showPermissionsModal,
@@ -27,8 +41,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   return (
     <ModalsContext.Provider
       value={{
-        showExportModal,
-        setShowExportModal,
         showMajorsModal,
         setShowMajorsModal,
         showPermissionsModal,

@@ -1,5 +1,5 @@
+import { useUserRole } from "@/app/hooks/reactQuery";
 import { ModalsContext } from "@contexts/ModalsProvider";
-import { PermissionsContext } from "@contexts/PermissionsProvider";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
 import { Button, Card, Typography } from "@mui/joy";
@@ -7,10 +7,14 @@ import { useSession } from "next-auth/react";
 import { useContext } from "react";
 
 export default function PlannerActions() {
+  const { data: session, status } = useSession();
+
+  // TODO: remove modal context
   const { setShowMajorsModal, setShowPermissionsModal } =
     useContext(ModalsContext);
-  const { isAdmin } = useContext(PermissionsContext);
-  const { status } = useSession();
+
+  const { data: userRole } = useUserRole(session?.user.id);
+  const isAdmin = userRole === "ADMIN";
 
   const buttons = [
     {

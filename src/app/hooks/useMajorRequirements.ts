@@ -2,18 +2,18 @@ import {
   getMajorRequirements,
   saveMajorRequirements,
 } from "@/app/actions/majorRequirements";
-import { Major } from "@customTypes/Major";
+import { Program } from "@/app/types/Program";
 import { Binder, RequirementList } from "@customTypes/Requirements";
 import { useEffect, useState } from "react";
 
 export default function useMajorRequirements(
-  majors: Major[],
+  majors: Program[],
   userId: string | undefined,
 ) {
   const [listOfMajorRequirements, setListOfMajorRequirements] = useState<
     {
       majorRequirements: RequirementList;
-      major: Major;
+      major: Program;
       loadingSave: boolean;
       isSaved: boolean;
     }[]

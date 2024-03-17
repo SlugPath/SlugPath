@@ -1,5 +1,5 @@
 import { geOptions } from "@/lib/consts";
-import { coursesBy, getAllDepartments } from "@actions/course";
+import { getAllDepartments, getCoursesBy } from "@actions/course";
 import { SearchQueryDetails } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -34,7 +34,7 @@ export default function useSearch() {
   const { data: courses, isLoading: loading } = useQuery({
     queryKey: ["courses", queryDetails],
     placeholderData: keepPreviousData,
-    queryFn: async () => await coursesBy(queryDetails),
+    queryFn: async () => await getCoursesBy(queryDetails),
     staleTime: Infinity,
   });
 

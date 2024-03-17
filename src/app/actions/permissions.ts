@@ -5,7 +5,12 @@ import { Role } from "@prisma/client";
 
 import { Permission } from "../types/Permission";
 
-export async function upsertPermission({
+/**
+ * Delete existing then insert a new permission for a user
+ * @param param0 userId, permission to upsert
+ * @returns the upserted permission
+ */
+export async function replacePermission({
   userId,
   permission,
 }: {
@@ -32,7 +37,7 @@ export async function upsertPermission({
     }
 
     // Create new permissions
-    const result = tx.permission.upsert({
+    const result = await tx.permission.upsert({
       where: {
         userEmail: permission.userEmail,
       },
@@ -88,8 +93,9 @@ export async function upsertPermission({
 }
 
 /**
- * userId is the id of the potential admin making the request
- * userEmail is the email of the user to remove permissions from
+ * Remove a permission from a user
+ * @param param0 userid, userEmail to remove permission from
+ * @returns the removed permission
  */
 export async function removePermission({
   userId,
@@ -110,6 +116,10 @@ export async function removePermission({
   return result;
 }
 
+/**
+ * Fetch all permissions for all users
+ * @returns List of all permissions
+ */
 export async function getPermissions(): Promise<Permission[]> {
   const usersPermissions = await prisma.permission.findMany({
     select: {
@@ -134,6 +144,11 @@ export async function getPermissions(): Promise<Permission[]> {
   return usersPermissions;
 }
 
+/**
+ * Fetch a user's permissions
+ * @param userId a unique id that identifies a user
+ * @returns user's permissions
+ */
 export async function getUserPermissions(userId: string): Promise<Permission> {
   const user = await prisma.user.findUnique({
     where: {
@@ -175,22 +190,31 @@ export async function getUserPermissions(userId: string): Promise<Permission> {
   return permissions;
 }
 
-export async function userHasMajorEditPermission(
+/**
+ * Fetch user permissions and check if the user has permission to edit a program
+ *
+ * NOTE: decieving function, should be purely database logic / sql filtering.
+ * Frontend filtering should be left to the frontend if pure javascript filter
+ * @param userId
+ * @param programId
+ * @returns
+ */
+export async function userHasProgramEditPermission(
   userId: string,
-  majorId: number,
+  programId: number,
 ): Promise<boolean> {
   const permissions = await getUserPermissions(userId);
 
   const major = await prisma.major.findUnique({
     where: {
-      id: majorId,
+      id: programId,
     },
     select: {
       name: true,
     },
   });
 
-  if (!major) throw new Error(`Major ${majorId} not found`);
+  if (!major) throw new Error(`Major ${programId} not found`);
 
   if (permissions?.majorEditingPermissions) {
     return permissions?.majorEditingPermissions.some((majorEditPerm) => {
@@ -204,6 +228,11 @@ export async function userHasMajorEditPermission(
   return false;
 }
 
+/**
+ * Fetch a user's role
+ * @param userId unique id that identifies a user
+ * @returns
+ */
 export async function getUserRole(userId: string): Promise<string> {
   const user = await prisma.user.findUnique({
     where: {
