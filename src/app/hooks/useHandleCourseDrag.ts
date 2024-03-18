@@ -1,11 +1,18 @@
 import { CUSTOM_DROPPABLE, SEARCH_DROPPABLE } from "@/lib/consts";
-import { createCourseFromId, findQuarter } from "@/lib/plannerUtils";
+import {
+  createCourseFromId,
+  findQuarter,
+  getCourseFromPlanner,
+  isCustomCourse,
+} from "@/lib/plannerUtils";
 import { getQuarterId } from "@/lib/quarterUtils";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
 import useHandleRequirementListDrag from "@hooks/useHandleRequirementListDrag";
 import { v4 as uuidv4 } from "uuid";
+
+import { StoredCourse } from "../types/Course";
 
 // Helpers
 const draggedFromSearch = (droppableId: string) => {
@@ -81,10 +88,9 @@ export default function useHandleCourseDrag({
     const cid = uuidv4();
     newStoredCourses.splice(destination.index, 0, cid);
     const course = createCourseFromId(draggableId);
-    courseState.courses.push({
-      id: cid,
-      ...course,
-    });
+
+    // Don't add the same course twice to a particular quarter
+    if (isCourseInQuarter(quarter, { id: cid, ...course })) return;
     const newQuarter = {
       ...quarter,
       courses: newStoredCourses,
@@ -97,6 +103,7 @@ export default function useHandleCourseDrag({
         newQuarter,
         ...courseState.quarters.slice(idx + 1),
       ],
+      courses: [...courseState.courses, { id: cid, ...course }],
     };
 
     handleCourseUpdate(newState);
@@ -164,6 +171,20 @@ export default function useHandleCourseDrag({
     handleCourseUpdate(newState);
   }
 
+  function isCourseInQuarter(quarter: Quarter, course: StoredCourse): boolean {
+    // Ignore custom courses
+    if (isCustomCourse(course)) return false;
+    const _courses = quarter.courses.map((cid) =>
+      getCourseFromPlanner(cid, courseState),
+    );
+    const exists = _courses.find(
+      (c) =>
+        c.departmentCode === course.departmentCode &&
+        c.number === course.number,
+    );
+    return exists !== undefined;
+  }
+
   function moveCourseToNewQuarter(
     startQuarter: Quarter,
     finishQuarter: Quarter,
@@ -172,7 +193,16 @@ export default function useHandleCourseDrag({
     idx: number,
     idx2: number,
   ) {
-    const movedStoredCourse = startQuarter.courses[source.index];
+    const movedCid = startQuarter.courses[source.index];
+    // Don't add the same course twice to a particular quarter
+    if (
+      isCourseInQuarter(
+        finishQuarter,
+        getCourseFromPlanner(movedCid, courseState),
+      )
+    )
+      return;
+
     const startStoredCourses = Array.from(startQuarter.courses);
     startStoredCourses.splice(source.index, 1);
     const newStart = {
@@ -181,7 +211,7 @@ export default function useHandleCourseDrag({
     };
 
     const finishStoredCourses = Array.from(finishQuarter.courses);
-    finishStoredCourses.splice(destination.index, 0, movedStoredCourse);
+    finishStoredCourses.splice(destination.index, 0, movedCid);
     const newFinish = {
       ...finishQuarter,
       courses: finishStoredCourses,
