@@ -42,6 +42,7 @@ export function usePrograms() {
     queryKey: ["programs"],
     queryFn: async () => await getPrograms(),
     placeholderData: [],
+    refetchInterval: Infinity, // Programs are static
   });
 }
 
@@ -51,11 +52,12 @@ export function usePrograms() {
  * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
-export function useProgramsInYear(catalogYear: string) {
+export function useProgramsForYear(catalogYear: string) {
   return useQuery({
     queryKey: ["programs", catalogYear],
     queryFn: async () => await getPrograms(catalogYear),
     placeholderData: [],
+    refetchInterval: Infinity, // Programs are static
   });
 }
 
@@ -65,13 +67,23 @@ export function useProgramsInYear(catalogYear: string) {
  * @returns React Query useQuery Hook for all majors and minors
  */
 export function useUnqiuePrograms() {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ["uniquePrograms"],
     queryFn: async () => {
       const res = await getPrograms();
       return filterRedundantPrograms(res);
     },
+    // Use cache to avoid refetching data
+    initialData: () => {
+      const programs: Program[] | undefined = queryClient.getQueryData([
+        "programs",
+      ]);
+      return programs ? filterRedundantPrograms(programs) : [];
+    },
     placeholderData: [],
+    refetchInterval: Infinity, // Programs are static
   });
 }
 /**
@@ -81,13 +93,24 @@ export function useUnqiuePrograms() {
  * @returns React Query useQuery Hook for all majors and minors
  */
 export function useUnqiueProgramsInYear(catalogYear: string) {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ["uniquePrograms", catalogYear],
     queryFn: async () => {
       const res = await getPrograms(catalogYear);
       return filterRedundantPrograms(res);
     },
+    // Use cache to avoid refetching data
+    initialData: () => {
+      const programs: Program[] | undefined = queryClient.getQueryData([
+        "uniquePrograms",
+        catalogYear,
+      ]);
+      return programs ? filterRedundantPrograms(programs) : [];
+    },
     placeholderData: [],
+    refetchInterval: Infinity, // Programs are static
   });
 }
 
@@ -118,7 +141,21 @@ export function useProgramTypeOfYear(
  * @param programName (Optional) Name of the program
  * @returns React Query useQuery Hook for all catalog years
  */
-export function useCatalogYears(programName?: string) {
+export function useCatalogYears() {
+  return useQuery({
+    queryKey: ["years"],
+    queryFn: async () => await getCatalogYears(),
+    placeholderData: [],
+  });
+}
+
+/**
+ * A React Query hook to fetch all catalog years, optionally for a specific
+ * program
+ * @param programName (Optional) Name of the program
+ * @returns React Query useQuery Hook for all catalog years
+ */
+export function useCatalogYearsForProgram(programName: string) {
   return useQuery({
     queryKey: ["years", programName],
     queryFn: async () => await getCatalogYears(programName),

@@ -104,8 +104,8 @@ export default function Minors() {
         </h2>
         <div className="h-2" />
         <p className="text-subtext leading-7 max-w-md">
-          Add any minors you are thinking of pursuing (don&apos;t worry, you can
-          always change these later).
+          Almost done! Add any minors you&apos;re considering pursuing. You can
+          also skip and add these later if you would like.
         </p>
       </div>
 
