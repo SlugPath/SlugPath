@@ -32,7 +32,12 @@ export default function Search({
         </div>
         <SearchInputs handlers={handlers} params={params} />
         <div className="flex flex-col place-items-center">
-          {loading ? <CircularProgress /> : null}
+          {loading ? (
+            <div className="flex flex-col place-items-center">
+              <CircularProgress />
+              Loading Courses
+            </div>
+          ) : null}
         </div>
         <SearchResults courses={courses} loading={loading} />
       </Card>
