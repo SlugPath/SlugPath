@@ -27,7 +27,6 @@ const QUARTERS: Term[] = ["Fall", "Winter", "Spring", "Summer"];
 const cmpQuarters = (a: string, b: string) => {
   return QUARTERS.indexOf(a as Term) - QUARTERS.indexOf(b as Term);
 };
-
 export interface CustomCourseModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -148,7 +147,7 @@ export default function CustomCourseModal({
           <div className="flex flex-row justify-between items-center">
             <Typography level="title-lg">Edit Custom Course</Typography>
             <Tooltip title="We recommend replacing this custom course with a real course.">
-              <Chip color="warning" size="lg" className="mt-2 mr-2">
+              <Chip color="custom" size="lg" className="mt-2 mr-2">
                 Custom Course
               </Chip>
             </Tooltip>
