@@ -22,12 +22,14 @@ export default function GraduationProgress({
     <div className="flex flex-col place-items-center w-full gap-1">
       <Typography level="title-lg">Graduation Progress</Typography>
       <div className="flex flex-row gap-1 place-items-center">
-        <IsSatisfiedMark isSatisfied={totalPercentage == 100} />
         <Tooltip
           title="Combined progress toward graduation (major, credits, GE)"
           variant="soft"
         >
-          <Typography level="title-md">{totalPercentage}%</Typography>
+          <div className="flex flex-row gap-1">
+            <IsSatisfiedMark isSatisfied={totalPercentage == 100} />
+            <Typography level="title-md">{totalPercentage}%</Typography>
+          </div>
         </Tooltip>
       </div>
     </div>
