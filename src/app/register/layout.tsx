@@ -1,9 +1,10 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import useAccountCreationStore from "@/store/account-creation";
 import { ArrowBack } from "@mui/icons-material";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 
 import SplitScreenContainer from "../components/accountCreation/SplitScreenContainer";
 
@@ -14,17 +15,28 @@ export default function StepByStepLayout({
 }) {
   const pathname = usePathname();
 
-  // Determine the current step based on the pathname
+  // Zustand store
+  const { skipSetup, majors } = useAccountCreationStore((state) => ({
+    skipSetup: state.skipSetup,
+    majors: state.selectedMajors,
+  }));
+
+  // Determine the current step based on the pathname; reroute if step not met
   let step = 1;
+  const totalSteps = 3;
   let back = undefined;
   if (pathname === "/register/majors") {
+    if (skipSetup === undefined) redirect("/register");
+
     step = 2;
     back = "/register";
   } else if (pathname === "/register/minors") {
+    if (skipSetup === undefined) redirect("/register");
+    if (majors === undefined) redirect("/register/majors");
+
     step = 3;
     back = "/register/majors";
   }
-  const totalSteps = 3;
 
   return (
     <SplitScreenContainer>

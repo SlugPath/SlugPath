@@ -29,10 +29,8 @@ export default function Minors() {
   const selectedMinors = useAccountCreationStore(
     (state) => state.selectedMinors,
   );
-  const addMinorInfo = useAccountCreationStore((state) => state.addMinorInfo);
-  const deleteMinorInfo = useAccountCreationStore(
-    (state) => state.deleteMinorInfo,
-  );
+  const addMinorInfo = useAccountCreationStore((state) => state.addMinor);
+  const deleteMinorInfo = useAccountCreationStore((state) => state.deleteMinor);
 
   const isMaxMajorsSelected = !!(
     selectedMinors && selectedMinors.length >= MAX_MINOR_SELECTIONS

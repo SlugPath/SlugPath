@@ -1,17 +1,44 @@
 "use client";
 
+import { createUser } from "@/app/actions/user";
 import { cn } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import SelectBox from "../../components/accountCreation/SelectBox";
 
 export default function Register() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const router = useRouter();
+
   const skipSetup = useAccountCreationStore((state) => state.skipSetup);
   const setSkipSetup = useAccountCreationStore((state) => state.setSkipSetup);
 
-  const continueHref = skipSetup ? "/planner" : "/register/majors";
+  const handleContinue = async () => {
+    if (skipSetup) {
+      if (!user) {
+        console.error("User not found");
+        return;
+      }
+
+      await createUser(
+        {
+          userId: user.id,
+          email: user.email!,
+          name: user.name!,
+        },
+        [],
+      );
+      router.push("/planner");
+      return;
+    }
+
+    router.push("/register/majors");
+  };
 
   return (
     <>
@@ -68,16 +95,16 @@ export default function Register() {
 
       <div className="h-10" />
 
-      <Link
-        href={continueHref}
+      <button
         className={cn(
           skipSetup === undefined && "cursor-not-allowed opacity-50",
           "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity",
         )}
         aria-disabled={skipSetup === undefined}
+        onClick={handleContinue}
       >
         Continue
-      </Link>
+      </button>
     </>
   );
 }

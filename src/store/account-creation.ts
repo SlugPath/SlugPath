@@ -14,12 +14,13 @@ type AccountCreationStore = {
   setSkipSetup: (skip: boolean) => void;
 
   selectedMajors: Major[] | undefined;
-  addMajorInfo: (majorInfo: Major) => void;
-  deleteMajorInfo: (programId: number) => void;
+  setMajor: (majors: Major[]) => void;
+  addMajor: (majorInfo: Major) => void;
+  deleteMajor: (programId: number) => void;
 
   selectedMinors: Minor[] | undefined;
-  addMinorInfo: (minorInfor: Minor) => void;
-  deleteMinorInfo: (programId: number) => void;
+  addMinor: (minorInfor: Minor) => void;
+  deleteMinor: (programId: number) => void;
 };
 
 const useAccountCreationStore = create<AccountCreationStore>((set) => ({
@@ -30,12 +31,14 @@ const useAccountCreationStore = create<AccountCreationStore>((set) => ({
   // Majors
   selectedMajors: undefined,
 
-  addMajorInfo: (newMajorInfo) =>
+  setMajor: (majors) => set({ selectedMajors: majors }),
+
+  addMajor: (newMajor) =>
     set((state) => ({
-      selectedMajors: [...(state.selectedMajors ?? []), newMajorInfo],
+      selectedMajors: [...(state.selectedMajors ?? []), newMajor],
     })),
 
-  deleteMajorInfo: (programId) =>
+  deleteMajor: (programId) =>
     set((state) => {
       if (state.selectedMajors === undefined) {
         return { selectedMajors: undefined };
@@ -51,12 +54,12 @@ const useAccountCreationStore = create<AccountCreationStore>((set) => ({
   // Minors
   selectedMinors: undefined,
 
-  addMinorInfo: (newMinorInfo) =>
+  addMinor: (newMinor) =>
     set((state) => ({
-      selectedMinors: [...(state.selectedMinors ?? []), newMinorInfo],
+      selectedMinors: [...(state.selectedMinors ?? []), newMinor],
     })),
 
-  deleteMinorInfo: (programId) =>
+  deleteMinor: (programId) =>
     set((state) => {
       if (state.selectedMinors === undefined) {
         return { selectedMinors: undefined };

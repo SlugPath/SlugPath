@@ -43,6 +43,7 @@ export function usePrograms() {
     queryFn: async () => await getPrograms(),
     placeholderData: [],
     refetchInterval: Infinity, // Programs are static
+    refetchOnMount: false,
   });
 }
 
@@ -58,6 +59,7 @@ export function useProgramsForYear(catalogYear: string) {
     queryFn: async () => await getPrograms(catalogYear),
     placeholderData: [],
     refetchInterval: Infinity, // Programs are static
+    refetchOnMount: false,
   });
 }
 
@@ -84,6 +86,7 @@ export function useUnqiuePrograms() {
     },
     placeholderData: [],
     refetchInterval: Infinity, // Programs are static
+    refetchOnMount: false,
   });
 }
 /**
@@ -111,6 +114,7 @@ export function useUnqiueProgramsInYear(catalogYear: string) {
     },
     placeholderData: [],
     refetchInterval: Infinity, // Programs are static
+    refetchOnMount: false,
   });
 }
 

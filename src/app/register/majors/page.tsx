@@ -6,19 +6,14 @@ import { Program } from "@/app/types/Program";
 import { cn, filterRedundantPrograms, isContainingName } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { Add, Error, Warning } from "@mui/icons-material";
-import {
-  Autocomplete,
-  CircularProgress,
-  LinearProgress,
-  Option,
-  Select,
-} from "@mui/joy";
-import Link from "next/link";
+import { Autocomplete, CircularProgress, Option, Select } from "@mui/joy";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const MAX_MAJOR_SELECTIONS = 2;
 
 export default function Majors() {
+  const router = useRouter();
   const [majorInput, setMajorInput] = useState("");
   const [majorValue, setMajorValue] = useState<Program | null>(null); // undefined MUI components are uncontrolled
   const [catalogYearValue, setCatalogYearValue] = useState("");
@@ -29,8 +24,9 @@ export default function Majors() {
   const selectedMajors = useAccountCreationStore(
     (state) => state.selectedMajors,
   );
-  const addMajorInfo = useAccountCreationStore((state) => state.addMajorInfo);
-  const deleteMajor = useAccountCreationStore((state) => state.deleteMajorInfo);
+  const setMajor = useAccountCreationStore((state) => state.setMajor);
+  const addMajor = useAccountCreationStore((state) => state.addMajor);
+  const deleteMajor = useAccountCreationStore((state) => state.deleteMajor);
 
   const isMaxMajorsSelected = !!(
     selectedMajors && selectedMajors.length >= MAX_MAJOR_SELECTIONS
@@ -63,7 +59,7 @@ export default function Majors() {
 
     if (isMaxMajorsSelected) return;
 
-    addMajorInfo({
+    addMajor({
       id: programId,
       name: majorValue!.name,
       catalogYear: catalogYearValue,
@@ -74,6 +70,13 @@ export default function Majors() {
   const handleDeleteProgram = (programId: number) => {
     setError("");
     deleteMajor(programId);
+  };
+
+  const handleContinue = () => {
+    if (!selectedMajors) {
+      setMajor([]);
+    }
+    router.push("/register/minors");
   };
 
   // NOTE: User thrown errors (more than one of same major) exist in addition to
@@ -163,8 +166,8 @@ export default function Majors() {
         </button>
       </div>
 
+      {/* Warn / error */}
       <div className="h-10 flex items-center">
-        {(isPending || isFetching) && <LinearProgress />}
         {!isMaxMajorsSelected && error.length > 0 && (
           <p className="text-red-500 text-sm mt-2 flex items-center">
             <Error
@@ -193,6 +196,7 @@ export default function Majors() {
 
       <div className="h-4" />
 
+      {/* Selected Programs */}
       <div className="bg-gray-50 rounded-lg min-h-48 flex items-center justify-start flex-col p-5 gap-5">
         {(selectedMajors === undefined || selectedMajors.length == 0) && (
           <p className="text-subtext w-full text-center flex-1 flex items-center justify-center">
@@ -212,16 +216,16 @@ export default function Majors() {
 
       <div className="h-10" />
 
-      <Link
-        href="/register/minors"
+      <button
         className={cn(
           false && "cursor-not-allowed opacity-50",
           "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
         )}
         aria-disabled={false}
+        onClick={handleContinue}
       >
         Continue
-      </Link>
+      </button>
     </>
   );
 }
