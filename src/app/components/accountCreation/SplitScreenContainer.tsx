@@ -1,4 +1,5 @@
 import { HelpOutline } from "@mui/icons-material";
+import Image from "next/image";
 
 import { Logo } from "../Logo";
 
@@ -21,7 +22,7 @@ export default function SplitScreenContainer({
         </div>
       </div>
       <div className="relative hidden w-0 flex-1 lg:block">
-        <img
+        <Image
           className="absolute inset-0 h-full w-full object-cover p-2"
           src="/images/ucsc.jpg"
           alt=""

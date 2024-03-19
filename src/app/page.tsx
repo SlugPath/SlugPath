@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -23,7 +24,7 @@ export default async function Page() {
           href="/register"
           className="bg-black flex gap-2 px-6 py-3 rounded-full items-center justify-center mt-8"
         >
-          <img
+          <Image
             src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
             alt="Sign in"
             className="h-5 w-auto"
