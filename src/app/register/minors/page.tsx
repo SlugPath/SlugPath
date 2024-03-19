@@ -16,10 +16,11 @@ const MAX_MINOR_SELECTIONS = 2;
 export default function Minors() {
   const { data: session } = useSession();
 
-  // if undefined MUI assumes component is uncontrolled
-  const [minorValue, setMinorValue] = useState<Program | null>(null);
   const [minorInput, setMinorInput] = useState("");
+  const [minorValue, setMinorValue] = useState<Program | null>(null); // undefined MUI components are uncontrolled
   const [catalogYearInput, setCatalogYearInput] = useState("");
+
+  const [error, setError] = useState("");
 
   // Zustand store
   const selectedMajors = useAccountCreationStore(
@@ -36,8 +37,6 @@ export default function Minors() {
   const isMaxMajorsSelected = !!(
     selectedMinors && selectedMinors.length >= MAX_MINOR_SELECTIONS
   );
-
-  const [error, setError] = useState("");
 
   // NOTE: Instead of fetching minors and years separately, fetch all programs
   // and filter to reduce db calls
@@ -132,13 +131,6 @@ export default function Minors() {
           value={minorValue}
           options={minors}
           getOptionLabel={(option) => option.name}
-          // renderOption={(props, option) => {
-          //   return (
-          //     <li {...props} key={option.id}>
-          //       {option.name}
-          //     </li>
-          //   );
-          // }}
           placeholder="Minor"
           variant="plain"
           onChange={(_, newValue) => {
@@ -171,8 +163,8 @@ export default function Minors() {
             setCatalogYearInput(newValue ?? "");
             setError("");
           }}
+          sx={{ minWidth: "9.1rem" }}
           disabled={!minorValue}
-          sx={{ minWidth: "9.2rem" }}
         >
           {catalogYears?.map((year) => (
             <Option key={year.catalogYear} value={year.catalogYear}>
@@ -196,6 +188,7 @@ export default function Minors() {
         </button>
       </div>
 
+      {/* Warn / error */}
       <div className="h-10 flex items-center">
         {!isMaxMajorsSelected && error.length > 0 && (
           <p className="text-red-500 text-sm mt-2 flex items-center">
@@ -225,6 +218,7 @@ export default function Minors() {
 
       <div className="h-4" />
 
+      {/* Selected Programs */}
       <div className="bg-gray-50 rounded-lg min-h-48 flex items-center justify-start flex-col p-5 gap-5">
         {(!selectedMinors || selectedMinors.length == 0) && (
           <p className="text-subtext w-full text-center flex-1 flex items-center justify-center">

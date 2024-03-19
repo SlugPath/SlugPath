@@ -2,10 +2,17 @@
 
 import ProgramChip from "@/app/components/ProgramChip";
 import { usePrograms } from "@/app/hooks/reactQuery";
+import { Program } from "@/app/types/Program";
 import { cn, filterRedundantPrograms, isContainingName } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { Add, Error, Warning } from "@mui/icons-material";
-import { LinearProgress, Option, Select } from "@mui/joy";
+import {
+  Autocomplete,
+  CircularProgress,
+  LinearProgress,
+  Option,
+  Select,
+} from "@mui/joy";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -13,7 +20,10 @@ const MAX_MAJOR_SELECTIONS = 2;
 
 export default function Majors() {
   const [majorInput, setMajorInput] = useState("");
-  const [catalogYearInput, setCatalogYearInput] = useState("");
+  const [majorValue, setMajorValue] = useState<Program | null>(null); // undefined MUI components are uncontrolled
+  const [catalogYearValue, setCatalogYearValue] = useState("");
+
+  const [error, setError] = useState("");
 
   // Zustand store
   const selectedMajors = useAccountCreationStore(
@@ -26,8 +36,6 @@ export default function Majors() {
     selectedMajors && selectedMajors.length >= MAX_MAJOR_SELECTIONS
   );
 
-  const [error, setError] = useState("");
-
   // Instead of fetching majors and years separately, fetch all programs and
   // filter to reduce db calls
   const { data: programs, isPending, isFetching, isError } = usePrograms();
@@ -37,7 +45,7 @@ export default function Majors() {
   }, [programs]);
 
   const catalogYears = programs?.filter(
-    (program) => program.name === majorInput,
+    (program) => program.name === (majorValue ? majorValue.name : ""),
   );
 
   // Add a program to the list of selected programs
@@ -45,10 +53,10 @@ export default function Majors() {
     setError("");
 
     const programId = catalogYears!.find(
-      (program) => program.catalogYear === catalogYearInput,
+      (program) => program.catalogYear === catalogYearValue,
     )!.id;
 
-    if (selectedMajors && isContainingName(majorInput, selectedMajors)) {
+    if (selectedMajors && isContainingName(majorValue!.name, selectedMajors)) {
       setError("You have already added this major");
       return;
     }
@@ -57,8 +65,8 @@ export default function Majors() {
 
     addMajorInfo({
       id: programId,
-      name: majorInput,
-      catalogYear: catalogYearInput,
+      name: majorValue!.name,
+      catalogYear: catalogYearValue,
     });
   };
 
@@ -94,34 +102,44 @@ export default function Majors() {
       <div className="h-12" />
 
       <div className="flex flex-col md:flex-row gap-4">
-        <Select
-          value={majorInput}
+        <Autocomplete
+          value={majorValue}
+          options={majors}
+          getOptionLabel={(option) => option.name}
           placeholder="Major"
           variant="plain"
           onChange={(_, newValue) => {
-            setMajorInput(newValue ?? "");
+            setMajorValue(newValue ?? null);
             setError("");
           }}
-          className="flex-1 border-gray-500"
-          disabled={isError || isPending || isFetching}
-        >
-          {majors &&
-            majors.map((major) => (
-              <Option key={major.name} value={major.name}>
-                {major.name}
-              </Option>
-            ))}
-        </Select>
+          inputValue={majorInput}
+          onInputChange={(_, newInputValue) => {
+            setMajorInput(newInputValue);
+            setError("");
+          }}
+          sx={{ flex: "1 1 0%" }}
+          disabled={isError}
+          loading={isPending || isFetching}
+          endDecorator={
+            isPending || isFetching ? (
+              <CircularProgress
+                size="sm"
+                sx={{ bgcolor: "background.surface" }}
+              />
+            ) : null
+          }
+        />
 
         <Select
-          value={catalogYearInput}
+          value={catalogYearValue}
           placeholder="Catalog Year"
           variant="plain"
           onChange={(_, newValue) => {
-            setCatalogYearInput(newValue ?? "");
+            setCatalogYearValue(newValue ?? "");
             setError("");
           }}
-          disabled={!majorInput}
+          sx={{ minWidth: "9.1rem" }}
+          disabled={!majorValue}
         >
           {catalogYears?.map((year) => (
             <Option key={year.catalogYear} value={year.catalogYear}>
@@ -133,12 +151,12 @@ export default function Majors() {
         <button
           type="button"
           className={cn(
-            (!majorInput || !catalogYearInput || isMaxMajorsSelected) &&
+            (!majorValue || !catalogYearValue || isMaxMajorsSelected) &&
               "cursor-not-allowed opacity-50",
             "bg-primary-500 text-white px-3 py-1 rounded-lg flex items-center justify-center gap-1 font-bold",
           )}
           onClick={handleAddProgram}
-          disabled={!majorInput || !catalogYearInput || isMaxMajorsSelected}
+          disabled={!majorValue || !catalogYearValue || isMaxMajorsSelected}
         >
           <Add sx={{ color: "#fff" }} />
           Add

@@ -28,6 +28,8 @@ export default async function Page() {
             src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
             alt="Sign in"
             className="h-5 w-auto"
+            width="512"
+            height="512"
           />
           <p className="text-white">Continue with Google</p>
         </Link>

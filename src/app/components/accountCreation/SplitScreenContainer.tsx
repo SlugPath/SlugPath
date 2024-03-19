@@ -26,6 +26,8 @@ export default function SplitScreenContainer({
           className="absolute inset-0 h-full w-full object-cover p-2"
           src="/images/ucsc.jpg"
           alt=""
+          width="6720"
+          height="4480"
         />
       </div>
     </div>
