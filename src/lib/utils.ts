@@ -1,5 +1,5 @@
 import { StoredCourse } from "@/app/types/Course";
-import { Program, ProgramInfo } from "@/app/types/Program";
+import { Program } from "@/app/types/Program";
 import { Course } from "@prisma/client";
 import { isAlpha } from "class-validator";
 import { v4 as uuidv4 } from "uuid";
@@ -106,18 +106,16 @@ export function isProgramInPrograms(
 }
 
 /**
- * Checks if a programInfo is in a list of programInfos
- * @param programInfo a program name and catalog year
- * @param programInfos a list of program names and catalog years
- * @returns true if the programInfo is in the list of programInfos, otherwise false
+ * Checks if an array of objects with `name`s contains a specific name
+ * @param name a name to search for
+ * @param array an array of objects with a `name` property
+ * @returns true if the array contains the name, false otherwise
  */
-export const isProgramNameInProgramInfos = (
-  programName: string,
-  programInfos: ProgramInfo[],
+export const isContainingName = (
+  name: string,
+  array: { name: string; [x: string]: any; [x: number]: any }[],
 ) => {
-  return programInfos.some(
-    (programInfo) => programName === programInfo.programName,
-  );
+  return array.some((e) => e.name === name);
 };
 
 export function toStoredCourse({

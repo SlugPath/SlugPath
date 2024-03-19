@@ -1,20 +1,23 @@
 "use client";
 
+import { createUser } from "@/app/actions/user";
 import ProgramChip from "@/app/components/ProgramChip";
 import { usePrograms } from "@/app/hooks/reactQuery";
-import {
-  cn,
-  filterRedundantPrograms,
-  isProgramNameInProgramInfos,
-} from "@/lib/utils";
+import { Program } from "@/app/types/Program";
+import { cn, filterRedundantPrograms, isContainingName } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { Add, Error, Warning } from "@mui/icons-material";
-import { LinearProgress, Option, Select } from "@mui/joy";
+import { Autocomplete, CircularProgress, Option, Select } from "@mui/joy";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 
 const MAX_MINOR_SELECTIONS = 2;
 
 export default function Minors() {
+  const { data: session } = useSession();
+
+  // if undefined MUI assumes component is uncontrolled
+  const [minorValue, setMinorValue] = useState<Program | null>(null);
   const [minorInput, setMinorInput] = useState("");
   const [catalogYearInput, setCatalogYearInput] = useState("");
 
@@ -45,45 +48,58 @@ export default function Minors() {
   }, [programs]);
 
   const catalogYears = programs?.filter(
-    (program) => program.name === minorInput,
+    (program) => program.name === (minorValue ? minorValue.name : ""),
   );
 
   // Add a program to the list of selected programs
   const handleAddProgram = () => {
     setError("");
 
-    if (
-      selectedMinors &&
-      isProgramNameInProgramInfos(minorInput, selectedMinors)
-    ) {
+    const programId = catalogYears!.find(
+      (program) => program.catalogYear === catalogYearInput,
+    )!.id;
+
+    if (selectedMinors && isContainingName(minorValue!.name, selectedMinors)) {
       setError("You have already added this major");
       return;
     }
 
     if (isMaxMajorsSelected) return;
 
-    addMinorInfo({ programName: minorInput, catalogYear: catalogYearInput });
+    addMinorInfo({
+      id: programId,
+      name: minorValue!.name,
+      catalogYear: catalogYearInput,
+    });
   };
 
   // Delete a program from the list of selected programs
-  const handleDeleteProgram = (programName: string, catalogYear: string) => {
+  const handleDeleteProgram = (programId: number) => {
     setError("");
-    deleteMinorInfo({ programName, catalogYear });
+    deleteMinorInfo(programId);
   };
 
   // TODO: Store selected majors and minors in the database, and navigate to the
   // next page
-  const handleStartPlanning = () => {
-    alert(
-      JSON.stringify(
-        {
-          selectedMajors,
-          selectedMinors,
-        },
-        null,
-        2,
-      ),
+  const handleStartPlanning = async () => {
+    const majorIds = selectedMajors
+      ? selectedMajors.map((major) => major.id)
+      : [];
+    const minorIds = selectedMinors
+      ? selectedMinors.map((minor) => minor.id)
+      : [];
+    const programIds = [...majorIds, ...minorIds];
+
+    await createUser(
+      {
+        userId: session!.user!.id!,
+        email: session!.user!.email!,
+        name: session?.user.name ?? "",
+      },
+      programIds,
     );
+
+    alert(programIds);
   };
 
   // NOTE: User thrown errors (more than one of same major) exist in addition to
@@ -112,24 +128,40 @@ export default function Minors() {
       <div className="h-12" />
 
       <div className="flex flex-col md:flex-row gap-4">
-        <Select
-          value={minorInput}
+        <Autocomplete
+          value={minorValue}
+          options={minors}
+          getOptionLabel={(option) => option.name}
+          // renderOption={(props, option) => {
+          //   return (
+          //     <li {...props} key={option.id}>
+          //       {option.name}
+          //     </li>
+          //   );
+          // }}
           placeholder="Minor"
           variant="plain"
           onChange={(_, newValue) => {
-            setMinorInput(newValue ?? "");
+            setMinorValue(newValue ?? null);
             setError("");
           }}
-          className="flex-1 border-gray-500"
-          disabled={isError || isPending || isFetching}
-        >
-          {minors &&
-            minors.map((major) => (
-              <Option key={major.name} value={major.name}>
-                {major.name}
-              </Option>
-            ))}
-        </Select>
+          inputValue={minorInput}
+          onInputChange={(_, newInputValue) => {
+            setMinorInput(newInputValue);
+            setError("");
+          }}
+          sx={{ flex: "1 1 0%" }}
+          disabled={isError}
+          loading={isPending || isFetching}
+          endDecorator={
+            isPending || isFetching ? (
+              <CircularProgress
+                size="sm"
+                sx={{ bgcolor: "background.surface" }}
+              />
+            ) : null
+          }
+        />
 
         <Select
           value={catalogYearInput}
@@ -139,7 +171,8 @@ export default function Minors() {
             setCatalogYearInput(newValue ?? "");
             setError("");
           }}
-          disabled={!minorInput}
+          disabled={!minorValue}
+          sx={{ minWidth: "9.2rem" }}
         >
           {catalogYears?.map((year) => (
             <Option key={year.catalogYear} value={year.catalogYear}>
@@ -151,12 +184,12 @@ export default function Minors() {
         <button
           type="button"
           className={cn(
-            (!minorInput || !catalogYearInput || isMaxMajorsSelected) &&
+            (!minorValue || !catalogYearInput || isMaxMajorsSelected) &&
               "cursor-not-allowed opacity-50",
             "bg-primary-500 text-white px-3 py-1 rounded-lg flex items-center justify-center gap-1 font-bold",
           )}
           onClick={handleAddProgram}
-          disabled={!minorInput || !catalogYearInput || isMaxMajorsSelected}
+          disabled={!minorValue || !catalogYearInput || isMaxMajorsSelected}
         >
           <Add sx={{ color: "#fff" }} />
           Add
@@ -164,7 +197,6 @@ export default function Minors() {
       </div>
 
       <div className="h-10 flex items-center">
-        {(isPending || isFetching) && <LinearProgress />}
         {!isMaxMajorsSelected && error.length > 0 && (
           <p className="text-red-500 text-sm mt-2 flex items-center">
             <Error
@@ -202,12 +234,10 @@ export default function Minors() {
         {selectedMinors &&
           selectedMinors.map((program) => (
             <ProgramChip
-              key={program.programName + program.catalogYear}
-              programName={program.programName}
+              key={program.name + program.catalogYear}
+              programName={program.name}
               catalogYear={program.catalogYear}
-              deleteProgram={() =>
-                handleDeleteProgram(program.programName, program.catalogYear)
-              }
+              deleteProgram={() => handleDeleteProgram(program.id)}
             />
           ))}
       </div>

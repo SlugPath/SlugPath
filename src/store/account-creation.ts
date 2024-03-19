@@ -1,17 +1,25 @@
-import { ProgramInfo } from "@/app/types/Program";
+import {
+  Major as MajorExplicit,
+  Minor as MinorExplicit,
+} from "@/app/types/Program";
 import { create } from "zustand";
+
+// QUESTION: These types may be a little scuffed, should use new type? Or keep redundant
+// programType property?
+type Major = Omit<MajorExplicit, "programType">;
+type Minor = Omit<MinorExplicit, "programType">;
 
 type AccountCreationStore = {
   skipSetup: boolean | undefined;
   setSkipSetup: (skip: boolean) => void;
 
-  selectedMajors: ProgramInfo[] | undefined;
-  addMajorInfo: (majorInfo: ProgramInfo) => void;
-  deleteMajorInfo: (majorInfo: ProgramInfo) => void;
+  selectedMajors: Major[] | undefined;
+  addMajorInfo: (majorInfo: Major) => void;
+  deleteMajorInfo: (programId: number) => void;
 
-  selectedMinors: ProgramInfo[] | undefined;
-  addMinorInfo: (minorInfor: ProgramInfo) => void;
-  deleteMinorInfo: (minorInfo: ProgramInfo) => void;
+  selectedMinors: Minor[] | undefined;
+  addMinorInfo: (minorInfor: Minor) => void;
+  deleteMinorInfo: (programId: number) => void;
 };
 
 const useAccountCreationStore = create<AccountCreationStore>((set) => ({
@@ -27,16 +35,15 @@ const useAccountCreationStore = create<AccountCreationStore>((set) => ({
       selectedMajors: [...(state.selectedMajors ?? []), newMajorInfo],
     })),
 
-  deleteMajorInfo: (toDeleteMajorInfo) =>
+  deleteMajorInfo: (programId) =>
     set((state) => {
       if (state.selectedMajors === undefined) {
         return { selectedMajors: undefined };
       }
 
+      // Better way to do this?
       const _majorInfo = state.selectedMajors.filter(
-        (majorInfo) =>
-          majorInfo.programName !== toDeleteMajorInfo.programName ||
-          majorInfo.catalogYear !== toDeleteMajorInfo.catalogYear,
+        (majorInfo) => majorInfo.id !== programId,
       );
       return { selectedMajors: _majorInfo };
     }),
@@ -49,16 +56,14 @@ const useAccountCreationStore = create<AccountCreationStore>((set) => ({
       selectedMinors: [...(state.selectedMinors ?? []), newMinorInfo],
     })),
 
-  deleteMinorInfo: (toDeleteMinorInfo) =>
+  deleteMinorInfo: (programId) =>
     set((state) => {
       if (state.selectedMinors === undefined) {
         return { selectedMinors: undefined };
       }
 
       const _majorInfo = state.selectedMinors.filter(
-        (minorInfo) =>
-          minorInfo.programName !== toDeleteMinorInfo.programName ||
-          minorInfo.catalogYear !== toDeleteMinorInfo.catalogYear,
+        (minorInfo) => minorInfo.id !== programId,
       );
       return { selectedMinors: _majorInfo };
     }),

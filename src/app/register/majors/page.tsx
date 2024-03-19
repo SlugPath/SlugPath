@@ -2,11 +2,7 @@
 
 import ProgramChip from "@/app/components/ProgramChip";
 import { usePrograms } from "@/app/hooks/reactQuery";
-import {
-  cn,
-  filterRedundantPrograms,
-  isProgramNameInProgramInfos,
-} from "@/lib/utils";
+import { cn, filterRedundantPrograms, isContainingName } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { Add, Error, Warning } from "@mui/icons-material";
 import { LinearProgress, Option, Select } from "@mui/joy";
@@ -48,23 +44,28 @@ export default function Majors() {
   const handleAddProgram = () => {
     setError("");
 
-    if (
-      selectedMajors &&
-      isProgramNameInProgramInfos(majorInput, selectedMajors)
-    ) {
+    const programId = catalogYears!.find(
+      (program) => program.catalogYear === catalogYearInput,
+    )!.id;
+
+    if (selectedMajors && isContainingName(majorInput, selectedMajors)) {
       setError("You have already added this major");
       return;
     }
 
     if (isMaxMajorsSelected) return;
 
-    addMajorInfo({ programName: majorInput, catalogYear: catalogYearInput });
+    addMajorInfo({
+      id: programId,
+      name: majorInput,
+      catalogYear: catalogYearInput,
+    });
   };
 
   // Delete a program from the list of selected programs
-  const handleDeleteProgram = (programName: string, catalogYear: string) => {
+  const handleDeleteProgram = (programId: number) => {
     setError("");
-    deleteMajor({ programName, catalogYear });
+    deleteMajor(programId);
   };
 
   // NOTE: User thrown errors (more than one of same major) exist in addition to
@@ -183,12 +184,10 @@ export default function Majors() {
         {selectedMajors &&
           selectedMajors.map((program) => (
             <ProgramChip
-              key={program.programName + program.catalogYear}
-              programName={program.programName}
+              key={program.name + program.catalogYear}
+              programName={program.name}
               catalogYear={program.catalogYear}
-              deleteProgram={() =>
-                handleDeleteProgram(program.programName, program.catalogYear)
-              }
+              deleteProgram={() => handleDeleteProgram(program.id)}
             />
           ))}
       </div>
