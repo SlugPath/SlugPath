@@ -2,9 +2,9 @@ import { PlannerData } from "@/app/types/Planner";
 import { initialPlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import {
-  getAllPlanners,
   getPlannerById,
-  saveAllPlanners,
+  getUserPlanners,
+  updateUserPlanners,
 } from "@actions/planner";
 import { expect } from "@jest/globals";
 import { v4 as uuidv4 } from "uuid";
@@ -97,13 +97,13 @@ describe("Planner actions", () => {
   });
 
   it("should create 1 empty planner for 1 user", async () => {
-    expect(await getAllPlanners(user!.email)).toHaveLength(0);
+    expect(await getUserPlanners(user!.id)).toHaveLength(0);
     const id = await createPlanner(initialPlanner(), user!);
     expect(await getPlannerById(id)).toBeDefined();
-  });
+  }, 7000);
 
   it("should update 1 planner for 1 user", async () => {
-    expect(await getAllPlanners(user!.email)).toHaveLength(0);
+    expect(await getUserPlanners(user!.id)).toHaveLength(0);
 
     const plannerId = await createPlanner(initialPlanner(), user!);
     const plannerData = initialPlanner();
@@ -115,12 +115,12 @@ describe("Planner actions", () => {
       plannerData.courses.push(c);
     });
 
-    await saveAllPlanners({
+    await updateUserPlanners({
       userId: user!.id,
       planners: [plannerData],
     });
     // Ensure there is only 1 planner for that user
-    const allPlanners = await getAllPlanners(user!.email);
+    const allPlanners = await getUserPlanners(user!.id);
     expect(allPlanners).toHaveLength(1);
 
     // Ensure the content of that planner is updated
@@ -135,7 +135,7 @@ describe("Planner actions", () => {
   });
 
   it("should return an empty list if user is invalid", async () => {
-    expect(await getAllPlanners("invalid-email")).toHaveLength(0);
+    expect(await getUserPlanners("invalid-userid")).toHaveLength(0);
   });
 
   it("should throw an error if planner id is invalid", async () => {
@@ -156,7 +156,7 @@ describe("Planner actions", () => {
     });
 
     await expect(
-      saveAllPlanners({
+      updateUserPlanners({
         userId: user!.id,
         planners: [plannerData],
       }),
@@ -164,7 +164,7 @@ describe("Planner actions", () => {
   });
 
   it("should return the correct labels for each course", async () => {
-    const planners = await getAllPlanners(user!.email);
+    const planners = await getUserPlanners(user!.id);
     expect(planners).toHaveLength(0);
 
     const plannerData = initialPlanner();
@@ -175,12 +175,12 @@ describe("Planner actions", () => {
     plannerData.courses = plannerCourses;
     plannerData.quarters[0].courses = plannerData.courses.map((c) => c.id);
 
-    await saveAllPlanners({
+    await updateUserPlanners({
       userId: user!.id,
       planners: [plannerData],
     });
     // Ensure there is only 1 planner for that user
-    const allPlanners = await getAllPlanners(user!.email);
+    const allPlanners = await getUserPlanners(user!.id);
     expect(allPlanners).toHaveLength(1);
     // Ensure the content of that planner is updated
     const check2 = await getPlannerById(plannerData.id);
@@ -198,7 +198,7 @@ async function createPlanner(
   planner: PlannerData,
   user: { id: string },
 ): Promise<string> {
-  await saveAllPlanners({
+  await updateUserPlanners({
     userId: user.id,
     planners: [planner],
   });

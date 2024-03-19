@@ -16,6 +16,17 @@ export type PlannerData = {
 };
 
 /**
+ * `PlannerCreateInput` is a type used to store the input for creating a planner
+ */
+export type PlannerCreateInput = {
+  userId: string;
+  plannerId: string;
+  plannerData: PlannerData;
+  title: string;
+  order: number;
+};
+
+/**
  * `PlannerTitle` is a type used to store the title and id of a planner. Used when loading
  * major default planners
  */

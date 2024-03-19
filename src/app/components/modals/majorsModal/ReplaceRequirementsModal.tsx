@@ -1,4 +1,4 @@
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider/Provider";
+import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { getAllRequirementLists } from "@actions/majorRequirements";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { RequirementList } from "@customTypes/Requirements";
@@ -11,6 +11,7 @@ import {
   Sheet,
   Typography,
 } from "@mui/joy";
+import { CircularProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 
@@ -27,12 +28,15 @@ export default function ReplaceRequirementsModal() {
     MajorVerificationContext,
   );
 
-  const { data: requirementLists, refetch: refetchRequirementLists } = useQuery(
-    {
-      queryKey: ["getAllRequirementLists"],
-      queryFn: async () => await getAllRequirementLists(),
-    },
-  );
+  const {
+    isLoading: loadingRequirementLists,
+    data: requirementLists,
+    refetch: refetchRequirementLists,
+  } = useQuery({
+    queryKey: ["getAllRequirementLists", showModal],
+    queryFn: async () => await getAllRequirementLists(),
+    enabled: showModal,
+  });
 
   const majorRequirements =
     major !== undefined ? getRequirementsForMajor(major.id) : undefined;
@@ -76,8 +80,7 @@ export default function ReplaceRequirementsModal() {
         <div className="mb-4">
           <Typography level="h4">Replace Current Requirement List</Typography>
           <Typography>
-            Choose a requirement list to replace the current one for `
-            {majorRequirements?.title}`
+            Choose a requirement list to replace `{majorRequirements?.title}`
           </Typography>
         </div>
         <div
@@ -89,6 +92,7 @@ export default function ReplaceRequirementsModal() {
             handleReplaceRL={handleReplaceRL}
             setShowModal={setShowModal}
           />
+          {loadingRequirementLists && <CircularProgress />}
         </div>
         <ModalClose variant="plain" />
       </Sheet>

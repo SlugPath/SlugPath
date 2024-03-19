@@ -1,8 +1,9 @@
 "use client";
 
-import { PlannersProvider } from "@contexts/PlannersProvider";
+import { PlannersProvider } from "@/app/contexts/PlannersProvider";
 
 import ExportModal from "../modals/exportModal/ExportModal";
+import ShareModal from "../modals/shareModal/ShareModal";
 import PlannerList from "./PlannerList";
 import PlannerTabs from "./plannerTabs/PlannerTabs";
 
@@ -18,6 +19,7 @@ export default function Planners() {
         </div>
       </div>
       <ExportModal />
+      <ShareModal />
     </PlannersProvider>
   );
 }
