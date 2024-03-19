@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Slug Path",
   description: "A simple course planner for UCSC students",
+  metadataBase: new URL("https://slugpath.com"),
 };
 
 export default function RootLayout({
