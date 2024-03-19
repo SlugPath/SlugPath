@@ -1,8 +1,9 @@
 "use server";
 
-import { toPlannerData } from "@/lib/plannerUtils";
+import { clonePlanner, toPlannerData } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import { LabelColor } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
 
 import { PlannerCreateInput, PlannerData } from "../types/Planner";
 
@@ -103,6 +104,29 @@ export async function updateUserPlanners({
 }
 
 /**
+ * Duplicates a planner for a user
+ * @param userId id of the user
+ * @param plannerId if
+ */
+export async function duplicatePlanner(userId: string, plannerId: string) {
+  await prisma.$transaction(async (tx) => {
+    const plan = await getPlannerById(plannerId, tx);
+    if (!plan) throw new Error("couldn't find planner to duplicate");
+    const dupePlan = clonePlanner({
+      ...plan,
+      id: uuidv4(),
+    });
+    await createPlanner(tx, {
+      userId,
+      plannerId: dupePlan.id,
+      title: `Copy of ${plan.title}`,
+      plannerData: dupePlan,
+      order: 0,
+    });
+  });
+}
+
+/**
  * Retrieves all planners for a user, sorted by `order` field in asc order.
  * @param userId user email
  * @returns a list of planner titles and ids belonging to a user
@@ -133,9 +157,12 @@ export async function getUserPlanners(userId: string): Promise<PlannerData[]> {
  * @param plannerId planner id
  * @returns a PlannerData instance if it exists, otherwise null
  */
-export async function getPlannerById(plannerId: string | undefined) {
+export async function getPlannerById(
+  plannerId: string | undefined,
+  tx: any = prisma,
+) {
   if (!plannerId) return null;
-  const p = await prisma.planner.findUnique({
+  const p = await tx.planner.findUnique({
     where: {
       id: plannerId,
     },

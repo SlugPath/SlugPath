@@ -84,8 +84,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                             size="lg"
                             startDecorator={<Add />}
                           >
-                            {" "}
-                            Add Year{" "}
+                            Add Year
                           </Button>
                         </span>
                       </Tooltip>
