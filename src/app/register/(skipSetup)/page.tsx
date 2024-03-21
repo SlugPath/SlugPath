@@ -23,6 +23,8 @@ export default function Register() {
   const setSkipSetup = useAccountCreationStore((state) => state.setSkipSetup);
 
   const handleContinue = async () => {
+    if (skipSetup === undefined) return;
+
     if (skipSetup) {
       if (!user) {
         console.error("User not found");
@@ -104,10 +106,10 @@ export default function Register() {
 
       <button
         className={cn(
-          false && "cursor-not-allowed opacity-50",
+          skipSetup === undefined && "cursor-not-allowed opacity-50",
           "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
         )}
-        aria-disabled={false}
+        aria-disabled={skipSetup === undefined}
         onClick={handleContinue}
       >
         {isCreatingUser ? <CircularProgress size="sm" /> : "Continue"}
