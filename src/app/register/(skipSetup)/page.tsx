@@ -4,16 +4,20 @@ import { createUser } from "@/app/actions/user";
 import { cn } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
+import { CircularProgress } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import SelectBox from "../../components/accountCreation/SelectBox";
 
 export default function Register() {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const user = session?.user;
 
   const router = useRouter();
+
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
 
   const skipSetup = useAccountCreationStore((state) => state.skipSetup);
   const setSkipSetup = useAccountCreationStore((state) => state.setSkipSetup);
@@ -24,6 +28,7 @@ export default function Register() {
         console.error("User not found");
         return;
       }
+      setIsCreatingUser(true);
 
       await createUser(
         {
@@ -33,8 +38,8 @@ export default function Register() {
         },
         [],
       );
-      router.push("/planner");
-      return;
+
+      updateSession({ ...session, user: { ...user, isRecordCreated: true } });
     }
 
     router.push("/register/majors");
@@ -97,13 +102,13 @@ export default function Register() {
 
       <button
         className={cn(
-          skipSetup === undefined && "cursor-not-allowed opacity-50",
-          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity",
+          false && "cursor-not-allowed opacity-50",
+          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
         )}
-        aria-disabled={skipSetup === undefined}
+        aria-disabled={false}
         onClick={handleContinue}
       >
-        Continue
+        {isCreatingUser ? <CircularProgress size="sm" /> : "Continue"}
       </button>
     </>
   );

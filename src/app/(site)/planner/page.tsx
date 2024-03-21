@@ -1,3 +1,4 @@
+import { authOptions } from "@/lib/auth";
 import Planners from "@components/planners/Planners";
 import {
   HydrationBoundary,
@@ -9,7 +10,7 @@ import { getServerSession } from "next-auth";
 import { getUserPlanners } from "../../actions/planner";
 
 export default async function Home() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const userId = session?.user.id ?? "";
   const queryClient = new QueryClient();
 

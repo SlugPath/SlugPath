@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { ArrowBack } from "@mui/icons-material";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 
@@ -14,6 +15,17 @@ export default function StepByStepLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
+
+  // TODO: centralize routing logic (preferably in middleware)
+  // NOTE: don't want to redirect to /register if session is undefined (still pending)
+  if (session === null) {
+    redirect("/");
+  }
+
+  if (session) {
+    if (session.user.isRecordCreated) redirect("/planner");
+  }
 
   // Zustand store
   const { skipSetup, majors } = useAccountCreationStore((state) => ({

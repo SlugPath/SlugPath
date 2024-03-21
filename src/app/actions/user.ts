@@ -19,14 +19,20 @@ export async function createUser(
   },
   programIds: number[],
 ) {
-  return await prisma.user.create({
-    data: {
+  return await prisma.user.upsert({
+    create: {
       id: userId,
       email,
       name,
       majors: {
         connect: programIds.map((id) => ({ id })),
       },
+    },
+    where: {
+      id: userId,
+    },
+    update: {
+      name,
     },
   });
 }

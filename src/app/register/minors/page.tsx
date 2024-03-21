@@ -14,12 +14,13 @@ import { useEffect, useMemo, useState } from "react";
 const MAX_MINOR_SELECTIONS = 2;
 
 export default function Minors() {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
 
   const [minorInput, setMinorInput] = useState("");
   const [minorValue, setMinorValue] = useState<Program | null>(null); // undefined MUI components are uncontrolled
   const [catalogYearInput, setCatalogYearInput] = useState("");
 
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [error, setError] = useState("");
 
   // Zustand store
@@ -79,6 +80,8 @@ export default function Minors() {
   // TODO: Store selected majors and minors in the database, and navigate to the
   // next page
   const handleStartPlanning = async () => {
+    setIsCreatingUser(true);
+
     const majorIds = selectedMajors
       ? selectedMajors.map((major) => major.id)
       : [];
@@ -96,7 +99,10 @@ export default function Minors() {
       programIds,
     );
 
-    alert(programIds);
+    updateSession({
+      ...session,
+      user: { ...session!.user, isRecordCreated: true },
+    });
   };
 
   // NOTE: User thrown errors (more than one of same major) exist in addition to
@@ -244,7 +250,7 @@ export default function Minors() {
         aria-disabled={false}
         onClick={handleStartPlanning}
       >
-        Start Planning
+        {isCreatingUser ? <CircularProgress size="sm" /> : "Start Planning"}
       </button>
     </>
   );

@@ -1,13 +1,22 @@
+// import Image from "next/image";
+import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import LoginGoogleButton from "./components/LoginGoogleButton";
 import SplitScreenContainer from "./components/accountCreation/SplitScreenContainer";
 
 export default async function Page() {
-  const session = await getServerSession();
-  if (session?.user.id) redirect("/planner");
+  const session = await getServerSession(authOptions);
+
+  // TODO: centralize routing logic (preferably in middleware)
+  if (session) {
+    if (session.user.isRecordCreated) {
+      redirect("/planner");
+    }
+
+    redirect("/register");
+  }
 
   return (
     <SplitScreenContainer>
@@ -20,19 +29,7 @@ export default async function Page() {
           from UCSC recommended templates. Don&apos;t have a plan yet? No
           worries, start with an empty planner.
         </p>
-        <Link
-          href="/register"
-          className="bg-black flex gap-2 px-6 py-3 rounded-full items-center justify-center mt-8"
-        >
-          <Image
-            src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
-            alt="Sign in"
-            className="h-5 w-auto"
-            width="512"
-            height="512"
-          />
-          <p className="text-white">Continue with Google</p>
-        </Link>
+        <LoginGoogleButton />
         <div className="h-40" />
       </div>
     </SplitScreenContainer>
