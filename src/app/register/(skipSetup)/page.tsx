@@ -41,7 +41,10 @@ export default function Register() {
         [],
       );
 
-      updateSession({ ...session, user: { ...user, isRecordCreated: true } });
+      await updateSession({
+        ...session,
+        user: { ...user, isRecordCreated: true },
+      });
       // TODO: centralize routing logic (preferably in middleware)
       redirect("/planner");
     }

@@ -10,6 +10,7 @@ import { Add, Error, Warning } from "@mui/icons-material";
 import { Autocomplete, CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const MAX_MINOR_SELECTIONS = 2;
@@ -100,7 +101,7 @@ export default function Minors() {
       programIds,
     );
 
-    updateSession({
+    await updateSession({
       ...session,
       user: { ...session!.user, isRecordCreated: true },
     });

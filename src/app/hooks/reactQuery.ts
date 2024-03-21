@@ -32,8 +32,7 @@ import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
 
 /**
- * A React Query hook to fetch all majors and minors, optionally for a specific
- * catalog year
+ * A React Query hook to fetch all majors and minors
  * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
@@ -48,7 +47,7 @@ export function usePrograms() {
 }
 
 /**
- * A React Query hook to fetch all majors and minors, optionally for a specific
+ * A React Query hook to fetch all majors and minors for a specific
  * catalog year
  * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
@@ -64,8 +63,7 @@ export function useProgramsForYear(catalogYear: string) {
 }
 
 /**
- * A React Query hook to fetch all unique majors and minors, optionally for a
- * specific catalog year
+ * A React Query hook to fetch all unique majors and minors
  * @returns React Query useQuery Hook for all majors and minors
  */
 export function useUnqiuePrograms() {
@@ -90,8 +88,8 @@ export function useUnqiuePrograms() {
   });
 }
 /**
- * A React Query hook to fetch all unique majors and minors, optionally for a
- * specific catalog year
+ * A React Query hook to fetch all unique majors and minors for a specific
+ * catalog year
  * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
