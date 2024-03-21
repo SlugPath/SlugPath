@@ -25,6 +25,7 @@ import LabelsSelectionModal from "./LabelSelectionModal";
 import MoreEnrollInfo from "./MoreEnrollInfo";
 import QuartersOfferedTable from "./QuartersOfferedTable";
 import ReplaceCustomModal from "./ReplaceCustomModal";
+import ReplaceTransferModal from "./ReplaceTransferModal";
 import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 60;
@@ -286,6 +287,7 @@ export default function CourseInfoModal({
           )}
           <Typography component="p">Credits: {credits(data)}</Typography>
           {!isCustomCourse(course) && <MoreEnrollInfo course={course} />}
+          {!isCustomCourse(course) && <ReplaceTransferModal course={course} />}
           {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}

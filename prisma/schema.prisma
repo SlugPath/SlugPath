@@ -60,13 +60,25 @@ model Course {
   departmentCode  String
   number          String
   title           String
-  credits         Int      @default(5)
+  credits         Int              @default(5)
   prerequisites   String
   ge              String[]
   quartersOffered String[]
   description     String?
+  transferCourses TransferCourse[]
 
   @@id([departmentCode, number])
+}
+
+model TransferCourse {
+  id             Int    @id @default(autoincrement())
+  title          String
+  departmentCode String
+  number         String
+  school         String
+  course         Course @relation(fields: [departmentCode, number], references: [departmentCode, number])
+
+  @@unique([departmentCode, number, school])
 }
 
 model Major {

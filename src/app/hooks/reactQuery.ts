@@ -4,6 +4,7 @@ import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getCourse, getSuggestedCourses } from "../actions/course";
+import { getTransferEquivalent } from "../actions/enrollment";
 import {
   removePermission as deletePermission,
   getPermissions,
@@ -26,6 +27,7 @@ import {
   updateUserDefaultPlanner,
   updateUserPrograms,
 } from "../actions/program";
+import { StoredCourse } from "../types/Course";
 import { Permission } from "../types/Permission";
 import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
@@ -54,6 +56,18 @@ export function useUnqiuePrograms() {
       return filterRedundantPrograms(res);
     },
     placeholderData: [],
+  });
+}
+
+/**
+ * A React Query hook to fetch equivalent transfer courses for a specified course at UCSC.
+ * @param course UCSC course
+ * @returns React Query useQuery Hook for transfer courses
+ */
+export function useTransferCourses(course: StoredCourse) {
+  return useQuery({
+    queryKey: ["transferCourses", course.departmentCode, course.number],
+    queryFn: async () => await getTransferEquivalent(course),
   });
 }
 
