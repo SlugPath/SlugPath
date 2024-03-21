@@ -8,6 +8,7 @@ class Institution(BaseModel):
 class Course(BaseModel):
   dept_code: str
   number: str
+  name: str
   institution_name: str = Field(default="University of California Santa Cruz")
 
 class InitialData(BaseModel):
