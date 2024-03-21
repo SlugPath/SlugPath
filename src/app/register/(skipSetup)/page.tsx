@@ -6,7 +6,7 @@ import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
 import { CircularProgress } from "@mui/joy";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import SelectBox from "../../components/accountCreation/SelectBox";
@@ -40,6 +40,8 @@ export default function Register() {
       );
 
       updateSession({ ...session, user: { ...user, isRecordCreated: true } });
+      // TODO: centralize routing logic (preferably in middleware)
+      redirect("/planner");
     }
 
     router.push("/register/majors");

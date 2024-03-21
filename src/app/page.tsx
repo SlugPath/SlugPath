@@ -1,10 +1,9 @@
-// import Image from "next/image";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import LoginGoogleButton from "./components/LoginGoogleButton";
 import SplitScreenContainer from "./components/accountCreation/SplitScreenContainer";
+import LoginGoogleButton from "./components/buttons/LoginGoogleButton";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

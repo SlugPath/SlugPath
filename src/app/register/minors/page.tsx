@@ -9,6 +9,7 @@ import useAccountCreationStore from "@/store/account-creation";
 import { Add, Error, Warning } from "@mui/icons-material";
 import { Autocomplete, CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const MAX_MINOR_SELECTIONS = 2;
@@ -103,6 +104,8 @@ export default function Minors() {
       ...session,
       user: { ...session!.user, isRecordCreated: true },
     });
+    // TODO: centralize routing logic (preferably in middleware)
+    redirect("/planner");
   };
 
   // NOTE: User thrown errors (more than one of same major) exist in addition to
