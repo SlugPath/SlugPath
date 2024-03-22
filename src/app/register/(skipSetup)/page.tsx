@@ -22,36 +22,38 @@ export default function Register() {
   const skipSetup = useAccountCreationStore((state) => state.skipSetup);
   const setSkipSetup = useAccountCreationStore((state) => state.setSkipSetup);
 
+  const isContinueDisabled = skipSetup === undefined;
+
   const handleContinue = async () => {
-    if (skipSetup === undefined) return;
+    if (isContinueDisabled) return;
 
-    if (skipSetup) {
-      if (!user) {
-        console.error("User not found");
-        return;
-      }
-      setIsCreatingUser(true);
-
-      await createUser(
-        {
-          userId: user.id,
-          email: user.email!,
-          name: user.name!,
-        },
-        [],
-      );
-
-      // NOTE: Session update forces redirect in layout
-      await updateSession({
-        ...session,
-        user: { ...user, isRecordCreated: true },
-      });
-
-      // TODO: Centralize routing logic (pregerably in middleware)
-      redirect("/planner");
+    if (!skipSetup) {
+      router.push("/register/majors");
+      return;
     }
 
-    router.push("/register/majors");
+    // Skip account creation
+    setIsCreatingUser(true);
+
+    await createUser(
+      {
+        userId: user!.id,
+        email: user!.email!,
+        name: user!.name!,
+      },
+      [],
+    );
+
+    // NOTE: Session update forces redirect in layout
+    await updateSession({
+      ...session,
+      user: { ...user, isRecordCreated: true },
+    });
+
+    // TODO: Centralize routing logic (pregerably in middleware)
+    // NOTE: Session update forced redirect (`updateSession`) causes hot reload
+    // error with client side routing, redirect call needed to avoid this
+    redirect("/planner");
   };
 
   return (
@@ -111,10 +113,10 @@ export default function Register() {
 
       <button
         className={cn(
-          skipSetup === undefined && "cursor-not-allowed opacity-50",
+          isContinueDisabled && "cursor-not-allowed opacity-50",
           "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
         )}
-        aria-disabled={skipSetup === undefined}
+        aria-disabled={isContinueDisabled}
         onClick={handleContinue}
       >
         {isCreatingUser ? <CircularProgress size="sm" /> : "Continue"}

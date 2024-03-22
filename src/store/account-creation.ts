@@ -1,25 +1,17 @@
-import {
-  Major as MajorExplicit,
-  Minor as MinorExplicit,
-} from "@/app/types/Program";
+import { Program } from "@/app/types/Program";
 import { create } from "zustand";
-
-// QUESTION: These types may be a little scuffed, should use new type? Or keep redundant
-// programType property?
-type Major = Omit<MajorExplicit, "programType">;
-type Minor = Omit<MinorExplicit, "programType">;
 
 type AccountCreationStore = {
   skipSetup: boolean | undefined;
   setSkipSetup: (skip: boolean) => void;
 
-  selectedMajors: Major[] | undefined;
-  setMajor: (majors: Major[]) => void;
-  addMajor: (majorInfo: Major) => void;
+  selectedMajors: Program[] | undefined;
+  setMajor: (majors: Program[]) => void;
+  addMajor: (major: Program) => void;
   deleteMajor: (programId: number) => void;
 
-  selectedMinors: Minor[] | undefined;
-  addMinor: (minorInfor: Minor) => void;
+  selectedMinors: Program[] | undefined;
+  addMinor: (major: Program) => void;
   deleteMinor: (programId: number) => void;
 };
 
