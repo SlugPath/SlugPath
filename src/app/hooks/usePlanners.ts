@@ -1,12 +1,14 @@
-import { usePlanners, useUserDefaultPlanner } from "@/app/hooks/reactQuery";
+import {
+  usePlanners,
+  useUpdatePlannersMutation,
+  useUserDefaultPlanner,
+} from "@/app/hooks/reactQuery";
 import { cloneDefaultPlanner, clonePlanner } from "@/lib/plannerUtils";
 import { PlannerData } from "@customTypes/Planner";
-import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { updateUserPlanners } from "../actions/planner";
 import { MultiPlanner } from "../contexts/PlannersProvider";
 
 export function usePlannersOld() {
@@ -61,15 +63,7 @@ export function usePlannersOld() {
     };
   }, []);
 
-  const { mutate: saveAll } = useMutation({
-    mutationKey: ["savePlanners"],
-    mutationFn: async (input: { userId: string; planners: PlannerData[] }) => {
-      await updateUserPlanners(input);
-    },
-    onError: (err) => {
-      console.error(err);
-    },
-  });
+  const { mutate: saveAll } = useUpdatePlannersMutation();
 
   // Save changes to the planners every 30 seconds in the database if the tab is currently focused
   useEffect(() => {
