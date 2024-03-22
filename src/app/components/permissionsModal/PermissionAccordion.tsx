@@ -6,7 +6,7 @@ import {
   useUserPermissions,
 } from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
-import { Major, Program } from "@/app/types/Program";
+import { Program } from "@/app/types/Program";
 import { isProgramAlreadyAdded } from "@/lib/permissionsUtils";
 import {
   addNewProgramToPermissions,
@@ -268,7 +268,7 @@ function SelectProgram({
 
   return (
     <Select
-      value={value as Major} // TODO: Fix type
+      value={value}
       placeholder="Add a program..."
       variant="plain"
       onChange={onChange}

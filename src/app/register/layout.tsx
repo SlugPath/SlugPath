@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 
-import SplitScreenContainer from "../components/accountCreation/SplitScreenContainer";
+import SplitScreenContainer from "./SplitScreenContainer";
 
 export default function StepByStepLayout({
   children,

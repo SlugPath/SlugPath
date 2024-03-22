@@ -1,13 +1,12 @@
 "use client";
 
 import { createUser } from "@/app/actions/user";
-import { cn } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
-import { CircularProgress } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
+import ContinueButton from "../ContinueButton";
 import ProgramSelector from "../ProgramSelector";
 
 export default function Minors() {
@@ -25,6 +24,7 @@ export default function Minors() {
   const addMinor = useAccountCreationStore((state) => state.addMinor);
   const deleteMinor = useAccountCreationStore((state) => state.deleteMinor);
 
+  // Create user and route to planner page
   const handleStartPlanning = async () => {
     setIsCreatingUser(true);
 
@@ -81,16 +81,9 @@ export default function Minors() {
 
       <div className="h-10" />
 
-      <button
-        className={cn(
-          false && "cursor-not-allowed opacity-50",
-          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
-        )}
-        aria-disabled={false}
-        onClick={handleStartPlanning}
-      >
-        {isCreatingUser ? <CircularProgress size="sm" /> : "Start Planning"}
-      </button>
+      <ContinueButton loading={isCreatingUser} onClick={handleStartPlanning}>
+        Start Planning
+      </ContinueButton>
     </>
   );
 }

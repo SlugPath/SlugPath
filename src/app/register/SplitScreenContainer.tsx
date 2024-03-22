@@ -1,7 +1,7 @@
 // import { HelpOutline } from "@mui/icons-material";
 import Image from "next/image";
 
-import { Logo } from "../Logo";
+import { Logo } from "../components/Logo";
 
 interface SplitScreenContainerProps {
   children: React.ReactNode;

@@ -1,29 +1,33 @@
 "use client";
 
+import { getPrograms } from "@/app/actions/program";
 import { createUser } from "@/app/actions/user";
-import { cn } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
-import { CircularProgress } from "@mui/joy";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import SelectBox from "../../components/accountCreation/SelectBox";
+import ContinueButton from "../ContinueButton";
+import SelectBox from "./SelectBox";
 
 export default function Register() {
   const { data: session, update: updateSession } = useSession();
   const user = session?.user;
 
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
+  // Zustand store
   const skipSetup = useAccountCreationStore((state) => state.skipSetup);
   const setSkipSetup = useAccountCreationStore((state) => state.setSkipSetup);
 
   const isContinueDisabled = skipSetup === undefined;
 
+  // Create user or not based on skipSetup, then redirect
   const handleContinue = async () => {
     if (isContinueDisabled) return;
 
@@ -55,6 +59,14 @@ export default function Register() {
     // error with client side routing, redirect call needed to avoid this
     redirect("/planner");
   };
+
+  // On queryClient mount, prefetch programs for future program selectors
+  useEffect(() => {
+    queryClient.prefetchQuery({
+      queryKey: ["programs"],
+      queryFn: () => getPrograms(),
+    });
+  }, [queryClient]);
 
   return (
     <>
@@ -111,16 +123,13 @@ export default function Register() {
 
       <div className="h-10" />
 
-      <button
-        className={cn(
-          isContinueDisabled && "cursor-not-allowed opacity-50",
-          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
-        )}
-        aria-disabled={isContinueDisabled}
+      <ContinueButton
+        disabled={isContinueDisabled}
+        loading={isCreatingUser}
         onClick={handleContinue}
       >
-        {isCreatingUser ? <CircularProgress size="sm" /> : "Continue"}
-      </button>
+        Continue
+      </ContinueButton>
     </>
   );
 }

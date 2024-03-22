@@ -96,7 +96,7 @@ export default function ProgramSelector({
 
   return (
     <>
-      {/* Input Selector */}
+      {/* Program, catalogYear, add button */}
       <div className="flex flex-col md:flex-row gap-4">
         <Autocomplete
           value={minorValue}

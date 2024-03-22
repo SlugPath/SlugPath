@@ -1,9 +1,9 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import useAccountCreationStore from "@/store/account-creation";
 import { useRouter } from "next/navigation";
 
+import ContinueButton from "../ContinueButton";
 import ProgramSelector from "../ProgramSelector";
 
 export default function Majors() {
@@ -17,6 +17,7 @@ export default function Majors() {
   const addMajor = useAccountCreationStore((state) => state.addMajor);
   const deleteMajor = useAccountCreationStore((state) => state.deleteMajor);
 
+  // Route to minors page
   const handleContinue = () => {
     // NOTE: Routing restricted if selectedMajors is undefined
     if (!selectedMajors) {
@@ -49,16 +50,7 @@ export default function Majors() {
 
       <div className="h-10" />
 
-      <button
-        className={cn(
-          false && "cursor-not-allowed opacity-50",
-          "bg-primary-500 text-white w-full flex items-center justify-center py-3 rounded-lg transition-opacity font-bold",
-        )}
-        aria-disabled={false}
-        onClick={handleContinue}
-      >
-        Continue
-      </button>
+      <ContinueButton onClick={handleContinue}>Continue</ContinueButton>
     </>
   );
 }
