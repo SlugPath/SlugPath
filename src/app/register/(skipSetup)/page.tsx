@@ -41,11 +41,13 @@ export default function Register() {
         [],
       );
 
+      // NOTE: Session update forces redirect in layout
       await updateSession({
         ...session,
         user: { ...user, isRecordCreated: true },
       });
-      // TODO: centralize routing logic (preferably in middleware)
+
+      // TODO: Centralize routing logic (pregerably in middleware)
       redirect("/planner");
     }
 
