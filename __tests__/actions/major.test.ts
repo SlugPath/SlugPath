@@ -1,4 +1,5 @@
 import {
+  getCatalogYears,
   getProgramDefaultPlanners,
   getPrograms,
   getUserProgramsByEmail,
@@ -280,5 +281,73 @@ describe("Major actions", () => {
     expect(await getUserProgramsByEmail(user2!.email)).toStrictEqual(
       majorResult,
     );
+  });
+
+  it("should return the available catalog years", async () => {
+    // Create 4 majors
+    await prisma.major.create({
+      data: {
+        catalogYear: "2020-2021",
+        name: "Test Major 1",
+        programType: ProgramType.Major,
+      },
+    });
+
+    await prisma.major.create({
+      data: {
+        catalogYear: "2021-2022",
+        name: "Test Major 1",
+        programType: ProgramType.Major,
+      },
+    });
+
+    await prisma.major.create({
+      data: {
+        catalogYear: "2022-2023",
+        name: "Test Major 1",
+        programType: ProgramType.Major,
+      },
+    });
+
+    await prisma.major.create({
+      data: {
+        catalogYear: "2023-2024",
+        name: "Test Major 1",
+        programType: ProgramType.Major,
+      },
+    });
+
+    const catalogYearsObjs = await getCatalogYears();
+    const catalogYears = catalogYearsObjs.map((year) => year.catalogYear);
+
+    expect(catalogYears).toContain("2020-2021");
+    expect(catalogYears).toContain("2021-2022");
+    expect(catalogYears).toContain("2022-2023");
+    expect(catalogYears).toContain("2023-2024");
+  });
+
+  it("should return the available catalog years for a specific major", async () => {
+    // Create 2 majors
+    await prisma.major.create({
+      data: {
+        catalogYear: "2020-2021",
+        name: "Test Major 2",
+        programType: ProgramType.Major,
+      },
+    });
+
+    await prisma.major.create({
+      data: {
+        catalogYear: "2022-2023",
+        name: "Test Major 2",
+        programType: ProgramType.Major,
+      },
+    });
+
+    const catalogYearsObjs = await getCatalogYears();
+    const catalogYears = catalogYearsObjs.map((year) => year.catalogYear);
+
+    expect(catalogYears).toContain("2020-2021");
+    expect(catalogYears).toContain("2022-2023");
   });
 });

@@ -3,7 +3,6 @@ import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getCatalogYears } from "../actions/catalogYears";
 import { getCourse, getSuggestedCourses } from "../actions/course";
 import {
   removePermission as deletePermission,
@@ -18,6 +17,7 @@ import {
   updateUserPlanners,
 } from "../actions/planner";
 import {
+  getCatalogYears,
   getProgramDefaultPlanners,
   getPrograms,
   getProgramsByTypeInYear,
