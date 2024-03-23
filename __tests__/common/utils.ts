@@ -1,3 +1,4 @@
+import { createUser as createUserAction } from "@/app/actions/user";
 import { Program } from "@/app/types/Program";
 import prisma from "@/lib/prisma";
 import { ProgramType, Role } from "@prisma/client";
@@ -36,28 +37,15 @@ export async function createMajor(
  * Creates a user in the database
  * @returns newly created user
  */
-export async function createUser({
-  email,
-  name,
-  role,
-  majors,
-}: {
+export async function createUser(user: {
   email: string;
   name: string;
   role?: Role;
   majors?: Program[];
 }) {
-  return await prisma.user.create({
-    data: {
-      id: uuidv4(),
-      email,
-      name,
-      role,
-      majors: {
-        connect: majors?.map((major) => ({ id: major.id })),
-      },
-    },
-  });
+  const { majors, ...userData } = user;
+  const majorIds = majors ? majors?.map((major) => major.id) : [];
+  return await createUserAction({ ...userData, userId: uuidv4() }, majorIds);
 }
 
 // non prisma helper functions

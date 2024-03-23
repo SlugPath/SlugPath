@@ -4,6 +4,7 @@ import {
   getUserProgramsByEmail,
   updateUserPrograms,
 } from "@/app/actions/program";
+import "@/app/actions/user";
 import { Program } from "@/app/types/Program";
 import prisma from "@/lib/prisma";
 import { ProgramType } from "@prisma/client";

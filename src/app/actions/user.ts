@@ -5,7 +5,7 @@ import { Role } from "@prisma/client";
 
 /**
  * Create a user in the database, and associate them with Program(s)
- * @param UserParams user's name, email, and id
+ * @param UserParams user's id, email, name, and optionally their role
  * @param programIds the ids of the programs to associate the user with
  */
 export async function createUser(
@@ -31,6 +31,13 @@ export async function createUser(
       majors: {
         connect: programIds.map((id) => ({ id })),
       },
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      majors: true,
     },
   });
 }
