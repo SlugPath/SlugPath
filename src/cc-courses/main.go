@@ -143,10 +143,10 @@ func getTransferEquivalents(departmentId int, insts []Institution, initialData I
 				if equiv.Type != "Course" {
 					continue
 				}
-				fmt.Println(ucscCourse)
 				transferCourses[ucscCourse] = append(transferCourses[ucscCourse], Course{
 					DeptCode:        equiv.Prefix,
 					CourseNumber:    equiv.CourseNumber,
+					Name:            equiv.CourseTitle,
 					InstitutionName: inst.Name,
 				})
 			}
@@ -204,8 +204,10 @@ func runPipeline() {
 	transferCourses := make(map[string][]Course)
 
 	for transfers := range ch {
+		fmt.Println("RECEVIED")
 		maps.Copy(transferCourses, transfers)
 	}
+	fmt.Println("DONE")
 
 	writeTransfersToFile(transferCourses)
 

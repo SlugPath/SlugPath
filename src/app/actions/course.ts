@@ -1,7 +1,11 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { compareCoursesByNum, toStoredCourse } from "@/lib/utils";
+import {
+  compareCoursesByNum,
+  fromTransferToStoredCourse,
+  toStoredCourse,
+} from "@/lib/utils";
 import { Course, Prisma } from "@prisma/client";
 
 import {
@@ -105,6 +109,39 @@ export async function getCoursesBy(
   const res = courses.map(toStoredCourse);
   res.sort(compareCoursesByNum);
   return res;
+}
+
+/**
+ * Returns a list of transfer alternatives for a particular course at UCSC
+ * across the UC-CCC-CSU system
+ * @param course an official UCSC course
+ * @returns a list of transfer alternatives for `course`
+ */
+export async function getTransferEquivalents(
+  course: StoredCourse,
+): Promise<StoredCourse[]> {
+  const equivalences = await prisma.course.findFirst({
+    where: {
+      departmentCode: course.departmentCode,
+      number: course.number,
+    },
+    select: {
+      transferCourses: {
+        select: {
+          id: true,
+          title: true,
+          departmentCode: true,
+          number: true,
+          school: true,
+        },
+      },
+    },
+  });
+  if (!equivalences) return [];
+
+  const { transferCourses } = equivalences;
+
+  return transferCourses.map(fromTransferToStoredCourse);
 }
 
 /**

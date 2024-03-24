@@ -71,14 +71,14 @@ model Course {
 }
 
 model TransferCourse {
-  id             Int    @id @default(autoincrement())
-  title          String
-  departmentCode String
-  number         String
-  school         String
-  course         Course @relation(fields: [departmentCode, number], references: [departmentCode, number])
-
-  @@unique([departmentCode, number, school])
+  id                   Int     @id @default(autoincrement())
+  title                String
+  departmentCode       String
+  number               String
+  school               String
+  Course               Course? @relation(fields: [courseDepartmentCode, courseNumber], references: [departmentCode, number])
+  courseDepartmentCode String?
+  courseNumber         String?
 }
 
 model Major {

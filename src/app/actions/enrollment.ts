@@ -100,12 +100,6 @@ export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
   });
 }
 
-export async function getTransferEquivalent(course: StoredCourse) {
-  // Not implemented yet
-  console.log(course);
-  return [];
-}
-
 // =========== Helper functions =============
 // function getTransferURL(
 //   institution: string,

@@ -105,6 +105,31 @@ export function isProgramInPrograms(
   return alreadyAdded;
 }
 
+/**
+ * Converts a TransferCourse object to a StoredCourse object
+ * @param t a TransferCourse object
+ * @returns a StoredCourse object
+ */
+export function fromTransferToStoredCourse(t: {
+  departmentCode: string;
+  number: string;
+  title: string;
+  school: string;
+}): StoredCourse {
+  return {
+    departmentCode: t.departmentCode,
+    number: t.number,
+    title: t.title,
+    school: t.school,
+    credits: 5,
+    id: uuidv4(),
+    labels: [],
+    ge: [],
+    quartersOffered: [],
+    description: "",
+  };
+}
+
 export function toStoredCourse({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   department: _,
@@ -112,6 +137,7 @@ export function toStoredCourse({
 }: Course): StoredCourse {
   return {
     ...rest,
+    school: "UCSC",
     description: rest.description ?? "",
     labels: [],
     id: uuidv4(),

@@ -9,8 +9,12 @@ export default function ReplaceTransferModal({
   const { data } = useTransferCourses(course);
   return (
     <div className="flex flex-row flex-wrap gap-2">
-      Foo:
-      {data?.map((inst: any) => <p key={inst.id}> {inst.name} </p>)}
+      {data?.map((t) => (
+        <p key={t.id}>
+          {" "}
+          {t.title} @ {t.school}{" "}
+        </p>
+      ))}
     </div>
   );
 }

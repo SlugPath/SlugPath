@@ -3,8 +3,11 @@ import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getCourse, getSuggestedCourses } from "../actions/course";
-import { getTransferEquivalent } from "../actions/enrollment";
+import {
+  getCourse,
+  getSuggestedCourses,
+  getTransferEquivalents,
+} from "../actions/course";
 import {
   removePermission as deletePermission,
   getPermissions,
@@ -67,7 +70,7 @@ export function useUnqiuePrograms() {
 export function useTransferCourses(course: StoredCourse) {
   return useQuery({
     queryKey: ["transferCourses", course.departmentCode, course.number],
-    queryFn: async () => await getTransferEquivalent(course),
+    queryFn: async () => await getTransferEquivalents(course),
   });
 }
 

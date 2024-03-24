@@ -58,6 +58,7 @@ export const customCourse = (): StoredCourse => {
     id: uuidv4(),
     credits: 5,
     departmentCode: "",
+    school: "UCSC",
     number: "",
     title: "Custom Course",
     ge: [],
@@ -180,6 +181,7 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
   try {
     const course = JSON.parse(id);
     return {
+      school: course.school,
       title: course.title,
       departmentCode: course.departmentCode,
       number: course.number,
