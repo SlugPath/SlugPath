@@ -4,7 +4,7 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { InfoOutlined } from "@mui/icons-material";
-import { Button, Card, Tooltip, Typography } from "@mui/joy";
+import { Button, Tooltip, Typography } from "@mui/joy";
 import { useContext, useMemo, useState } from "react";
 
 import CustomCourseModal from "../modals/courseInfoModal/CustomCourseModal";
@@ -48,7 +48,8 @@ export default function CustomCourseSelection() {
   };
 
   return (
-    <Card className="w-80 mt-2 mr-2" variant="plain">
+    <>
+      {/* <Card className="w-80 mt-2 mr-2" variant="plain"> */}
       <div className="flex flex-row gap-2 items-center mx-auto">
         <Button onClick={handleOpen}>
           <Typography
@@ -110,6 +111,7 @@ export default function CustomCourseSelection() {
           }}
         </Droppable>
       )}
-    </Card>
+      {/* </Card> */}
+    </>
   );
 }
