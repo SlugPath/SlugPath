@@ -171,6 +171,10 @@ export function isCustomCourse(c: StoredCourse): boolean {
   return departmentCode === "" || number === "";
 }
 
+export function isTransferCourse(c: StoredCourse): boolean {
+  return c.school !== "UCSC";
+}
+
 export function getTitle({ title, departmentCode, number }: StoredCourse) {
   return title !== undefined && title.length > 0
     ? title

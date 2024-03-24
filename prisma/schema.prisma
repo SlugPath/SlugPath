@@ -52,6 +52,7 @@ model EnrolledCourse {
   quarterId       Int
   labels          String[]
   description     String?
+  school          String   @default("UCSC")
   quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 

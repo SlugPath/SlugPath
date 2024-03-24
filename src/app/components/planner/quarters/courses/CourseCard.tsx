@@ -5,6 +5,7 @@ import {
   getDeptAndNumber,
   isCustomCourse,
   isOffered,
+  isTransferCourse,
 } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import CloseIconButton from "@components/buttons/CloseIconButton";
@@ -60,6 +61,8 @@ export default function CourseCard({
   function cardColor() {
     if (isCustomCourse(course)) {
       return "custom";
+    } else if (isTransferCourse(course)) {
+      return "transfer";
     } else if (isEnrolledCourse) {
       return "primary";
     } else {
