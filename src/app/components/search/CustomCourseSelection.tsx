@@ -3,7 +3,7 @@ import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
-import HelpOutline from "@mui/icons-material/HelpOutline";
+import { InfoOutlined } from "@mui/icons-material";
 import { Button, Card, Tooltip, Typography } from "@mui/joy";
 import { useContext, useMemo, useState } from "react";
 
@@ -70,7 +70,7 @@ export default function CustomCourseSelection() {
           }
           variant="soft"
         >
-          <HelpOutline style={{ fontSize: "22px" }} />
+          <InfoOutlined style={{ fontSize: "22px" }} />
         </Tooltip>
       </div>
       <CustomCourseModal

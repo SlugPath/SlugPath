@@ -1,5 +1,5 @@
 import useSearch from "@/app/hooks/useSearch";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { InfoOutlined } from "@mui/icons-material";
 import { Card, CircularProgress, Tooltip } from "@mui/joy";
 
 import CustomCourseSelection from "./CustomCourseSelection";
@@ -26,7 +26,7 @@ export default function Search({
               title="Search by class name, or filter by department or GE type"
               variant="soft"
             >
-              <HelpOutlineIcon style={{ fontSize: "22px" }} />
+              <InfoOutlined style={{ fontSize: "22px" }} />
             </Tooltip>
           </div>
         </div>
