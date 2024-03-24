@@ -31,7 +31,7 @@ export default function useSearch() {
   });
 
   // Query to get the courses based on the query details
-  const { data: courses, isLoading: loading } = useQuery({
+  const { data: courses, isPending: loading } = useQuery({
     queryKey: ["courses", queryDetails],
     placeholderData: keepPreviousData,
     queryFn: async () => await getCoursesBy(queryDetails),
