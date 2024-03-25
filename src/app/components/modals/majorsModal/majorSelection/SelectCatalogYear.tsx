@@ -3,7 +3,7 @@ import { SyntheticEvent } from "react";
 
 export interface SelectCatalogYearProps {
   catalogYear: string;
-  years: string[];
+  years: { catalogYear: string }[];
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     newValue: string | null,
@@ -24,9 +24,9 @@ export default function SelectCatalogYear({
         variant="plain"
         onChange={onChange}
       >
-        {years.map((year, index) => (
-          <Option key={index} value={year}>
-            {year}
+        {years.map((year) => (
+          <Option key={year.catalogYear} value={year.catalogYear}>
+            {year.catalogYear}
           </Option>
         ))}
       </Select>

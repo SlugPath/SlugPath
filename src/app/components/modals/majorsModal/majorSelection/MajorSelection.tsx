@@ -1,10 +1,10 @@
 import {
+  useCatalogYears,
   useProgramTypeOfYear,
   useUpdateUserProgramsMutation,
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
 import { Program } from "@/app/types/Program";
-import { years } from "@/lib/defaultPlanners";
 import { isProgramInPrograms } from "@/lib/utils";
 import { Delete } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
@@ -102,6 +102,8 @@ export default function UserProgramsEditor() {
   );
 }
 
+// TODO: Refactor, fetch all programs and filter for majors and minors, then
+// fetch years based on the selected program
 function AddProgramInputs() {
   const { data: session } = useSession();
   const userId = session?.user?.id;
@@ -112,6 +114,9 @@ function AddProgramInputs() {
   const [catalogYear, setCatalogYear] = useState("");
   const [programName, setProgramName] = useState("");
   const [error, setError] = useState("");
+
+  // Fetch all catalog years
+  const { data: catalogYears } = useCatalogYears();
 
   // Fetch all majors and minors for the user
   const { data: userPrograms } = useUserPrograms(userId);
@@ -186,7 +191,7 @@ function AddProgramInputs() {
         <div className="col-span-2">
           <SelectCatalogYear
             catalogYear={catalogYear}
-            years={years}
+            years={catalogYears ?? []}
             onChange={(_, newValue) =>
               typeof newValue === "string" && setCatalogYear(newValue)
             }

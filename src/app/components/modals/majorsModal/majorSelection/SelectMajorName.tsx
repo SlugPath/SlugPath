@@ -1,9 +1,10 @@
+import { Program } from "@/app/types/Program";
 import { Option, Select, Typography } from "@mui/joy";
 import { SyntheticEvent } from "react";
 
 export interface SelectMajorNameProps {
   selectedMajor: string;
-  majors: string[] | undefined;
+  majors: Program[] | undefined;
   onChange: (
     event: SyntheticEvent<Element, Event> | null,
     newValue: string | null,
@@ -25,9 +26,9 @@ export default function SelectMajorName({
         onChange={onChange}
         disabled={majors === undefined || majors?.length == 0}
       >
-        {majors?.map((major, index) => (
-          <Option key={index} value={major}>
-            {major}
+        {majors?.map((major) => (
+          <Option key={major.name} value={major}>
+            {major.name}
           </Option>
         ))}
       </Select>

@@ -1,11 +1,11 @@
 import { ProgramType } from "@prisma/client";
 
-export interface Program {
-  name: string;
+export type Program = {
   id: number;
+  name: string;
   catalogYear: string;
   programType: ProgramType;
-}
+};
 
 export type ProgramInput = {
   name: string;
