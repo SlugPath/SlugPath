@@ -26,7 +26,7 @@ export default async function Navbar() {
 
         <div className="flex flex-1 justify-end place-items-center gap-2">
           <ToggleDarkModeButton />
-          {session && session.user ? (
+          {isAuthenticated ? (
             <UserAvatarButton image={image} />
           ) : (
             <LoginButton />

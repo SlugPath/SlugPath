@@ -72,7 +72,7 @@ export default function Register() {
     <>
       <div>
         <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-          Start you&apos;re degree off right
+          Start your degree off right
         </h2>
         <div className="h-2" />
         <p className="text-subtext leading-7 max-w-md">

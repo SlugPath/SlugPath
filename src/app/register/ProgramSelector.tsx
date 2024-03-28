@@ -102,7 +102,7 @@ export default function ProgramSelector({
           value={minorValue}
           options={programs}
           getOptionLabel={(option) => option.name}
-          placeholder="Minor"
+          placeholder={programType === ProgramType.Major ? "Major" : "Minor"}
           variant="plain"
           onChange={(_, newValue) => {
             setMinorValue(newValue ?? null);

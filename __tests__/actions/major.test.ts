@@ -285,36 +285,29 @@ describe("Major actions", () => {
 
   it("should return the available catalog years", async () => {
     // Create 4 majors
-    await prisma.major.create({
-      data: {
-        catalogYear: "2020-2021",
-        name: "Test Major 1",
-        programType: ProgramType.Major,
-      },
-    });
-
-    await prisma.major.create({
-      data: {
-        catalogYear: "2021-2022",
-        name: "Test Major 1",
-        programType: ProgramType.Major,
-      },
-    });
-
-    await prisma.major.create({
-      data: {
-        catalogYear: "2022-2023",
-        name: "Test Major 1",
-        programType: ProgramType.Major,
-      },
-    });
-
-    await prisma.major.create({
-      data: {
-        catalogYear: "2023-2024",
-        name: "Test Major 1",
-        programType: ProgramType.Major,
-      },
+    await prisma.major.createMany({
+      data: [
+        {
+          catalogYear: "2020-2021",
+          name: "Test Major 1",
+          programType: ProgramType.Major,
+        },
+        {
+          catalogYear: "2021-2022",
+          name: "Test Major 1",
+          programType: ProgramType.Major,
+        },
+        {
+          catalogYear: "2022-2023",
+          name: "Test Major 1",
+          programType: ProgramType.Major,
+        },
+        {
+          catalogYear: "2023-2024",
+          name: "Test Major 1",
+          programType: ProgramType.Major,
+        },
+      ],
     });
 
     const catalogYearsObjs = await getCatalogYears();
@@ -328,20 +321,19 @@ describe("Major actions", () => {
 
   it("should return the available catalog years for a specific major", async () => {
     // Create 2 majors
-    await prisma.major.create({
-      data: {
-        catalogYear: "2020-2021",
-        name: "Test Major 2",
-        programType: ProgramType.Major,
-      },
-    });
-
-    await prisma.major.create({
-      data: {
-        catalogYear: "2022-2023",
-        name: "Test Major 2",
-        programType: ProgramType.Major,
-      },
+    await prisma.major.createMany({
+      data: [
+        {
+          catalogYear: "2020-2021",
+          name: "Test Major 2",
+          programType: ProgramType.Major,
+        },
+        {
+          catalogYear: "2022-2023",
+          name: "Test Major 2",
+          programType: ProgramType.Major,
+        },
+      ],
     });
 
     const catalogYearsObjs = await getCatalogYears();

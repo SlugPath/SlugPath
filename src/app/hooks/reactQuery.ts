@@ -66,7 +66,7 @@ export function useProgramsForYear(catalogYear: string) {
  * A React Query hook to fetch all unique majors and minors
  * @returns React Query useQuery Hook for all majors and minors
  */
-export function useUnqiuePrograms() {
+export function useUniquePrograms() {
   const queryClient = useQueryClient();
 
   return useQuery({
@@ -138,9 +138,7 @@ export function useProgramTypeOfYear(
 }
 
 /**
- * A React Query hook to fetch all catalog years, optionally for a specific
- * program
- * @param programName (Optional) Name of the program
+ * A React Query hook to fetch all catalog years
  * @returns React Query useQuery Hook for all catalog years
  */
 export function useCatalogYears() {
@@ -152,9 +150,8 @@ export function useCatalogYears() {
 }
 
 /**
- * A React Query hook to fetch all catalog years, optionally for a specific
- * program
- * @param programName (Optional) Name of the program
+ * A React Query hook to fetch all catalog years
+ * @param programName Name of the program
  * @returns React Query useQuery Hook for all catalog years
  */
 export function useCatalogYearsForProgram(programName: string) {

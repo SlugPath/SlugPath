@@ -1,7 +1,7 @@
 import {
   useDeleteUserPermissionMutation,
   usePermissions,
-  useUnqiuePrograms,
+  useUniquePrograms,
   useUpdateUserPermissionMutation,
   useUserPermissions,
 } from "@/app/hooks/reactQuery";
@@ -252,7 +252,7 @@ function SelectProgram({
   permission: Permission;
   onAddProgramEditPermission: (permission: Permission, major: Program) => void;
 }) {
-  const { data: programs } = useUnqiuePrograms();
+  const { data: programs } = useUniquePrograms();
 
   const [value, setValue] = useState<Program | null>(null);
 
