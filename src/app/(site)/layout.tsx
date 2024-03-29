@@ -13,14 +13,10 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  // TODO: centralize routing logic (preferably in middleware)
-  if (!session) {
-    redirect("/");
-  } else {
-    if (!session.user.isRecordCreated) {
-      redirect("/register");
-    }
+  if (session && !session.user.isRecordCreated) {
+    redirect("/register");
   }
+
   return (
     <div className="bg-bg-light dark:bg-bg-dark bg-cover min-h-screen flex flex-col max-h-screen min-w-0">
       <ScreenSizeWarning />

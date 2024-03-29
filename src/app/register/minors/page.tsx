@@ -3,7 +3,6 @@
 import { createUser } from "@/app/actions/user";
 import useAccountCreationStore from "@/store/account-creation";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { useState } from "react";
 
 import ContinueButton from "../ContinueButton";
@@ -50,11 +49,6 @@ export default function Minors() {
       ...session,
       user: { ...session!.user, isRecordCreated: true },
     });
-
-    // TODO: Centralize routing logic (pregerably in middleware)
-    // NOTE: Session update forced redirect (`updateSession`) causes hot reload
-    // error with client side routing, redirect call needed to avoid this
-    redirect("/planner");
   };
 
   return (

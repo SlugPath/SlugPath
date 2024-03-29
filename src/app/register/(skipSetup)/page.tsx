@@ -6,7 +6,7 @@ import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import ContinueButton from "../ContinueButton";
@@ -53,11 +53,6 @@ export default function Register() {
       ...session,
       user: { ...user, isRecordCreated: true },
     });
-
-    // TODO: Centralize routing logic (pregerably in middleware)
-    // NOTE: Session update forced redirect (`updateSession`) causes hot reload
-    // error with client side routing, redirect call needed to avoid this
-    redirect("/planner");
   };
 
   // On queryClient mount, prefetch programs for future program selectors
