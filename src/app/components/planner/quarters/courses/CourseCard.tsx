@@ -160,7 +160,7 @@ const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
         {truncateTitle(
           course ? getDeptAndNumber(course) : "No course",
           MAX_VISIBLE_COURSE_TITLE,
-        )}
+        ) + (isTransferCourse(course) ? ` at ${course.school}` : "")}
       </Link>
     </Typography>
   );

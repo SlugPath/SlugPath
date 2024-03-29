@@ -1,5 +1,10 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
-import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import {
+  getTitle,
+  isCustomCourse,
+  isOffered,
+  isOfficialCourse,
+} from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import { getCourse } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -82,9 +87,17 @@ export default function CourseInfoModal({
   // Accessors
   function title(c?: StoredCourse) {
     if (loading) return "";
-    if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
+    if (!c) {
+      if (isCustomCourse(course!))
+        return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
+      // For transfer courses
+      return truncateTitle(
+        `${course?.departmentCode} ${course?.number} ${getTitle(course!)}`,
+        MAX_MODAL_TITLE,
+      );
+    }
     return truncateTitle(
-      `${c.departmentCode} ${c.number} ${getTitle(c)}`,
+      `${c?.departmentCode} ${c?.number} ${getTitle(c!)}`,
       MAX_MODAL_TITLE,
     );
   }
@@ -233,9 +246,13 @@ export default function CourseInfoModal({
                   Custom Course
                 </Chip>
               </Tooltip>
-            ) : (
+            ) : isOfficialCourse(course) ? (
               <Chip color="primary" size="lg" className="mr-2">
                 Official Course
+              </Chip>
+            ) : (
+              <Chip color="transfer" size="lg" className="mr-2">
+                Transfer Course
               </Chip>
             )}
           </div>
@@ -254,7 +271,8 @@ export default function CourseInfoModal({
             </Typography>
           </Skeleton>
           {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
-          {!isCustomCourse(course) ? (
+          <Typography component="p">Credits: {credits(data)}</Typography>
+          {isOfficialCourse(course) ? (
             <>
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
@@ -263,8 +281,10 @@ export default function CourseInfoModal({
                   <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />
                 )}
               </Skeleton>
+              <MoreEnrollInfo course={course} />
+              <ReplaceTransferModal course={course} />
             </>
-          ) : (
+          ) : isCustomCourse(course) ? (
             <>
               <div className="flex flex-row gap-2 items-center">
                 <Typography component="p">Quarters Offered:</Typography>
@@ -284,10 +304,9 @@ export default function CourseInfoModal({
                 </Typography>
               )}
             </>
+          ) : (
+            <p className="text-lg">School: {course.school}</p>
           )}
-          <Typography component="p">Credits: {credits(data)}</Typography>
-          {!isCustomCourse(course) && <MoreEnrollInfo course={course} />}
-          {!isCustomCourse(course) && <ReplaceTransferModal course={course} />}
           {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}

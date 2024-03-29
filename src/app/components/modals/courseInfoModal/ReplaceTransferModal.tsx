@@ -9,8 +9,8 @@ export default function ReplaceTransferModal({
 }) {
   const { data: courses, isPending: loading } = useTransferCourses(course);
   return (
-    <div className="h-36">
-      <p className="text-lg font-bold">Transfer Alternatives</p>
+    <div className="h-36 mb-5">
+      <p className="text-lg font-semibold">Transfer Alternatives</p>
       <SearchResults
         courses={courses ?? []}
         loading={loading}
