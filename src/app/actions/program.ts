@@ -71,7 +71,7 @@ export async function getMinors(catalogYear?: string) {
  * @param catalogYear Year of the catalog to get programs for
  * @returns degree programs
  */
-export async function getPrograms(catalogYear?: string) {
+export async function getPrograms(catalogYear?: string, unique = false) {
   const query: any = {
     select: {
       name: true,
@@ -92,6 +92,10 @@ export async function getPrograms(catalogYear?: string) {
     query.where = {
       catalogYear,
     };
+  }
+
+  if (unique) {
+    query.distinct = ["name"];
   }
   return await prisma.major.findMany(query);
 }

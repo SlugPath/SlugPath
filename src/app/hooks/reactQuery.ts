@@ -32,27 +32,12 @@ import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
 
 /**
- * A React Query hook to fetch all majors and minors
- * @param catalogYear Year of selected catalog
- * @returns React Query useQuery Hook for all majors and minors
- */
-export function usePrograms() {
-  return useQuery({
-    queryKey: ["programs"],
-    queryFn: async () => await getPrograms(),
-    placeholderData: [],
-    staleTime: Infinity, // Programs are static
-    refetchOnMount: false,
-  });
-}
-
-/**
- * A React Query hook to fetch all majors and minors for a specific
+ * A React Query hook to fetch all majors and minors, optionally for a specific
  * catalog year
- * @param catalogYear Year of selected catalog
+ * @param catalogYear (optional) Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
-export function useProgramsForYear(catalogYear: string) {
+export function usePrograms(catalogYear?: string) {
   return useQuery({
     queryKey: ["programs", catalogYear],
     queryFn: async () => await getPrograms(catalogYear),
@@ -63,49 +48,21 @@ export function useProgramsForYear(catalogYear: string) {
 }
 
 /**
- * A React Query hook to fetch all unique majors and minors
+ * A React Query hook to fetch all unique majors and minors, optionally for a
+ * specific catalog year
+ * @param catalogYear (optional) Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
-export function useUniquePrograms() {
-  const queryClient = useQueryClient();
-
-  return useQuery({
-    queryKey: ["uniquePrograms"],
-    queryFn: async () => {
-      const res = await getPrograms();
-      return filterRedundantPrograms(res);
-    },
-    // Use cache to avoid refetching data
-    initialData: () => {
-      const programs: Program[] | undefined = queryClient.getQueryData([
-        "programs",
-      ]);
-      return programs ? filterRedundantPrograms(programs) : [];
-    },
-    placeholderData: [],
-    staleTime: Infinity, // Programs are static
-    refetchOnMount: false,
-  });
-}
-/**
- * A React Query hook to fetch all unique majors and minors for a specific
- * catalog year
- * @param catalogYear Year of selected catalog
- * @returns React Query useQuery Hook for all majors and minors
- */
-export function useUnqiueProgramsInYear(catalogYear: string) {
+export function useUniquePrograms(catalogYear?: string) {
   const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ["uniquePrograms", catalogYear],
-    queryFn: async () => {
-      const res = await getPrograms(catalogYear);
-      return filterRedundantPrograms(res);
-    },
+    queryFn: async () => await getPrograms(catalogYear, true),
     // Use cache to avoid refetching data
     initialData: () => {
       const programs: Program[] | undefined = queryClient.getQueryData([
-        "uniquePrograms",
+        "programs",
         catalogYear,
       ]);
       return programs ? filterRedundantPrograms(programs) : [];
@@ -138,23 +95,12 @@ export function useProgramTypeOfYear(
 }
 
 /**
- * A React Query hook to fetch all catalog years
- * @returns React Query useQuery Hook for all catalog years
- */
-export function useCatalogYears() {
-  return useQuery({
-    queryKey: ["years"],
-    queryFn: async () => await getCatalogYears(),
-    placeholderData: [],
-  });
-}
-
-/**
- * A React Query hook to fetch all catalog years
+ * A React Query hook to fetch all catalog years, optionally for a specific
+ * program
  * @param programName Name of the program
  * @returns React Query useQuery Hook for all catalog years
  */
-export function useCatalogYearsForProgram(programName: string) {
+export function useCatalogYears(programName?: string) {
   return useQuery({
     queryKey: ["years", programName],
     queryFn: async () => await getCatalogYears(programName),
