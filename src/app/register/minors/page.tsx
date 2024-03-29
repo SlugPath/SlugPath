@@ -3,14 +3,15 @@
 import { createUser } from "@/app/actions/user";
 import useAccountCreationStore from "@/store/account-creation";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import ContinueButton from "../ContinueButton";
 import ProgramSelector from "../ProgramSelector";
 
 export default function Minors() {
-  const { data: session, update: updateSession } = useSession();
+  const { data: session } = useSession();
+  // const router = useRouter();
 
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
@@ -45,16 +46,8 @@ export default function Minors() {
       programIds,
     );
 
-    // NOTE: Session update forces redirect in layout
-    await updateSession({
-      ...session,
-      user: { ...session!.user, isRecordCreated: true },
-    });
-
-    // TODO: Centralize routing logic (pregerably in middleware)
-    // NOTE: Session update forced redirect (`updateSession`) causes hot reload
-    // error with client side routing, redirect call needed to avoid this
-    redirect("/planner");
+    // TODO: Update JWT with user record creation status w/o refreshing
+    location.reload();
   };
 
   return (

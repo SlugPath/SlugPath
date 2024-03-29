@@ -5,11 +5,6 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
-  pages: {
-    signIn: "/",
-    signOut: "/",
-    error: "/",
-  },
   callbacks: {
     async signIn({ user }) {
       if (!user.email) throw new Error("user must have an email");
@@ -26,6 +21,20 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token;
         token.sub = user.id;
       }
+
+      // QUESTION: Why is default planner id being set here? Should be in user
+      // state?
+      const userRecord = await prisma.user.findFirst({
+        where: {
+          id: token.sub,
+        },
+        select: {
+          defaultPlannerId: true,
+          majors: true,
+        },
+      });
+
+      token.isUserRecordCreated = userRecord !== null;
 
       return token;
     },
@@ -51,7 +60,9 @@ export const authOptions: NextAuthOptions = {
           session.user.programs = userRecord?.majors;
         }
 
-        session.user.isRecordCreated = userRecord !== null;
+        // TODO: extend JWT to include user record creation status
+        session.user.isRecordCreated =
+          (token.isUserRecordCreated as boolean) ?? false;
         session.user.email = token.email;
         session.user.name = token.name;
       }

@@ -6,14 +6,14 @@ import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import ContinueButton from "../ContinueButton";
 import SelectBox from "./SelectBox";
 
 export default function Register() {
-  const { data: session, update: updateSession } = useSession();
+  const { data: session } = useSession();
   const user = session?.user;
 
   const queryClient = useQueryClient();
@@ -48,16 +48,8 @@ export default function Register() {
       [],
     );
 
-    // NOTE: Session update forces redirect in layout
-    await updateSession({
-      ...session,
-      user: { ...user, isRecordCreated: true },
-    });
-
-    // TODO: Centralize routing logic (pregerably in middleware)
-    // NOTE: Session update forced redirect (`updateSession`) causes hot reload
-    // error with client side routing, redirect call needed to avoid this
-    redirect("/planner");
+    // TODO: Update JWT with user record creation status w/o refreshing
+    location.reload();
   };
 
   // On queryClient mount, prefetch programs for future program selectors

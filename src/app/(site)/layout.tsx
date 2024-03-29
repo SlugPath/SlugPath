@@ -1,26 +1,28 @@
 import ScreenSizeWarning from "@/app/components/modals/ScreenSizeWarning";
-import { authOptions } from "@/lib/auth";
+// import { authOptions } from "@/lib/auth";
 import BetaWarning from "@components/beta/BetaWarning";
 import Navbar from "@components/navbar/Navbar";
 import { OpenInNew } from "@mui/icons-material";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+
+// import { getServerSession } from "next-auth";
+// import { redirect } from "next/navigation";
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
 
-  // TODO: centralize routing logic (preferably in middleware)
-  if (!session) {
-    redirect("/");
-  } else {
-    if (!session.user.isRecordCreated) {
-      redirect("/register");
-    }
-  }
+  // // TODO: centralize routing logic (preferably in middleware)
+  // if (!session) {
+  //   redirect("/");
+  // } else {
+  //   if (!session.user.isRecordCreated) {
+  //     redirect("/register");
+  //   }
+  // }
+
   return (
     <div className="bg-bg-light dark:bg-bg-dark bg-cover min-h-screen flex flex-col max-h-screen min-w-0">
       <ScreenSizeWarning />

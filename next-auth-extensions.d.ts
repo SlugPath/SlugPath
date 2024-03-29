@@ -14,3 +14,10 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 }
+
+// declare module "next-auth/jwt" {
+//   interface JWT {
+//     sub: string;
+//     isUserRecordCreated: boolean;
+//   } & DefaultJWT["user"];
+// }
