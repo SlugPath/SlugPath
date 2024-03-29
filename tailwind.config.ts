@@ -13,6 +13,9 @@ const config: Config = {
         "bg-light": "#e2e8f0",
         "bg-dark": "#203354",
 
+        subtext: "#767676",
+        "bg-faded-dark": "#172554",
+
         "primary-100": "#bfdbfe",
         "primary-200": "#93c5fd",
         "primary-400": "#0b6bcb",

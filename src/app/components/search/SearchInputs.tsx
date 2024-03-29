@@ -196,7 +196,7 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
           Reset Filters
         </Button>
       </div>
-      <Divider sx={{ height: 3, marginBottom: "0.25rem" }} />
+      <Divider sx={{ height: 3 }} />
     </form>
   );
 }

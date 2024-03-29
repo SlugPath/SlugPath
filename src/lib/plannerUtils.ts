@@ -195,6 +195,18 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
 }
 
 /**
+ * Finds the StoredCourse that matches an id
+ * @param cid is the id of the course to find
+ * @param courseState is the planner state
+ * @returns a StoredCourse or undefined
+ */
+export function getCourseFromPlanner(cid: string, courseState: PlannerData) {
+  const found = courseState.courses.find((c) => c.id === cid);
+  if (!found) throw new Error("couldn't find course with matching cid");
+  return found;
+}
+
+/**
  * @param courses is a list of courses
  * @returns courses with duplicates removed
  */

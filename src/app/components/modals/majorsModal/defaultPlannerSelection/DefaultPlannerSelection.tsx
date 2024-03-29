@@ -21,7 +21,7 @@ import {
 } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
 
@@ -72,8 +72,11 @@ export default function DefaultPlannerSelection({
   // however, no current database storage for primary major. Unclear if this
   // state should be persisted on server, or if it should be stored in local
   // storage.
-  const setPrimaryMajor = (program: Program | null) =>
-    console.warn(`setPrimaryMajor currently unimplemented ${program}`);
+  const setPrimaryMajor = useCallback(
+    (program: Program | null) =>
+      console.warn(`setPrimaryMajor currently unimplemented ${program}`),
+    [],
+  );
 
   const setDefaultPlannerId = (plannerId: string) =>
     alert(`setDefaultPlannerId currently unimplemented ${plannerId}`);
