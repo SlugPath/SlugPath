@@ -146,9 +146,7 @@ export async function getTransferEquivalents(
 
 /**
  * Fetch courses that match the specified titles
- * PURPOSE: for replacing custom courses, look for courses that match the specified titles
- * QUESTION: Is this function description accurate?
- * @param titles course titles to get suggested classes for
+ * @param titles course titles to match
  * @returns courses that match the specified titles
  */
 export async function getSuggestedCourses(

@@ -1,16 +1,16 @@
-import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import {
   getTitle,
   isCustomCourse,
   isOffered,
   isOfficialCourse,
+  isTransferCourse,
 } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { getCourse } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
+import { useCourse, usePastEnrollmentInfo } from "@hooks/reactQuery";
 import { WarningAmberRounded } from "@mui/icons-material";
 import {
   Button,
@@ -22,15 +22,13 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
 import MoreEnrollInfo from "./MoreEnrollInfo";
 import QuartersOfferedTable from "./QuartersOfferedTable";
-import ReplaceCustomModal from "./ReplaceCustomModal";
-import ReplaceTransferModal from "./ReplaceTransferModal";
+import ReplaceCourseModal from "./ReplaceCourseModal";
 import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 60;
@@ -60,31 +58,19 @@ export default function CourseInfoModal({
 
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
-  const { data, isLoading: loading } = useQuery({
-    queryKey: ["course", course?.departmentCode, course?.number],
-    queryFn: async () =>
-      await getCourse({
-        departmentCode: course!.departmentCode,
-        number: course!.number,
-      }),
-    enabled: course && !isCustomCourse(course),
-    staleTime: Infinity,
-  });
-
-  const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
-    queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
-    queryFn: async () => await getEnrollmentInfo(course!),
-    enabled: course !== undefined && !isCustomCourse(course),
-    placeholderData: [],
-    staleTime: Infinity,
-  });
+  const { data, isLoading: loading } = useCourse(
+    course?.departmentCode ?? "",
+    course?.number ?? "",
+  );
+  const { data: enrollmentInfo, isLoading: enrollLoading } =
+    usePastEnrollmentInfo(course);
 
   // This is to prevent illegally opening the modal
   if (course === undefined || course.departmentCode === undefined) {
     return null;
   }
 
-  // Accessors
+  // ============= Begin Accessor Functions =============
   function title(c?: StoredCourse) {
     if (loading) return "";
     if (!c) {
@@ -141,7 +127,9 @@ export default function CourseInfoModal({
     return preqs.includes(start) ? preqs : `${start} ${preqs}`;
   }
 
-  // Handlers
+  // ============= End Accessor Functions =============
+
+  // ============= Begin Handler Functions =============
   const handleOpenLabels = () => {
     setShowLabelSelectionModal(true);
   };
@@ -156,9 +144,13 @@ export default function CourseInfoModal({
     setDisplayCourse([newCourse, term]);
   };
 
-  // Only show this second modal if it is a custom course,
+  // ============= End Handler Functions =============
+
+  // Only show this second modal if it is a custom/official course,
   // in the planner, and the course is being edited
+  const courseInPlanner = !isTransferCourse(course) && term !== undefined;
   const customCourseInPlanner = isCustomCourse(course) && term !== undefined;
+
   if (editing && customCourseInPlanner) {
     const handleClose = () => {
       setEditing(false);
@@ -182,16 +174,17 @@ export default function CourseInfoModal({
 
   // Only show this modal if it is a custom course,
   // in the planner, and the course is being replaced
-  if (replacing && customCourseInPlanner) {
+  if (replacing && courseInPlanner) {
     return (
-      <ReplaceCustomModal
+      <ReplaceCourseModal
         onSave={() => {
           setReplacing(false);
           setShowModal(false);
         }}
         onClose={() => setReplacing(false)}
         isOpen={replacing}
-        customCourse={course}
+        toReplace={course}
+        isTransfer={isOfficialCourse(course)}
       />
     );
   }
@@ -230,15 +223,7 @@ export default function CourseInfoModal({
           )}
           <div className="flex justify-between items-center">
             <Skeleton loading={loading} variant="text" width="50%">
-              <Typography
-                component="h2"
-                id="modal-title"
-                level="h4"
-                textColor="inherit"
-                fontWeight="lg"
-              >
-                {title(data)}
-              </Typography>
+              <h2 className="text-xl font-bold">{title(data)}</h2>
             </Skeleton>
             {isCustomCourse(course) ? (
               <Tooltip title="We recommend replacing this custom course with a real course.">
@@ -271,26 +256,25 @@ export default function CourseInfoModal({
             </Typography>
           </Skeleton>
           {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
-          <Typography component="p">Credits: {credits(data)}</Typography>
+          <p>Credits: {credits(data)}</p>
           {isOfficialCourse(course) ? (
             <>
-              <Typography component="p">{prerequisites(data)}</Typography>
-              <Typography component="p">GE: {ge(data)}</Typography>
+              <p>{prerequisites(data)}</p>
+              <p>GE: {ge(data)}</p>
               <Skeleton loading={enrollLoading}>
                 {enrollmentInfo && enrollmentInfo.length > 0 && (
                   <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />
                 )}
               </Skeleton>
               <MoreEnrollInfo course={course} />
-              <ReplaceTransferModal course={course} />
             </>
           ) : isCustomCourse(course) ? (
             <>
               <div className="flex flex-row gap-2 items-center">
-                <Typography component="p">Quarters Offered:</Typography>
-                {course.quartersOffered.map((q, i) => (
+                <p>Quarters Offered:</p>
+                {course.quartersOffered.map((quarter, i) => (
                   <Chip key={i} color="primary">
-                    {q}
+                    {quarter}
                   </Chip>
                 ))}
               </div>
@@ -315,31 +299,20 @@ export default function CourseInfoModal({
             />
           )}
           <ModalClose variant="plain" />
-          {!viewOnly && customCourseInPlanner && (
-            <div className="flex gap-2">
-              <Button onClick={() => setEditing(true)} className="w-1/2">
-                <Typography
-                  level="body-lg"
-                  sx={{
-                    color: "white",
-                  }}
-                >
-                  Edit
-                </Typography>
-              </Button>
+          {!viewOnly && courseInPlanner && (
+            <div className="flex gap-2 justify-center">
+              {isCustomCourse(course) && (
+                <Button onClick={() => setEditing(true)} className="w-1/2">
+                  <p className="text-white text-lg">Edit</p>
+                </Button>
+              )}
+
               <Button
                 onClick={() => setReplacing(true)}
                 className="w-1/2"
                 color="success"
               >
-                <Typography
-                  level="body-lg"
-                  sx={{
-                    color: "white",
-                  }}
-                >
-                  Replace
-                </Typography>
+                <p className="text-white text-lg">Replace</p>
               </Button>
             </div>
           )}
