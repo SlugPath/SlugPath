@@ -27,7 +27,6 @@ export interface ReplaceCourseModalProps {
   onClose: () => void;
   onSave: () => void;
   isOpen: boolean;
-  isTransfer: boolean;
   toReplace: StoredCourse;
 }
 
@@ -35,11 +34,11 @@ export default function ReplaceCourseModal({
   onClose,
   onSave,
   isOpen,
-  isTransfer,
   toReplace,
 }: ReplaceCourseModalProps) {
   // Get the title(s) of the custom course if we are replacing a custom course
-  const titles = isCustomCourse(toReplace)
+  const isTransfer = !isCustomCourse(toReplace);
+  const titles = !isTransfer
     ? Array.from(toReplace.title.toUpperCase().matchAll(courseNumberRegex)).map(
         (m) => m[0],
       )

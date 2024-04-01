@@ -184,7 +184,6 @@ export default function CourseInfoModal({
         onClose={() => setReplacing(false)}
         isOpen={replacing}
         toReplace={course}
-        isTransfer={isOfficialCourse(course)}
       />
     );
   }
