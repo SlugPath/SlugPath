@@ -97,6 +97,25 @@ export async function getPrograms(catalogYear?: string) {
 }
 
 /**
+ * Fetch a program(major or minor) by its id
+ * @param programId id of the program to get
+ * @returns a degree program
+ */
+export async function getProgram(programId: number): Promise<Program | null> {
+  return await prisma.major.findUnique({
+    where: {
+      id: programId,
+    },
+    select: {
+      name: true,
+      id: true,
+      catalogYear: true,
+      programType: true,
+    },
+  });
+}
+
+/**
  * Fetch all majors or minors for a specified year
  * @param programType Major or Minor
  * @param catalogYear Year of the catalog to get majors or minors for

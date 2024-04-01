@@ -17,6 +17,7 @@ import {
   updateUserPlanners,
 } from "../actions/planner";
 import {
+  getProgram,
   getProgramDefaultPlanners,
   getPrograms,
   getProgramsByTypeInYear,
@@ -39,6 +40,20 @@ export function usePrograms() {
     queryKey: ["allPrograms"],
     queryFn: async () => await getPrograms(),
     placeholderData: [],
+  });
+}
+
+/**
+ * A React Query hook to fetch a specific program by its id
+ * @param programId unique id that identifies a program
+ * @returns React Query useQuery Hook for a program
+ */
+export function useProgram(programId: number) {
+  return useQuery({
+    queryKey: ["program", programId],
+    queryFn: async () => await getProgram(programId),
+    placeholderData: null,
+    enabled: !!programId,
   });
 }
 

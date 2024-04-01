@@ -7,6 +7,7 @@ import { Program } from "@/app/types/Program";
 import { years } from "@/lib/defaultPlanners";
 import { isProgramInPrograms } from "@/lib/utils";
 import { Delete } from "@mui/icons-material";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,
@@ -22,6 +23,7 @@ import {
 } from "@mui/joy";
 import { ProgramType } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import SelectCatalogYear from "./SelectCatalogYear";
@@ -30,6 +32,7 @@ import SelectMajorName from "./SelectMajorName";
 export default function UserProgramsEditor() {
   const { data: session } = useSession();
   const userId = session?.user?.id;
+  const router = useRouter();
 
   // Fetch all majors and minors for the user
   const { data: userPrograms, isPending: userProgramsIsLoading } =
@@ -50,9 +53,19 @@ export default function UserProgramsEditor() {
   return (
     <div className="space-y-4 w-full">
       <Card variant="soft" size="sm">
-        <Typography level="h4" textColor="inherit" fontWeight="lg" mb={1}>
-          Your Majors and Minors
-        </Typography>
+        <div className="flex flex-row justify-start items-start gap-2">
+          <Typography level="h4" textColor="inherit" fontWeight="lg" mb={1}>
+            Your Majors and Minors
+          </Typography>
+          <Button
+            variant="plain"
+            onClick={() => router.push("/planner")}
+            startDecorator={<KeyboardArrowLeftIcon fontSize="large" />}
+            sx={{ width: "fit-content" }}
+          >
+            Back to Planner
+          </Button>
+        </div>
 
         {saveProgramsIsError && (
           <Alert color="danger" startDecorator={<ReportIcon />}>

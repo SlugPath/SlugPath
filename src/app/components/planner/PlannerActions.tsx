@@ -1,19 +1,14 @@
 import { useUserRole } from "@/app/hooks/reactQuery";
-import { ModalsContext } from "@contexts/ModalsProvider";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import SchoolIcon from "@mui/icons-material/School";
 import { Button, Card, Typography } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
 
 export default function PlannerActions() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const redirectToAdminDashboard = () => router.push("planner/permissions");
-
-  // TODO: remove modal context
-  const { setShowMajorsModal } = useContext(ModalsContext);
 
   const { data: userRole } = useUserRole(session?.user.id);
   const isAdmin = userRole === "ADMIN";
@@ -22,7 +17,7 @@ export default function PlannerActions() {
     {
       name: "Majors",
       icon: <SchoolIcon fontSize="large" />,
-      onClick: () => setShowMajorsModal(true),
+      onClick: () => router.push("/planner/majors"),
       disabled: status !== "authenticated",
     },
   ];
