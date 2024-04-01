@@ -151,6 +151,7 @@ export function usePlanners(userId: string | undefined) {
     queryKey: ["planners", userId],
     queryFn: async () => await getUserPlanners(userId!),
     refetchInterval: 1000 * 180,
+    staleTime: 1000 * 90,
     placeholderData: [],
     throwOnError: true,
     enabled: !!userId,

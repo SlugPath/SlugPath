@@ -1,32 +1,30 @@
-import { useColorScheme } from "@mui/joy";
-import { blue } from "@mui/material/colors";
+import { Tooltip } from "@mui/joy";
 
-const lightColor = blue[200];
-const darkColor = blue[600];
-const fadedLightColor = blue[50];
-const fadedDarkColor = "#172554";
-
-export default function ProgressBar({ percentage }: { percentage: number }) {
-  const { mode } = useColorScheme();
-  const fadedBackgroundColor =
-    mode === "dark" ? fadedDarkColor : fadedLightColor;
-  const backgroundColor = mode === "dark" ? darkColor : lightColor;
-
+export default function ProgressBar({
+  percentage,
+  progressType,
+}: {
+  percentage: number;
+  progressType: string;
+}) {
   return (
-    <div
-      className="flex flex-row w-full h-6 rounded-md"
-      style={{
-        background: fadedBackgroundColor,
-      }}
+    <Tooltip
+      title={
+        `${Math.round(percentage)}% of ` +
+        progressType +
+        ` requirements completed`
+      }
+      variant="soft"
     >
-      <div
-        className="rounded-md"
-        style={{
-          width: `${percentage}%`,
-          background: backgroundColor,
-          transition: "width 0.25s",
-        }}
-      ></div>
-    </div>
+      <div className="flex flex-row w-full h-6 rounded-md bg-blue-50 dark:bg-bg-faded-dark">
+        <div
+          className="rounded-md bg-blue-200 dark:bg-blue-600"
+          style={{
+            width: `${percentage}%`,
+            transition: "width 0.25s",
+          }}
+        ></div>
+      </div>
+    </Tooltip>
   );
 }

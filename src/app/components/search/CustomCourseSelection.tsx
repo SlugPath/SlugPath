@@ -3,8 +3,8 @@ import { createCourseDraggableId } from "@/lib/plannerUtils";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
-import { Add } from "@mui/icons-material";
-import { Button, Card, Typography } from "@mui/joy";
+import { InfoOutlined } from "@mui/icons-material";
+import { Button, Tooltip, Typography } from "@mui/joy";
 import { useContext, useMemo, useState } from "react";
 
 import CustomCourseModal from "../modals/courseInfoModal/CustomCourseModal";
@@ -48,18 +48,32 @@ export default function CustomCourseSelection() {
   };
 
   return (
-    <Card className="w-80 mb-2 mr-2" variant="plain">
-      <Button onClick={handleOpen} startDecorator={<Add />}>
-        <Typography
-          level="body-md"
-          fontWeight="lg"
-          sx={{
-            color: "white",
-          }}
+    <>
+      {/* <Card className="w-80 mt-2 mr-2" variant="plain"> */}
+      <div className="flex flex-row gap-2 items-center mx-auto">
+        <Button onClick={handleOpen}>
+          <Typography
+            level="body-md"
+            fontWeight="lg"
+            sx={{
+              color: "white",
+            }}
+          >
+            Add Custom Course
+          </Typography>
+        </Button>
+        <Tooltip
+          title={
+            <div className="max-w-28 text-balance">
+              Use custom courses to represent internships, study abroad terms,
+              and classes taken outside of UCSC
+            </div>
+          }
+          variant="soft"
         >
-          Add Custom Course
-        </Typography>
-      </Button>
+          <InfoOutlined style={{ fontSize: "22px" }} />
+        </Tooltip>
+      </div>
       <CustomCourseModal
         isOpen={open}
         onSave={handleAdd}
@@ -77,7 +91,7 @@ export default function CustomCourseSelection() {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={{ height: "100%" }}
+                className="flex-1 h-full"
               >
                 {customCourses.map((course, index) => (
                   <DraggableCourseCard
@@ -97,6 +111,7 @@ export default function CustomCourseSelection() {
           }}
         </Droppable>
       )}
-    </Card>
+      {/* </Card> */}
+    </>
   );
 }
