@@ -21,6 +21,8 @@ export default function useHandleRequirementListDrag() {
       ? getRequirementsForMajor(majorToEdit!.id)
       : undefined;
 
+  console.log("majorToEdit: ", majorToEdit);
+
   function draggedToRequirementList(droppableId: string) {
     return droppableId.includes(REQUIREMENT_LIST_DROPPABLE_PREFIX);
   }
