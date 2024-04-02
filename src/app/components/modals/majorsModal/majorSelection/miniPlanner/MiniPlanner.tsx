@@ -10,11 +10,11 @@ export default function MiniPlanner({
   plannerId: string;
   active?: boolean;
 }) {
-  const { data: courseState, isLoading: loading } = usePlanner(plannerId);
+  const { data: planner, isLoading: loading } = usePlanner(plannerId);
 
-  if (!active || plannerId === EMPTY_PLANNER || loading) {
+  if (!active || plannerId === EMPTY_PLANNER || loading || !planner) {
     return <></>;
   }
 
-  return <MiniQuarters courseState={courseState!} />;
+  return <MiniQuarters courseState={planner} />;
 }

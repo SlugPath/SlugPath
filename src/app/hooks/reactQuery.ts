@@ -21,10 +21,7 @@ import {
   getProgramDefaultPlanners,
   getPrograms,
   getProgramsByTypeInYear,
-  getUserDefaultPlannerId,
-  getUserPrimaryProgram,
   getUserProgramsById,
-  updateUserDefaultPlanner,
   updateUserPrograms,
 } from "../actions/program";
 import { Permission } from "../types/Permission";
@@ -122,20 +119,6 @@ export function useUserPrograms(userId: string | undefined) {
 }
 
 /**
- * A React Query hook to fetch a user's primary major
- * @param userId unique id that identifies a user
- * @returns React Query useQuery Hook for a user's primary major
- */
-export function useUserPrimaryProgram(userId: string | undefined) {
-  return useQuery({
-    queryKey: ["userPrimaryProgram", userId],
-    queryFn: async () => await getUserPrimaryProgram(userId!),
-    placeholderData: null,
-    enabled: !!userId,
-  });
-}
-
-/**
  * A React Query hook to save user programs
  * @param userId unique id that identifies a user
  * @returns React Query useMutation Hook for saving user programs
@@ -201,48 +184,6 @@ export function usePlanner(plannerId: string) {
     queryFn: async () => await getPlannerById(plannerId),
     placeholderData: initialPlanner(),
     enabled: !!plannerId && plannerId !== EMPTY_PLANNER,
-  });
-}
-
-/**
- * A React Query hook to fetch a user's default planner id
- * @param userId unique id that identifies a user
- * @returns React Query useQuery Hook for a user's default planner id
- */
-export function useUserDefaultPlannerId(userId: string | undefined) {
-  return useQuery({
-    queryKey: ["userDefaultPlannerId", userId],
-    queryFn: async () => {
-      return await getUserDefaultPlannerId(userId!);
-    },
-    placeholderData: undefined,
-    enabled: !!userId,
-  });
-}
-
-/**
- * A React Query hook to update a user's default planner id
- * @param userId unique id that identifies a user
- * @param plannerId unique id that identifies a planner
- * @returns React Query useMutation Hook for updating a user's default planner id
- */
-export function useUpdateUserDefaultPlannerIdMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (params: {
-      userId: string;
-      defaultPlannerId: string;
-    }) => {
-      await updateUserDefaultPlanner(params);
-    },
-    onSuccess: (_, { userId }) => {
-      queryClient.refetchQueries({
-        queryKey: ["userDefaultPlannerId", userId],
-      });
-      queryClient.refetchQueries({ queryKey: ["userDefaultPlanner", userId] });
-      queryClient.refetchQueries({ queryKey: ["userPrimaryProgram", userId] });
-    },
   });
 }
 

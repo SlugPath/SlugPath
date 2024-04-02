@@ -35,7 +35,7 @@ export default function MajorsModal() {
           boxShadow: "lg",
         }}
       >
-        <MajorAndPlannerSelection isInPlannerPage={true} />
+        <MajorAndPlannerSelection />
         <ModalClose variant="plain" />
       </Sheet>
     </Modal>
@@ -43,21 +43,13 @@ export default function MajorsModal() {
 }
 
 // TODO: Loading states from react-query
-export function MajorAndPlannerSelection({
-  isInPlannerPage,
-  onSavedDefaultPlanner,
-}: {
-  isInPlannerPage: boolean;
-  onSavedDefaultPlanner?: () => void;
-}) {
+export function MajorAndPlannerSelection() {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
-  const {
-    setShowMajorsModal,
-    setShowMajorRequirementsEditModal,
-    setMajorToEdit,
-  } = useContext(ModalsContext);
+  const { setShowMajorRequirementsEditModal, setMajorToEdit } =
+    useContext(ModalsContext);
+
   const { getRequirementsForMajor } = useContext(MajorVerificationContext);
 
   // Fetch programsAllowedToEdit
@@ -75,11 +67,6 @@ export function MajorAndPlannerSelection({
     setMajorToEdit(major);
     setShowMajorRequirementsEditModal(true);
   }
-
-  const handleSave = () => {
-    setShowMajorsModal(false);
-    if (onSavedDefaultPlanner) onSavedDefaultPlanner();
-  };
 
   return (
     <div className="flex-row space-x-3 grid grid-cols-7 w-full">
@@ -123,11 +110,7 @@ export function MajorAndPlannerSelection({
         >
           My Default Planner
         </Typography>
-        <DefaultPlannerSelection
-          onSaved={handleSave}
-          saveButtonName={isInPlannerPage ? "Save" : "Next"}
-          isInPlannerPage={isInPlannerPage}
-        />
+        <DefaultPlannerSelection />
       </Card>
     </div>
   );
