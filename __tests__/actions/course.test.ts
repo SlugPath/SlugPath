@@ -73,6 +73,7 @@ describe("Course actions", () => {
         ge: ["mf"],
         prerequisites: "None",
         quartersOffered: ["Fall", "Winter", "Spring"],
+        school: "UCSC",
       });
     });
 
@@ -112,6 +113,7 @@ describe("Course actions", () => {
         description: "",
         ge: [],
         quartersOffered: [],
+        school: "UCSC",
       });
     });
   });
@@ -234,6 +236,7 @@ describe("Course actions", () => {
         credits: 5,
         quartersOffered: ["Fall", "Winter", "Spring"],
         labels: [],
+        school: "UCSC",
       };
       const b: StoredCourse = {
         id: "bar",
@@ -246,6 +249,7 @@ describe("Course actions", () => {
         credits: 5,
         quartersOffered: ["Fall", "Winter", "Spring"],
         labels: [],
+        school: "UCSC",
       };
 
       expect(compareCoursesByNum(a, b)).toEqual(1);

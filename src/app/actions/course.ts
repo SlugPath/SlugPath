@@ -23,64 +23,41 @@ import {
 export async function getCoursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
-  const departmentCodeParam = () => {
-    if (pred.departmentCode) {
-      return {
-        departmentCode: {
-          contains: pred.departmentCode,
-        },
-      };
-    }
-    return {};
+  const query: any = {
+    where: {},
   };
 
-  const numberParam = () => {
-    if (pred.number) {
-      return {
-        number: {
-          contains: pred.number,
-        },
-      };
-    }
-    return {};
-  };
+  if (pred.departmentCode) {
+    query.where.departmentCode = {
+      contains: pred.departmentCode,
+    };
+  }
 
-  const geParam = () => {
-    if (pred.ge) {
-      return {
-        ge: {
-          has: pred.ge,
-        },
-      };
-    }
-    return {};
-  };
+  if (pred.number) {
+    query.where.number = {
+      contains: pred.number,
+    };
+  }
 
-  const creditParam = () => {
-    if (pred.creditRange) {
-      return {
-        credits: {
-          gte: pred.creditRange[0],
-          lte: pred.creditRange[1],
-        },
-      };
-    }
-    return {};
-  };
+  if (pred.ge) {
+    query.where.ge = {
+      has: pred.ge,
+    };
+  }
+
+  if (pred.creditRange) {
+    query.where.credits = {
+      gte: pred.creditRange[0],
+      lte: pred.creditRange[1],
+    };
+  }
 
   // Since course numbers can contain non-integer characters, a raw SQL query is necessary.
   // If the number field is empty, a raw query is used. If not, regular Prisma Client commands are used,
   // as the course number slider has no effect when the number field is active.
   let courses = [];
   if (pred.number) {
-    courses = await prisma.course.findMany({
-      where: {
-        departmentCode: departmentCodeParam().departmentCode,
-        number: numberParam().number,
-        ge: geParam().ge,
-        credits: creditParam().credits,
-      },
-    });
+    courses = await prisma.course.findMany(query);
   } else {
     // Raw query filters integers from course number characters to see if in slider range
     // If department or ge fields are empty an empty query is used
