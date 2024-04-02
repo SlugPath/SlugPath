@@ -1,36 +1,59 @@
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
-import { PlannerTitle } from "@customTypes/Planner";
+import { useUserProgramDefaultPlanners } from "@/app/hooks/reactQuery";
+import { PlannerTitle } from "@/app/types/Planner";
+import { Program } from "@/app/types/Program";
 import Info from "@mui/icons-material/Info";
-import {
-  List,
-  ListItem,
-  Tab,
-  TabList,
-  Tabs,
-  Tooltip,
-  Typography,
-} from "@mui/joy";
-import { SyntheticEvent } from "react";
+import { Tab, TabList, Tabs, Tooltip, Typography } from "@mui/joy";
+import { CircularProgress } from "@mui/material";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 import MiniPlanner from "../majorSelection/miniPlanner/MiniPlanner";
 
 export interface SelectDefaultPlannerProps {
-  onChange: (
-    event: SyntheticEvent<Element, Event> | null,
-    value: string | number | null,
-  ) => void;
-  loadingMajorDefaultPlanners: boolean;
-  majorDefaultPlanners?: PlannerTitle[];
-  selectedDefaultPlanner?: string;
+  program: Program;
 }
 
 export default function SelectDefaultPlanner({
-  selectedDefaultPlanner,
-  onChange,
-  majorDefaultPlanners,
-  loadingMajorDefaultPlanners,
+  program,
 }: SelectDefaultPlannerProps) {
-  const defaultPlanners: PlannerTitle[] = majorDefaultPlanners ?? [];
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
+  const [selectedPlannerTitle, setSelectedPlannerTitle] =
+    useState<PlannerTitle>();
+
+  // Fetch default planners for the program
+  const {
+    data: defaultPlanners,
+    isPending: defaultPlannersIsPending,
+    isFetching: defaultPlannersIsFetching,
+  } = useUserProgramDefaultPlanners(userId, program);
+
+  const isDefaultPlannersLoading =
+    defaultPlannersIsPending || defaultPlannersIsFetching;
+
+  // Handlers
+  const handleProgramChange = (
+    _: React.SyntheticEvent | null,
+    newValue: string | number | null,
+  ) => {
+    if (typeof newValue !== "string") return;
+
+    setSelectedPlannerTitle(
+      defaultPlanners?.find((planner) => planner.id === newValue),
+    );
+  };
+
+  // Set the default planner to the first planner in the list
+  useEffect(() => {
+    if (
+      defaultPlanners &&
+      defaultPlanners.length > 0 &&
+      !selectedPlannerTitle
+    ) {
+      setSelectedPlannerTitle(defaultPlanners[0]);
+    }
+  }, [defaultPlanners, selectedPlannerTitle]);
 
   return (
     <>
@@ -41,36 +64,29 @@ export default function SelectDefaultPlanner({
         </Tooltip>
       </div>
       <div className="space-y-2">
-        <Tabs value={selectedDefaultPlanner} variant="soft" onChange={onChange}>
+        <Tabs
+          value={selectedPlannerTitle?.id ?? null}
+          variant="soft"
+          onChange={handleProgramChange}
+        >
           <TabList>
-            {defaultPlanners?.map((planner, index) => (
-              <Tab key={index} value={planner.id}>
+            {defaultPlanners?.map((planner) => (
+              <Tab key={planner.title} value={planner.id}>
                 {planner.title}
               </Tab>
             ))}
           </TabList>
         </Tabs>
-        {loadingMajorDefaultPlanners ? (
-          <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
-        ) : (
-          <>
-            <List>
-              {defaultPlanners.map((defaultPlanner, index: number) => {
-                const id = defaultPlanner.id;
-                const plannerIsSelected = selectedDefaultPlanner == id;
-                return (
-                  <ListItem
-                    sx={{
-                      display: plannerIsSelected ? "block" : "none",
-                    }}
-                    key={index}
-                  >
-                    <MiniPlanner plannerId={id} active={plannerIsSelected} />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </>
+
+        {isDefaultPlannersLoading && (
+          <div className="h-40 w-full flex items-center justify-center">
+            <CircularProgress size={24} />
+          </div>
+        )}
+
+        {/* TOOD: empty state / error state */}
+        {!isDefaultPlannersLoading && selectedPlannerTitle && (
+          <MiniPlanner plannerId={selectedPlannerTitle.id} active={true} />
         )}
       </div>
     </>

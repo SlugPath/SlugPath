@@ -27,7 +27,7 @@ export default function SelectMajorName({
         disabled={majors === undefined || majors?.length == 0}
       >
         {majors?.map((major) => (
-          <Option key={major.name} value={major}>
+          <Option key={major.name} value={major.name}>
             {major.name}
           </Option>
         ))}

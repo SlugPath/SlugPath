@@ -138,6 +138,9 @@ function AddProgramInputs() {
       programType in ProgramType;
 
     if (!isValidInput) {
+      console.error(
+        `Invalid input provided: ${programName}, ${catalogYear}, ${programType}`,
+      );
       setError("Please select a major and catalog year");
       return;
     }
