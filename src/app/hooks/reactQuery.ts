@@ -13,6 +13,7 @@ import {
 } from "../actions/permissions";
 import {
   getPlannerById,
+  getPlannersByProgram,
   getUserPlanners,
   updateUserPlanners,
 } from "../actions/planner";
@@ -184,6 +185,20 @@ export function usePlanner(plannerId: string) {
     queryFn: async () => await getPlannerById(plannerId),
     placeholderData: initialPlanner(),
     enabled: !!plannerId && plannerId !== EMPTY_PLANNER,
+  });
+}
+
+/**
+ * A React Query hook to fetch all default planners for a program
+ * @param programName name of the program
+ * @returns React Query useQuery Hook for all default planners for a program
+ */
+export function useProgramDefaultPlanners(programName: string) {
+  return useQuery({
+    queryKey: ["programDefaultPlanners", programName],
+    queryFn: async () => await getPlannersByProgram(programName),
+    placeholderData: [],
+    enabled: !!programName,
   });
 }
 

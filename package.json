@@ -34,6 +34,7 @@
     "@tanstack/react-query": "^5.22.2",
     "@tanstack/react-query-devtools": "^5.24.0",
     "class-validator": "^0.14.1",
+    "embla-carousel-react": "^8.0.0",
     "fmt": "^2.0.0",
     "lodash": "^4.17.21",
     "next": "14.1.0",

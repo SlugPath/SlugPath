@@ -24,13 +24,13 @@ export default function SelectDefaultPlanner({
 
   // Fetch default planners for the program
   const {
-    data: defaultPlanners,
-    isPending: defaultPlannersIsPending,
-    isFetching: defaultPlannersIsFetching,
+    data: defaultPlannerTitles,
+    isPending: defaultPlannerTitlesIsPending,
+    isFetching: defaultPlannerTitlesIsFetching,
   } = useUserProgramDefaultPlanners(userId, program);
 
-  const isDefaultPlannersLoading =
-    defaultPlannersIsPending || defaultPlannersIsFetching;
+  const isDefaultPlannerTitlesLoading =
+    defaultPlannerTitlesIsPending || defaultPlannerTitlesIsFetching;
 
   // Handlers
   const handleProgramChange = (
@@ -40,20 +40,20 @@ export default function SelectDefaultPlanner({
     if (typeof newValue !== "string") return;
 
     setSelectedPlannerTitle(
-      defaultPlanners?.find((planner) => planner.id === newValue),
+      defaultPlannerTitles?.find((planner) => planner.id === newValue),
     );
   };
 
   // Set the default planner to the first planner in the list
   useEffect(() => {
     if (
-      defaultPlanners &&
-      defaultPlanners.length > 0 &&
+      defaultPlannerTitles &&
+      defaultPlannerTitles.length > 0 &&
       !selectedPlannerTitle
     ) {
-      setSelectedPlannerTitle(defaultPlanners[0]);
+      setSelectedPlannerTitle(defaultPlannerTitles[0]);
     }
-  }, [defaultPlanners, selectedPlannerTitle]);
+  }, [defaultPlannerTitles, selectedPlannerTitle]);
 
   return (
     <>
@@ -70,7 +70,7 @@ export default function SelectDefaultPlanner({
           onChange={handleProgramChange}
         >
           <TabList>
-            {defaultPlanners?.map((planner) => (
+            {defaultPlannerTitles?.map((planner) => (
               <Tab key={planner.title} value={planner.id}>
                 {planner.title}
               </Tab>
@@ -78,14 +78,14 @@ export default function SelectDefaultPlanner({
           </TabList>
         </Tabs>
 
-        {isDefaultPlannersLoading && (
+        {isDefaultPlannerTitlesLoading && (
           <div className="h-40 w-full flex items-center justify-center">
             <CircularProgress size={24} />
           </div>
         )}
 
         {/* TOOD: empty state / error state */}
-        {!isDefaultPlannersLoading && selectedPlannerTitle && (
+        {!isDefaultPlannerTitlesLoading && selectedPlannerTitle && (
           <MiniPlanner plannerId={selectedPlannerTitle.id} active={true} />
         )}
       </div>

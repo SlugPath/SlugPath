@@ -1,7 +1,19 @@
 "use client";
 
 import ContinueButton from "@/app/components/buttons/ContinueButton";
-import { useUserPrograms } from "@/app/hooks/reactQuery";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/app/components/miscellaneous/Carousel";
+import {
+  useProgramDefaultPlanners,
+  useUserProgramDefaultPlanners,
+  useUserPrograms,
+} from "@/app/hooks/reactQuery";
+import { PlannerTitle } from "@/app/types/Planner";
 import { Program } from "@/app/types/Program";
 import { CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
@@ -42,6 +54,7 @@ export default function CurriculumSelect() {
         </p>
       </div>
 
+      {/* Program Select */}
       <Select
         placeholder="Choose one…"
         variant="plain"
@@ -68,8 +81,13 @@ export default function CurriculumSelect() {
           ))}
       </Select>
 
-      {/* {!isUserProgramsEmpty && selectedProgram && (
-      )} */}
+      {/* Curriculum Select */}
+      {!isUserProgramsEmpty && selectedProgram && (
+        <CurriculumSelectCarousel
+          key={selectedProgram.id}
+          program={selectedProgram}
+        />
+      )}
 
       <div className="max-w-lg w-full">
         <ContinueButton onClick={() => {}}>Use this template</ContinueButton>
@@ -78,8 +96,63 @@ export default function CurriculumSelect() {
   );
 }
 
-// function CurriculumSelectCarosel() {
-//   return (
+function CurriculumSelectCarousel({ program }: { program: Program }) {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
 
-//   )
-// }
+  const [selectedPlannerTitle, setSelectedPlannerTitle] =
+    useState<PlannerTitle>();
+
+  // Fetch default planners for the program
+  const {
+    data: _defaultPlanners,
+    isPending: defaultPlannersIsPending,
+    isFetching: defaultPlannersIsFetching,
+  } = useProgramDefaultPlanners(program.name);
+
+  const isDefaultPlannersLoading =
+    defaultPlannersIsPending || defaultPlannersIsFetching;
+
+  // Replace course ids with course objects
+  const defaultPlanners = _defaultPlanners?.map((planner) => ({
+    ...planner,
+    quarters: planner.quarters.map((quarter) => ({
+      ...quarter,
+      courses: quarter.courses.map((courseId) =>
+        planner.courses.find((c) => c.id === courseId),
+      ),
+    })),
+  }));
+
+  // Set the default planner to the first planner in the list
+  useEffect(() => {
+    if (
+      defaultPlanners &&
+      defaultPlanners.length > 0 &&
+      !selectedPlannerTitle
+    ) {
+      setSelectedPlannerTitle(defaultPlanners[0]);
+    }
+  }, [defaultPlanners, selectedPlannerTitle]);
+
+  return (
+    <pre>{JSON.stringify(defaultPlanners, null, 2)}</pre>
+    // <MiniPlanner />
+    // <Carousel>
+    //   <CarouselContent>
+    //     <CarouselItem>1</CarouselItem>
+    //     <CarouselItem>2</CarouselItem>
+    //   </CarouselContent>
+    //   <CarouselPrevious />
+    //   <CarouselNext />
+    // </Carousel>
+  );
+}
+
+function MiniPlanner() {
+  return (
+    <div>
+      <h1>MiniPlanner</h1>
+    </div>
+  );
+}
