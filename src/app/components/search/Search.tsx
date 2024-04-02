@@ -17,32 +17,28 @@ export default function Search({
   const { courses, handlers, params, loading } = useSearch();
 
   return (
-    <>
-      <Card className="flex-col w-80 h-full min-h-0 min-w-80" variant="plain">
-        <div className="flex flex-col place-items-center">
-          <div className="flex text-xl font-bold items-center gap-2">
-            Course Search
-            <Tooltip
-              title="Search by class name, or filter by department or GE type"
-              variant="soft"
-            >
-              <InfoOutlined style={{ fontSize: "22px" }} />
-            </Tooltip>
-          </div>
+    <Card className="flex-col w-80 h-full min-h-0 min-w-80" variant="plain">
+      <div className="flex flex-col place-items-center">
+        <div className="flex text-xl font-bold items-center gap-2">
+          Course Search
+          <Tooltip
+            title="Search by class name, or filter by department or GE type"
+            variant="soft"
+          >
+            <InfoOutlined style={{ fontSize: "22px" }} />
+          </Tooltip>
         </div>
-        <SearchInputs handlers={handlers} params={params} />
-        {loading == true ? (
-          <div className="flex flex-col place-items-center">
-            <div className="flex flex-col place-items-center">
-              <CircularProgress />
-              Loading Courses
-            </div>
-          </div>
-        ) : (
-          <SearchResults courses={courses} loading={loading} />
-        )}
-        {displayCustomCourseSelection && <CustomCourseSelection />}
-      </Card>
-    </>
+      </div>
+      <SearchInputs handlers={handlers} params={params} />
+      {loading ? (
+        <div className="flex flex-col justify-center items-center flex-1 h-full gap-4">
+          <CircularProgress />
+          Loading Courses
+        </div>
+      ) : (
+        <SearchResults courses={courses} loading={loading} />
+      )}
+      {displayCustomCourseSelection && <CustomCourseSelection />}
+    </Card>
   );
 }
