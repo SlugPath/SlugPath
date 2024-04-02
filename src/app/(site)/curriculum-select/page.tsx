@@ -10,7 +10,6 @@ import {
 } from "@/app/components/miscellaneous/Carousel";
 import {
   useProgramDefaultPlanners,
-  useUserProgramDefaultPlanners,
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
 import { PlannerTitle } from "@/app/types/Planner";
@@ -18,6 +17,8 @@ import { Program } from "@/app/types/Program";
 import { CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+
+import MiniPlanner from "./MiniPlanner";
 
 export default function CurriculumSelect() {
   const { data: session } = useSession();
@@ -31,6 +32,8 @@ export default function CurriculumSelect() {
     isPending: userProgramsIsPending,
     isFetching: userProgramsIsFetching,
   } = useUserPrograms(userId);
+
+  console.log(userPrograms);
 
   const isUserProgramsLoading = userProgramsIsPending || userProgramsIsFetching;
   const isUserProgramsEmpty = !(userPrograms && userPrograms.length > 0);
@@ -97,8 +100,8 @@ export default function CurriculumSelect() {
 }
 
 function CurriculumSelectCarousel({ program }: { program: Program }) {
-  const { data: session } = useSession();
-  const userId = session?.user.id;
+  // const { data: session } = useSession();
+  // const userId = session?.user.id;
 
   const [selectedPlannerTitle, setSelectedPlannerTitle] =
     useState<PlannerTitle>();
@@ -135,24 +138,28 @@ function CurriculumSelectCarousel({ program }: { program: Program }) {
     }
   }, [defaultPlanners, selectedPlannerTitle]);
 
-  return (
-    <pre>{JSON.stringify(defaultPlanners, null, 2)}</pre>
-    // <MiniPlanner />
-    // <Carousel>
-    //   <CarouselContent>
-    //     <CarouselItem>1</CarouselItem>
-    //     <CarouselItem>2</CarouselItem>
-    //   </CarouselContent>
-    //   <CarouselPrevious />
-    //   <CarouselNext />
-    // </Carousel>
-  );
-}
+  if (isDefaultPlannersLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <CircularProgress size="lg" />
+      </div>
+    );
+  }
 
-function MiniPlanner() {
   return (
-    <div>
-      <h1>MiniPlanner</h1>
-    </div>
+    <Carousel className="flex w-1/2">
+      <CarouselContent>
+        {defaultPlanners!.map((planner, index) => (
+          <CarouselItem
+            key={index}
+            className="flex items-center justify-center"
+          >
+            <MiniPlanner plannerState={planner} />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   );
 }
