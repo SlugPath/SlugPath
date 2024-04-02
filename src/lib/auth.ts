@@ -30,22 +30,11 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.sub ?? "";
 
-        // QUESTION: Why is default planner id being set here? Should be in user
-        // state?
         const userRecord = await prisma.user.findFirst({
           where: {
             id: session.user.id,
           },
-          select: {
-            defaultPlannerId: true,
-            majors: true,
-          },
         });
-
-        if (userRecord) {
-          session.user.defaultPlannerId = userRecord?.defaultPlannerId;
-          session.user.programs = userRecord?.majors;
-        }
 
         session.user.isRecordCreated = userRecord !== null;
         session.user.email = token.email;

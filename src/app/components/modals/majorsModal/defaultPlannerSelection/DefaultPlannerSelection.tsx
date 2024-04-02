@@ -41,15 +41,6 @@ export default function DefaultPlannerSelection() {
   const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
 
   // Handlers
-  function handleProgramChange(
-    _: React.SyntheticEvent | null,
-    newValue: Program | null,
-  ) {
-    if (newValue == null) return;
-
-    setSelectedProgram(newValue);
-  }
-
   function handleConfirmReplaceCurrent() {
     replaceCurrentPlanner();
     setReplaceAlertOpen(false);
@@ -89,7 +80,9 @@ export default function DefaultPlannerSelection() {
               placeholder="Choose one…"
               variant="plain"
               value={selectedProgram}
-              onChange={handleProgramChange}
+              onChange={(_, newValue) =>
+                newValue != null && setSelectedProgram(newValue)
+              }
               disabled={isUserProgramsLoading || isUserProgramsEmpty}
               endDecorator={
                 isUserProgramsLoading ? (

@@ -13,6 +13,7 @@ import { useCallback, useContext, useMemo } from "react";
 
 import { PlannersContext } from "../contexts/PlannersProvider";
 
+// TODO: Refactor and remove this hook
 export default function usePlanner(input: {
   userId: string | undefined;
   plannerId: string;

@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import ContinueButton from "../ContinueButton";
+import ContinueButton from "../../components/buttons/ContinueButton";
 import SelectBox from "./SelectBox";
 
 export default function Register() {
@@ -65,11 +65,10 @@ export default function Register() {
 
   return (
     <>
-      <div>
+      <div className="space-y-2">
         <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
           Start your degree off right
         </h2>
-        <div className="h-2" />
         <p className="text-subtext leading-7 max-w-md">
           Let us know what you&apos;re studying and we&apos;ll help you pick
           from UCSC recommended templates. Don&apos;t have a plan yet? No

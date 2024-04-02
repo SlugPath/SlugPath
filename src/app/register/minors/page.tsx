@@ -5,7 +5,7 @@ import useAccountCreationStore from "@/store/account-creation";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-import ContinueButton from "../ContinueButton";
+import ContinueButton from "../../components/buttons/ContinueButton";
 import ProgramSelector from "../ProgramSelector";
 
 export default function Minors() {
@@ -53,11 +53,10 @@ export default function Minors() {
 
   return (
     <>
-      <div>
+      <div className="space-y-2">
         <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
           Add any minors
         </h2>
-        <div className="h-2" />
         <p className="text-subtext leading-7 max-w-md">
           Almost done! Add any minors you&apos;re considering pursuing. You can
           also skip and add these later if you would like.

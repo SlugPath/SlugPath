@@ -1,4 +1,3 @@
-import { Program } from "@/app/types/Program";
 import { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
@@ -8,9 +7,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string; // The user's unique identifier
-      defaultPlannerId: string | null | undefined;
-      isRecordCreated: boolean;
-      programs: Program[];
+      isRecordCreated: boolean; // Whether the user has a record in the database
     } & DefaultSession["user"];
   }
 }

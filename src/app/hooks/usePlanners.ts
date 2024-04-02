@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { MultiPlanner } from "../contexts/PlannersProvider";
 
+// TODO: Refactor and remove this hook
 export function usePlannersOld() {
   const { data: session } = useSession();
 

@@ -3,7 +3,7 @@
 import useAccountCreationStore from "@/store/account-creation";
 import { useRouter } from "next/navigation";
 
-import ContinueButton from "../ContinueButton";
+import ContinueButton from "../../components/buttons/ContinueButton";
 import ProgramSelector from "../ProgramSelector";
 
 export default function Majors() {
@@ -28,11 +28,10 @@ export default function Majors() {
 
   return (
     <>
-      <div>
+      <div className="space-y-2">
         <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
           Pick your major
         </h2>
-        <div className="h-2" />
         <p className="text-subtext leading-7 max-w-md">
           Start by adding your major (or majors). You can always change these
           later.
