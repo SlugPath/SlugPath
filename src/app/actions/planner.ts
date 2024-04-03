@@ -157,11 +157,15 @@ export async function getUserPlanners(userId: string): Promise<PlannerData[]> {
  * @param programName name of the program
  * @returns a PlannerData instance if it exists, otherwise null
  */
-export async function getPlannersByProgram(programName: string) {
+export async function getPlannersByProgram(
+  programName: string,
+  catalogYear: string,
+) {
   const plans = await prisma.planner.findMany({
     where: {
       major: {
         name: programName,
+        catalogYear: catalogYear,
       },
     },
     include: {

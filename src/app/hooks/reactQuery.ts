@@ -162,7 +162,7 @@ export function usePlanners(userId: string | undefined) {
  * A React Query hook to update all user planners
  * @returns React Query useMutation Hook for updating all user planners
  */
-export function useUpdatePlannersMutation() {
+export function useUpdatePlannersMutation(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -170,6 +170,9 @@ export function useUpdatePlannersMutation() {
       await updateUserPlanners(params),
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: ["planners", userId] });
+      if (onSuccess) {
+        onSuccess();
+      }
     },
   });
 }
@@ -189,14 +192,18 @@ export function usePlanner(plannerId: string) {
 }
 
 /**
- * A React Query hook to fetch all default planners for a program
+ * A React Query hook to fetch all default planners for a program in a catalog year
  * @param programName name of the program
- * @returns React Query useQuery Hook for all default planners for a program
+ * @param catalogYear year of the catalog
+ * @returns React Query useQuery Hook for all default planners for a program in a catalog year
  */
-export function useProgramDefaultPlanners(programName: string) {
+export function useProgramDefaultPlanners(
+  programName: string,
+  catalogYear: string,
+) {
   return useQuery({
-    queryKey: ["programDefaultPlanners", programName],
-    queryFn: async () => await getPlannersByProgram(programName),
+    queryKey: ["programDefaultPlanners", programName, catalogYear],
+    queryFn: async () => await getPlannersByProgram(programName, catalogYear),
     placeholderData: [],
     enabled: !!programName,
   });

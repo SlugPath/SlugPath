@@ -3,6 +3,7 @@
 import ContinueButton from "@/app/components/buttons/ContinueButton";
 import {
   Carousel,
+  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -10,19 +11,27 @@ import {
 } from "@/app/components/miscellaneous/Carousel";
 import {
   useProgramDefaultPlanners,
+  useUpdatePlannersMutation,
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
 import { PlannerTitle } from "@/app/types/Planner";
 import { Program } from "@/app/types/Program";
+import { clonePlanner } from "@/lib/plannerUtils";
 import { CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { v4 as uuid4 } from "uuid";
 
 import MiniPlanner from "./MiniPlanner";
 
 export default function CurriculumSelect() {
   const { data: session } = useSession();
   const userId = session?.user.id;
+  const router = useRouter();
+
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
 
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
@@ -33,7 +42,14 @@ export default function CurriculumSelect() {
     isFetching: userProgramsIsFetching,
   } = useUserPrograms(userId);
 
-  console.log(userPrograms);
+  const { mutate: saveAll } = useUpdatePlannersMutation(
+    handleUpdatePlannersSuccess,
+  );
+
+  const { data: _defaultPlanners } = useProgramDefaultPlanners(
+    selectedProgram ? selectedProgram.name : "",
+    selectedProgram ? selectedProgram.catalogYear : "",
+  );
 
   const isUserProgramsLoading = userProgramsIsPending || userProgramsIsFetching;
   const isUserProgramsEmpty = !(userPrograms && userPrograms.length > 0);
@@ -44,6 +60,35 @@ export default function CurriculumSelect() {
       setSelectedProgram(userPrograms![0]);
     }
   }, [userPrograms, selectedProgram]);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+  }, [api]);
+
+  function handleUpdatePlannersSuccess() {
+    router.push("/planner");
+  }
+
+  function handleClickUseTemplate() {
+    if (!_defaultPlanners) {
+      return;
+    }
+
+    const defaultPlanner = {
+      ..._defaultPlanners[current],
+      id: uuid4(),
+    };
+
+    saveAll({ userId: userId!, planners: [clonePlanner(defaultPlanner)] });
+  }
 
   return (
     <div className="flex-1 h-full w-full flex flex-col items-center justify-center p-5">
@@ -89,20 +134,26 @@ export default function CurriculumSelect() {
         <CurriculumSelectCarousel
           key={selectedProgram.id}
           program={selectedProgram}
+          setApi={setApi}
         />
       )}
 
       <div className="max-w-lg w-full">
-        <ContinueButton onClick={() => {}}>Use this template</ContinueButton>
+        <ContinueButton onClick={() => handleClickUseTemplate()}>
+          Use this template
+        </ContinueButton>
       </div>
     </div>
   );
 }
 
-function CurriculumSelectCarousel({ program }: { program: Program }) {
-  // const { data: session } = useSession();
-  // const userId = session?.user.id;
-
+function CurriculumSelectCarousel({
+  program,
+  setApi,
+}: {
+  program: Program;
+  setApi: (api: CarouselApi) => void;
+}) {
   const [selectedPlannerTitle, setSelectedPlannerTitle] =
     useState<PlannerTitle>();
 
@@ -111,7 +162,7 @@ function CurriculumSelectCarousel({ program }: { program: Program }) {
     data: _defaultPlanners,
     isPending: defaultPlannersIsPending,
     isFetching: defaultPlannersIsFetching,
-  } = useProgramDefaultPlanners(program.name);
+  } = useProgramDefaultPlanners(program.name, program.catalogYear);
 
   const isDefaultPlannersLoading =
     defaultPlannersIsPending || defaultPlannersIsFetching;
@@ -147,13 +198,10 @@ function CurriculumSelectCarousel({ program }: { program: Program }) {
   }
 
   return (
-    <Carousel className="flex w-1/2">
+    <Carousel className="flex w-1/2 p-5" setApi={setApi}>
       <CarouselContent>
         {defaultPlanners!.map((planner, index) => (
-          <CarouselItem
-            key={index}
-            className="flex items-center justify-center"
-          >
+          <CarouselItem key={index} className="flex items-start justify-start">
             <MiniPlanner plannerState={planner} />
           </CarouselItem>
         ))}
