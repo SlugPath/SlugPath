@@ -14,30 +14,20 @@ import {
   View,
 } from "@react-pdf/renderer";
 
-export default function PlannerPDF({
-  planners,
-  activePlanner,
-  courseState,
-}: {
-  planners: PlannerData[];
-  activePlanner: string;
-  courseState: PlannerData;
-}) {
+export default function PlannerPDF({ planner }: { planner: PlannerData }) {
   return (
     <PDFViewer width="100%" height="90%">
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.titleView}>
-            <Text style={styles.plannerTitle}>
-              {getActivePlanner(planners, activePlanner)}
-            </Text>
+            <Text style={styles.plannerTitle}>{planner.title}</Text>
 
             {/* Image rendered as pdf, no need for alt text */}
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image style={styles.image} src="/images/slug-path-icon.png" />
           </View>
           <View>
-            <Years courseState={courseState} />
+            <Years planner={planner} />
           </View>
         </Page>
       </Document>
@@ -45,17 +35,17 @@ export default function PlannerPDF({
   );
 }
 
-function Years({ courseState }: { courseState: PlannerData }) {
+function Years({ planner }: { planner: PlannerData }) {
   return (
     <View>
       {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
         const slice_val = quartersPerYear * i;
-        const quarters = courseState.quarters.slice(
+        const quarters = planner.quarters.slice(
           slice_val,
           slice_val + quartersPerYear,
         );
         return (
-          <PDFQuarters key={i} quarters={quarters} courseState={courseState} />
+          <PDFQuarters key={i} quarters={quarters} courseState={planner} />
         );
       })}
     </View>
@@ -157,7 +147,3 @@ const styles = StyleSheet.create({
     width: "auto",
   },
 });
-
-function getActivePlanner(planners: PlannerData[], activePlanner: string) {
-  return planners.find((p) => p.id === activePlanner)?.title;
-}

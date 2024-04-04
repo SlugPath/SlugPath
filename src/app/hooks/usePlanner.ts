@@ -5,13 +5,12 @@ import {
   initialPlanner,
   isCustomCourse,
 } from "@/lib/plannerUtils";
+import usePlannersStore from "@/store/planners";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
-import { useCallback, useContext, useMemo } from "react";
-
-import { PlannersContext } from "../contexts/PlannersProvider";
+import { useCallback, useMemo } from "react";
 
 export default function usePlanner(input: {
   userId: string | undefined;
@@ -19,8 +18,21 @@ export default function usePlanner(input: {
   title: string;
   order: number;
 }) {
-  const { getPlanner, setPlanner } = useContext(PlannersContext);
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanner = usePlannersStore((state) => state.setPlanner);
 
+  const getPlanner = useCallback(
+    (id: string) => {
+      if (!planners) throw new Error("Planners not loaded yet");
+
+      const p = planners.find((planner) => planner.id === id);
+      if (!p) throw new Error(`Planner not found with id '${id}'`);
+      return p;
+    },
+    [planners],
+  );
+
+  // TODO: cursed
   const courseState = getPlanner
     ? getPlanner(input.plannerId)
     : initialPlanner();

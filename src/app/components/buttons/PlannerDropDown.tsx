@@ -1,4 +1,4 @@
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import useModalStore from "@/store/modal";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForever from "@mui/icons-material/DeleteForever";
@@ -12,7 +12,7 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface PlannerDropDownProps {
   id: string;
@@ -34,7 +34,10 @@ export default function PlannerDropDown({
   dropDownClosed,
 }: PlannerDropDownProps) {
   const [open, setOpen] = useState(false);
-  const { setShowExportModal, setShowShareModal } = useContext(PlannersContext);
+
+  // QUESTION: show modals needed?
+  const setShowExportModal = useModalStore((state) => state.setShowExportModal);
+  const setShowShareModal = useModalStore((state) => state.setShowShareModal);
 
   const handleOpenChange = useCallback(
     (_: React.SyntheticEvent | null, isOpen: boolean) => {

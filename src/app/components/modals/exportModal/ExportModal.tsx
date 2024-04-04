@@ -1,6 +1,9 @@
-import { PlannersContext } from "@contexts/PlannersProvider";
+import { usePlanners } from "@/app/hooks/reactQuery";
+import useModalStore from "@/store/modal";
+import useActivePlannerStore from "@/store/planners";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { Suspense, lazy, useContext } from "react";
+import { useSession } from "next-auth/react";
+import { Suspense, lazy } from "react";
 
 import ExportSkeleton from "./ExportSkeleton";
 
@@ -8,16 +11,20 @@ const PlannerPDF = lazy(() => import("./PlannerPDF"));
 
 // Create styles
 export default function ExportModal() {
-  const {
-    planners,
-    activePlanner,
-    setShowExportModal,
-    showExportModal,
-    getPlanner,
-  } = useContext(PlannersContext);
-  if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
+  const { data: session } = useSession();
+  const userId = session?.user.id;
 
-  const courseState = getPlanner(activePlanner);
+  const { data: planners } = usePlanners(userId);
+  const activePlannerId = useActivePlannerStore(
+    (state) => state.activePlannerId,
+  );
+
+  const activePlanner = planners?.find(
+    (planner) => planner.id === activePlannerId,
+  );
+
+  const setShowExportModal = useModalStore((state) => state.setShowExportModal);
+  const showExportModal = useModalStore((state) => state.showExportModal);
 
   return (
     <Modal
@@ -49,13 +56,11 @@ export default function ExportModal() {
         >
           Export to PDF
         </Typography>
-        <Suspense fallback={<ExportSkeleton />}>
-          <PlannerPDF
-            planners={planners}
-            activePlanner={activePlanner}
-            courseState={courseState}
-          />
-        </Suspense>
+        {activePlanner && (
+          <Suspense fallback={<ExportSkeleton />}>
+            <PlannerPDF planner={activePlanner} />
+          </Suspense>
+        )}
         <ModalClose variant="plain" sx={{ m: 1 }} />
       </Sheet>
     </Modal>

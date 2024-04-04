@@ -1,5 +1,6 @@
 import { APP_URL } from "@/config";
-import { PlannersContext } from "@contexts/PlannersProvider";
+import useModalStore from "@/store/modal";
+import useActivePlannerStore from "@/store/planners";
 import { LibraryAddCheck } from "@mui/icons-material";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import {
@@ -11,18 +12,20 @@ import {
   Tooltip,
   Typography,
 } from "@mui/joy";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 // Create styles
 export default function ShareModal() {
-  const { activePlanner, showShareModal, setShowShareModal } =
-    useContext(PlannersContext);
+  const setShowShareModal = useModalStore((state) => state.setShowShareModal);
+  const showShareModal = useModalStore((state) => state.showShareModal);
+
+  const activePlannerId = useActivePlannerStore(
+    (state) => state.activePlannerId,
+  );
 
   const [open, setOpen] = useState(false);
 
-  if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
-
-  const plannerURL = `${APP_URL}/planner/${activePlanner}`;
+  const plannerURL = `${APP_URL}/planner/${activePlannerId}`;
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(plannerURL).then(() => setOpen(true));

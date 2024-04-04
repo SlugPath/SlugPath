@@ -1,6 +1,5 @@
 import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
 import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
 import {
   useUpdateUserDefaultPlannerIdMutation,
   useUserDefaultPlannerId,
@@ -21,7 +20,7 @@ import {
 } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import SelectDefaultPlanner from "./SelectDefaultPlanner";
 
@@ -83,7 +82,10 @@ export default function DefaultPlannerSelection({
 
   const { data: userPrograms } = useUserPrograms(session?.user.id);
 
-  const { addPlanner, replaceCurrentPlanner } = useContext(PlannersContext);
+  const addPlanner = () => alert("addPlanner currently unimplemented");
+
+  const replaceCurrentPlanner = () =>
+    alert("replaceCurrentPlanner currently unimplemented");
   const [replaceAlertOpen, setReplaceAlertOpen] = useState(false);
 
   const router = useRouter();

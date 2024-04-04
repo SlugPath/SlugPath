@@ -1,8 +1,11 @@
+import { clonePlanner, initialPlanner } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { PlannersContext } from "@contexts/PlannersProvider";
+import useActivePlannerStore, { MAX_PLANNERS } from "@/store/planners";
+import usePlannersStore from "@/store/planners";
 import { Add } from "@mui/icons-material";
 import { IconButton, Input, Tooltip, useColorScheme } from "@mui/joy";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import PlannerDropDown from "../../buttons/PlannerDropDown";
 import ConfirmAlert from "../../modals/ConfirmAlert";
@@ -10,29 +13,31 @@ import RenameModal from "../../modals/RenameModal";
 import TitleSnackbar from "./TitleSnackbar";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
-const MAX_PLANNERS = 10;
-
 interface PlannerDeleteAlertData {
   id: string;
   title: string;
   alertOpen: boolean;
 }
+
 const emptyDeleteAlertData: PlannerDeleteAlertData = {
   id: "",
   title: "",
   alertOpen: false,
 };
 
+// TODO: finish refactor
 export default function PlannerTabs() {
-  const {
-    planners,
-    removePlanner,
-    switchPlanners,
-    changePlannerName,
-    addPlanner,
-    duplicatePlanner,
-    activePlanner,
-  } = useContext(PlannersContext);
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanner = usePlannersStore((state) => state.setPlanner);
+  const addPlanner = usePlannersStore((state) => state.addPlanner);
+  const deletePlanner = usePlannersStore((state) => state.deletePlanner);
+
+  const activePlannerId = useActivePlannerStore(
+    (state) => state.activePlannerId,
+  );
+  const setActivePlannerId = useActivePlannerStore(
+    (state) => state.setActivePlannerId,
+  );
 
   // State-ful variables for managing the editing of planner names
   // and deletion alerts
@@ -44,25 +49,42 @@ export default function PlannerTabs() {
     useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
   const [tooManyAlertIsOpen, setTooManyAlertIsOpen] = useState(false);
 
-  /**
-   * Event listener that runs when user clicks the add button
-   */
+  const handleChangePlannerName = (id: string, newTitle: string) => {
+    const oldPlanner = planners.find((planner) => planner.id === id);
+    if (!oldPlanner) throw new Error("Couldn't find planner to rename");
+
+    const newPlanner = { ...oldPlanner, title: newTitle };
+    setPlanner(id, newPlanner);
+  };
+
   const handleAddPlanner = () => {
+    console.log("handleAddPlanner");
     // Check if user has too many planners open
-    if (planners.length == MAX_PLANNERS) {
+    if (planners && planners.length == MAX_PLANNERS) {
       setTooManyAlertIsOpen(true);
       return;
     }
-    addPlanner();
+
+    // TODO: Remove user default planner
+    const newPlanner = {
+      ...initialPlanner(),
+      id: uuidv4(),
+      title: "New Planner",
+    };
+    addPlanner(newPlanner);
   };
 
   /**
    * Callback to delete planner and close the alert modal
    * @param id planner id
    */
-  const deletePlanner = (id: string) => {
+  const handleDeletePlanner = () => {
+    const success = deletePlanner(deleteAlert.id);
+    if (!success) {
+      throw new Error("Failed to delete planner with id: " + deleteAlert.id);
+      return;
+    }
     setDeleteAlert(emptyDeleteAlertData);
-    removePlanner(id);
   };
 
   const handleOpenDeleteAlert = (id: string, title: string) => {
@@ -77,20 +99,25 @@ export default function PlannerTabs() {
     title.length >= 2 && setPlannerBeingEdited(null);
   };
 
-  const handleTabChange = (id: string) => {
-    switchPlanners(id);
-  };
-
   /**
    * Event listener that runs when user clicks the duplicate button
    */
   const handleDuplicatePlanner = (id: string) => {
     // Check if user has too many planners open
-    if (Object.keys(planners).length == MAX_PLANNERS) {
+    if (planners && planners.length == MAX_PLANNERS) {
       setTooManyAlertIsOpen(true);
       return;
     }
-    duplicatePlanner(id);
+
+    const sourcePlanner = planners?.find((planner) => planner.id === id);
+    if (!sourcePlanner) throw new Error("Couldn't find planner to duplicate");
+
+    const newPlanner = {
+      ...clonePlanner(sourcePlanner),
+      id: uuidv4(),
+      title: "New Planner",
+    };
+    addPlanner(newPlanner);
   };
 
   return (
@@ -101,14 +128,14 @@ export default function PlannerTabs() {
             key={id}
             title={title}
             id={id}
-            selected={activePlanner ? activePlanner === id : false}
+            selected={activePlannerId ? activePlannerId === id : false}
             isEditing={plannerBeingEdited === id}
             setPlannerBeingEdited={setPlannerBeingEdited}
             onEndEditing={(newTitle) => {
-              changePlannerName(id, newTitle);
+              handleChangePlannerName(id, newTitle);
               handleBlur(newTitle);
             }}
-            onClick={() => handleTabChange(id)}
+            onClick={() => setActivePlannerId(id)}
             onOpenDeleteAlert={handleOpenDeleteAlert}
             onDuplicate={() => handleDuplicatePlanner(id)}
           />
@@ -127,10 +154,7 @@ export default function PlannerTabs() {
       <ConfirmAlert
         open={deleteAlert.alertOpen}
         onClose={() => setDeleteAlert(emptyDeleteAlertData)}
-        onConfirm={() => {
-          deletePlanner(deleteAlert.id);
-          setDeleteAlert(emptyDeleteAlertData);
-        }}
+        onConfirm={handleDeletePlanner}
         dialogText={deleteAlert.title}
       />
       <TooManyPlannersAlert
