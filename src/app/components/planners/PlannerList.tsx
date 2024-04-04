@@ -1,6 +1,7 @@
 "use client";
 
 import { ModalsProvider } from "@/app/contexts/ModalsProvider";
+import { PlannerData } from "@/app/types/Planner";
 import { cn } from "@/lib/utils";
 import usePlannersStore from "@/store/planners";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
@@ -11,6 +12,7 @@ import Planner from "../planner/Planner";
 
 export default function PlannerList() {
   const planners = usePlannersStore((state) => state.planners);
+  const setPlanner = usePlannersStore((state) => state.setPlanner);
   const activePlannerId = usePlannersStore((state) => state.activePlannerId);
 
   // const activePlanner = useMemo(
@@ -23,17 +25,24 @@ export default function PlannerList() {
   // TODO: Remove providers; remove map; use only one planner
   return (
     <div className="w-full flex-1 flex flex-col min-h-0">
-      {planners.map(({ id, title }, index) => (
+      {planners.map((planner) => (
         <div
-          key={id}
+          key={planner.id}
           className={cn(
-            activePlannerId === id ? "flex w-full flex-1 min-h-0" : "hidden",
+            activePlannerId === planner.id
+              ? "flex w-full flex-1 min-h-0"
+              : "hidden",
           )}
         >
           <MajorVerificationProvider>
             <ModalsProvider>
-              <PlannerProvider plannerId={id} title={title} order={index}>
-                <Planner isActive={activePlannerId === id} />
+              <PlannerProvider
+                planner={planner}
+                setPlanner={(newPlanner: PlannerData) =>
+                  setPlanner(planner.id, newPlanner)
+                }
+              >
+                <Planner isActive={activePlannerId === planner.id} />
               </PlannerProvider>
             </ModalsProvider>
           </MajorVerificationProvider>

@@ -14,6 +14,10 @@ export const years = 4;
 export const quartersPerYear = 4;
 export const EMPTY_PLANNER = "emptyPlanner";
 
+/**
+ * Creates a new PlannerData instance with default values
+ * @returns a new PlannerData instance
+ */
 export const initialPlanner = (): PlannerData => {
   return {
     quarters: createQuarters(),

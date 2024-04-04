@@ -49,8 +49,11 @@ export default function PlannerTabs() {
     useState<PlannerDeleteAlertData>(emptyDeleteAlertData);
   const [tooManyAlertIsOpen, setTooManyAlertIsOpen] = useState(false);
 
+  // Handlers
+
   const handleChangePlannerName = (id: string, newTitle: string) => {
     const oldPlanner = planners.find((planner) => planner.id === id);
+    // TODO: more graceful error handling
     if (!oldPlanner) throw new Error("Couldn't find planner to rename");
 
     const newPlanner = { ...oldPlanner, title: newTitle };
@@ -65,13 +68,7 @@ export default function PlannerTabs() {
       return;
     }
 
-    // TODO: Remove user default planner
-    const newPlanner = {
-      ...initialPlanner(),
-      id: uuidv4(),
-      title: "New Planner",
-    };
-    addPlanner(newPlanner);
+    addPlanner(initialPlanner());
   };
 
   /**
@@ -81,9 +78,10 @@ export default function PlannerTabs() {
   const handleDeletePlanner = () => {
     const success = deletePlanner(deleteAlert.id);
     if (!success) {
+      // TODO: more graceful error handling
       throw new Error("Failed to delete planner with id: " + deleteAlert.id);
-      return;
     }
+
     setDeleteAlert(emptyDeleteAlertData);
   };
 
@@ -110,6 +108,7 @@ export default function PlannerTabs() {
     }
 
     const sourcePlanner = planners?.find((planner) => planner.id === id);
+    // TODO: more graceful error handling
     if (!sourcePlanner) throw new Error("Couldn't find planner to duplicate");
 
     const newPlanner = {

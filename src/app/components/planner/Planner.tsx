@@ -26,10 +26,7 @@ import { useContext, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
-import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
-import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";
@@ -63,88 +60,92 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   }
 
   return (
-    <div className="flex w-full flex-1 min-h-0">
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <CourseInfoProvider>
-          <div className="flex justify-between space-x-4 w-full min-h-0">
-            <div className="flex flex-col min-h-0 flex-initial">
-              <SearchContainer />
-            </div>
-            <div className="overflow-auto w-full flex-grow max-h-full">
-              <AccordionGroup>
-                <div className="space-y-2 overflow-auto min-h-0">
-                  <Years yearRange={yearRange} />
-                  <div className="my-4">
-                    {courseState.years == MAX_YEARS ? (
-                      <Tooltip title="Cannot add more years.">
-                        <span>
-                          <Button
-                            disabled
-                            fullWidth={true}
-                            size="lg"
-                            startDecorator={<Add />}
-                          >
-                            Add Year
-                          </Button>
-                        </span>
-                      </Tooltip>
-                    ) : (
-                      <Button
-                        fullWidth={true}
-                        size="lg"
-                        onClick={addYear}
-                        startDecorator={<Add />}
-                      >
-                        Add Year
-                      </Button>
-                    )}
-                  </div>
-                  <Accordion
-                    variant="soft"
-                    sx={{
-                      borderRadius: "0.5rem",
-                      "&.MuiAccordion-root": {
-                        "& .MuiAccordionSummary-root": {
-                          padding: "0.5rem 0",
-                          paddingX: "0.5rem",
+    <>
+      <div className="flex w-full flex-1 min-h-0">
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <CourseInfoProvider>
+            {/* TODO: Fix Modals: pass needed props? Relocate to remove context state */}
+            <CourseInfoModal />
+            <ReplaceRequirementsModal />
+            <div className="flex justify-between space-x-4 w-full min-h-0">
+              <div className="flex flex-col min-h-0 flex-initial">
+                <SearchContainer />
+              </div>
+              <div className="overflow-auto w-full flex-grow max-h-full">
+                <AccordionGroup>
+                  <div className="space-y-2 overflow-auto min-h-0">
+                    <Years yearRange={yearRange} />
+                    <div className="my-4">
+                      {courseState.years == MAX_YEARS ? (
+                        <Tooltip title="Cannot add more years.">
+                          <span>
+                            <Button
+                              disabled
+                              fullWidth={true}
+                              size="lg"
+                              startDecorator={<Add />}
+                            >
+                              Add Year
+                            </Button>
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <Button
+                          fullWidth={true}
+                          size="lg"
+                          onClick={addYear}
+                          startDecorator={<Add />}
+                        >
+                          Add Year
+                        </Button>
+                      )}
+                    </div>
+                    <Accordion
+                      variant="soft"
+                      sx={{
+                        borderRadius: "0.5rem",
+                        "&.MuiAccordion-root": {
+                          "& .MuiAccordionSummary-root": {
+                            padding: "0.5rem 0",
+                            paddingX: "0.5rem",
+                          },
                         },
-                      },
-                    }}
-                    defaultExpanded={true}
-                    expanded={isExpanded === true}
-                    onChange={(_, expanded) => {
-                      setIsExpanded(expanded ? true : false);
-                    }}
-                  >
-                    <AccordionSummary indicator={null}>
-                      {indicatorIcon(isExpanded)}
-                      Notes
-                      <IconButton />
-                    </AccordionSummary>
-                    <AccordionDetails className="mb-3">
-                      <NotesEditor
-                        content={courseState.notes}
-                        onUpdateNotes={updateNotes}
-                      />
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
-              </AccordionGroup>
+                      }}
+                      defaultExpanded={true}
+                      expanded={isExpanded === true}
+                      onChange={(_, expanded) => {
+                        setIsExpanded(expanded ? true : false);
+                      }}
+                    >
+                      <AccordionSummary indicator={null}>
+                        {indicatorIcon(isExpanded)}
+                        Notes
+                        <IconButton />
+                      </AccordionSummary>
+                      <AccordionDetails className="mb-3">
+                        <NotesEditor
+                          content={courseState.notes}
+                          onUpdateNotes={updateNotes}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                </AccordionGroup>
+              </div>
+              <div className="flex flex-col self-start gap-3">
+                <PlannerActions />
+                <GraduationProgressCard
+                  totalCredits={totalCredits}
+                  geSatisfied={geSatisfied}
+                  courseState={courseState}
+                />
+                <LabelLegend />
+              </div>
             </div>
-            <div className="flex flex-col self-start gap-3">
-              <PlannerActions />
-              <GraduationProgressCard
-                totalCredits={totalCredits}
-                geSatisfied={geSatisfied}
-                courseState={courseState}
-              />
-              <LabelLegend />
-            </div>
-          </div>
-          <Modals />
-        </CourseInfoProvider>
-      </DragDropContext>
-    </div>
+          </CourseInfoProvider>
+        </DragDropContext>
+      </div>
+    </>
   );
 }
 
@@ -202,18 +203,6 @@ function GraduationProgressCard({
         <GEProgress ge={geSatisfied} courseState={courseState} />
       </div>
     </Card>
-  );
-}
-
-function Modals() {
-  return (
-    <>
-      <CourseInfoModal />
-      <MajorsModal />
-      <EditMajorRequirementsModal />
-      <ReplaceRequirementsModal />
-      <PermissionsModal />
-    </>
   );
 }
 

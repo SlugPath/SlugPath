@@ -3,9 +3,9 @@ import {
   usePermissions,
   useUpdateUserPermissionMutation,
 } from "@/app/hooks/reactQuery";
+import { ModalProps } from "@/app/types/Modal";
 import { isUserAlreadyAdded, sortPermissions } from "@/lib/permissionsUtils";
 import { isValidEmail } from "@/lib/utils";
-import { ModalsContext } from "@contexts/ModalsProvider";
 import ReportIcon from "@mui/icons-material/Report";
 import {
   Alert,
@@ -18,19 +18,17 @@ import {
 } from "@mui/joy";
 import { CircularProgress } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import IsSatisfiedMark from "../miscellaneous/IsSatisfiedMark";
 import PermissionList from "./PermissionList";
 
-export default function PermissionsModal() {
+export default function PermissionsModal({
+  showModal,
+  setShowModal,
+}: ModalProps) {
   const { data: session } = useSession();
   const userId = session?.user.id;
-
-  // Modal context
-  // TODO: Remove context
-  const { showPermissionsModal, setShowPermissionsModal } =
-    useContext(ModalsContext);
 
   // Input state
   const [email, setEmail] = useState("");
@@ -77,8 +75,8 @@ export default function PermissionsModal() {
 
   return (
     <Modal
-      open={showPermissionsModal}
-      onClose={() => setShowPermissionsModal(false)}
+      open={showModal}
+      onClose={() => setShowModal(false)}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       <Sheet

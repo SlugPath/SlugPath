@@ -38,7 +38,7 @@ export function Requirements({
   parents: number;
   hideTitle: boolean;
   hasEditPermission?: boolean;
-  onClickEdit?: (major: Program) => void;
+  onClickEdit?: () => void;
 }) {
   const { mode } = useColorScheme();
 
@@ -71,7 +71,7 @@ export function Requirements({
                 You have edit permission
               </Chip>
               {onClickEdit && (
-                <Button onClick={() => onClickEdit(major)}>Edit</Button>
+                <Button onClick={() => onClickEdit()}>Edit</Button>
               )}
             </div>
           )}

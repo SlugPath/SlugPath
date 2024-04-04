@@ -11,11 +11,20 @@ export default function usePlannerSync(intervalLength = 30000) {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
+  // Server planners
+  const { data: initialPlanners } = usePlanners(userId);
   const { mutate: updatePlanners } = useUpdatePlannersMutation();
+
+  // Local planners
   const planners = usePlannersStore((state) => state.planners);
   const setPlanners = usePlannersStore((state) => state.setPlanners);
 
-  const { data: initialPlanners } = usePlanners(userId);
+  // Set initial planners
+  useEffect(() => {
+    if (initialPlanners && planners.length === 0) {
+      setPlanners(initialPlanners);
+    }
+  }, [initialPlanners, planners.length, setPlanners]);
 
   // Manage window focus
   const [isWindowFocused, setIsWindowFocused] = useState(true);
@@ -37,21 +46,14 @@ export default function usePlannerSync(intervalLength = 30000) {
     };
   }, []);
 
-  // Set initial planners
-  useEffect(() => {
-    if (initialPlanners && planners.length === 0) {
-      setPlanners(initialPlanners);
-    }
-  }, [initialPlanners, planners.length, setPlanners]);
-
   // Save planners every 30 seconds
   useEffect(() => {
     const saveChanges = () => {
       if (userId && isWindowFocused) {
         updatePlanners({ userId, planners });
-        console.debug("Saved planners on interval");
+        console.log("Saved planners on interval");
       } else {
-        console.debug("Not saving planners, window not focused");
+        console.log("Not saving planners, window not focused");
       }
     };
     const interval = setInterval(saveChanges, intervalLength);
@@ -64,7 +66,7 @@ export default function usePlannerSync(intervalLength = 30000) {
   // Save planners on beforeunload
   useEffect(() => {
     const handleBeforeUnload = () => {
-      console.debug("beforeunload, saving planners");
+      console.log("beforeunload, saving planners");
       if (userId) {
         navigator.sendBeacon("/api/planners", JSON.stringify(planners));
       }

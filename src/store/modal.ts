@@ -6,6 +6,9 @@ type ModalStore = {
 
   showShareModal: boolean;
   setShowShareModal: (show: boolean) => void;
+
+  showReplaceRLModal: boolean;
+  setShowReplaceRLModal: (show: boolean) => void;
 };
 
 const useModalStore = create<ModalStore>((set) => ({
@@ -14,6 +17,9 @@ const useModalStore = create<ModalStore>((set) => ({
 
   showShareModal: false,
   setShowShareModal: (show: boolean) => set({ showShareModal: show }),
+
+  showReplaceRLModal: false,
+  setShowReplaceRLModal: (show: boolean) => set({ showReplaceRLModal: show }),
 }));
 
 export default useModalStore;

@@ -1,6 +1,7 @@
 import Search from "@/app/components/search/Search";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
+import { Program } from "@/app/types/Program";
+import useModalStore from "@/store/modal";
 import {
   Button,
   Card,
@@ -14,13 +15,22 @@ import { useContext } from "react";
 
 import { RequirementsEditing } from "./Requirements";
 
-export default function EditMajorRequirementsModal() {
-  const {
-    setShowMajorRequirementsEditModal: setShowModal,
-    showMajorRequirementsEditModal: showModal,
-    setShowReplaceRLModal,
-    majorToEdit: major,
-  } = useContext(ModalsContext);
+type EditMajorRequirementsModalProps = {
+  showModal: boolean;
+  setShowModal: (show: boolean) => void;
+  program: Program;
+};
+
+export default function EditMajorRequirementsModal({
+  showModal,
+  setShowModal,
+  program,
+}: EditMajorRequirementsModalProps) {
+  // Zustand modal store
+  const setShowReplaceRLModal = useModalStore(
+    (state) => state.setShowReplaceRLModal,
+  );
+
   const {
     getLoadingSave,
     getIsSaved,
@@ -29,16 +39,17 @@ export default function EditMajorRequirementsModal() {
   } = useContext(MajorVerificationContext);
 
   const majorRequirements =
-    major !== undefined ? getRequirementsForMajor(major.id) : undefined;
-  const loadingSave = major !== undefined ? getLoadingSave(major?.id) : false;
-  const isSaved = major !== undefined ? getIsSaved(major?.id) : false;
+    program !== undefined ? getRequirementsForMajor(program.id) : undefined;
+  const loadingSave =
+    program !== undefined ? getLoadingSave(program?.id) : false;
+  const isSaved = program !== undefined ? getIsSaved(program?.id) : false;
 
   function Title() {
     return (
       <div className="flex flex-col space-y-2">
         <div className="flex flex-row justify-between">
           <Typography level="h4">
-            Editing {major?.name} {major?.catalogYear}
+            Editing {program?.name} {program?.catalogYear}
           </Typography>
         </div>
       </div>
@@ -46,7 +57,7 @@ export default function EditMajorRequirementsModal() {
   }
 
   function handleSave() {
-    onSaveMajorRequirements(major!.id);
+    onSaveMajorRequirements(program!.id);
   }
 
   return (
@@ -75,7 +86,7 @@ export default function EditMajorRequirementsModal() {
         <div className="mb-4">
           <Title />
         </div>
-        {major !== undefined && (
+        {program !== undefined && (
           <div className="flex min-h-0 flex-col flex-1">
             <div className="flex flex-row mb-3 flex-1 min-h-0">
               {showModal && (
@@ -96,7 +107,7 @@ export default function EditMajorRequirementsModal() {
                   <RequirementsEditing
                     requirements={majorRequirements}
                     parents={0}
-                    major={major}
+                    major={program}
                   />
                 ) : (
                   <div>Major requirements could not be loaded.</div>

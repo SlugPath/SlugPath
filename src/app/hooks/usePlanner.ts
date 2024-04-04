@@ -2,54 +2,45 @@ import {
   findQuarter,
   getGeSatisfied,
   getTotalCredits,
-  initialPlanner,
   isCustomCourse,
 } from "@/lib/plannerUtils";
-import usePlannersStore from "@/store/planners";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { useCallback, useMemo } from "react";
 
-export default function usePlanner(input: {
-  userId: string | undefined;
-  plannerId: string;
-  title: string;
-  order: number;
-}) {
-  const planners = usePlannersStore((state) => state.planners);
-  const setPlanner = usePlannersStore((state) => state.setPlanner);
+interface PlannerInput {
+  planner: PlannerData;
+  setPlanner: (planner: PlannerData) => boolean;
+}
 
-  const getPlanner = useCallback(
-    (id: string) => {
-      if (!planners) throw new Error("Planners not loaded yet");
+export default function usePlanner({ planner, setPlanner }: PlannerInput) {
+  // const planners = usePlannersStore((state) => state.planners);
+  // const setPlanner = usePlannersStore((state) => state.setPlanner);
 
-      const p = planners.find((planner) => planner.id === id);
-      if (!p) throw new Error(`Planner not found with id '${id}'`);
-      return p;
-    },
-    [planners],
-  );
+  // const getPlanner = useCallback(
+  //   (id: string) => {
+  //     if (!planners) throw new Error("Planners not loaded yet");
 
-  // TODO: cursed
-  const courseState = getPlanner
-    ? getPlanner(input.plannerId)
-    : initialPlanner();
+  //     const p = planners.find((planner) => planner.id === id);
+  //     if (!p) throw new Error(`Planner not found with id '${id}'`);
+  //     return p;
+  //   },
+  //   [planners],
+  // );
 
-  const handleCourseUpdate = useCallback(
-    (newState: PlannerData) => {
-      setPlanner(input.plannerId, newState);
-    },
-    [input.plannerId, setPlanner],
-  );
+  // // TODO: cursed
+  // const courseState = getPlanner
+  //   ? getPlanner(input.plannerId)
+  //   : initialPlanner();
 
   const totalCredits = useMemo(
-    () => getTotalCredits(courseState.courses!),
-    [courseState],
+    () => getTotalCredits(planner.courses),
+    [planner],
   );
 
-  const geSatisfied = useMemo(() => getGeSatisfied(courseState), [courseState]);
+  const geSatisfied = useMemo(() => getGeSatisfied(planner), [planner]);
 
   /**
    * A curried function that returns a callback to be invoked upon deleting a course
@@ -57,7 +48,7 @@ export default function usePlanner(input: {
    * @returns a callback
    */
   const deleteCourse = (quarterId: string) => {
-    const { quarter, idx } = findQuarter(courseState.quarters, quarterId);
+    const { quarter, idx } = findQuarter(planner.quarters, quarterId);
     return (deleteIdx: number) => {
       const quarterCourses = quarter.courses;
       const deleteCid = quarter.courses[deleteIdx];
@@ -65,16 +56,16 @@ export default function usePlanner(input: {
         ...quarterCourses.slice(0, deleteIdx),
         ...quarterCourses.slice(deleteIdx + 1),
       ];
-      handleCourseUpdate({
-        ...courseState,
-        courses: courseState.courses.filter((c) => c.id !== deleteCid),
+      setPlanner({
+        ...planner,
+        courses: planner.courses.filter((c) => c.id !== deleteCid),
         quarters: [
-          ...courseState.quarters.slice(0, idx),
+          ...planner.quarters.slice(0, idx),
           {
             ...quarter,
             courses: newCourses,
           },
-          ...courseState.quarters.slice(idx + 1),
+          ...planner.quarters.slice(idx + 1),
         ],
       });
     };
@@ -88,9 +79,9 @@ export default function usePlanner(input: {
    */
   const editCustomCourse = (course: StoredCourse) => {
     const cid = course.id;
-    handleCourseUpdate({
-      ...courseState,
-      courses: courseState.courses.map((c) => {
+    setPlanner({
+      ...planner,
+      courses: planner.courses.map((c) => {
         if (c.id === cid && isCustomCourse(c)) {
           return {
             ...c,
@@ -103,15 +94,15 @@ export default function usePlanner(input: {
   };
 
   const addYear = () => {
-    handleCourseUpdate({
-      ...courseState,
-      years: courseState.years + 1,
+    setPlanner({
+      ...planner,
+      years: planner.years + 1,
       quarters: [
-        ...courseState.quarters,
+        ...planner.quarters,
         // Add new quarters for the new year
         ...["Fall", "Winter", "Spring", "Summer"].map((t) => {
           return {
-            year: courseState.years,
+            year: planner.years,
             title: t,
             courses: [],
           } as Quarter;
@@ -121,7 +112,7 @@ export default function usePlanner(input: {
   };
 
   const deleteYear = (year: number) => {
-    const quarters = [...courseState.quarters];
+    const quarters = [...planner.quarters];
     const idx = quarters.findIndex((q) => q.year === year);
     if (idx == -1) {
       throw new Error("Year not found"); // should not happen
@@ -131,7 +122,7 @@ export default function usePlanner(input: {
       .slice(idx, idx + 4)
       .map((q) => q.courses)
       .flat();
-    const newCourses = courseState.courses.filter(
+    const newCourses = planner.courses.filter(
       (c) => !toRemoveCourses.includes(c.id),
     );
 
@@ -145,21 +136,21 @@ export default function usePlanner(input: {
         year: newYear,
       };
     }
-    handleCourseUpdate({
-      ...courseState,
+    setPlanner({
+      ...planner,
       courses: newCourses,
       quarters,
-      years: courseState.years - 1,
+      years: planner.years - 1,
     });
   };
 
   const getAllLabels = () => {
-    return courseState.labels;
+    return planner.labels;
   };
 
   const getCourseLabels = (course: StoredCourse): Label[] => {
     return course.labels.map((lid) => {
-      const label = courseState.labels.find((l) => l.id === lid);
+      const label = planner.labels.find((l) => l.id === lid);
       if (label === undefined) throw new Error("label not found");
       return label;
     });
@@ -174,15 +165,15 @@ export default function usePlanner(input: {
     labels: Label[];
     newCourse?: StoredCourse;
   }) => {
-    handleCourseUpdate({
-      ...courseState,
-      labels: courseState.labels.map((old) => {
+    setPlanner({
+      ...planner,
+      labels: planner.labels.map((old) => {
         // Update only the labels that got updated (their names changed)
         const updated = labels.find((l) => l.id === old.id);
         if (updated === undefined) return old;
         return updated;
       }),
-      courses: courseState.courses.map((c) => {
+      courses: planner.courses.map((c) => {
         return c.id === newCourse?.id ? newCourse : c;
       }),
     });
@@ -190,23 +181,23 @@ export default function usePlanner(input: {
 
   const updateNotes = useCallback(
     (content: string) => {
-      handleCourseUpdate({
-        ...courseState,
+      setPlanner({
+        ...planner,
         notes: content,
       });
     },
-    [courseState, handleCourseUpdate],
+    [planner, setPlanner],
   );
 
   const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
     const newCids = courses.map((c) => c.id);
-    const newCourses = courseState.courses.filter((c) => c.id != customId);
+    const newCourses = planner.courses.filter((c) => c.id != customId);
     newCourses.push(...courses);
 
-    handleCourseUpdate({
-      ...courseState,
+    setPlanner({
+      ...planner,
       courses: newCourses,
-      quarters: courseState.quarters.map((q) => {
+      quarters: planner.quarters.map((q) => {
         const idx = q.courses.indexOf(customId);
         if (idx !== -1) {
           const quarterCourses = [...q.courses];
@@ -223,12 +214,12 @@ export default function usePlanner(input: {
 
   return {
     replaceCustomCourse,
-    courseState,
+    courseState: planner,
     totalCredits,
     geSatisfied,
     deleteCourse,
     editCustomCourse,
-    handleCourseUpdate,
+    handleCourseUpdate: setPlanner,
     getCourseLabels,
     getAllLabels,
     updatePlannerLabels,
