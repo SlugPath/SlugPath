@@ -4,7 +4,7 @@ import { StoredCourse } from "@/app/types/Course";
 import { Program } from "@/app/types/Program";
 import { Binder, RequirementList } from "@/app/types/Requirements";
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
-import { getBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
+import { findBinderValue, isStoredCourse } from "@/lib/requirementsUtils";
 import { Droppable } from "@hello-pangea/dnd";
 import { Delete, Edit } from "@mui/icons-material";
 import {
@@ -263,7 +263,7 @@ export function RequirementsEditing({
           <Select
             variant="soft"
             placeholder="Choose one…"
-            defaultValue={getBinderValue(requirements)}
+            defaultValue={findBinderValue(requirements)}
             onChange={handleNewBinderSelected}
             style={{ ...cardStyleProps(parents + 1, mode) }}
           >

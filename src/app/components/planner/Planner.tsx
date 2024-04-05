@@ -1,5 +1,5 @@
-import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
-import { getQuarterId } from "@/lib/quarterUtils";
+import { QUARTERS_PER_YEAR, findCoursesInQuarter } from "@/lib/plannerUtils";
+import { constructQuarterId } from "@/lib/quarterUtils";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -35,9 +35,9 @@ import MajorProgress from "./graduationProgress/MajorProgress";
 import NotesEditor from "./notesEditor";
 import QuarterCard from "./quarters/QuarterCard";
 
-const MAX_YEARS = 10;
+const MAX_PLANNER_YEARS = 10;
 
-export default function Planner({ isActive }: { isActive: boolean }) {
+export default function Planner() {
   const {
     handleDragEnd,
     totalCredits,
@@ -53,9 +53,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 
   const [isExpanded, setIsExpanded] = useState(true);
-  if (!isActive) {
-    return <></>;
-  }
 
   return (
     <>
@@ -74,7 +71,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   <div className="space-y-2 overflow-auto min-h-0">
                     <Years yearRange={yearRange} />
                     <div className="my-4">
-                      {courseState.years == MAX_YEARS ? (
+                      {courseState.years >= MAX_PLANNER_YEARS ? (
                         <Tooltip title="Cannot add more years.">
                           <span>
                             <Button
@@ -201,12 +198,12 @@ function Year({ year }: { year: number }) {
   const { deleteYear, courseState } = useContext(PlannerContext);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
-  const startQuarters = quartersPerYear * (year - 1);
+  const startQuarters = QUARTERS_PER_YEAR * (year - 1);
   const quarters = useMemo(
     () =>
       courseState.quarters.slice(
         startQuarters,
-        startQuarters + quartersPerYear,
+        startQuarters + QUARTERS_PER_YEAR,
       ),
     [courseState, startQuarters],
   );
@@ -254,7 +251,7 @@ function Year({ year }: { year: number }) {
         <div className="flex flex-row space-x-2">
           {quarters.map((quarter) => {
             const courses = findCoursesInQuarter(courseState, quarter);
-            const id = getQuarterId(quarter);
+            const id = constructQuarterId(quarter);
             return (
               <QuarterCard
                 key={id}

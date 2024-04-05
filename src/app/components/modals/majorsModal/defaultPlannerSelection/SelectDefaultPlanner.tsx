@@ -1,4 +1,4 @@
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import { EMPTY_PLANNER_ID } from "@/lib/plannerUtils";
 import { PlannerTitle } from "@customTypes/Planner";
 import Info from "@mui/icons-material/Info";
 import {
@@ -51,7 +51,7 @@ export default function SelectDefaultPlanner({
           </TabList>
         </Tabs>
         {loadingMajorDefaultPlanners ? (
-          <MiniPlanner plannerId={EMPTY_PLANNER} active={true} />
+          <MiniPlanner plannerId={EMPTY_PLANNER_ID} active={true} />
         ) : (
           <>
             <List>

@@ -7,21 +7,20 @@ import { LabelColor } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 import { initialLabels } from "./labels";
-import { getQuarterId } from "./quarterUtils";
 
 const quarterNames: Term[] = ["Fall", "Winter", "Spring", "Summer"];
-export const years = 4;
-export const quartersPerYear = 4;
-export const EMPTY_PLANNER = "emptyPlanner";
+export const DEFAULT_PROGRAM_YEAR_COUNT = 4;
+export const QUARTERS_PER_YEAR = 4;
+export const EMPTY_PLANNER_ID = "emptyPlanner";
 
 /**
  * Creates a new PlannerData instance with default values
  * @returns a new PlannerData instance
  */
-export const initialPlanner = (): PlannerData => {
+export const initializeNewPlanner = (): PlannerData => {
   return {
-    quarters: createQuarters(),
-    years,
+    quarters: initializeQuarters(),
+    years: DEFAULT_PROGRAM_YEAR_COUNT,
     courses: [],
     labels: initialLabels(),
     notes: "",
@@ -30,10 +29,14 @@ export const initialPlanner = (): PlannerData => {
   };
 };
 
-export const emptyPlanner = (): PlannerData => {
+/**
+ * Creates a new PlannerData instance with default values
+ * @returns a new PlannerData instance with empty values
+ */
+export const initializeEmptyPlanner = (): PlannerData => {
   return {
     quarters: [],
-    years,
+    years: DEFAULT_PROGRAM_YEAR_COUNT,
     courses: [],
     labels: [],
     notes: "",
@@ -42,10 +45,15 @@ export const emptyPlanner = (): PlannerData => {
   };
 };
 
-export function createQuarters() {
+/**
+ * Creates a new Quarters instance with default number of years and quarters per
+ * year
+ * @returns an array of Quarter objects
+ */
+export function initializeQuarters() {
   const quarters: Quarter[] = [];
-  for (let year = 0; year < years; year++) {
-    for (let quarter = 0; quarter < quartersPerYear; quarter++) {
+  for (let year = 0; year < DEFAULT_PROGRAM_YEAR_COUNT; year++) {
+    for (let quarter = 0; quarter < QUARTERS_PER_YEAR; quarter++) {
       quarters.push({
         year,
         title: `${quarterNames[quarter]}`,
@@ -57,7 +65,11 @@ export function createQuarters() {
   return quarters;
 }
 
-export const customCourse = (): StoredCourse => {
+/**
+ * Creates an empty custom course
+ * @returns a new StoredCourse instance
+ */
+export const initializeCustomCourse = (): StoredCourse => {
   return {
     id: uuidv4(),
     credits: 5,
@@ -71,7 +83,12 @@ export const customCourse = (): StoredCourse => {
   };
 };
 
-export function getDeptAndNumber({
+/**
+ * Displays department code and number if they exist, otherwise displays title
+ * @param param0 a stored course
+ * @returns a string that represents the course
+ */
+export function courseTitle({
   departmentCode,
   number,
   title,
@@ -102,7 +119,7 @@ export async function getRealEquivalent(
 
   if (!regex.test(title)) {
     return {
-      ...customCourse(),
+      ...initializeCustomCourse(),
       title,
     };
   }
@@ -118,13 +135,13 @@ export async function getRealEquivalent(
   // Should not happen
   if (equivalent === null) {
     return {
-      ...customCourse(),
+      ...initializeCustomCourse(),
       title,
     };
   }
 
   return {
-    ...customCourse(),
+    ...initializeCustomCourse(),
     title: equivalent.title,
     departmentCode: equivalent.departmentCode,
     number: equivalent.number,
@@ -135,54 +152,53 @@ export async function getRealEquivalent(
 }
 
 /**
- * Finds a quarter with a given id in an array of `Quarter`
- * @param quarters array of quarters in a `CourseState` instance
- * @param id quarter id
- * @returns quarter and index where it was located
+ * Finds a course with a given id in a planner
+ * @param planner a planner
+ * @param id course id
+ * @returns the course with the given id, or throws an error if not found
  */
-export function findQuarter(
-  quarters: Quarter[],
-  id: string,
-): { quarter: Quarter; idx: number } {
-  const quarter = quarters.find((q) => getQuarterId(q) == id);
-  const idx = quarters.findIndex((q) => getQuarterId(q) == id);
-  if (quarter === undefined) throw new Error(`invalid quarter id: ${id}`);
-  return { quarter, idx };
-}
-
-export function findCourseById(
-  courseState: PlannerData,
-  id: string,
-): StoredCourse {
-  const course = courseState.courses.find((c) => c.id === id);
+export function findCourseById(planner: PlannerData, id: string): StoredCourse {
+  const course = planner.courses.find((c) => c.id === id);
   if (course === undefined)
     throw new Error(
-      `course ${id} not found in ${JSON.stringify(courseState, null, 2)}`,
+      `course ${id} not found in ${JSON.stringify(planner, null, 2)}`,
     );
   return course;
 }
 
+/**
+ * Finds all StoredCourses in a quarter
+ * @param planner a planner
+ * @param quarter a quarter
+ * @returns a list of courses in the quarter
+ */
 export function findCoursesInQuarter(
-  courseState: PlannerData,
+  planner: PlannerData,
   quarter: Quarter,
 ): StoredCourse[] {
-  return quarter.courses.map((cid) => findCourseById(courseState, cid));
+  return quarter.courses.map((cid) => findCourseById(planner, cid));
 }
 
+/**
+ * Checks if a course is a custom course
+ * @param c a StoredCourse
+ * @returns true if the course is a custom course
+ */
 export function isCustomCourse(c: StoredCourse): boolean {
   const { departmentCode, number } = c;
   return departmentCode === "" || number === "";
 }
 
-export function getTitle({ title, departmentCode, number }: StoredCourse) {
-  return title !== undefined && title.length > 0
-    ? title
-    : `${departmentCode} ${number}`;
-}
-
-export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
+/**
+ * Initializes a StoredCourse from a stringified course
+ * @param stringifiedCourse a stringified course
+ * @returns a StoredCourse
+ */
+export function initalizeCourseFromStringifiedId(
+  stringifiedCourse: string,
+): Omit<StoredCourse, "id"> {
   try {
-    const course = JSON.parse(id);
+    const course = JSON.parse(stringifiedCourse);
     return {
       title: course.title,
       departmentCode: course.departmentCode,
@@ -194,27 +210,28 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
       labels: [],
     };
   } catch (e) {
-    throw new Error(`Invalid course id ${id}`);
+    throw new Error(`Invalid course id ${stringifiedCourse}`);
   }
 }
 
 /**
  * Finds the StoredCourse that matches an id
  * @param cid is the id of the course to find
- * @param courseState is the planner state
+ * @param planner is the planner state
  * @returns a StoredCourse or undefined
  */
-export function getCourseFromPlanner(cid: string, courseState: PlannerData) {
-  const found = courseState.courses.find((c) => c.id === cid);
+export function findCourseFromPlanner(cid: string, planner: PlannerData) {
+  const found = planner.courses.find((c) => c.id === cid);
   if (!found) throw new Error("couldn't find course with matching cid");
   return found;
 }
 
 /**
+ *
  * @param courses is a list of courses
  * @returns courses with duplicates removed
  */
-export function getUniqueCourses(courses: StoredCourse[]): StoredCourse[] {
+export function findUniqueCourses(courses: StoredCourse[]): StoredCourse[] {
   const uniqueCourses = new Map();
 
   for (const course of courses) {
@@ -232,8 +249,8 @@ export function getUniqueCourses(courses: StoredCourse[]): StoredCourse[] {
  * @param courses is a list of courses
  * @returns total number of credits not including repeated courses
  */
-export function getTotalCredits(courses: StoredCourse[]): number {
-  const uniqueCourses = getUniqueCourses(courses);
+export function findTotalCredits(courses: StoredCourse[]): number {
+  const uniqueCourses = findUniqueCourses(courses);
   return uniqueCourses.reduce((accumulatedCredits, course) => {
     return accumulatedCredits + course.credits;
   }, 0);
@@ -302,28 +319,11 @@ export function getGeSatisfied(planner: PlannerData): string[] {
 }
 
 /**
- * Extracts the term from a quarter ID
- * @param qid quarter Id of the format `quarter-{year}-{term}`
- * @returns term name
+ * Checks if a course is offered in a term
+ * @param quartersOffered is a list of quarters a course is offered in
+ * @param term a term to check if the course is offered in
+ * @returns true if the course is offered in the term, false otherwise
  */
-export function extractTermFromQuarter(
-  qid: string | undefined,
-): Term | undefined {
-  if (qid === undefined) return undefined;
-
-  const tokens = qid.split("-");
-  const term = tokens[tokens.length - 1];
-  if (
-    term !== "Fall" &&
-    term !== "Winter" &&
-    term !== "Spring" &&
-    term !== "Summer"
-  ) {
-    return undefined;
-  }
-  return term as Term;
-}
-
 export function isOffered(
   quartersOffered: string[],
   term: Term | undefined,
@@ -422,7 +422,9 @@ export function cloneDefaultPlanner(defaultPlanner: PlannerData): PlannerData {
  */
 export function toPlannerData(planner: any): PlannerData {
   // Set all the courses for each quarter
-  const newPlanner: PlannerData = JSON.parse(JSON.stringify(emptyPlanner()));
+  const newPlanner: PlannerData = JSON.parse(
+    JSON.stringify(initializeEmptyPlanner()),
+  );
   const allCourses: StoredCourse[] = [];
   planner?.quarters.forEach((q: any) => {
     const courseIds: string[] = q.courses.map((c: StoredCourse) => c.id);

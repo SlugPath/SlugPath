@@ -1,6 +1,8 @@
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
 
+export const DEFAULT_DAYS_TO_PERMISSION_EXPIRATION = 14;
+
 /**
  * Check if the user has permission to edit a program
  *
@@ -104,8 +106,6 @@ export function isProgramAlreadyAdded(
 }
 
 // Permissions Mutations
-
-const DEFAULT_DAYS_TO_PERMISSION_EXPIRATION = 14;
 
 /**
  * Immutable function to add a new program to the permissions

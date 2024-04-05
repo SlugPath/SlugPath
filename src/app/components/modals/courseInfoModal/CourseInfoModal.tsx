@@ -1,7 +1,7 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
-import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import { useCourse } from "@/app/hooks/reactQuery";
+import { isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { getCourse } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
@@ -54,17 +54,12 @@ export default function CourseInfoModal({
 
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
-  const { data, isLoading: loading } = useQuery({
-    queryKey: ["course", course?.departmentCode, course?.number],
-    queryFn: async () =>
-      await getCourse({
-        departmentCode: course!.departmentCode,
-        number: course!.number,
-      }),
-    enabled: course && !isCustomCourse(course),
-    staleTime: Infinity,
-  });
+  const { data, isLoading: loading } = useCourse(
+    course?.departmentCode,
+    course?.number,
+  );
 
+  // TODO: move to `reactQuery.ts`
   const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
     queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
     queryFn: async () => await getEnrollmentInfo(course!),
@@ -83,7 +78,7 @@ export default function CourseInfoModal({
     if (loading) return "";
     if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
     return truncateTitle(
-      `${c.departmentCode} ${c.number} ${getTitle(c)}`,
+      `${c.departmentCode} ${c.number} ${c.title}`,
       MAX_MODAL_TITLE,
     );
   }

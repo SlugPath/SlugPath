@@ -1,6 +1,6 @@
 import { useSuggestedCourses } from "@/app/hooks/reactQuery";
 import { REPLACE_CUSTOM_DROPPABLE } from "@/lib/consts";
-import { createCourseFromId } from "@/lib/plannerUtils";
+import { initalizeCourseFromStringifiedId } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import DraggableCourseCard from "@components/planner/quarters/courses/DraggableCourseCard";
 import Search from "@components/search/Search";
@@ -64,7 +64,7 @@ export default function ReplaceCustomModal({
     draggableId: string,
     destination: DraggableLocation,
   ) {
-    const course = createCourseFromId(draggableId);
+    const course = initalizeCourseFromStringifiedId(draggableId);
     if (destination.droppableId !== droppableId) {
       return;
     }

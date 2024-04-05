@@ -1,11 +1,11 @@
 import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
 import {
-  extractTermFromQuarter,
+  courseTitle,
   geLabels,
-  getDeptAndNumber,
   isCustomCourse,
   isOffered,
 } from "@/lib/plannerUtils";
+import { extractTermFromQuarterId } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
 import CloseIconButton from "@components/buttons/CloseIconButton";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
@@ -51,7 +51,7 @@ export default function CourseCard({
   function handleShowCourseInfoModal(course: StoredCourse) {
     const courseTerm = [
       course,
-      extractTermFromQuarter(quarterId),
+      extractTermFromQuarterId(quarterId),
     ] as CourseTerm;
     setDisplayCourse(courseTerm);
     onShowCourseInfoModal();
@@ -144,7 +144,7 @@ const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
         checkOffered &&
         !isOffered(
           course.quartersOffered,
-          extractTermFromQuarter(quarterId),
+          extractTermFromQuarterId(quarterId),
         ) && <WarningAmberRounded color="warning" />
       }
     >
@@ -155,7 +155,7 @@ const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
         onClick={() => onShowCourseInfoModal(course)}
       >
         {truncateTitle(
-          course ? getDeptAndNumber(course) : "No course",
+          course ? courseTitle(course) : "No course",
           MAX_VISIBLE_COURSE_TITLE,
         )}
       </Link>

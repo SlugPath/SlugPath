@@ -1,4 +1,4 @@
-import { EMPTY_PLANNER, initialPlanner } from "@/lib/plannerUtils";
+import { EMPTY_PLANNER_ID, initializeNewPlanner } from "@/lib/plannerUtils";
 import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -168,8 +168,8 @@ export function usePlanner(plannerId: string) {
   return useQuery({
     queryKey: ["getPlanner", plannerId],
     queryFn: async () => await getPlannerById(plannerId),
-    placeholderData: initialPlanner(),
-    enabled: !!plannerId && plannerId !== EMPTY_PLANNER,
+    placeholderData: initializeNewPlanner(),
+    enabled: !!plannerId && plannerId !== EMPTY_PLANNER_ID,
   });
 }
 
@@ -232,9 +232,9 @@ export function useUserDefaultPlanner(userId: string | undefined) {
     queryKey: ["userDefaultPlanner", defaultPlannerId],
     queryFn: async () => {
       const defaultPlanner = await getPlannerById(defaultPlannerId!);
-      return defaultPlanner ?? initialPlanner(); // QUESTION: is this correct?
+      return defaultPlanner ?? initializeNewPlanner(); // QUESTION: is this correct?
     },
-    placeholderData: initialPlanner(),
+    placeholderData: initializeNewPlanner(),
     enabled: !!defaultPlannerId && !!userId,
   });
 }
@@ -351,7 +351,10 @@ export function useUserRole(userId: string | undefined) {
  * @param departmentCode Department code of the course
  * @param courseNumber Course number
  */
-export function useCourse(departmentCode: string, courseNumber: string) {
+export function useCourse(
+  departmentCode: string | undefined,
+  courseNumber: string | undefined,
+) {
   return useQuery({
     queryKey: ["course", departmentCode, courseNumber],
     queryFn: async () => {
@@ -361,7 +364,11 @@ export function useCourse(departmentCode: string, courseNumber: string) {
       });
     },
     placeholderData: undefined,
-    enabled: departmentCode !== "" && courseNumber !== "",
+    enabled:
+      !!departmentCode &&
+      departmentCode !== "" &&
+      !!courseNumber &&
+      courseNumber !== "",
     staleTime: Infinity, // Course info is static
   });
 }

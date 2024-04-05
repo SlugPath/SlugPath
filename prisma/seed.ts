@@ -1,5 +1,5 @@
 import { majors, minors, years } from "@/lib/defaultPlanners";
-import { createQuarters, getRealEquivalent } from "@/lib/plannerUtils";
+import { getRealEquivalent, initializeQuarters } from "@/lib/plannerUtils";
 import { zip } from "@/lib/utils";
 import {
   Major,
@@ -113,7 +113,7 @@ async function main() {
 }
 
 function createNonePlannerForMajor(major: Major): PrismaPromise<any> {
-  const noneQuarters: any[] = createQuarters();
+  const noneQuarters: any[] = initializeQuarters();
   let idx = 0;
   for (const y of [1, 2, 3, 4]) {
     for (const t of [Term.Fall, Term.Winter, Term.Spring, Term.Summer]) {

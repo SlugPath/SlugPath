@@ -1,4 +1,4 @@
-import { getColor } from "@/lib/labels";
+import { lookupColor } from "@/lib/labels";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { Label } from "@customTypes/Label";
 import { Button, Card, CardContent, Chip, Typography } from "@mui/joy";
@@ -54,7 +54,7 @@ export default function LabelLegend() {
             }}
           >
             <Chip
-              style={getColor("green")}
+              style={lookupColor("green")}
               sx={{ paddingX: "0.5rem", marginX: "0.16rem" }}
             >
               <div>{"GE"}</div>

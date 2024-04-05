@@ -1,4 +1,4 @@
-import { clonePlanner, initialPlanner } from "@/lib/plannerUtils";
+import { clonePlanner, initializeNewPlanner } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import useActivePlannerStore, { MAX_PLANNERS } from "@/store/planners";
 import usePlannersStore from "@/store/planners";
@@ -68,7 +68,7 @@ export default function PlannerTabs() {
       return;
     }
 
-    addPlanner(initialPlanner());
+    addPlanner(initializeNewPlanner());
   };
 
   /**

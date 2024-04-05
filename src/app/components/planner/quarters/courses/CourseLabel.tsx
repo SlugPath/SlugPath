@@ -1,4 +1,4 @@
-import { getColor } from "@/lib/labels";
+import { lookupColor } from "@/lib/labels";
 import { Label } from "@customTypes/Label";
 import { Chip } from "@mui/joy";
 
@@ -19,7 +19,7 @@ export default function CourseLabel({
 
   return (
     <Chip
-      style={getColor(label.color ?? "grey")}
+      style={lookupColor(label.color ?? "grey")}
       sx={{
         paddingX: inMenu ? "1rem" : "0.5rem",
         marginX: "0.25rem",

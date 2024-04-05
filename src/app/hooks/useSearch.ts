@@ -1,4 +1,4 @@
-import { geOptions } from "@/lib/consts";
+import { GE_OPTIONS } from "@/lib/consts";
 import { getAllDepartments, getCoursesBy } from "@actions/course";
 import { SearchQueryDetails } from "@customTypes/Course";
 import useDebounce from "@hooks/useDebounce";
@@ -121,7 +121,7 @@ export default function useSearch() {
       departmentCode,
       number,
       ge,
-      geOptions,
+      geOptions: GE_OPTIONS,
       numberRange,
       creditRange,
     },

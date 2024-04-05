@@ -1,6 +1,10 @@
 import { Label } from "@/app/types/Label";
 import { v4 as uuid } from "uuid";
 
+/**
+ * Returns an array of labels with default values
+ * @returns an array of labels with default values
+ */
 export const initialLabels = (): Label[] => {
   return [
     {
@@ -46,7 +50,7 @@ export const initialLabels = (): Label[] => {
  * @param color is a string such as "red", "blue", "green", etc.
  * @returns a string that is the tailwindcss class for the color
  */
-export function getColor(color: string) {
+export function lookupColor(color: string) {
   switch (color.toLowerCase()) {
     case "red":
       return { backgroundColor: "#EF4444" };

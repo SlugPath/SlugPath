@@ -1,5 +1,5 @@
 import { Term } from "@/app/types/Quarter";
-import { customCourse } from "@/lib/plannerUtils";
+import { initializeCustomCourse } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import { StoredCourse } from "@customTypes/Course";
 import { InfoOutlined } from "@mui/icons-material";
@@ -41,7 +41,7 @@ export default function CustomCourseModal({
   defaultCourse,
 }: CustomCourseModalProps) {
   const [course, setCustomCourse] = useState<StoredCourse>(
-    defaultCourse ? { ...defaultCourse } : customCourse(),
+    defaultCourse ? { ...defaultCourse } : initializeCustomCourse(),
   );
 
   const setQuarters = (newQuarter: string, offered: boolean) => {
@@ -121,7 +121,7 @@ export default function CustomCourseModal({
     onSave(course);
 
     // Reset custom course and quarters
-    setCustomCourse(customCourse());
+    setCustomCourse(initializeCustomCourse());
   };
 
   return (

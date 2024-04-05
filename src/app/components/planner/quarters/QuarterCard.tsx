@@ -1,4 +1,4 @@
-import { getTotalCredits } from "@/lib/plannerUtils";
+import { findTotalCredits } from "@/lib/plannerUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { Card, Chip } from "@mui/joy";
@@ -14,7 +14,7 @@ export default function QuarterCard({
   id: string;
   courses: StoredCourse[];
 }) {
-  const totalCredits = getTotalCredits(courses);
+  const totalCredits = findTotalCredits(courses);
 
   return (
     <Card size="md" className="min-w-[130px] w-full" variant="plain">

@@ -1,11 +1,10 @@
 import { CUSTOM_DROPPABLE, SEARCH_DROPPABLE } from "@/lib/consts";
 import {
-  createCourseFromId,
-  findQuarter,
-  getCourseFromPlanner,
+  findCourseFromPlanner,
+  initalizeCourseFromStringifiedId,
   isCustomCourse,
 } from "@/lib/plannerUtils";
-import { getQuarterId } from "@/lib/quarterUtils";
+import { constructQuarterId, findQuarter } from "@/lib/quarterUtils";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
@@ -87,7 +86,7 @@ export default function useHandleCourseDrag({
     const newStoredCourses = Array.from(quarter.courses);
     const cid = uuidv4();
     newStoredCourses.splice(destination.index, 0, cid);
-    const course = createCourseFromId(draggableId);
+    const course = initalizeCourseFromStringifiedId(draggableId);
 
     // Don't add the same course twice to a particular quarter
     if (isCourseInQuarter(quarter, { id: cid, ...course })) return;
@@ -123,7 +122,9 @@ export default function useHandleCourseDrag({
     );
 
     function isSameQuarter(startQuarter: Quarter, finishQuarter: Quarter) {
-      return getQuarterId(startQuarter) === getQuarterId(finishQuarter);
+      return (
+        constructQuarterId(startQuarter) === constructQuarterId(finishQuarter)
+      );
     }
 
     if (isSameQuarter(startQuarter, finishQuarter)) {
@@ -175,7 +176,7 @@ export default function useHandleCourseDrag({
     // Ignore custom courses
     if (isCustomCourse(course)) return false;
     const _courses = quarter.courses.map((cid) =>
-      getCourseFromPlanner(cid, courseState),
+      findCourseFromPlanner(cid, courseState),
     );
     const exists = _courses.find(
       (c) =>
@@ -198,7 +199,7 @@ export default function useHandleCourseDrag({
     if (
       isCourseInQuarter(
         finishQuarter,
-        getCourseFromPlanner(movedCid, courseState),
+        findCourseFromPlanner(movedCid, courseState),
       )
     )
       return;

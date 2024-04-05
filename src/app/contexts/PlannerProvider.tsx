@@ -1,10 +1,10 @@
+import { initializeCustomCourse } from "@/lib/plannerUtils";
 import { CustomCourseInput, StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
 import { DropResult } from "@hello-pangea/dnd";
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
-import useCustomCourseSelection from "../hooks/useCustomCourseSelection";
 import useHandleCourseDrag from "../hooks/useHandleCourseDrag";
 import usePlanner from "../hooks/usePlanner";
 
@@ -65,8 +65,31 @@ export function PlannerProvider({
     setPlanner,
   });
 
-  const { customCourses, handleAddCustom, handleRemoveCustom } =
-    useCustomCourseSelection();
+  const [customCourses, setCustomCourses] = useState<StoredCourse[]>([]);
+
+  const handleAddCustom = ({
+    title,
+    description,
+    credits,
+    quartersOffered,
+  }: CustomCourseInput) => {
+    setCustomCourses((prev) => {
+      const newCourse: StoredCourse = {
+        ...initializeCustomCourse(),
+        title,
+        description,
+        credits,
+        quartersOffered,
+      };
+      return [newCourse, ...prev];
+    });
+  };
+
+  const handleRemoveCustom = (idx: number) => {
+    setCustomCourses((prev) => {
+      return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+    });
+  };
 
   const { handleDragEnd } = useHandleCourseDrag({
     courseState: courseState!,

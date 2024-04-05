@@ -1,6 +1,6 @@
 "use server";
 
-import { terms } from "@/lib/consts";
+import { TERMS } from "@/lib/consts";
 import { z } from "zod";
 
 import { StoredCourse } from "../types/Course";
@@ -59,7 +59,7 @@ function cmpOfferings(a: ClassOffering, b: ClassOffering) {
 // in past quarters and upcoming quarters.
 export async function getEnrollmentInfo(course: CourseEnrollQuery) {
   const pastOfferings = await Promise.all(
-    terms.map(({ id }) =>
+    TERMS.map(({ id }) =>
       fetch(createEnrollmentInfoURL(id, course)).then((res) => res.json()),
     ),
   ).then((offers) => {
@@ -134,7 +134,7 @@ function getCurrentQuarter() {
     catalogYear = `${currentYear - 1}-${currentYear}`;
   }
 
-  const currentQuarter = terms.find(
+  const currentQuarter = TERMS.find(
     (t) => t.title === term && t.catalogYear === catalogYear,
   );
   if (!currentQuarter) throw new Error("unable to get current quarter");
@@ -143,11 +143,11 @@ function getCurrentQuarter() {
 
 function getFutureQuarters() {
   const { id: currentId } = getCurrentQuarter();
-  return terms.filter((t) => t.id >= currentId);
+  return TERMS.filter((t) => t.id >= currentId);
 }
 
 function getTermById(id: string) {
-  const term = terms.find((t) => `${t.id}` === id);
+  const term = TERMS.find((t) => `${t.id}` === id);
   if (!term) throw new Error(`couldn't find term by id ${id}`);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id: _, ...rest } = term;

@@ -1,4 +1,4 @@
-import { getQuarterColor } from "@/lib/quarterUtils";
+import { lookupQuarterColor } from "@/lib/quarterUtils";
 import { getMoreEnrollmentInfo } from "@actions/enrollment";
 import { StoredCourse } from "@customTypes/Course";
 import { Groups, LocationOn, People, Person } from "@mui/icons-material";
@@ -39,7 +39,7 @@ export default function MoreEnrollInfo({ course }: MoreEnrollInfoProps) {
           {data?.map((off, i) => (
             <Accordion key={i}>
               <AccordionSummary>
-                <Chip color={getQuarterColor(off.term.title)}>
+                <Chip color={lookupQuarterColor(off.term.title)}>
                   {off.term.title} {off.term.catalogYear} Section{" "}
                   {off.class_section}
                 </Chip>

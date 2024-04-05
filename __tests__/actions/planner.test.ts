@@ -1,5 +1,5 @@
 import { PlannerData } from "@/app/types/Planner";
-import { initialPlanner } from "@/lib/plannerUtils";
+import { initializeNewPlanner } from "@/lib/plannerUtils";
 import prisma from "@/lib/prisma";
 import {
   getPlannerById,
@@ -98,15 +98,15 @@ describe("Planner actions", () => {
 
   it("should create 1 empty planner for 1 user", async () => {
     expect(await getUserPlanners(user!.id)).toHaveLength(0);
-    const id = await createPlanner(initialPlanner(), user!);
+    const id = await createPlanner(initializeNewPlanner(), user!);
     expect(await getPlannerById(id)).toBeDefined();
   }, 7000);
 
   it("should update 1 planner for 1 user", async () => {
     expect(await getUserPlanners(user!.id)).toHaveLength(0);
 
-    const plannerId = await createPlanner(initialPlanner(), user!);
-    const plannerData = initialPlanner();
+    const plannerId = await createPlanner(initializeNewPlanner(), user!);
+    const plannerData = initializeNewPlanner();
     const plannerCourses = cseCourses();
 
     plannerData.id = plannerId;
@@ -146,7 +146,7 @@ describe("Planner actions", () => {
   });
 
   it("should throw an error if course id not found", async () => {
-    const plannerData = initialPlanner();
+    const plannerData = initializeNewPlanner();
     const plannerCourses = cseCourses();
 
     plannerData.id = uuidv4();
@@ -167,7 +167,7 @@ describe("Planner actions", () => {
     const planners = await getUserPlanners(user!.id);
     expect(planners).toHaveLength(0);
 
-    const plannerData = initialPlanner();
+    const plannerData = initializeNewPlanner();
     const plannerCourses = cseCourses();
     plannerData.labels[0].name = "Elective";
     plannerData.labels[1].name = "Capstone";

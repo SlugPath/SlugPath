@@ -1,9 +1,9 @@
 import {
-  findQuarter,
+  findTotalCredits,
   getGeSatisfied,
-  getTotalCredits,
   isCustomCourse,
 } from "@/lib/plannerUtils";
+import { findQuarter } from "@/lib/quarterUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
@@ -36,7 +36,7 @@ export default function usePlanner({ planner, setPlanner }: PlannerInput) {
   //   : initialPlanner();
 
   const totalCredits = useMemo(
-    () => getTotalCredits(planner.courses),
+    () => findTotalCredits(planner.courses),
     [planner],
   );
 

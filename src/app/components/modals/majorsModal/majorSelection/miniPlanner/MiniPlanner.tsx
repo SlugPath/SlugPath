@@ -1,5 +1,5 @@
 import { usePlanner } from "@/app/hooks/reactQuery";
-import { EMPTY_PLANNER } from "@/lib/plannerUtils";
+import { EMPTY_PLANNER_ID } from "@/lib/plannerUtils";
 
 import MiniQuarters from "./MiniQuarters";
 
@@ -12,7 +12,7 @@ export default function MiniPlanner({
 }) {
   const { data: courseState, isLoading: loading } = usePlanner(plannerId);
 
-  if (!active || plannerId === EMPTY_PLANNER || loading) {
+  if (!active || plannerId === EMPTY_PLANNER_ID || loading) {
     return <></>;
   }
 

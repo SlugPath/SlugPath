@@ -1,5 +1,5 @@
 import { REQUIREMENT_LIST_DROPPABLE_PREFIX } from "@/lib/consts";
-import { createCourseFromId } from "@/lib/plannerUtils";
+import { initalizeCourseFromStringifiedId } from "@/lib/plannerUtils";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { DraggableLocation } from "@hello-pangea/dnd";
 import { useContext } from "react";
@@ -53,7 +53,7 @@ export default function useHandleRequirementListDrag() {
     const len = REQUIREMENT_LIST_DROPPABLE_PREFIX.length;
     const id = droppableId.slice(len);
     const course: StoredCourse = {
-      ...createCourseFromId(draggableId),
+      ...initalizeCourseFromStringifiedId(draggableId),
       id: uuidv4(),
     };
     const requirementList = findRequirementList(id, programRequirements);

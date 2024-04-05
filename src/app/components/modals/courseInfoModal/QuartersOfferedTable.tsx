@@ -1,4 +1,4 @@
-import { getQuarterColor } from "@/lib/quarterUtils";
+import { lookupQuarterColor } from "@/lib/quarterUtils";
 import { Chip, Sheet, Tab, TabList, TabPanel, Table, Tabs } from "@mui/joy";
 
 export default function QuartersOfferedTable({
@@ -107,7 +107,7 @@ export default function QuartersOfferedTable({
                             (professor, index) => (
                               <Chip
                                 key={index}
-                                color={getQuarterColor(
+                                color={lookupQuarterColor(
                                   quarter as
                                     | "Fall"
                                     | "Winter"

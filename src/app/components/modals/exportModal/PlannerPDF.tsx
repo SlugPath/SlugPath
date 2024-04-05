@@ -1,6 +1,6 @@
-import { getDeptAndNumber, getTitle, isCustomCourse } from "@/lib/plannerUtils";
-import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
-import { getQuarterId } from "@/lib/quarterUtils";
+import { courseTitle, isCustomCourse } from "@/lib/plannerUtils";
+import { QUARTERS_PER_YEAR, findCoursesInQuarter } from "@/lib/plannerUtils";
+import { constructQuarterId } from "@/lib/quarterUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
@@ -38,16 +38,18 @@ export default function PlannerPDF({ planner }: { planner: PlannerData }) {
 function Years({ planner }: { planner: PlannerData }) {
   return (
     <View>
-      {Array.from({ length: quartersPerYear }, (_, index) => index).map((i) => {
-        const slice_val = quartersPerYear * i;
-        const quarters = planner.quarters.slice(
-          slice_val,
-          slice_val + quartersPerYear,
-        );
-        return (
-          <PDFQuarters key={i} quarters={quarters} courseState={planner} />
-        );
-      })}
+      {Array.from({ length: QUARTERS_PER_YEAR }, (_, index) => index).map(
+        (i) => {
+          const slice_val = QUARTERS_PER_YEAR * i;
+          const quarters = planner.quarters.slice(
+            slice_val,
+            slice_val + QUARTERS_PER_YEAR,
+          );
+          return (
+            <PDFQuarters key={i} quarters={quarters} courseState={planner} />
+          );
+        },
+      )}
     </View>
   );
 }
@@ -64,7 +66,11 @@ function PDFQuarters({
       {quarters.map((q) => {
         const courses = findCoursesInQuarter(courseState, q);
         return (
-          <PDFQuarter key={getQuarterId(q)} quarter={q} courses={courses} />
+          <PDFQuarter
+            key={constructQuarterId(q)}
+            quarter={q}
+            courses={courses}
+          />
         );
       })}
     </View>
@@ -86,9 +92,7 @@ function PDFQuarter({
           return (
             <View key={idx} style={styles.course}>
               <Text>
-                {isCustomCourse(course)
-                  ? getTitle(course)
-                  : getDeptAndNumber(course)}
+                {isCustomCourse(course) ? course.title : courseTitle(course)}
               </Text>
             </View>
           );
