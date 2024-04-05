@@ -1,5 +1,5 @@
+import { ModalProps } from "@/app/types/Modal";
 import { APP_URL } from "@/config";
-import useModalStore from "@/store/modal";
 import useActivePlannerStore from "@/store/planners";
 import { LibraryAddCheck } from "@mui/icons-material";
 import ContentCopy from "@mui/icons-material/ContentCopy";
@@ -15,10 +15,7 @@ import {
 import { useState } from "react";
 
 // Create styles
-export default function ShareModal() {
-  const setShowShareModal = useModalStore((state) => state.setShowShareModal);
-  const showShareModal = useModalStore((state) => state.showShareModal);
-
+export default function ShareModal({ showModal, setShowModal }: ModalProps) {
   const activePlannerId = useActivePlannerStore(
     (state) => state.activePlannerId,
   );
@@ -55,8 +52,8 @@ export default function ShareModal() {
         </>
       </Snackbar>
       <Modal
-        open={showShareModal}
-        onClose={() => setShowShareModal(false)}
+        open={showModal}
+        onClose={() => setShowModal(false)}
         sx={{
           display: "flex",
           justifyContent: "center",

@@ -1,5 +1,4 @@
 import { usePlanners } from "@/app/hooks/reactQuery";
-import useModalStore from "@/store/modal";
 import useActivePlannerStore from "@/store/planners";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { useSession } from "next-auth/react";
@@ -10,7 +9,13 @@ import ExportSkeleton from "./ExportSkeleton";
 const PlannerPDF = lazy(() => import("./PlannerPDF"));
 
 // Create styles
-export default function ExportModal() {
+export default function ExportModal({
+  showModal,
+  setShowModal,
+}: {
+  showModal: boolean;
+  setShowModal: (show: boolean) => void;
+}) {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
@@ -23,13 +28,10 @@ export default function ExportModal() {
     (planner) => planner.id === activePlannerId,
   );
 
-  const setShowExportModal = useModalStore((state) => state.setShowExportModal);
-  const showExportModal = useModalStore((state) => state.showExportModal);
-
   return (
     <Modal
-      open={showExportModal}
-      onClose={() => setShowExportModal(false)}
+      open={showModal}
+      onClose={() => setShowModal(false)}
       sx={{
         display: "flex",
         justifyContent: "center",

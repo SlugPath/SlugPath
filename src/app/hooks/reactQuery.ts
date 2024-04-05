@@ -257,16 +257,6 @@ export function useUserProgramDefaultPlanners(
         program: program!,
       });
 
-      // OLD NOTE: set defaultPlannerId to the first default planner id of the
-      // newly selected primary major if it hasn't been already (old code below)
-
-      // const ids = planners.map((p) => p.id);
-      // if (defaultPlannerId && !ids.includes(defaultPlannerId))
-      // queryClient.setQueryData(
-      //   ["userDefaultPlannerId", userId],
-      //   planners[0]?.id,
-      // );
-      // }
       return planners;
     },
     enabled: !!userId && !!program,

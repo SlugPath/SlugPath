@@ -2,7 +2,6 @@ import { findCoursesInQuarter, quartersPerYear } from "@/lib/plannerUtils";
 import { getQuarterId } from "@/lib/quarterUtils";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
-import { ModalsContext } from "@contexts/ModalsProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
 import { DragDropContext } from "@hello-pangea/dnd";
@@ -26,7 +25,6 @@ import { useContext, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";
@@ -66,10 +64,10 @@ export default function Planner({ isActive }: { isActive: boolean }) {
           <CourseInfoProvider>
             {/* TODO: Fix Modals: pass needed props? Relocate to remove context state */}
             <CourseInfoModal />
-            <ReplaceRequirementsModal />
+
             <div className="flex justify-between space-x-4 w-full min-h-0">
               <div className="flex flex-col min-h-0 flex-initial">
-                <SearchContainer />
+                <Search displayCustomCourseSelection />;
               </div>
               <div className="overflow-auto w-full flex-grow max-h-full">
                 <AccordionGroup>
@@ -147,23 +145,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
       </div>
     </>
   );
-}
-
-// SearchContainer is used to hide the main Search component when another modal that uses the Search component is open,
-// such as the CourseInfoModal or MajorProgressModal.
-function SearchContainer() {
-  const { showMajorsModal } = useContext(ModalsContext);
-
-  // Don't show the virtualized search menu if the majorProgressModal is open
-  if (showMajorsModal)
-    return (
-      <div className="flex flex-col gap-2 w-80 h-full">
-        <Card className="h-20" />
-        <Card className="h-full flex-1" />
-      </div>
-    );
-
-  return <Search displayCustomCourseSelection />;
 }
 
 function GraduationProgressCard({

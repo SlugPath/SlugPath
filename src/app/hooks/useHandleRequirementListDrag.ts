@@ -5,8 +5,8 @@ import { DraggableLocation } from "@hello-pangea/dnd";
 import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { ModalsContext } from "../contexts/ModalsProvider";
 import { StoredCourse } from "../types/Course";
+import { Program } from "../types/Program";
 import { RequirementList } from "../types/Requirements";
 
 export default function useHandleRequirementListDrag() {
@@ -15,10 +15,15 @@ export default function useHandleRequirementListDrag() {
     findRequirementList,
     updateRequirementList,
   } = useContext(MajorVerificationContext);
-  const { majorToEdit } = useContext(ModalsContext);
-  const majorRequirements =
-    majorToEdit !== undefined
-      ? getRequirementsForMajor(majorToEdit!.id)
+
+  // TODO: pass majorToEdit as a parameter
+  // This is a placeholder for the major that is being edited, used to be
+  // retrieved from the modalContext, currently has no way to be passed in
+  const programToEdit = undefined as undefined | Program;
+
+  const programRequirements =
+    programToEdit !== undefined
+      ? getRequirementsForMajor(programToEdit!.id)
       : undefined;
 
   function draggedToRequirementList(droppableId: string) {
@@ -43,7 +48,7 @@ export default function useHandleRequirementListDrag() {
       });
     }
 
-    if (majorRequirements === undefined) return;
+    if (programRequirements === undefined) return;
 
     const len = REQUIREMENT_LIST_DROPPABLE_PREFIX.length;
     const id = droppableId.slice(len);
@@ -51,14 +56,14 @@ export default function useHandleRequirementListDrag() {
       ...createCourseFromId(draggableId),
       id: uuidv4(),
     };
-    const requirementList = findRequirementList(id, majorRequirements);
+    const requirementList = findRequirementList(id, programRequirements);
     const index = destination.index;
 
     if (requirementList) {
       if (requirementListHasCourse(requirementList, course)) return;
 
       requirementList.requirements.splice(index, 0, course);
-      updateRequirementList(majorToEdit!.id, id, requirementList);
+      updateRequirementList(programToEdit!.id, id, requirementList);
     }
   }
 
@@ -66,18 +71,18 @@ export default function useHandleRequirementListDrag() {
     source: DraggableLocation,
     destination: DraggableLocation,
   ) {
-    if (majorRequirements === undefined) return;
+    if (programRequirements === undefined) return;
 
     const len = REQUIREMENT_LIST_DROPPABLE_PREFIX.length;
     const sourceId = source.droppableId.slice(len);
     const destinationId = destination.droppableId.slice(len);
     const sourceRequirementList = findRequirementList(
       sourceId,
-      majorRequirements,
+      programRequirements,
     );
     const destinationRequirementList = findRequirementList(
       destinationId,
-      majorRequirements,
+      programRequirements,
     );
 
     function isSameRequirementList(sourceId: string, destinationId: string) {
@@ -89,7 +94,7 @@ export default function useHandleRequirementListDrag() {
       source: DraggableLocation,
       destination: DraggableLocation,
     ) {
-      if (majorToEdit === undefined) return;
+      if (programToEdit === undefined) return;
 
       const newRequirements = Array.from(requirementList.requirements);
       newRequirements.splice(source.index, 1);
@@ -102,7 +107,7 @@ export default function useHandleRequirementListDrag() {
         ...requirementList,
         requirements: newRequirements,
       };
-      updateRequirementList(majorToEdit.id, sourceId, newRequirementList);
+      updateRequirementList(programToEdit.id, sourceId, newRequirementList);
     }
 
     function moveCourseToNewRequirementList(
@@ -111,7 +116,7 @@ export default function useHandleRequirementListDrag() {
       source: DraggableLocation,
       destination: DraggableLocation,
     ) {
-      if (majorToEdit === undefined) return;
+      if (programToEdit === undefined) return;
 
       const newSourceRequirements = Array.from(
         sourceRequirementList.requirements,
@@ -133,9 +138,13 @@ export default function useHandleRequirementListDrag() {
         ...destinationRequirementList,
         requirements: newDestinationRequirements,
       };
-      updateRequirementList(majorToEdit.id, sourceId, newSourceRequirementList);
       updateRequirementList(
-        majorToEdit.id,
+        programToEdit.id,
+        sourceId,
+        newSourceRequirementList,
+      );
+      updateRequirementList(
+        programToEdit.id,
         destinationId,
         newDestinationRequirementList,
       );

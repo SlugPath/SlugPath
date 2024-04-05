@@ -1,4 +1,3 @@
-import useModalStore from "@/store/modal";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForever from "@mui/icons-material/DeleteForever";
@@ -13,6 +12,9 @@ import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
 import React, { useCallback, useEffect, useState } from "react";
+
+import ExportModal from "../modals/exportModal/ExportModal";
+import ShareModal from "../modals/shareModal/ShareModal";
 
 interface PlannerDropDownProps {
   id: string;
@@ -36,8 +38,8 @@ export default function PlannerDropDown({
   const [open, setOpen] = useState(false);
 
   // QUESTION: show modals needed?
-  const setShowExportModal = useModalStore((state) => state.setShowExportModal);
-  const setShowShareModal = useModalStore((state) => state.setShowShareModal);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   const handleOpenChange = useCallback(
     (_: React.SyntheticEvent | null, isOpen: boolean) => {
@@ -56,75 +58,83 @@ export default function PlannerDropDown({
   }, [onRightClick]);
 
   return (
-    <Dropdown open={open} onOpenChange={handleOpenChange}>
-      <MenuButton
-        slots={{ root: ArrowDropDownIcon }}
-        slotProps={{ root: { variant: "plain", color: "neutral" } }}
-        sx={{
-          "&:focus": {
-            backgroundColor: "transparent",
-            outline: "none",
-          },
-          borderRadius: "50%",
-        }}
-      >
-        <MoreVert />
-      </MenuButton>
-      <Menu placement="bottom-end">
-        <MenuItem onClick={onRenameButtonClick}>
-          <ListItemDecorator>
-            <DriveFileRenameOutlineIcon />
-          </ListItemDecorator>{" "}
-          Rename
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => {
-            // Stop the event from bubbling up to the parent to prevent the tab changing
-            // back to the original tab after the duplicate button is clicked
-            e.stopPropagation();
-            onDuplicateButtonClick();
+    <>
+      <ShareModal showModal={showShareModal} setShowModal={setShowShareModal} />
+      <ExportModal
+        showModal={showExportModal}
+        setShowModal={setShowExportModal}
+      />
+
+      <Dropdown open={open} onOpenChange={handleOpenChange}>
+        <MenuButton
+          slots={{ root: ArrowDropDownIcon }}
+          slotProps={{ root: { variant: "plain", color: "neutral" } }}
+          sx={{
+            "&:focus": {
+              backgroundColor: "transparent",
+              outline: "none",
+            },
+            borderRadius: "50%",
           }}
         >
-          <ListItemDecorator>
-            <ContentCopyIcon />
-          </ListItemDecorator>{" "}
-          Duplicate
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowExportModal(true);
-          }}
-        >
-          <ListItemDecorator>
-            <DownloadIcon />
-          </ListItemDecorator>{" "}
-          Download
-        </MenuItem>
-        {/* FIXME: Need to add the share planner functionality to the dropdown */}
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowShareModal(true);
-          }}
-        >
-          <ListItemDecorator>
-            <IosShareIcon />
-          </ListItemDecorator>{" "}
-          Share
-        </MenuItem>
-        <ListDivider />
-        <MenuItem
-          variant="soft"
-          color="danger"
-          onClick={() => onDeleteButtonClick(id, title)}
-        >
-          <ListItemDecorator sx={{ color: "inherit" }}>
-            <DeleteForever />
-          </ListItemDecorator>{" "}
-          Delete
-        </MenuItem>
-      </Menu>
-    </Dropdown>
+          <MoreVert />
+        </MenuButton>
+        <Menu placement="bottom-end">
+          <MenuItem onClick={onRenameButtonClick}>
+            <ListItemDecorator>
+              <DriveFileRenameOutlineIcon />
+            </ListItemDecorator>{" "}
+            Rename
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              // Stop the event from bubbling up to the parent to prevent the tab changing
+              // back to the original tab after the duplicate button is clicked
+              e.stopPropagation();
+              onDuplicateButtonClick();
+            }}
+          >
+            <ListItemDecorator>
+              <ContentCopyIcon />
+            </ListItemDecorator>{" "}
+            Duplicate
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowExportModal(true);
+            }}
+          >
+            <ListItemDecorator>
+              <DownloadIcon />
+            </ListItemDecorator>{" "}
+            Download
+          </MenuItem>
+          {/* FIXME: Need to add the share planner functionality to the dropdown */}
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowShareModal(true);
+            }}
+          >
+            <ListItemDecorator>
+              <IosShareIcon />
+            </ListItemDecorator>{" "}
+            Share
+          </MenuItem>
+          <ListDivider />
+          <MenuItem
+            variant="soft"
+            color="danger"
+            onClick={() => onDeleteButtonClick(id, title)}
+          >
+            <ListItemDecorator sx={{ color: "inherit" }}>
+              <DeleteForever />
+            </ListItemDecorator>{" "}
+            Delete
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+    </>
   );
 }

@@ -11,9 +11,11 @@ import PermissionsModal from "../permissionsModal/PermissionsModal";
 export default function PlannerActions() {
   const { data: session, status } = useSession();
 
+  // Modal state
   const [showMajorsModal, setShowMajorsModal] = useState(false);
   const [showPermissionsModal, setShowPermissionsModal] = useState(false);
 
+  // Fetch user role
   const { data: userRole } = useUserRole(session?.user.id);
   const isAdmin = userRole === "ADMIN";
 

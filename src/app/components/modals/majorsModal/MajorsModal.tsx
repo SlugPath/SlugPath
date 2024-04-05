@@ -18,7 +18,6 @@ export default function MajorsModal({ showModal, setShowModal }: ModalProps) {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
-  // TODO: Eliminate the need Zustand, use props instead
   const [showMajorRequirementsEditModal, setShowMajorRequirementsEditModal] =
     useState(false);
 

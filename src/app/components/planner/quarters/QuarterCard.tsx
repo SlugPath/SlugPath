@@ -1,9 +1,7 @@
 import { getTotalCredits } from "@/lib/plannerUtils";
-import { ModalsContext } from "@contexts/ModalsProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
 import { Card, Chip } from "@mui/joy";
-import { useContext } from "react";
 
 import DraggableCourseCard from "./courses/DraggableCourseCard";
 
@@ -17,7 +15,6 @@ export default function QuarterCard({
   courses: StoredCourse[];
 }) {
   const totalCredits = getTotalCredits(courses);
-  const { showMajorsModal } = useContext(ModalsContext);
 
   return (
     <Card size="md" className="min-w-[130px] w-full" variant="plain">
@@ -27,8 +24,7 @@ export default function QuarterCard({
           {totalCredits} Credits
         </Chip>
       </div>
-      {/* disable quarterCard droppable when majorProgressModal droppable may be active, prevents dnd issues */}
-      <Droppable droppableId={id} isDropDisabled={showMajorsModal}>
+      <Droppable droppableId={id}>
         {(provided) => {
           return (
             <div
