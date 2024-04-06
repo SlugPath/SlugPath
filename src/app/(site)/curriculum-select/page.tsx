@@ -3,7 +3,6 @@
 import ContinueButton from "@/app/components/buttons/ContinueButton";
 import {
   Carousel,
-  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -30,8 +29,7 @@ export default function CurriculumSelect() {
   const userId = session?.user.id;
   const router = useRouter();
 
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
+  const [selectedPlanner, setSelectedPlanner] = useState<number | null>(null);
 
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
@@ -64,28 +62,16 @@ export default function CurriculumSelect() {
     }
   }, [userPrograms, selectedProgram]);
 
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCurrent(api.selectedScrollSnap());
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-
   function handleUpdatePlannersSuccess() {
     router.push("/planner");
   }
 
   function handleClickUseTemplate() {
-    if (!_defaultPlanners || !planners) {
+    if (!_defaultPlanners || !planners || selectedPlanner == null) {
       return;
     }
 
-    const defaultPlanner = _defaultPlanners[current];
+    const defaultPlanner = _defaultPlanners[selectedPlanner];
 
     addNewPlannerMutation({
       userId,
@@ -137,12 +123,16 @@ export default function CurriculumSelect() {
         <CurriculumSelectCarousel
           key={selectedProgram.id}
           program={selectedProgram}
-          setApi={setApi}
+          setSelectedPlanner={setSelectedPlanner}
+          selectedPlanner={selectedPlanner}
         />
       )}
 
       <div className="max-w-lg w-full">
-        <ContinueButton onClick={() => handleClickUseTemplate()}>
+        <ContinueButton
+          onClick={() => handleClickUseTemplate()}
+          disabled={selectedPlanner == null}
+        >
           Use this template
         </ContinueButton>
       </div>
@@ -152,10 +142,12 @@ export default function CurriculumSelect() {
 
 function CurriculumSelectCarousel({
   program,
-  setApi,
+  setSelectedPlanner,
+  selectedPlanner,
 }: {
   program: Program;
-  setApi: (api: CarouselApi) => void;
+  setSelectedPlanner: (index: number) => void;
+  selectedPlanner: number | null;
 }) {
   const [selectedPlannerTitle, setSelectedPlannerTitle] =
     useState<PlannerTitle>();
@@ -201,11 +193,15 @@ function CurriculumSelectCarousel({
   }
 
   return (
-    <Carousel className="flex w-1/2 p-5" setApi={setApi}>
-      <CarouselContent>
+    <Carousel className="flex w-5/6 p-5">
+      <CarouselContent className="w-2/4">
         {defaultPlanners!.map((planner, index) => (
           <CarouselItem key={index} className="flex items-start justify-start">
-            <MiniPlanner plannerState={planner} />
+            <MiniPlanner
+              plannerState={planner}
+              onSelected={() => setSelectedPlanner(index)}
+              selected={index == selectedPlanner}
+            />
           </CarouselItem>
         ))}
       </CarouselContent>
