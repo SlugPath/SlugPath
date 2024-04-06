@@ -121,9 +121,6 @@ export async function removePermission({
  * @returns List of all permissions
  */
 export async function getPermissions(): Promise<Permission[]> {
-  // wait 1 second
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   const usersPermissions = await prisma.permission.findMany({
     select: {
       userEmail: true,

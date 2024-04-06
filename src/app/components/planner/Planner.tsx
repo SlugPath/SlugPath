@@ -137,7 +137,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <LabelLegend />
             </div>
           </div>
-          <Modals />
+          <CourseInfoModal />
         </CourseInfoProvider>
       </DragDropContext>
     </div>
@@ -198,14 +198,6 @@ function GraduationProgressCard({
         <GEProgress ge={geSatisfied} courseState={courseState} />
       </div>
     </Card>
-  );
-}
-
-function Modals() {
-  return (
-    <>
-      <CourseInfoModal />
-    </>
   );
 }
 

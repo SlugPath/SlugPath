@@ -42,7 +42,7 @@ export default function EditRequirements() {
 function Container() {
   const { activePlanner } = useContext(PlannersContext);
 
-  if (activePlanner === undefined) return <div></div>;
+  if (activePlanner === undefined) return <></>;
 
   return (
     <PlannerProvider plannerId={activePlanner} title={""} order={0}>
@@ -87,18 +87,6 @@ function Component() {
   const loadingSave = major !== undefined ? getLoadingSave(major.id) : false;
   const isSaved = major !== undefined ? getIsSaved(major.id) : false;
 
-  function Title() {
-    return (
-      <div className="flex flex-col space-y-2">
-        <div className="flex flex-row justify-between">
-          <Typography level="h4">
-            Editing {major?.name} {major?.catalogYear}
-          </Typography>
-        </div>
-      </div>
-    );
-  }
-
   function handleSave() {
     onSaveMajorRequirements(major!.id);
   }
@@ -108,7 +96,9 @@ function Component() {
       <CourseInfoProvider>
         <div className="flex flex-row p-4 pb-0 justify-between">
           <div className="flex flex-row">
-            <Title />
+            <Typography level="h4">
+              Editing {major?.name} {major?.catalogYear}
+            </Typography>
             <Button
               variant="plain"
               onClick={() => {

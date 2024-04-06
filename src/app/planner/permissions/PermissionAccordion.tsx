@@ -1,3 +1,6 @@
+import CloseIconButton from "@/app/components/buttons/CloseIconButton";
+import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
+import StyledAccordion from "@/app/components/planner/StyledAccordion";
 import {
   useDeleteUserPermissionMutation,
   usePermissions,
@@ -37,10 +40,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { useSession } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
-
-import CloseIconButton from "../../components/buttons/CloseIconButton";
-import ConfirmAlert from "../../components/modals/ConfirmAlert";
-import StyledAccordion from "../../components/planner/StyledAccordion";
 
 const materialTheme = extendMaterialTheme();
 

@@ -26,16 +26,16 @@ export default function Majors() {
   return (
     <PlannersProvider>
       <MajorVerificationProvider>
-        <MidComponent />
+        <SelectionContainer />
       </MajorVerificationProvider>
     </PlannersProvider>
   );
 }
 
-function MidComponent() {
+function SelectionContainer() {
   const { activePlanner } = useContext(PlannersContext);
 
-  if (activePlanner === undefined) return <div></div>;
+  if (activePlanner === undefined) return <></>;
 
   return (
     <PlannerProvider plannerId={activePlanner} title={""} order={0}>

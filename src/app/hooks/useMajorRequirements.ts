@@ -95,12 +95,11 @@ export default function useMajorRequirements(
     const newListOfMajorRequirements = listOfMajorRequirements?.map(
       (majorRequirement) => {
         if (majorRequirement.major.id === majorId) {
-          const someVar = {
+          return {
             ...majorRequirement,
             majorRequirements: newMajorRequirements,
             isSaved: false,
           };
-          return someVar;
         }
         return majorRequirement;
       },
