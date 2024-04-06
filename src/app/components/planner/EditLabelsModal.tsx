@@ -15,7 +15,7 @@ import {
 } from "@mui/joy";
 import { useState } from "react";
 
-import CourseLabel from "../planner/quarters/courses/CourseLabel";
+import CourseLabel from "./quarters/courses/CourseLabel";
 
 interface EditLabelsModalProps {
   setShowModal: (showModal: boolean) => void;

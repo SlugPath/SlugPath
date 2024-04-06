@@ -10,18 +10,18 @@ import {
   CarouselPrevious,
 } from "@/app/components/miscellaneous/Carousel";
 import {
+  useAddNewPlannerMutation,
+  usePlanners,
   useProgramDefaultPlanners,
-  useUpdatePlannersMutation,
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
 import { PlannerTitle } from "@/app/types/Planner";
 import { Program } from "@/app/types/Program";
-import { clonePlanner } from "@/lib/plannerUtils";
+import { cloneDefaultPlanner } from "@/lib/plannerUtils";
 import { CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { v4 as uuid4 } from "uuid";
 
 import MiniPlanner from "./MiniPlanner";
 
@@ -42,7 +42,10 @@ export default function CurriculumSelect() {
     isFetching: userProgramsIsFetching,
   } = useUserPrograms(userId);
 
-  const { mutate: saveAll } = useUpdatePlannersMutation(
+  const { data: planners } = usePlanners(userId);
+
+  const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(
+    userId,
     handleUpdatePlannersSuccess,
   );
 
@@ -66,10 +69,10 @@ export default function CurriculumSelect() {
       return;
     }
 
-    setCurrent(api.selectedScrollSnap() + 1);
+    setCurrent(api.selectedScrollSnap());
 
     api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
+      setCurrent(api.selectedScrollSnap());
     });
   }, [api]);
 
@@ -78,16 +81,16 @@ export default function CurriculumSelect() {
   }
 
   function handleClickUseTemplate() {
-    if (!_defaultPlanners) {
+    if (!_defaultPlanners || !planners) {
       return;
     }
 
-    const defaultPlanner = {
-      ..._defaultPlanners[current],
-      id: uuid4(),
-    };
+    const defaultPlanner = _defaultPlanners[current];
 
-    saveAll({ userId: userId!, planners: [clonePlanner(defaultPlanner)] });
+    addNewPlannerMutation({
+      userId,
+      planner: cloneDefaultPlanner(defaultPlanner),
+    });
   }
 
   return (

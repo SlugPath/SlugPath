@@ -4,8 +4,8 @@ import { Label } from "@customTypes/Label";
 import { Button, Card, CardContent, Chip, Typography } from "@mui/joy";
 import { useContext, useState } from "react";
 
-import EditLabelsModal from "../modals/EditLabelsModal";
 import CourseLabel from "../planner/quarters/courses/CourseLabel";
+import EditLabelsModal from "./EditLabelsModal";
 
 export default function LabelLegend() {
   const { getAllLabels, updatePlannerLabels } = useContext(PlannerContext);

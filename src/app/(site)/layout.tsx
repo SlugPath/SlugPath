@@ -1,4 +1,4 @@
-import ScreenSizeWarning from "@/app/components/modals/ScreenSizeWarning";
+import ScreenSizeWarning from "@/app/(site)/ScreenSizeWarning";
 import { authOptions } from "@/lib/auth";
 import BetaWarning from "@components/beta/BetaWarning";
 import Navbar from "@components/navbar/Navbar";

@@ -15,6 +15,8 @@ export interface ModalsContextProps {
   setShowReplaceRLModal: SetShow;
   showMajorRequirementsEditModal: boolean;
   setShowMajorRequirementsEditModal: SetShow;
+  showNewPlannerModal: boolean;
+  setShowNewPlannerModal: SetShow;
   courseState: PlannerData;
   majorToEdit: Program | undefined;
   setMajorToEdit: SetState<Program | undefined>;
@@ -32,6 +34,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
     setShowReplaceRLModal,
     showMajorRequirementsEditModal,
     setShowMajorRequirementsEditModal,
+    showNewPlannerModal,
+    setShowNewPlannerModal,
     majorToEdit,
     setMajorToEdit,
   } = useModals();
@@ -49,6 +53,8 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
         setShowReplaceRLModal,
         showMajorRequirementsEditModal,
         setShowMajorRequirementsEditModal,
+        showNewPlannerModal,
+        setShowNewPlannerModal,
         courseState,
         majorToEdit,
         setMajorToEdit,

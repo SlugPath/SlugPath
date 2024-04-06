@@ -101,6 +101,9 @@ export async function updateUserPlanners({
       ),
     );
   });
+
+  console.log("saved planners");
+  console.log(planners);
 }
 
 /**

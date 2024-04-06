@@ -1,7 +1,12 @@
-import { EMPTY_PLANNER, initialPlanner } from "@/lib/plannerUtils";
+import {
+  EMPTY_PLANNER,
+  cloneDefaultPlanner,
+  initialPlanner,
+} from "@/lib/plannerUtils";
 import { filterRedundantPrograms } from "@/lib/utils";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
 
 import { getCourse, getSuggestedCourses } from "../actions/course";
 import {
@@ -152,9 +157,12 @@ export function usePlanners(userId: string | undefined) {
     queryFn: async () => await getUserPlanners(userId!),
     refetchInterval: 1000 * 180,
     staleTime: 1000 * 90,
-    placeholderData: [],
     throwOnError: true,
     enabled: !!userId,
+    /* adding the line 'placeholderData: []' will cause a bug where
+      it seems there are no planners when in fact there are. Affects
+      Planners.tsx
+     */
   });
 }
 
@@ -170,6 +178,46 @@ export function useUpdatePlannersMutation(onSuccess?: () => void) {
       await updateUserPlanners(params),
     onSuccess: (_, { userId }) => {
       queryClient.invalidateQueries({ queryKey: ["planners", userId] });
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
+  });
+}
+
+export function useAddNewPlannerMutation(
+  userId: string | undefined,
+  onSuccess?: () => void,
+) {
+  const { data: planners } = usePlanners(userId);
+  const { mutate: saveAll } = useUpdatePlannersMutation(onSuccess);
+
+  async function addNewPlanner({
+    userId,
+    planner,
+  }: {
+    userId: string | undefined;
+    planner: PlannerData;
+  }) {
+    if (!planners) return;
+
+    const id = uuidv4();
+
+    const newPlanners = planners.concat({
+      ...cloneDefaultPlanner(planner!),
+      id,
+      title: "New Planner",
+    });
+
+    await saveAll({ userId: userId!, planners: newPlanners });
+  }
+
+  return useMutation({
+    mutationFn: async (params: {
+      userId: string | undefined;
+      planner: PlannerData;
+    }) => await addNewPlanner(params),
+    onSuccess: () => {
       if (onSuccess) {
         onSuccess();
       }
