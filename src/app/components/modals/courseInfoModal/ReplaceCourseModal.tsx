@@ -16,7 +16,8 @@ import {
 import { useSuggestedCourses, useTransferCourses } from "@hooks/reactQuery";
 import { OpenInNew } from "@mui/icons-material";
 import { Button, Card, Modal, ModalClose, Sheet } from "@mui/joy";
-import React, { useContext, useEffect, useState } from "react";
+import Fuse from "fuse.js";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import CourseInfoModal from "./CourseInfoModal";
@@ -219,6 +220,18 @@ export default function ReplaceCourseModal({
 
 function TransferCoursesList({ course }: { course: StoredCourse }) {
   const { data: courses, isPending: loading } = useTransferCourses(course);
+  const [schoolFilter, setSchoolFilter] = useState("");
+
+  // Fuzzy search for courses by school
+  const filteredCourses = useMemo(() => {
+    if (schoolFilter === "") return courses;
+    const fuse = new Fuse(courses ?? [], {
+      keys: ["school"],
+      threshold: 0.2,
+    });
+    return fuse.search(schoolFilter).map((result) => result.item);
+  }, [schoolFilter, courses]);
+
   return (
     <Card variant="soft" className="h-full w-full">
       <div className="ml-2 h-5/6">
@@ -237,10 +250,16 @@ function TransferCoursesList({ course }: { course: StoredCourse }) {
             </a>
             for the most up to date information
           </div>
+          <input
+            className="w-full p-2 rounded-md border border-gray-200 dark:border-gray-800 bg-blue-400 placeholder-slate-800 dark:placeholder-slate-200 font-medium placeholder:font-medium"
+            value={schoolFilter}
+            onChange={(e) => setSchoolFilter(e.target.value)}
+            placeholder="Filter by School"
+          />
         </div>
-        <div className="h-5/6">
+        <div className="h-3/4">
           <SearchResults
-            courses={courses ?? []}
+            courses={filteredCourses ?? []}
             loading={loading}
             droppableId="transfer-search"
           />

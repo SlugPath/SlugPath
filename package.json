@@ -35,6 +35,7 @@
     "@tanstack/react-query-devtools": "^5.28.6",
     "class-validator": "^0.14.1",
     "fmt": "^2.0.0",
+    "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
     "next": "14.1.0",
     "next-auth": "^4.24.7",
