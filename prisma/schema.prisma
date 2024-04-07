@@ -51,9 +51,13 @@ model EnrolledCourse {
   quartersOffered String[]
   quarterId       Int
   labels          String[]
-  description     String?
   school          String   @default("UCSC")
-  quarter         Quarter  @relation(fields: [quarterId], references: [id], onDelete: Cascade)
+
+  description String?
+  // This field should only be set if it is a transfer course
+  equivalent  String?
+
+  quarter Quarter @relation(fields: [quarterId], references: [id], onDelete: Cascade)
 }
 
 model Course {
