@@ -122,33 +122,36 @@ async function main() {
       },
     });
     if (!exists) continue;
-    const transferCourses = await prisma.$transaction(
-      transferData[course as keyof typeof transferData].map((t: any) =>
-        prisma.transferCourse.create({
-          data: {
-            title: t.name,
-            departmentCode: t.deptCode,
-            number: t.courseNumber,
-            school: t.institution,
+    // Perform a transaction where for each official UCSC course we create the transfer courses and connect them
+    await prisma.$transaction(async (client) => {
+      const transfers = await Promise.all(
+        transferData[course as keyof typeof transferData].map((t: any) =>
+          client.transferCourse.create({
+            data: {
+              title: t.name,
+              departmentCode: t.deptCode,
+              number: t.courseNumber,
+              school: t.institution,
+            },
+            select: {
+              id: true,
+            },
+          }),
+        ),
+      );
+      await client.course.update({
+        where: {
+          departmentCode_number: {
+            departmentCode,
+            number,
           },
-          select: {
-            id: true,
+        },
+        data: {
+          transferCourses: {
+            connect: transfers,
           },
-        }),
-      ),
-    );
-    await prisma.course.update({
-      where: {
-        departmentCode_number: {
-          departmentCode,
-          number,
         },
-      },
-      data: {
-        transferCourses: {
-          connect: transferCourses,
-        },
-      },
+      });
     });
   }
   console.log(`✨ Done ✨`);

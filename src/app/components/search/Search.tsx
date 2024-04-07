@@ -18,7 +18,7 @@ export default function Search({
 
   return (
     <>
-      <Card className=" flex-col w-80 h-full min-h-0 min-w-80" variant="plain">
+      <Card className="flex-col w-80 h-full min-h-0 min-w-80" variant="plain">
         <div className="flex flex-col place-items-center">
           <div className="flex text-xl font-bold items-center gap-2">
             Course Search

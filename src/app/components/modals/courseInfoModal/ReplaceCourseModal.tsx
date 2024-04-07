@@ -38,11 +38,9 @@ export default function ReplaceCourseModal({
 }: ReplaceCourseModalProps) {
   // Get the title(s) of the custom course if we are replacing a custom course
   const isTransfer = !isCustomCourse(toReplace);
-  const titles = !isTransfer
-    ? Array.from(toReplace.title.toUpperCase().matchAll(courseNumberRegex)).map(
-        (m) => m[0],
-      )
-    : [];
+  const titles = Array.from(
+    toReplace.title.toUpperCase().matchAll(courseNumberRegex),
+  ).map((m) => m[0]);
 
   // Fetch the suggested classes from the database (to replace this course)
   const {
@@ -222,17 +220,11 @@ export default function ReplaceCourseModal({
 function TransferCoursesList({ course }: { course: StoredCourse }) {
   const { data: courses, isPending: loading } = useTransferCourses(course);
   return (
-    <Card
-      variant="soft"
-      sx={{
-        height: "100%",
-        width: "100%",
-      }}
-    >
+    <Card variant="soft" className="h-full w-full">
       <div className="ml-2 h-5/6">
         <div className="mb-2 ml-2 gap-2 flex-col flex">
           <p className="text-xl font-semibold">Transfer Alternatives</p>
-          <div className="text-lg rounded-lg p-2 bg-orange-200">
+          <div className="text-lg rounded-lg p-2 bg-orange-200 dark:bg-orange-900">
             <strong>Disclaimer:</strong> always check
             <a
               className="ml-1 inline-block underline text-blue-500 hover:text-blue-700 cursor-pointer"
@@ -246,11 +238,13 @@ function TransferCoursesList({ course }: { course: StoredCourse }) {
             for the most up to date information
           </div>
         </div>
-        <SearchResults
-          courses={courses ?? []}
-          loading={loading}
-          droppableId="transfer-search"
-        />
+        <div className="h-5/6">
+          <SearchResults
+            courses={courses ?? []}
+            loading={loading}
+            droppableId="transfer-search"
+          />
+        </div>
       </div>
     </Card>
   );

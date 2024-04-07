@@ -97,12 +97,13 @@ export async function getCoursesBy(
 export async function getTransferEquivalents(
   course: StoredCourse,
 ): Promise<StoredCourse[]> {
-  const equivalences = await prisma.course.findFirst({
+  const res = await prisma.course.findFirst({
     where: {
       departmentCode: course.departmentCode,
       number: course.number,
     },
     select: {
+      ge: true,
       transferCourses: {
         select: {
           id: true,
@@ -114,11 +115,11 @@ export async function getTransferEquivalents(
       },
     },
   });
-  if (!equivalences) return [];
+  if (!res) return [];
 
-  const { transferCourses } = equivalences;
+  const { transferCourses, ge } = res;
 
-  return transferCourses.map(fromTransferToStoredCourse);
+  return transferCourses.map((t) => fromTransferToStoredCourse(t, ge));
 }
 
 /**

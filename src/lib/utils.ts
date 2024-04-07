@@ -108,14 +108,18 @@ export function isProgramInPrograms(
 /**
  * Converts a TransferCourse object to a StoredCourse object
  * @param t a TransferCourse object
+ * @param ge a list of general education requirements from the source official course
  * @returns a StoredCourse object
  */
-export function fromTransferToStoredCourse(t: {
-  departmentCode: string;
-  number: string;
-  title: string;
-  school: string;
-}): StoredCourse {
+export function fromTransferToStoredCourse(
+  t: {
+    departmentCode: string;
+    number: string;
+    title: string;
+    school: string;
+  },
+  ge: string[],
+): StoredCourse {
   return {
     departmentCode: t.departmentCode,
     number: t.number,
@@ -124,7 +128,7 @@ export function fromTransferToStoredCourse(t: {
     credits: 5,
     id: uuidv4(),
     labels: [],
-    ge: [],
+    ge,
     quartersOffered: [],
     description: "",
   };

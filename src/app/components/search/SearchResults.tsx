@@ -42,8 +42,6 @@ export default function SearchResults({
     parent: any;
     style: any;
   }) {
-    // We are rendering an extra item for the placeholder
-    // To do this we increased our data set size to include one 'fake' item
     if (!courses[index]) {
       return null;
     }
@@ -92,20 +90,18 @@ export default function SearchResults({
             className="h-full"
           >
             {hasResults() ? (
-              <div className="h-full">
-                <div className="overflow-y-auto h-full">
-                  <AutoSizer>
-                    {({ height, width }) => (
-                      <List
-                        height={height}
-                        rowCount={getItemCount(snapshot)}
-                        rowHeight={40}
-                        width={width}
-                        rowRenderer={(props) => getRowRender(props)}
-                      />
-                    )}
-                  </AutoSizer>
-                </div>
+              <div className="overflow-y-auto h-full">
+                <AutoSizer>
+                  {({ height, width }) => (
+                    <List
+                      height={height}
+                      rowCount={getItemCount(snapshot)}
+                      rowHeight={40}
+                      width={width}
+                      rowRenderer={(props) => getRowRender(props)}
+                    />
+                  )}
+                </AutoSizer>
               </div>
             ) : (
               <div className="flex justify-center items-center overflow-y-auto h-full">

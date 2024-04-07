@@ -76,6 +76,8 @@ export function useTransferCourses(course: StoredCourse) {
   return useQuery({
     queryKey: ["transferCourses", course.departmentCode, course.number],
     queryFn: async () => await getTransferEquivalents(course),
+    staleTime: Infinity,
+    enabled: isOfficialCourse(course),
   });
 }
 
@@ -408,6 +410,7 @@ export function useSuggestedCourses(titles: string[]) {
     queryKey: ["suggestedCourses", ...titles],
     queryFn: async () => await getSuggestedCourses(titles),
     enabled: titles.length > 0,
+    staleTime: Infinity,
   });
 }
 

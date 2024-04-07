@@ -104,7 +104,7 @@ export default function CourseInfoModal({
   }
 
   function ge(c?: StoredCourse) {
-    if (loading || !c) return "";
+    if (loading) return "";
     const capitalize: { [key: string]: string } = {
       peT: "PE-T",
       peH: "PE-H",
@@ -113,7 +113,8 @@ export default function CourseInfoModal({
       prS: "PR-S",
       prE: "PR-E",
     };
-    return c.ge.map((code: string) => {
+    const ges = c?.ge ?? course?.ge ?? [];
+    return ges.map((code: string) => {
       if (code === "None") return code;
       if (Object.keys(capitalize).includes(code)) return capitalize[code];
       return code.toLocaleUpperCase();
@@ -254,12 +255,16 @@ export default function CourseInfoModal({
               {description(data)}
             </Typography>
           </Skeleton>
-          {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
+          {/* Show GE's if it's an official course or a transfer course */}
+          {(isOfficialCourse(course) || isTransferCourse(course)) && (
+            <p>GE: {ge(data)}</p>
+          )}
+
+          {/* Show preqs, past enrollment info, and instructors for official courses*/}
           <p>Credits: {credits(data)}</p>
           {isOfficialCourse(course) ? (
             <>
               <p>{prerequisites(data)}</p>
-              <p>GE: {ge(data)}</p>
               <Skeleton loading={enrollLoading}>
                 {enrollmentInfo && enrollmentInfo.length > 0 && (
                   <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />

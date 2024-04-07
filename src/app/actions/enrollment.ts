@@ -100,13 +100,6 @@ export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
   });
 }
 
-// =========== Helper functions =============
-// function getTransferURL(
-//   institution: string,
-//   department: number,
-// ) {
-//   return `https://assist.org/api/articulation/Agreements?Key=${data.YEAR}/${institution}/to/${data.UCSC}/${department}`;
-
 function createEnrollmentInfoURL(
   termId: number,
   { number, departmentCode }: Pick<StoredCourse, "number" | "departmentCode">,

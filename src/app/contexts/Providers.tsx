@@ -48,7 +48,7 @@ function customizeTheme() {
   const darkLavender = "#231645";
 
   const green = "#e8f4ea";
-  const darkGreen = "#77DD77";
+  const darkGreen = "#1E2F23";
 
   return extendTheme({
     components: {
