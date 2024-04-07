@@ -14,6 +14,7 @@ export const storedCourseSchema = z.object({
   quartersOffered: z.array(z.string()),
   description: z.string(),
   labels: z.array(z.string()),
+  equivalent: z.string().optional(),
 });
 
 export type StoredCourse = z.infer<typeof storedCourseSchema>;

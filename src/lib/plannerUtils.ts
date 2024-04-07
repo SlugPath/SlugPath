@@ -198,6 +198,7 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
       description: course.description ?? "",
       ge: course.ge,
       labels: [],
+      equivalent: course.equivalent ?? "",
     };
   } catch (e) {
     throw new Error(`Invalid course id ${id}`);

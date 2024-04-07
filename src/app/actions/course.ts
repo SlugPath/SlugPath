@@ -103,6 +103,8 @@ export async function getTransferEquivalents(
       number: course.number,
     },
     select: {
+      departmentCode: true,
+      number: true,
       ge: true,
       transferCourses: {
         select: {
@@ -117,9 +119,15 @@ export async function getTransferEquivalents(
   });
   if (!res) return [];
 
-  const { transferCourses, ge } = res;
+  const { transferCourses, ge, departmentCode, number } = res;
 
-  return transferCourses.map((t) => fromTransferToStoredCourse(t, ge));
+  return transferCourses.map((t) =>
+    fromTransferToStoredCourse(t, {
+      ge,
+      number,
+      departmentCode,
+    }),
+  );
 }
 
 /**

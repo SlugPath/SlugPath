@@ -11,7 +11,7 @@ import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { useCourse, usePastEnrollmentInfo } from "@hooks/reactQuery";
-import { WarningAmberRounded } from "@mui/icons-material";
+import { ArrowRightAlt, WarningAmberRounded } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -20,7 +20,6 @@ import {
   Sheet,
   Skeleton,
   Tooltip,
-  Typography,
 } from "@mui/joy";
 import { useContext, useState } from "react";
 
@@ -242,18 +241,9 @@ export default function CourseInfoModal({
             )}
           </div>
           <Skeleton loading={loading} variant="text" width="50%">
-            <Typography
-              className="text-wrap"
-              level="body-md"
-              sx={{
-                inlineSize: "100%",
-                overflowWrap: "break-word",
-                maxHeight: "12rem",
-                overflowY: "auto",
-              }}
-            >
+            <p className="break-words text-wrap max-h-48 overflow-y-auto">
               {description(data)}
-            </Typography>
+            </p>
           </Skeleton>
           {/* Show GE's if it's an official course or a transfer course */}
           {(isOfficialCourse(course) || isTransferCourse(course)) && (
@@ -283,17 +273,25 @@ export default function CourseInfoModal({
                 ))}
               </div>
               {!isOffered(course.quartersOffered, term) && (
-                <Typography
-                  color="warning"
-                  component="p"
-                  startDecorator={<WarningAmberRounded color="warning" />}
-                >
+                <p className="text-orange-800 dark:text-orange-400 flex items-center">
+                  <span className="mb-1">
+                    <WarningAmberRounded color="warning" />
+                  </span>
                   Warning: {course.title} is not offered in {` ${term}`} Quarter
-                </Typography>
+                </p>
               )}
             </>
           ) : (
-            <p className="text-lg">School: {course.school}</p>
+            <>
+              <p className="text-lg">School: {course.school}</p>
+              <p className="text-lg flex items-center">
+                Replacing{" "}
+                <span>
+                  <ArrowRightAlt fontSize="large" />
+                </span>
+                {course.equivalent}
+              </p>
+            </>
           )}
           {!viewOnly && (
             <SelectedLabels

@@ -105,12 +105,18 @@ export function isProgramInPrograms(
   return alreadyAdded;
 }
 
+type SourceCourse = {
+  ge: string[];
+  departmentCode: string;
+  number: string;
+};
 /**
  * Converts a TransferCourse object to a StoredCourse object
  * @param t a TransferCourse object
- * @param ge a list of general education requirements from the source official course
+ * @param SourceCourse object of the course that the transfer course is equivalent to
  * @returns a StoredCourse object
  */
+
 export function fromTransferToStoredCourse(
   t: {
     departmentCode: string;
@@ -118,7 +124,7 @@ export function fromTransferToStoredCourse(
     title: string;
     school: string;
   },
-  ge: string[],
+  { ge, departmentCode, number }: SourceCourse,
 ): StoredCourse {
   return {
     departmentCode: t.departmentCode,
@@ -131,6 +137,7 @@ export function fromTransferToStoredCourse(
     ge,
     quartersOffered: [],
     description: "",
+    equivalent: `${departmentCode} ${number}`,
   };
 }
 
