@@ -1,8 +1,8 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { useCourse } from "@/app/hooks/reactQuery";
+import { Term } from "@/app/types/Quarter";
 import { isCustomCourse, isOffered } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
@@ -29,18 +29,27 @@ import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 60;
 
+// TODO: Fix viewOnly.
 export default function CourseInfoModal({
+  showModal,
+  setShowModal,
+
+  course,
+  setCourse,
+  term,
+
   viewOnly = false,
 }: {
+  showModal: boolean;
+  setShowModal: (show: boolean) => void;
+
+  course: StoredCourse;
+  setCourse?: (course: StoredCourse) => void;
+  term?: Term;
+
   viewOnly?: boolean;
 }) {
   const [showLabelSelectionModal, setShowLabelSelectionModal] = useState(false);
-  const {
-    setShowCourseInfoModal: setShowModal,
-    showCourseInfoModal: showModal,
-    displayCourse: courseTerm,
-    setDisplayCourse,
-  } = useContext(CourseInfoContext);
 
   const {
     editCustomCourse,
@@ -51,8 +60,6 @@ export default function CourseInfoModal({
 
   const [editing, setEditing] = useState(false);
   const [replacing, setReplacing] = useState(false);
-
-  const [course = undefined, term = undefined] = courseTerm ?? [];
 
   const { data, isLoading: loading } = useCourse(
     course?.departmentCode,
@@ -67,11 +74,6 @@ export default function CourseInfoModal({
     placeholderData: [],
     staleTime: Infinity,
   });
-
-  // This is to prevent illegally opening the modal
-  if (course === undefined || course.departmentCode === undefined) {
-    return null;
-  }
 
   // Accessors
   function title(c?: StoredCourse) {
@@ -134,7 +136,7 @@ export default function CourseInfoModal({
       labels,
       newCourse,
     });
-    setDisplayCourse([newCourse, term]);
+    setCourse(newCourse);
   };
 
   // Only show this second modal if it is a custom course,
@@ -147,7 +149,7 @@ export default function CourseInfoModal({
 
     const handleSave = (crs: StoredCourse) => {
       editCustomCourse(crs);
-      setDisplayCourse([crs, term]);
+      setCourse(crs);
       handleClose();
     };
 

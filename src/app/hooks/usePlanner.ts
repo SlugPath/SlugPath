@@ -1,13 +1,15 @@
 import {
-  findTotalCredits,
-  getGeSatisfied,
-  isCustomCourse,
-} from "@/lib/plannerUtils";
+  addYear as addYearFunc,
+  deleteYear as deleteYearFunc,
+  findCourseLabels,
+  replaceCustomCourse as replaceCustomCourseFunc,
+  updateCustomCourse,
+} from "@/lib/courseUtils";
+import { findTotalCredits, getGeSatisfied } from "@/lib/plannerUtils";
 import { findQuarter } from "@/lib/quarterUtils";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
-import { Quarter } from "@customTypes/Quarter";
 import { useCallback, useMemo } from "react";
 
 interface PlannerInput {
@@ -16,25 +18,6 @@ interface PlannerInput {
 }
 
 export default function usePlanner({ planner, setPlanner }: PlannerInput) {
-  // const planners = usePlannersStore((state) => state.planners);
-  // const setPlanner = usePlannersStore((state) => state.setPlanner);
-
-  // const getPlanner = useCallback(
-  //   (id: string) => {
-  //     if (!planners) throw new Error("Planners not loaded yet");
-
-  //     const p = planners.find((planner) => planner.id === id);
-  //     if (!p) throw new Error(`Planner not found with id '${id}'`);
-  //     return p;
-  //   },
-  //   [planners],
-  // );
-
-  // // TODO: cursed
-  // const courseState = getPlanner
-  //   ? getPlanner(input.plannerId)
-  //   : initialPlanner();
-
   const totalCredits = useMemo(
     () => findTotalCredits(planner.courses),
     [planner],
@@ -71,77 +54,24 @@ export default function usePlanner({ planner, setPlanner }: PlannerInput) {
     };
   };
 
-  /**
-   * A function that is used to edit a custom course and reflect changes in
-   * the entire planner state
-   * @param cid id of custom course being edited
-   * @param newTitle new title of custom course
-   */
   const editCustomCourse = (course: StoredCourse) => {
-    const cid = course.id;
-    setPlanner({
-      ...planner,
-      courses: planner.courses.map((c) => {
-        if (c.id === cid && isCustomCourse(c)) {
-          return {
-            ...c,
-            ...course,
-          };
-        }
-        return c;
-      }),
-    });
+    const _planner = updateCustomCourse(course, planner);
+    setPlanner(_planner);
+  };
+
+  const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
+    const _planner = replaceCustomCourseFunc(customId, courses, planner);
+    setPlanner(_planner);
   };
 
   const addYear = () => {
-    setPlanner({
-      ...planner,
-      years: planner.years + 1,
-      quarters: [
-        ...planner.quarters,
-        // Add new quarters for the new year
-        ...["Fall", "Winter", "Spring", "Summer"].map((t) => {
-          return {
-            year: planner.years,
-            title: t,
-            courses: [],
-          } as Quarter;
-        }),
-      ],
-    });
+    const _planner = addYearFunc(planner);
+    setPlanner(_planner);
   };
 
   const deleteYear = (year: number) => {
-    const quarters = [...planner.quarters];
-    const idx = quarters.findIndex((q) => q.year === year);
-    if (idx == -1) {
-      throw new Error("Year not found"); // should not happen
-    }
-
-    const toRemoveCourses = quarters
-      .slice(idx, idx + 4)
-      .map((q) => q.courses)
-      .flat();
-    const newCourses = planner.courses.filter(
-      (c) => !toRemoveCourses.includes(c.id),
-    );
-
-    quarters.splice(idx, 4);
-
-    for (let j = idx; j < quarters.length; j++) {
-      const quarterToChange = quarters[j];
-      const newYear = quarterToChange.year - 1;
-      quarters[j] = {
-        ...quarterToChange,
-        year: newYear,
-      };
-    }
-    setPlanner({
-      ...planner,
-      courses: newCourses,
-      quarters,
-      years: planner.years - 1,
-    });
+    const _planner = deleteYearFunc(year, planner);
+    setPlanner(_planner);
   };
 
   const getAllLabels = () => {
@@ -149,11 +79,7 @@ export default function usePlanner({ planner, setPlanner }: PlannerInput) {
   };
 
   const getCourseLabels = (course: StoredCourse): Label[] => {
-    return course.labels.map((lid) => {
-      const label = planner.labels.find((l) => l.id === lid);
-      if (label === undefined) throw new Error("label not found");
-      return label;
-    });
+    return findCourseLabels(course, planner);
   };
 
   // Updates the planner state with new labels as well as any course
@@ -188,29 +114,6 @@ export default function usePlanner({ planner, setPlanner }: PlannerInput) {
     },
     [planner, setPlanner],
   );
-
-  const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
-    const newCids = courses.map((c) => c.id);
-    const newCourses = planner.courses.filter((c) => c.id != customId);
-    newCourses.push(...courses);
-
-    setPlanner({
-      ...planner,
-      courses: newCourses,
-      quarters: planner.quarters.map((q) => {
-        const idx = q.courses.indexOf(customId);
-        if (idx !== -1) {
-          const quarterCourses = [...q.courses];
-          quarterCourses.splice(idx, 1, ...newCids);
-          return {
-            ...q,
-            courses: quarterCourses,
-          };
-        }
-        return q;
-      }),
-    });
-  };
 
   return {
     replaceCustomCourse,

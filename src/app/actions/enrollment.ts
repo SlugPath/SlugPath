@@ -76,6 +76,11 @@ export async function getEnrollmentInfo(course: CourseEnrollQuery) {
 
 // getMoreEnrollmentInfo returns current and future enrollment information about a particular
 // course
+/**
+ * Fetches enrollment information for a course in current and future quarters
+ * @param course a course enrollment query
+ * @returns a list of objects containing enrollment information
+ */
 export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
   const futureQuarters = getFutureQuarters();
 

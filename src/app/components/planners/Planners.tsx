@@ -3,10 +3,12 @@
 import usePlannerSync from "@/app/hooks/usePlannerSync";
 import { PlannerData } from "@/app/types/Planner";
 import { cn } from "@/lib/utils";
+import useModalsStore from "@/store/modal";
 import usePlannersStore from "@/store/planners";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
 
+import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import Planner from "../planner/Planner";
 import PlannerTabs from "./plannerTabs/PlannerTabs";
 
@@ -34,6 +36,16 @@ function PlannerList() {
   const setPlanner = usePlannersStore((state) => state.setPlanner);
   const activePlannerId = usePlannersStore((state) => state.activePlannerId);
 
+  // CourseInfoModal Zustand store
+  const showCourseInfoModal = useModalsStore(
+    (state) => state.showCourseInfoModal,
+  );
+  const setShowCourseInfoModal = useModalsStore(
+    (state) => state.setShowCourseInfoModal,
+  );
+  const displayCourse = useModalsStore((state) => state.displayCourse);
+  const displayTerm = useModalsStore((state) => state.displayTerm);
+
   // const activePlanner = useMemo(
   //   () => planners.find((planner) => planner.id === activePlannerId),
   //   [planners, activePlannerId],
@@ -43,29 +55,37 @@ function PlannerList() {
 
   // TODO: Remove providers; remove map; use only one planner
   return (
-    <div className="w-full flex-1 flex flex-col min-h-0">
-      {planners.map((planner) => (
-        <div
-          key={planner.id}
-          className={cn(
-            activePlannerId === planner.id
-              ? "flex w-full flex-1 min-h-0"
-              : "hidden",
-          )}
-        >
-          <MajorVerificationProvider>
-            <PlannerProvider
-              planner={planner}
-              setPlanner={(newPlanner: PlannerData) =>
-                setPlanner(planner.id, newPlanner)
-              }
-            >
-              {activePlannerId === planner.id && <Planner />}
-            </PlannerProvider>
-          </MajorVerificationProvider>
-        </div>
-      ))}
-    </div>
+    <>
+      <CourseInfoModal
+        showModal={showCourseInfoModal}
+        setShowModal={setShowCourseInfoModal}
+        course={displayCourse}
+        term={displayTerm}
+      />
+      <div className="w-full flex-1 flex flex-col min-h-0">
+        {planners.map((planner) => (
+          <div
+            key={planner.id}
+            className={cn(
+              activePlannerId === planner.id
+                ? "flex w-full flex-1 min-h-0"
+                : "hidden",
+            )}
+          >
+            <MajorVerificationProvider>
+              <PlannerProvider
+                planner={planner}
+                setPlanner={(newPlanner: PlannerData) =>
+                  setPlanner(planner.id, newPlanner)
+                }
+              >
+                {activePlannerId === planner.id && <Planner />}
+              </PlannerProvider>
+            </MajorVerificationProvider>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 

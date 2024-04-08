@@ -99,6 +99,11 @@ export function courseTitle({
   return `${title}`;
 }
 
+/**
+ * Stringifies a course
+ * @param course a stored course and a suffix
+ * @returns  a string that represents the course
+ */
 export function createCourseDraggableId(
   course: StoredCourse & { suffix: string },
 ) {

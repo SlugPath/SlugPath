@@ -1,5 +1,4 @@
 import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
-import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
 import {
   useUpdateUserDefaultPlannerIdMutation,
   useUserDefaultPlannerId,
@@ -211,7 +210,6 @@ export default function DefaultPlannerSelection({
             loadingMajorDefaultPlanners={loadingProgramDefaultPlanners}
           />
         )}
-        <CourseInfoModal />
       </div>
       <div className="flex justify-end w-full gap-4">
         {updateDefaultPlannerIsPending ? (

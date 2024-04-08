@@ -1,8 +1,7 @@
 import { PlannerData } from "@/app/types/Planner";
 import { create } from "zustand";
 
-// This is a simple store that keeps track of the local planners and active
-// planner id.
+// A Zustand store that keeps track of the local planners and active planner id.
 
 // NOTE: Since planner data is only saved every 30 seconds and on unload, there
 // is a need for a local store in addition to React Query cache.

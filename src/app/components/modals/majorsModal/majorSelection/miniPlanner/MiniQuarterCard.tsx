@@ -1,9 +1,8 @@
-import { isCustomCourse } from "@/lib/plannerUtils";
-import { CourseInfoContext } from "@contexts/CourseInfoProvider";
+import { courseTitle, isCustomCourse } from "@/lib/plannerUtils";
+import useModalsStore from "@/store/modal";
 import { CourseTerm, StoredCourse } from "@customTypes/Course";
 import { Quarter } from "@customTypes/Quarter";
 import { Card, Link, Typography } from "@mui/joy";
-import { useContext } from "react";
 
 export interface MiniQuarterCardProps {
   quarter: Quarter;
@@ -33,20 +32,18 @@ function MiniCourseCard({
   course: StoredCourse;
   quarter: Quarter;
 }) {
-  const { onShowCourseInfoModal, setDisplayCourse } =
-    useContext(CourseInfoContext);
-
-  function courseTitle(course: StoredCourse) {
-    if (course.departmentCode && course.number) {
-      return `${course.departmentCode} ${course.number}`;
-    }
-    return course.title;
-  }
+  // Zustand modal store
+  const setDisplayCourseInfo = useModalsStore(
+    (state) => state.setDisplayCourseInfo,
+  );
+  const setShowCourseInfoModal = useModalsStore(
+    (state) => state.setShowCourseInfoModal,
+  );
 
   function handleClickedCourse(course: StoredCourse) {
     const courseTerm = [course, quarter.title] as CourseTerm;
-    setDisplayCourse(courseTerm);
-    onShowCourseInfoModal();
+    setDisplayCourseInfo(courseTerm);
+    setShowCourseInfoModal(true);
   }
 
   return (

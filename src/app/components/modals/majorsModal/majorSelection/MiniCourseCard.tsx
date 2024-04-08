@@ -1,8 +1,8 @@
-import { isCustomCourse } from "@/lib/plannerUtils";
-import { CourseInfoContext } from "@contexts/CourseInfoProvider";
-import { CourseTerm, StoredCourse } from "@customTypes/Course";
+import { Term } from "@/app/types/Quarter";
+import { courseTitle, isCustomCourse } from "@/lib/plannerUtils";
+import useModalsStore from "@/store/modal";
+import { StoredCourse } from "@customTypes/Course";
 import { Card, Link } from "@mui/joy";
-import { useContext } from "react";
 
 export function MiniCourseCard({
   course,
@@ -11,21 +11,19 @@ export function MiniCourseCard({
   course: StoredCourse;
   quarterTitle?: string;
 }) {
-  const { onShowCourseInfoModal, setDisplayCourse } =
-    useContext(CourseInfoContext);
+  // Zustand modal store
+  const setShowCourseInfoModal = useModalsStore(
+    (state) => state.setShowCourseInfoModal,
+  );
+  const setDisplayCourse = useModalsStore((state) => state.setDisplayCourse);
+  const setDisplayTerm = useModalsStore((state) => state.setDisplayTerm);
 
-  function courseTitle(course: StoredCourse) {
-    if (course.departmentCode && course.number) {
-      return `${course.departmentCode} ${course.number}`;
-    }
-    return course.title;
-  }
-
-  function handleClickedCourse(course: StoredCourse) {
-    const courseTerm = [course, quarterTitle] as CourseTerm;
-    setDisplayCourse(courseTerm);
-    onShowCourseInfoModal();
-  }
+  // Handlers
+  const handleClickedCourse = () => {
+    setShowCourseInfoModal(true);
+    setDisplayCourse(course);
+    setDisplayTerm(quarterTitle as Term);
+  };
 
   return (
     <Card
@@ -42,7 +40,7 @@ export function MiniCourseCard({
         overlay
         underline="none"
         sx={{ color: "text.tertiary" }}
-        onClick={() => handleClickedCourse(course)}
+        onClick={handleClickedCourse}
       >
         {courseTitle(course)}
       </Link>
