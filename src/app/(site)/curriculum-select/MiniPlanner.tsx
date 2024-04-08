@@ -2,13 +2,15 @@
 
 import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
 import { StoredCourse } from "@/app/types/Course";
+import { PlannerData } from "@/app/types/Planner";
+import { Quarter } from "@/app/types/Quarter";
 
 export default function MiniPlanner({
   plannerState,
   onSelected,
   selected,
 }: {
-  plannerState: any;
+  plannerState: PlannerData;
   onSelected: () => void;
   selected?: boolean;
 }) {
@@ -26,7 +28,9 @@ export default function MiniPlanner({
             slice_val + 4,
           );
 
-          return <Year key={i} year={i} quarters={quarters} />;
+          return (
+            <Year key={i} planner={plannerState} year={i} quarters={quarters} />
+          );
         })}
       </div>
       <SelectedIndicator toggled={selected ? selected : false} />
@@ -54,7 +58,15 @@ function QuarterLabels() {
   );
 }
 
-function Year({ year, quarters }: { year: number; quarters: any[] }) {
+function Year({
+  planner,
+  year,
+  quarters,
+}: {
+  planner: PlannerData;
+  year: number;
+  quarters: any[];
+}) {
   const style = year % 2 === 1 ? { backgroundColor: "#f3f4f6" } : {};
 
   return (
@@ -62,11 +74,16 @@ function Year({ year, quarters }: { year: number; quarters: any[] }) {
       <div className="col-span-1">
         <div className="text-gray-500 text-center">Year {year + 1}</div>
       </div>
-      {quarters.map((quarter, index) => (
+      {quarters.map((quarter: Quarter, index: number) => (
         <div key={index} style={style} className="min-h-24 col-span-2">
           <div className="space-y-1 m-2 text-left">
-            {quarter.courses.map((course: StoredCourse, index: number) => (
-              <MiniCourseCard key={index} course={course} />
+            {quarter.courses.map((courseId, index) => (
+              <MiniCourseCard
+                key={index}
+                course={
+                  planner.courses.find((c: StoredCourse) => c.id === courseId)!
+                }
+              />
             ))}
           </div>
         </div>

@@ -8,6 +8,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/app/components/miscellaneous/Carousel";
+import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
+import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
+import { PlannerProvider } from "@/app/contexts/PlannerProvider";
 import {
   useAddNewPlannerMutation,
   usePlanners,
@@ -81,61 +84,66 @@ export default function CurriculumSelect() {
 
   return (
     <div className="flex-1 h-full w-full flex flex-col items-center justify-center p-5">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 text-center">
-          Select a starting curriculum
-        </h1>
-        <p className="text-subtext leading-7 max-w-md text-center">
-          Build your schedule based on your primary program. Pick from UCSC
-          recommended plans.
-        </p>
-      </div>
+      <PlannerProvider plannerId={""} title={""} order={0}>
+        <CourseInfoProvider>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 text-center">
+              Select a starting curriculum
+            </h1>
+            <p className="text-subtext leading-7 max-w-md text-center">
+              Build your schedule based on your primary program. Pick from UCSC
+              recommended plans.
+            </p>
+          </div>
 
-      {/* Program Select */}
-      <Select
-        placeholder="Choose one…"
-        variant="plain"
-        value={selectedProgram}
-        onChange={(_, newValue) =>
-          newValue != null && setSelectedProgram(newValue)
-        }
-        disabled={isUserProgramsLoading || isUserProgramsEmpty}
-        sx={{ width: "100%", maxWidth: "32rem" }}
-        endDecorator={
-          isUserProgramsLoading ? (
-            <CircularProgress
-              size="sm"
-              sx={{ bgcolor: "background.surface" }}
+          {/* Program Select */}
+          <Select
+            placeholder="Choose one…"
+            variant="plain"
+            value={selectedProgram}
+            onChange={(_, newValue) =>
+              newValue != null && setSelectedProgram(newValue)
+            }
+            disabled={isUserProgramsLoading || isUserProgramsEmpty}
+            sx={{ width: "100%", maxWidth: "32rem" }}
+            endDecorator={
+              isUserProgramsLoading ? (
+                <CircularProgress
+                  size="sm"
+                  sx={{ bgcolor: "background.surface" }}
+                />
+              ) : null
+            }
+          >
+            {userPrograms &&
+              userPrograms.map((major, index) => (
+                <Option key={index} value={major}>
+                  {major.name} {major.catalogYear}
+                </Option>
+              ))}
+          </Select>
+
+          {/* Curriculum Select */}
+          {!isUserProgramsEmpty && selectedProgram && (
+            <CurriculumSelectCarousel
+              key={selectedProgram.id}
+              program={selectedProgram}
+              setSelectedPlanner={setSelectedPlanner}
+              selectedPlanner={selectedPlanner}
             />
-          ) : null
-        }
-      >
-        {userPrograms &&
-          userPrograms.map((major, index) => (
-            <Option key={index} value={major}>
-              {major.name} {major.catalogYear}
-            </Option>
-          ))}
-      </Select>
+          )}
 
-      {/* Curriculum Select */}
-      {!isUserProgramsEmpty && selectedProgram && (
-        <CurriculumSelectCarousel
-          key={selectedProgram.id}
-          program={selectedProgram}
-          setSelectedPlanner={setSelectedPlanner}
-          selectedPlanner={selectedPlanner}
-        />
-      )}
-
-      <div className="max-w-lg w-full">
-        <ContinueButton
-          onClick={() => handleClickUseTemplate()}
-          disabled={selectedPlanner == null}
-        >
-          Use this template
-        </ContinueButton>
-      </div>
+          <div className="max-w-lg w-full">
+            <ContinueButton
+              onClick={() => handleClickUseTemplate()}
+              disabled={selectedPlanner == null}
+            >
+              Use this template
+            </ContinueButton>
+          </div>
+          <CourseInfoModal />
+        </CourseInfoProvider>
+      </PlannerProvider>
     </div>
   );
 }
@@ -154,7 +162,7 @@ function CurriculumSelectCarousel({
 
   // Fetch default planners for the program
   const {
-    data: _defaultPlanners,
+    data: defaultPlanners,
     isPending: defaultPlannersIsPending,
     isFetching: defaultPlannersIsFetching,
   } = useProgramDefaultPlanners(program.name, program.catalogYear);
@@ -163,15 +171,15 @@ function CurriculumSelectCarousel({
     defaultPlannersIsPending || defaultPlannersIsFetching;
 
   // Replace course ids with course objects
-  const defaultPlanners = _defaultPlanners?.map((planner) => ({
-    ...planner,
-    quarters: planner.quarters.map((quarter) => ({
-      ...quarter,
-      courses: quarter.courses.map((courseId) =>
-        planner.courses.find((c) => c.id === courseId),
-      ),
-    })),
-  }));
+  // const defaultPlanners = _defaultPlanners?.map((planner) => ({
+  //   ...planner,
+  //   quarters: planner.quarters.map((quarter) => ({
+  //     ...quarter,
+  //     courses: quarter.courses.map((courseId) =>
+  //       planner.courses.find((c) => c.id === courseId),
+  //     ),
+  //   })),
+  // }));
 
   // Set the default planner to the first planner in the list
   useEffect(() => {
