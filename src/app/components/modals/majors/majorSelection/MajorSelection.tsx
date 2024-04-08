@@ -53,10 +53,8 @@ export default function UserProgramsEditor() {
   return (
     <div className="space-y-4 w-full">
       <Card variant="soft" size="sm">
-        <div className="flex flex-row justify-start items-start gap-2">
-          <Typography level="h4" textColor="inherit" fontWeight="lg" mb={1}>
-            Your Majors and Minors
-          </Typography>
+        <div className="flex flex-row justify-start items-center gap-2">
+          <div className="font-semibold text-xl">Your Majors and Minors</div>
           <Button
             variant="plain"
             onClick={() => router.push("/planner")}

@@ -20,7 +20,7 @@ import {
 import { useProgram } from "@/app/hooks/reactQuery";
 import { DragDropContext } from "@hello-pangea/dnd";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { Button, Tooltip, Typography } from "@mui/joy";
+import { Button, Tooltip } from "@mui/joy";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -95,10 +95,10 @@ function Component() {
     <DragDropContext onDragEnd={handleDragEnd}>
       <CourseInfoProvider>
         <div className="flex flex-row p-4 pb-0 justify-between">
-          <div className="flex flex-row">
-            <Typography level="h4">
+          <div className="flex flex-row items-center">
+            <div className="font-semibold text-xl">
               Editing {major?.name} {major?.catalogYear}
-            </Typography>
+            </div>
             <Button
               variant="plain"
               onClick={() => {
