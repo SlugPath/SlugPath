@@ -2,8 +2,6 @@
 
 import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
 import { StoredCourse } from "@/app/types/Course";
-import { Typography } from "@mui/joy";
-import Grid from "@mui/joy/Grid";
 
 export default function MiniPlanner({
   plannerState,
@@ -19,13 +17,7 @@ export default function MiniPlanner({
       onClick={() => onSelected()}
       className="bg-slate-50 p-4 border-4 border-gray-300 rounded-2xl relative"
     >
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          flexGrow: 1,
-        }}
-      >
+      <div className="grid grid-cols-9">
         <QuarterLabels />
         {Array.from({ length: 4 }, (_, index) => index).map((i) => {
           const slice_val = 4 * i;
@@ -36,7 +28,7 @@ export default function MiniPlanner({
 
           return <Year key={i} year={i} quarters={quarters} />;
         })}
-      </Grid>
+      </div>
       <SelectedIndicator toggled={selected ? selected : false} />
     </button>
   );
@@ -45,19 +37,19 @@ export default function MiniPlanner({
 function QuarterLabels() {
   return (
     <>
-      <Grid xs={2} />
-      <Grid xs={2.5}>
-        <Typography color="neutral">Fall</Typography>
-      </Grid>
-      <Grid xs={2.5}>
-        <Typography color="neutral">Winter</Typography>
-      </Grid>
-      <Grid xs={2.5}>
-        <Typography color="neutral">Spring</Typography>
-      </Grid>
-      <Grid xs={2.5}>
-        <Typography color="neutral">Summer</Typography>
-      </Grid>
+      <div className="col-span-1" />
+      <div className="col-span-2">
+        <div className="text-gray-500 text-left ml-2">Fall</div>
+      </div>
+      <div className="col-span-2">
+        <div className="text-gray-500 text-left ml-2">Winter</div>
+      </div>
+      <div className="col-span-2">
+        <div className="text-gray-500 text-left ml-2">Spring</div>
+      </div>
+      <div className="col-span-2">
+        <div className="text-gray-500 text-left ml-2">Summer</div>
+      </div>
     </>
   );
 }
@@ -67,17 +59,17 @@ function Year({ year, quarters }: { year: number; quarters: any[] }) {
 
   return (
     <>
-      <Grid xs={2}>
-        <Typography color="neutral" className="text-center">
-          Year {year + 1}
-        </Typography>
-      </Grid>
+      <div className="col-span-1">
+        <div className="text-gray-500 text-center">Year {year + 1}</div>
+      </div>
       {quarters.map((quarter, index) => (
-        <Grid xs={2.5} key={index} style={style} className="space-y-1 min-h-24">
-          {quarter.courses.map((course: StoredCourse, index: number) => (
-            <MiniCourseCard key={index} course={course} />
-          ))}
-        </Grid>
+        <div key={index} style={style} className="min-h-24 col-span-2">
+          <div className="space-y-1 m-2 text-left">
+            {quarter.courses.map((course: StoredCourse, index: number) => (
+              <MiniCourseCard key={index} course={course} />
+            ))}
+          </div>
+        </div>
       ))}
     </>
   );
@@ -85,7 +77,7 @@ function Year({ year, quarters }: { year: number; quarters: any[] }) {
 
 function SelectedIndicator({ toggled }: { toggled: boolean }) {
   return (
-    <div className="border-gray-300 border-4 items-center flex justify-center rounded-full transition-opacity w-8 h-8 absolute top-0 right-0 m-2 p-2">
+    <div className="border-gray-300 bg-white border-4 items-center flex justify-center rounded-full transition-opacity w-8 h-8 absolute top-0 right-0 m-2 p-2">
       {toggled && <div className="bg-blue-300 rounded-full p-2" />}
     </div>
   );

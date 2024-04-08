@@ -43,6 +43,7 @@ export function MiniCourseCard({
         underline="none"
         sx={{ color: "text.tertiary" }}
         onClick={() => handleClickedCourse(course)}
+        className="font-medium"
       >
         {courseTitle(course)}
       </Link>
