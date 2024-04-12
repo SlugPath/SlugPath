@@ -12,18 +12,21 @@ import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoM
 import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
 import { PlannerProvider } from "@/app/contexts/PlannerProvider";
 import {
-  useAddNewPlannerMutation,
+  // useAddNewPlannerMutation,
   usePlanners,
   useProgramDefaultPlanners,
+  useUpdatePlannersMutation,
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
-import { PlannerTitle } from "@/app/types/Planner";
+import { PlannerData, PlannerTitle } from "@/app/types/Planner";
 import { Program } from "@/app/types/Program";
 import { cloneDefaultPlanner } from "@/lib/plannerUtils";
 import { CircularProgress, Option, Select } from "@mui/joy";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import MiniPlanner from "./MiniPlanner";
 
@@ -31,6 +34,8 @@ export default function CurriculumSelect() {
   const { data: session } = useSession();
   const userId = session?.user.id;
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const [selectedPlanner, setSelectedPlanner] = useState<number | null>(null);
 
@@ -66,7 +71,12 @@ export default function CurriculumSelect() {
   }, [userPrograms, selectedProgram]);
 
   function handleUpdatePlannersSuccess() {
-    router.push("/planner");
+    queryClient.invalidateQueries({ queryKey: ["planners", userId] });
+
+    // Successful invalidating the queries seems to only work with a delay
+    // invalidating { queryKey: ["planners", userId] } causes correct fetching of
+    // newly added planner.
+    setTimeout(() => router.push("/planner"), 500);
   }
 
   function handleClickUseTemplate() {
@@ -170,17 +180,6 @@ function CurriculumSelectCarousel({
   const isDefaultPlannersLoading =
     defaultPlannersIsPending || defaultPlannersIsFetching;
 
-  // Replace course ids with course objects
-  // const defaultPlanners = _defaultPlanners?.map((planner) => ({
-  //   ...planner,
-  //   quarters: planner.quarters.map((quarter) => ({
-  //     ...quarter,
-  //     courses: quarter.courses.map((courseId) =>
-  //       planner.courses.find((c) => c.id === courseId),
-  //     ),
-  //   })),
-  // }));
-
   // Set the default planner to the first planner in the list
   useEffect(() => {
     if (
@@ -217,4 +216,44 @@ function CurriculumSelectCarousel({
       <CarouselNext />
     </Carousel>
   );
+}
+
+function useAddNewPlannerMutation(
+  userId: string | undefined,
+  onSuccess?: () => void,
+) {
+  const { data: planners } = usePlanners(userId);
+  const { mutate: saveAll } = useUpdatePlannersMutation(onSuccess);
+
+  async function addNewPlanner({
+    userId,
+    planner,
+  }: {
+    userId: string | undefined;
+    planner: PlannerData;
+  }) {
+    if (!planners) return;
+
+    const id = uuidv4();
+
+    const newPlanners = planners.concat({
+      ...cloneDefaultPlanner(planner!),
+      id,
+      title: "New Planner",
+    });
+
+    await saveAll({ userId: userId!, planners: newPlanners });
+  }
+
+  return useMutation({
+    mutationFn: async (params: {
+      userId: string | undefined;
+      planner: PlannerData;
+    }) => await addNewPlanner(params),
+    onSuccess: () => {
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
+  });
 }
