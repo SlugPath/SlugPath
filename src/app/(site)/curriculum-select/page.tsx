@@ -31,15 +31,15 @@ import { v4 as uuidv4 } from "uuid";
 import MiniPlanner from "./MiniPlanner";
 
 export default function CurriculumSelect() {
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userId = session?.user.id;
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-
   const [selectedPlanner, setSelectedPlanner] = useState<number | null>(null);
-
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+
+  const [loadingPage, setLoadingPage] = useState(false);
 
   // Fetch user programs
   const {
@@ -72,11 +72,15 @@ export default function CurriculumSelect() {
 
   function handleUpdatePlannersSuccess() {
     queryClient.invalidateQueries({ queryKey: ["planners", userId] });
+    setLoadingPage(true);
 
     // Successful invalidating the queries seems to only work with a delay
     // invalidating { queryKey: ["planners", userId] } causes correct fetching of
     // newly added planner.
-    setTimeout(() => router.push("/planner"), 500);
+    setTimeout(() => {
+      setLoadingPage(false);
+      router.push("/planner");
+    }, 500);
   }
 
   function handleClickUseTemplate() {
@@ -147,6 +151,7 @@ export default function CurriculumSelect() {
             <ContinueButton
               onClick={() => handleClickUseTemplate()}
               disabled={selectedPlanner == null}
+              loading={loadingPage}
             >
               Use this template
             </ContinueButton>
