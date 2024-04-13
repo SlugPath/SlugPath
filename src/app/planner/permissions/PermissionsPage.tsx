@@ -1,30 +1,24 @@
 "use client";
 
-import IsSatisfiedMark from "@/app/components/miscellaneous/IsSatisfiedMark";
+import PermissionList from "@/app/planner/permissions/PermissionList";
+import { isUserAlreadyAdded, sortPermissions } from "@/lib/permissionsUtils";
+import { isValidEmail } from "@/lib/utils";
+import IsSatisfiedMark from "@components/miscellaneous/IsSatisfiedMark";
 import {
   useDeleteUserPermissionMutation,
   usePermissions,
   useUpdateUserPermissionMutation,
-} from "@/app/hooks/reactQuery";
-import PermissionList from "@/app/planner/permissions/PermissionList";
-import { isUserAlreadyAdded, sortPermissions } from "@/lib/permissionsUtils";
-import { isValidEmail } from "@/lib/utils";
+} from "@hooks/reactQuery";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import ReportIcon from "@mui/icons-material/Report";
 import { Alert, Button, Input, Typography } from "@mui/joy";
 import { CircularProgress } from "@mui/material";
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-} from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Permissions() {
-  const queryClient = new QueryClient();
   const router = useRouter();
   const session = useSession();
   const userId = session.data?.user.id;
@@ -73,7 +67,7 @@ export default function Permissions() {
   }
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <>
       <div className="flex flex-row justify-start w-full items-center">
         <Typography
           component="h2"
@@ -124,6 +118,6 @@ export default function Permissions() {
         </div>
         <PermissionList />
       </div>
-    </HydrationBoundary>
+    </>
   );
 }

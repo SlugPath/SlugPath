@@ -11,14 +11,13 @@ export default function PermissionsList() {
   return (
     <AccordionGroup className="w-full h-[70vh] overflow-auto">
       <List className="flex flex-col gap-1">
-        {permissions &&
-          permissions.map((permission, index) => (
-            <ListItem key={index}>
-              <ListItemContent>
-                <PermissionAccordion permission={permission} />
-              </ListItemContent>
-            </ListItem>
-          ))}
+        {permissions?.map((permission, index) => (
+          <ListItem key={index}>
+            <ListItemContent>
+              <PermissionAccordion permission={permission} />
+            </ListItemContent>
+          </ListItem>
+        ))}
       </List>
     </AccordionGroup>
   );
