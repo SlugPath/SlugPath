@@ -92,7 +92,7 @@ export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
     return filterOfferings(offers, course).map((c) => ({
       term: getTermById(c.strm),
       instructor: c.instructors[0].name,
-      class_meeting: `${c.start_time}-${c.end_time}, ${c.meeting_days} @ ${c.location}`,
+      class_meeting: `${c.start_time} - ${c.end_time}, ${c.meeting_days} @${c.location}`,
       class_section: c.class_section,
       waitlist_total: c.waitlist_total,
       enrolled: `${c.enrl_total} of ${c.enrl_capacity} enrolled`,
@@ -100,7 +100,6 @@ export async function getMoreEnrollmentInfo(course: CourseEnrollQuery) {
   });
 }
 
-// =========== Helper functions =============
 function createEnrollmentInfoURL(
   termId: number,
   { number, departmentCode }: Pick<StoredCourse, "number" | "departmentCode">,

@@ -1,4 +1,3 @@
-import { useUserPrograms } from "@/app/hooks/reactQuery";
 import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 import useProgramVerification from "@/app/hooks/useProgramVerification";
 import { StoredCourse } from "@customTypes/Course";
@@ -45,6 +44,7 @@ export function MajorVerificationProvider({
 }) {
   const { data: session } = useSession();
   const {
+    userPrograms,
     updateRequirementList,
     addRequirementList,
     removeRequirementList,
@@ -54,8 +54,6 @@ export function MajorVerificationProvider({
     findRequirementList,
     isMajorRequirementsSatisfied: isProgramRequirementsSatisfied,
   } = useProgramVerification();
-
-  const { data: userPrograms } = useUserPrograms(session?.user.id);
 
   const { getLoadingSave, getIsSaved } = useMajorRequirements(
     userPrograms ?? [],

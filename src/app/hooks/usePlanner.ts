@@ -187,7 +187,7 @@ export default function usePlanner(input: {
     [courseState, handleCourseUpdate],
   );
 
-  const replaceCustomCourse = (customId: string, courses: StoredCourse[]) => {
+  const replaceCourse = (customId: string, courses: StoredCourse[]) => {
     const newCids = courses.map((c) => c.id);
     const newCourses = courseState.courses.filter((c) => c.id != customId);
     newCourses.push(...courses);
@@ -211,7 +211,7 @@ export default function usePlanner(input: {
   };
 
   return {
-    replaceCustomCourse,
+    replaceCourse,
     courseState,
     totalCredits,
     geSatisfied,
