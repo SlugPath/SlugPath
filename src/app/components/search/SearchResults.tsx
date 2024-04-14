@@ -10,11 +10,13 @@ import DraggableCourseCard from "../planner/quarters/courses/DraggableCourseCard
 export interface SearchResultsProps {
   courses: StoredCourse[];
   loading: boolean;
+  droppableId?: string;
 }
 
 export default function SearchResults({
   courses,
   loading,
+  droppableId = SEARCH_DROPPABLE,
 }: SearchResultsProps) {
   function hasResults(): boolean {
     return courses.length > 0;
@@ -40,8 +42,6 @@ export default function SearchResults({
     parent: any;
     style: any;
   }) {
-    // We are rendering an extra item for the placeholder
-    // To do this we increased our data set size to include one 'fake' item
     if (!courses[index]) {
       return null;
     }
@@ -66,7 +66,7 @@ export default function SearchResults({
 
   return (
     <Droppable
-      droppableId={SEARCH_DROPPABLE}
+      droppableId={droppableId}
       isDropDisabled={true}
       mode="virtual"
       renderClone={(provided, _, rubric) => {
@@ -90,20 +90,18 @@ export default function SearchResults({
             className="h-full"
           >
             {hasResults() ? (
-              <div className="h-full">
-                <div className="overflow-y-auto h-full">
-                  <AutoSizer>
-                    {({ height, width }) => (
-                      <List
-                        height={height}
-                        rowCount={getItemCount(snapshot)}
-                        rowHeight={40}
-                        width={width}
-                        rowRenderer={(props) => getRowRender(props)}
-                      />
-                    )}
-                  </AutoSizer>
-                </div>
+              <div className="overflow-y-auto h-full">
+                <AutoSizer>
+                  {({ height, width }) => (
+                    <List
+                      height={height}
+                      rowCount={getItemCount(snapshot)}
+                      rowHeight={40}
+                      width={width}
+                      rowRenderer={(props) => getRowRender(props)}
+                    />
+                  )}
+                </AutoSizer>
               </div>
             ) : (
               <div className="flex justify-center items-center overflow-y-auto h-full">

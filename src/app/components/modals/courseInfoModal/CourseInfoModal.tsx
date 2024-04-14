@@ -1,12 +1,17 @@
-import { getEnrollmentInfo } from "@/app/actions/enrollment";
-import { getTitle, isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import {
+  getTitle,
+  isCustomCourse,
+  isOffered,
+  isOfficialCourse,
+  isTransferCourse,
+} from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import { getCourse } from "@actions/course";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
-import { WarningAmberRounded } from "@mui/icons-material";
+import { useCourse, usePastEnrollmentInfo } from "@hooks/reactQuery";
+import { ArrowRightAlt, WarningAmberRounded } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -15,16 +20,14 @@ import {
   Sheet,
   Skeleton,
   Tooltip,
-  Typography,
 } from "@mui/joy";
-import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
 import LabelsSelectionModal from "./LabelSelectionModal";
 import MoreEnrollInfo from "./MoreEnrollInfo";
 import QuartersOfferedTable from "./QuartersOfferedTable";
-import ReplaceCustomModal from "./ReplaceCustomModal";
+import ReplaceCourseModal from "./ReplaceCourseModal";
 import SelectedLabels from "./SelectedLabels";
 
 const MAX_MODAL_TITLE = 60;
@@ -54,36 +57,32 @@ export default function CourseInfoModal({
 
   const [course = undefined, term = undefined] = courseTerm ?? [];
 
-  const { data, isLoading: loading } = useQuery({
-    queryKey: ["course", course?.departmentCode, course?.number],
-    queryFn: async () =>
-      await getCourse({
-        departmentCode: course!.departmentCode,
-        number: course!.number,
-      }),
-    enabled: course && !isCustomCourse(course),
-    staleTime: Infinity,
-  });
-
-  const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
-    queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
-    queryFn: async () => await getEnrollmentInfo(course!),
-    enabled: course !== undefined && !isCustomCourse(course),
-    placeholderData: [],
-    staleTime: Infinity,
-  });
+  const { data, isLoading: loading } = useCourse(
+    course?.departmentCode ?? "",
+    course?.number ?? "",
+  );
+  const { data: enrollmentInfo, isLoading: enrollLoading } =
+    usePastEnrollmentInfo(course);
 
   // This is to prevent illegally opening the modal
   if (course === undefined || course.departmentCode === undefined) {
     return null;
   }
 
-  // Accessors
+  // ============= Begin Accessor Functions =============
   function title(c?: StoredCourse) {
     if (loading) return "";
-    if (!c) return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
+    if (!c) {
+      if (isCustomCourse(course!))
+        return (course?.title ?? "").slice(0, MAX_MODAL_TITLE);
+      // For transfer courses
+      return truncateTitle(
+        `${course?.departmentCode} ${course?.number} ${getTitle(course!)}`,
+        MAX_MODAL_TITLE,
+      );
+    }
     return truncateTitle(
-      `${c.departmentCode} ${c.number} ${getTitle(c)}`,
+      `${c?.departmentCode} ${c?.number} ${getTitle(c!)}`,
       MAX_MODAL_TITLE,
     );
   }
@@ -104,7 +103,7 @@ export default function CourseInfoModal({
   }
 
   function ge(c?: StoredCourse) {
-    if (loading || !c) return "";
+    if (loading) return "";
     const capitalize: { [key: string]: string } = {
       peT: "PE-T",
       peH: "PE-H",
@@ -113,7 +112,8 @@ export default function CourseInfoModal({
       prS: "PR-S",
       prE: "PR-E",
     };
-    return c.ge.map((code: string) => {
+    const ges = c?.ge ?? course?.ge ?? [];
+    return ges.map((code: string) => {
       if (code === "None") return code;
       if (Object.keys(capitalize).includes(code)) return capitalize[code];
       return code.toLocaleUpperCase();
@@ -127,7 +127,9 @@ export default function CourseInfoModal({
     return preqs.includes(start) ? preqs : `${start} ${preqs}`;
   }
 
-  // Handlers
+  // ============= End Accessor Functions =============
+
+  // ============= Begin Handler Functions =============
   const handleOpenLabels = () => {
     setShowLabelSelectionModal(true);
   };
@@ -142,9 +144,13 @@ export default function CourseInfoModal({
     setDisplayCourse([newCourse, term]);
   };
 
-  // Only show this second modal if it is a custom course,
+  // ============= End Handler Functions =============
+
+  // Only show this second modal if it is a custom/official course,
   // in the planner, and the course is being edited
+  const courseInPlanner = !isTransferCourse(course) && term !== undefined;
   const customCourseInPlanner = isCustomCourse(course) && term !== undefined;
+
   if (editing && customCourseInPlanner) {
     const handleClose = () => {
       setEditing(false);
@@ -168,16 +174,16 @@ export default function CourseInfoModal({
 
   // Only show this modal if it is a custom course,
   // in the planner, and the course is being replaced
-  if (replacing && customCourseInPlanner) {
+  if (replacing && courseInPlanner) {
     return (
-      <ReplaceCustomModal
+      <ReplaceCourseModal
         onSave={() => {
           setReplacing(false);
           setShowModal(false);
         }}
         onClose={() => setReplacing(false)}
         isOpen={replacing}
-        customCourse={course}
+        toReplace={course}
       />
     );
   }
@@ -216,15 +222,7 @@ export default function CourseInfoModal({
           )}
           <div className="flex justify-between items-center">
             <Skeleton loading={loading} variant="text" width="50%">
-              <Typography
-                component="h2"
-                id="modal-title"
-                level="h4"
-                textColor="inherit"
-                fontWeight="lg"
-              >
-                {title(data)}
-              </Typography>
+              <h2 className="text-xl font-bold">{title(data)}</h2>
             </Skeleton>
             {isCustomCourse(course) ? (
               <Tooltip title="We recommend replacing this custom course with a real course.">
@@ -232,60 +230,69 @@ export default function CourseInfoModal({
                   Custom Course
                 </Chip>
               </Tooltip>
-            ) : (
+            ) : isOfficialCourse(course) ? (
               <Chip color="primary" size="lg" className="mr-2">
                 Official Course
+              </Chip>
+            ) : (
+              <Chip color="transfer" size="lg" className="mr-2">
+                Transfer Course
               </Chip>
             )}
           </div>
           <Skeleton loading={loading} variant="text" width="50%">
-            <Typography
-              className="text-wrap"
-              level="body-md"
-              sx={{
-                inlineSize: "100%",
-                overflowWrap: "break-word",
-                maxHeight: "12rem",
-                overflowY: "auto",
-              }}
-            >
+            <p className="break-words text-wrap max-h-48 overflow-y-auto">
               {description(data)}
-            </Typography>
+            </p>
           </Skeleton>
-          {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
-          {!isCustomCourse(course) ? (
+          {/* Show GE's if it's an official course or a transfer course */}
+          {(isOfficialCourse(course) || isTransferCourse(course)) && (
+            <p>GE: {ge(data)}</p>
+          )}
+
+          {/* Show preqs, past enrollment info, and instructors for official courses*/}
+          <p>Credits: {credits(data)}</p>
+          {isOfficialCourse(course) ? (
             <>
-              <Typography component="p">{prerequisites(data)}</Typography>
-              <Typography component="p">GE: {ge(data)}</Typography>
+              <p>{prerequisites(data)}</p>
               <Skeleton loading={enrollLoading}>
                 {enrollmentInfo && enrollmentInfo.length > 0 && (
                   <QuartersOfferedTable enrollmentInfo={enrollmentInfo} />
                 )}
               </Skeleton>
+              <MoreEnrollInfo course={course} />
             </>
-          ) : (
+          ) : isCustomCourse(course) ? (
             <>
               <div className="flex flex-row gap-2 items-center">
-                <Typography component="p">Quarters Offered:</Typography>
-                {course.quartersOffered.map((q, i) => (
+                <p>Quarters Offered:</p>
+                {course.quartersOffered.map((quarter, i) => (
                   <Chip key={i} color="primary">
-                    {q}
+                    {quarter}
                   </Chip>
                 ))}
               </div>
               {!isOffered(course.quartersOffered, term) && (
-                <Typography
-                  color="warning"
-                  component="p"
-                  startDecorator={<WarningAmberRounded color="warning" />}
-                >
+                <p className="text-orange-800 dark:text-orange-400 flex items-center">
+                  <span className="mb-1">
+                    <WarningAmberRounded color="warning" />
+                  </span>
                   Warning: {course.title} is not offered in {` ${term}`} Quarter
-                </Typography>
+                </p>
               )}
             </>
+          ) : (
+            <>
+              <p className="text-lg">School: {course.school}</p>
+              <p className="text-lg flex items-center">
+                Replacing{" "}
+                <span>
+                  <ArrowRightAlt fontSize="large" />
+                </span>
+                {course.equivalent}
+              </p>
+            </>
           )}
-          <Typography component="p">Credits: {credits(data)}</Typography>
-          {!isCustomCourse(course) && <MoreEnrollInfo course={course} />}
           {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}
@@ -294,31 +301,20 @@ export default function CourseInfoModal({
             />
           )}
           <ModalClose variant="plain" />
-          {!viewOnly && customCourseInPlanner && (
-            <div className="flex gap-2">
-              <Button onClick={() => setEditing(true)} className="w-1/2">
-                <Typography
-                  level="body-lg"
-                  sx={{
-                    color: "white",
-                  }}
-                >
-                  Edit
-                </Typography>
-              </Button>
+          {!viewOnly && courseInPlanner && (
+            <div className="flex gap-2 justify-center">
+              {isCustomCourse(course) && (
+                <Button onClick={() => setEditing(true)} className="w-1/2">
+                  <p className="text-white text-lg">Edit</p>
+                </Button>
+              )}
+
               <Button
                 onClick={() => setReplacing(true)}
                 className="w-1/2"
                 color="success"
               >
-                <Typography
-                  level="body-lg"
-                  sx={{
-                    color: "white",
-                  }}
-                >
-                  Replace
-                </Typography>
+                <p className="text-white text-lg">Replace</p>
               </Button>
             </div>
           )}

@@ -22,7 +22,7 @@ export interface PlannerContextProps {
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
-  replaceCustomCourse: (customId: string, courses: StoredCourse[]) => void;
+  replaceCourse: (customId: string, courses: StoredCourse[]) => void;
   handleDragEnd: (result: DropResult) => void;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
@@ -63,7 +63,7 @@ export function PlannerProvider({
     updateNotes,
     addYear,
     deleteYear,
-    replaceCustomCourse,
+    replaceCourse,
   } = usePlanner({
     userId: session?.user.id,
     plannerId: plannerId,
@@ -83,7 +83,7 @@ export function PlannerProvider({
   return (
     <PlannerContext.Provider
       value={{
-        replaceCustomCourse,
+        replaceCourse,
         deleteCourse,
         editCustomCourse,
         totalCredits,

@@ -50,3 +50,8 @@ tfplan
 
 #icloud
 .App.tsx.icloud
+
+# python
+__pycache__/
+*.pyc
+venv/

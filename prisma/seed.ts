@@ -1,3 +1,4 @@
+import transferData from "@/cc-courses/transfers.json";
 import { majors, minors, years } from "@/lib/defaultPlanners";
 import { createQuarters, getRealEquivalent } from "@/lib/plannerUtils";
 import { zip } from "@/lib/utils";
@@ -21,7 +22,6 @@ async function main() {
   for (let i = 0; i < courses.length; i++) {
     const course = courses[i];
     const updatedCourse = {
-      // this helps avoid bugs and makes the code more DRY
       data: {
         department: course.department,
         departmentCode: course.departmentCode,
@@ -109,6 +109,51 @@ async function main() {
     ops3.push(createNonePlannerForMajor(m));
   }
   await prisma.$transaction([...ops3]);
+
+  console.log(`✨ Adding transfer courses ✨`);
+  // TODO: update this to use transactions
+  for (const course of Object.keys(transferData)) {
+    // Create all transfer courses
+    const [departmentCode, number] = course.split(" ");
+    const exists = await prisma.course.findFirst({
+      where: {
+        departmentCode,
+        number,
+      },
+    });
+    if (!exists) continue;
+    // Perform a transaction where for each official UCSC course we create the transfer courses and connect them
+    await prisma.$transaction(async (client) => {
+      const transfers = await Promise.all(
+        transferData[course as keyof typeof transferData].map((t: any) =>
+          client.transferCourse.create({
+            data: {
+              title: t.name,
+              departmentCode: t.deptCode,
+              number: t.courseNumber,
+              school: t.institution,
+            },
+            select: {
+              id: true,
+            },
+          }),
+        ),
+      );
+      await client.course.update({
+        where: {
+          departmentCode_number: {
+            departmentCode,
+            number,
+          },
+        },
+        data: {
+          transferCourses: {
+            connect: transfers,
+          },
+        },
+      });
+    });
+  }
   console.log(`✨ Done ✨`);
 }
 
