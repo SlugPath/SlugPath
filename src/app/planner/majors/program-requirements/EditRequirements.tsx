@@ -1,24 +1,14 @@
 "use client";
 
-import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
-import { RequirementsEditing } from "@/app/components/modals/majors/Requirements";
-import Search from "@/app/components/search/Search";
-import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
-import {
-  MajorVerificationContext,
-  MajorVerificationProvider,
-} from "@/app/contexts/MajorVerificationProvider";
-import { ModalsContext, ModalsProvider } from "@/app/contexts/ModalsProvider";
-import {
-  PlannerContext,
-  PlannerProvider,
-} from "@/app/contexts/PlannerProvider";
-import {
-  PlannersContext,
-  PlannersProvider,
-} from "@/app/contexts/PlannersProvider";
-import { useProgram } from "@/app/hooks/reactQuery";
+import ConfirmAlert from "@components/modals/ConfirmAlert";
+import { RequirementsEditing } from "@components/modals/majors/Requirements";
+import Search from "@components/search/Search";
+import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
+import { ModalsContext } from "@contexts/ModalsProvider";
 import { DragDropContext } from "@hello-pangea/dnd";
+import { useProgram } from "@hooks/reactQuery";
+import useHandleRequirementListDrag from "@hooks/useHandleRequirementListDrag";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { Button, Tooltip } from "@mui/joy";
 import { useParams } from "next/navigation";
@@ -28,30 +18,6 @@ import { useContext, useEffect, useState } from "react";
 import ReplaceRequirementsModal from "./ReplaceRequirementsModal";
 
 export default function EditRequirements() {
-  return (
-    <ModalsProvider>
-      <PlannersProvider>
-        <MajorVerificationProvider>
-          <Container />
-        </MajorVerificationProvider>
-      </PlannersProvider>
-    </ModalsProvider>
-  );
-}
-
-function Container() {
-  const { activePlanner } = useContext(PlannersContext);
-
-  if (activePlanner === undefined) return <></>;
-
-  return (
-    <PlannerProvider plannerId={activePlanner} title={""} order={0}>
-      <Component />
-    </PlannerProvider>
-  );
-}
-
-function Component() {
   const params = useParams();
   const majorIdString = params.majorId as string;
   const majorId = majorIdString ? parseInt(majorIdString) : undefined;
@@ -69,14 +35,18 @@ function Component() {
     onSaveMajorRequirements,
   } = useContext(MajorVerificationContext);
 
-  const { handleDragEnd } = useContext(PlannerContext);
-  const { setMajorToEdit, setShowReplaceRLModal } = useContext(ModalsContext);
+  const { majorToEdit, setMajorToEdit, setShowReplaceRLModal } =
+    useContext(ModalsContext);
 
+  // This is a little duplicative, but it's necessary to indicate that the client state and server state are separate
+  // In the future this can be streamlined by removing ModalsContext and using a store for MajorVerificationContext
   useEffect(() => {
     if (major) {
       setMajorToEdit(major);
     }
   }, [major, setMajorToEdit]);
+
+  const { handleDragEnd } = useHandleRequirementListDrag(majorToEdit);
 
   if (!major) {
     return <div>Major not found</div>;
@@ -96,9 +66,9 @@ function Component() {
       <CourseInfoProvider>
         <div className="flex flex-row p-4 pb-0 justify-between">
           <div className="flex flex-row items-center">
-            <div className="font-semibold text-xl">
+            <p className="font-semibold text-xl">
               Editing {major?.name} {major?.catalogYear}
-            </div>
+            </p>
             <Button
               variant="plain"
               onClick={() => {

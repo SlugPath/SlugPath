@@ -1,13 +1,3 @@
-import CloseIconButton from "@/app/components/buttons/CloseIconButton";
-import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
-import StyledAccordion from "@/app/components/planner/StyledAccordion";
-import {
-  useDeleteUserPermissionMutation,
-  usePermissions,
-  useUnqiuePrograms,
-  useUpdateUserPermissionMutation,
-  useUserPermissions,
-} from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
 import { isProgramAlreadyAdded } from "@/lib/permissionsUtils";
@@ -16,6 +6,16 @@ import {
   removeProgramFromPermissions,
   updateProgramExpirationDate,
 } from "@/lib/permissionsUtils";
+import CloseIconButton from "@components/buttons/CloseIconButton";
+import ConfirmAlert from "@components/modals/ConfirmAlert";
+import StyledAccordion from "@components/planner/StyledAccordion";
+import {
+  useDeleteUserPermissionMutation,
+  usePermissions,
+  useUnqiuePrograms,
+  useUpdateUserPermissionMutation,
+  useUserPermissions,
+} from "@hooks/reactQuery";
 import {
   AccordionDetails,
   AccordionSummary,
