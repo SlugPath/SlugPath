@@ -1,7 +1,11 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { compareCoursesByNum, toStoredCourse } from "@/lib/utils";
+import {
+  compareCoursesByNum,
+  fromTransferToStoredCourse,
+  toStoredCourse,
+} from "@/lib/utils";
 import { Course, Prisma } from "@prisma/client";
 
 import {
@@ -19,64 +23,41 @@ import {
 export async function getCoursesBy(
   pred: SearchQueryDetails,
 ): Promise<StoredCourse[]> {
-  const departmentCodeParam = () => {
-    if (pred.departmentCode) {
-      return {
-        departmentCode: {
-          contains: pred.departmentCode,
-        },
-      };
-    }
-    return {};
+  const query: any = {
+    where: {},
   };
 
-  const numberParam = () => {
-    if (pred.number) {
-      return {
-        number: {
-          contains: pred.number,
-        },
-      };
-    }
-    return {};
-  };
+  if (pred.departmentCode) {
+    query.where.departmentCode = {
+      contains: pred.departmentCode,
+    };
+  }
 
-  const geParam = () => {
-    if (pred.ge) {
-      return {
-        ge: {
-          has: pred.ge,
-        },
-      };
-    }
-    return {};
-  };
+  if (pred.number) {
+    query.where.number = {
+      contains: pred.number,
+    };
+  }
 
-  const creditParam = () => {
-    if (pred.creditRange) {
-      return {
-        credits: {
-          gte: pred.creditRange[0],
-          lte: pred.creditRange[1],
-        },
-      };
-    }
-    return {};
-  };
+  if (pred.ge) {
+    query.where.ge = {
+      has: pred.ge,
+    };
+  }
+
+  if (pred.creditRange) {
+    query.where.credits = {
+      gte: pred.creditRange[0],
+      lte: pred.creditRange[1],
+    };
+  }
 
   // Since course numbers can contain non-integer characters, a raw SQL query is necessary.
   // If the number field is empty, a raw query is used. If not, regular Prisma Client commands are used,
   // as the course number slider has no effect when the number field is active.
   let courses = [];
   if (pred.number) {
-    courses = await prisma.course.findMany({
-      where: {
-        departmentCode: departmentCodeParam().departmentCode,
-        number: numberParam().number,
-        ge: geParam().ge,
-        credits: creditParam().credits,
-      },
-    });
+    courses = await prisma.course.findMany(query);
   } else {
     // Raw query filters integers from course number characters to see if in slider range
     // If department or ge fields are empty an empty query is used
@@ -108,10 +89,50 @@ export async function getCoursesBy(
 }
 
 /**
+ * Returns a list of transfer alternatives for a particular course at UCSC
+ * across the UC-CCC-CSU system
+ * @param course an official UCSC course
+ * @returns a list of transfer alternatives for `course`
+ */
+export async function getTransferEquivalents(
+  course: StoredCourse,
+): Promise<StoredCourse[]> {
+  const res = await prisma.course.findFirst({
+    where: {
+      departmentCode: course.departmentCode,
+      number: course.number,
+    },
+    select: {
+      departmentCode: true,
+      number: true,
+      ge: true,
+      transferCourses: {
+        select: {
+          id: true,
+          title: true,
+          departmentCode: true,
+          number: true,
+          school: true,
+        },
+      },
+    },
+  });
+  if (!res) return [];
+
+  const { transferCourses, ge, departmentCode, number } = res;
+
+  return transferCourses.map((t) =>
+    fromTransferToStoredCourse(t, {
+      ge,
+      number,
+      departmentCode,
+    }),
+  );
+}
+
+/**
  * Fetch courses that match the specified titles
- * PURPOSE: for replacing custom courses, look for courses that match the specified titles
- * QUESTION: Is this function description accurate?
- * @param titles course titles to get suggested classes for
+ * @param titles course titles to match
  * @returns courses that match the specified titles
  */
 export async function getSuggestedCourses(

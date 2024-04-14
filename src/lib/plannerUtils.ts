@@ -58,6 +58,7 @@ export const customCourse = (): StoredCourse => {
     id: uuidv4(),
     credits: 5,
     departmentCode: "",
+    school: "UCSC",
     number: "",
     title: "Custom Course",
     ge: [],
@@ -170,6 +171,14 @@ export function isCustomCourse(c: StoredCourse): boolean {
   return departmentCode === "" || number === "";
 }
 
+export function isTransferCourse(c: StoredCourse): boolean {
+  return c.school !== "UCSC";
+}
+
+export function isOfficialCourse(c: StoredCourse): boolean {
+  return c.school === "UCSC" && !isCustomCourse(c);
+}
+
 export function getTitle({ title, departmentCode, number }: StoredCourse) {
   return title !== undefined && title.length > 0
     ? title
@@ -180,6 +189,7 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
   try {
     const course = JSON.parse(id);
     return {
+      school: course.school,
       title: course.title,
       departmentCode: course.departmentCode,
       number: course.number,
@@ -188,6 +198,7 @@ export function createCourseFromId(id: string): Omit<StoredCourse, "id"> {
       description: course.description ?? "",
       ge: course.ge,
       labels: [],
+      equivalent: course.equivalent ?? "",
     };
   } catch (e) {
     throw new Error(`Invalid course id ${id}`);

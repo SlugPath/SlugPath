@@ -205,6 +205,7 @@ export default function useProgramVerification() {
   }
 
   return {
+    userPrograms,
     updateRequirementList,
     addRequirementList,
     removeRequirementList,

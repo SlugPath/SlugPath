@@ -1,3 +1,4 @@
+import useMajorRequirements from "@/app/hooks/useMajorRequirements";
 import useProgramVerification from "@/app/hooks/useProgramVerification";
 import { StoredCourse } from "@customTypes/Course";
 import { PlannerData } from "@customTypes/Planner";
@@ -41,6 +42,7 @@ export function MajorVerificationProvider({
   children: React.ReactNode;
 }) {
   const {
+    userPrograms,
     updateRequirementList,
     addRequirementList,
     removeRequirementList,
@@ -52,7 +54,11 @@ export function MajorVerificationProvider({
     getIsSaved,
     getLoadingSave,
   } = useProgramVerification();
-
+  
+  const { getLoadingSave, getIsSaved } = useMajorRequirements(
+    userPrograms ?? [],
+    session?.user.id,
+  );
   return (
     <MajorVerificationContext.Provider
       value={{

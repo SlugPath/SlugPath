@@ -1,21 +1,27 @@
-import { EMPTY_PLANNER, initialPlanner } from "@/lib/plannerUtils";
+import {
+  EMPTY_PLANNER,
+  initialPlanner,
+  isOfficialCourse,
+} from "@/lib/plannerUtils";
 import { filterRedundantPrograms } from "@/lib/utils";
-import { ProgramType } from "@prisma/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-import { getCourse, getSuggestedCourses } from "../actions/course";
+import {
+  getCourse,
+  getSuggestedCourses,
+  getTransferEquivalents,
+} from "@actions/course";
+import { getEnrollmentInfo } from "@actions/enrollment";
 import {
   removePermission as deletePermission,
   getPermissions,
   getUserPermissions,
   getUserRole,
   replacePermission,
-} from "../actions/permissions";
+} from "@actions/permissions";
 import {
   getPlannerById,
   getUserPlanners,
   updateUserPlanners,
-} from "../actions/planner";
+} from "@actions/planner";
 import {
   getProgram,
   getProgramDefaultPlanners,
@@ -26,7 +32,11 @@ import {
   getUserProgramsById,
   updateUserDefaultPlanner,
   updateUserPrograms,
-} from "../actions/program";
+} from "@actions/program";
+import { ProgramType } from "@prisma/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { StoredCourse } from "../types/Course";
 import { Permission } from "../types/Permission";
 import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
@@ -69,6 +79,20 @@ export function useUnqiuePrograms() {
       return filterRedundantPrograms(res);
     },
     placeholderData: [],
+  });
+}
+
+/**
+ * A React Query hook to fetch equivalent transfer courses for a specified course at UCSC.
+ * @param course UCSC course
+ * @returns React Query useQuery Hook for transfer courses
+ */
+export function useTransferCourses(course: StoredCourse) {
+  return useQuery({
+    queryKey: ["transferCourses", course.departmentCode, course.number],
+    queryFn: async () => await getTransferEquivalents(course),
+    staleTime: Infinity,
+    enabled: isOfficialCourse(course),
   });
 }
 
@@ -392,14 +416,31 @@ export function useCourse(departmentCode: string, courseNumber: string) {
 }
 
 /**
- * A React Query hook to fetch suggested courses based on course titles
- * @param titles Course titles to get suggested classes for
+ * A React Query hook to fetch suggested courses for a given custom course
+ * @param titles titles of the custom course to search for
  * @returns React Query useQuery Hook for courses that match the specified titles
  */
+
 export function useSuggestedCourses(titles: string[]) {
   return useQuery({
-    queryKey: ["suggestedCourses", titles],
+    queryKey: ["suggestedCourses", ...titles],
     queryFn: async () => await getSuggestedCourses(titles),
     enabled: titles.length > 0,
+    staleTime: Infinity,
+  });
+}
+
+/**
+ * A React Query hook to fetch past enrollment info for a course
+ * @param course an official course to get past enrollment info for
+ * @returns React Query useQuery Hook for past enrollment info
+ */
+export function usePastEnrollmentInfo(course: StoredCourse | undefined) {
+  return useQuery({
+    queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
+    queryFn: async () => await getEnrollmentInfo(course!),
+    enabled: course !== undefined && isOfficialCourse(course),
+    placeholderData: [],
+    staleTime: Infinity,
   });
 }
