@@ -1,5 +1,8 @@
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { useAddNewPlannerMutation } from "@/app/hooks/reactQuery";
+import {
+  useAddNewPlannerMutation,
+  useUserPrograms,
+} from "@/app/hooks/reactQuery";
 import SelectBox from "@/app/register/(skipSetup)/SelectBox";
 import { initialPlanner } from "@/lib/plannerUtils";
 import { AutoAwesome, Map } from "@mui/icons-material";
@@ -25,6 +28,7 @@ export default function NewPlannerModal() {
   const [chooseCurriculum, setChooseCurriculum] = useState(true);
 
   const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(userId);
+  const { data: programs } = useUserPrograms(userId);
 
   function handleClickContinue() {
     if (chooseCurriculum) {
@@ -53,20 +57,28 @@ export default function NewPlannerModal() {
         className="space-y-2"
       >
         <Typography level="h3">New Planner</Typography>
-        <SelectBox
-          selected={chooseCurriculum == true}
-          setSelected={() => setChooseCurriculum(true)}
-        >
-          <div className="flex gap-3">
-            <div className="border-gray-300 border-2 rounded-lg p-2 h-fit w-fit">
-              <Map className="h-6 w-auto" sx={{ color: "#000" }} />
-            </div>
-            <div>
-              <p className="font-bold">Prefilled planners</p>
-              <p className="text-subtext">Choose a base to build on top of</p>
-            </div>
+        {programs && programs.length == 0 ? (
+          <div className="flex flex-row items-center">
+            <p className="text-subtext">
+              You must choose a major to choose a prefilled planner.
+            </p>
           </div>
-        </SelectBox>
+        ) : (
+          <SelectBox
+            selected={chooseCurriculum == true}
+            setSelected={() => setChooseCurriculum(true)}
+          >
+            <div className="flex gap-3">
+              <div className="border-gray-300 border-2 rounded-lg p-2 h-fit w-fit">
+                <Map className="h-6 w-auto" sx={{ color: "#000" }} />
+              </div>
+              <div>
+                <p className="font-bold">Prefilled planners</p>
+                <p className="text-subtext">Choose a base to build on top of</p>
+              </div>
+            </div>
+          </SelectBox>
+        )}
 
         <SelectBox
           selected={chooseCurriculum == false}

@@ -2,6 +2,8 @@
 
 import { getPrograms } from "@/app/actions/program";
 import { createUser } from "@/app/actions/user";
+import { useAddNewPlannerMutation } from "@/app/hooks/reactQuery";
+import { initialPlanner } from "@/lib/plannerUtils";
 import useAccountCreationStore from "@/store/account-creation";
 import { AutoAwesome, Map } from "@mui/icons-material";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,9 +17,11 @@ import SelectBox from "./SelectBox";
 export default function Register() {
   const { data: session, update: updateSession } = useSession();
   const user = session?.user;
+  const userId = session?.user.id;
 
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(userId);
 
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
@@ -53,6 +57,9 @@ export default function Register() {
       ...session,
       user: { ...user, isRecordCreated: true },
     });
+
+    // create new empty planner
+    addNewPlannerMutation({ userId, planner: initialPlanner() });
   };
 
   // On queryClient mount, prefetch programs for future program selectors

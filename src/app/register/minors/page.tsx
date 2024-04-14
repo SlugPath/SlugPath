@@ -1,6 +1,8 @@
 "use client";
 
 import { createUser } from "@/app/actions/user";
+import { useAddNewPlannerMutation } from "@/app/hooks/reactQuery";
+import { initialPlanner } from "@/lib/plannerUtils";
 import useAccountCreationStore from "@/store/account-creation";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -10,6 +12,8 @@ import ProgramSelector from "../ProgramSelector";
 
 export default function Minors() {
   const { data: session, update: updateSession } = useSession();
+  const userId = session?.user.id;
+  const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(userId);
 
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
@@ -49,6 +53,11 @@ export default function Minors() {
       ...session,
       user: { ...session!.user, isRecordCreated: true },
     });
+
+    if (majorIds.length == 0) {
+      // create new empty planner if user has not chosen any majors or minors
+      addNewPlannerMutation({ userId, planner: initialPlanner() });
+    }
   };
 
   return (

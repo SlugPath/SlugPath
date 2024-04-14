@@ -10,21 +10,23 @@ import { useEffect } from "react";
 
 import ShareModal from "../modals/shareModal/ShareModal";
 import PlannerList from "./PlannerList";
+import NewPlannerModal from "./modals/NewPlannerModal";
 import ExportModal from "./modals/exportModal/ExportModal";
 import PlannerTabs from "./plannerTabs/PlannerTabs";
 
 export default function Planners() {
   const { data: session } = useSession();
   const userId = session?.user.id;
-  const { data: planners } = usePlanners(userId);
-  const router = useRouter();
   const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const { data: planners, isLoading, isFetching } = usePlanners(userId);
 
   useEffect(() => {
-    if (planners && planners.length == 0) {
+    if (planners && !isLoading && !isFetching && planners.length == 0) {
       router.push("/curriculum-select");
     }
-  }, [planners, router]);
+  }, [isFetching, isLoading, planners, router]);
 
   useEffect(() => {
     if (userId) {
@@ -45,6 +47,7 @@ export default function Planners() {
         </div>
         <ExportModal />
         <ShareModal />
+        <NewPlannerModal />
       </ModalsProvider>
     </PlannersProvider>
   );

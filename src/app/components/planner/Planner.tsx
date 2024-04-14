@@ -30,7 +30,6 @@ import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequireme
 import MajorsModal from "../modals/majorsModal/MajorsModal";
 import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
 import PermissionsModal from "../permissionsModal/PermissionsModal";
-import NewPlannerModal from "../planners/modals/NewPlannerModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";
@@ -214,7 +213,6 @@ function Modals() {
       <EditMajorRequirementsModal />
       <ReplaceRequirementsModal />
       <PermissionsModal />
-      <NewPlannerModal />
     </>
   );
 }
