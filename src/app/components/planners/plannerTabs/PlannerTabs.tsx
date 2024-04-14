@@ -11,8 +11,6 @@ import RenameModal from "./RenameModal";
 import TitleSnackbar from "./TitleSnackbar";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
-// import { useRouter } from "next/navigation";
-
 const MAX_PLANNERS = 10;
 
 interface PlannerDeleteAlertData {
@@ -27,8 +25,6 @@ const emptyDeleteAlertData: PlannerDeleteAlertData = {
 };
 
 export default function PlannerTabs() {
-  // const router = useRouter();
-
   const {
     planners,
     removePlanner,

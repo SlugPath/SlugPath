@@ -81,7 +81,7 @@ export async function updateUserPlanners({
 }: {
   userId: string;
   planners: PlannerData[];
-}): Promise<void> {
+}): Promise<PlannerData[]> {
   await prisma.$transaction(async (tx) => {
     await tx.planner.deleteMany({
       where: {
@@ -101,6 +101,8 @@ export async function updateUserPlanners({
       ),
     );
   });
+
+  return getUserPlanners(userId);
 }
 
 /**

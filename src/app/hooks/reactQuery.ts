@@ -176,9 +176,10 @@ export function useUpdatePlannersMutation(onSuccess?: () => void) {
   return useMutation({
     mutationFn: async (params: { userId: string; planners: PlannerData[] }) =>
       await updateUserPlanners(params),
-    onSuccess: (_, { userId }) => {
+    onSuccess: (data, { userId }) => {
       queryClient.invalidateQueries({ queryKey: ["planners", userId] });
       if (onSuccess) {
+        queryClient.setQueryData(["planners", userId], data);
         onSuccess();
       }
     },

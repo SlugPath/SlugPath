@@ -22,8 +22,6 @@ export default function NewPlannerModal() {
     useContext(ModalsContext);
   const router = useRouter();
 
-  const [loadingNewPlanner, setLoadingNewPlanner] = useState(false);
-
   const [chooseCurriculum, setChooseCurriculum] = useState(true);
 
   const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(userId);
@@ -33,11 +31,7 @@ export default function NewPlannerModal() {
       router.push("/curriculum-select");
     } else {
       addNewPlannerMutation({ userId, planner: initialPlanner() });
-      setLoadingNewPlanner(true);
-      setTimeout(() => {
-        setLoadingNewPlanner(false);
-        setShowNewPlannerModal(false);
-      }, 500);
+      setShowNewPlannerModal(false);
     }
   }
 
@@ -89,12 +83,7 @@ export default function NewPlannerModal() {
           </div>
         </SelectBox>
 
-        <ContinueButton
-          loading={loadingNewPlanner}
-          onClick={handleClickContinue}
-        >
-          Continue
-        </ContinueButton>
+        <ContinueButton onClick={handleClickContinue}>Continue</ContinueButton>
       </Sheet>
     </Modal>
   );
