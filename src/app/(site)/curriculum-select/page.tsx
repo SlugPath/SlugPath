@@ -1,25 +1,25 @@
 "use client";
 
-import ContinueButton from "@/app/components/buttons/ContinueButton";
+import { PlannerTitle } from "@/app/types/Planner";
+import { Program } from "@/app/types/Program";
+import { cloneDefaultPlanner } from "@/lib/plannerUtils";
+import ContinueButton from "@components/buttons/ContinueButton";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/app/components/miscellaneous/Carousel";
-import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
-import { CourseInfoProvider } from "@/app/contexts/CourseInfoProvider";
-import { PlannerProvider } from "@/app/contexts/PlannerProvider";
+} from "@components/miscellaneous/Carousel";
+import CourseInfoModal from "@components/modals/courseInfoModal/CourseInfoModal";
+import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
+import { PlannerProvider } from "@contexts/PlannerProvider";
 import {
   useAddNewPlannerMutation,
   usePlanners,
   useProgramDefaultPlanners,
   useUserPrograms,
-} from "@/app/hooks/reactQuery";
-import { PlannerTitle } from "@/app/types/Planner";
-import { Program } from "@/app/types/Program";
-import { cloneDefaultPlanner } from "@/lib/plannerUtils";
+} from "@hooks/reactQuery";
 import { CircularProgress, Option, Select } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

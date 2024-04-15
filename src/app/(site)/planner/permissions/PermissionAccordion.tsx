@@ -1,10 +1,3 @@
-import {
-  useDeleteUserPermissionMutation,
-  usePermissions,
-  useUniquePrograms,
-  useUpdateUserPermissionMutation,
-  useUserPermissions,
-} from "@/app/hooks/reactQuery";
 import { Permission } from "@/app/types/Permission";
 import { Program } from "@/app/types/Program";
 import { isProgramAlreadyAdded } from "@/lib/permissionsUtils";
@@ -13,6 +6,16 @@ import {
   removeProgramFromPermissions,
   updateProgramExpirationDate,
 } from "@/lib/permissionsUtils";
+import CloseIconButton from "@components/buttons/CloseIconButton";
+import ConfirmAlert from "@components/modals/ConfirmAlert";
+import StyledAccordion from "@components/planner/StyledAccordion";
+import {
+  useDeleteUserPermissionMutation,
+  usePermissions,
+  useUniquePrograms,
+  useUpdateUserPermissionMutation,
+  useUserPermissions,
+} from "@hooks/reactQuery";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -37,10 +40,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { useSession } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
-
-import CloseIconButton from "../buttons/CloseIconButton";
-import ConfirmAlert from "../modals/ConfirmAlert";
-import StyledAccordion from "../planner/StyledAccordion";
 
 const materialTheme = extendMaterialTheme();
 

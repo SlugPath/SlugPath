@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import ShareModal from "../modals/shareModal/ShareModal";
+import ShareModal from "../modals/ShareModal";
 import PlannerList from "./PlannerList";
 import NewPlannerModal from "./modals/NewPlannerModal";
 import ExportModal from "./modals/exportModal/ExportModal";

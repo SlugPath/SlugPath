@@ -1,9 +1,10 @@
 "use client";
 
-import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
 import { StoredCourse } from "@/app/types/Course";
 import { PlannerData } from "@/app/types/Planner";
 import { Quarter } from "@/app/types/Quarter";
+
+import { MiniCourseCard } from "../planner/majors/majorSelection/MiniCourseCard";
 
 export default function MiniPlanner({
   plannerState,

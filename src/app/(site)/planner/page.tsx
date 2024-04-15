@@ -1,4 +1,4 @@
-import { authOptions } from "@/lib/auth";
+import { getUserPlanners } from "@actions/planner";
 import Planners from "@components/planners/Planners";
 import {
   HydrationBoundary,
@@ -7,10 +7,8 @@ import {
 } from "@tanstack/react-query";
 import { getServerSession } from "next-auth";
 
-import { getUserPlanners } from "../../actions/planner";
-
 export default async function Home() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   const userId = session?.user.id ?? "";
   const queryClient = new QueryClient();
 

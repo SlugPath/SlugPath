@@ -215,8 +215,8 @@ export default function CourseInfoModal({
             <LabelsSelectionModal
               showModal={showLabelSelectionModal}
               setShowModal={setShowLabelSelectionModal}
-              labels={getAllLabels()}
-              selectedLabels={getCourseLabels(course)}
+              labels={getAllLabels ? getAllLabels() : []}
+              selectedLabels={getCourseLabels ? getCourseLabels(course) : []}
               onUpdateLabels={handleUpdateLabels}
             />
           )}
@@ -295,7 +295,7 @@ export default function CourseInfoModal({
           )}
           {!viewOnly && (
             <SelectedLabels
-              labels={getCourseLabels(course)}
+              labels={getCourseLabels ? getCourseLabels(course) : []}
               handleOpenLabels={handleOpenLabels}
               ge={course.ge}
             />

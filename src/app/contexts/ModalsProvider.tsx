@@ -9,8 +9,6 @@ import useModals from "../hooks/useModals";
 export interface ModalsContextProps {
   showMajorsModal: boolean;
   setShowMajorsModal: SetShow;
-  showPermissionsModal: boolean;
-  setShowPermissionsModal: SetShow;
   showReplaceRLModal: boolean;
   setShowReplaceRLModal: SetShow;
   showMajorRequirementsEditModal: boolean;
@@ -28,8 +26,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
     showMajorsModal,
     setShowMajorsModal,
-    showPermissionsModal,
-    setShowPermissionsModal,
     showReplaceRLModal,
     setShowReplaceRLModal,
     showMajorRequirementsEditModal,
@@ -47,8 +43,6 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
       value={{
         showMajorsModal,
         setShowMajorsModal,
-        showPermissionsModal,
-        setShowPermissionsModal,
         showReplaceRLModal,
         setShowReplaceRLModal,
         showMajorRequirementsEditModal,

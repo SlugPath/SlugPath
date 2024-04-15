@@ -1,6 +1,6 @@
-import { useUserProgramDefaultPlanners } from "@/app/hooks/reactQuery";
 import { PlannerTitle } from "@/app/types/Planner";
 import { Program } from "@/app/types/Program";
+import { useUserProgramDefaultPlanners } from "@hooks/reactQuery";
 import Info from "@mui/icons-material/Info";
 import { Tab, TabList, Tabs, Tooltip, Typography } from "@mui/joy";
 import { CircularProgress } from "@mui/material";

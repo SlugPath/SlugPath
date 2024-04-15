@@ -169,6 +169,7 @@ export async function getPlannersByProgram(
         name: programName,
         catalogYear: catalogYear,
       },
+      userId: null,
     },
     include: {
       labels: true,

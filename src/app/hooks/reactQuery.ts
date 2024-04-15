@@ -26,6 +26,7 @@ import {
 } from "@actions/planner";
 import {
   getCatalogYears,
+  getProgram,
   getProgramDefaultPlanners,
   getPrograms,
   getProgramsByTypeInYear,
@@ -54,6 +55,20 @@ export function usePrograms(catalogYear?: string) {
     placeholderData: [],
     staleTime: Infinity, // Programs are static
     refetchOnMount: false,
+  });
+}
+
+/**
+ * A React Query hook to fetch a specific program by its id
+ * @param programId unique id that identifies a program
+ * @returns React Query useQuery Hook for a program
+ */
+export function useProgram(programId: number) {
+  return useQuery({
+    queryKey: ["program", programId],
+    queryFn: async () => await getProgram(programId),
+    placeholderData: null,
+    enabled: !!programId,
   });
 }
 
@@ -347,7 +362,7 @@ export function usePermissions(
   return useQuery({
     queryKey: ["permissions"],
     queryFn: async () => await getPermissions(),
-    placeholderData: [],
+    // placeholderData: [],
     select,
   });
 }

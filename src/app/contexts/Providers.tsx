@@ -4,7 +4,10 @@ import { CssVarsProvider, extendTheme } from "@mui/joy";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+import { MajorVerificationProvider } from "./MajorVerificationProvider";
+import { ModalsProvider } from "./ModalsProvider";
 import NextAuthProvider from "./NextAuthProvider";
+import { PlannersProvider } from "./PlannersProvider";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -105,7 +108,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <NextAuthProvider>
       <CssVarsProvider defaultMode="system" theme={theme}>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <MajorVerificationProvider>
+            <ModalsProvider>
+              <PlannersProvider>{children}</PlannersProvider>
+            </ModalsProvider>
+          </MajorVerificationProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </CssVarsProvider>

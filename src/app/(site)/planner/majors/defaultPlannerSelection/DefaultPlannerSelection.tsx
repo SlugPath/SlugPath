@@ -1,9 +1,9 @@
-import ConfirmAlert from "@/app/components/modals/ConfirmAlert";
-import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
-import { ModalsContext } from "@/app/contexts/ModalsProvider";
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
-import { useUserPrograms } from "@/app/hooks/reactQuery";
 import { Program } from "@/app/types/Program";
+import ConfirmAlert from "@components/modals/ConfirmAlert";
+import CourseInfoModal from "@components/modals/courseInfoModal/CourseInfoModal";
+import { ModalsContext } from "@contexts/ModalsProvider";
+import { PlannersContext } from "@contexts/PlannersProvider";
+import { useUserPrograms } from "@hooks/reactQuery";
 import {
   Button,
   CircularProgress,

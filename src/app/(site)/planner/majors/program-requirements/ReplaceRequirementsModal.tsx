@@ -1,5 +1,7 @@
-import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
+import { Requirements } from "@/app/(site)/planner/majors/Requirements";
 import { getAllRequirementLists } from "@actions/majorRequirements";
+import StyledAccordion from "@components/planner/StyledAccordion";
+import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { RequirementList } from "@customTypes/Requirements";
 import {
@@ -14,9 +16,6 @@ import {
 import { CircularProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
-
-import StyledAccordion from "../../planner/StyledAccordion";
-import { Requirements } from "./Requirements";
 
 export default function ReplaceRequirementsModal() {
   const {

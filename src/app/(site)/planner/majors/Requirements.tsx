@@ -1,4 +1,4 @@
-import { MiniCourseCard } from "@/app/components/modals/majorsModal/majorSelection/MiniCourseCard";
+import { MiniCourseCard } from "@/app/(site)/planner/majors/majorSelection/MiniCourseCard";
 import { MajorVerificationContext } from "@/app/contexts/MajorVerificationProvider";
 import { StoredCourse } from "@/app/types/Course";
 import { Program } from "@/app/types/Program";
@@ -21,7 +21,7 @@ import {
 import Option from "@mui/joy/Option";
 import { useContext, useState } from "react";
 
-import DraggableCourseCard from "../../planner/quarters/courses/DraggableCourseCard";
+import DraggableCourseCard from "../../../components/planner/quarters/courses/DraggableCourseCard";
 import BinderTitle from "./BinderTitle";
 import FulfillmentMark from "./FulfillmentMark";
 

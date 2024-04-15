@@ -1,8 +1,8 @@
 import { authOptions } from "@/lib/auth";
+import LoginGoogleButton from "@components/buttons/LoginGoogleButton";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import LoginGoogleButton from "./components/buttons/LoginGoogleButton";
 import SplitScreenContainer from "./register/SplitScreenContainer";
 
 export default async function Page() {

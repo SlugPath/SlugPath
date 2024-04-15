@@ -6,6 +6,14 @@ import { Program } from "@/app/types/Program";
 import { Binder, RequirementList } from "@customTypes/Requirements";
 import { useEffect, useState } from "react";
 
+/**
+ * @param majors is the majors/minors the user has.
+ * This hook keeps track of listOfMajorRequirements which has major requirements
+ * for each major/minor the user has. It is intended to allow the user to edit
+ * major requirements
+ */
+
+// TODO: use this hook in a future admin page where all major requirements can easily be edited.
 export default function useMajorRequirements(
   majors: Program[],
   userId: string | undefined,
