@@ -17,7 +17,7 @@ export default function PlannerActions() {
 
   const buttons = [
     {
-      name: "Majors",
+      name: "Majors & Minors",
       icon: <SchoolIcon fontSize="large" sx={{ color: "#fff" }} />,
       onClick: () => router.push("/planner/majors"),
       disabled: status !== "authenticated",

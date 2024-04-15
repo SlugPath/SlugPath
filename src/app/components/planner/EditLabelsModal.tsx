@@ -145,6 +145,7 @@ function LabelListItem({
                 handleEndEditing();
               }
             }}
+            onBlur={handleEndEditing}
             onChange={(e) => setLabelName(e.target.value)}
           />
         ) : null}

@@ -82,6 +82,9 @@ export async function updateUserPlanners({
   userId: string;
   planners: PlannerData[];
 }): Promise<PlannerData[]> {
+  const plannersToReturn: PlannerData[] = [];
+
+  console.log("planners length a", planners.length);
   await prisma.$transaction(async (tx) => {
     await tx.planner.deleteMany({
       where: {
@@ -89,7 +92,7 @@ export async function updateUserPlanners({
       },
     });
 
-    await Promise.all(
+    const updatedPlanners = await Promise.all(
       planners.map((p, i) =>
         createPlanner(tx, {
           userId,
@@ -100,9 +103,11 @@ export async function updateUserPlanners({
         }),
       ),
     );
+
+    plannersToReturn.push(...updatedPlanners.map(toPlannerData));
   });
 
-  return getUserPlanners(userId);
+  return plannersToReturn;
 }
 
 /**
