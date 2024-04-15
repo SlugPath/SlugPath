@@ -1,5 +1,6 @@
 "use client";
 
+import CourseInfoModal from "@/app/components/modals/courseInfoModal/CourseInfoModal";
 import ConfirmAlert from "@components/modals/ConfirmAlert";
 import { RequirementsEditing } from "@components/modals/majors/Requirements";
 import Search from "@components/search/Search";
@@ -133,6 +134,7 @@ export default function EditRequirements() {
           confirmButtonName="Yes, discard changes"
         />
         <ReplaceRequirementsModal />
+        <CourseInfoModal />
       </CourseInfoProvider>
     </DragDropContext>
   );
