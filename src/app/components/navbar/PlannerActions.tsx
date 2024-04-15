@@ -1,14 +1,16 @@
+"use client";
+
 import { useUserRole } from "@/app/hooks/reactQuery";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import SchoolIcon from "@mui/icons-material/School";
-import { Button, Card, Typography } from "@mui/joy";
+import { Button } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function PlannerActions() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const redirectToAdminDashboard = () => router.push("planner/permissions");
+  const redirectToAdminDashboard = () => router.push("/planner/permissions");
 
   const { data: userRole } = useUserRole(session?.user.id);
   const isAdmin = userRole === "ADMIN";
@@ -16,7 +18,7 @@ export default function PlannerActions() {
   const buttons = [
     {
       name: "Majors",
-      icon: <SchoolIcon fontSize="large" />,
+      icon: <SchoolIcon fontSize="large" sx={{ color: "#fff" }} />,
       onClick: () => router.push("/planner/majors"),
       disabled: status !== "authenticated",
     },
@@ -25,25 +27,26 @@ export default function PlannerActions() {
   if (isAdmin) {
     buttons.push({
       name: "Permissions",
-      icon: <LockOpenIcon fontSize="large" />,
+      icon: <AdminPanelSettingsIcon fontSize="large" sx={{ color: "#fff" }} />,
       onClick: () => redirectToAdminDashboard(),
       disabled: false,
     });
   }
 
   return (
-    <Card variant="plain" className="flex flex-col gap-1">
+    <div className="flex flex-row">
       {buttons.map((button, index) => (
         <Button
           onClick={button.onClick}
-          variant="plain"
+          variant="solid"
           key={index}
           startDecorator={button.icon}
           disabled={button.disabled}
+          className="hover:bg-primary-400"
         >
-          <Typography>{button.name}</Typography>
+          {button.name}
         </Button>
       ))}
-    </Card>
+    </div>
   );
 }

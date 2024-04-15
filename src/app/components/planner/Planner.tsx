@@ -28,7 +28,6 @@ import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
-import PlannerActions from "./PlannerActions";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
@@ -127,8 +126,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 </div>
               </AccordionGroup>
             </div>
-            <div className="flex flex-col self-start gap-3">
-              <PlannerActions />
+            <div className="flex flex-col self-start gap-3 overflow-auto h-full">
               <GraduationProgressCard
                 totalCredits={totalCredits}
                 geSatisfied={geSatisfied}
