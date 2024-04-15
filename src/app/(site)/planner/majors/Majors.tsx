@@ -16,7 +16,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useContext, useMemo } from "react";
 
 import { Requirements } from "../majors/Requirements";
-import DefaultPlannerSelection from "../majors/defaultPlannerSelection/DefaultPlannerSelection";
 import UserProgramsEditor from "../majors/majorSelection/MajorSelection";
 
 export default function Majors() {
@@ -85,12 +84,6 @@ function MajorAndPlannerSelection() {
           })}
         </div>
         <CourseInfoModal />
-        <Card variant="soft" className="col-span-4">
-          <h4 className="flex flex-col space-y-2 justify-between mb-2">
-            My Default Planner
-          </h4>
-          <DefaultPlannerSelection />
-        </Card>
       </CourseInfoProvider>
     </div>
   );
