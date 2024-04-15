@@ -1,16 +1,16 @@
 import IsSatisfiedMark from "@components/miscellaneous/IsSatisfiedMark";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
-import { PlannerContext } from "@contexts/PlannerProvider";
+import { PlannersContext } from "@contexts/PlannersProvider";
 import { Requirements } from "@customTypes/Requirements";
 import { useContext } from "react";
 
 export default function FulfillmentMark(requirements: Requirements) {
   const { isMajorRequirementsSatisfied } = useContext(MajorVerificationContext);
-  const { courseState } = useContext(PlannerContext);
+  const { getPlanner, activePlanner } = useContext(PlannersContext);
 
   const isSatisfied = isMajorRequirementsSatisfied(
     requirements,
-    courseState.courses,
+    getPlanner(activePlanner!).courses,
   );
 
   return <IsSatisfiedMark isSatisfied={isSatisfied} />;

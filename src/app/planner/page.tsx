@@ -1,3 +1,4 @@
+import { getUserPlanners } from "@actions/planner";
 import Planners from "@components/planners/Planners";
 import {
   HydrationBoundary,
@@ -5,8 +6,6 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getServerSession } from "next-auth";
-
-import { getUserPlanners } from "../actions/planner";
 
 export default async function Home() {
   const session = await getServerSession();

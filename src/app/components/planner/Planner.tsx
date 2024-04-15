@@ -26,10 +26,6 @@ import { useContext, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
-import MajorsModal from "../modals/majorsModal/MajorsModal";
-import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
-import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";
@@ -141,7 +137,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <LabelLegend />
             </div>
           </div>
-          <Modals />
+          <CourseInfoModal />
         </CourseInfoProvider>
       </DragDropContext>
     </div>
@@ -202,18 +198,6 @@ function GraduationProgressCard({
         <GEProgress ge={geSatisfied} courseState={courseState} />
       </div>
     </Card>
-  );
-}
-
-function Modals() {
-  return (
-    <>
-      <CourseInfoModal />
-      <MajorsModal />
-      <EditMajorRequirementsModal />
-      <ReplaceRequirementsModal />
-      <PermissionsModal />
-    </>
   );
 }
 

@@ -102,7 +102,10 @@ export default function CourseCard({
               onShowCourseInfoModal={handleShowCourseInfoModal}
               quarterId={quarterId}
             />
-            <CourseLabelList labels={getCourseLabels(course)} ge={course.ge} />
+            <CourseLabelList
+              labels={getCourseLabels ? getCourseLabels(course) : []}
+              ge={course.ge}
+            />
           </Grid>
           <Grid xs={1}>
             {/* Show delete icon only if the course is in the planner or in the custom course selection */}
