@@ -7,7 +7,7 @@ import { create } from "zustand";
 // NOTE: not all modals need to be in this store, only those that need to be
 // controlled from multiple components.
 
-type Modals = {
+interface ModalsState {
   // CourseInfoModal
   showCourseInfoModal: boolean;
   setShowCourseInfoModal: (show: boolean) => void;
@@ -17,9 +17,10 @@ type Modals = {
   setCourseInfoDisplayTerm: (term?: Term) => void;
   courseInfoViewOnly?: boolean;
   setCouseInfoViewOnly: (viewOnly: boolean) => void;
-};
+}
 
-const useModalsStore = create<Modals>((set) => ({
+const useModalsStore = create<ModalsState>((set) => ({
+  // CourseInfoModal
   showCourseInfoModal: false,
   setShowCourseInfoModal: (show: boolean) => set({ showCourseInfoModal: show }),
   courseInfoDisplayCourseInfo: undefined,

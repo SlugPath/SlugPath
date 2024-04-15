@@ -1,7 +1,6 @@
 import { clonePlanner, initializeNewPlanner } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import useActivePlannerStore, { MAX_PLANNERS } from "@/store/planners";
-import usePlannersStore from "@/store/planners";
+import usePlannersStore, { MAX_PLANNERS } from "@/store/planners";
 import { Add } from "@mui/icons-material";
 import { IconButton, Input, Tooltip, useColorScheme } from "@mui/joy";
 import { useState } from "react";
@@ -32,10 +31,8 @@ export default function PlannerTabs() {
   const addPlanner = usePlannersStore((state) => state.addPlanner);
   const deletePlanner = usePlannersStore((state) => state.deletePlanner);
 
-  const activePlannerId = useActivePlannerStore(
-    (state) => state.activePlannerId,
-  );
-  const setActivePlannerId = useActivePlannerStore(
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
+  const setActivePlannerId = usePlannersStore(
     (state) => state.setActivePlannerId,
   );
 

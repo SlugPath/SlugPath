@@ -1,7 +1,10 @@
 import { getEnrollmentInfo } from "@/app/actions/enrollment";
 import { useCourse } from "@/app/hooks/reactQuery";
 import { Term } from "@/app/types/Quarter";
-import { isCustomCourse, isOffered } from "@/lib/plannerUtils";
+import {
+  isCustomCourse as isCustomCourseFunc,
+  isOffered,
+} from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { StoredCourse } from "@customTypes/Course";
@@ -30,6 +33,7 @@ import SelectedLabels from "./SelectedLabels";
 const MAX_MODAL_TITLE = 60;
 
 // TODO: Fix viewOnly.
+// TODO: course / term possibly undefined?
 export default function CourseInfoModal({
   showModal,
   setShowModal,
@@ -66,11 +70,13 @@ export default function CourseInfoModal({
     course?.number,
   );
 
+  const isCustomCourse = course && isCustomCourseFunc(course);
+
   // TODO: move to `reactQuery.ts`
   const { data: enrollmentInfo, isLoading: enrollLoading } = useQuery({
     queryKey: ["pastEnrollmentInfo", course?.departmentCode, course?.number],
     queryFn: async () => await getEnrollmentInfo(course!),
-    enabled: course !== undefined && !isCustomCourse(course),
+    enabled: !isCustomCourse,
     placeholderData: [],
     staleTime: Infinity,
   });
@@ -87,7 +93,7 @@ export default function CourseInfoModal({
 
   function description(c?: StoredCourse) {
     // If it is a custom course with a description, display it
-    if (course && isCustomCourse(course)) {
+    if (isCustomCourse) {
       return `Description: ${course.description}`;
     }
     if (loading || !c) return "";
@@ -136,12 +142,12 @@ export default function CourseInfoModal({
       labels,
       newCourse,
     });
-    setCourse(newCourse);
+    if (setCourse) setCourse(newCourse);
   };
 
   // Only show this second modal if it is a custom course,
   // in the planner, and the course is being edited
-  const customCourseInPlanner = isCustomCourse(course) && term !== undefined;
+  const customCourseInPlanner = isCustomCourse && term !== undefined;
   if (editing && customCourseInPlanner) {
     const handleClose = () => {
       setEditing(false);
@@ -149,7 +155,7 @@ export default function CourseInfoModal({
 
     const handleSave = (crs: StoredCourse) => {
       editCustomCourse(crs);
-      setCourse(crs);
+      if (setCourse) setCourse(crs);
       handleClose();
     };
 
@@ -202,7 +208,7 @@ export default function CourseInfoModal({
         }}
       >
         <div className="flex flex-col gap-2">
-          {course.labels && (
+          {course && course.labels && (
             <LabelsSelectionModal
               showModal={showLabelSelectionModal}
               setShowModal={setShowLabelSelectionModal}
@@ -223,7 +229,7 @@ export default function CourseInfoModal({
                 {title(data)}
               </Typography>
             </Skeleton>
-            {isCustomCourse(course) ? (
+            {isCustomCourse ? (
               <Tooltip title="We recommend replacing this custom course with a real course.">
                 <Chip color="custom" size="lg" className="mr-2">
                   Custom Course
@@ -250,7 +256,7 @@ export default function CourseInfoModal({
             </Typography>
           </Skeleton>
           {/* Show preqs, ge, past enrollment info, and instructors for official courses*/}
-          {!isCustomCourse(course) ? (
+          {!isCustomCourse ? (
             <>
               <Typography component="p">{prerequisites(data)}</Typography>
               <Typography component="p">GE: {ge(data)}</Typography>
@@ -282,7 +288,7 @@ export default function CourseInfoModal({
             </>
           )}
           <Typography component="p">Credits: {credits(data)}</Typography>
-          {!isCustomCourse(course) && <MoreEnrollInfo course={course} />}
+          {!isCustomCourse && <MoreEnrollInfo course={course} />}
           {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels(course)}

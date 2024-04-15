@@ -20,6 +20,7 @@ export default function usePlannerSync(intervalLength = 30000) {
   const setPlanners = usePlannersStore((state) => state.setPlanners);
 
   // Set initial planners
+  // TODO: Prompt user intervention on sync conflict
   useEffect(() => {
     if (initialPlanners && planners.length === 0) {
       setPlanners(initialPlanners);

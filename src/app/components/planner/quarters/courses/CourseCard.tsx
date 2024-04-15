@@ -7,10 +7,10 @@ import {
 } from "@/lib/plannerUtils";
 import { extractTermFromQuarterId } from "@/lib/quarterUtils";
 import { truncateTitle } from "@/lib/utils";
+import useModalsStore from "@/store/modal";
 import CloseIconButton from "@components/buttons/CloseIconButton";
-import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
-import { CourseTerm, StoredCourse } from "@customTypes/Course";
+import { StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import { WarningAmberRounded } from "@mui/icons-material";
@@ -38,8 +38,20 @@ export default function CourseCard({
 }: CourseCardProps) {
   const { deleteCourse, getCourseLabels, handleRemoveCustom } =
     useContext(PlannerContext);
-  const { setDisplayCourse, onShowCourseInfoModal } =
-    useContext(CourseInfoContext);
+
+  // Zustand
+  const setShowCourseInfoModal = useModalsStore(
+    (state) => state.setShowCourseInfoModal,
+  );
+
+  const setCourseInfoDisplayCourse = useModalsStore(
+    (state) => state.setCourseInfoDisplayCourse,
+  );
+
+  const setCourseInfoDisplayTerm = useModalsStore(
+    (state) => state.setCourseInfoDisplayTerm,
+  );
+
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
   const getItemStyle = (draggableStyle: any) => ({
@@ -48,13 +60,11 @@ export default function CourseCard({
     ...draggableStyle,
   });
   const isEnrolledCourse = quarterId !== undefined;
+
   function handleShowCourseInfoModal(course: StoredCourse) {
-    const courseTerm = [
-      course,
-      extractTermFromQuarterId(quarterId),
-    ] as CourseTerm;
-    setDisplayCourse(courseTerm);
-    onShowCourseInfoModal();
+    setCourseInfoDisplayCourse(course);
+    setCourseInfoDisplayTerm(extractTermFromQuarterId(quarterId));
+    setShowCourseInfoModal(true);
   }
 
   function cardColor() {

@@ -4,11 +4,15 @@ import { create } from "zustand";
 // A Zustand store that keeps track of the local planners and active planner id.
 
 // NOTE: Since planner data is only saved every 30 seconds and on unload, there
-// is a need for a local store in addition to React Query cache.
+// is a need for a local store in addition to React Query cache. See client /
+// server planner syncronization in `usePlannerSync.ts` for more details.
+
+// NOTE: In order to skip inital syncronization load time, this store needs to
+// accept initial data from the server. This is done using a context provider.
 
 export const MAX_PLANNERS = 10;
 
-type Planners = {
+interface PlannersState {
   planners: PlannerData[];
   setPlanner: (plannerId: string, planner: PlannerData) => boolean;
   setPlanners: (planners: PlannerData[]) => boolean;
@@ -17,9 +21,9 @@ type Planners = {
 
   activePlannerId: string | undefined;
   setActivePlannerId: (plannerId: string | undefined) => void;
-};
+}
 
-const usePlannersStore = create<Planners>((set) => ({
+const usePlannersStore = create<PlannersState>((set) => ({
   planners: [],
 
   /**

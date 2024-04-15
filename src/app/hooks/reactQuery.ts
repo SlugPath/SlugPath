@@ -139,6 +139,7 @@ export function usePlanners(userId: string | undefined) {
     staleTime: 1000 * 90,
     placeholderData: [],
     throwOnError: true,
+    refetchOnMount: false,
     enabled: !!userId,
   });
 }
