@@ -105,6 +105,19 @@ export function isProgramInPrograms(
   return alreadyAdded;
 }
 
+/**
+ * Checks if an array of objects with `name`s contains a specific name
+ * @param name a name to search for
+ * @param array an array of objects with a `name` property
+ * @returns true if the array contains the name, false otherwise
+ */
+export const isContainingName = (
+  name: string,
+  array: { name: string; [x: string]: any; [x: number]: any }[],
+) => {
+  return array.some((e) => e.name === name);
+};
+
 type SourceCourse = {
   ge: string[];
   departmentCode: string;

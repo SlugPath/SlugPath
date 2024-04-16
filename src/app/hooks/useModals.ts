@@ -6,6 +6,7 @@ export default function useModals() {
   const [showReplaceRLModal, setShowReplaceRLModal] = useState(false); // RL = Requirement List
   const [showMajorRequirementsEditModal, setShowMajorRequirementsEditModal] =
     useState(false);
+  const [showNewPlannerModal, setShowNewPlannerModal] = useState(false);
   const [majorToEdit, setMajorToEdit] = useState<Program | undefined>(
     undefined,
   );
@@ -17,6 +18,8 @@ export default function useModals() {
     setShowReplaceRLModal,
     showMajorRequirementsEditModal,
     setShowMajorRequirementsEditModal,
+    showNewPlannerModal,
+    setShowNewPlannerModal,
     majorToEdit,
     setMajorToEdit,
   };

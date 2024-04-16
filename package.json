@@ -34,6 +34,7 @@
     "@tanstack/react-query": "^5.28.6",
     "@tanstack/react-query-devtools": "^5.28.6",
     "class-validator": "^0.14.1",
+    "embla-carousel-react": "^8.0.0",
     "fmt": "^2.0.0",
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
@@ -51,7 +52,8 @@
     "reflect-metadata": "^0.2.1",
     "ts-node": "^10.9.2",
     "uuid": "^9.0.1",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^4.5.2"
   },
   "peerDependencies": {
     "@mui/material": "^5.8.6",
@@ -96,6 +98,7 @@
     "prettier": "3.0.3",
     "prisma": "^5.11.0",
     "punycode": "^2.3.1",
+    "sharp": "^0.33.3",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.2",
     "tsx": "^3.14.0",

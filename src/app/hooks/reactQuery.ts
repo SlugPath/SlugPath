@@ -1,5 +1,6 @@
 import {
   EMPTY_PLANNER,
+  cloneDefaultPlanner,
   initialPlanner,
   isOfficialCourse,
 } from "@/lib/plannerUtils";
@@ -19,22 +20,22 @@ import {
 } from "@actions/permissions";
 import {
   getPlannerById,
+  getPlannersByProgram,
   getUserPlanners,
   updateUserPlanners,
 } from "@actions/planner";
 import {
+  getCatalogYears,
   getProgram,
   getProgramDefaultPlanners,
   getPrograms,
   getProgramsByTypeInYear,
-  getUserDefaultPlannerId,
-  getUserPrimaryProgram,
   getUserProgramsById,
-  updateUserDefaultPlanner,
   updateUserPrograms,
 } from "@actions/program";
 import { ProgramType } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
 
 import { StoredCourse } from "../types/Course";
 import { Permission } from "../types/Permission";
@@ -42,14 +43,18 @@ import { PlannerData } from "../types/Planner";
 import { Program, ProgramInput } from "../types/Program";
 
 /**
- * A React Query hook to fetch all majors and minors
+ * A React Query hook to fetch all majors and minors, optionally for a specific
+ * catalog year
+ * @param catalogYear (optional) Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
-export function usePrograms() {
+export function usePrograms(catalogYear?: string) {
   return useQuery({
-    queryKey: ["allPrograms"],
-    queryFn: async () => await getPrograms(),
+    queryKey: ["programs", catalogYear],
+    queryFn: async () => await getPrograms(catalogYear),
     placeholderData: [],
+    staleTime: Infinity, // Programs are static
+    refetchOnMount: false,
   });
 }
 
@@ -68,17 +73,28 @@ export function useProgram(programId: number) {
 }
 
 /**
- * A React Query hook to fetch all unique majors and minors
+ * A React Query hook to fetch all unique majors and minors, optionally for a
+ * specific catalog year
+ * @param catalogYear (optional) Year of selected catalog
  * @returns React Query useQuery Hook for all majors and minors
  */
-export function useUnqiuePrograms() {
+export function useUniquePrograms(catalogYear?: string) {
+  const queryClient = useQueryClient();
+
   return useQuery({
-    queryKey: ["allUniquePrograms"],
-    queryFn: async () => {
-      const res = await getPrograms();
-      return filterRedundantPrograms(res);
+    queryKey: ["uniquePrograms", catalogYear],
+    queryFn: async () => await getPrograms(catalogYear, true),
+    // Use cache to avoid refetching data
+    initialData: () => {
+      const programs: Program[] | undefined = queryClient.getQueryData([
+        "programs",
+        catalogYear,
+      ]);
+      return programs ? filterRedundantPrograms(programs) : [];
     },
     placeholderData: [],
+    staleTime: Infinity, // Programs are static
+    refetchOnMount: false,
   });
 }
 
@@ -97,7 +113,8 @@ export function useTransferCourses(course: StoredCourse) {
 }
 
 /**
- * A React Query hook to fetch degree programs of a specified program type (major or minor) for a specific catalog year
+ * A React Query hook to fetch degree programs of a specified program type
+ * (major or minor) for a specific catalog year
  * @param programType Major or Minor
  * @param catalogYear Year of selected catalog
  * @returns React Query useQuery Hook for degree programs
@@ -109,13 +126,27 @@ export function useProgramTypeOfYear(
   return useQuery({
     queryKey: ["programs", programType, catalogYear],
     queryFn: async () => {
-      console.log("fetching programs", programType, catalogYear);
       return await getProgramsByTypeInYear(programType, catalogYear);
     },
     placeholderData: [],
     enabled: catalogYear !== "" && programType in ProgramType,
   });
 }
+
+/**
+ * A React Query hook to fetch all catalog years, optionally for a specific
+ * program
+ * @param programName Name of the program
+ * @returns React Query useQuery Hook for all catalog years
+ */
+export function useCatalogYears(programName?: string) {
+  return useQuery({
+    queryKey: ["years", programName],
+    queryFn: async () => await getCatalogYears(programName),
+    placeholderData: [],
+  });
+}
+
 /**
  * A React Query hook to fetch all majors and minors for a user by their user id
  * @param userId unique id that identifies a user
@@ -126,20 +157,6 @@ export function useUserPrograms(userId: string | undefined) {
     queryKey: ["userPrograms", userId],
     queryFn: async () => await getUserProgramsById(userId!),
     placeholderData: [],
-  });
-}
-
-/**
- * A React Query hook to fetch a user's primary major
- * @param userId unique id that identifies a user
- * @returns React Query useQuery Hook for a user's primary major
- */
-export function useUserPrimaryProgram(userId: string | undefined) {
-  return useQuery({
-    queryKey: ["userPrimaryProgram", userId],
-    queryFn: async () => await getUserPrimaryProgram(userId!),
-    placeholderData: null,
-    enabled: !!userId,
   });
 }
 
@@ -167,7 +184,7 @@ export function useUpdateUserProgramsMutation() {
 
 /**
  * A React Query hook to fetch all planners
- * @param email user email
+ * @param userId unique id that identifies a user
  * @returns React Query useQuery Hook for all planners
  */
 export function usePlanners(userId: string | undefined) {
@@ -176,9 +193,12 @@ export function usePlanners(userId: string | undefined) {
     queryFn: async () => await getUserPlanners(userId!),
     refetchInterval: 1000 * 180,
     staleTime: 1000 * 90,
-    placeholderData: [],
     throwOnError: true,
     enabled: !!userId,
+    /* adding the line 'placeholderData: []' will cause a bug where
+      it seems there are no planners when in fact there are. Affects
+      Planners.tsx
+     */
   });
 }
 
@@ -186,14 +206,58 @@ export function usePlanners(userId: string | undefined) {
  * A React Query hook to update all user planners
  * @returns React Query useMutation Hook for updating all user planners
  */
-export function useUpdatePlannersMutation() {
+export function useUpdatePlannersMutation(onSuccess?: () => void) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (params: { userId: string; planners: PlannerData[] }) =>
       await updateUserPlanners(params),
-    onSuccess: (_, { userId }) => {
+    onSuccess: (data, { userId }) => {
       queryClient.invalidateQueries({ queryKey: ["planners", userId] });
+      if (onSuccess) {
+        queryClient.setQueryData(["planners", userId], data);
+        onSuccess();
+      }
+    },
+  });
+}
+
+export function useAddNewPlannerMutation(
+  userId: string | undefined,
+  onSuccess?: () => void,
+) {
+  const { data: planners } = usePlanners(userId);
+  const { mutate: saveAll } = useUpdatePlannersMutation(onSuccess);
+
+  async function addNewPlanner({
+    userId,
+    planner,
+  }: {
+    userId: string | undefined;
+    planner: PlannerData;
+  }) {
+    if (!planners) return;
+
+    const id = uuidv4();
+
+    const newPlanners = planners.concat({
+      ...cloneDefaultPlanner(planner!),
+      id,
+      title: "New Planner",
+    });
+
+    await saveAll({ userId: userId!, planners: newPlanners });
+  }
+
+  return useMutation({
+    mutationFn: async (params: {
+      userId: string | undefined;
+      planner: PlannerData;
+    }) => await addNewPlanner(params),
+    onSuccess: () => {
+      if (onSuccess) {
+        onSuccess();
+      }
     },
   });
 }
@@ -213,44 +277,20 @@ export function usePlanner(plannerId: string) {
 }
 
 /**
- * A React Query hook to fetch a user's default planner id
- * @param userId unique id that identifies a user
- * @returns React Query useQuery Hook for a user's default planner id
+ * A React Query hook to fetch all default planners for a program in a catalog year
+ * @param programName name of the program
+ * @param catalogYear year of the catalog
+ * @returns React Query useQuery Hook for all default planners for a program in a catalog year
  */
-export function useUserDefaultPlannerId(userId: string | undefined) {
+export function useProgramDefaultPlanners(
+  programName: string,
+  catalogYear: string,
+) {
   return useQuery({
-    queryKey: ["userDefaultPlannerId", userId],
-    queryFn: async () => {
-      return await getUserDefaultPlannerId(userId!);
-    },
-    placeholderData: undefined,
-    enabled: !!userId,
-  });
-}
-
-/**
- * A React Query hook to update a user's default planner id
- * @param userId unique id that identifies a user
- * @param plannerId unique id that identifies a planner
- * @returns React Query useMutation Hook for updating a user's default planner id
- */
-export function useUpdateUserDefaultPlannerIdMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (params: {
-      userId: string;
-      defaultPlannerId: string;
-    }) => {
-      await updateUserDefaultPlanner(params);
-    },
-    onSuccess: (_, { userId }) => {
-      queryClient.refetchQueries({
-        queryKey: ["userDefaultPlannerId", userId],
-      });
-      queryClient.refetchQueries({ queryKey: ["userDefaultPlanner", userId] });
-      queryClient.refetchQueries({ queryKey: ["userPrimaryProgram", userId] });
-    },
+    queryKey: ["programDefaultPlanners", programName, catalogYear],
+    queryFn: async () => await getPlannersByProgram(programName, catalogYear),
+    placeholderData: [],
+    enabled: !!programName,
   });
 }
 

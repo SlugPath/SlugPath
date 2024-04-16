@@ -71,7 +71,7 @@ export async function getMinors(catalogYear?: string) {
  * @param catalogYear Year of the catalog to get programs for
  * @returns degree programs
  */
-export async function getPrograms(catalogYear?: string) {
+export async function getPrograms(catalogYear?: string, unique = false) {
   const query: any = {
     select: {
       name: true,
@@ -92,6 +92,10 @@ export async function getPrograms(catalogYear?: string) {
     query.where = {
       catalogYear,
     };
+  }
+
+  if (unique) {
+    query.distinct = ["name"];
   }
   return await prisma.major.findMany(query);
 }
@@ -145,7 +149,7 @@ export async function getProgramsByTypeInYear(
       },
     ],
   });
-  return res.map((major) => major.name);
+  return res;
 }
 
 /**
@@ -258,10 +262,6 @@ export async function updateUserPrograms({
     return userPrograms;
   });
 }
-
-/**
- * Connects the user to the given progra while disconnecting any old majors.
- */
 
 /**
  * Connects the user to the given programs while disconnecting any old majors
@@ -412,95 +412,21 @@ export async function getProgramDefaultPlanners({
 }
 
 /**
- * Fetch the default planner for a user
- * @param userId user id for the user to get default planner for
- * @returns
- */
-export async function getUserDefaultPlannerId(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      defaultPlannerId: true,
-    },
-  });
-
-  if (user === null) {
-    return null;
-  }
-  return user.defaultPlannerId;
-}
-
-/**
- * Fetch the primary major for a user.
+ * Fetches the list of unique catalog years, optionally for a specific program
  *
- * Done by finding major of the default planner for the user,
- * otherwise returns first major in the user's list of majors,
- * otherwise returns null.
- * @param userId user id for the user to get primary major for
- * @returns primary major for the user
+ * TODO: Add unit tests
+ * @param programName The program to fetch catalog years for
+ * @returns A list of catalog years
  */
-export async function getUserPrimaryProgram(userId: string) {
-  // first find major based on user's default planner
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      defaultPlannerId: true,
-    },
-  });
-
-  if (user === null || user.defaultPlannerId === null) {
-    return null;
+export async function getCatalogYears(programName?: string) {
+  // Used Raw SQL to allow for DISTINCT, as Prisma support is experimental in v6
+  if (!programName) {
+    const result =
+      await prisma.$queryRaw`SELECT DISTINCT "catalogYear" FROM "Major" ORDER BY "catalogYear" ASC;`;
+    return result as { catalogYear: string }[];
   }
 
-  const planner = await prisma.planner.findUnique({
-    where: {
-      id: user.defaultPlannerId,
-    },
-    select: {
-      major: true,
-    },
-  });
-
-  if (planner !== null) {
-    return planner.major;
-  }
-
-  // if no default planner, find first major in user's list of majors
-  const userMajors = await getUserProgramsById(userId);
-  if (userMajors !== null && userMajors.length > 0) {
-    return userMajors[0];
-  }
-
-  return null;
-}
-
-/**
- * Update the user's default planner in the database
- * @param userId user id for the user to update default planner for
- * @param defaultPlannerId planner id to set as default
- * @returns
- */
-export async function updateUserDefaultPlanner({
-  userId,
-  defaultPlannerId,
-}: {
-  userId: string;
-  defaultPlannerId: string;
-}) {
-  const user = await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      defaultPlannerId,
-    },
-  });
-
-  return {
-    defaultPlannerId: user.defaultPlannerId,
-  };
+  const result =
+    await prisma.$queryRaw`SELECT DISTINCT "catalogYear" FROM "Major" WHERE name=${programName} ORDER BY "catalogYear" ASC;`;
+  return result as { catalogYear: string }[];
 }
