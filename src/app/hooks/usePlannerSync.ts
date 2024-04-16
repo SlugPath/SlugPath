@@ -1,10 +1,12 @@
-import { usePlanners, useUpdatePlannersMutation } from "@/app/hooks/reactQuery";
-import usePlannersStore from "@/store/planners";
+import { useUpdatePlannersMutation } from "@/app/hooks/reactQuery";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
+import usePlannersStore from "./usePlanners";
+
 /**
  * Hook to sync the local planners with the server on interval and beforeunload
+ *
  * @param intervalLength The interval length in milliseconds to save the planners
  */
 export default function usePlannerSync(intervalLength = 30000) {
@@ -12,20 +14,13 @@ export default function usePlannerSync(intervalLength = 30000) {
   const userId = session?.user.id;
 
   // Server planners
-  const { data: initialPlanners } = usePlanners(userId);
   const { mutate: updatePlanners } = useUpdatePlannersMutation();
+
+  // TODO: check for server / client planner differences and promt user to to
+  // resolve sync conflict
 
   // Local planners
   const planners = usePlannersStore((state) => state.planners);
-  const setPlanners = usePlannersStore((state) => state.setPlanners);
-
-  // Set initial planners
-  // TODO: Prompt user intervention on sync conflict
-  useEffect(() => {
-    if (initialPlanners && planners.length === 0) {
-      setPlanners(initialPlanners);
-    }
-  }, [initialPlanners, planners.length, setPlanners]);
 
   // Manage window focus
   const [isWindowFocused, setIsWindowFocused] = useState(true);

@@ -1,6 +1,6 @@
+import usePlannersStore from "@/app/hooks/usePlanners";
 import { ModalProps } from "@/app/types/Modal";
 import { APP_URL } from "@/config";
-import useActivePlannerStore from "@/store/planners";
 import { LibraryAddCheck } from "@mui/icons-material";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import {
@@ -16,9 +16,7 @@ import { useState } from "react";
 
 // Create styles
 export default function ShareModal({ showModal, setShowModal }: ModalProps) {
-  const activePlannerId = useActivePlannerStore(
-    (state) => state.activePlannerId,
-  );
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
 
   const [open, setOpen] = useState(false);
 

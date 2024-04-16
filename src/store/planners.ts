@@ -1,5 +1,5 @@
 import { PlannerData } from "@/app/types/Planner";
-import { create } from "zustand";
+import { createStore } from "zustand";
 
 // A Zustand store that keeps track of the local planners and active planner id.
 
@@ -8,108 +8,136 @@ import { create } from "zustand";
 // server planner syncronization in `usePlannerSync.ts` for more details.
 
 // NOTE: In order to skip inital syncronization load time, this store needs to
-// accept initial data from the server. This is done using a context provider.
+// accept initial data from the server. This means the store created must be an
+// object (using `createStore`) instead of a custom hook (using `create`). A
+// context is then needed to access this store. See context provider in
+// `PlannersProvider.tsx` for more details.
+// https://tuffstuff9.hashnode.dev/zustand-create-vs-createstore
 
 export const MAX_PLANNERS = 10;
 
-interface PlannersState {
+interface PlannersProps {
   planners: PlannerData[];
-  setPlanner: (plannerId: string, planner: PlannerData) => boolean;
+  activePlannerId: string | undefined;
+}
+
+export interface PlannersState extends PlannersProps {
+  planners: PlannerData[];
   setPlanners: (planners: PlannerData[]) => boolean;
+
+  setPlanner: (plannerId: string, planner: PlannerData) => boolean;
   addPlanner: (planner: PlannerData) => boolean;
   deletePlanner: (plannerId: string) => boolean;
 
-  activePlannerId: string | undefined;
   setActivePlannerId: (plannerId: string | undefined) => void;
 }
 
-const usePlannersStore = create<PlannersState>((set) => ({
-  planners: [],
+export type PlannersStore = ReturnType<typeof createPlannersStore>;
 
-  /**
-   * Sets a planner in the store
-   * @param plannerId a unique planner id
-   * @param newPlanner a PlannerData object
-   * @returns true if the planner was found and updated, false otherwise
-   */
-  setPlanner: (plannerId: string, newPlanner: PlannerData) => {
-    console.log("planner store: Setting planner", plannerId, newPlanner);
+const createPlannersStore = (initProps?: Partial<PlannersProps>) => {
+  const DEFAULT_PROPS: PlannersProps = {
+    planners: [],
+    activePlannerId: undefined,
+  };
 
-    let success = false;
-    set((state) => ({
-      planners: state.planners.map((oldPlanner) => {
-        if (oldPlanner.id === plannerId) {
-          success = true;
-          return newPlanner;
-        }
-        return oldPlanner;
-      }),
-    }));
-    return success;
-  },
+  const activePlannerId = initProps?.planners?.[0]?.id;
 
-  /**
-   * Replaces all planners in the store, then sets the active planner to the
-   * first planner
-   * @param planners an array of PlannerData objects
-   * @returns true if the planners were updated, false otherwise
-   */
-  setPlanners: (planners: PlannerData[]) => {
-    console.log("planner store: Setting planners", planners);
+  // Zustand store initialization debug log
+  const debugPlannerIds = initProps?.planners?.map((p) => p.id).join(", ");
+  console.debug(
+    `Initializing planner store with active planner id ${activePlannerId} and planners ${debugPlannerIds}`,
+  );
 
-    set({ planners, activePlannerId: planners[0]?.id });
-    return true;
-  },
+  return createStore<PlannersState>((set) => ({
+    ...DEFAULT_PROPS, // Default props
+    ...initProps, // Overwrite default props with initial props (if any)
+    activePlannerId,
 
-  /**
-   * Adds a planner to the store then sets it as active
-   * @param planner a PlannerData object
-   * @returns true if the planner was added, false otherwise
-   */
-  addPlanner: (planner: PlannerData) => {
-    console.log("planner store: Adding planner", planner);
+    /**
+     * Replaces all planners in the store, then sets the active planner to the
+     * first planner
+     * @param planners an array of PlannerData objects
+     * @returns true if the planners were updated, false otherwise
+     */
+    setPlanners: (planners: PlannerData[]) => {
+      console.debug("planner store: Setting planners", planners);
 
-    let success = false;
-    set((state) => {
-      if (state.planners.length >= MAX_PLANNERS) return state;
+      set({ planners, activePlannerId: planners[0]?.id });
+      return true;
+    },
 
-      success = true;
-      return {
-        planners: [...state.planners, planner],
-        activePlannerId: planner.id,
-      };
-    });
-    return success;
-  },
+    /**
+     * Sets a planner in the store
+     * @param plannerId a unique planner id
+     * @param newPlanner a PlannerData object
+     * @returns true if the planner was found and updated, false otherwise
+     */
+    setPlanner: (plannerId: string, newPlanner: PlannerData) => {
+      console.debug("planner store: Setting planner", plannerId, newPlanner);
 
-  /**
-   * Deletes a planner from the store then updates the active planner
-   * @param plannerId a unique planner id
-   * @returns true if the planner was found and deleted, false otherwise
-   */
-  deletePlanner: (plannerId: string) => {
-    console.log("planner store: Deleting planner", plannerId);
+      let success = false;
+      set((state) => ({
+        planners: state.planners.map((oldPlanner) => {
+          if (oldPlanner.id === plannerId) {
+            success = true;
+            return newPlanner;
+          }
+          return oldPlanner;
+        }),
+      }));
+      return success;
+    },
 
-    let success = false;
-    set((state) => {
-      const plannerIdx = state.planners.findIndex((p) => p.id === plannerId);
-      const newPlanners = state.planners.filter((planner) => {
-        if (planner.id === plannerId) {
-          success = true;
-          return false;
-        }
-        return true;
+    /**
+     * Adds a planner to the store then sets it as active
+     * @param planner a PlannerData object
+     * @returns true if the planner was added, false otherwise
+     */
+    addPlanner: (planner: PlannerData) => {
+      console.debug("planner store: Adding planner", planner);
+
+      let success = false;
+      set((state) => {
+        if (state.planners.length >= MAX_PLANNERS) return state;
+
+        success = true;
+        return {
+          planners: [...state.planners, planner],
+          activePlannerId: planner.id,
+        };
       });
-      const newActivePlannerId =
-        newPlanners[plannerIdx]?.id ?? newPlanners[plannerIdx - 1]?.id;
+      return success;
+    },
 
-      return { planners: newPlanners, activePlannerId: newActivePlannerId };
-    });
-    return success;
-  },
+    /**
+     * Deletes a planner from the store then updates the active planner
+     * @param plannerId a unique planner id
+     * @returns true if the planner was found and deleted, false otherwise
+     */
+    deletePlanner: (plannerId: string) => {
+      console.debug("planner store: Deleting planner", plannerId);
 
-  activePlannerId: undefined,
-  setActivePlannerId: (id: string | undefined) => set({ activePlannerId: id }),
-}));
+      let success = false;
+      set((state) => {
+        const plannerIdx = state.planners.findIndex((p) => p.id === plannerId);
+        const newPlanners = state.planners.filter((planner) => {
+          if (planner.id === plannerId) {
+            success = true;
+            return false;
+          }
+          return true;
+        });
+        const newActivePlannerId =
+          newPlanners[plannerIdx]?.id ?? newPlanners[plannerIdx - 1]?.id;
 
-export default usePlannersStore;
+        return { planners: newPlanners, activePlannerId: newActivePlannerId };
+      });
+      return success;
+    },
+
+    setActivePlannerId: (id: string | undefined) =>
+      set({ activePlannerId: id }),
+  }));
+};
+
+export default createPlannersStore;

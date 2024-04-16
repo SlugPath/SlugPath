@@ -1,6 +1,5 @@
 import { QUARTERS_PER_YEAR, findCoursesInQuarter } from "@/lib/plannerUtils";
 import { constructQuarterId } from "@/lib/quarterUtils";
-import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
 import { PlannerData } from "@customTypes/Planner";
@@ -24,7 +23,6 @@ import {
 import { useContext, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
-import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
 import PlannerActions from "./PlannerActions";

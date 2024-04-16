@@ -1,6 +1,7 @@
+import usePlannersStore from "@/app/hooks/usePlanners";
 import { clonePlanner, initializeNewPlanner } from "@/lib/plannerUtils";
 import { truncateTitle } from "@/lib/utils";
-import usePlannersStore, { MAX_PLANNERS } from "@/store/planners";
+import { MAX_PLANNERS } from "@/store/planners";
 import { Add } from "@mui/icons-material";
 import { IconButton, Input, Tooltip, useColorScheme } from "@mui/joy";
 import { useState } from "react";
@@ -26,15 +27,22 @@ const emptyDeleteAlertData: PlannerDeleteAlertData = {
 
 // TODO: finish refactor
 export default function PlannerTabs() {
-  const planners = usePlannersStore((state) => state.planners);
-  const setPlanner = usePlannersStore((state) => state.setPlanner);
-  const addPlanner = usePlannersStore((state) => state.addPlanner);
-  const deletePlanner = usePlannersStore((state) => state.deletePlanner);
-
-  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
-  const setActivePlannerId = usePlannersStore(
-    (state) => state.setActivePlannerId,
-  );
+  // Zustand store
+  const {
+    planners,
+    setPlanner,
+    addPlanner,
+    deletePlanner,
+    activePlannerId,
+    setActivePlannerId,
+  } = usePlannersStore((state) => ({
+    planners: state.planners,
+    setPlanner: state.setPlanner,
+    addPlanner: state.addPlanner,
+    deletePlanner: state.deletePlanner,
+    activePlannerId: state.activePlannerId,
+    setActivePlannerId: state.setActivePlannerId,
+  }));
 
   // State-ful variables for managing the editing of planner names
   // and deletion alerts
@@ -118,6 +126,18 @@ export default function PlannerTabs() {
 
   return (
     <>
+      <ConfirmAlert
+        open={deleteAlert.alertOpen}
+        onClose={() => setDeleteAlert(emptyDeleteAlertData)}
+        onConfirm={handleDeletePlanner}
+        dialogText={deleteAlert.title}
+      />
+      <TooManyPlannersAlert
+        open={tooManyAlertIsOpen}
+        onClose={() => setTooManyAlertIsOpen(false)}
+        warningContent="Too Many Planners"
+        dialogContent="You have too many planners open. Delete one to make a new one."
+      />
       <div className="grid grid-flow-col gap-2 ml-1 overflow-x-auto">
         {planners?.map(({ id, title }) => (
           <CustomTab
@@ -147,18 +167,6 @@ export default function PlannerTabs() {
           </IconButton>
         </Tooltip>
       </div>
-      <ConfirmAlert
-        open={deleteAlert.alertOpen}
-        onClose={() => setDeleteAlert(emptyDeleteAlertData)}
-        onConfirm={handleDeletePlanner}
-        dialogText={deleteAlert.title}
-      />
-      <TooManyPlannersAlert
-        open={tooManyAlertIsOpen}
-        onClose={() => setTooManyAlertIsOpen(false)}
-        warningContent="Too Many Planners"
-        dialogContent="You have too many planners open. Delete one to make a new one."
-      />
     </>
   );
 }

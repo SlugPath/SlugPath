@@ -1,8 +1,6 @@
-import { usePlanners } from "@/app/hooks/reactQuery";
-import useActivePlannerStore from "@/store/planners";
+import usePlannersStore from "@/app/hooks/usePlanners";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { useSession } from "next-auth/react";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useMemo } from "react";
 
 import ExportSkeleton from "./ExportSkeleton";
 
@@ -16,16 +14,16 @@ export default function ExportModal({
   showModal: boolean;
   setShowModal: (show: boolean) => void;
 }) {
-  const { data: session } = useSession();
-  const userId = session?.user.id;
+  // Zustand store
+  const { planners, activePlannerId } = usePlannersStore((state) => ({
+    planners: state.planners,
+    activePlannerId: state.activePlannerId,
+  }));
 
-  const { data: planners } = usePlanners(userId);
-  const activePlannerId = useActivePlannerStore(
-    (state) => state.activePlannerId,
-  );
-
-  const activePlanner = planners?.find(
-    (planner) => planner.id === activePlannerId,
+  // TODO: cache activePlanner globally ?
+  const activePlanner = useMemo(
+    () => planners.find((planner) => planner.id === activePlannerId),
+    [planners, activePlannerId],
   );
 
   return (

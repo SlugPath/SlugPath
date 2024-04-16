@@ -12,11 +12,12 @@ export function MiniCourseCard({
   quarterTitle?: string;
 }) {
   // Zustand modal store
-  const setShowCourseInfoModal = useModalsStore(
-    (state) => state.setShowCourseInfoModal,
-  );
-  const setDisplayCourse = useModalsStore((state) => state.setDisplayCourse);
-  const setDisplayTerm = useModalsStore((state) => state.setDisplayTerm);
+  const { setShowCourseInfoModal, setDisplayCourse, setDisplayTerm } =
+    useModalsStore((state) => ({
+      setShowCourseInfoModal: state.setShowCourseInfoModal,
+      setDisplayCourse: state.setCourseInfoDisplayCourse,
+      setDisplayTerm: state.setCourseInfoDisplayTerm,
+    }));
 
   // Handlers
   const handleClickedCourse = () => {

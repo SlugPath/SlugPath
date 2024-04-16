@@ -1,6 +1,6 @@
 import { courseTitle, isCustomCourse } from "@/lib/plannerUtils";
 import useModalsStore from "@/store/modal";
-import { CourseTerm, StoredCourse } from "@customTypes/Course";
+import { StoredCourse } from "@customTypes/Course";
 import { Quarter } from "@customTypes/Quarter";
 import { Card, Link, Typography } from "@mui/joy";
 
@@ -33,16 +33,19 @@ function MiniCourseCard({
   quarter: Quarter;
 }) {
   // Zustand modal store
-  const setDisplayCourseInfo = useModalsStore(
-    (state) => state.setDisplayCourseInfo,
-  );
-  const setShowCourseInfoModal = useModalsStore(
-    (state) => state.setShowCourseInfoModal,
-  );
+  const {
+    setShowCourseInfoModal,
+    setCourseInfoDisplayCourse,
+    setCourseInfoDisplayTerm,
+  } = useModalsStore((state) => ({
+    setShowCourseInfoModal: state.setShowCourseInfoModal,
+    setCourseInfoDisplayCourse: state.setCourseInfoDisplayCourse,
+    setCourseInfoDisplayTerm: state.setCourseInfoDisplayTerm,
+  }));
 
   function handleClickedCourse(course: StoredCourse) {
-    const courseTerm = [course, quarter.title] as CourseTerm;
-    setDisplayCourseInfo(courseTerm);
+    setCourseInfoDisplayCourse(course);
+    setCourseInfoDisplayTerm(quarter.title);
     setShowCourseInfoModal(true);
   }
 

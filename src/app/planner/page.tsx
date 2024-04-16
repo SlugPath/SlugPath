@@ -8,12 +8,14 @@ import {
 import { getServerSession } from "next-auth";
 
 import { getUserPlanners } from "../actions/planner";
+import { PlannerData } from "../types/Planner";
 
 export default async function Planner() {
   const session = await getServerSession(authOptions);
   const userId = session?.user.id ?? "";
   const queryClient = new QueryClient();
 
+  // Prefetch the user's planners
   await queryClient.prefetchQuery({
     queryKey: ["planners", userId],
     queryFn: async () => {
@@ -22,9 +24,12 @@ export default async function Planner() {
     },
   });
 
+  // Get the user's planners from the prefetch above
+  const planners = queryClient.getQueryData(["planners", userId]);
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Planners />
+      <Planners initialPlanners={planners as PlannerData[]} />
     </HydrationBoundary>
   );
 }
