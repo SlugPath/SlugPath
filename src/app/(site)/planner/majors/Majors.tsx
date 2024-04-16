@@ -5,10 +5,10 @@ import {
   extractUnexpiredPrograms,
   hasPermissionToEditProgram,
 } from "@/lib/permissionsUtils";
+import usePlannersStore from "@/store/planner";
 import CourseInfoModal from "@components/modals/courseInfoModal/CourseInfoModal";
 import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
-import { PlannersContext } from "@contexts/PlannersProvider";
 import { useUserPermissions, useUserPrograms } from "@hooks/reactQuery";
 import { Card } from "@mui/joy";
 import { useSession } from "next-auth/react";
@@ -19,7 +19,13 @@ import { Requirements } from "../majors/Requirements";
 import UserProgramsEditor from "../majors/majorSelection/MajorSelection";
 
 export default function Majors() {
-  const { activePlanner } = useContext(PlannersContext);
+  const planners = usePlannersStore((state) => state.planners);
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
+
+  const activePlanner = useMemo(
+    () => planners.find((planner) => planner.id === activePlannerId),
+    [planners, activePlannerId],
+  );
 
   if (activePlanner === undefined) return <></>;
 

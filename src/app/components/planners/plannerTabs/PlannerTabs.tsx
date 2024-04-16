@@ -1,6 +1,6 @@
 import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { truncateTitle } from "@/lib/utils";
-import { PlannersContext } from "@contexts/PlannersProvider";
+import usePlannersStore from "@/store/planner";
 import { Add } from "@mui/icons-material";
 import { IconButton, Input, Tooltip, useColorScheme } from "@mui/joy";
 import { useContext, useState } from "react";
@@ -25,14 +25,33 @@ const emptyDeleteAlertData: PlannerDeleteAlertData = {
 };
 
 export default function PlannerTabs() {
-  const {
-    planners,
-    removePlanner,
-    switchPlanners,
-    changePlannerName,
-    duplicatePlanner,
-    activePlanner,
-  } = useContext(PlannersContext);
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanners = usePlannersStore((state) => state.setPlanners);
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
+  const setActivePlannerId = usePlannersStore(
+    (state) => state.setActivePlannerId,
+  );
+
+  function removePlanner(id: string) {
+    const newPlanners = planners.filter((planner) => planner.id !== id);
+    setPlanners(newPlanners);
+  }
+
+  function duplicatePlanner(id: string) {
+    const planner = planners.find((planner) => planner.id === id);
+    if (planner) {
+      const newPlanner = { ...planner, id: Date.now().toString() };
+      setPlanners([...planners, newPlanner]);
+    }
+  }
+
+  function changePlannerName(id: string, newTitle: string) {
+    setPlanners(
+      planners.map((planner) =>
+        planner.id === id ? { ...planner, title: newTitle } : planner,
+      ),
+    );
+  }
 
   const { setShowNewPlannerModal } = useContext(ModalsContext);
 
@@ -83,7 +102,7 @@ export default function PlannerTabs() {
   };
 
   const handleTabChange = (id: string) => {
-    switchPlanners(id);
+    setActivePlannerId(id);
   };
 
   /**
@@ -106,7 +125,7 @@ export default function PlannerTabs() {
             key={id}
             title={title}
             id={id}
-            selected={activePlanner ? activePlanner === id : false}
+            selected={activePlannerId ? activePlannerId === id : false}
             isEditing={plannerBeingEdited === id}
             setPlannerBeingEdited={setPlannerBeingEdited}
             onEndEditing={(newTitle) => {

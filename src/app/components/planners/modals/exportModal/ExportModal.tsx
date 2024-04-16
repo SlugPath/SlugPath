@@ -1,3 +1,4 @@
+import usePlannersStore from "@/store/planner";
 import { PlannersContext } from "@contexts/PlannersProvider";
 import { Modal, ModalClose, Sheet, Typography } from "@mui/joy";
 import { Suspense, lazy, useContext } from "react";
@@ -8,16 +9,19 @@ const PlannerPDF = lazy(() => import("./PlannerPDF"));
 
 // Create styles
 export default function ExportModal() {
-  const {
-    planners,
-    activePlanner,
-    setShowExportModal,
-    showExportModal,
-    getPlanner,
-  } = useContext(PlannersContext);
-  if (activePlanner === undefined || Object.is(activePlanner, {})) return null;
+  const { setShowExportModal, showExportModal } = useContext(PlannersContext);
 
-  const courseState = getPlanner(activePlanner);
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
+  const planners = usePlannersStore((state) => state.planners);
+
+  if (activePlannerId === undefined || Object.is(activePlannerId, {}))
+    return null;
+
+  const courseState = planners.find(
+    (planner) => planner.id === activePlannerId,
+  );
+
+  if (!courseState) return null;
 
   return (
     <Modal
@@ -52,7 +56,7 @@ export default function ExportModal() {
         <Suspense fallback={<ExportSkeleton />}>
           <PlannerPDF
             planners={planners}
-            activePlanner={activePlanner}
+            activePlanner={activePlannerId}
             courseState={courseState}
           />
         </Suspense>

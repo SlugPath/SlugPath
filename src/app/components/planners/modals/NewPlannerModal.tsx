@@ -4,7 +4,8 @@ import {
   useUserPrograms,
 } from "@/app/hooks/reactQuery";
 import SelectBox from "@/app/register/(skipSetup)/SelectBox";
-import { initialPlanner } from "@/lib/plannerUtils";
+import { cloneDefaultPlanner, initialPlanner } from "@/lib/plannerUtils";
+import usePlannersStore from "@/store/planner";
 import { AutoAwesome, Map } from "@mui/icons-material";
 import { Modal, Sheet, Typography } from "@mui/joy";
 import { useSession } from "next-auth/react";
@@ -27,14 +28,22 @@ export default function NewPlannerModal() {
 
   const [chooseCurriculum, setChooseCurriculum] = useState(true);
 
-  const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(userId);
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanners = usePlannersStore((state) => state.setPlanners);
   const { data: programs } = useUserPrograms(userId);
+
+  const { mutate: addNewPlannerMutation } = useAddNewPlannerMutation(userId);
 
   function handleClickContinue() {
     if (chooseCurriculum) {
       router.push("/curriculum-select");
     } else {
-      addNewPlannerMutation({ userId, planner: initialPlanner() });
+      const newPlanners = [...planners, initialPlanner()];
+      setPlanners(newPlanners);
+      addNewPlannerMutation({
+        userId,
+        planner: cloneDefaultPlanner(initialPlanner()),
+      });
       setShowNewPlannerModal(false);
     }
   }

@@ -3,6 +3,7 @@
 import { ModalsProvider } from "@/app/contexts/ModalsProvider";
 import { PlannersProvider } from "@/app/contexts/PlannersProvider";
 import { usePlanners } from "@/app/hooks/reactQuery";
+import usePlannerSync from "@/app/hooks/usePlannerSync";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -20,6 +21,8 @@ export default function Planners() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  usePlannerSync();
+
   const { data: planners, isLoading, isFetching } = usePlanners(userId);
 
   useEffect(() => {
@@ -35,8 +38,8 @@ export default function Planners() {
   }, [queryClient, userId]);
 
   return (
-    <PlannersProvider>
-      <ModalsProvider>
+    <ModalsProvider>
+      <PlannersProvider>
         <div className="flex flex-col py-4 mb-auto flex-1 min-h-0 gap-4">
           <div className="flex justify-left px-7">
             <PlannerTabs />
@@ -45,10 +48,10 @@ export default function Planners() {
             <PlannerList />
           </div>
         </div>
-        <ExportModal />
-        <ShareModal />
         <NewPlannerModal />
-      </ModalsProvider>
-    </PlannersProvider>
+        <ShareModal />
+        <ExportModal />
+      </PlannersProvider>
+    </ModalsProvider>
   );
 }

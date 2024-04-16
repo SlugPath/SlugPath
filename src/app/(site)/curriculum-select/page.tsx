@@ -3,6 +3,7 @@
 import { PlannerTitle } from "@/app/types/Planner";
 import { Program } from "@/app/types/Program";
 import { cloneDefaultPlanner } from "@/lib/plannerUtils";
+import usePlannersStore from "@/store/planner";
 import ContinueButton from "@components/buttons/ContinueButton";
 import {
   Carousel,
@@ -48,6 +49,8 @@ export default function CurriculumSelect() {
     handleUpdatePlannersSuccess,
   );
 
+  const setPlanners = usePlannersStore((state) => state.setPlanners);
+
   const { data: _defaultPlanners } = useProgramDefaultPlanners(
     selectedProgram ? selectedProgram.name : "",
     selectedProgram ? selectedProgram.catalogYear : "",
@@ -78,6 +81,7 @@ export default function CurriculumSelect() {
       userId,
       planner: cloneDefaultPlanner(defaultPlanner),
     });
+    setPlanners([...planners, cloneDefaultPlanner(defaultPlanner)]);
   }
 
   return (

@@ -7,7 +7,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { MajorVerificationProvider } from "./MajorVerificationProvider";
 import { ModalsProvider } from "./ModalsProvider";
 import NextAuthProvider from "./NextAuthProvider";
-import { PlannersProvider } from "./PlannersProvider";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -109,9 +108,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <CssVarsProvider defaultMode="system" theme={theme}>
         <QueryClientProvider client={queryClient}>
           <MajorVerificationProvider>
-            <ModalsProvider>
-              <PlannersProvider>{children}</PlannersProvider>
-            </ModalsProvider>
+            <ModalsProvider>{children}</ModalsProvider>
           </MajorVerificationProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

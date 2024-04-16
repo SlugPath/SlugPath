@@ -6,8 +6,10 @@ import SchoolIcon from "@mui/icons-material/School";
 import { Button } from "@mui/joy";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function PlannerActions() {
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const router = useRouter();
   const redirectToAdminDashboard = () => router.push("/planner/permissions");
@@ -32,6 +34,8 @@ export default function PlannerActions() {
       disabled: false,
     });
   }
+
+  if (pathname === "/curriculum-select") return null;
 
   return (
     <div className="flex flex-row">
