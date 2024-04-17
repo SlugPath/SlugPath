@@ -13,6 +13,9 @@ export interface MajorVerificationContextProps {
   getLoadingSave: (majorId: number) => boolean;
   getIsSaved: (majorId: number) => boolean;
   calculateMajorProgressPercentage: (courseState: PlannerData) => number;
+  calculateAllMajorProgressPercentages: (courseState: PlannerData) => {
+    [key: string]: number;
+  };
   errors: string;
   findRequirementList: (
     id: string,
@@ -46,6 +49,7 @@ export function MajorVerificationProvider({
     removeRequirementList,
     handleSaveMajorRequirements,
     calculateMajorProgressPercentage,
+    calculateAllMajorProgressPercentages,
     getRequirementsForMajor,
     findRequirementList,
     isMajorRequirementsSatisfied: isProgramRequirementsSatisfied,
@@ -61,6 +65,8 @@ export function MajorVerificationProvider({
         getLoadingSave,
         getIsSaved,
         calculateMajorProgressPercentage: calculateMajorProgressPercentage,
+        calculateAllMajorProgressPercentages:
+          calculateAllMajorProgressPercentages,
         errors: "",
         findRequirementList,
         addRequirementList,

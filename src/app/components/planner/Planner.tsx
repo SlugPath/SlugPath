@@ -168,9 +168,10 @@ function GraduationProgressCard({
   geSatisfied: string[];
   courseState: PlannerData;
 }) {
-  const { calculateMajorProgressPercentage } = useContext(
-    MajorVerificationContext,
-  );
+  const {
+    calculateMajorProgressPercentage,
+    calculateAllMajorProgressPercentages,
+  } = useContext(MajorVerificationContext);
 
   return (
     <Card variant="plain">
@@ -179,10 +180,9 @@ function GraduationProgressCard({
         courseState={courseState}
         majorProgressPercentage={calculateMajorProgressPercentage(courseState)}
       />
-
       <div>
         <MajorProgress
-          majorProgressPercentage={calculateMajorProgressPercentage(
+          majorProgressPercentage={calculateAllMajorProgressPercentages(
             courseState,
           )}
         />

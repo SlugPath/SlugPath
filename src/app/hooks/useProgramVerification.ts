@@ -204,6 +204,57 @@ export default function useProgramVerification() {
     return totalPercentage;
   }
 
+  function calculateAllMajorProgressPercentages(courseState: PlannerData): {
+    [key: string]: number;
+  } {
+    if (!userPrograms) {
+      return {};
+    }
+    console.log("IN calculateALLMajorProgressPercentages");
+
+    const percentages = userPrograms.map((major) => {
+      const majorRequirements = getRequirementsForMajor(major.id);
+      if (!majorRequirements) {
+        return 0;
+      } else {
+        const requirementsTotal = majorRequirements.requirements.length;
+        const requirementsSatisfied = majorRequirements.requirements.reduce(
+          (count, requirement) =>
+            isMajorRequirementsSatisfied(requirement, courseState.courses)
+              ? count + 1
+              : count,
+          0,
+        );
+        const percentage: number =
+          (requirementsSatisfied / requirementsTotal) * 100;
+        return isNaN(percentage) ? 0 : percentage;
+      }
+    });
+    console.log("percentages:");
+    console.log(percentages);
+
+    // Check if percentages array is empty
+    if (percentages.length === 0) {
+      return {}; // Return empty object if no percentages are calculated
+    }
+
+    // Calculate average percentage
+    const averagePercentage =
+      percentages.length > 0
+        ? percentages.reduce((acc, percentage) => acc + percentage, 0) /
+          percentages.length
+        : 0;
+
+    // Construct result dictionary
+    const result: { [key: string]: number } = { average: averagePercentage };
+    userPrograms.forEach((major, index) => {
+      result[major.id] = percentages[index];
+    });
+    console.log("result:");
+    console.log(result);
+    return result;
+  }
+
   return {
     userPrograms,
     updateRequirementList,
@@ -211,6 +262,7 @@ export default function useProgramVerification() {
     removeRequirementList,
     handleSaveMajorRequirements,
     calculateMajorProgressPercentage,
+    calculateAllMajorProgressPercentages,
     getRequirementsForMajor,
     findRequirementList,
     isMajorRequirementsSatisfied,
