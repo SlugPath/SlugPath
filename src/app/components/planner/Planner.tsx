@@ -182,7 +182,7 @@ function GraduationProgressCard({
       />
       <div>
         <MajorProgress
-          majorProgressPercentage={calculateAllMajorProgressPercentages(
+          majorProgressPercentages={calculateAllMajorProgressPercentages(
             courseState,
           )}
         />

@@ -10,6 +10,7 @@ export default function MajorProgressBar({
   percentages: { [key: string]: number };
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
   const theme = useTheme();
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
@@ -20,13 +21,10 @@ export default function MajorProgressBar({
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-
   const averagePercentage = percentages["average"] || 0;
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const { data: userPrograms } = useUserPrograms(userId);
-  console.log(userPrograms);
 
   return (
     <div
@@ -74,16 +72,16 @@ export default function MajorProgressBar({
           ]}
         >
           <Box
-            //className="bg-secondary-100 dark:bg-blue-500"
             sx={{
               p: 1,
               borderRadius: 8,
-              marginTop: "0.2rem",
+              marginTop: "0.5rem",
               backgroundColor:
-                theme.palette.mode === "dark" ? "#0d47a1" : "#eef3f8",
+                theme.palette.mode === "dark" ? "#181a1c" : "#eef3f8",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
             }}
           >
-            {Object.keys(percentages).map((key) => {
+            {Object.keys(percentages).map((key, index, array) => {
               if (key !== "average") {
                 const majorName =
                   userPrograms?.find(
@@ -94,18 +92,26 @@ export default function MajorProgressBar({
                     (program) => program.id === parseInt(key, 10),
                   )?.programType || "Major";
                 return (
-                  <div key={key} style={{ marginBottom: "0.5rem" }}>
-                    <Typography sx={{ fontSize: 13 }}>
-                      {`${majorName} ${programType} - ${Math.round(
-                        percentages[key],
-                      )}%`}
+                  <div
+                    key={key}
+                    style={{
+                      marginBottom:
+                        index === array.length - 2 ? "0.2rem" : "0.8rem",
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: "lg", fontSize: 11 }}>
+                      {`${
+                        majorName.length > 25
+                          ? majorName.substring(0, 25) + "..."
+                          : majorName
+                      } ${programType} - ${Math.round(percentages[key])}%`}
                     </Typography>
                     <div
                       className="flex flex-row w-full h-5 rounded-md bg-blue-100 dark:bg-bg-faded-dark"
                       style={{ cursor: "pointer" }}
                     >
                       <div
-                        className="rounded-md bg-blue-300 dark:bg-blue-600"
+                        className="rounded-md bg-blue-400 dark:bg-blue-700"
                         style={{
                           height: "100%",
                           width: `${percentages[key]}%`,
