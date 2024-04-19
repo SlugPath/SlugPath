@@ -81,7 +81,7 @@ export async function updateUserPlanners({
 }: {
   userId: string;
   planners: PlannerData[];
-}): Promise<void> {
+}): Promise<PlannerData[]> {
   await prisma.$transaction(async (tx) => {
     await tx.planner.deleteMany({
       where: {
@@ -101,6 +101,8 @@ export async function updateUserPlanners({
       ),
     );
   });
+
+  return planners;
 }
 
 /**
@@ -138,6 +140,36 @@ export async function getUserPlanners(userId: string): Promise<PlannerData[]> {
     },
     orderBy: {
       order: "asc",
+    },
+    include: {
+      labels: true,
+      quarters: {
+        include: {
+          courses: true,
+        },
+      },
+    },
+  });
+
+  return plans.map(toPlannerData);
+}
+
+/**
+ * Retrieves all planners for a program
+ * @param programName name of the program
+ * @returns a PlannerData instance if it exists, otherwise null
+ */
+export async function getPlannersByProgram(
+  programName: string,
+  catalogYear: string,
+) {
+  const plans = await prisma.planner.findMany({
+    where: {
+      major: {
+        name: programName,
+        catalogYear: catalogYear,
+      },
+      userId: null,
     },
     include: {
       labels: true,

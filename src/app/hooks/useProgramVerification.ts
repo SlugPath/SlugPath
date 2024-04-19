@@ -26,6 +26,8 @@ export default function useProgramVerification() {
     onSetMajorRequirements,
     onSaveMajorRequirements,
     getRequirementsForMajor,
+    getIsSaved,
+    getLoadingSave,
   } = useMajorRequirements(userPrograms ?? [], session?.user.id);
 
   function updateRequirementList(
@@ -203,6 +205,7 @@ export default function useProgramVerification() {
   }
 
   return {
+    userPrograms,
     updateRequirementList,
     addRequirementList,
     removeRequirementList,
@@ -211,6 +214,8 @@ export default function useProgramVerification() {
     getRequirementsForMajor,
     findRequirementList,
     isMajorRequirementsSatisfied,
+    getIsSaved,
+    getLoadingSave,
   };
 }
 

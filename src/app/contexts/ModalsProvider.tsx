@@ -9,12 +9,12 @@ import useModals from "../hooks/useModals";
 export interface ModalsContextProps {
   showMajorsModal: boolean;
   setShowMajorsModal: SetShow;
-  showPermissionsModal: boolean;
-  setShowPermissionsModal: SetShow;
   showReplaceRLModal: boolean;
   setShowReplaceRLModal: SetShow;
   showMajorRequirementsEditModal: boolean;
   setShowMajorRequirementsEditModal: SetShow;
+  showNewPlannerModal: boolean;
+  setShowNewPlannerModal: SetShow;
   courseState: PlannerData;
   majorToEdit: Program | undefined;
   setMajorToEdit: SetState<Program | undefined>;
@@ -26,12 +26,12 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
   const {
     showMajorsModal,
     setShowMajorsModal,
-    showPermissionsModal,
-    setShowPermissionsModal,
     showReplaceRLModal,
     setShowReplaceRLModal,
     showMajorRequirementsEditModal,
     setShowMajorRequirementsEditModal,
+    showNewPlannerModal,
+    setShowNewPlannerModal,
     majorToEdit,
     setMajorToEdit,
   } = useModals();
@@ -43,12 +43,12 @@ export function ModalsProvider({ children }: { children: React.ReactNode }) {
       value={{
         showMajorsModal,
         setShowMajorsModal,
-        showPermissionsModal,
-        setShowPermissionsModal,
         showReplaceRLModal,
         setShowReplaceRLModal,
         showMajorRequirementsEditModal,
         setShowMajorRequirementsEditModal,
+        showNewPlannerModal,
+        setShowNewPlannerModal,
         courseState,
         majorToEdit,
         setMajorToEdit,

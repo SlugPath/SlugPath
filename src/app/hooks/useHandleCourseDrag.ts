@@ -9,7 +9,6 @@ import { getQuarterId } from "@/lib/quarterUtils";
 import { PlannerData } from "@customTypes/Planner";
 import { Quarter } from "@customTypes/Quarter";
 import { DraggableLocation, DropResult } from "@hello-pangea/dnd";
-import useHandleRequirementListDrag from "@hooks/useHandleRequirementListDrag";
 import { v4 as uuidv4 } from "uuid";
 
 import { StoredCourse } from "../types/Course";
@@ -32,12 +31,6 @@ export default function useHandleCourseDrag({
   handleCourseUpdate: (newState: PlannerData) => void;
   handleRemoveCustom: (idx: number) => void;
 }) {
-  const {
-    draggedToRequirementList,
-    addCourseToRequirementList,
-    moveCourseRequirementList,
-  } = useHandleRequirementListDrag();
-
   function handleDragEnd(result: DropResult) {
     const { destination, source, draggableId } = result;
 
@@ -53,27 +46,14 @@ export default function useHandleCourseDrag({
       draggedFromSearch(source.droppableId) ||
       draggedFromCustom(source.droppableId)
     ) {
-      if (draggedToRequirementList(destination.droppableId)) {
-        addCourseToRequirementList(
-          destination.droppableId,
-          draggableId,
-          destination,
-        );
-      } else {
-        addCourseFromSearch(draggableId, destination);
-        // Remove from the custom course selection
-        if (draggedFromCustom(source.droppableId)) {
-          handleRemoveCustom(source.index);
-        }
+      addCourseFromSearch(draggableId, destination);
+      // Remove from the custom course selection
+      if (draggedFromCustom(source.droppableId)) {
+        handleRemoveCustom(source.index);
       }
       return;
     }
-
-    if (draggedToRequirementList(source.droppableId)) {
-      moveCourseRequirementList(source, destination);
-    } else {
-      moveCourse(source, destination);
-    }
+    moveCourse(source, destination);
   }
 
   function addCourseFromSearch(

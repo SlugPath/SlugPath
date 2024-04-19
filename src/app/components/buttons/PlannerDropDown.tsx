@@ -53,75 +53,77 @@ export default function PlannerDropDown({
   }, [onRightClick]);
 
   return (
-    <Dropdown open={open} onOpenChange={handleOpenChange}>
-      <MenuButton
-        slots={{ root: ArrowDropDownIcon }}
-        slotProps={{ root: { variant: "plain", color: "neutral" } }}
-        sx={{
-          "&:focus": {
-            backgroundColor: "transparent",
-            outline: "none",
-          },
-          borderRadius: "50%",
-        }}
-      >
-        <MoreVert />
-      </MenuButton>
-      <Menu placement="bottom-end">
-        <MenuItem onClick={onRenameButtonClick}>
-          <ListItemDecorator>
-            <DriveFileRenameOutlineIcon />
-          </ListItemDecorator>{" "}
-          Rename
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => {
-            // Stop the event from bubbling up to the parent to prevent the tab changing
-            // back to the original tab after the duplicate button is clicked
-            e.stopPropagation();
-            onDuplicateButtonClick();
+    <>
+      <Dropdown open={open} onOpenChange={handleOpenChange}>
+        <MenuButton
+          slots={{ root: ArrowDropDownIcon }}
+          slotProps={{ root: { variant: "plain", color: "neutral" } }}
+          sx={{
+            "&:focus": {
+              backgroundColor: "transparent",
+              outline: "none",
+            },
+            borderRadius: "50%",
           }}
         >
-          <ListItemDecorator>
-            <ContentCopyIcon />
-          </ListItemDecorator>{" "}
-          Duplicate
-        </MenuItem>
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowExportModal(true);
-          }}
-        >
-          <ListItemDecorator>
-            <DownloadIcon />
-          </ListItemDecorator>{" "}
-          Download
-        </MenuItem>
-        {/* FIXME: Need to add the share planner functionality to the dropdown */}
-        <MenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowShareModal(true);
-          }}
-        >
-          <ListItemDecorator>
-            <IosShareIcon />
-          </ListItemDecorator>{" "}
-          Share
-        </MenuItem>
-        <ListDivider />
-        <MenuItem
-          variant="soft"
-          color="danger"
-          onClick={() => onDeleteButtonClick(id, title)}
-        >
-          <ListItemDecorator sx={{ color: "inherit" }}>
-            <DeleteForever />
-          </ListItemDecorator>{" "}
-          Delete
-        </MenuItem>
-      </Menu>
-    </Dropdown>
+          <MoreVert />
+        </MenuButton>
+        <Menu placement="bottom-end">
+          <MenuItem onClick={onRenameButtonClick}>
+            <ListItemDecorator>
+              <DriveFileRenameOutlineIcon />
+            </ListItemDecorator>{" "}
+            Rename
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              // Stop the event from bubbling up to the parent to prevent the tab changing
+              // back to the original tab after the duplicate button is clicked
+              e.stopPropagation();
+              onDuplicateButtonClick();
+            }}
+          >
+            <ListItemDecorator>
+              <ContentCopyIcon />
+            </ListItemDecorator>{" "}
+            Duplicate
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowExportModal(true);
+            }}
+          >
+            <ListItemDecorator>
+              <DownloadIcon />
+            </ListItemDecorator>{" "}
+            Download
+          </MenuItem>
+          {/* FIXME: Need to add the share planner functionality to the dropdown */}
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowShareModal(true);
+            }}
+          >
+            <ListItemDecorator>
+              <IosShareIcon />
+            </ListItemDecorator>{" "}
+            Share
+          </MenuItem>
+          <ListDivider />
+          <MenuItem
+            variant="soft"
+            color="danger"
+            onClick={() => onDeleteButtonClick(id, title)}
+          >
+            <ListItemDecorator sx={{ color: "inherit" }}>
+              <DeleteForever />
+            </ListItemDecorator>{" "}
+            Delete
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+    </>
   );
 }

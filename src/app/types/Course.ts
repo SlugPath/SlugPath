@@ -2,18 +2,19 @@ import { z } from "zod";
 
 import { Term } from "./Quarter";
 
-// TODO: Add more rigorous validation
 export const storedCourseSchema = z.object({
   id: z.string(),
   departmentCode: z.string(),
   number: z.string(),
   credits: z.number(),
   title: z.string(),
+  school: z.string().default("UCSC"),
   ge: z.array(z.string()),
   prerequisites: z.string().optional(),
   quartersOffered: z.array(z.string()),
   description: z.string(),
   labels: z.array(z.string()),
+  equivalent: z.string().optional(),
 });
 
 export type StoredCourse = z.infer<typeof storedCourseSchema>;

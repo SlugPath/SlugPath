@@ -1,12 +1,13 @@
+import { ModalsContext } from "@/app/contexts/ModalsProvider";
 import { truncateTitle } from "@/lib/utils";
-import { PlannersContext } from "@contexts/PlannersProvider";
+import usePlannersStore from "@/store/planner";
 import { Add } from "@mui/icons-material";
 import { IconButton, Input, Tooltip, useColorScheme } from "@mui/joy";
 import { useContext, useState } from "react";
 
 import PlannerDropDown from "../../buttons/PlannerDropDown";
 import ConfirmAlert from "../../modals/ConfirmAlert";
-import RenameModal from "../../modals/RenameModal";
+import RenameModal from "./RenameModal";
 import TitleSnackbar from "./TitleSnackbar";
 import TooManyPlannersAlert from "./TooManyPlannersAlert";
 
@@ -24,15 +25,35 @@ const emptyDeleteAlertData: PlannerDeleteAlertData = {
 };
 
 export default function PlannerTabs() {
-  const {
-    planners,
-    removePlanner,
-    switchPlanners,
-    changePlannerName,
-    addPlanner,
-    duplicatePlanner,
-    activePlanner,
-  } = useContext(PlannersContext);
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanners = usePlannersStore((state) => state.setPlanners);
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
+  const setActivePlannerId = usePlannersStore(
+    (state) => state.setActivePlannerId,
+  );
+
+  function removePlanner(id: string) {
+    const newPlanners = planners.filter((planner) => planner.id !== id);
+    setPlanners(newPlanners);
+  }
+
+  function duplicatePlanner(id: string) {
+    const planner = planners.find((planner) => planner.id === id);
+    if (planner) {
+      const newPlanner = { ...planner, id: Date.now().toString() };
+      setPlanners([...planners, newPlanner]);
+    }
+  }
+
+  function changePlannerName(id: string, newTitle: string) {
+    setPlanners(
+      planners.map((planner) =>
+        planner.id === id ? { ...planner, title: newTitle } : planner,
+      ),
+    );
+  }
+
+  const { setShowNewPlannerModal } = useContext(ModalsContext);
 
   // State-ful variables for managing the editing of planner names
   // and deletion alerts
@@ -46,6 +67,8 @@ export default function PlannerTabs() {
 
   /**
    * Event listener that runs when user clicks the add button
+   * To add a planner, navigates to curriculum-select page
+   * to allow user to choose a starting planner
    */
   const handleAddPlanner = () => {
     // Check if user has too many planners open
@@ -53,7 +76,8 @@ export default function PlannerTabs() {
       setTooManyAlertIsOpen(true);
       return;
     }
-    addPlanner();
+
+    setShowNewPlannerModal(true);
   };
 
   /**
@@ -78,7 +102,7 @@ export default function PlannerTabs() {
   };
 
   const handleTabChange = (id: string) => {
-    switchPlanners(id);
+    setActivePlannerId(id);
   };
 
   /**
@@ -101,7 +125,7 @@ export default function PlannerTabs() {
             key={id}
             title={title}
             id={id}
-            selected={activePlanner ? activePlanner === id : false}
+            selected={activePlannerId ? activePlannerId === id : false}
             isEditing={plannerBeingEdited === id}
             setPlannerBeingEdited={setPlannerBeingEdited}
             onEndEditing={(newTitle) => {

@@ -1,34 +1,48 @@
 "use client";
 
-import { ModalsProvider } from "@/app/contexts/ModalsProvider";
-import { PlannersContext } from "@/app/contexts/PlannersProvider";
+import { PlannerData } from "@/app/types/Planner";
 import { cn } from "@/lib/utils";
+import usePlannersStore from "@/store/planner";
 import { MajorVerificationProvider } from "@contexts/MajorVerificationProvider";
 import { PlannerProvider } from "@contexts/PlannerProvider";
-import { useContext } from "react";
+import { useMemo } from "react";
 
 import Planner from "../planner/Planner";
 
 export default function PlannerList() {
-  const { planners, activePlanner } = useContext(PlannersContext);
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanner = usePlannersStore((state) => state.setPlanner);
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
+
+  const activePlanner = useMemo(
+    () => planners.find((planner) => planner.id === activePlannerId),
+    [planners, activePlannerId],
+  );
 
   if (!planners || planners.length == 0) return <HelpfulTips />;
 
+  if (!activePlanner) {
+    throw new Error("Active planner not found");
+  }
+
   return (
     <div className="w-full flex-1 flex flex-col min-h-0">
-      {planners.map(({ id, title }, index) => (
+      {planners.map(({ id }) => (
         <div
           key={id}
           className={cn(
-            activePlanner === id ? "flex w-full flex-1 min-h-0" : "hidden",
+            activePlannerId === id ? "flex w-full flex-1 min-h-0" : "hidden",
           )}
         >
           <MajorVerificationProvider>
-            <ModalsProvider>
-              <PlannerProvider plannerId={id} title={title} order={index}>
-                <Planner isActive={activePlanner === id} />
-              </PlannerProvider>
-            </ModalsProvider>
+            <PlannerProvider
+              planner={activePlanner}
+              setPlanner={(newPlanner: PlannerData) =>
+                setPlanner(activePlanner.id, newPlanner)
+              }
+            >
+              <Planner isActive={activePlannerId === id} />
+            </PlannerProvider>
           </MajorVerificationProvider>
         </div>
       ))}

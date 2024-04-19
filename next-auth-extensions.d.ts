@@ -6,9 +6,8 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
-      /** The user's id */
-      id: string;
-      defaultPlannerId: string | null | undefined;
+      id: string; // The user's unique identifier
+      isRecordCreated: boolean; // Whether the user has a record in the database
     } & DefaultSession["user"];
   }
 }

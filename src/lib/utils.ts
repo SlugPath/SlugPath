@@ -105,6 +105,55 @@ export function isProgramInPrograms(
   return alreadyAdded;
 }
 
+/**
+ * Checks if an array of objects with `name`s contains a specific name
+ * @param name a name to search for
+ * @param array an array of objects with a `name` property
+ * @returns true if the array contains the name, false otherwise
+ */
+export const isContainingName = (
+  name: string,
+  array: { name: string; [x: string]: any; [x: number]: any }[],
+) => {
+  return array.some((e) => e.name === name);
+};
+
+type SourceCourse = {
+  ge: string[];
+  departmentCode: string;
+  number: string;
+};
+/**
+ * Converts a TransferCourse object to a StoredCourse object
+ * @param t a TransferCourse object
+ * @param SourceCourse object of the course that the transfer course is equivalent to
+ * @returns a StoredCourse object
+ */
+
+export function fromTransferToStoredCourse(
+  t: {
+    departmentCode: string;
+    number: string;
+    title: string;
+    school: string;
+  },
+  { ge, departmentCode, number }: SourceCourse,
+): StoredCourse {
+  return {
+    departmentCode: t.departmentCode,
+    number: t.number,
+    title: t.title,
+    school: t.school,
+    credits: 5,
+    id: uuidv4(),
+    labels: [],
+    ge,
+    quartersOffered: [],
+    description: "",
+    equivalent: `${departmentCode} ${number}`,
+  };
+}
+
 export function toStoredCourse({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   department: _,
@@ -112,6 +161,7 @@ export function toStoredCourse({
 }: Course): StoredCourse {
   return {
     ...rest,
+    school: "UCSC",
     description: rest.description ?? "",
     labels: [],
     id: uuidv4(),

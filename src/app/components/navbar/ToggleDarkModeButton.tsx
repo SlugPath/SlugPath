@@ -1,3 +1,5 @@
+"use client";
+
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { Button, useColorScheme } from "@mui/joy";
@@ -21,11 +23,15 @@ export default function ToggleButton() {
   }, [isDark]);
 
   return (
-    <Button variant="solid" className="hover:bg-primary-400">
+    <Button
+      onClick={handleToggleMode}
+      variant="solid"
+      className="hover:bg-primary-400"
+    >
       {isDark ? (
-        <DarkModeIcon onClick={handleToggleMode} sx={{ color: "#fff" }} />
+        <DarkModeIcon sx={{ color: "#fff" }} />
       ) : (
-        <LightModeIcon onClick={handleToggleMode} sx={{ color: "#fff" }} />
+        <LightModeIcon sx={{ color: "#fff" }} />
       )}
     </Button>
   );

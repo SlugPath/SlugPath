@@ -2,7 +2,6 @@ import { CustomCourseInput, StoredCourse } from "@customTypes/Course";
 import { Label } from "@customTypes/Label";
 import { PlannerData } from "@customTypes/Planner";
 import { DropResult } from "@hello-pangea/dnd";
-import { useSession } from "next-auth/react";
 import { createContext } from "react";
 
 import useCustomCourseSelection from "../hooks/useCustomCourseSelection";
@@ -11,9 +10,8 @@ import usePlanner from "../hooks/usePlanner";
 
 export interface PlannerProviderProps {
   children: React.ReactNode;
-  plannerId: string;
-  title: string;
-  order: number;
+  planner: PlannerData;
+  setPlanner: (planner: PlannerData) => boolean;
 }
 
 export interface PlannerContextProps {
@@ -22,7 +20,7 @@ export interface PlannerContextProps {
   totalCredits: number;
   geSatisfied: string[];
   courseState: PlannerData;
-  replaceCustomCourse: (customId: string, courses: StoredCourse[]) => void;
+  replaceCourse: (customId: string, courses: StoredCourse[]) => void;
   handleDragEnd: (result: DropResult) => void;
   getCourseLabels: (course: StoredCourse) => Label[];
   getAllLabels: () => Label[];
@@ -45,11 +43,9 @@ export const PlannerContext = createContext({} as PlannerContextProps);
 
 export function PlannerProvider({
   children,
-  plannerId,
-  title,
-  order,
+  planner,
+  setPlanner,
 }: PlannerProviderProps) {
-  const { data: session } = useSession();
   const {
     deleteCourse,
     editCustomCourse,
@@ -63,12 +59,10 @@ export function PlannerProvider({
     updateNotes,
     addYear,
     deleteYear,
-    replaceCustomCourse,
+    replaceCourse,
   } = usePlanner({
-    userId: session?.user.id,
-    plannerId: plannerId,
-    title,
-    order,
+    planner,
+    setPlanner,
   });
 
   const { customCourses, handleAddCustom, handleRemoveCustom } =
@@ -83,7 +77,7 @@ export function PlannerProvider({
   return (
     <PlannerContext.Provider
       value={{
-        replaceCustomCourse,
+        replaceCourse,
         deleteCourse,
         editCustomCourse,
         totalCredits,

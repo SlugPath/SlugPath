@@ -28,13 +28,8 @@ import React from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
-import EditMajorRequirementsModal from "../modals/majorsModal/EditMajorRequirementsModal";
-import MajorsModal from "../modals/majorsModal/MajorsModal";
-import ReplaceRequirementsModal from "../modals/majorsModal/ReplaceRequirementsModal";
-import PermissionsModal from "../permissionsModal/PermissionsModal";
 import Search from "../search/Search";
 import LabelLegend from "./LabelLegend";
-import PlannerActions from "./PlannerActions";
 import { CreditsProgress } from "./graduationProgress/CreditsProgress";
 import GEProgress from "./graduationProgress/GEProgress";
 import GraduationProgress from "./graduationProgress/GraduationProgress";
@@ -101,7 +96,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                   open={openGrad}
                   onClose={toggleGraduationDrawer(false)}
                 >
-                  <PlannerActions />
                   <GraduationProgressCard
                     totalCredits={totalCredits}
                     geSatisfied={geSatisfied}
@@ -170,8 +164,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 </div>
               </AccordionGroup>
             </div>
-            <div className="hidden lg:flex flex-col self-start gap-3">
-              <PlannerActions />
+            <div className="hidden lg:flex flex-col self-start gap-3 overflow-auto h-full">
               <GraduationProgressCard
                 totalCredits={totalCredits}
                 geSatisfied={geSatisfied}
@@ -180,7 +173,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <LabelLegend />
             </div>
           </div>
-          <Modals />
+          <CourseInfoModal />
         </CourseInfoProvider>
       </DragDropContext>
     </div>
@@ -241,18 +234,6 @@ function GraduationProgressCard({
         <GEProgress ge={geSatisfied} courseState={courseState} />
       </div>
     </Card>
-  );
-}
-
-function Modals() {
-  return (
-    <>
-      <CourseInfoModal />
-      <MajorsModal />
-      <EditMajorRequirementsModal />
-      <ReplaceRequirementsModal />
-      <PermissionsModal />
-    </>
   );
 }
 

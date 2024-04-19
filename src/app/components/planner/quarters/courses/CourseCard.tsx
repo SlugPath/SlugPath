@@ -1,12 +1,11 @@
-import { MAX_VISIBLE_COURSE_TITLE } from "@/lib/consts";
 import {
   extractTermFromQuarter,
   geLabels,
   getDeptAndNumber,
   isCustomCourse,
   isOffered,
+  isTransferCourse,
 } from "@/lib/plannerUtils";
-import { truncateTitle } from "@/lib/utils";
 import CloseIconButton from "@components/buttons/CloseIconButton";
 import { CourseInfoContext } from "@contexts/CourseInfoProvider";
 import { PlannerContext } from "@contexts/PlannerProvider";
@@ -60,6 +59,8 @@ export default function CourseCard({
   function cardColor() {
     if (isCustomCourse(course)) {
       return "custom";
+    } else if (isTransferCourse(course)) {
+      return "transfer";
     } else if (isEnrolledCourse) {
       return "primary";
     } else {
@@ -101,7 +102,10 @@ export default function CourseCard({
               onShowCourseInfoModal={handleShowCourseInfoModal}
               quarterId={quarterId}
             />
-            <CourseLabelList labels={getCourseLabels(course)} ge={course.ge} />
+            <CourseLabelList
+              labels={getCourseLabels ? getCourseLabels(course) : []}
+              ge={course.ge}
+            />
           </Grid>
           <Grid xs={1}>
             {/* Show delete icon only if the course is in the planner or in the custom course selection */}
@@ -121,9 +125,7 @@ export default function CourseCard({
                   }}
                 />
               )
-            ) : (
-              <></>
-            )}
+            ) : null}
           </Grid>
         </Grid>
       </CardContent>
@@ -140,6 +142,7 @@ const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
   const checkOffered = course && isCustomCourse(course);
   return (
     <Typography
+      className="truncate text-ellipsis"
       endDecorator={
         checkOffered &&
         !isOffered(
@@ -151,13 +154,15 @@ const Title = ({ course, onShowCourseInfoModal, quarterId }: TitleProps) => {
       <Link
         overlay
         underline="none"
-        sx={{ color: "text.tertiary" }}
+        sx={{
+          color: "text.tertiary",
+        }}
         onClick={() => onShowCourseInfoModal(course)}
       >
-        {truncateTitle(
-          course ? getDeptAndNumber(course) : "No course",
-          MAX_VISIBLE_COURSE_TITLE,
-        )}
+        {course
+          ? getDeptAndNumber(course) +
+            (isTransferCourse(course) ? ` at ${course.school}` : "")
+          : "No course"}
       </Link>
     </Typography>
   );
@@ -168,11 +173,9 @@ const CourseLabelList = ({ labels, ge }: { labels: Label[]; ge: string[] }) => {
 
   return (
     <div className="flex truncate">
-      {allLabels
-        ? allLabels.map((label, index) => (
-            <CourseLabel key={index} label={label} displayText={false} />
-          ))
-        : null}
+      {allLabels?.map((label, index) => (
+        <CourseLabel key={index} label={label} displayText={false} />
+      ))}
     </div>
   );
 };
