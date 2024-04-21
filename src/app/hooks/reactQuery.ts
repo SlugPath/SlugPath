@@ -217,6 +217,7 @@ export function useUpdatePlannersMutation(onSuccess?: () => void) {
       if (onSuccess) {
         queryClient.setQueryData(["planners", userId], data);
         onSuccess();
+        console.log("Planners updated successfully");
       }
     },
   });
