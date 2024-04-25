@@ -6,6 +6,7 @@ import { LogoAlt } from "../Logo";
 import LoginButton from "../buttons/LoginButton";
 import UserAvatarButton from "../buttons/UserAvatarButton";
 import { USER_AVATAR_DEFAULT_IMAGE } from "../miscellaneous/UserAvatar";
+import MobileMenu from "./MobileMenu";
 import PlannerActions from "./PlannerActions";
 import ToggleDarkModeButton from "./ToggleDarkModeButton";
 
@@ -25,7 +26,7 @@ export default async function Navbar() {
           <LogoAlt className="h-10 w-auto" />
         </Link>
 
-        <div className="flex flex-1 justify-end place-items-center">
+        <div className="hidden lg:flex flex-1 justify-end place-items-center">
           <ToggleDarkModeButton />
           <PlannerActions />
           {isAuthenticated ? (
@@ -33,6 +34,10 @@ export default async function Navbar() {
           ) : (
             <LoginButton />
           )}
+        </div>
+        <div className="lg:hidden flex flex-1 justify-end place-items-center">
+          <ToggleDarkModeButton />
+          <MobileMenu />
         </div>
       </nav>
     </header>

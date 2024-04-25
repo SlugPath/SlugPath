@@ -19,7 +19,6 @@ import {
   AccordionSummary,
   Button,
   Card,
-  Drawer,
   IconButton,
   Tooltip,
 } from "@mui/joy";
@@ -55,14 +54,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
   );
 
   const [isExpanded, setIsExpanded] = useState(true);
-  const [openSearch, setOpenSearch] = useState(false);
-  const toggleSearchDrawer = (newOpen: boolean) => () => {
-    setOpenSearch(newOpen);
-  };
-  const [openGrad, setOpenGrad] = useState(false);
-  const toggleGraduationDrawer = (newOpen: boolean) => () => {
-    setOpenGrad(newOpen);
-  };
 
   if (!isActive) {
     return <></>;
@@ -77,33 +68,6 @@ export default function Planner({ isActive }: { isActive: boolean }) {
               <SearchContainer />
             </div>
             <div className="overflow-auto w-full flex-grow max-h-full">
-              <div className="lg:hidden flex flex-col items-center space-y-2">
-                <Button fullWidth={true} onClick={toggleSearchDrawer(true)}>
-                  Course Search
-                </Button>
-                <Button fullWidth={true} onClick={toggleGraduationDrawer(true)}>
-                  Graduation Progress
-                </Button>
-                <Drawer
-                  anchor="left"
-                  open={openSearch}
-                  onClose={toggleSearchDrawer(false)}
-                >
-                  <SearchContainer />
-                </Drawer>
-                <Drawer
-                  anchor="right"
-                  open={openGrad}
-                  onClose={toggleGraduationDrawer(false)}
-                >
-                  <GraduationProgressCard
-                    totalCredits={totalCredits}
-                    geSatisfied={geSatisfied}
-                    courseState={courseState}
-                  />
-                  <LabelLegend />
-                </Drawer>
-              </div>
               <AccordionGroup>
                 <div className="space-y-2 overflow-auto min-h-0">
                   <Years yearRange={yearRange} />
