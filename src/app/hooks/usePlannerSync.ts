@@ -1,13 +1,13 @@
 import { usePlanners, useUpdatePlannersMutation } from "@/app/hooks/reactQuery";
 import usePlannersStore from "@/store/planner";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 /**
  * Hook to sync the local planners with the server on interval and beforeunload
  * @param intervalLength The interval length in milliseconds to save the planners
  */
-export default function usePlannerSync(intervalLength = 30000) {
+export default function usePlannerSync(intervalLength = 10000) {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
@@ -27,34 +27,14 @@ export default function usePlannerSync(intervalLength = 30000) {
     }
   }, [initialPlanners, planners.length, setPlanners]);
 
-  // Manage window focus
-  const [isWindowFocused, setIsWindowFocused] = useState(true);
-  useEffect(() => {
-    const handleFocus = () => {
-      setIsWindowFocused(true);
-    };
-
-    const handleBlur = () => {
-      setIsWindowFocused(false);
-    };
-
-    window.addEventListener("focus", handleFocus);
-    window.addEventListener("blur", handleBlur);
-
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-      window.removeEventListener("blur", handleBlur);
-    };
-  }, []);
-
-  // Save planners every 30 seconds
+  // Save planners every intervalLength milliseconds
   useEffect(() => {
     const saveChanges = () => {
-      if (userId && isWindowFocused) {
+      if (userId) {
         updatePlanners({ userId, planners });
-        console.log("Saved planners on interval");
+        console.log("Saved planners on interval of " + intervalLength + "ms");
       } else {
-        console.log("Not saving planners, window not focused");
+        console.log("Not saving planners, user not logged in.");
       }
     };
     const interval = setInterval(saveChanges, intervalLength);
@@ -62,7 +42,7 @@ export default function usePlannerSync(intervalLength = 30000) {
     return () => {
       clearInterval(interval);
     };
-  }, [updatePlanners, userId, planners, isWindowFocused, intervalLength]);
+  }, [updatePlanners, userId, planners, intervalLength]);
 
   // Save planners on beforeunload
   useEffect(() => {
