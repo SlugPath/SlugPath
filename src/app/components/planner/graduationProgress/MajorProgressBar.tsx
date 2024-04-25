@@ -111,7 +111,7 @@ export default function MajorProgressBar({
                       style={{ cursor: "pointer" }}
                     >
                       <div
-                        className="rounded-md bg-blue-400 dark:bg-blue-700"
+                        className="rounded-md bg-blue-300 dark:bg-blue-600"
                         style={{
                           height: "100%",
                           width: `${percentages[key]}%`,
