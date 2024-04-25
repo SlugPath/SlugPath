@@ -60,36 +60,38 @@ function MajorAndPlannerSelection() {
     <div className="flex justify-between space-x-4 w-full min-h-0 p-3">
       <CourseInfoProvider>
         <UserProgramsEditor />
-        <div className="overflow-auto w-full flex-grow max-h-full space-y-4">
-          {userPrograms?.map((program, index) => {
-            const majorRequirements = getRequirementsForMajor(program.id);
+        <div className="hidden md:block">
+          <div className="overflow-auto w-full flex-grow max-h-full space-y-4">
+            {userPrograms?.map((program, index) => {
+              const majorRequirements = getRequirementsForMajor(program.id);
 
-            if (majorRequirements === undefined) {
+              if (majorRequirements === undefined) {
+                return (
+                  <Card key={index}>
+                    Missing requirements for {program.name}{" "}
+                    {program.catalogYear}. Reloading the page may help.
+                  </Card>
+                );
+              }
+
               return (
-                <Card key={index}>
-                  Missing requirements for {program.name} {program.catalogYear}.
-                  Reloading the page may help.
-                </Card>
+                <Requirements
+                  key={index}
+                  major={program}
+                  requirements={majorRequirements}
+                  parents={0}
+                  hideTitle={false}
+                  hasEditPermission={hasPermissionToEditProgram(
+                    program,
+                    programsAllowedToEdit,
+                  )}
+                  onClickEdit={handleClickEditRequirements}
+                />
               );
-            }
-
-            return (
-              <Requirements
-                key={index}
-                major={program}
-                requirements={majorRequirements}
-                parents={0}
-                hideTitle={false}
-                hasEditPermission={hasPermissionToEditProgram(
-                  program,
-                  programsAllowedToEdit,
-                )}
-                onClickEdit={handleClickEditRequirements}
-              />
-            );
-          })}
+            })}
+          </div>
+          <CourseInfoModal />
         </div>
-        <CourseInfoModal />
       </CourseInfoProvider>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { Menu } from "@mui/icons-material";
 import { Drawer, IconButton, List, ListItemButton } from "@mui/joy";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import UserAvatarButton from "../buttons/UserAvatarButton";
@@ -9,7 +10,12 @@ import UserAvatarButton from "../buttons/UserAvatarButton";
 export default function MobileMenu() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openGrad, setOpenGrad] = useState(false);
-  const [openMajMin, setOpenMajMin] = useState(false);
+  const router = useRouter();
+
+  const handleMajorMinorPageOpen = () => {
+    router.push("/planner/majors");
+    setOpenMenu(false);
+  };
 
   return (
     <div>
@@ -29,20 +35,13 @@ export default function MobileMenu() {
           }}
         >
           <UserAvatarButton image=""></UserAvatarButton>
-          <ListItemButton onClick={() => setOpenMajMin(true)}>
+          <ListItemButton onClick={handleMajorMinorPageOpen}>
             Majors & Minors
           </ListItemButton>
           <ListItemButton onClick={() => setOpenGrad(true)}>
             Graduation Progress
           </ListItemButton>
         </List>
-        <Drawer
-          anchor="right"
-          open={openMajMin}
-          onClose={() => setOpenMajMin(false)}
-        >
-          TODO
-        </Drawer>
         <Drawer
           anchor="right"
           open={openGrad}
