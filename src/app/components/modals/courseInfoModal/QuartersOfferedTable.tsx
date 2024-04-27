@@ -88,7 +88,7 @@ export default function QuartersOfferedTable({
                     <th
                       scope="col"
                       style={{
-                        width: "10%",
+                        width: "80px",
                         textAlign: "center",
                       }}
                     >

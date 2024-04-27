@@ -23,7 +23,7 @@ export default function SelectedLabels({
       <div className="overflow-x-auto flex no-scrollbar">
         <List orientation="horizontal">
           {allLabels.map((label) => (
-            <ListItem key={label.id}>
+            <ListItem key={label.id} style={{ padding: "0.1rem" }}>
               <CourseLabel
                 label={label}
                 displayText={label.name.length > 0}

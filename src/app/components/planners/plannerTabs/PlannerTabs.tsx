@@ -3,6 +3,7 @@ import { truncateTitle } from "@/lib/utils";
 import usePlannersStore from "@/store/planner";
 import { Add } from "@mui/icons-material";
 import { IconButton, Input, Tooltip, useColorScheme } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useState } from "react";
 
 import PlannerDropDown from "../../buttons/PlannerDropDown";
@@ -31,6 +32,7 @@ export default function PlannerTabs() {
   const setActivePlannerId = usePlannersStore(
     (state) => state.setActivePlannerId,
   );
+  const isMobileView = useMediaQuery("((max-width: 1000px))");
 
   function removePlanner(id: string) {
     const newPlanners = planners.filter((planner) => planner.id !== id);
@@ -137,16 +139,18 @@ export default function PlannerTabs() {
             onDuplicate={() => handleDuplicatePlanner(id)}
           />
         ))}
-        <Tooltip title="Create Planner" variant="soft">
-          <IconButton
-            aria-label="Add"
-            onClick={() => handleAddPlanner()}
-            size="sm"
-            color="primary"
-          >
-            <Add />
-          </IconButton>
-        </Tooltip>
+        {!isMobileView && (
+          <Tooltip title="Create Planner" variant="soft">
+            <IconButton
+              aria-label="Add"
+              onClick={() => handleAddPlanner()}
+              size="sm"
+              color="primary"
+            >
+              <Add />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
       <ConfirmAlert
         open={deleteAlert.alertOpen}

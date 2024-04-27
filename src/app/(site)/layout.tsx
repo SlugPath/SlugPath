@@ -17,8 +17,19 @@ export default async function RootLayout({
     redirect("/register");
   }
 
+  /* 
+  FIXME: 
+  1. Need to remove 'max-h-screen min-h-screen' from the first div classname 
+     for when the user is viewing on a mobile device and has their phone in landscape.
+     Something like: ${isMobileView && landscape? '' : 'max-h-screen min-h-screen'}
+  2. Also need to hide the feedback button under the same conditions.
+*/
   return (
-    <div className="bg-bg-light dark:bg-bg-dark bg-cover min-h-screen flex flex-col max-h-screen min-w-0">
+    <div
+      className={
+        "bg-bg-light dark:bg-bg-dark bg-cover flex flex-col min-w-0 max-h-screen min-h-screen"
+      }
+    >
       <ScreenSizeWarning />
       <Navbar />
       <BetaWarning />

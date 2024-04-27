@@ -11,6 +11,7 @@ import { CourseInfoProvider } from "@contexts/CourseInfoProvider";
 import { MajorVerificationContext } from "@contexts/MajorVerificationProvider";
 import { useUserPermissions, useUserPrograms } from "@hooks/reactQuery";
 import { Card } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext, useMemo } from "react";
@@ -52,6 +53,8 @@ function MajorAndPlannerSelection() {
   // Fetch user programs
   const { data: userPrograms } = useUserPrograms(userId);
 
+  const isMobileView = useMediaQuery("(max-width: 800px)");
+
   function handleClickEditRequirements(major: Program) {
     router.push(pathname + "/program-requirements/" + major.id);
   }
@@ -60,7 +63,7 @@ function MajorAndPlannerSelection() {
     <div className="flex justify-between space-x-4 w-full min-h-0 p-3">
       <CourseInfoProvider>
         <UserProgramsEditor />
-        <div className="hidden md:block">
+        {!isMobileView && (
           <div className="overflow-auto w-full flex-grow max-h-full space-y-4">
             {userPrograms?.map((program, index) => {
               const majorRequirements = getRequirementsForMajor(program.id);
@@ -89,9 +92,10 @@ function MajorAndPlannerSelection() {
                 />
               );
             })}
+
+            <CourseInfoModal />
           </div>
-          <CourseInfoModal />
-        </div>
+        )}
       </CourseInfoProvider>
     </div>
   );

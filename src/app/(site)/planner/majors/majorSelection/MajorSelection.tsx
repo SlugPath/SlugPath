@@ -22,6 +22,7 @@ import {
   Select,
   Sheet,
   Typography,
+  useColorScheme,
 } from "@mui/joy";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ProgramType } from "@prisma/client";
@@ -54,8 +55,8 @@ export default function UserProgramsEditor() {
   }
 
   const [openModal, setOpenModal] = useState(false);
-  const isMobileView = useMediaQuery("(max-width:600px)");
-
+  const isMobileView = useMediaQuery("(max-width: 800px)");
+  const { mode } = useColorScheme();
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -105,7 +106,7 @@ export default function UserProgramsEditor() {
                 <Card key={program.name} size="sm" variant="plain">
                   <div className="flex justify-between items-center">
                     {isMobileView ? (
-                      <div className="flex flex-col md:flex-row">
+                      <div className="flex flex-col flex-row">
                         <Typography>{program.name}</Typography>
                         <Typography>{program.catalogYear}</Typography>
                       </div>
@@ -130,47 +131,48 @@ export default function UserProgramsEditor() {
               );
             })}
         </div>
-        <div className="hidden md:block">
+        {!isMobileView ? (
           <AddProgramInputs />
-        </div>
-        <div className="md:hidden">
-          <Button variant="solid" onClick={handleOpenModal} fullWidth>
-            Add Program
-          </Button>
-          <Modal
-            open={openModal}
-            onClose={() => setOpenModal(false)}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Sheet
+        ) : (
+          <div className="bg-blue-500 hover:bg-blue-600 rounded">
+            <Button variant="solid" onClick={handleOpenModal} fullWidth>
+              Add Program
+            </Button>
+            <Modal
+              open={openModal}
+              onClose={() => setOpenModal(false)}
               sx={{
-                borderRadius: "md",
-                p: 3,
-                boxShadow: "lg",
-                width: "80%",
-                margin: "auto",
-                backgroundColor: "#f1f5f9",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <Typography
-                component="h2"
-                id="modal-title"
-                level="h4"
-                textColor="inherit"
-                fontWeight="lg"
-                mb={1}
-                sx={{ textAlign: "center" }}
+              <Sheet
+                sx={{
+                  borderRadius: "md",
+                  p: 3,
+                  boxShadow: "lg",
+                  width: "80%",
+                  margin: "auto",
+                  backgroundColor: mode === "light" ? "#f1f5f9" : "#181a1c",
+                }}
               >
-                Add Program
-              </Typography>
-              <AddProgramInputs closeAddProgramModal={handleCloseModal} />
-            </Sheet>
-          </Modal>
-        </div>
+                <Typography
+                  component="h2"
+                  id="modal-title"
+                  level="h4"
+                  textColor="inherit"
+                  fontWeight="lg"
+                  mb={1}
+                  sx={{ textAlign: "center" }}
+                >
+                  Add Program
+                </Typography>
+                <AddProgramInputs closeAddProgramModal={handleCloseModal} />
+              </Sheet>
+            </Modal>
+          </div>
+        )}
       </Card>
 
       {userProgramsIsLoading && <CircularProgress />}
@@ -190,6 +192,8 @@ function AddProgramInputs({ closeAddProgramModal = () => {} }) {
   const [catalogYear, setCatalogYear] = useState("");
   const [programName, setProgramName] = useState("");
   const [error, setError] = useState("");
+
+  const isMobileView = useMediaQuery("(max-width: 800px) ");
 
   // Fetch all catalog years
   const { data: catalogYears } = useCatalogYears();
@@ -251,8 +255,12 @@ function AddProgramInputs({ closeAddProgramModal = () => {} }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-2 items-end md:grid-cols-7 md:gap-2">
-        <div className="md:col-span-2">
+      <div
+        className={`grid grid-cols-1 gap-2 items-end ${
+          isMobileView ? "" : "grid-cols-7 gap-2"
+        }`}
+      >
+        <div className={` ${isMobileView ? "" : "col-span-2"}`}>
           <Typography level="body-lg">Program</Typography>
           <Select
             value={programType}
@@ -268,7 +276,7 @@ function AddProgramInputs({ closeAddProgramModal = () => {} }) {
             ))}
           </Select>
         </div>
-        <div className="md:col-span-2">
+        <div className={` ${isMobileView ? "" : "col-span-2"}`}>
           <SelectCatalogYear
             catalogYear={catalogYear}
             years={catalogYears ?? []}
@@ -277,15 +285,23 @@ function AddProgramInputs({ closeAddProgramModal = () => {} }) {
             }
           />
         </div>
-        <div className=" md:col-span-2">
+        <div className={` ${isMobileView ? "" : "col-span-2"}`}>
           <SelectMajorName
             selectedMajor={programName}
             majors={filteredPrograms}
             onChange={(_, newValue) => newValue && setProgramName(newValue)}
           />
         </div>
-        <div className="md:col-span-1">
-          <Button variant="soft" onClick={handleAddMajor} fullWidth>
+        <div
+          className={` ${isMobileView ? "col-span-1 flex justify-center" : ""}`}
+        >
+          <Button
+            onClick={handleAddMajor}
+            variant="soft"
+            className={
+              isMobileView ? "bg-blue-500 hover:bg-blue-600 rounded w-1/2" : ""
+            }
+          >
             Add
           </Button>
         </div>

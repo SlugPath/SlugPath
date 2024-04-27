@@ -14,6 +14,7 @@ import {
   Sheet,
   Typography,
 } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect, useState } from "react";
 
 import CourseLabel from "../../planner/quarters/courses/CourseLabel";
@@ -34,6 +35,7 @@ export default function LabelsSelectionModal({
   onUpdateLabels,
 }: LabelsSelectionModalProps) {
   const [checkedLabels, setCheckedLabels] = useState(selectedLabels);
+  const isMobileView = useMediaQuery("(max-width:600px)");
 
   function handleToggle(label: Label) {
     const currentIndex = checkedLabels.findIndex(
@@ -89,8 +91,8 @@ export default function LabelsSelectionModal({
     >
       <Sheet
         sx={{
-          width: "30%",
-          margin: 10,
+          width: isMobileView ? "85%" : "30%",
+          margin: isMobileView ? "none" : 10,
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",

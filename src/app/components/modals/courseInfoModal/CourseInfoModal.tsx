@@ -15,12 +15,14 @@ import { ArrowRightAlt, WarningAmberRounded } from "@mui/icons-material";
 import {
   Button,
   Chip,
+  Divider,
   Modal,
   ModalClose,
   Sheet,
   Skeleton,
   Tooltip,
 } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useState } from "react";
 
 import CustomCourseModal from "./CustomCourseModal";
@@ -63,6 +65,8 @@ export default function CourseInfoModal({
   );
   const { data: enrollmentInfo, isLoading: enrollLoading } =
     usePastEnrollmentInfo(course);
+
+  const isMobileView = useMediaQuery("(max-width:600px)");
 
   // This is to prevent illegally opening the modal
   if (course === undefined || course.departmentCode === undefined) {
@@ -203,11 +207,13 @@ export default function CourseInfoModal({
     >
       <Sheet
         sx={{
-          width: "50%",
-          margin: 10,
+          width: isMobileView ? "85%" : "50%",
+          maxHeight: isMobileView ? "80vh" : "90%",
+          margin: isMobileView ? "none" : 10,
           borderRadius: "md",
-          p: 3,
+          p: isMobileView ? 2.5 : 3,
           boxShadow: "lg",
+          overflowY: "auto",
         }}
       >
         <div className="flex flex-col gap-2">
@@ -220,28 +226,55 @@ export default function CourseInfoModal({
               onUpdateLabels={handleUpdateLabels}
             />
           )}
-          <div className="flex justify-between items-center">
+          <div
+            className={`flex ${
+              isMobileView ? "flex-col" : "justify-between items-center"
+            }`}
+          >
             <Skeleton loading={loading} variant="text" width="50%">
-              <h2 className="text-xl font-bold">{title(data)}</h2>
+              {isMobileView && isOfficialCourse(course) && !loading ? (
+                <>
+                  <h1 className="text-2xl font-bold">
+                    {data?.departmentCode} {data?.number}
+                  </h1>
+                  <h2 className="text-xl font-bold">{getTitle(data!)}</h2>
+                </>
+              ) : (
+                <h2 className="text-xl font-bold">{title(data)}</h2>
+              )}
             </Skeleton>
             {isCustomCourse(course) ? (
               <Tooltip title="We recommend replacing this custom course with a real course.">
-                <Chip color="custom" size="lg" className="mr-2">
+                <Chip
+                  color="custom"
+                  size={isMobileView ? "md" : "lg"}
+                  className="mr-2"
+                >
                   Custom Course
                 </Chip>
               </Tooltip>
             ) : isOfficialCourse(course) ? (
-              <Chip color="primary" size="lg" className="mr-2">
+              <Chip
+                color="primary"
+                size={isMobileView ? "md" : "lg"}
+                className="mr-2"
+                sx={{ marginTop: "0.25rem" }}
+              >
                 Official Course
               </Chip>
             ) : (
-              <Chip color="transfer" size="lg" className="mr-2">
+              <Chip
+                color="transfer"
+                size={isMobileView ? "md" : "lg"}
+                className="mr-2"
+              >
                 Transfer Course
               </Chip>
             )}
           </div>
+          {isMobileView && <Divider sx={{ height: 3, marginTop: "0.25rem" }} />}
           <Skeleton loading={loading} variant="text" width="50%">
-            <p className="break-words text-wrap max-h-48 overflow-y-auto">
+            <p className="break-words text-wrap max-h-50 overflow-y-auto">
               {description(data)}
             </p>
           </Skeleton>
@@ -252,7 +285,7 @@ export default function CourseInfoModal({
 
           {/* Show preqs, past enrollment info, and instructors for official courses*/}
           <p>Credits: {credits(data)}</p>
-          {isOfficialCourse(course) ? (
+          {!isMobileView && isOfficialCourse(course) && (
             <>
               <p>{prerequisites(data)}</p>
               <Skeleton loading={enrollLoading}>
@@ -262,7 +295,9 @@ export default function CourseInfoModal({
               </Skeleton>
               <MoreEnrollInfo course={course} />
             </>
-          ) : isCustomCourse(course) ? (
+          )}
+
+          {isCustomCourse(course) && (
             <>
               <div className="flex flex-row gap-2 items-center">
                 <p>Quarters Offered:</p>
@@ -281,18 +316,22 @@ export default function CourseInfoModal({
                 </p>
               )}
             </>
-          ) : (
-            <>
-              <p className="text-lg">School: {course.school}</p>
-              <p className="text-lg flex items-center">
-                Replacing{" "}
-                <span>
-                  <ArrowRightAlt fontSize="large" />
-                </span>
-                {course.equivalent}
-              </p>
-            </>
           )}
+
+          {!isMobileView &&
+            !isOfficialCourse(course) &&
+            !isCustomCourse(course) && (
+              <>
+                <p className="text-lg">School: {course.school}</p>
+                <p className="text-lg flex items-center">
+                  Replacing{" "}
+                  <span>
+                    <ArrowRightAlt fontSize="large" />
+                  </span>
+                  {course.equivalent}
+                </p>
+              </>
+            )}
           {!viewOnly && (
             <SelectedLabels
               labels={getCourseLabels ? getCourseLabels(course) : []}
@@ -301,20 +340,25 @@ export default function CourseInfoModal({
             />
           )}
           <ModalClose variant="plain" />
-          {!viewOnly && courseInPlanner && (
+          {!viewOnly && !isMobileView && courseInPlanner && (
             <div className="flex gap-2 justify-center">
               {isCustomCourse(course) && (
-                <Button onClick={() => setEditing(true)} className="w-1/2">
-                  <p className="text-white text-lg">Edit</p>
+                <Button
+                  onClick={() => setEditing(true)}
+                  className="w-1/2 bg-blue-500 hover:bg-blue-600"
+                >
+                  <p className="text-lg">Edit</p>
                 </Button>
               )}
 
               <Button
                 onClick={() => setReplacing(true)}
-                className="w-1/2"
-                color="success"
+                className="w-1/2 bg-green-700 hover:bg-green-800"
+                //className="w-1/2"
+                //color="success"
+                //variant="solid"
               >
-                <p className="text-white text-lg">Replace</p>
+                <p className="text-lg">Replace</p>
               </Button>
             </div>
           )}
