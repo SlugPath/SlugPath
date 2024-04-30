@@ -23,7 +23,6 @@ import {
   Tooltip,
 } from "@mui/joy";
 import { useContext, useMemo, useState } from "react";
-import React from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
 import CourseInfoModal from "../modals/courseInfoModal/CourseInfoModal";
@@ -161,7 +160,7 @@ function SearchContainer() {
   return <Search displayCustomCourseSelection />;
 }
 
-function GraduationProgressCard({
+export function GraduationProgressCard({
   totalCredits,
   geSatisfied,
   courseState,

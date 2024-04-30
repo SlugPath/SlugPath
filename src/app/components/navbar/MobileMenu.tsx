@@ -1,16 +1,19 @@
 "use client";
 
+import { PlannerContext } from "@/app/contexts/PlannerProvider";
 import { Menu } from "@mui/icons-material";
 import { Drawer, IconButton, List, ListItemButton } from "@mui/joy";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import UserAvatarButton from "../buttons/UserAvatarButton";
+import { GraduationProgressCard } from "../planner/Planner";
 
 export default function MobileMenu() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openGrad, setOpenGrad] = useState(false);
   const router = useRouter();
+  const { totalCredits, geSatisfied, courseState } = useContext(PlannerContext);
 
   const handleMajorMinorPageOpen = () => {
     router.push("/planner/majors");
@@ -47,7 +50,11 @@ export default function MobileMenu() {
           open={openGrad}
           onClose={() => setOpenGrad(false)}
         >
-          TODO
+          <GraduationProgressCard
+            totalCredits={totalCredits}
+            geSatisfied={geSatisfied}
+            courseState={courseState}
+          />
         </Drawer>
       </Drawer>
     </div>

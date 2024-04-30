@@ -22,7 +22,7 @@ export default async function RootLayout({
   1. Need to remove 'max-h-screen min-h-screen' from the first div classname 
      for when the user is viewing on a mobile device and has their phone in landscape.
      Something like: ${isMobileView && landscape? '' : 'max-h-screen min-h-screen'}
-  2. Also need to hide the feedback button under the same conditions.
+  2. Also need to hide the feedback button under the same conditions. DONE
 */
   return (
     <div
@@ -38,7 +38,7 @@ export default async function RootLayout({
         <a
           target="_blank"
           href="https://forms.gle/g6jsmGj2r2SCipwC6"
-          className="group fixed bottom-0 right-20 px-5 py-2 bg-rose-400 text-white text-sm font-semibold tracking-wider rounded-t-md flex items-center gap-1 hover:bg-rose-500"
+          className="hidden group fixed bottom-0 right-20 px-5 py-2 bg-rose-400 text-white text-sm font-semibold tracking-wider rounded-t-md lg:flex items-center gap-1 hover:bg-rose-500"
         >
           Feedback
           <OpenInNew sx={{ color: "white", height: "1rem", width: "auto" }} />
