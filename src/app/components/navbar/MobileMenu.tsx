@@ -1,10 +1,15 @@
 "use client";
 
-import { PlannerContext } from "@/app/contexts/PlannerProvider";
+import {
+  PlannerContext,
+  PlannerProvider,
+} from "@/app/contexts/PlannerProvider";
+import { PlannerData } from "@/app/types/Planner";
+import usePlannersStore from "@/store/planner";
 import { Menu } from "@mui/icons-material";
 import { Drawer, IconButton, List, ListItemButton } from "@mui/joy";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 import UserAvatarButton from "../buttons/UserAvatarButton";
 import { GraduationProgressCard } from "../planner/Planner";
@@ -13,12 +18,23 @@ export default function MobileMenu() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openGrad, setOpenGrad] = useState(false);
   const router = useRouter();
-  const { totalCredits, geSatisfied, courseState } = useContext(PlannerContext);
-
+  const planners = usePlannersStore((state) => state.planners);
+  const setPlanner = usePlannersStore((state) => state.setPlanner);
+  const activePlannerId = usePlannersStore((state) => state.activePlannerId);
   const handleMajorMinorPageOpen = () => {
     router.push("/planner/majors");
     setOpenMenu(false);
   };
+  const activePlanner = useMemo(
+    () => planners.find((planner) => planner.id === activePlannerId),
+    [planners, activePlannerId],
+  );
+
+  if (!planners || planners.length == 0) return null;
+
+  if (!activePlanner) {
+    throw new Error("Active planner not found");
+  }
 
   return (
     <div>
@@ -50,13 +66,38 @@ export default function MobileMenu() {
           open={openGrad}
           onClose={() => setOpenGrad(false)}
         >
-          <GraduationProgressCard
-            totalCredits={totalCredits}
-            geSatisfied={geSatisfied}
-            courseState={courseState}
-          />
+          {planners.map(({ id }) => (
+            <div key={id}>
+              <PlannerProvider
+                planner={activePlanner}
+                setPlanner={(newPlanner: PlannerData) =>
+                  setPlanner(activePlanner.id, newPlanner)
+                }
+              >
+                <MobileGradProgress
+                  isActive={activePlannerId === id}
+                ></MobileGradProgress>
+              </PlannerProvider>
+            </div>
+          ))}
         </Drawer>
       </Drawer>
     </div>
+  );
+}
+
+function MobileGradProgress({ isActive }: { isActive: boolean }) {
+  const { totalCredits, geSatisfied, courseState } = useContext(PlannerContext);
+
+  if (!isActive) {
+    return <></>;
+  }
+
+  return (
+    <GraduationProgressCard
+      totalCredits={totalCredits}
+      geSatisfied={geSatisfied}
+      courseState={courseState}
+    />
   );
 }
