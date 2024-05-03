@@ -19,6 +19,9 @@ export default async function Navbar() {
       ? session.user.image
       : USER_AVATAR_DEFAULT_IMAGE;
 
+  const name = isAuthenticated && session?.user?.name;
+  const email = isAuthenticated && session?.user?.email;
+
   return (
     <header className="bg-primary-500 w-full">
       <nav className="h-14 px-5 flex flex-row items-center">
@@ -37,7 +40,7 @@ export default async function Navbar() {
         </div>
         <div className="lg:hidden flex flex-1 justify-end place-items-center">
           <ToggleDarkModeButton />
-          <MobileMenu />
+          <MobileMenu image={image} name={name} email={email} />
         </div>
       </nav>
     </header>

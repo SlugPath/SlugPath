@@ -7,14 +7,31 @@ import {
 import { PlannerData } from "@/app/types/Planner";
 import usePlannersStore from "@/store/planner";
 import { Menu } from "@mui/icons-material";
-import { Drawer, IconButton, List, ListItemButton } from "@mui/joy";
+import DonutLargeIcon from "@mui/icons-material/DonutLarge";
+import SchoolIcon from "@mui/icons-material/School";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemDecorator,
+  ModalClose,
+  Typography,
+} from "@mui/joy";
 import { useRouter } from "next/navigation";
 import { useContext, useMemo, useState } from "react";
 
-import UserAvatarButton from "../buttons/UserAvatarButton";
+import UserAvatar from "../miscellaneous/UserAvatar";
 import { GraduationProgressCard } from "../planner/Planner";
 
-export default function MobileMenu() {
+interface MobileMenuProps {
+  image: string;
+  name?: string | null;
+  email?: string | null;
+}
+
+export default function MobileMenu({ image, name, email }: MobileMenuProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [openGrad, setOpenGrad] = useState(false);
   const router = useRouter();
@@ -46,21 +63,52 @@ export default function MobileMenu() {
         <Menu />
       </IconButton>
       <Drawer anchor="right" open={openMenu} onClose={() => setOpenMenu(false)}>
-        <List
-          size="lg"
-          component="nav"
+        <Box
           sx={{
-            "& > div": { justifyContent: "center" },
+            backgroundColor: "#e2e8f0",
           }}
         >
-          <UserAvatarButton image=""></UserAvatarButton>
-          <ListItemButton onClick={handleMajorMinorPageOpen}>
+          <ModalClose id="close-icon" />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+              p: 1.5,
+              pb: 2,
+              mt: 4,
+              borderBottom: "1px solid",
+              borderColor: "divider",
+            }}
+          >
+            <UserAvatar image={image} size="lg" />
+            {name !== null && <Typography level="title-lg">{name}</Typography>}
+            {email !== null && <Typography level="body-md">{email}</Typography>}
+          </Box>
+        </Box>
+        <List size="lg" component="nav">
+          <ListItemButton
+            onClick={handleMajorMinorPageOpen}
+            sx={{ fontWeight: "bold", fontSize: "1rem" }}
+          >
+            <ListItemDecorator>
+              <SchoolIcon />
+            </ListItemDecorator>
             Majors & Minors
           </ListItemButton>
-          <ListItemButton onClick={() => setOpenGrad(true)}>
+          <ListItemButton
+            onClick={() => setOpenGrad(true)}
+            sx={{ fontWeight: "bold", fontSize: "1rem" }}
+          >
+            <ListItemDecorator>
+              <DonutLargeIcon />
+            </ListItemDecorator>
             Graduation Progress
           </ListItemButton>
         </List>
+
+        {/* Graduation Progress Drawer */}
         <Drawer
           anchor="right"
           open={openGrad}

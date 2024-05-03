@@ -22,6 +22,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useContext, useMemo, useState } from "react";
 
 import ConfirmAlert from "../modals/ConfirmAlert";
@@ -54,6 +55,8 @@ export default function Planner({ isActive }: { isActive: boolean }) {
 
   const [isExpanded, setIsExpanded] = useState(true);
 
+  const isMobileView = useMediaQuery("((max-width: 1000px))");
+
   if (!isActive) {
     return <></>;
   }
@@ -66,35 +69,40 @@ export default function Planner({ isActive }: { isActive: boolean }) {
             <div className="hidden lg:flex flex-col min-h-0 flex-initial">
               <SearchContainer />
             </div>
-            <div className="overflow-auto w-full flex-grow max-h-full">
+            <div
+              className="overflow-auto w-full flex-grow max-h-full"
+              style={isMobileView ? { marginLeft: 0 } : {}}
+            >
               <AccordionGroup>
                 <div className="space-y-2 overflow-auto min-h-0">
                   <Years yearRange={yearRange} />
-                  <div className="my-4">
-                    {courseState.years == MAX_YEARS ? (
-                      <Tooltip title="Cannot add more years.">
-                        <span>
-                          <Button
-                            disabled
-                            fullWidth={true}
-                            size="lg"
-                            startDecorator={<Add />}
-                          >
-                            Add Year
-                          </Button>
-                        </span>
-                      </Tooltip>
-                    ) : (
-                      <Button
-                        fullWidth={true}
-                        size="lg"
-                        onClick={addYear}
-                        startDecorator={<Add />}
-                      >
-                        Add Year
-                      </Button>
-                    )}
-                  </div>
+                  {!isMobileView && (
+                    <div className="my-4">
+                      {courseState.years == MAX_YEARS ? (
+                        <Tooltip title="Cannot add more years.">
+                          <span>
+                            <Button
+                              disabled
+                              fullWidth={true}
+                              size="lg"
+                              startDecorator={<Add />}
+                            >
+                              Add Year
+                            </Button>
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <Button
+                          fullWidth={true}
+                          size="lg"
+                          onClick={addYear}
+                          startDecorator={<Add />}
+                        >
+                          Add Year
+                        </Button>
+                      )}
+                    </div>
+                  )}
                   <Accordion
                     variant="soft"
                     sx={{
@@ -223,6 +231,8 @@ function Year({ year }: { year: number }) {
       ),
     [courseState, startQuarters],
   );
+  const isPhoneMobileView = useMediaQuery("((max-width: 600px))");
+  const isMobileView = useMediaQuery("((max-width: 1000px))");
 
   return (
     <Accordion
@@ -242,29 +252,37 @@ function Year({ year }: { year: number }) {
         setIsExpanded(expanded ? true : false);
       }}
     >
-      <div>
+      <div className={`${isMobileView ? "flex justify-start" : ""}`}>
         <AccordionSummary indicator={null} className="text-xl font-bold">
           {indicatorIcon(isExpanded)}
           Year {year}
-          <IconButton>
-            <DeleteOutline
-              onClick={(e) => {
-                // Prevent the accordion from expanding/collapsing
-                e.stopPropagation();
-                setDeleteAlertOpen(true);
-              }}
-            />
-            <ConfirmAlert
-              open={deleteAlertOpen}
-              onClose={() => setDeleteAlertOpen(false)}
-              onConfirm={() => deleteYear(year - 1)}
-              dialogText={"Are you sure you want to delete Year " + year + "?"}
-            />
-          </IconButton>
+          {!isMobileView && (
+            <IconButton>
+              <DeleteOutline
+                onClick={(e) => {
+                  // Prevent the accordion from expanding/collapsing
+                  e.stopPropagation();
+                  setDeleteAlertOpen(true);
+                }}
+              />
+              <ConfirmAlert
+                open={deleteAlertOpen}
+                onClose={() => setDeleteAlertOpen(false)}
+                onConfirm={() => deleteYear(year - 1)}
+                dialogText={
+                  "Are you sure you want to delete Year " + year + "?"
+                }
+              />
+            </IconButton>
+          )}
         </AccordionSummary>
       </div>
       <AccordionDetails>
-        <div className="flex flex-row space-x-2 overflow-auto">
+        <div
+          className={`flex ${
+            isPhoneMobileView ? "flex-col space-y-2" : "flex-row space-x-2"
+          } overflow-auto`}
+        >
           {quarters.map((quarter) => {
             const courses = findCoursesInQuarter(courseState, quarter);
             const id = getQuarterId(quarter);
