@@ -66,7 +66,7 @@ export default function CourseInfoModal({
   const { data: enrollmentInfo, isLoading: enrollLoading } =
     usePastEnrollmentInfo(course);
 
-  const isMobileView = useMediaQuery("(max-width:600px)");
+  const isMobileView = useMediaQuery("(max-width:1000px)");
 
   // This is to prevent illegally opening the modal
   if (course === undefined || course.departmentCode === undefined) {
@@ -285,7 +285,7 @@ export default function CourseInfoModal({
 
           {/* Show preqs, past enrollment info, and instructors for official courses*/}
           <p>Credits: {credits(data)}</p>
-          {!isMobileView && isOfficialCourse(course) && (
+          {isOfficialCourse(course) && (
             <>
               <p>{prerequisites(data)}</p>
               <Skeleton loading={enrollLoading}>
@@ -296,7 +296,6 @@ export default function CourseInfoModal({
               <MoreEnrollInfo course={course} />
             </>
           )}
-
           {isCustomCourse(course) && (
             <>
               <div className="flex flex-row gap-2 items-center">
@@ -354,9 +353,6 @@ export default function CourseInfoModal({
               <Button
                 onClick={() => setReplacing(true)}
                 className="w-1/2 bg-green-700 hover:bg-green-800"
-                //className="w-1/2"
-                //color="success"
-                //variant="solid"
               >
                 <p className="text-lg">Replace</p>
               </Button>

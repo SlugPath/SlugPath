@@ -2,7 +2,7 @@ import { getTotalCredits } from "@/lib/plannerUtils";
 import { ModalsContext } from "@contexts/ModalsProvider";
 import { StoredCourse } from "@customTypes/Course";
 import { Droppable } from "@hello-pangea/dnd";
-import { Card, Chip, Divider } from "@mui/joy";
+import { Card, Chip } from "@mui/joy";
 import { useContext } from "react";
 
 import DraggableCourseCard from "./courses/DraggableCourseCard";
@@ -27,10 +27,6 @@ export default function QuarterCard({
           {totalCredits} Credits
         </Chip>
       </div>
-      <Divider
-        className="md:hidden"
-        sx={{ height: 2, marginTop: -1, marginX: "0em", padding: 0 }}
-      />
       {/* disable quarterCard droppable when majorProgressModal droppable may be active, prevents dnd issues */}
       <Droppable droppableId={id} isDropDisabled={showMajorsModal}>
         {(provided) => {

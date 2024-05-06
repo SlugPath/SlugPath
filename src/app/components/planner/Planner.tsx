@@ -252,11 +252,11 @@ function Year({ year }: { year: number }) {
         setIsExpanded(expanded ? true : false);
       }}
     >
-      <div className={`${isMobileView ? "flex justify-start" : ""}`}>
+      <div>
         <AccordionSummary indicator={null} className="text-xl font-bold">
           {indicatorIcon(isExpanded)}
           Year {year}
-          {!isMobileView && (
+          {!isMobileView ? (
             <IconButton>
               <DeleteOutline
                 onClick={(e) => {
@@ -274,6 +274,8 @@ function Year({ year }: { year: number }) {
                 }
               />
             </IconButton>
+          ) : (
+            <IconButton />
           )}
         </AccordionSummary>
       </div>

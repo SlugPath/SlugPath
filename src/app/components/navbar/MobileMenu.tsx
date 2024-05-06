@@ -11,6 +11,7 @@ import DonutLargeIcon from "@mui/icons-material/DonutLarge";
 import SchoolIcon from "@mui/icons-material/School";
 import {
   Box,
+  Button,
   Drawer,
   IconButton,
   List,
@@ -19,6 +20,7 @@ import {
   ModalClose,
   Typography,
 } from "@mui/joy";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useContext, useMemo, useState } from "react";
 
@@ -85,6 +87,14 @@ export default function MobileMenu({ image, name, email }: MobileMenuProps) {
             <UserAvatar image={image} size="lg" />
             {name !== null && <Typography level="title-lg">{name}</Typography>}
             {email !== null && <Typography level="body-md">{email}</Typography>}
+            <Button
+              onClick={() => signOut()}
+              size="sm"
+              variant="plain"
+              sx={{ padding: 0.5, marginY: -0.5 }}
+            >
+              <p className="text-xs">Sign Out</p>
+            </Button>
           </Box>
         </Box>
         <List size="lg" component="nav">
