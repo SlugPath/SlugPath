@@ -14,6 +14,7 @@ import { Label } from "@customTypes/Label";
 import { DraggableProvided } from "@hello-pangea/dnd";
 import { WarningAmberRounded } from "@mui/icons-material";
 import { Card, CardContent, Grid, Link, Typography } from "@mui/joy";
+import { useMediaQuery } from "@mui/material";
 import { useContext, useState } from "react";
 
 import CourseLabel from "./CourseLabel";
@@ -37,7 +38,7 @@ export default function CourseCard({
 }: CourseCardProps) {
   const { deleteCourse, getCourseLabels, handleRemoveCustom } =
     useContext(PlannerContext);
-  const { setDisplayCourse, onShowCourseInfoModal } =
+  const { setDisplayCourse, setQuarterCourseIndex, onShowCourseInfoModal } =
     useContext(CourseInfoContext);
   const [highlighted, setHighlighted] = useState(false);
   const margin = 2;
@@ -47,12 +48,17 @@ export default function CourseCard({
     ...draggableStyle,
   });
   const isEnrolledCourse = quarterId !== undefined;
+  const isTouchDevice = useMediaQuery("(hover: none) and (pointer: coarse)");
+  const isMobileView = useMediaQuery("((max-width: 1000px))");
+  const isTouchDesktop = isTouchDevice && !isMobileView;
+
   function handleShowCourseInfoModal(course: StoredCourse) {
     const courseTerm = [
       course,
       extractTermFromQuarter(quarterId),
     ] as CourseTerm;
     setDisplayCourse(courseTerm);
+    setQuarterCourseIndex([quarterId, index]);
     onShowCourseInfoModal();
   }
 
@@ -107,21 +113,29 @@ export default function CourseCard({
               ge={course.ge}
             />
           </Grid>
-          <Grid xs={1}>
+          <Grid xs={1} className="hidden md:flex">
             {/* Show delete icon only if the course is in the planner or in the custom course selection */}
             {quarterId !== undefined ? (
               isCustom ? (
                 <CloseIconButton
                   onClick={() => handleRemoveCustom(index)}
                   sx={{
-                    visibility: highlighted ? "visible" : "hidden",
+                    visibility: isTouchDesktop
+                      ? "hidden"
+                      : highlighted
+                      ? "visible"
+                      : "hidden",
                   }}
                 />
               ) : (
                 <CloseIconButton
                   onClick={() => handleDeleteCourse(quarterId, index)}
                   sx={{
-                    visibility: highlighted ? "visible" : "hidden",
+                    visibility: isTouchDesktop
+                      ? "hidden"
+                      : highlighted
+                      ? "visible"
+                      : "hidden",
                   }}
                 />
               )

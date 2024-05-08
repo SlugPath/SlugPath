@@ -97,6 +97,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                           size="lg"
                           onClick={addYear}
                           startDecorator={<Add />}
+                          className="bg-[#0B6BCB] hover:bg-[#185EA5]"
                         >
                           Add Year
                         </Button>
@@ -135,7 +136,7 @@ export default function Planner({ isActive }: { isActive: boolean }) {
                 </div>
               </AccordionGroup>
             </div>
-            <div className="hidden lg:flex flex-col self-start gap-3 overflow-auto h-full">
+            <div className="hidden lg:flex flex-col self-start gap-3 overflow-auto h-full min-w-[210px]">
               <GraduationProgressCard
                 totalCredits={totalCredits}
                 geSatisfied={geSatisfied}
@@ -231,7 +232,10 @@ function Year({ year }: { year: number }) {
       ),
     [courseState, startQuarters],
   );
-  const isPhoneMobileView = useMediaQuery("((max-width: 600px))");
+
+  const isColumnView = useMediaQuery(
+    "((max-width: 600px) or ((min-width: 1000px) and (max-width: 1200px)))",
+  );
   const isMobileView = useMediaQuery("((max-width: 1000px))");
 
   return (
@@ -282,7 +286,7 @@ function Year({ year }: { year: number }) {
       <AccordionDetails>
         <div
           className={`flex ${
-            isPhoneMobileView ? "flex-col space-y-2" : "flex-row space-x-2"
+            isColumnView ? "flex-col space-y-2" : "flex-row space-x-2"
           } overflow-auto`}
         >
           {quarters.map((quarter) => {

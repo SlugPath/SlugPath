@@ -1,4 +1,5 @@
 import { Box, Slider, Typography } from "@mui/joy";
+import { useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 
 function valueText(value: number) {
@@ -43,9 +44,11 @@ export default function CustomSliderComponent({
     onSliderChange(newRange);
   };
 
+  const isMobileView = useMediaQuery("(max-width: 1200px)");
+
   return (
     <div className="col-span-6">
-      <Box sx={{ width: 230, margin: "auto" }}>
+      <Box sx={{ width: isMobileView ? 190 : 230, margin: "auto" }}>
         <Typography sx={{ marginBottom: "0.5rem" }}>{label}</Typography>
         <Slider
           value={range}

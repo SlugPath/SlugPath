@@ -51,7 +51,10 @@ export default function CustomCourseSelection() {
     <>
       {/* <Card className="w-80 mt-2 mr-2" variant="plain"> */}
       <div className="flex flex-row gap-2 items-center mx-auto">
-        <Button onClick={handleOpen}>
+        <Button
+          className="bg-[#0B6BCB] hover:bg-[#185EA5]"
+          onClick={handleOpen}
+        >
           <Typography
             level="body-md"
             fontWeight="lg"

@@ -242,7 +242,10 @@ export default function CustomCourseModal({
               </div>
             </div>
           </div>
-          <Button className="w-full" onClick={handleSave}>
+          <Button
+            className="w-full bg-[#0B6BCB] hover:bg-[#185EA5]"
+            onClick={handleSave}
+          >
             <Typography
               level="body-lg"
               sx={{

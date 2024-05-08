@@ -45,6 +45,7 @@ export default function CourseInfoModal({
     showCourseInfoModal: showModal,
     displayCourse: courseTerm,
     setDisplayCourse,
+    quarterCourseIndex,
   } = useContext(CourseInfoContext);
 
   const {
@@ -52,6 +53,8 @@ export default function CourseInfoModal({
     getCourseLabels,
     getAllLabels,
     updatePlannerLabels,
+    deleteCourse,
+    handleRemoveCustom,
   } = useContext(PlannerContext);
 
   const [editing, setEditing] = useState(false);
@@ -66,7 +69,10 @@ export default function CourseInfoModal({
   const { data: enrollmentInfo, isLoading: enrollLoading } =
     usePastEnrollmentInfo(course);
 
+  const [quarterId, index] = quarterCourseIndex || [undefined, 0];
+
   const isMobileView = useMediaQuery("(max-width:1000px)");
+  const isTouchDevice = useMediaQuery("(hover: none) and (pointer: coarse)");
 
   // This is to prevent illegally opening the modal
   if (course === undefined || course.departmentCode === undefined) {
@@ -147,6 +153,21 @@ export default function CourseInfoModal({
     });
     setDisplayCourse([newCourse, term]);
   };
+
+  function handleDeleteCourse(
+    quarterId: string | undefined,
+    index: number,
+    isCustom: boolean,
+  ) {
+    if (!quarterId) return;
+    deleteCourse(quarterId)(index);
+    if (isCustom) {
+      handleRemoveCustom(index);
+    } else {
+      deleteCourse(quarterId)(index);
+    }
+    setShowModal(false);
+  }
 
   // ============= End Handler Functions =============
 
@@ -356,6 +377,16 @@ export default function CourseInfoModal({
               >
                 <p className="text-lg">Replace</p>
               </Button>
+              {quarterId !== undefined && isTouchDevice && (
+                <Button
+                  onClick={() =>
+                    handleDeleteCourse(quarterId, index, isCustomCourse(course))
+                  }
+                  className="w-1/2 bg-red-700 hover:bg-red-800"
+                >
+                  <p className="text-lg">Delete</p>
+                </Button>
+              )}
             </div>
           )}
         </div>

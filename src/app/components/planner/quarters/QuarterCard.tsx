@@ -34,7 +34,7 @@ export default function QuarterCard({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className={"h-full min-h-0 md:min-h-[112px]"}
+              className={"h-full min-h-0 sm:min-h-[112px]"}
             >
               {courses.map((course, index) => (
                 <DraggableCourseCard
