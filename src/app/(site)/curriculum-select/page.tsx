@@ -191,7 +191,7 @@ function CurriculumSelectCarousel({
 
   return (
     <Carousel className="flex w-5/6 p-5">
-      <CarouselContent className="w-2/4">
+      <CarouselContent className="lg:w-2/4">
         {defaultPlanners!.map((planner, index) => (
           <CarouselItem key={index} className="flex items-start justify-start">
             <MiniPlanner
