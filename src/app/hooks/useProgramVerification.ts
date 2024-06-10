@@ -204,6 +204,59 @@ export default function useProgramVerification() {
     return totalPercentage;
   }
 
+  /**
+   * Calculates the average major/minor percentages and individual program percentages.
+   *
+   * @param courseState The planner data containing course information.
+   * @returns A dictionary containing the average major/minor percentages and
+   * individual program percentages for each major/minor.
+   */
+  function calculateAllMajorProgressPercentages(courseState: PlannerData): {
+    [key: string]: number;
+  } {
+    if (!userPrograms) {
+      return {};
+    }
+
+    const percentages = userPrograms.map((major) => {
+      const majorRequirements = getRequirementsForMajor(major.id);
+      if (!majorRequirements) {
+        return 0;
+      } else {
+        const requirementsTotal = majorRequirements.requirements.length;
+        const requirementsSatisfied = majorRequirements.requirements.reduce(
+          (count, requirement) =>
+            isMajorRequirementsSatisfied(requirement, courseState.courses)
+              ? count + 1
+              : count,
+          0,
+        );
+        const percentage: number =
+          (requirementsSatisfied / requirementsTotal) * 100;
+        return isNaN(percentage) ? 0 : percentage;
+      }
+    });
+
+    // Check if percentages array is empty
+    if (percentages.length === 0) {
+      return {};
+    }
+
+    // Calculate average percentage
+    const averagePercentage =
+      percentages.length > 0
+        ? percentages.reduce((acc, percentage) => acc + percentage, 0) /
+          percentages.length
+        : 0;
+
+    // Construct result dictionary
+    const result: { [key: string]: number } = { average: averagePercentage };
+    userPrograms.forEach((major, index) => {
+      result[major.id] = percentages[index];
+    });
+    return result;
+  }
+
   return {
     userPrograms,
     updateRequirementList,
@@ -211,6 +264,7 @@ export default function useProgramVerification() {
     removeRequirementList,
     handleSaveMajorRequirements,
     calculateMajorProgressPercentage,
+    calculateAllMajorProgressPercentages,
     getRequirementsForMajor,
     findRequirementList,
     isMajorRequirementsSatisfied,

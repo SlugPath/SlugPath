@@ -1,22 +1,21 @@
 import { Typography } from "@mui/material";
 
-import ProgressBar from "./ProgressBar";
+import MajorProgressBar from "./MajorProgressBar";
 
 export default function MajorProgress({
-  majorProgressPercentage,
+  majorProgressPercentages,
 }: {
-  majorProgressPercentage: number;
+  majorProgressPercentages: { [key: string]: number };
 }) {
   return (
     <div className="flex justify-between">
-      <div className="flex flex-col place-items-center w-full">
-        <div className="flex flex-col w-full">
-          <Typography>Major</Typography>
-        </div>
-        <ProgressBar
-          percentage={majorProgressPercentage}
-          progressType={"major"}
-        />
+      <div className="flex flex-col w-full">
+        <Typography sx={{ marginBottom: 0.2 }}>
+          {Object.keys(majorProgressPercentages).length > 2
+            ? "Programs"
+            : "Program"}
+        </Typography>
+        <MajorProgressBar percentages={majorProgressPercentages} />
       </div>
     </div>
   );
