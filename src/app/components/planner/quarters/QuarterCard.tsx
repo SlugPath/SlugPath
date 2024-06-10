@@ -20,7 +20,7 @@ export default function QuarterCard({
   const { showMajorsModal } = useContext(ModalsContext);
 
   return (
-    <Card size="md" className="min-w-[130px] w-full" variant="plain">
+    <Card size="md" className="min-w-[130px] w-full " variant="plain">
       <div className="flex justify-between items-center">
         {title}
         <Chip component="span" size="sm">
@@ -34,7 +34,7 @@ export default function QuarterCard({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={{ height: "100%", minHeight: "112px" }}
+              className={"h-full min-h-0 sm:min-h-[112px]"}
             >
               {courses.map((course, index) => (
                 <DraggableCourseCard

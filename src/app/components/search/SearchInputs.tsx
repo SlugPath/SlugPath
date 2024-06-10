@@ -192,7 +192,11 @@ export default function SearchInputs({ params, handlers }: SearchInputsProps) {
             />
           </AccordionDetails>
         </Accordion>
-        <Button className="col-span-6" variant="solid" onClick={handleReset}>
+        <Button
+          className="col-span-6 bg-[#0B6BCB] hover:bg-[#185EA5]"
+          variant="solid"
+          onClick={handleReset}
+        >
           Reset Filters
         </Button>
       </div>

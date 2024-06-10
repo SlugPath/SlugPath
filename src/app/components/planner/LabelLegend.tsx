@@ -48,13 +48,16 @@ export default function LabelLegend() {
             className="flex flex-wrap gap-1"
             style={{
               maxWidth: "300px",
-              maxHeight: "100px",
+              maxHeight: "200px",
               overflowY: "auto",
               alignItems: "flex-start",
             }}
           >
             <Chip
-              style={getColor("green")}
+              style={{
+                ...getColor("green"),
+                color: "white",
+              }}
               sx={{ paddingX: "0.5rem", marginX: "0.16rem" }}
             >
               <div>{"GE"}</div>

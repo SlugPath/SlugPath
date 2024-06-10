@@ -19,7 +19,10 @@ export default function CourseLabel({
 
   return (
     <Chip
-      style={getColor(label.color ?? "grey")}
+      style={{
+        ...getColor(label.color ?? "grey"),
+        color: "white",
+      }}
       sx={{
         paddingX: inMenu ? "1rem" : "0.5rem",
         marginX: "0.25rem",

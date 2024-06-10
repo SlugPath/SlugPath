@@ -1,5 +1,6 @@
 import { getQuarterColor } from "@/lib/quarterUtils";
 import { Chip, Sheet, Tab, TabList, TabPanel, Table, Tabs } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function QuartersOfferedTable({
   enrollmentInfo,
@@ -9,6 +10,8 @@ export default function QuartersOfferedTable({
     instructor: string;
   }>;
 }) {
+  const isSmallScreen = useMediaQuery("((max-width: 600px))");
+
   const getProfessorsForYearAndQuarter = (year: string, quarter: string) => {
     const professorsSet = new Set<string>();
     enrollmentInfo.forEach(({ term, instructor }) => {
@@ -56,7 +59,7 @@ export default function QuartersOfferedTable({
           }}
         >
           {years.map((year, index) => (
-            <Tab key={index}> 20{year}</Tab>
+            <Tab key={index}>{isSmallScreen ? `${year}` : `20${year}`}</Tab>
           ))}
         </TabList>
         {years.map((year, index) => (
@@ -66,6 +69,9 @@ export default function QuartersOfferedTable({
                 maxHeight: 300,
                 overflow: "auto",
                 borderRadius: "sm",
+                "&::-webkit-scrollbar": isSmallScreen
+                  ? { display: "none" }
+                  : {},
               }}
             >
               <Table
@@ -88,7 +94,7 @@ export default function QuartersOfferedTable({
                     <th
                       scope="col"
                       style={{
-                        width: "10%",
+                        width: "80px",
                         textAlign: "center",
                       }}
                     >
@@ -102,7 +108,13 @@ export default function QuartersOfferedTable({
                     <tr key={index}>
                       <td style={{ textAlign: "center" }}>{quarter}</td>
                       <td>
-                        <div className="flex justify-start flex-wrap items-center gap-2">
+                        <div
+                          className="flex justify-start flex-wrap items-center gap-2"
+                          style={{
+                            maxHeight: isSmallScreen ? 60 : undefined,
+                            overflowX: isSmallScreen ? "auto" : undefined,
+                          }}
+                        >
                           {getProfessorsForYearAndQuarter(year, quarter).map(
                             (professor, index) => (
                               <Chip

@@ -39,7 +39,10 @@ export default function ConfirmAlert(props: ConfirmAlertProps) {
           {props.dialogText ? props.dialogText : `Are you sure?`}
         </DialogContent>
         <DialogActions>
-          <Button variant="solid" color="danger" onClick={handleConfirm}>
+          <Button
+            className="bg-[#C41C1C] hover:bg-[#A51818]"
+            onClick={handleConfirm}
+          >
             {props.confirmButtonName ? props.confirmButtonName : "Confirm"}
           </Button>
           <Button

@@ -9,6 +9,8 @@ export interface CourseInfoContextProps {
   setShowCourseInfoModal: SetShow;
   displayCourse: [StoredCourse, Term | undefined] | undefined;
   setDisplayCourse: SetState<[StoredCourse, Term | undefined] | undefined>;
+  quarterCourseIndex: [string | undefined, number] | undefined;
+  setQuarterCourseIndex: SetState<[string | undefined, number] | undefined>;
   onShowCourseInfoModal: () => void;
 }
 
@@ -23,6 +25,9 @@ export function CourseInfoProvider({
   const [displayCourse, setDisplayCourse] = useState<
     [StoredCourse, Term | undefined] | undefined
   >();
+  const [quarterCourseIndex, setQuarterCourseIndex] = useState<
+    [string | undefined, number] | undefined
+  >(undefined);
 
   return (
     <CourseInfoContext.Provider
@@ -31,6 +36,8 @@ export function CourseInfoProvider({
         setShowCourseInfoModal,
         displayCourse,
         setDisplayCourse,
+        quarterCourseIndex,
+        setQuarterCourseIndex,
         onShowCourseInfoModal: () => setShowCourseInfoModal(true),
       }}
     >

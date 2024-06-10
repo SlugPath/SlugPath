@@ -17,10 +17,14 @@ import {
   CircularProgress,
   IconButton,
   LinearProgress,
+  Modal,
   Option,
   Select,
+  Sheet,
   Typography,
+  useColorScheme,
 } from "@mui/joy";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { ProgramType } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -50,10 +54,25 @@ export default function UserProgramsEditor() {
     savePrograms({ userId: userId!, programs: _programs });
   }
 
+  const [openModal, setOpenModal] = useState(false);
+  const isMobileView = useMediaQuery("(max-width: 800px)");
+  const { mode } = useColorScheme();
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="space-y-4 w-full">
       <Card variant="soft" size="sm">
-        <div className="flex flex-row justify-start items-center gap-2">
+        <div
+          className={`flex flex-row ${
+            isMobileView ? "justify-between" : "justify-start"
+          } items-center`}
+        >
           <div className="font-semibold text-xl">Your Majors and Minors</div>
           <Button
             variant="plain"
@@ -61,7 +80,7 @@ export default function UserProgramsEditor() {
             startDecorator={<KeyboardArrowLeftIcon fontSize="large" />}
             sx={{ width: "fit-content" }}
           >
-            Back to Planner
+            {isMobileView ? "Back" : "Back to Planner"}
           </Button>
         </div>
 
@@ -86,9 +105,16 @@ export default function UserProgramsEditor() {
               return (
                 <Card key={program.name} size="sm" variant="plain">
                   <div className="flex justify-between items-center">
-                    <Typography>
-                      {program.name} {program.catalogYear}
-                    </Typography>
+                    {isMobileView ? (
+                      <div className="flex flex-col flex-row">
+                        <Typography>{program.name}</Typography>
+                        <Typography>{program.catalogYear}</Typography>
+                      </div>
+                    ) : (
+                      <Typography>
+                        {program.name} {program.catalogYear}
+                      </Typography>
+                    )}
                     <div className="flex space-x-2">
                       <Chip color={isMajor ? "success" : "primary"}>
                         {isMajor ? "Major" : "Minor"}
@@ -105,7 +131,48 @@ export default function UserProgramsEditor() {
               );
             })}
         </div>
-        <AddProgramInputs />
+        {!isMobileView ? (
+          <AddProgramInputs />
+        ) : (
+          <div className="bg-blue-500 hover:bg-blue-600 rounded">
+            <Button variant="solid" onClick={handleOpenModal} fullWidth>
+              Add Program
+            </Button>
+            <Modal
+              open={openModal}
+              onClose={() => setOpenModal(false)}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Sheet
+                sx={{
+                  borderRadius: "md",
+                  p: 3,
+                  boxShadow: "lg",
+                  width: "80%",
+                  margin: "auto",
+                  backgroundColor: mode === "light" ? "#f1f5f9" : "#181a1c",
+                }}
+              >
+                <Typography
+                  component="h2"
+                  id="modal-title"
+                  level="h4"
+                  textColor="inherit"
+                  fontWeight="lg"
+                  mb={1}
+                  sx={{ textAlign: "center" }}
+                >
+                  Add Program
+                </Typography>
+                <AddProgramInputs closeAddProgramModal={handleCloseModal} />
+              </Sheet>
+            </Modal>
+          </div>
+        )}
       </Card>
 
       {userProgramsIsLoading && <CircularProgress />}
@@ -115,7 +182,7 @@ export default function UserProgramsEditor() {
 
 // TODO: Refactor, fetch all programs and filter for majors and minors, then
 // fetch years based on the selected program
-function AddProgramInputs() {
+function AddProgramInputs({ closeAddProgramModal = () => {} }) {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
@@ -125,6 +192,8 @@ function AddProgramInputs() {
   const [catalogYear, setCatalogYear] = useState("");
   const [programName, setProgramName] = useState("");
   const [error, setError] = useState("");
+
+  const isMobileView = useMediaQuery("(max-width: 800px) ");
 
   // Fetch all catalog years
   const { data: catalogYears } = useCatalogYears();
@@ -181,12 +250,17 @@ function AddProgramInputs() {
       userId: userId!,
       programs: _programs,
     });
+    closeAddProgramModal();
   }
 
   return (
     <>
-      <div className="grid grid-cols-7 gap-2 items-end">
-        <div className="col-span-2">
+      <div
+        className={`grid grid-cols-1 gap-2 items-end ${
+          isMobileView ? "" : "grid-cols-7 gap-2"
+        }`}
+      >
+        <div className={` ${isMobileView ? "" : "col-span-2"}`}>
           <Typography level="body-lg">Program</Typography>
           <Select
             value={programType}
@@ -202,7 +276,7 @@ function AddProgramInputs() {
             ))}
           </Select>
         </div>
-        <div className="col-span-2">
+        <div className={` ${isMobileView ? "" : "col-span-2"}`}>
           <SelectCatalogYear
             catalogYear={catalogYear}
             years={catalogYears ?? []}
@@ -211,15 +285,23 @@ function AddProgramInputs() {
             }
           />
         </div>
-        <div className="col-span-2">
+        <div className={` ${isMobileView ? "" : "col-span-2"}`}>
           <SelectMajorName
             selectedMajor={programName}
             majors={filteredPrograms}
             onChange={(_, newValue) => newValue && setProgramName(newValue)}
           />
         </div>
-        <div className="col-span-1">
-          <Button variant="soft" onClick={handleAddMajor}>
+        <div
+          className={` ${isMobileView ? "col-span-1 flex justify-center" : ""}`}
+        >
+          <Button
+            onClick={handleAddMajor}
+            variant="soft"
+            className={
+              isMobileView ? "bg-blue-500 hover:bg-blue-600 rounded w-1/2" : ""
+            }
+          >
             Add
           </Button>
         </div>

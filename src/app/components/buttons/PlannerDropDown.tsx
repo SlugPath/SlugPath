@@ -12,6 +12,7 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
 interface PlannerDropDownProps {
@@ -46,6 +47,8 @@ export default function PlannerDropDown({
     [dropDownClosed],
   );
 
+  const isMobileView = useMediaQuery("((max-width: 1000px))");
+
   useEffect(() => {
     if (onRightClick) {
       setOpen(true);
@@ -75,19 +78,21 @@ export default function PlannerDropDown({
             </ListItemDecorator>{" "}
             Rename
           </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              // Stop the event from bubbling up to the parent to prevent the tab changing
-              // back to the original tab after the duplicate button is clicked
-              e.stopPropagation();
-              onDuplicateButtonClick();
-            }}
-          >
-            <ListItemDecorator>
-              <ContentCopyIcon />
-            </ListItemDecorator>{" "}
-            Duplicate
-          </MenuItem>
+          {!isMobileView && (
+            <MenuItem
+              onClick={(e) => {
+                // Stop the event from bubbling up to the parent to prevent the tab changing
+                // back to the original tab after the duplicate button is clicked
+                e.stopPropagation();
+                onDuplicateButtonClick();
+              }}
+            >
+              <ListItemDecorator>
+                <ContentCopyIcon />
+              </ListItemDecorator>{" "}
+              Duplicate
+            </MenuItem>
+          )}
           <MenuItem
             onClick={(e) => {
               e.stopPropagation();
@@ -99,7 +104,6 @@ export default function PlannerDropDown({
             </ListItemDecorator>{" "}
             Download
           </MenuItem>
-          {/* FIXME: Need to add the share planner functionality to the dropdown */}
           <MenuItem
             onClick={(e) => {
               e.stopPropagation();

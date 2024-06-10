@@ -27,7 +27,8 @@ export const MobileWarningModal = ({
         <h2 className="text-lg font-bold mb-4">Low Resolution Warning</h2>
         <p>
           Your screen resolution is lower than recommended for the best
-          experience.
+          experience. If using a mobile device, hold horizontally for better
+          results.
         </p>
         <button
           onClick={onClose}

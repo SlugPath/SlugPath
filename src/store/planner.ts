@@ -33,7 +33,7 @@ const usePlannersStore = create<PlannersState>((set) => ({
    * @returns true if the planner was found and updated, false otherwise
    */
   setPlanner: (plannerId: string, newPlanner: PlannerData) => {
-    console.log("planner store: Setting planner", plannerId, newPlanner);
+    //console.log("planner store: Setting planner", plannerId, newPlanner);
 
     let success = false;
     set((state) => ({
@@ -55,7 +55,7 @@ const usePlannersStore = create<PlannersState>((set) => ({
    * @returns true if the planners were updated, false otherwise
    */
   setPlanners: (planners: PlannerData[]) => {
-    console.log("planner store: Setting planners", planners);
+    //console.log("planner store: Setting planners", planners);
 
     set({ planners, activePlannerId: planners[0]?.id });
     return true;
@@ -67,7 +67,7 @@ const usePlannersStore = create<PlannersState>((set) => ({
    * @returns true if the planner was added, false otherwise
    */
   addPlanner: (planner: PlannerData) => {
-    console.log("planner store: Adding planner", planner);
+    //console.log("planner store: Adding planner", planner);
 
     let success = false;
     set((state) => {
@@ -88,7 +88,7 @@ const usePlannersStore = create<PlannersState>((set) => ({
    * @returns true if the planner was found and deleted, false otherwise
    */
   deletePlanner: (plannerId: string) => {
-    console.log("planner store: Deleting planner", plannerId);
+    //console.log("planner store: Deleting planner", plannerId);
 
     let success = false;
     set((state) => {
